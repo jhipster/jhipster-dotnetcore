@@ -1,38 +1,77 @@
 {
-  "name": "app",
+  "name": "generator-jhipster-dotnetcore",
   "version": "0.0.0",
-  "description": "Description for App",
-  "license": "UNLICENSED",
-  "workspaces": [
-    "src/App/ClientApp"
+  "description": "A .Net Core based JHipster (JHipster.Net)",
+  "keywords": [
+    "yeoman-generator",
+    "jhipster-blueprint",
+    "jhipster-5"
   ],
-  "scripts": {
-    "app:up": "docker compose -f docker/app.yml up --wait",
-    "ci:e2e:prepare": "npm run ci:e2e:prepare:docker",
-    "ci:e2e:prepare:docker": "npm run services:up --if-present && docker ps -a",
-    "ci:e2e:run": "concurrently -k -s first \"npm run ci:e2e:server:start\" \"npm run e2e:headless\"",
-    "ci:e2e:server:start": "docker compose -f docker/app.yml up --wait",
-    "ci:e2e:teardown": "npm run ci:e2e:teardown:docker --if-present",
-    "ci:frontend:test": "npm run -w src/App/ClientApp/ ci:frontend:test",
-    "docker:db:up": "echo \"Docker for db sqllite not configured for application app\"",
-    "e2e:headless": "npm run -w src/App/ClientApp/ e2e:headless",
-    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts,html,css,scss}\"",
-    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts,html,css,scss}\"",
-    "test": "npm test -w src/App/ClientApp/",
-    "webapp:build": "npm run -w src/App/ClientApp/ webapp:build"
+  "homepage": "https://github.com/danielpetisme/generator-jhipster-dotnetcore",
+  "author": {
+    "name": "Daniel Petisme",
+    "email": "daniel@jhipster.tech",
+    "url": ""
   },
-  "config": {
-    "default_environment": "prod"
+  "files": [
+    "generators"
+  ],
+  "main": "generators/app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielpetisme/generator-jhipster-dotnetcore.git"
+  },
+  "dependencies": {
+    "chalk": "2.4.1",
+    "ejs": "2.6.1",
+    "glob": "7.1.2",
+    "gulp-filter": "5.1.0",
+    "insight": "0.10.1",
+    "jhipster-core": "3.0.2",
+    "js-yaml": "3.12.0",
+    "lodash": "4.17.10",
+    "meow": "5.0.0",
+    "mkdirp": "0.5.1",
+    "pluralize": "7.0.0",
+    "prettier": "1.13.5",
+    "randexp": "0.4.9",
+    "semver": "5.5.0",
+    "shelljs": "0.8.2",
+    "through2": "2.0.3",
+    "generator-jhipster": ">=5.4.0",
+    "yeoman-environment": "2.3.0",
+    "yeoman-generator": "2.0.5"
   },
   "devDependencies": {
-    "concurrently": "9.1.0",
-    "generator-jhipster": "8.8.0",
-    "generator-jhipster-dotnetcore": "4.2.0",
-    "prettier": "3.4.2",
-    "prettier-plugin-packagejson": "2.5.6"
+    "chai": "4.1.2",
+    "ejs-lint": "0.3.0",
+    "eslint": "5.0.0",
+    "eslint-config-airbnb-base": "13.0.0",
+    "eslint-config-prettier": "3.1.0",
+    "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-prettier": "3.0.0",
+    "fs-extra": "6.0.1",
+    "jsdoc": "3.5.5",
+    "mocha": "5.2.0",
+    "prettier": "1.14.3",
+    "sinon": "6.0.0",
+    "yeoman-assert": "3.1.1",
+    "yeoman-test": "1.7.2"
   },
-  "overrides": {
-    "browser-sync": "3.0.3",
-    "webpack": "5.97.1"
+  "scripts": {
+    "lint": "eslint .",
+    "lint-fix": "npm run lint -- --fix",
+    "pretest": "npm run lint",
+    "test": "npm run test:unit -- test/*.spec.js",
+    "test:unit": "mocha --timeout 20000 --slow 0 --reporter spec",
+    "jsdoc": "jsdoc --configure jsdoc-conf.json",
+    "release": "git push && git push --tags && npm publish",
+    "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
+    "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
+    "release:major": "npm version major -a -m \"Update to %s\" && npm run release"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/danielpetisme/generator-jhipster-dotnetcore/issues"
   }
 }

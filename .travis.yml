@@ -1,0 +1,11 @@
+os:
+    - linux
+language: node_js
+node_js:
+    - "10.13.0"
+before_install:
+    - npm install -g npm
+install:
+    - npm install
+script:
+    - npm test
