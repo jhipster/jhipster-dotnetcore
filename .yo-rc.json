@@ -1,0 +1,10 @@
+{
+  "generator-jhipster-blueprint": {
+    "promptValues": {
+      "githubName": "danielpetisme",
+      "authorName": "Daniel Petisme",
+      "authorEmail": "daniel@jhipster.tech",
+      "authorUrl": ""
+    }
+  }
+}
