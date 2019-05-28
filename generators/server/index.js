@@ -1,10 +1,15 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+const _ = require('lodash');
+const os = require('os');
+const prompts = require('./prompts')
 const ServerGenerator = require('generator-jhipster/generators/server');
+const constants = require('../generator-dotnetcore-constants');
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
         super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        this.log.info('HERE!!!');
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -55,17 +60,29 @@ module.exports = class extends ServerGenerator {
          * ```
          */
         // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
+        return {};
     }
 
     get prompting() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._prompting();
+        return {
+            askForModuleName: prompts.askForModuleName,
+            askForSomething: prompts.askForSomething,
+        };
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._configuring();
+        return {
+            configureGlobal() {
+                this.camelizedBaseName = _.camelCase(this.baseName);
+                this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.lowercaseBaseName = this.baseName.toLowerCase();
+                this.humanizedBaseName = _.startCase(this.baseName);
+                this.projectDir = `${constants.SERVER_SRC_DIR}/${this.camelizedBaseName}`;
+            },
+            saveConfig() {
+                return {};
+            }
+        }
     }
 
     get default() {
