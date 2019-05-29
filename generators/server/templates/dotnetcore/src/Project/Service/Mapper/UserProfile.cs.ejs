@@ -1,0 +1,12 @@
+using AutoMapper;
+using <%= namespace %>.Models;
+using <%= namespace %>.Service.Dto;
+
+namespace <%= namespace %>.Service.Mapper {
+    public class UserProfile : Profile {
+        public UserProfile()
+        {
+            CreateMap<User, UserDto>();
+        }
+    }
+}
