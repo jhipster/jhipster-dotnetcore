@@ -1,0 +1,24 @@
+{
+    "Serilog": {
+        "MinimumLevel": "Information",
+        "WriteTo": [
+            {
+                "Name": "Console",
+                "Args": {
+                    "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console",
+                    "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u4} {ProcessId} --- [{ThreadId,3}] {LoggerName,-40} : {Message:lj}{NewLine}{Exception}"
+                }
+            },
+            {
+                "Name": "File",
+                "Args": {
+                    "path":"app.log",
+                    "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u4} {ProcessId} --- [{ThreadId,3}] {LoggerName,-40} : {Message:lj}{NewLine}{Exception}",
+                    "fileSizeLimitBytes": 10240,
+                    "rollingInterval": "Day",
+                    "retainedFileCountLimit": 90
+                }
+            }
+        ]
+    }
+}

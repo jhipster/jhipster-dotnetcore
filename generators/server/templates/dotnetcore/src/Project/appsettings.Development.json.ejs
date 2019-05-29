@@ -1,0 +1,17 @@
+{
+    "Serilog": {
+        "MinimumLevel": "Debug",
+        "WriteTo": [
+            {
+                "Name": "Console",
+                "Args": {
+                    "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console",
+                    "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u4} {ProcessId} --- [{ThreadId,3}] {LoggerName,-40} : {Message:lj}{NewLine}{Exception}"
+                }
+            }
+        ]
+    },
+    "EntityFramework": {
+        "DataSource": ":memory:"
+    }
+}

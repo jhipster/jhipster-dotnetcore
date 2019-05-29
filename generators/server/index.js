@@ -26,9 +26,11 @@ module.exports = class extends ServerGenerator {
     get initializing() {
         return {
             setupServerconsts() {
+                const configuration = this.getAllJhipsterConfig(this, true);
                 this.SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
                 this.SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-                this.TARGET_FRAMEWORK = constants.TARGET_FRAMEWORK;
+                this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+
             }
         }
     }
@@ -36,7 +38,11 @@ module.exports = class extends ServerGenerator {
     get prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
-            askForSomething: prompts.askForSomething,
+            askForServerSideOpts: prompts.askForServerSideOpts,
+
+            setSharedConfigOptions() {
+                this.configOptions.namespace = this.namespace;
+            }
         };
     }
 
@@ -48,10 +54,19 @@ module.exports = class extends ServerGenerator {
                 this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
-                this.projectDir = `${constants.SERVER_SRC_DIR}/${this.camelizedBaseName}`;
+                this.mainProjectDir = this.pascalizedBaseName;
+                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
             },
             saveConfig() {
-                return {};
+                return {
+                    saveConfig() {
+                       const config = {
+                           namespace: this.namespace
+                       }
+
+                       this.config.set(config);
+                    }
+                };
             }
         }
     }
