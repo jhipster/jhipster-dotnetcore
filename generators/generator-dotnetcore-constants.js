@@ -1,6 +1,6 @@
 
-const SERVER_SRC_DIR = 'src';
-const SERVER_TEST_DIR = 'test';
+const SERVER_SRC_DIR = 'src/';
+const SERVER_TEST_DIR = 'test/';
 const PROJECT_TEST_SUFFIX = '.Test';
 
 const TARGET_FRAMEWORK = 'netcoreapp2.2';

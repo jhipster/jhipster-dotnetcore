@@ -5,25 +5,25 @@ function askForModuleName() {
     this.askModuleName(this);
 }
 
-function askForSomething() {
-    const prompts = [{
-        type: 'input',
-        name: 'something',
-        message: 'Ask Something',
-        default: 'Why not!'
-    }];
+// function askForSomething() {
+//     const prompts = [{
+//         type: 'input',
+//         name: 'something',
+//         message: 'Ask Something',
+//         default: 'Why not!'
+//     }];
 
-    const done = this.async();
+//     const done = this.async();
 
-    this.prompt(prompts).then((prompt) => {
-        this.something = prompt.something;
-        done();
-    });
-}
+//     this.prompt(prompts).then((prompt) => {
+//         this.something = prompt.something;
+//         done();
+//     });
+// }
 
 module.exports = {
     askForModuleName,
-    askForSomething
+//    askForSomething
     // askForServerSideOpts,
     // askForOptionalItems,
     // askFori18n
