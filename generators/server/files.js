@@ -1,12 +1,16 @@
 
+const mkdirp = require('mkdirp');
+const constants = require('../generator-dotnetcore-constants');
+
+/* Constants use throughout */
+const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 const serverFiles = {
 
     serverCsProj: [
         {
             path: SERVER_SRC_DIR,
-            templates: 'Project.csproj',
-            renameTo: generator =>`${generator.projectDir}/${generator.camelizedBaseName}.csproj`
+            templates: [{ file: 'Project/Project.csproj', renameTo: generator =>`${generator.pascalizedBaseName}/${generator.pascalizedBaseName}.csproj`}]
         }
     // ],
     // serverProgram: [
@@ -29,6 +33,16 @@ const serverFiles = {
 
 }
 
+function writeFiles() {
+    return {
+        writeFiles() {
+            this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
+        }
+    }
+
+}
+
 module.exports = {
-    serverFiles
+    serverFiles,
+    writeFiles
 };

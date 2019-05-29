@@ -3,13 +3,14 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const os = require('os');
 const prompts = require('./prompts')
+const writeFiles = require('./files').writeFiles;
 const ServerGenerator = require('generator-jhipster/generators/server');
 const constants = require('../generator-dotnetcore-constants');
+const toPascalCase = require('to-pascal-case');
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
         super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
-        this.log.info('HERE!!!');
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -23,44 +24,13 @@ module.exports = class extends ServerGenerator {
     }
 
     get initializing() {
-        /**
-         * Any method beginning with _ can be reused from the superclass `ClientGenerator`
-         *
-         * There are multiple ways to customize a phase from JHipster.
-         *
-         * 1. Let JHipster handle a phase, blueprint doesnt override anything.
-         * ```
-         *      return super._initializing();
-         * ```
-         *
-         * 2. Override the entire phase, this is when the blueprint takes control of a phase
-         * ```
-         *      return {
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *          myAnotherCustomInitPhaseStep(){
-         *              // Do all your stuff here
-         *          }
-         *      };
-         * ```
-         *
-         * 3. Partially override a phase, this is when the blueprint gets the phase from JHipster and customizes it.
-         * ```
-         *      const phaseFromJHipster = super._initializing();
-         *      const myCustomPhaseSteps = {
-         *          displayLogo() {
-         *              // override the displayLogo method from the _initializing phase of JHipster
-         *          },
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *      }
-         *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
-         * ```
-         */
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return {};
+        return {
+            setupServerconsts() {
+                this.SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+                this.SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
+                this.TARGET_FRAMEWORK = constants.TARGET_FRAMEWORK;
+            }
+        }
     }
 
     get prompting() {
@@ -75,6 +45,7 @@ module.exports = class extends ServerGenerator {
             configureGlobal() {
                 this.camelizedBaseName = _.camelCase(this.baseName);
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.lowercaseBaseName = this.baseName.toLowerCase();
                 this.humanizedBaseName = _.startCase(this.baseName);
                 this.projectDir = `${constants.SERVER_SRC_DIR}/${this.camelizedBaseName}`;
@@ -91,8 +62,7 @@ module.exports = class extends ServerGenerator {
     }
 
     get writing() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._writing();
+        return writeFiles.call(this);
     }
 
     get end() {

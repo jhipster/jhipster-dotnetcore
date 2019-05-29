@@ -39,6 +39,7 @@
     "semver": "5.5.0",
     "shelljs": "0.8.2",
     "through2": "2.0.3",
+    "to-pascal-case": "^1.0.0",
     "yeoman-environment": "2.3.0",
     "yeoman-generator": "2.0.5"
   },
