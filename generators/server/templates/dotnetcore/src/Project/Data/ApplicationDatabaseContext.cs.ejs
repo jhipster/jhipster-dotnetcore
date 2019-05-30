@@ -39,9 +39,6 @@ namespace <%= namespace %>.Data {
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<OperationLabel>()
-                .HasKey(t => new { t.OperationId, t.LabelId });
         }
     }
 }
