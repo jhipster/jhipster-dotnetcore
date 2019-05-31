@@ -32,7 +32,7 @@ const serverFiles = {
         },
         {
             path: SERVER_TEST_DIR,
-            templates: [{ file: 'Project.Test/Project.Test.csproj', renameTo: generator => `${generator.testProjectDir}/${generator.pascalizedBaseName}.${constants.PROJECT_TEST_SUFFIX}.csproj` }]
+            templates: [{ file: 'Project.Test/Project.Test.csproj', renameTo: generator => `${generator.testProjectDir}/${generator.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj` }]
         },
         {
             path: SERVER_TEST_DIR,
