@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const EntityServerGenerator = require('generator-jhipster/generators/entity-server');
+const writeFiles = require('./files').writeFiles;
 
 module.exports = class extends EntityServerGenerator {
     constructor(args, opts) {
@@ -13,9 +14,6 @@ module.exports = class extends EntityServerGenerator {
         }
 
         this.configOptions = jhContext.configOptions || {};
-        if (jhContext.databaseType === 'cassandra') {
-            this.pkType = 'UUID';
-        }
     }
 
     get writing() {
@@ -55,7 +53,6 @@ module.exports = class extends EntityServerGenerator {
          *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
          * ```
          */
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._writing();
+        return writeFiles();
     }
 };
