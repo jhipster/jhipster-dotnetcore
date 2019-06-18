@@ -48,7 +48,7 @@ module.exports = class extends ServerGenerator {
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
-        const jhipsterNetPhaseSetps = {
+        const jhipsterNetPhaseSteps = {
             displayLogo() {
                 this.printJHipsterNetLogo();
             },
@@ -62,7 +62,7 @@ module.exports = class extends ServerGenerator {
 
             }
         }
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSetps);
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     printJHipsterNetLogo() {
@@ -129,16 +129,12 @@ module.exports = class extends ServerGenerator {
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
             },
             saveConfig() {
-                return {
-                    saveConfig() {
-                        const config = {
-                            namespace: this.namespace
-                        }
-                        this.config.set(config);
-                    }
-                };
+                const config = {
+                    namespace: this.namespace
+                }
+                this.config.set(config);
             }
-        }
+        };
     }
 
     get default() {

@@ -30,7 +30,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Entity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entity)}.cs`
+                    renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`
                 }
             ]
         }

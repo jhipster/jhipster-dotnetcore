@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
+const toPascalCase = require('to-pascal-case');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -14,7 +15,7 @@ module.exports = class extends EntityGenerator {
 
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
+        jhContext.setupEntityOptions(this, jhContext);
     }
 
     get initializing() {
@@ -54,8 +55,14 @@ module.exports = class extends EntityGenerator {
          *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
          * ```
          */
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const jhipsterNetPhaseSteps = {
+            getConfigNetBlueprint() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
+            }
+        }
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get prompting() {
@@ -64,8 +71,15 @@ module.exports = class extends EntityGenerator {
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._configuring();
+        const phaseFromJHipster = super._configuring();
+        const jhipsterNetPhaseSteps = {
+            loadInMemoryDataNetBlueprint() {
+                const context = this.context;
+                context.pascalizedBaseName = toPascalCase(context.baseName);
+                context.mainProjectDir = context.pascalizedBaseName;
+            }
+        }
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get writing() {

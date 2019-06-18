@@ -16,55 +16,47 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
-let importJsonIgnore = false;
+<%_ let importJsonIgnore = false;
 let hasManyToMany = false;
 let entityTableName = _.snakeCase(entityClass);
 let entityClassName = asEntity(entityClass);
-let entityVariableName = _.camelCase(entityClass); %>
+let entityVariableName = _.camelCase(entityClass); _%>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-<%  let idx = 0;
+<%_ let idx = 0;
     while (idx < relationships.length && !hasManyToMany){
         if(relationships[idx] === 'many-to-many'){
             hasManyToMany = true;
         }
         idx++;
     }
-    if (hasManyToMany) { %>
+    if (hasManyToMany) { _%>
 using JHipsterNetSampleApplication.Models.RelationshipTools;
-<% } if (importJsonIgnore === true || hasManyToMany) { %>
+<%_ } if (importJsonIgnore === true || hasManyToMany) { _%>
 using Newtonsoft.Json;
-<% } %>
+<%_ } _%>
 
-namespace .Models {
+namespace <%= namespace %>.Models {
     [Table("<%= entityTableName %>")]
     public class <%= entityClassName %> {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        <%# Parcours de tous les attributs %>
-        <% for (idx in fields){
+        <%_ for (idx in fields){
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
             const fieldValidateRules = fields[idx].fieldValidateRules;
-            const fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
-            const fieldType = fields[idx].fieldType;
-            const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-            const fieldName = fields[idx].fieldName;
-            const fieldNameUnderscored = fields[idx].fieldNameUnderscored;
-            const fieldNameAsDatabaseColumn = fields[idx].fieldNameAsDatabaseColumn;
             if (fieldValidate === true) {
                 if (fieldValidateRules.includes('required')) {
                     required = true;
                 }
             }
-            if (required) { %>
+            if (required) { _%>
         [Required]
-            <% }
+            <%_ }
         }
 
         for (idx in relationships) {
@@ -80,29 +72,23 @@ namespace .Models {
             const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
             const ownerSide = relationships[idx].ownerSide;
             const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        } %>
+        } _%>
         // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-        <% for (idx in fields) {
+        <%_ for (idx in fields) {
             const fieldType = fields[idx].fieldType;
-            const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
-            const fieldName = fields[idx].fieldName;
-            const fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod; %>
-        public <%= fieldType %> <%= fieldName %> { get; set; };
+            const fieldName = fields[idx].fieldName; _%>
+        public <%= fieldType %> <%= fieldName %> { get; set; }
         <%_ } _%>
-
-        <% if (hasManyToMany) { %>
+        <%_ if (hasManyToMany) { _%>
             public <%= entityClassName %>()
             {
-                <%# Récupérer le champ sur lequel s'applique la many to many %>
-                <% for (idx in relationshipq) {
+                <%_ for (idx in relationshipq) {
                     const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
                     const otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural;
-
-                } %>
-
+                } _%>
                 Operations = new JoinListFacade<Operation, <%= entityClassName %>, OperationLabel>(this, OperationLabels);
             }
-        <% } %>
+        <%_ } _%>
 
         public override bool Equals(object obj)
         {
@@ -122,12 +108,10 @@ namespace .Models {
         {
             return "<%= entityClassName %>{" +
             $"ID='{Id}'" +
-            <%# Affichage de tous les attributs sauf les relations %>
-            <% for (idx in fields) {
-                const fieldName = fields[idx].fieldName;
-            %>
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName; _%>
                 $", <%= fieldName %>='{<%= fieldName %>}'" +
-            <% } %>
+            <%_ } _%>
             "}";
         }
     }
