@@ -18,21 +18,22 @@
 -%>
 <%_ let importJsonIgnore = false;
 let hasManyToMany = false;
-let entityTableName = _.snakeCase(entityClass);
-let entityClassName = asEntity(entityClass);
-let entityVariableName = _.camelCase(entityClass); _%>
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; _%>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 <%_ let idx = 0;
-    while (idx < relationships.length && !hasManyToMany){
-        if(relationships[idx] === 'many-to-many'){
-            hasManyToMany = true;
-        }
-        idx++;
+while (idx < relationships.length && !hasManyToMany){
+    const relationshipType = relationships[idx].relationshipType;
+    if(relationshipType === 'many-to-many'){
+        hasManyToMany = true;
     }
-    if (hasManyToMany) { _%>
+    idx++;
+}
+if (hasManyToMany) { _%>
 using JHipsterNetSampleApplication.Models.RelationshipTools;
 <%_ } if (importJsonIgnore === true || hasManyToMany) { _%>
 using Newtonsoft.Json;
@@ -49,6 +50,8 @@ namespace <%= namespace %>.Models {
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
             const fieldValidateRules = fields[idx].fieldValidateRules;
+            const fieldType = fields[idx].fieldType;
+            const fieldNamePascalized = fields[idx].fieldNamePascalized;
             if (fieldValidate === true) {
                 if (fieldValidateRules.includes('required')) {
                     required = true;
@@ -56,40 +59,52 @@ namespace <%= namespace %>.Models {
             }
             if (required) { _%>
         [Required]
-            <%_ }
+            <%_ } _%>
+        public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
+
+        <%_ }
+        for (idx in relationships) {
+            const relationshipType = relationships[idx].relationshipType;
+            const relationshipRequired = relationships[idx].relationshipRequired;
+            const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
+            const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
+            const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
+            const joinedEntitiesName = relationships[idx].joinedEntitiesName ;
+            const joinedEntitiesFieldNamePlural = relationships[idx].joinedEntitiesFieldNamePlural ;
+            if(relationshipType === 'one-to-many') { _%>
+        public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= otherEntityNamePascalized %>>();
+            <%_  } else if (relationshipType === 'many-to-one') {
+                if (relationshipRequired) { _%>
+        [Required]
+                <%_ } _%>
+        public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
+            <%_  } else if (relationshipType === 'many-to-many') {_%>
+        [JsonIgnore]
+        public IList<<%= joinedEntitiesName %>> <%= joinedEntitiesFieldNamePlural %> { get; } = new List<<%= joinedEntitiesName %>>();
+
+        [NotMapped]
+        public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; }
+            <%_ } _%>
+
+        <%_ } _%>
+        // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+        <%_ if (hasManyToMany) { _%>
+        public <%= entityClassName %>()
+        {
+            <%_ for (idx in relationships) {
+                const relationshipType = relationships[idx].relationshipType;
+                if(relationshipType === 'many-to-many'){
+                    const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
+                    const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
+                    const joinedEntitiesName = relationships[idx].joinedEntitiesName ;
+                    const joinedEntitiesFieldNamePlural = relationships[idx].joinedEntitiesFieldNamePlural ; _%>
+            <%= relationshipFieldNamePascalizedPlural %> = new JoinListFacade<<%= otherEntityNamePascalized %>, <%= entityClassName %>, <%= joinedEntitiesName %>>(this, <%= joinedEntitiesFieldNamePlural %>);
+                <%_ }
+            } _%>
         }
 
-        for (idx in relationships) {
-            const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
-            const otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural;
-            const relationshipName = relationships[idx].relationshipName;
-            const relationshipFieldName = relationships[idx].relationshipFieldName;
-            const relationshipFieldNamePlural = relationships[idx].relationshipFieldNamePlural;
-            const joinTableName = getJoinTableName(entityTableName, relationshipName, prodDatabaseType);
-            const relationshipType = relationships[idx].relationshipType;
-            const relationshipValidate = relationships[idx].relationshipValidate;
-            const relationshipRequired = relationships[idx].relationshipRequired;
-            const otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized;
-            const ownerSide = relationships[idx].ownerSide;
-            const isUsingMapsId = relationships[idx].useJPADerivedIdentifier;
-        } _%>
-        // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-        <%_ for (idx in fields) {
-            const fieldType = fields[idx].fieldType;
-            const fieldName = fields[idx].fieldName; _%>
-        public <%= fieldType %> <%= fieldName %> { get; set; }
         <%_ } _%>
-        <%_ if (hasManyToMany) { _%>
-            public <%= entityClassName %>()
-            {
-                <%_ for (idx in relationshipq) {
-                    const otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName;
-                    const otherEntityRelationshipNamePlural = relationships[idx].otherEntityRelationshipNamePlural;
-                } _%>
-                Operations = new JoinListFacade<Operation, <%= entityClassName %>, OperationLabel>(this, OperationLabels);
-            }
-        <%_ } _%>
-
         public override bool Equals(object obj)
         {
             if (this == obj) return true;
@@ -107,12 +122,12 @@ namespace <%= namespace %>.Models {
         public override string ToString()
         {
             return "<%= entityClassName %>{" +
-            $"ID='{Id}'" +
+                    $"ID='{Id}'" +
             <%_ for (idx in fields) {
-                const fieldName = fields[idx].fieldName; _%>
-                $", <%= fieldName %>='{<%= fieldName %>}'" +
+                const fieldNamePascalized = fields[idx].fieldNamePascalized; _%>
+                    $", <%= fieldNamePascalized %>='{<%= fieldNamePascalized %>}'" +
             <%_ } _%>
-            "}";
+                    "}";
         }
     }
 }
