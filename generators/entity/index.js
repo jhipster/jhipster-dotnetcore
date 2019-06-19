@@ -2,6 +2,8 @@
 const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
 const toPascalCase = require('to-pascal-case');
+const pluralize = require('pluralize');
+const _ = require('lodash');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -61,7 +63,7 @@ module.exports = class extends EntityGenerator {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
             }
-        }
+        };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
@@ -77,8 +79,29 @@ module.exports = class extends EntityGenerator {
                 const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
+                context.pascalizedEntityClass = toPascalCase(context.entityClass);
+                context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
+                context.camelCasedEntityClass = _.camelCase(context.entityClass);
+
+                // Load in-memory data for fields
+                context.fields.forEach(field => {
+                    field.fieldNamePascalized = toPascalCase(field.fieldName);
+                });
+
+                // Load in-memory data for .Net Blueprint relationships
+                context.relationships.forEach(relationship => {
+                    relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
+                    relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
+                    relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
+                    if (relationship.ownerSide) {
+                        relationship.joinedEntitiesName = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
+                    } else {
+                        relationship.joinedEntitiesName = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
+                    }
+                    relationship.joinedEntitiesFieldNamePlural = pluralize(relationship.joinedEntitiesName);
+                });
             }
-        }
+        };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
