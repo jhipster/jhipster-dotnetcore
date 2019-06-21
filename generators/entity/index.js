@@ -82,6 +82,7 @@ module.exports = class extends EntityGenerator {
                 context.pascalizedEntityClass = toPascalCase(context.entityClass);
                 context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
                 context.camelCasedEntityClass = _.camelCase(context.entityClass);
+                context.entityClassHasManyToMany = false;
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
@@ -94,11 +95,18 @@ module.exports = class extends EntityGenerator {
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     if (relationship.ownerSide) {
-                        relationship.joinedEntitiesName = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
+                        relationship.joinEntityName = context.entityClass + _.upperFirst(relationship.otherEntityName);
+                        relationship.joinEntityNamePascalized = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
                     } else {
-                        relationship.joinedEntitiesName = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
+                        relationship.joinEntityName = relationship.otherEntityName + _.upperFirst(context.entityClass);
+                        relationship.joinEntityNamePascalized = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
                     }
-                    relationship.joinedEntitiesFieldNamePlural = pluralize(relationship.joinedEntitiesName);
+                    relationship.joinEntityFieldNamePlural = pluralize(relationship.joinEntityNamePascalized);
+                    if (relationship.relationshipType === 'many-to-many') {
+                        context.entityClassHasManyToMany = true;
+                    }
+                    relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
+                    relationship.joinEntityGenerated = false;
                 });
             }
         };

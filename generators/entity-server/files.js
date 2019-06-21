@@ -22,6 +22,7 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
+const joinEntitiesTemplates = [];
 
 const serverFiles = {
     server: [
@@ -33,13 +34,41 @@ const serverFiles = {
                     renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`
                 }
             ]
+        },
+        {
+            condition: generator => generator.entityClassHasManyToMany,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Models/Interfaces/IJoinedEntity.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IJoinedEntity.cs`
+                },
+                {
+                    file: 'Project/Models/RelationshipTools/JoinListFacade.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Models/RelationshipTools/JoinListFacade.cs`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.entityClassHasManyToMany,
+            path: SERVER_SRC_DIR,
+            templates: joinEntitiesTemplates
         }
     ]
 }
 
 function writeFiles() {
     return {
-        writeFiles() {
+        writeServerFiles() {
+            this.relationships.forEach(relationship => {
+                if (relationship.relationshipType === 'many-to-many') {
+                    joinEntitiesTemplates.push({
+                        file: 'Project/Models/JoinEntity.cs',
+                        renameTo: generator => `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`
+                    });
+                }
+            });
+
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
         }
     };
