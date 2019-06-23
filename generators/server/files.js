@@ -136,7 +136,7 @@ const serverFiles = {
         },
         {
             path: SERVER_SRC_DIR,
-            templates: [{ file: 'Project/Models/Interfaces/IAuditedEntityBase.cs', renameTo: generator => `${generator.mainProjectDir}/Models/IAuditedEntityBase.cs` }]
+            templates: [{ file: 'Project/Models/Interfaces/IAuditedEntityBase.cs', renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IAuditedEntityBase.cs` }]
         },
         {
             path: SERVER_SRC_DIR,
