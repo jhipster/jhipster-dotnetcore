@@ -80,9 +80,13 @@ module.exports = class extends EntityGenerator {
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
                 context.pascalizedEntityClass = toPascalCase(context.entityClass);
+                context.pascalizedEntityClassPlural = toPascalCase(context.entityClassPlural);
                 context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
                 context.camelCasedEntityClass = _.camelCase(context.entityClass);
+                context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
+                context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
+                context.entities = this.getExistingEntities();
 
                 // Load in-memory data for fields
                 context.fields.forEach(field => {
@@ -101,7 +105,7 @@ module.exports = class extends EntityGenerator {
                         relationship.joinEntityName = relationship.otherEntityName + _.upperFirst(context.entityClass);
                         relationship.joinEntityNamePascalized = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
                     }
-                    relationship.joinEntityFieldNamePlural = pluralize(relationship.joinEntityNamePascalized);
+                    relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
                     if (relationship.relationshipType === 'many-to-many') {
                         context.entityClassHasManyToMany = true;
                     }

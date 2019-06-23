@@ -32,6 +32,10 @@ const serverFiles = {
                 {
                     file: 'Project/Models/Entity.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`
+                },
+                {
+                    file: 'Project/Controllers/EntityController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`
                 }
             ]
         },
