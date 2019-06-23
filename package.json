@@ -29,7 +29,7 @@
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",
     "jhipster-core": "3.0.2",
-    "js-yaml": "3.12.0",
+    "js-yaml": "3.13.1",
     "lodash": "4.17.10",
     "meow": "5.0.0",
     "mkdirp": "0.5.1",
