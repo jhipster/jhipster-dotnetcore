@@ -83,6 +83,7 @@ namespace <%= namespace %>.Controllers {
             }); _%>
             _applicationDatabaseContext.Update(<%= camelCasedEntityClass %>);
             <%_ let first = true;
+            let suffix = 0;
             relationships.forEach( relationship => {
                 if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
                     if (first) {_%>
@@ -92,11 +93,9 @@ namespace <%= namespace %>.Controllers {
                         <%_ first = false;
                     }
                     if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
-// MODIFICATION ULTERIEURE ICI (alea sur le nom de variable)
-            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(bA => bA.<%= relationship.relationshipFieldNamePascalizedPlural %>).IsModified = true;
+            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalizedPlural %>).IsModified = true;
                 <%_ } else { _%>
-// MODIFICATION ULTERIEURE ICI (alea sur le nom de variable)
-            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(bA => bA.<%= relationship.relationshipFieldNamePascalized %>).IsModified = true;
+            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>).IsModified = true;
                 <%_ }
                 }
             }); _%>
@@ -110,19 +109,19 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
             var page = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
-            <%_ relationships.forEach( relationship => {
+            <%_ const reachedEntities = [];
+            reachedEntities.push(camelCasedEntityClass);
+            relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-// MODIFICATION ULTERIEURE ICI (alea sur le nom de variable)
-                .Include(bankAccount => bankAccount.<%= relationship.relationshipFieldNamePascalized %>)
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                     <%_ let idx = 0;
                     while (idx < entities.length && entities[idx].name !== relationship.otherEntityNamePascalized) {
                         idx ++;
                     }
                     if (idx < entities.length) {
                         entities[idx].definition.relationships.forEach(r => {
-                            if (r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one') { _%>
-// MODIFICATION ULTERIEURE ICI (alea sur le nom de variable) + ajout import toPascalCase
-                    .ThenInclude(bankAccount => bankAccount.<%= toPascalCase(r.relationshipName) %>)
+                            if ((r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one') && !reachedEntities.includes(r.otherEntityName)) { _%>
+                    .ThenInclude(<%= _.camelCase(entities[idx].name) %> => <%= _.camelCase(entities[idx].name) %>.<%= toPascalCase(r.relationshipName) %>)
                             <%_ }
                         });
                     }
@@ -138,19 +137,19 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
             var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
-            <%_ relationships.forEach( relationship => {
+            <%_ const reachedEntities2 = [];
+            reachedEntities2.push(camelCasedEntityClass);
+            relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-// MODIFICATION ULTERIEURE ICI (alea sur le nom de variable)
-                .Include(bankAccount => bankAccount.<%= relationship.relationshipFieldNamePascalized %>)
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                     <%_ let idx = 0;
                     while (idx < entities.length && entities[idx].name !== relationship.otherEntityNamePascalized) {
                         idx ++;
                     }
                     if (idx < entities.length) {
                         entities[idx].definition.relationships.forEach(r => {
-                            if (r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one') { _%>
-// MODIFICATION ULTERIEURE ICI (alea sur le nom de variable) + ajout import toPascalCase
-                    .ThenInclude(bankAccount => bankAccount.<%= toPascalCase(r.relationshipName) %>)
+                            if (r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one' && !reachedEntities2.includes(r.otherEntityName)) { _%>
+                    .ThenInclude(<%= _.camelCase(entities[idx].name) %> => <%= _.camelCase(entities[idx].name) %>.<%= toPascalCase(r.relationshipName) %>)
                             <%_ }
                         });
                     }
