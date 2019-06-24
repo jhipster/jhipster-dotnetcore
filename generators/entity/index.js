@@ -87,8 +87,11 @@ module.exports = class extends EntityGenerator {
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
                 context.entities = this.getExistingEntities();
+                context.toPascalCase = toPascalCase;
+                context.pluralize = pluralize;
+                context._ = _;
 
-                // Load in-memory data for fields
+                // Load in-memory data for .Net Blueprint fields
                 context.fields.forEach(field => {
                     field.fieldNamePascalized = toPascalCase(field.fieldName);
                 });

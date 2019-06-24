@@ -58,6 +58,35 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: joinEntitiesTemplates
         }
+    ],
+    db: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Data/Extensions/DbContextExtensions.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbContextExtensions.cs`
+                },
+                {
+                    file: 'Project/Data/Extensions/DbSetExtensions.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbSetExtensions.cs`
+                },
+                {
+                    file: 'Project/Data/Extensions/PropertyAccessorCache.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/PropertyAccessorCache.cs`
+                }
+            ]
+        },
+        {
+            condition: generator => generator.entityClassHasManyToMany,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Data/ApplicationDatabaseContext.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`
+                }
+            ]
+        }
     ]
 }
 
