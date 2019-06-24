@@ -37,7 +37,7 @@ namespace <%= namespace %>.Data {
                     if (relationship.relationshipType === 'many-to-many') {
                         if (relationship.ownerSide) {
                             let entityClassNamePascalized = entity.name;
-                            let otherEntityClassNamePascalized = relationship.otherEntityName;
+                            let otherEntityClassNamePascalized = toPascalCase(relationship.otherEntityName);
                             let joinEntityClassNamePascalized = entityClassNamePascalized + otherEntityClassNamePascalized; _%>
         public DbSet<<%= joinEntityClassNamePascalized %>> <%= pluralize(joinEntityClassNamePascalized) %> { get; set; }
                         <%_ }
@@ -84,7 +84,7 @@ namespace <%= namespace %>.Data {
                         if (relationship.relationshipType === 'many-to-many') {
                             if (relationship.ownerSide) {
                                 let entityClassNamePascalized = entity.name;
-                                let otherEntityClassNamePascalized = relationship.otherEntityName;
+                                let otherEntityClassNamePascalized = toPascalCase(relationship.otherEntityName);
                                 let joinEntityClassNamePascalized = entityClassNamePascalized + otherEntityClassNamePascalized;
                                 let ownerRelationshipFieldName = entityClassNamePascalized;
                                 let nonOwnerRelationshipFieldName = otherEntityClassNamePascalized; _%>
