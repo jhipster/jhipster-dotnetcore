@@ -1,6 +1,6 @@
 # generator-jhipster-dotnetcore
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> JHipster blueprint, A .Net Core based JHipster (JHipster.Net)
+> JHipster blueprint, 
 
 # Introduction
 
