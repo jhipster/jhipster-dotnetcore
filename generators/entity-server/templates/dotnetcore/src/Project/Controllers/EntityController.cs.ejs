@@ -1,0 +1,171 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using JHipsterNet.Pagination;
+using JHipsterNet.Pagination.Extensions;
+using <%= namespace %>.Data;
+using <%= namespace %>.Data.Extensions;
+using <%= namespace %>.Models;
+using <%= namespace %>.Web.Extensions;
+using <%= namespace %>.Web.Filters;
+using <%= namespace %>.Web.Rest.Problems;
+using <%= namespace %>.Web.Rest.Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace <%= namespace %>.Controllers {
+    [Authorize]
+    [Route("api")]
+    [ApiController]
+    public class <%= pascalizedEntityClass %>Controller : ControllerBase {
+        private const string EntityName = "<%= camelCasedEntityClass %>";
+
+        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
+
+        private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
+
+        public <%= pascalizedEntityClass %>Controller(ILogger<<%= pascalizedEntityClass %>Controller> log,
+            ApplicationDatabaseContext applicationDatabaseContext)
+        {
+            _log = log;
+            _applicationDatabaseContext = applicationDatabaseContext;
+        }
+
+        [HttpPost("<%= kebabCasedEntityClassPlural %>")]
+        [ValidateModel]
+        public async Task<ActionResult<<%= pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        {
+            _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= camelCasedEntityClass %>}");
+            if (<%= camelCasedEntityClass %>.Id != 0)
+                throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName,
+                    "idexists");
+
+            <%_ if (relationships.length != 0) { _%>
+            _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
+            <%_ } else { _%>
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
+            <%_ } _%>
+            await _applicationDatabaseContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(Get<%= pascalizedEntityClass %>), new { id = <%= camelCasedEntityClass %>.Id }, <%= camelCasedEntityClass %>)
+                .WithHeaders(HeaderUtil.CreateEntityCreationAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
+        }
+
+        [HttpPut("<%= kebabCasedEntityClassPlural %>")]
+        [ValidateModel]
+        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        {
+            _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= camelCasedEntityClass %>}");
+            if (<%= camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
+            //TODO catch //DbUpdateConcurrencyException into problem
+            <%_ relationships.forEach( relationship => {
+                if (relationship.relationshipType === 'many-to-many') { _%>
+            _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
+                <%_ }
+            }); _%>
+            _applicationDatabaseContext.Update(<%= camelCasedEntityClass %>);
+            <%_ let first = true;
+            let suffix = 0;
+            relationships.forEach( relationship => {
+                if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
+                    if (first) {_%>
+            /* Force the reference navigation property to be in "modified" state.
+            This allows to modify it with a null value (the field is nullable).
+            This takes into consideration the case of removing the association between the two instances. */
+                        <%_ first = false;
+                    }
+                    if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
+            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalizedPlural %>).IsModified = true;
+                <%_ } else { _%>
+            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>).IsModified = true;
+                <%_ }
+                }
+            }); _%>
+            await _applicationDatabaseContext.SaveChangesAsync();
+            return Ok(<%= camelCasedEntityClass %>)
+                .WithHeaders(HeaderUtil.CreateEntityUpdateAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
+        }
+
+        [HttpGet("<%= kebabCasedEntityClassPlural %>")]
+        public ActionResult<IEnumerable<<%= pascalizedEntityClass %>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
+        {
+            _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
+            var page = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+            <%_ const reachedEntities = [];
+            reachedEntities.push(camelCasedEntityClass);
+            relationships.forEach( relationship => {
+                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                    <%_ let idx = 0;
+                    while (idx < entities.length && entities[idx].name !== relationship.otherEntityNamePascalized) {
+                        idx ++;
+                    }
+                    if (idx < entities.length) {
+                        entities[idx].definition.relationships.forEach(r => {
+                            if ((r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one') && !reachedEntities.includes(r.otherEntityName)) { _%>
+                    .ThenInclude(<%= _.camelCase(entities[idx].name) %> => <%= _.camelCase(entities[idx].name) %>.<%= toPascalCase(r.relationshipName) %>)
+                            <%_ }
+                        });
+                    }
+                }
+            }); _%>
+                .UsePageable(pageable);
+            var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
+            return Ok(page.Content).WithHeaders(headers);
+        }
+
+        [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]
+        public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] long id)
+        {
+            _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
+            var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+            <%_ const reachedEntities2 = [];
+            reachedEntities2.push(camelCasedEntityClass);
+            relationships.forEach( relationship => {
+                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                    <%_ let idx = 0;
+                    while (idx < entities.length && entities[idx].name !== relationship.otherEntityNamePascalized) {
+                        idx ++;
+                    }
+                    if (idx < entities.length) {
+                        entities[idx].definition.relationships.forEach(r => {
+                            if (r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one' && !reachedEntities2.includes(r.otherEntityName)) { _%>
+                    .ThenInclude(<%= _.camelCase(entities[idx].name) %> => <%= _.camelCase(entities[idx].name) %>.<%= toPascalCase(r.relationshipName) %>)
+                            <%_ }
+                        });
+                    }
+                }
+            }); _%>
+                .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
+            return ActionResultUtil.WrapOrNotFound(result);
+        }
+
+        [HttpDelete("<%= kebabCasedEntityClassPlural %>/{id}")]
+        public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] long id)
+        {
+            _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.RemoveById(id);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
+        }
+    }
+}

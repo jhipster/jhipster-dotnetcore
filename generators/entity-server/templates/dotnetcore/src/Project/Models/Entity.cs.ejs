@@ -1,0 +1,174 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ function equivalentCSharpType(javaType) {
+    let cSharpType;
+
+    switch(javaType) {
+        case 'String':
+            cSharpType = 'string';
+            break;
+        case 'Integer':
+            cSharpType = 'int?';
+            break;
+        case 'Long':
+            cSharpType = 'long?';
+            break;
+        case 'Float':
+            cSharpType = 'float?';
+            break;
+        case 'Double':
+            cSharpType = 'double?';
+            break;
+        case 'BigDecimal':
+            cSharpType = 'decimal?';
+            break;
+        case 'LocalDate':
+            cSharpType = 'DateTime';
+            break;
+        case 'Instant':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'ZonedDateTime':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Duration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Boolean':
+            cSharpType = 'bool?';
+            break;
+        case 'Enumeration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Blob':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        default:
+            cSharpType = 'UNKNOWN_TYPE';
+    }
+
+    return cSharpType;
+}
+let importJsonIgnore = false;
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; _%>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+<%_ if (hasManyToMany) { _%>
+using <%= namespace %>.Models.RelationshipTools;
+<%_ } if (importJsonIgnore === true || hasManyToMany) { _%>
+using Newtonsoft.Json;
+<%_ } _%>
+
+namespace <%= namespace %>.Models {
+    [Table("<%= entityTableName %>")]
+    public class <%= entityClassName %> {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
+
+        <%_ for (idx in fields){
+            let required = false;
+            const fieldValidate = fields[idx].fieldValidate;
+            const fieldValidateRules = fields[idx].fieldValidateRules;
+            const fieldType = equivalentCSharpType(fields[idx].fieldType);
+            const fieldNamePascalized = fields[idx].fieldNamePascalized;
+            if (fieldValidate === true) {
+                if (fieldValidateRules.includes('required')) {
+                    required = true;
+                }
+            }
+            if (required) { _%>
+        [Required]
+            <%_ } _%>
+        public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
+
+        <%_ }
+        for (idx in relationships) {
+            const relationshipType = relationships[idx].relationshipType;
+            const relationshipRequired = relationships[idx].relationshipRequired;
+            const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
+            const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
+            const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
+            const joinEntityNamePascalized = relationships[idx].joinEntityNamePascalized ;
+            const joinEntityFieldNamePascalizedPlural = relationships[idx].joinEntityFieldNamePascalizedPlural ;
+            if(relationshipType === 'one-to-many') { _%>
+        public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= otherEntityNamePascalized %>>();
+            <%_  } else if (relationshipType === 'many-to-one') {
+                if (relationshipRequired) { _%>
+        [Required]
+                <%_ } _%>
+        public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
+            <%_  } else if (relationshipType === 'many-to-many') {_%>
+        [JsonIgnore]
+        public IList<<%= joinEntityNamePascalized %>> <%= joinEntityFieldNamePascalizedPlural %> { get; } = new List<<%= joinEntityNamePascalized %>>();
+
+        [NotMapped]
+        public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; }
+            <%_ } _%>
+
+        <%_ } _%>
+        // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+        <%_ if (hasManyToMany) { _%>
+        public <%= entityClassName %>()
+        {
+            <%_ for (idx in relationships) {
+                const relationshipType = relationships[idx].relationshipType;
+                if(relationshipType === 'many-to-many'){
+                    const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
+                    const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
+                    const joinEntityNamePascalized = relationships[idx].joinEntityNamePascalized ;
+                    const joinEntityFieldNamePascalizedPlural = relationships[idx].joinEntityFieldNamePascalizedPlural ; _%>
+            <%= relationshipFieldNamePascalizedPlural %> = new JoinListFacade<<%= otherEntityNamePascalized %>, <%= entityClassName %>, <%= joinEntityNamePascalized %>>(this, <%= joinEntityFieldNamePascalizedPlural %>);
+                <%_ }
+            } _%>
+        }
+
+        <%_ } _%>
+        public override bool Equals(object obj)
+        {
+            if (this == obj) return true;
+            if (obj == null || GetType() != obj.GetType()) return false;
+            var <%= entityVariableName %> = obj as <%= entityClassName %>;
+            if (<%= entityVariableName %>?.Id == null || <%= entityVariableName %>?.Id == 0 || Id == 0) return false;
+            return EqualityComparer<long>.Default.Equals(Id, <%= entityVariableName %>.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
+
+        public override string ToString()
+        {
+            return "<%= entityClassName %>{" +
+                    $"ID='{Id}'" +
+            <%_ for (idx in fields) {
+                const fieldNamePascalized = fields[idx].fieldNamePascalized; _%>
+                    $", <%= fieldNamePascalized %>='{<%= fieldNamePascalized %>}'" +
+            <%_ } _%>
+                    "}";
+        }
+    }
+}

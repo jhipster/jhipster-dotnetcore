@@ -1,6 +1,9 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
+const toPascalCase = require('to-pascal-case');
+const pluralize = require('pluralize');
+const _ = require('lodash');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -14,7 +17,7 @@ module.exports = class extends EntityGenerator {
 
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext, this);
+        jhContext.setupEntityOptions(this, jhContext);
     }
 
     get initializing() {
@@ -54,8 +57,14 @@ module.exports = class extends EntityGenerator {
          *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
          * ```
          */
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const jhipsterNetPhaseSteps = {
+            getConfigNetBlueprint() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
+            }
+        };
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get prompting() {
@@ -64,8 +73,51 @@ module.exports = class extends EntityGenerator {
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._configuring();
+        const phaseFromJHipster = super._configuring();
+        const jhipsterNetPhaseSteps = {
+            loadInMemoryDataNetBlueprint() {
+                const context = this.context;
+                context.pascalizedBaseName = toPascalCase(context.baseName);
+                context.mainProjectDir = context.pascalizedBaseName;
+                context.pascalizedEntityClass = toPascalCase(context.entityClass);
+                context.pascalizedEntityClassPlural = toPascalCase(context.entityClassPlural);
+                context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
+                context.camelCasedEntityClass = _.camelCase(context.entityClass);
+                context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
+                context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
+                context.entityClassHasManyToMany = false;
+                context.entities = this.getExistingEntities();
+                context.toPascalCase = toPascalCase;
+                context.pluralize = pluralize;
+                context._ = _;
+
+                // Load in-memory data for .Net Blueprint fields
+                context.fields.forEach(field => {
+                    field.fieldNamePascalized = toPascalCase(field.fieldName);
+                });
+
+                // Load in-memory data for .Net Blueprint relationships
+                context.relationships.forEach(relationship => {
+                    relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
+                    relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
+                    relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
+                    if (relationship.ownerSide) {
+                        relationship.joinEntityName = context.entityClass + _.upperFirst(relationship.otherEntityName);
+                        relationship.joinEntityNamePascalized = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
+                    } else {
+                        relationship.joinEntityName = relationship.otherEntityName + _.upperFirst(context.entityClass);
+                        relationship.joinEntityNamePascalized = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
+                    }
+                    relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
+                    if (relationship.relationshipType === 'many-to-many') {
+                        context.entityClassHasManyToMany = true;
+                    }
+                    relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
+                    relationship.joinEntityGenerated = false;
+                });
+            }
+        };
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get writing() {
