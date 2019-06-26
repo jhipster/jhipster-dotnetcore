@@ -2,6 +2,8 @@
 const _ = require('lodash');
 const chalk = require('chalk');
 const LanguageGenerator = require('generator-jhipster/generators/languages');
+const jhipsterUtils = require('generator-jhipster/generators/utils');
+
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
 const toPascalCase = require('to-pascal-case');
@@ -43,6 +45,8 @@ module.exports = class extends LanguageGenerator {
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
+                this.relativeMainClientDir = "ClientApp";
+                this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
             },
             saveConfigDotnetcore() {
                 return {
@@ -186,7 +190,7 @@ module.exports = class extends LanguageGenerator {
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: ".${this.mainClientDir}/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                content += `                    { pattern: "./${this.relativeMainClientDir}/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
                     i !== languages.length - 1 ? ',' : ''
                 }\n`;
             });

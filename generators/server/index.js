@@ -161,7 +161,7 @@ module.exports = class extends ServerGenerator {
                     })
                     .finally(() => {
                         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
-                        this.log(chalk.green(`Run your .Net Core application:\n${chalk.yellow.bold(`dotnet run --project ./${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`)}`));
+                        this.log(chalk.green(`Run your .Net Core application:\n${chalk.yellow.bold(`dotnet run --verbosity normal --project ./${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`)}`));
                     });
             }
         };
