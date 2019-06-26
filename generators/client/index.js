@@ -115,7 +115,11 @@ return {};
                 this.mainProjectDir = this.pascalizedBaseName;
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
+                this.relativeMainClientDir = "ClientApp";
+                this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
+//TODO PROMPT
+                this.authenticationType = "jwt";
             },
             saveConfigDotnetcore() {
                 return {

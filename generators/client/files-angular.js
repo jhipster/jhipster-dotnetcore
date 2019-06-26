@@ -80,17 +80,68 @@ for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
     }
 }
 
-function updateWebPackCommonJs() {
+function updateWebpackCommonJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.common.js`,
         "src/main/webapp",
-        this.mainClientDir,
+        this.relativeMainClientDir,
         true
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.common.js`,
         "src\\/main\\/webapp\\/",
-        `${this.mainClientDir}/`.replace(new RegExp("/", "g"), "\\/"),
+        `${this.relativeMainClientDir}/`.replace(new RegExp("/", "g"), "\\/"),
+        false
+    );
+}
+
+function updateWebpackDevJs() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
+        "src/main/webapp",
+        this.relativeMainClientDir,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
+        "path: utils.root(.*),",
+        "path: utils.root('wwwroot'),",
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
+        "contentBase: '.*'",
+        "contentBase: './wwwroot'",
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
+        "cacheDirectory: path.resolve(.*)",
+        "cacheDirectory: path.resolve('bin/cache-loader')",
+        true
+    );
+}
+
+function updateWebpackProdJs() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.prod.js`,
+        "src/main/webapp",
+        this.relativeMainClientDir,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.prod.js`,
+        "path: utils.root(.*),",
+        "path: utils.root('wwwroot'),",
+        true
+    );
+}
+
+function angularJson() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/angular.json`,
+        "src/main/webapp",
+        this.relativeMainClientDir,
         false
     );
 }
@@ -108,13 +159,34 @@ function updateTsConfigJson() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`,
         "src/main/webapp",
-        this.mainClientDir,
+        this.relativeMainClientDir,
         true
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`,
         "\"outDir\": \".*\"",
         "\"outDir\": \"wwwwroot/app\"",
+        true
+    );
+}
+
+function updateTsConfigAotJson() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`,
+        "src/main/webapp",
+        this.relativeMainClientDir,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`,
+        "\"outDir\": \".*\"",
+        "\"outDir\": \"wwwwroot/app\"",
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`,
+        "\"genDir\": \".*\"",
+        "\"genDir\": \"bin/aot\"",
         true
     );
 }
@@ -145,9 +217,13 @@ function updateHomeTitle() {
 
 function writeFiles() {
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
-    updateWebPackCommonJs.call(this);
+    updateWebpackCommonJs.call(this);
+    updateWebpackDevJs.call(this);
+    updateWebpackProdJs.call(this);
+    angularJson.call(this);
     updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
+    updateTsConfigAotJson.call(this);
     updatePackageJson.call(this);
     updateHomeTitle.call(this);
 }
