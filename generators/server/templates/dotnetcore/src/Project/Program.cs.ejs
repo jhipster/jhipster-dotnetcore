@@ -21,11 +21,15 @@ using System.IO;
 using JHipsterNet.Logging;
 using ILogger = Serilog.ILogger;
 
+using static JHipsterNet.Boot.BannerPrinter;
+
 namespace <%= namespace %> {
     public class Program {
 
         public static int Main(string[] args)
         {
+            PrintBanner(10 * 1000);
+
             try {
 
                 Log.Logger = CreateLogger();

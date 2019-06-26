@@ -375,6 +375,14 @@ const serverFiles = {
     serverJhipsterNet: [
         {
             path: SERVER_SRC_DIR,
+            templates: [{ file: 'JHipsterNet/Boot/Ansi/AnsiColor.cs', renameTo: () => 'JHipsterNet/Boot/Ansi/AnsiColor.cs' }]
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [{ file: 'JHipsterNet/Boot/BannerPrinter.cs', renameTo: () => 'JHipsterNet/Boot/BannerPrinter.cs' }]
+        },
+        {
+            path: SERVER_SRC_DIR,
             templates: [{ file: 'JHipsterNet/Pagination/Sort.cs', renameTo: () => 'JHipsterNet/Pagination/Sort.cs' }]
         },
         {
