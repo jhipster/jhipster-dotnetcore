@@ -1,7 +1,7 @@
 {
   "name": "generator-jhipster-dotnetcore",
   "version": "0.0.0",
-  "description": "A .Net Core based JHipster (JHipster.Net)",
+  "description": "",
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
@@ -24,12 +24,11 @@
   "dependencies": {
     "chalk": "2.4.1",
     "ejs": "2.6.1",
-    "generator-jhipster": ">=5.4.0",
     "glob": "7.1.2",
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",
     "jhipster-core": "3.0.2",
-    "js-yaml": "3.13.1",
+    "js-yaml": "3.12.0",
     "lodash": "4.17.10",
     "meow": "5.0.0",
     "mkdirp": "0.5.1",
@@ -37,9 +36,9 @@
     "prettier": "1.13.5",
     "randexp": "0.4.9",
     "semver": "5.5.0",
-    "shelljs": "^0.8.2",
+    "shelljs": "0.8.2",
     "through2": "2.0.3",
-    "to-pascal-case": "^1.0.0",
+    "generator-jhipster": ">=5.4.0",
     "yeoman-environment": "2.3.0",
     "yeoman-generator": "2.0.5"
   },
