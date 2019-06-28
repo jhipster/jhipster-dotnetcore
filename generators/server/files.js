@@ -196,7 +196,7 @@ const serverFiles = {
         },
         {
             path: SERVER_TEST_DIR,
-            templates: [{ file: 'Project.Test/Controllers/UserResourceIntTest.cs', renameTo: generator => `${generator.testProjectDir}/Web/Rest/UserResourceIntTest.cs` }]
+            templates: [{ file: 'Project.Test/Controllers/UserResourceIntTest.cs', renameTo: generator => `${generator.testProjectDir}/Controllers/UserResourceIntTest.cs` }]
         },
 
     ],

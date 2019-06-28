@@ -4,6 +4,7 @@ const EntityGenerator = require('generator-jhipster/generators/entity');
 const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
+const constants = require('../generator-dotnetcore-constants');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -79,6 +80,7 @@ module.exports = class extends EntityGenerator {
                 const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
+                context.testProjectDir = `${context.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
                 context.pascalizedEntityClass = toPascalCase(context.entityClass);
                 context.pascalizedEntityClassPlural = toPascalCase(context.entityClassPlural);
                 context.snakeCasedEntityClass = _.snakeCase(context.entityClass);

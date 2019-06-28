@@ -1,0 +1,354 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ let hasDateTimeTypeField = false;
+let idx = 0;
+while (idx < fields.length && !hasDateTimeTypeField) {
+    if (fields[idx].fieldType === 'LocalDate') {
+        hasDateTimeTypeField = true;
+    }
+    idx ++;
+}
+if (hasDateTimeTypeField) { _%>
+using System;
+<%_ } _%>
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
+using JHipsterNetSampleApplication.Data;
+using JHipsterNetSampleApplication.Models;
+using JHipsterNetSampleApplication.Test.Setup;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Xunit;
+
+namespace <%= namespace %>.Test.Web.Rest {
+    public class <%= pascalizedEntityClass %>ResourceIntTest {
+        public <%= pascalizedEntityClass %>ResourceIntTest()
+        {
+            _factory = new NhipsterWebApplicationFactory<Startup>();
+            _client = _factory.CreateClient();
+
+            _applicationDatabaseContext = _factory.GetRequiredService<ApplicationDatabaseContext>();
+
+            InitTest();
+        }
+
+// Pour chaque field, creer 2 attributs du même type : un "avant", un "après" et avec des valeurs différentes.
+
+        private readonly NhipsterWebApplicationFactory<Startup> _factory;
+        private readonly HttpClient _client;
+
+        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
+
+        private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
+
+// TO CONTINUE HERE
+
+        private BankAccount CreateEntity()
+        {
+            return new BankAccount {
+                Name = DefaultName,
+                Balance = DefaultBalance
+            };
+        }
+
+        private void InitTest()
+        {
+            _bankAccount = CreateEntity();
+        }
+
+        [Fact]
+        public async Task CheckNameIsRequired()
+        {
+            var databaseSizeBeforeTest = _applicationDatabaseContext.BankAccounts.Count();
+
+            // set the field null
+            _bankAccount.Name = null;
+
+            // Create the BankAccount, which fails.
+            var response = await _client.PostAsync("/api/bank-accounts", TestUtil.ToJsonContent(_bankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var bankAccountList = _applicationDatabaseContext.BankAccounts.ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeTest);
+        }
+
+        [Fact]
+        public async Task CreateBankAccount()
+        {
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.BankAccounts.Count();
+
+            // Create the BankAccount
+            var response = await _client.PostAsync("/api/bank-accounts", TestUtil.ToJsonContent(_bankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Validate the BankAccount in the database
+            var bankAccountList = _applicationDatabaseContext.BankAccounts.ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            var testBankAccount = bankAccountList[bankAccountList.Count - 1];
+            testBankAccount.Name.Should().Be(DefaultName);
+            testBankAccount.Balance.Should().Be(DefaultBalance);
+        }
+
+        [Fact]
+        public async Task CreateBankAccountWithExistingId()
+        {
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.BankAccounts.Count();
+            databaseSizeBeforeCreate.Should().Be(0);
+            // Create the BankAccount with an existing ID
+            _bankAccount.Id = 1L;
+
+            // An entity with an existing ID cannot be created, so this API call must fail
+            var response = await _client.PostAsync("/api/bank-accounts", TestUtil.ToJsonContent(_bankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            // Validate the BankAccount in the database
+            var bankAccountList = _applicationDatabaseContext.BankAccounts.ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeCreate);
+        }
+
+        [Fact]
+        public async Task CreateBankAccountWithExistingReferencedEntity()
+        {
+            // Get a User to referenced
+            var user = _applicationDatabaseContext.Users.ToList()[0];
+
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.BankAccounts.Count();
+
+            // Set the referencing field
+            _bankAccount.User = user;
+
+            // Create the BankAccount
+            var response = await _client.PostAsync("/api/bank-accounts", TestUtil.ToJsonContent(_bankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Validate the BankAccount in the database
+            /* AsNoTracking() permits to avoid the use of the cache and force to fetch data from the database.
+               It is needed because another context makes the update and our context doesn't have the knowlegde of
+               data changes and without it our context will fetch from its cache omitting the changes done. */
+            var bankAccountList = _applicationDatabaseContext.BankAccounts
+                .Include(bankAccount => bankAccount.User)
+                .AsNoTracking()
+                .ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            var testBankAccount = bankAccountList[bankAccountList.Count - 1];
+            testBankAccount.Name.Should().Be(DefaultName);
+            testBankAccount.Balance.Should().Be(DefaultBalance);
+            testBankAccount.User.Should().Be(user);
+        }
+
+        [Fact]
+        public async Task DeleteBankAccount()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.BankAccounts.Add(_bankAccount);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeDelete = _applicationDatabaseContext.BankAccounts.Count();
+
+            var response = await _client.DeleteAsync($"/api/bank-accounts/{_bankAccount.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the database is empty
+            var bankAccountList = _applicationDatabaseContext.BankAccounts.ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeDelete - 1);
+        }
+
+        [Fact]
+        public void EqualsVerifier()
+        {
+            TestUtil.EqualsVerifier(typeof(BankAccount));
+            var bankAccount1 = new User {
+                Id = "bankAccount-1"
+            };
+            var bankAccount2 = new User {
+                Id = bankAccount1.Id
+            };
+            bankAccount1.Should().Be(bankAccount2);
+            bankAccount2.Id = "bankAccount-2";
+            bankAccount1.Should().NotBe(bankAccount2);
+            bankAccount1.Id = null;
+            bankAccount1.Should().NotBe(bankAccount2);
+        }
+
+        [Fact]
+        public async Task GetAllBankAccounts()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.BankAccounts.Add(_bankAccount);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Get all the bankAccountList
+            var response = await _client.GetAsync("/api/bank-accounts?sort=id,desc");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectTokens("$.[*].id").Should().Contain(_bankAccount.Id);
+            json.SelectTokens("$.[*].name").Should().Contain(DefaultName);
+            json.SelectTokens("$.[*].balance").Should().Contain(DefaultBalance);
+        }
+
+        [Fact]
+        public async Task GetBankAccount()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.BankAccounts.Add(_bankAccount);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Get the bankAccount
+            var response = await _client.GetAsync($"/api/bank-accounts/{_bankAccount.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectTokens("$.id").Should().Contain(_bankAccount.Id);
+            json.SelectTokens("$.name").Should().Contain(DefaultName);
+            json.SelectTokens("$.balance").Should().Contain(DefaultBalance);
+        }
+
+        [Fact]
+        public async Task GetNonExistingBankAccount()
+        {
+            var response = await _client.GetAsync("/api/bank-accounts/" + long.MaxValue);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task UpdateBankAccount()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.BankAccounts.Add(_bankAccount);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.BankAccounts.Count();
+
+            // Update the bankAccount
+            var updatedBankAccount =
+                await _applicationDatabaseContext.BankAccounts.SingleOrDefaultAsync(it => it.Id == _bankAccount.Id);
+            // Disconnect from session so that the updates on updatedBankAccount are not directly saved in db
+//TODO detach
+            updatedBankAccount.Name = UpdatedName;
+            updatedBankAccount.Balance = UpdatedBalance;
+
+            var response = await _client.PutAsync("/api/bank-accounts", TestUtil.ToJsonContent(updatedBankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the BankAccount in the database
+            var bankAccountList = _applicationDatabaseContext.BankAccounts.ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeUpdate);
+            var testBankAccount = bankAccountList[bankAccountList.Count - 1];
+            testBankAccount.Name.Should().Be(UpdatedName);
+            testBankAccount.Balance.Should().Be(UpdatedBalance);
+        }
+
+        [Fact]
+        public async Task UpdateBankAccountWithExistingReferencedEntity()
+        {
+            // Get two Users to referenced
+            var user = _applicationDatabaseContext.Users.ToList()[0];
+            var updatedUser = _applicationDatabaseContext.Users.ToList()[1];
+
+            // Set the referencing field
+            _bankAccount.User = user;
+
+            // Initialize the database with a bankAccount
+            _applicationDatabaseContext.BankAccounts.Add(_bankAccount);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.BankAccounts.Count();
+
+            // Update the bankAccount
+            var updatedBankAccount = await _applicationDatabaseContext.BankAccounts
+                .SingleOrDefaultAsync(it => it.Id == _bankAccount.Id);
+            // Disconnect from session so that the updates on updatedBankAccount are not directly saved in db
+//TODO detach
+            updatedBankAccount.Name = UpdatedName;
+            updatedBankAccount.Balance = UpdatedBalance;
+            updatedBankAccount.User = updatedUser;
+
+            var response = await _client.PutAsync("/api/bank-accounts", TestUtil.ToJsonContent(updatedBankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the BankAccount in the database
+            var bankAccountList = _applicationDatabaseContext.BankAccounts
+                .Include(bankAccount => bankAccount.User)
+                .AsNoTracking()
+                .ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeUpdate);
+            var testBankAccount = bankAccountList[bankAccountList.Count - 1];
+            testBankAccount.Name.Should().Be(UpdatedName);
+            testBankAccount.Balance.Should().Be(UpdatedBalance);
+            testBankAccount.User.Should().Be(updatedUser);
+        }
+
+        [Fact]
+        public async Task UpdateBankAccountWithReferencedEntityToNull()
+        {
+            // Get a User to referenced
+            var user = _applicationDatabaseContext.Users.ToList()[0];
+
+            // Set the referencing field
+            _bankAccount.User = user;
+
+            // Initialize the database with a bankAccount
+            _applicationDatabaseContext.BankAccounts.Add(_bankAccount);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.BankAccounts.Count();
+
+            // Update the bankAccount
+            var updatedBankAccount = await _applicationDatabaseContext.BankAccounts
+                .SingleOrDefaultAsync(it => it.Id == _bankAccount.Id);
+            // Disconnect from session so that the updates on updatedBankAccount are not directly saved in db
+//TODO detach
+            updatedBankAccount.Name = UpdatedName;
+            updatedBankAccount.Balance = UpdatedBalance;
+            updatedBankAccount.User = null;
+
+            var response = await _client.PutAsync("/api/bank-accounts", TestUtil.ToJsonContent(updatedBankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the BankAccount in the database
+            var bankAccountList = _applicationDatabaseContext.BankAccounts
+                .Include(bankAccount => bankAccount.User)
+                .AsNoTracking()
+                .ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeUpdate);
+            var testBankAccount = bankAccountList[bankAccountList.Count - 1];
+            testBankAccount.Name.Should().Be(UpdatedName);
+            testBankAccount.Balance.Should().Be(UpdatedBalance);
+            testBankAccount.User.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task UpdateNonExistingBankAccount()
+        {
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.BankAccounts.Count();
+
+            // If the entity doesn't have an ID, it will throw BadRequestAlertException
+            var response = await _client.PutAsync("/api/bank-accounts", TestUtil.ToJsonContent(_bankAccount));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            // Validate the BankAccount in the database
+            var bankAccountList = _applicationDatabaseContext.BankAccounts.ToList();
+            bankAccountList.Count().Should().Be(databaseSizeBeforeUpdate);
+        }
+    }
+}
