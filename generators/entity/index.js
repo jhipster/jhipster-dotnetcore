@@ -84,6 +84,7 @@ module.exports = class extends EntityGenerator {
                 context.pascalizedEntityClass = toPascalCase(context.entityClass);
                 context.pascalizedEntityClassPlural = toPascalCase(context.entityClassPlural);
                 context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
+                context.snakeCasedEntityClassPlural = _.snakeCase(context.entityClassPlural);
                 context.camelCasedEntityClass = _.camelCase(context.entityClass);
                 context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
@@ -96,6 +97,7 @@ module.exports = class extends EntityGenerator {
                 // Load in-memory data for .Net Blueprint fields
                 context.fields.forEach(field => {
                     field.fieldNamePascalized = toPascalCase(field.fieldName);
+                    field.fieldNameCamelCased = _.camelCase(field.fieldName);
                 });
 
                 // Load in-memory data for .Net Blueprint relationships
@@ -103,6 +105,11 @@ module.exports = class extends EntityGenerator {
                     relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
+                    relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
+                    relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
+                    relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
+                    relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
+                    relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(relationship.otherEntityRelationshipFieldNamePascalized);
                     if (relationship.ownerSide) {
                         relationship.joinEntityName = context.entityClass + _.upperFirst(relationship.otherEntityName);
                         relationship.joinEntityNamePascalized = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
@@ -110,11 +117,12 @@ module.exports = class extends EntityGenerator {
                         relationship.joinEntityName = relationship.otherEntityName + _.upperFirst(context.entityClass);
                         relationship.joinEntityNamePascalized = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
                     }
+                    relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
+                    relationship.joinEntityNameCamelCased = _.camelCase(relationship.joinEntityName);
                     relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
                     if (relationship.relationshipType === 'many-to-many') {
                         context.entityClassHasManyToMany = true;
                     }
-                    relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
                     relationship.joinEntityGenerated = false;
                 });
             }
