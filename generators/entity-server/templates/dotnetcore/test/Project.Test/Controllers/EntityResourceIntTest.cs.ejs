@@ -1,0 +1,1258 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ function defaultValue(cSharpType) {
+    let defaultValue;
+    const defaultNumValue = 1;
+
+    switch (cSharpType) {
+        case 'string' :
+            defaultValue = "\"AAAAAAAAAA\"";
+            break;
+        case 'int?' :
+            defaultValue = `${defaultNumValue}`;
+            break;
+        case 'long?' :
+            defaultValue = `${defaultNumValue}L`;
+            break;
+        case 'float?' :
+            defaultValue = `${defaultNumValue}F`;
+            break;
+        case 'double?' :
+            defaultValue = `${defaultNumValue}D`;
+            break;
+        case 'decimal?' :
+            defaultValue = `${defaultNumValue}M`;
+            break;
+        case 'DateTime?' :
+            defaultValue = "DateTime.UnixEpoch";
+            break;
+        case 'bool?' :
+            defaultValue = "false";
+            break;
+    }
+
+    return defaultValue;
+}
+function updatedValue(cSharpType) {
+    let updatedValue;
+    const updatedNumValue = 2;
+
+    switch (cSharpType) {
+        case 'string' :
+            updatedValue = "\"BBBBBBBBBB\"";
+            break;
+        case 'int?' :
+            updatedValue = `${updatedNumValue}`;
+            break;
+        case 'long?' :
+            updatedValue = `${updatedNumValue}L`;
+            break;
+        case 'float?' :
+            updatedValue = `${updatedNumValue}F`;
+            break;
+        case 'double?' :
+            updatedValue = `${updatedNumValue}D`;
+            break;
+        case 'decimal?' :
+            updatedValue = `${updatedNumValue}M`;
+            break;
+        case 'DateTime?' :
+            updatedValue = "DateTime.Now";
+            break;
+        case 'bool?' :
+            updatedValue = "true";
+            break;
+    }
+
+    return updatedValue;
+}
+function equivalentCSharpType(javaType) {
+    let cSharpType;
+
+    switch(javaType) {
+        case 'String':
+            cSharpType = 'string';
+            break;
+        case 'Integer':
+            cSharpType = 'int?';
+            break;
+        case 'Long':
+            cSharpType = 'long?';
+            break;
+        case 'Float':
+            cSharpType = 'float?';
+            break;
+        case 'Double':
+            cSharpType = 'double?';
+            break;
+        case 'BigDecimal':
+            cSharpType = 'decimal?';
+            break;
+        case 'LocalDate':
+            cSharpType = 'DateTime?';
+            break;
+        case 'Instant':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'ZonedDateTime':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Duration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Boolean':
+            cSharpType = 'bool?';
+            break;
+        case 'Enumeration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Blob':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        default:
+            cSharpType = 'UNKNOWN_TYPE';
+    }
+
+    return cSharpType;
+}
+function hasDateTimeTypeField() {
+    let dateTimeTypeField = false;
+    let idx = 0;
+    while (idx < fields.length && !dateTimeTypeField) {
+        if (fields[idx].fieldType === 'LocalDate') {
+            dateTimeTypeField = true;
+        }
+        idx ++;
+    }
+    return dateTimeTypeField;
+}
+function hasManyToOneOrManyToManyWithDateTimeTypeField() {
+    let dateTimeTypeField = false;
+    let i = 0;
+    while (i < relationships.length && !dateTimeTypeField) {
+        let relationship = relationships[i];
+        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
+            let found = false;
+            let j = 0;
+            while (j < entities.length && !found) {
+                let entity = entities[j];
+                if (entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length && !dateTimeTypeField) {
+                        let field = entity.definition.fields[k];
+                        if (field.fieldType === 'LocalDate') {
+                            dateTimeTypeField = true;
+                        }
+                        k++;
+                    }
+                    found = true;
+                }
+                j++;
+            }
+        }
+        i ++;
+    }
+    return dateTimeTypeField;
+}
+if (hasDateTimeTypeField() || hasManyToOneOrManyToManyWithDateTimeTypeField()) { _%>
+using System;
+<%_ } _%>
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
+using <%= namespace %>.Data;
+using <%= namespace %>.Models;
+using <%= namespace %>.Test.Setup;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Xunit;
+
+namespace <%= namespace %>.Test.Web.Rest {
+    public class <%= pascalizedEntityClass %>ResourceIntTest {
+        public <%= pascalizedEntityClass %>ResourceIntTest()
+        {
+            _factory = new NhipsterWebApplicationFactory<Startup>();
+            _client = _factory.CreateClient();
+
+            _applicationDatabaseContext = _factory.GetRequiredService<ApplicationDatabaseContext>();
+
+            InitTest();
+        }
+
+        <%_ fields.forEach(field => {
+            const fieldType = equivalentCSharpType(field.fieldType);
+            if (field.fieldType == 'String') { _%>
+        private const <%= fieldType %> Default<%= field.fieldNamePascalized %> = <%- defaultValue(fieldType) %>;
+        private const <%= fieldType %> Updated<%= field.fieldNamePascalized %> = <%- updatedValue(fieldType) %>;
+            <%_ } else { _%>
+        private static readonly <%= fieldType %> Default<%= field.fieldNamePascalized %> = <%- defaultValue(fieldType) %>;
+        private static readonly <%= fieldType %> Updated<%= field.fieldNamePascalized %> = <%- updatedValue(fieldType) %>;
+            <%_ } _%>
+
+        <%_ }); _%>
+        private readonly NhipsterWebApplicationFactory<Startup> _factory;
+        private readonly HttpClient _client;
+
+        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
+
+        private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
+
+        private <%= pascalizedEntityClass %> CreateEntity()
+        {
+            return new <%= pascalizedEntityClass %> {
+                <%_ let i = 0;
+                if (fields.length != 0) {
+                    while (i < fields.length - 1) { _%>
+                    <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
+                        <%_ i ++;
+                    }; _%>
+                    <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>
+                <%_ }_%>
+            };
+        }
+
+        private void InitTest()
+        {
+            _<%= camelCasedEntityClass %> = CreateEntity();
+        }
+
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass %>()
+        {
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Create the <%= pascalizedEntityClass %>
+            var response = await _client.PostAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass %>WithExistingId()
+        {
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            databaseSizeBeforeCreate.Should().Be(0);
+            // Create the <%= pascalizedEntityClass %> with an existing ID
+            _<%= camelCasedEntityClass %>.Id = 1L;
+
+            // An entity with an existing ID cannot be created, so this API call must fail
+            var response = await _client.PostAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate);
+        }
+
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-one') { _%>
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass %>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>()
+        {
+            <%_ if (relationship.otherEntityName.toUpperCase() === 'USER' || relationship.otherEntityName.toUpperCase() === 'USERROLE' || relationship.otherEntityName.toUpperCase() === 'ROLE') { _%>
+            // Get a <%= relationship.otherEntityNamePascalized %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[0];
+            <%_ } else { _%>
+            // Create a <%= relationship.otherEntityNamePascalized %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ let j = 0;
+                let found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } _%>
+
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = <%= relationship.otherEntityNameCamelCased %>;
+
+            // Create the <%= pascalizedEntityClass %>
+            var response = await _client.PostAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            /* AsNoTracking() permits to avoid the use of the cache and force to fetch data from the database.
+               It is needed because another context makes the update and our context doesn't have the knowlegde of
+               data changes and without it our context will fetch from its cache omitting the changes done. */
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>);
+        }
+
+            <%_ }
+        }); _%>
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-many') { _%>
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass%>WithManyToManyAssociationWith<%= relationship.otherEntityNamePascalized %>()
+        {
+            <%_ if (relationship.ownerSide) { _%>
+            // Create a <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+
+            // Create the <%= pascalizedEntityClass %>
+            var response = await _client.PostAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            <%_ } else { _%>
+            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            /* Due to JsonIgnore annotation on <%= relationship.relationshipFieldNamePascalizedPlural %> property, we first create the <%= pascalizedEntityClass %>
+               This allows the <%= relationship.otherEntityNameCamelCased %> to create the relationship */
+            var response = await _client.PostAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            var <%= camelCasedEntityClass %> = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList()[0];
+
+            // Create an <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            <%= relationship.otherEntityNameCamelCased %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(<%= camelCasedEntityClass %>);
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } _%>
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .Include(<%= (camelCasedEntityClass).charAt(0) %> => <%= (camelCasedEntityClass).charAt(0) %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>[0].Should().Be(<%= relationship.otherEntityNameCamelCased %>);
+
+            // Validate the <%= relationship.otherEntityNamePascalized %> in the database and in particular the <%= pascalizedEntityClass %> referenced
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
+        }
+
+            <%_ }
+        }); _%>
+        <%_ fields.forEach(field => {
+            let required = false;
+            if (field.fieldValidate === true) {
+                if (field.fieldValidateRules.includes('required')) {
+                    required = true;
+                }
+            }
+            if (required) { _%>
+        [Fact]
+        public async Task Check<%= field.fieldNamePascalized %>IsRequired()
+        {
+            var databaseSizeBeforeTest = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Set the field to null
+            _<%= camelCasedEntityClass %>.<%= field.fieldNamePascalized %> = null;
+
+            // Create the <%= pascalizedEntityClass %>, which fails.
+            var response = await _client.PostAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeTest);
+        }
+
+        <%_ }
+        }); _%>
+        [Fact]
+        public async Task GetAll<%= pascalizedEntityClassPlural %>()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Get all the <%= camelCasedEntityClass %>List
+            var response = await _client.GetAsync("/api/<%= snakeCasedEntityClassPlural %>?sort=id,desc");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            <%_ fields.forEach(field => { _%>
+            json.SelectTokens("$.[*].<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task Get<%= pascalizedEntityClass %>()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Get the <%= camelCasedEntityClass %>
+            var response = await _client.GetAsync($"/api/<%= snakeCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            <%_ fields.forEach(field => { _%>
+            json.SelectTokens("$.<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task GetNonExisting<%= pascalizedEntityClass %>()
+        {
+            var response = await _client.GetAsync("/api/<%= snakeCasedEntityClassPlural %>/" + long.MaxValue);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Update<%= pascalizedEntityClass %>()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Update the <%= camelCasedEntityClass %>
+            var updated<%= pascalizedEntityClass %> =
+                await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.SingleOrDefaultAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
+//TODO detach
+            <%_ fields.forEach(field => { _%>
+            updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+
+            var response = await _client.PutAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task UpdateNonExisting<%= pascalizedEntityClass %>()
+        {
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // If the entity doesn't have an ID, it will throw BadRequestAlertException
+            var response = await _client.PutAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+        }
+
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-one') { _%>
+        [Fact]
+        public async Task Update<%= pascalizedEntityClass %>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>()
+        {
+            <%_ if (relationship.otherEntityName.toUpperCase() === 'USER' || relationship.otherEntityName.toUpperCase() === 'USERROLE' || relationship.otherEntityName.toUpperCase() === 'ROLE') { _%>
+            // Get two <%= relationship.otherEntityNamePascalizedPlural %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[0];
+            var updated<%= relationship.otherEntityNamePascalized %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[1];
+            <%_ } else { _%>
+            // Create two <%= relationship.otherEntityNamePascalizedPlural %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            var updated<%= relationship.otherEntityNamePascalized %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } _%>
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = <%= relationship.otherEntityNameCamelCased %>;
+
+            // Initialize the database with a <%= camelCasedEntityClass %>
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Update the <%= camelCasedEntityClass %>
+            var updated<%= pascalizedEntityClass %> = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .SingleOrDefaultAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
+//TODO detach
+            <%_ fields.forEach(field => { _%>
+            updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+            updated<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = updated<%= relationship.otherEntityNamePascalized %>;
+
+            var response = await _client.PutAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>.Should().Be(updated<%= relationship.otherEntityNamePascalized %>);
+            <%_ if (relationship.otherEntityName.toUpperCase() !== 'USER' && relationship.otherEntityName.toUpperCase() !== 'USERROLE' && relationship.otherEntityName.toUpperCase() !== 'ROLE') { _%>
+
+            // Validate the updated<%= relationship.otherEntityNamePascalized %> in the database
+            var testUpdated<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == updated<%= relationship.otherEntityNamePascalized %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(updated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= pascalizedEntityClassPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
+
+            // Validate the <%= relationship.otherEntityNameCamelCased %> in the database
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
+            <%_ } _%>
+        }
+
+            <%_ }
+        }); _%>
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-one' && !relationship.relationshipRequired) { _%>
+        [Fact]
+        public async Task Update<%= pascalizedEntityClass %>WithReferenced<%= relationship.otherEntityNamePascalized %>ToNull()
+        {
+            <%_ if (relationship.otherEntityName.toUpperCase() === 'USER' || relationship.otherEntityName.toUpperCase() === 'USERROLE' || relationship.otherEntityName.toUpperCase() === 'ROLE') { _%>
+            // Get a <%= relationship.otherEntityNamePascalized %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[0];
+            <%_ } else { _%>
+            // Create a <%= relationship.otherEntityNamePascalized %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } _%>
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = <%= relationship.otherEntityNameCamelCased %>;
+
+            // Initialize the database with a <%= camelCasedEntityClass %>
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Update the <%= camelCasedEntityClass %>
+            var updated<%= pascalizedEntityClass %> = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .SingleOrDefaultAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
+//TODO detach
+            <%_ fields.forEach(field => { _%>
+            updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+            updated<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = null;
+
+            var response = await _client.PutAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>.Should().BeNull();
+            <%_ if (relationship.otherEntityName.toUpperCase() !== 'USER' && relationship.otherEntityName.toUpperCase() !== 'USERROLE' && relationship.otherEntityName.toUpperCase() !== 'ROLE') { _%>
+
+            // Validate the <%= relationship.otherEntityNameCamelCased %> in the database
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
+            <%_ } _%>
+        }
+
+            <%_ }
+        }); _%>
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-many') { _%>
+        [Fact]
+        public async Task Update<%= pascalizedEntityClass%>WithManyToManyAssociationWith<%= relationship.otherEntityNamePascalized %>()
+        {
+            <%_ if (relationship.ownerSide) { _%>
+            // Create two <%= relationship.otherEntityNamePascalizedPlural %> to test the ManyToMany association
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            var updated<%= relationship.otherEntityNamePascalized %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+
+            // Initialize the database with an <%= camelCasedEntityClass %>
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Update the <%= camelCasedEntityClass %>
+            var updated<%= pascalizedEntityClass%> = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .SingleOrDefaultAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            // Disconnect from session so that the updates on updated<%= pascalizedEntityClass%> are not directly saved in db
+//TODO detach
+            <%_ fields.forEach(field => { _%>
+            updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+            updated<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Clear();
+            updated<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
+
+            var response = await _client.PutAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            <%_ } else { _%>
+            /* Due to JsonIgnore annotation on <%= relationship.relationshipFieldNamePascalizedPlural %> property, we first create the <%= pascalizedEntityClass %>
+               This allows the <%= relationship.otherEntityNameCamelCased %> to create the relationship */
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Create an <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            <%= relationship.otherEntityNameCamelCased %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(_<%= camelCasedEntityClass %>);
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            // Update the <%= camelCasedEntityClass%>
+            var updated<%= pascalizedEntityClass %> = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .SingleOrDefaultAsync(it => it.Id == _<%= camelCasedEntityClass%>.Id);
+            // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
+//TODO detach
+            <%_ fields.forEach(field => { _%>
+            updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+
+            var response = await _client.PutAsync("/api/<%= snakeCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Create a second <%= relationship.otherEntityNamePascalized %> to update the ManyToMany association
+            var updated<%= relationship.otherEntityNamePascalized %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            updated<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(updated<%= pascalizedEntityClass %>);
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } _%>
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .Include(<%= (camelCasedEntityClass).charAt(0) %> => <%= (camelCasedEntityClass).charAt(0) %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            <%_ fields.forEach(field => { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+            <%_ if (relationship.ownerSide) { _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>[0].Should().Be(updated<%= relationship.otherEntityNamePascalized %>);
+            <%_ } else { _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>[0].Should().Be(<%= relationship.otherEntityNameCamelCased %>);
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>[1].Should().Be(updated<%= relationship.otherEntityNamePascalized %>);
+            <%_ } _%>
+
+            // Validate the updated<%= relationship.otherEntityNamePascalized %> in the database and in particular the <%= pascalizedEntityClass %> referenced
+            var testUpdated<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == updated<%= relationship.otherEntityNamePascalized %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(updated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
+
+            // Validate the <%= relationship.otherEntityNameCamelCased %> in the database and in particular there is no more <%= pascalizedEntityClass%> referenced
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            <%_ if (relationship.ownerSide) { _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
+            <%_ } else { _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass%>);
+            <%_ } _%>
+        }
+
+        <%_ }
+        }); _%>
+        [Fact]
+        public async Task Delete<%= pascalizedEntityClass %>()
+        {
+            // Initialize the database
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeDelete = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            var response = await _client.DeleteAsync($"/api/<%= snakeCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the database is empty
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeDelete - 1);
+        }
+
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-one' && relationship.otherEntityName.toUpperCase() !== 'USER'
+                && relationship.otherEntityName.toUpperCase() !== 'USERROLE' && relationship.otherEntityName.toUpperCase() !== 'ROLE') { _%>
+        [Fact]
+        public async Task Delete<%= pascalizedEntityClass%>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>()
+        {
+            // Create a <%= relationship.otherEntityNamePascalized %> to referenced
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = <%= relationship.otherEntityNameCamelCased %>;
+
+            // Initialize the database with a <%= camelCasedEntityClass %>
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            var databaseSizeBeforeDelete = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            var response = await _client.DeleteAsync($"/api/<%= snakeCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the database is empty
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeDelete - 1);
+
+            // Validate the <%= relationship.otherEntityNamePascalized %> in the database and in particular there is no more <%= pascalizedEntityClass %> referenced
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
+        }
+
+            <%_ }
+        }); _%>
+        <%_ relationships.forEach(relationship => {
+            if (relationship.relationshipType === 'many-to-many') { _%>
+        [Fact]
+        public async Task Delete<%= pascalizedEntityClass%>WithManyToManyAssociationWith<%= relationship.otherEntityNamePascalized %>()
+        {
+            <%_ if (relationship.ownerSide) { _%>
+            // Create a <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Set the referencing field
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+
+            // Initialize the database
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } else { _%>
+            /* Due to JsonIgnore annotation on <%= relationship.relationshipFieldNamePascalizedPlural %> property, we first create the <%= pascalizedEntityClass %>
+               This allows the <%= relationship.otherEntityNameCamelCased %> to create the relationship */
+            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+
+            // Create an <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
+            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
+                <%_ j = 0;
+                found = false;
+                while (j < entities.length && !found) {
+                    const entity = entities[j];
+                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                        let k = 0;
+                        if (entity.definition.fields.length != 0) {
+                            while (k < entity.definition.fields.length - 1) {
+                                const field = entity.definition.fields[k];
+                                const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                                <%_ k ++;
+                            }
+                            const field = entity.definition.fields[k];
+                            const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                        <%_ }
+                        found = true;
+                    }
+                    j ++;
+                } _%>
+            };
+            <%= relationship.otherEntityNameCamelCased %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(_<%= camelCasedEntityClass %>);
+            _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
+            await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ } _%>
+
+            var databaseSizeBeforeDelete = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+
+            var response = await _client.DeleteAsync($"/api/<%= snakeCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the database is empty
+            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+                .AsNoTracking()
+                .ToList();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeDelete - 1);
+
+            // Validate the <%= relationship.otherEntityNamePascalized %> in the database and in particular there is no more <%= pascalizedEntityClass %> referenced
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            <%_ j = 0;
+            found = false;
+            while (j < entities.length && !found) {
+                const entity = entities[j];
+                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
+                    let k = 0;
+                    while (k < entity.definition.fields.length) {
+                        const field = entity.definition.fields[k]; _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
+                        <%_ k ++;
+                    }
+                    found = true;
+                }
+                j ++;
+            } _%>
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
+        }
+
+            <%_ }
+        }); _%>
+        [Fact]
+        public void EqualsVerifier()
+        {
+            TestUtil.EqualsVerifier(typeof(<%= pascalizedEntityClass %>));
+            var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %> {
+                Id = 1L
+            };
+            var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %> {
+                Id = <%= camelCasedEntityClass %>1.Id
+            };
+            <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);
+            <%= camelCasedEntityClass %>2.Id = 2L;
+            <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
+            <%= camelCasedEntityClass %>1.Id = 0;
+            <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
+        }
+    }
+}

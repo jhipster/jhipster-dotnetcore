@@ -115,7 +115,7 @@ namespace <%= namespace %>.Controllers {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                     <%_ let idx = 0;
-                    while (idx < entities.length && entities[idx].name !== relationship.otherEntityNamePascalized) {
+                    while (idx < entities.length && entities[idx].name.toUpperCase() !== relationship.otherEntityName.toUpperCase()) {
                         idx ++;
                     }
                     if (idx < entities.length) {
@@ -143,7 +143,7 @@ namespace <%= namespace %>.Controllers {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                     <%_ let idx = 0;
-                    while (idx < entities.length && entities[idx].name !== relationship.otherEntityNamePascalized) {
+                    while (idx < entities.length && entities[idx].name.toUpperCase() !== relationship.otherEntityName.toUpperCase()) {
                         idx ++;
                     }
                     if (idx < entities.length) {
@@ -153,7 +153,10 @@ namespace <%= namespace %>.Controllers {
                             <%_ }
                         });
                     }
-                }
+                } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
+                <%_ }
             }); _%>
                 .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
             return ActionResultUtil.WrapOrNotFound(result);
