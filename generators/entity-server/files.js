@@ -64,6 +64,10 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Data/ApplicationDatabaseContext.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`
+                },
+                {
                     file: 'Project/Data/Extensions/DbContextExtensions.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbContextExtensions.cs`
                 },
@@ -76,14 +80,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/PropertyAccessorCache.cs`
                 }
             ]
-        },
+        }
+    ],
+    test: [
         {
-            condition: generator => generator.entityClassHasManyToMany,
-            path: SERVER_SRC_DIR,
+            path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project/Data/ApplicationDatabaseContext.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`
+                    file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
+                    renameTo: generator =>
+                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`
                 }
             ]
         }

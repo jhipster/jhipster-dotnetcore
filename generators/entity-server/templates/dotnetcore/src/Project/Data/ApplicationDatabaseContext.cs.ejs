@@ -31,7 +31,7 @@ namespace <%= namespace %>.Data {
         }
 
         <%_ entities.forEach(entity => {
-            if(entity.name !== pascalizedEntityClass) { _%>
+            if(entity.name.toUpperCase() !== entityClass.toUpperCase()) { _%>
         public DbSet<<%= entity.name %>> <%= pluralize(entity.name) %> { get; set; }
                 <%_ entity.definition.relationships.forEach(relationship => {
                     if (relationship.relationshipType === 'many-to-many') {
@@ -79,7 +79,7 @@ namespace <%= namespace %>.Data {
                 .OnDelete(DeleteBehavior.Cascade);
 
             <%_ entities.forEach(entity => {
-                if(entity.name !== pascalizedEntityClass) {
+                if(entity.name.toUpperCase() !== entityClass.toUpperCase()) {
                     entity.definition.relationships.forEach(relationship => {
                         if (relationship.relationshipType === 'many-to-many') {
                             if (relationship.ownerSide) {
