@@ -59,6 +59,7 @@ module.exports = class extends EntityGenerator {
                 context.pluralize = pluralize;
                 context._ = _;
                 context.mainAngularDir = `${context.mainProjectDir}/ClientApp/app`;
+                context.mainClientDir = `${context.mainProjectDir}/ClientApp`;
 
                 // Load in-memory data for .Net Blueprint fields
                 context.fields.forEach(field => {

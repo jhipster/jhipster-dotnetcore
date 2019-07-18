@@ -77,7 +77,7 @@ namespace <%= namespace %>.Controllers {
             if (<%= camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
             //TODO catch //DbUpdateConcurrencyException into problem
             <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-many') { _%>
+                if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
             _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
                 <%_ }
             }); _%>
@@ -86,15 +86,13 @@ namespace <%= namespace %>.Controllers {
             let suffix = 0;
             relationships.forEach( relationship => {
                 if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
-                    if (first) {_%>
+                    if (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-one') {
+                        if (first) { _%>
             /* Force the reference navigation property to be in "modified" state.
             This allows to modify it with a null value (the field is nullable).
             This takes into consideration the case of removing the association between the two instances. */
-                        <%_ first = false;
-                    }
-                    if (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many') { _%>
-            _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalizedPlural %>).IsModified = true;
-                <%_ } else { _%>
+                            <%_ first = false;
+                        } _%>
             _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>).IsModified = true;
                 <%_ }
                 }
