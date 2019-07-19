@@ -112,6 +112,9 @@ module.exports = class extends ServerGenerator {
 
             setSharedConfigOptions() {
                 this.configOptions.namespace = this.namespace;
+                this.configOptions.databaseType = this.databaseType;
+                this.configOptions.devDatabaseType = this.devDatabaseType;
+                this.configOptions.prodDatabaseType = this.prodDatabaseType;
             }
         };
     }
@@ -130,7 +133,10 @@ module.exports = class extends ServerGenerator {
             },
             saveConfig() {
                 const config = {
-                    namespace: this.namespace
+                    namespace: this.namespace,
+                    databaseType: this.databaseType,
+                    devDatabaseType: this.devDatabaseType,
+                    prodDatabaseType: this.prodDatabaseType
                 }
                 this.config.set(config);
             }
