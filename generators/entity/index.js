@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
@@ -22,42 +23,6 @@ module.exports = class extends EntityGenerator {
     }
 
     get initializing() {
-        /**
-         * Any method beginning with _ can be reused from the superclass `EntityGenerator`
-         *
-         * There are multiple ways to customize a phase from JHipster.
-         *
-         * 1. Let JHipster handle a phase, blueprint doesnt override anything.
-         * ```
-         *      return super._initializing();
-         * ```
-         *
-         * 2. Override the entire phase, this is when the blueprint takes control of a phase
-         * ```
-         *      return {
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *          myAnotherCustomInitPhaseStep(){
-         *              // Do all your stuff here
-         *          }
-         *      };
-         * ```
-         *
-         * 3. Partially override a phase, this is when the blueprint gets the phase from JHipster and customizes it.
-         * ```
-         *      const phaseFromJHipster = super._initializing();
-         *      const myCustomPhaseSteps = {
-         *          displayLogo() {
-         *              // override the displayLogo method from the _initializing phase of JHipster
-         *          },
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *      }
-         *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
-         * ```
-         */
         const phaseFromJHipster = super._initializing();
         const jhipsterNetPhaseSteps = {
             getConfigNetBlueprint() {
@@ -111,7 +76,9 @@ module.exports = class extends EntityGenerator {
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
                     relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
                     relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
-                    relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(relationship.otherEntityRelationshipFieldNamePascalized);
+                    relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
+                        relationship.otherEntityRelationshipFieldNamePascalized
+                    );
                     if (relationship.ownerSide) {
                         relationship.joinEntityName = context.entityClass + _.upperFirst(relationship.otherEntityName);
                         relationship.joinEntityNamePascalized = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
