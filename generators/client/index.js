@@ -20,9 +20,10 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const ClientGenerator = require('generator-jhipster/generators/client');
-const constants = require('../generator-dotnetcore-constants');
-const dotnet = require('../dotnet');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');
+const fs = require('fs');
+const constants = require('../generator-dotnetcore-constants');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 
@@ -42,42 +43,6 @@ module.exports = class extends ClientGenerator {
     }
 
     get initializing() {
-        /**
-         * Any method beginning with _ can be reused from the superclass `ClientGenerator`
-         *
-         * There are multiple ways to customize a phase from JHipster.
-         *
-         * 1. Let JHipster handle a phase, blueprint doesnt override anything.
-         * ```
-         *      return super._initializing();
-         * ```
-         *
-         * 2. Override the entire phase, this is when the blueprint takes control of a phase
-         * ```
-         *      return {
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *          myAnotherCustomInitPhaseStep(){
-         *              // Do all your stuff here
-         *          }
-         *      };
-         * ```
-         *
-         * 3. Partially override a phase, this is when the blueprint gets the phase from JHipster and customizes it.
-         * ```
-         *      const phaseFromJHipster = super._initializing();
-         *      const myCustomPhaseSteps = {
-         *          displayLogo() {
-         *              // override the displayLogo method from the _initializing phase of JHipster
-         *          },
-         *          myCustomInitPhaseStep() {
-         *              // Do all your stuff here
-         *          },
-         *      }
-         *      return Object.assign(phaseFromJHipster, myCustomPhaseSteps);
-         * ```
-         */
         // Here we are not overriding this phase and hence its being handled by JHipster
         return super._initializing();
     }
@@ -115,23 +80,119 @@ return {};
                 this.mainProjectDir = this.pascalizedBaseName;
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
-                this.relativeMainClientDir = "ClientApp";
+                this.relativeMainClientDir = 'ClientApp';
                 this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-//TODO PROMPT
-                this.authenticationType = "jwt";
+// TODO PROMPT
+                this.authenticationType = 'jwt';
             },
             saveConfigDotnetcore() {
-                return {
-                    saveConfig() {
-                        const config = {
+                const config = {};
+                this.config.set(config);
+            },
+            configuringNeedlesNetBlueprint() {
+                // modify path in needle-client-angular
+                fs.readFile(
+                    'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client-angular.js',
+                    'utf8',
+                    (err, data) => {
+                        if (err) {
+                            return console.log(err);
                         }
-                        this.config.set(config);
+                        const result = data.replace(
+                            /CLIENT_MAIN_SRC_DIR =(.*);/,
+                            `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
+                        );
+
+                        fs.writeFile(
+                            'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client-angular.js',
+                            result,
+                            'utf8',
+                            err => {
+                                if (err) return console.log(err);
+                            }
+                        );
                     }
-                };
+                );
+
+                // modify path in needle-client-i18n
+                fs.readFile(
+                    'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client-i18n.js',
+                    'utf8',
+                    (err, data) => {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        const result = data.replace(
+                            /CLIENT_MAIN_SRC_DIR =(.*);/,
+                            `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
+                        );
+
+                        fs.writeFile(
+                            'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client-i18n.js',
+                            result,
+                            'utf8',
+                            err => {
+                                if (err) return console.log(err);
+                            }
+                        );
+                    }
+                );
+
+                // modify path in needle-client
+                fs.readFile(
+                    'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client.js',
+                    'utf8',
+                    (err, data) => {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        const result = data.replace(
+                            /CLIENT_MAIN_SRC_DIR =(.*);/,
+                            `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
+                        );
+
+                        fs.writeFile(
+                            'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client.js',
+                            result,
+                            'utf8',
+                            err => {
+                                if (err) return console.log(err);
+                            }
+                        );
+                    }
+                );
+
+                // modify path in needle-client-webpack
+                fs.readFile(
+                    'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client-webpack.js',
+                    'utf8',
+                    (err, data) => {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        let result = data.replace(
+                            /CLIENT_MAIN_SRC_DIR =(.*);/,
+                            `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
+                        );
+                        result = result.replace(
+                            /CLIENT_WEBPACK_DIR =(.*);/,
+                            `CLIENT_WEBPACK_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/';`
+                        );
+
+                        fs.writeFile(
+                            'node_modules/generator-jhipster-dotnetcore/node_modules/generator-jhipster/generators/client/needle-api/needle-client-webpack.js',
+                            result,
+                            'utf8',
+                            err => {
+                                if (err) return console.log(err);
+                            }
+                        );
+                    }
+                );
             }
         };
-        return {...phaseFromJHipster, ...customPhaseSteps};
+        return { ...phaseFromJHipster, ...customPhaseSteps };
     }
 
     get default() {

@@ -4,10 +4,9 @@ const chalk = require('chalk');
 const LanguageGenerator = require('generator-jhipster/generators/languages');
 const jhipsterUtils = require('generator-jhipster/generators/utils');
 
-const constants = require('../generator-dotnetcore-constants');
-const dotnet = require('../dotnet');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');
-
+const constants = require('../generator-dotnetcore-constants');
 
 module.exports = class extends LanguageGenerator {
     constructor(args, opts) {
@@ -45,20 +44,19 @@ module.exports = class extends LanguageGenerator {
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                this.relativeMainClientDir = "ClientApp";
+                this.relativeMainClientDir = 'ClientApp';
                 this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
             },
             saveConfigDotnetcore() {
                 return {
                     saveConfig() {
-                        const config = {
-                        }
+                        const config = {};
                         this.config.set(config);
                     }
                 };
             }
         };
-        return {...phaseFromJHipster, ...customPhaseSteps};
+        return { ...phaseFromJHipster, ...customPhaseSteps };
     }
 
     get default() {
@@ -68,7 +66,7 @@ module.exports = class extends LanguageGenerator {
     get writing() {
         return {
             translateFile() {
-                const from = "src/main/webapp/";
+                const from = 'src/main/webapp/';
                 const to = `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/`;
                 this.languagesToApply.forEach(language => {
                     if (!this.skipClient) {
@@ -80,36 +78,37 @@ module.exports = class extends LanguageGenerator {
                     // statistics.sendSubGenEvent('languages/language', language);
                     this.replaceContent(
                         `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/i18n/${language}/home.json`,
-                        "Java",
-                        ".Net Core",
+                        'Java',
+                        '.Net Core',
                         false
-                    )
+                    );
                 });
             },
             write() {
-                const from = "src/main/webapp/";
+                const from = 'src/main/webapp/';
                 const to = `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/`;
                 if (!this.skipClient) {
-                    this.languages.forEach(language => {
-                        this._installI18nClientFilesByLanguageDotNetCore(from, to, language);
-                        this._updateLanguagesInLanguageConstantNG2DotNetCore(this.languages);
-                        this._updateLanguagesInWebpackDotNetCore(this.languages);
-                        if (this.clientFramework === 'angularX') {
-                            this._updateLanguagesInMomentWebpackNgxDotNetCore(this.languages);
+                    this.languages.forEach(
+                        language => {
+                            this._installI18nClientFilesByLanguageDotNetCore(from, to, language);
+                            this._updateLanguagesInLanguageConstantNG2DotNetCore(this.languages);
+                            this._updateLanguagesInWebpackDotNetCore(this.languages);
+                            if (this.clientFramework === 'angularX') {
+                                this._updateLanguagesInMomentWebpackNgxDotNetCore(this.languages);
+                            }
+                            // if (this.clientFramework === 'react') {
+                            //     this.updateLanguagesInMomentWebpackReact(this.languages);
+                            // }
+                            this.replaceContent(
+                                `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/i18n/${language}/home.json`,
+                                'Java',
+                                '.Net Core',
+                                false
+                            );
                         }
-                        // if (this.clientFramework === 'react') {
-                        //     this.updateLanguagesInMomentWebpackReact(this.languages);
+                        // if (!this.skipServer) {
+                        //     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
                         // }
-                        this.replaceContent(
-                            `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/i18n/${language}/home.json`,
-                            "Java",
-                            ".Net Core",
-                            false
-                        )
-                    }
-                    // if (!this.skipServer) {
-                    //     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
-                    // }
                     );
                 }
             }
@@ -190,9 +189,9 @@ module.exports = class extends LanguageGenerator {
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./${this.relativeMainClientDir}/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
-                    i !== languages.length - 1 ? ',' : ''
-                }\n`;
+                content += `                    { pattern: "./${
+                    this.relativeMainClientDir
+                }/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content +=
                 '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
@@ -248,5 +247,4 @@ module.exports = class extends LanguageGenerator {
             this.debug('Error:', e);
         }
     }
-
 };
