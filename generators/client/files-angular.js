@@ -202,7 +202,7 @@ function updatePackageJson() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/package.json`,
         "\"clean-www\": \".*\"",
-        "\"clean-www\": \"wwwroot/{src,target/}\"",
+        "\"clean-www\": \"rimraf wwwroot/{src,target/}\"",
         true
     );
 }
