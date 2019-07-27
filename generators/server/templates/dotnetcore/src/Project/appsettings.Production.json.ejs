@@ -26,7 +26,7 @@
             {
                 "Name": "File",
                 "Args": {
-                    "path":"app.log",
+                    "path": "app.log",
                     "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u4} {ProcessId} --- [{ThreadId,3}] {LoggerName,-40} : {Message:lj}{NewLine}{Exception}",
                     "fileSizeLimitBytes": 10240,
                     "rollingInterval": "Day",
@@ -34,5 +34,8 @@
                 }
             }
         ]
+    },
+    "EntityFramework": {
+        "DataSource": ":memory:"
     }
 }
