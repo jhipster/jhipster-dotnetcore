@@ -67,7 +67,7 @@ module.exports = class extends LanguageGenerator {
         return {
             translateFile() {
                 const from = 'src/main/webapp/';
-                const to = `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/`;
+                const to = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/`;
                 this.languagesToApply.forEach(language => {
                     if (!this.skipClient) {
                         this._installI18nClientFilesByLanguageDotNetCore(from, to, language);
@@ -77,7 +77,7 @@ module.exports = class extends LanguageGenerator {
                     // }
                     // statistics.sendSubGenEvent('languages/language', language);
                     this.replaceContent(
-                        `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/i18n/${language}/home.json`,
+                        `${constants.SERVER_SRC_DIR}${this.mainClientDir}/i18n/${language}/home.json`,
                         'Java',
                         '.Net Core',
                         false
@@ -85,12 +85,10 @@ module.exports = class extends LanguageGenerator {
                 });
             },
             write() {
-                const from = 'src/main/webapp/';
-                const to = `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/`;
                 if (!this.skipClient) {
                     this.languages.forEach(
                         language => {
-                            this._installI18nClientFilesByLanguageDotNetCore(from, to, language);
+                            this._updateLanguagesInLanguagePipeDotNetCore(this.languages);
                             this._updateLanguagesInLanguageConstantNG2DotNetCore(this.languages);
                             this._updateLanguagesInWebpackDotNetCore(this.languages);
                             if (this.clientFramework === 'angularX') {
@@ -99,12 +97,6 @@ module.exports = class extends LanguageGenerator {
                             // if (this.clientFramework === 'react') {
                             //     this.updateLanguagesInMomentWebpackReact(this.languages);
                             // }
-                            this.replaceContent(
-                                `${constants.SERVER_SRC_DIR}/${this.mainClientDir}/i18n/${language}/home.json`,
-                                'Java',
-                                '.Net Core',
-                                false
-                            );
                         }
                         // if (!this.skipServer) {
                         //     this.updateLanguagesInLanguageMailServiceIT(this.languages, this.packageFolder);
@@ -125,10 +117,10 @@ module.exports = class extends LanguageGenerator {
         }
         this._copyI18nFilesByNameDotNetCore(from, to, 'configuration.json', lang);
         this._copyI18nFilesByNameDotNetCore(from, to, 'error.json', lang);
-        this._copyI18nFilesByNameDotNetCore(from, to, 'login.json', lang);
         this._copyI18nFilesByNameDotNetCore(from, to, 'home.json', lang);
-        this._copyI18nFilesByNameDotNetCore(from, to, 'metrics.json', lang);
+        this._copyI18nFilesByNameDotNetCore(from, to, 'login.json', lang);
         this._copyI18nFilesByNameDotNetCore(from, to, 'logs.json', lang);
+        this._copyI18nFilesByNameDotNetCore(from, to, 'metrics.json', lang);
         this._copyI18nFilesByNameDotNetCore(from, to, 'password.json', lang);
         this._copyI18nFilesByNameDotNetCore(from, to, 'register.json', lang);
         this._copyI18nFilesByNameDotNetCore(from, to, 'sessions.json', lang);
@@ -152,11 +144,43 @@ module.exports = class extends LanguageGenerator {
         this.copy(`${prefix}/${from}i18n/${lang}/${fileToCopy}`, `${to}i18n/${lang}/${fileToCopy}`);
     }
 
+    _updateLanguagesInLanguagePipeDotNetCore(languages) {
+        const fullPath =
+            this.clientFramework === 'angularX'
+                ? `${constants.SERVER_SRC_DIR}${this.mainAngularDir}/shared/language/find-language-from-key.pipe.ts`
+                : `${constants.SERVER_SRC_DIR}${this.mainClientDir}/app/config/translation.ts`;
+        try {
+            let content = '{\n';
+            this.generateLanguageOptions(languages, this.clientFramework).forEach((ln, i) => {
+                content += `        ${ln}${i !== languages.length - 1 ? ',' : ''}\n`;
+            });
+            content += '        // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object\n    };';
+
+            jhipsterUtils.replaceContent(
+                {
+                    file: fullPath,
+                    pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
+                    content
+                },
+                this
+            );
+        } catch (e) {
+            this.log(
+                chalk.yellow('\nUnable to find ') +
+                    fullPath +
+                    chalk.yellow(' or missing required jhipster-needle. Language pipe not updated with languages: ') +
+                    languages +
+                    chalk.yellow(' since block was not found. Check if you have enabled translation support.\n')
+            );
+            this.debug('Error:', e);
+        }
+    }
+
     _updateLanguagesInLanguageConstantNG2DotNetCore(languages) {
         if (this.clientFramework !== 'angularX') {
             return;
         }
-        const fullPath = `${this.mainClientDir}app/core/language/language.constants.ts`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainAngularDir}/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -185,7 +209,7 @@ module.exports = class extends LanguageGenerator {
     }
 
     _updateLanguagesInWebpackDotNetCore(languages) {
-        const fullPath = `${constants.SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.common.js`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.common.js`;
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
@@ -218,7 +242,7 @@ module.exports = class extends LanguageGenerator {
     }
 
     _updateLanguagesInMomentWebpackNgxDotNetCore(languages) {
-        const fullPath = `${constants.SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.common.js`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.prod.js`;
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {
