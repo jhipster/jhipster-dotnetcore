@@ -29,7 +29,7 @@
     "insight": "0.10.1",
     "jhipster-core": "3.0.2",
     "js-yaml": "3.12.0",
-    "lodash": "4.17.10",
+    "lodash": "4.17.13",
     "meow": "5.0.0",
     "mkdirp": "0.5.1",
     "pluralize": "7.0.0",
