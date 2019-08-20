@@ -180,6 +180,15 @@ function updateHomeTitle() {
     this.replaceContent(`${SERVER_SRC_DIR}/${this.mainClientDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
 }
 
+function updateVendorScss() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}/${this.mainClientDir}/content/scss/vendor.scss`,
+        'src/main/webapp',
+        this.relativeMainClientDir,
+        false
+    );
+}
+
 function writeFiles() {
     this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
     updateWebpackCommonJs.call(this);
@@ -191,6 +200,7 @@ function writeFiles() {
     updateTsConfigAotJson.call(this);
     updatePackageJson.call(this);
     updateHomeTitle.call(this);
+    updateVendorScss.call(this);
 }
 
 module.exports = {
