@@ -20,8 +20,8 @@ const constants = require('../generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
-const dockerFiles = {
-    global: [
+const files = {
+    docker: [
         {
             path: SERVER_SRC_DIR,
             templates: [{ file: 'Project/Dockerfile', renameTo: generator => `${generator.mainProjectDir}/Dockerfile` }]
@@ -29,18 +29,23 @@ const dockerFiles = {
         {
             templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }]
         }
+    ],
+    general: [
+        {
+            templates: [{ file: 'README.md', method: 'copy' }]
+        }
     ]
 };
 
 function writeFiles() {
     return {
         writeDockerFiles() {
-            this.writeFilesToDisk(dockerFiles, this, false, 'dotnetcore');
+            this.writeFilesToDisk(files, this, false, 'dotnetcore');
         }
     };
 }
 
 module.exports = {
     writeFiles,
-    dockerFiles
+    files
 };
