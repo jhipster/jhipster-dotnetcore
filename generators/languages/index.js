@@ -22,7 +22,15 @@ module.exports = class extends LanguageGenerator {
     }
 
     get initializing() {
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const jhipsterNetPhaseSteps = {
+            setupServerConsts() {
+                // Temporal fix for https://github.com/jhipster/jhipster-dotnetcore/issues/30
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.baseName = configuration.get('baseName') || this.configOptions.baseName;
+            }
+        };
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get prompting() {
