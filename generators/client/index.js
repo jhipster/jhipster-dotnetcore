@@ -187,7 +187,7 @@ module.exports = class extends ClientGenerator {
             installDependencies() {
                 this.log(
                     `\n\nI'm all done. Running ${chalk.green.bold(
-                        `npm --prefix ${constants.SERVER_SRC_DIR}${this.mainProjectDir} install`
+                        `npm --prefix ${constants.SERVER_SRC_DIR}${this.mainProjectDir} install `
                     )}for you to install the required dependencies. If this fails, try running the command yourself.`
                 );
                 this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`, 'install']);
