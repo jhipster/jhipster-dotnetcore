@@ -186,7 +186,15 @@ return {};
     }
 
     get end() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._end();
+        return {
+            end() {
+                if (this.skipClient) return;
+                this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+
+                if (!this.options['skip-install']) {
+                    this.spawnCommandSync('npm', ['--prefix', this.mainClientDir, 'run', 'cleanup']);
+                }
+            }
+        };
     }
 };
