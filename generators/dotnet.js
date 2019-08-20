@@ -19,44 +19,42 @@
 const shelljs = require('shelljs');
 
 function exec(cmd, opts = {}) {
-    return new Promise(function (resolve, reject) {
-        shelljs.exec(
-            cmd,
-            opts,
-            (code, stdout, stderr) => {
-                if (code !== 0) {
-                    return reject(Error(stderr));
-                }
-                return resolve(stdout);
-            });
+    return new Promise((resolve, reject) => {
+        shelljs.exec(cmd, opts, (code, stdout, stderr) => {
+            if (code !== 0) {
+                return reject(Error(stderr));
+            }
+            return resolve(stdout);
+        });
     });
 }
 
 function hasDotnet() {
-    return new Promise(function (resolve, reject) {
-        if(!shelljs.which('dotnet')) {
-            return reject(Error(`'dotnet' not found in the PATH`));
+    return new Promise((resolve, reject) => {
+        if (!shelljs.which('dotnet')) {
+            return reject(Error("'dotnet' not found in the PATH."));
         }
         return resolve();
     });
 }
-async function newSln(solutioName) {
+async function newSln(solutionName) {
     await hasDotnet();
-    return await exec(`dotnet new sln --name ${solutioName}`);
+    return exec(`dotnet new sln --name ${solutionName}`);
 }
 
-async function slnAdd(solutionFile, projects){
+async function slnAdd(solutionFile, projects) {
     await hasDotnet();
-    return await exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
+    return exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
 }
 
 async function restore() {
     await hasDotnet();
-    return await exec(`dotnet restore`);
+    return exec('dotnet restore');
 }
 
 module.exports = {
-    newSln: newSln,
-    slnAdd:slnAdd,
-    restore: restore
+    hasDotnet,
+    newSln,
+    slnAdd,
+    restore
 };
