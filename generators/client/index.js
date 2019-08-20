@@ -192,7 +192,7 @@ return {};
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
                 if (!this.options['skip-install']) {
-                    this.spawnCommandSync('npm', ['--prefix', this.mainClientDir, 'run', 'cleanup']);
+                    this.spawnCommandSync('npm', ['--prefix', this.mainProjectDir, 'run', 'cleanup']);
                 }
             }
         };
