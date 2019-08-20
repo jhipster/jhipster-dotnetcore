@@ -24,40 +24,40 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 const angularFiles = require('generator-jhipster/generators/client/files-angular').files;
 
-var fileDestinationMapping = {
-    common: (generator) => `${SERVER_SRC_DIR}/${generator.mainProjectDir}`,
-    sass: (generator) => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    image: (generator) => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    swagger: (generator) => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    commonWeb: (generator) => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    angularApp: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularMain: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularAccountModule: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularAdminModule: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularCore: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularShared: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularAuthService: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    clientTestFw: (generator) => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`
+const fileDestinationMapping = {
+    common: generator => `${SERVER_SRC_DIR}/${generator.mainProjectDir}`,
+    sass: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
+    image: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
+    swagger: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
+    commonWeb: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
+    angularApp: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    angularMain: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    angularAccountModule: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    angularAdminModule: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    angularCore: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    angularShared: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    angularAuthService: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
+    clientTestFw: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`
 };
 
-var files =  {};
+const files = {};
 
 for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
     const blockKey = blocks[i];
     files[blockKey] = [];
     for (let j = 0, blockTemplates = angularFiles[blocks[i]]; j < blockTemplates.length; j++) {
         const blockTemplate = blockTemplates[j];
-        var udpatedBlockTemplate = {};
-        var previousPath = "";
+        const udpatedBlockTemplate = {};
+        var previousPath = '';
         if (blockTemplate.path) {
             previousPath = blockTemplate.path;
-            udpatedBlockTemplate.path = "";
+            udpatedBlockTemplate.path = '';
         }
         if (blockTemplate.condition) {
             udpatedBlockTemplate.condition = blockTemplate.condition;
         }
         udpatedBlockTemplate.templates = blockTemplate.templates.map(templateObj => {
-            var file = "";
+            let file = '';
             if (typeof templateObj === 'string') {
                 file = templateObj;
             } else {
@@ -67,11 +67,11 @@ for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
                     file = templateObj.file(generator);
                 }
             }
-            var updatedTemplateObj = {
+            const updatedTemplateObj = {
                 file: `${previousPath}/${file}`,
-                renameTo: (generator) => `${fileDestinationMapping[blockKey](generator)}/${file}`
+                renameTo: generator => `${fileDestinationMapping[blockKey](generator)}/${file}`
             };
-            if(templateObj.method) {
+            if (templateObj.method) {
                 updatedTemplateObj.method = templateObj.method;
             }
             return updatedTemplateObj;
@@ -83,14 +83,14 @@ for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
 function updateWebpackCommonJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.common.js`,
-        "src/main/webapp",
+        'src/main/webapp',
         this.relativeMainClientDir,
         true
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.common.js`,
-        "src\\/main\\/webapp\\/",
-        `${this.relativeMainClientDir}/`.replace(new RegExp("/", "g"), "\\/"),
+        'src\\/main\\/webapp\\/',
+        `${this.relativeMainClientDir}/`.replace(new RegExp('/', 'g'), '\\/'),
         false
     );
 }
@@ -98,13 +98,13 @@ function updateWebpackCommonJs() {
 function updateWebpackDevJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
-        "src/main/webapp",
+        'src/main/webapp',
         this.relativeMainClientDir,
         true
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
-        "path: utils.root(.*),",
+        'path: utils.root(.*),',
         "path: utils.root('wwwroot'),",
         true
     );
@@ -116,7 +116,7 @@ function updateWebpackDevJs() {
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.dev.js`,
-        "cacheDirectory: path.resolve(.*)",
+        'cacheDirectory: path.resolve(.*)',
         "cacheDirectory: path.resolve('bin/cache-loader')",
         true
     );
@@ -125,94 +125,59 @@ function updateWebpackDevJs() {
 function updateWebpackProdJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.prod.js`,
-        "src/main/webapp",
+        'src/main/webapp',
         this.relativeMainClientDir,
         true
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/webpack/webpack.prod.js`,
-        "path: utils.root(.*),",
+        'path: utils.root(.*),',
         "path: utils.root('wwwroot'),",
         true
     );
 }
 
 function angularJson() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainProjectDir}/angular.json`,
-        "src/main/webapp",
-        this.relativeMainClientDir,
-        false
-    );
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/angular.json`, 'src/main/webapp', this.relativeMainClientDir, false);
 }
 
 function updateProxyConfJson() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/proxy.conf.json`,
-        "\"target\": \"http://localhost:8080\"",
-        "\"target\": \"http://localhost:5000\"",
+        '"target": "http://localhost:8080"',
+        '"target": "http://localhost:5000"',
         false
     );
 }
 
 function updateTsConfigJson() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`,
-        "src/main/webapp",
-        this.relativeMainClientDir,
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`,
-        "\"outDir\": \".*\"",
-        "\"outDir\": \"wwwwroot/app\"",
-        true
-    );
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`, 'src/main/webapp', this.relativeMainClientDir, true);
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "wwwwroot/app"', true);
 }
 
 function updateTsConfigAotJson() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`,
-        "src/main/webapp",
-        this.relativeMainClientDir,
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`,
-        "\"outDir\": \".*\"",
-        "\"outDir\": \"wwwwroot/app\"",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`,
-        "\"genDir\": \".*\"",
-        "\"genDir\": \"bin/aot\"",
-        true
-    );
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`, 'src/main/webapp', this.relativeMainClientDir, true);
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`, '"outDir": ".*"', '"outDir": "wwwwroot/app"', true);
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`, '"genDir": ".*"', '"genDir": "bin/aot"', true);
 }
 
 function updatePackageJson() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/package.json`,
-        "\"cleanup\": \".*\"",
-        "\"cleanup\": \"rimraf bin/aot && rimraf wwwroot/*\"",
+        '"cleanup": ".*"',
+        '"cleanup": "rimraf bin/aot && rimraf wwwroot/*"',
         true
     );
 
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/package.json`,
-        "\"clean-www\": \".*\"",
-        "\"clean-www\": \"rimraf wwwroot/{src,target/}\"",
+        '"clean-www": ".*"',
+        '"clean-www": "rimraf wwwroot/{src,target/}"',
         true
     );
 }
 function updateHomeTitle() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}/${this.mainClientDir}/app/home/home.component.html`,
-        "Java",
-        ".Net Core",
-        false
-    );
+    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainClientDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
 }
 
 function writeFiles() {

@@ -61,8 +61,8 @@ module.exports = class extends ClientGenerator {
         //     }
         // };
         // If the prompts need to be overriden then use the code commented out above instead
-//        return super._prompting();
-return {};
+        //        return super._prompting();
+        return {};
     }
 
     get configuring() {
@@ -83,7 +83,7 @@ return {};
                 this.relativeMainClientDir = 'ClientApp';
                 this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-// TODO PROMPT
+                // TODO PROMPT
                 this.authenticationType = 'jwt';
             },
             saveConfigDotnetcore() {
@@ -181,8 +181,19 @@ return {};
     }
 
     get install() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._install();
+        // Override default yeoman installDependencies
+        const phaseFromJHipster = super._writing();
+        const customPhaseSteps = {
+            installDependencies() {
+                this.log(
+                    `\n\nI'm all done. Running ${chalk.green.bold(
+                        `npm --prefix ${constants.SERVER_SRC_DIR}${this.mainProjectDir} install`
+                    )}for you to install the required dependencies. If this fails, try running the command yourself.`
+                );
+                this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`, 'install']);
+            }
+        };
+        return customPhaseSteps;
     }
 
     get end() {
@@ -192,7 +203,7 @@ return {};
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
                 if (!this.options['skip-install']) {
-                    this.spawnCommandSync('npm', ['--prefix', this.mainProjectDir, 'run', 'cleanup']);
+                    this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`, 'run', 'cleanup']);
                 }
             }
         };
