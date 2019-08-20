@@ -22,7 +22,7 @@ const _ = require('lodash');
 const os = require('os');
 const shelljs = require('shelljs');
 const packagejs = require('../../package.json');
-const prompts = require('./prompts')
+const prompts = require('./prompts');
 const writeFiles = require('./files').writeFiles;
 const ServerGenerator = require('generator-jhipster/generators/server');
 const constants = require('../generator-dotnetcore-constants');
@@ -38,9 +38,13 @@ module.exports = class extends ServerGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
-        if (!shelljs.which('dotnet')) {
-            this.error(`Sorry, you need dotnet to be installed`);
-        }
+
+        dotnet.hasDotnet().catch(err => {
+            this.warning(
+                "The 'dotnet' command is not present in the PATH, use it at your own risk! If you encounter a bug, please install .Net Core first (https://dotnet.microsoft.com/download/dotnet-core)."
+            );
+        });
+
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupServerOptions(this, jhContext);
@@ -52,16 +56,15 @@ module.exports = class extends ServerGenerator {
             displayLogo() {
                 this.printJHipsterNetLogo();
             },
-            setupServerconsts() {
+            setupServeronsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
                 this.SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-
             }
-        }
+        };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
@@ -137,7 +140,7 @@ module.exports = class extends ServerGenerator {
                     databaseType: this.databaseType,
                     devDatabaseType: this.devDatabaseType,
                     prodDatabaseType: this.prodDatabaseType
-                }
+                };
                 this.config.set(config);
             }
         };
@@ -156,19 +159,36 @@ module.exports = class extends ServerGenerator {
         return {
             end() {
                 this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution.\n`));
-                dotnet.newSln(this.solutionName)
-                    .then(() => dotnet.slnAdd(`${this.solutionName}.sln`, [
-                        'src/JHipsterNet/JHipsterNet.csproj',
-                        `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
-                        `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`
-                    ]))
-                    .catch((err) => {
-                        this.warning(`\nFailed to create ${this.solutionName} .Net Core solution: ${err}`);
+                dotnet
+                    .newSln(this.solutionName)
+                    .then(() =>
+                        dotnet.slnAdd(`${this.solutionName}.sln`, [
+                            'src/JHipsterNet/JHipsterNet.csproj',
+                            `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
+                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${
+                                constants.PROJECT_TEST_SUFFIX
+                            }.csproj`
+                        ])
+                    )
+                    .catch(err => {
+                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
                     })
                     .finally(() => {
                         this.log(chalk.green.bold('\nServer application generated successfully.\n'));
-                        this.log(chalk.green(`Run your .Net Core application:\n${chalk.yellow.bold(`dotnet run --verbosity normal --project ./${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`)}`));
-                        this.log(chalk.green(`Test your .Net Core application:\n${chalk.yellow.bold(`dotnet test --list-tests --verbosity normal`)}`));
+                        this.log(
+                            chalk.green(
+                                `Run your .Net Core application:\n${chalk.yellow.bold(
+                                    `dotnet run --verbosity normal --project ./${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${
+                                        this.pascalizedBaseName
+                                    }.csproj`
+                                )}`
+                            )
+                        );
+                        this.log(
+                            chalk.green(
+                                `Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --list-tests --verbosity normal')}`
+                            )
+                        );
                     });
             }
         };
