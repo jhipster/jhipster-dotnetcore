@@ -160,7 +160,7 @@ module.exports = class extends ClientGenerator {
                 });
             }
         };
-        return { ...phaseFromJHipster, ...customPhaseSteps };
+        return Object.assign(phaseFromJHipster, customPhaseSteps );
     }
 
     get default() {
@@ -171,19 +171,19 @@ module.exports = class extends ClientGenerator {
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here
-        const phaseFromJHipster = super._writing();
-        const customPhaseSteps = {
+        const jhipsterPhase = super._writing();
+        const customPhase = {
             writeAngularFilesDotnetcore() {
                 writeAngularFiles.call(this);
             }
         };
-        return customPhaseSteps;
+        return customPhase;
     }
 
     get install() {
         // Override default yeoman installDependencies
-        const phaseFromJHipster = super._writing();
-        const customPhaseSteps = {
+        const jhipsterPhase = super._writing();
+        const customPhase = {
             installDependencies() {
                 this.log(
                     `\n\nI'm all done. Running ${chalk.green.bold(
@@ -193,11 +193,12 @@ module.exports = class extends ClientGenerator {
                 this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`, 'install']);
             }
         };
-        return customPhaseSteps;
+        return customPhase;
     }
 
     get end() {
-        return {
+        const jhipsterPhase = super._writing();
+        const customPhase = {
             end() {
                 if (this.skipClient) return;
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
@@ -207,5 +208,6 @@ module.exports = class extends ClientGenerator {
                 }
             }
         };
+        return Object.assign(jhipsterPhase, customPhase);
     }
 };
