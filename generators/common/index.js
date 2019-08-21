@@ -46,6 +46,7 @@ module.exports = class extends CommonGenerator {
                 this.kebabCasedBaseName = _.kebabCase(this.baseName);
                 this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.mainProjectDir = this.pascalizedBaseName;
+                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
             }
         };
     }

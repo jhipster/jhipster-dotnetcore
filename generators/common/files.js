@@ -32,7 +32,7 @@ const files = {
     ],
     general: [
         {
-            templates: [{ file: 'README.md', method: 'copy' }]
+            templates: [{ file: 'README.md' }]
         }
     ]
 };
