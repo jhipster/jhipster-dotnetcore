@@ -208,6 +208,6 @@ module.exports = class extends ClientGenerator {
                 }
             }
         };
-        return Object.assign(jhipsterPhase, customPhase);
+        return customPhase;
     }
 };
