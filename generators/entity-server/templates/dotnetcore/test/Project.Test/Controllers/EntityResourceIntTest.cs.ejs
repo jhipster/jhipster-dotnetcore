@@ -223,7 +223,7 @@ namespace <%= namespace %>.Test.Controllers {
                     while (i < fields.length - 1) { _%>
                     <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
                         <%_ i ++;
-                    }; _%>
+                    } _%>
                     <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>
                 <%_ }_%>
             };

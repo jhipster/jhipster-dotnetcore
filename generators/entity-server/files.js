@@ -90,6 +90,10 @@ const serverFiles = {
                     file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
                     renameTo: generator =>
                         `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`
+                },
+                {
+                    file: 'Project.Test/Setup/AssociatedEntityFactories.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Setup/AssociatedEntityFactories.cs`
                 }
             ]
         }

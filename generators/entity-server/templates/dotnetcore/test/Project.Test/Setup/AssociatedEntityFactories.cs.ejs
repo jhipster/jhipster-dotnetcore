@@ -1,0 +1,254 @@
+<%#
+ Copyright 2013-2019 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ function defaultValue(cSharpType) {
+    let defaultValue;
+    const defaultNumValue = 1;
+
+    switch (cSharpType) {
+        case 'string' :
+            defaultValue = "\"AAAAAAAAAA\"";
+            break;
+        case 'int?' :
+            defaultValue = `${defaultNumValue}`;
+            break;
+        case 'long?' :
+            defaultValue = `${defaultNumValue}L`;
+            break;
+        case 'float?' :
+            defaultValue = `${defaultNumValue}F`;
+            break;
+        case 'double?' :
+            defaultValue = `${defaultNumValue}D`;
+            break;
+        case 'decimal?' :
+            defaultValue = `${defaultNumValue}M`;
+            break;
+        case 'DateTime?' :
+            defaultValue = "DateTime.UnixEpoch";
+            break;
+        case 'bool?' :
+            defaultValue = "false";
+            break;
+    }
+
+    return defaultValue;
+}
+function updatedValue(cSharpType) {
+    let updatedValue;
+    const updatedNumValue = 2;
+
+    switch (cSharpType) {
+        case 'string' :
+            updatedValue = "\"BBBBBBBBBB\"";
+            break;
+        case 'int?' :
+            updatedValue = `${updatedNumValue}`;
+            break;
+        case 'long?' :
+            updatedValue = `${updatedNumValue}L`;
+            break;
+        case 'float?' :
+            updatedValue = `${updatedNumValue}F`;
+            break;
+        case 'double?' :
+            updatedValue = `${updatedNumValue}D`;
+            break;
+        case 'decimal?' :
+            updatedValue = `${updatedNumValue}M`;
+            break;
+        case 'DateTime?' :
+            updatedValue = "DateTime.Now";
+            break;
+        case 'bool?' :
+            updatedValue = "true";
+            break;
+    }
+
+    return updatedValue;
+}
+function equivalentCSharpType(javaType) {
+    let cSharpType;
+
+    switch(javaType) {
+        case 'String':
+            cSharpType = 'string';
+            break;
+        case 'Integer':
+            cSharpType = 'int?';
+            break;
+        case 'Long':
+            cSharpType = 'long?';
+            break;
+        case 'Float':
+            cSharpType = 'float?';
+            break;
+        case 'Double':
+            cSharpType = 'double?';
+            break;
+        case 'BigDecimal':
+            cSharpType = 'decimal?';
+            break;
+        case 'LocalDate':
+            cSharpType = 'DateTime?';
+            break;
+        case 'Instant':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'ZonedDateTime':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Duration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Boolean':
+            cSharpType = 'bool?';
+            break;
+        case 'Enumeration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Blob':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        default:
+            cSharpType = 'UNKNOWN_TYPE';
+    }
+
+    return cSharpType;
+}
+function entitiesHaveDateTimeTypeField() {
+    let dateTimeTypeFieldActualEntity = false;
+    let dateTimeTypeFieldOtherEntities = false;
+    let dateTimeTypeField = false;
+
+    let idx = 0;
+    while (idx < fields.length && !dateTimeTypeFieldActualEntity) {
+        if (fields[idx].fieldType === 'LocalDate') {
+            dateTimeTypeFieldActualEntity = true;
+        }
+        idx ++;
+    }
+
+    idx = 0;
+    while (idx < entities.length && !dateTimeTypeFieldOtherEntities) {
+        const entity = entities[idx];
+
+        let j = 0;
+        while (j < entity.definition.fields.length && !dateTimeTypeFieldOtherEntities) {
+            if (entity.definition.fields[j].fieldType === 'LocalDate') {
+                dateTimeTypeFieldOtherEntities = true;
+            }
+            j++;
+        }
+        idx ++;
+    }
+
+    if (dateTimeTypeFieldActualEntity || dateTimeTypeFieldOtherEntities) {
+        dateTimeTypeField = true;
+    }
+
+    return dateTimeTypeField;
+} _%>
+using <%= namespace %>.Models;
+<%_ if (entitiesHaveDateTimeTypeField()) { _%>
+using System;
+<%_ } _%>
+
+namespace <%= namespace %>.Test.Setup {
+    public class AssociatedEntityFactories {
+        <%_ entities.forEach(entity => {
+            if(entity.name.toUpperCase() !== entityClass.toUpperCase()) { _%>
+        public static <%= entity.name %> getDefaultAssociated<%= entity.name %>()
+        {
+            var <%= _.camelCase(entity.name) %> = new <%= entity.name %> {
+                <%_ let i = 0;
+                if (entity.definition.fields.length != 0) {
+                    while (i < entity.definition.fields.length - 1) {
+                        const field = entity.definition.fields[i];
+                        const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
+                        <%_ i ++;
+                    }
+                    const field = entity.definition.fields[i];
+                    const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
+                <%_ } _%>
+            };
+
+            return <%= _.camelCase(entity.name) %>;
+        }
+
+        public static <%= entity.name %> getUpdatedAssociated<%= entity.name %>()
+        {
+            var updated<%= entity.name %> = new <%= entity.name %> {
+                <%_ let i = 0;
+                if (entity.definition.fields.length != 0) {
+                    while (i < entity.definition.fields.length - 1) {
+                        const field = entity.definition.fields[i];
+                        const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
+                        <%_ i ++;
+                    }
+                    const field = entity.definition.fields[i];
+                    const fieldType = equivalentCSharpType(field.fieldType); _%>
+                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
+                <%_ } _%>
+            };
+
+            return updated<%= entity.name %>;
+        }
+
+            <%_ }
+        }); _%>
+        public static <%= pascalizedEntityClass %> getDefaultAssociated<%= pascalizedEntityClass %>()
+        {
+            var <%= camelCasedEntityClass %> = new <%= pascalizedEntityClass %> {
+                <%_ let i = 0;
+                if (fields.length != 0) {
+                    while (i < fields.length - 1) {
+                        const fieldType = equivalentCSharpType(fields[i].fieldType); _%>
+                <%= fields[i].fieldNamePascalized %> = <%- defaultValue(fieldType) %>,
+                        <%_ i ++;
+                    }
+                    const fieldType = equivalentCSharpType(fields[i].fieldType); _%>
+                <%= fields[i].fieldNamePascalized %> = <%- defaultValue(fieldType) %>
+                <%_ }_%>
+            };
+
+            return <%= camelCasedEntityClass %>;
+        }
+
+        public static <%= pascalizedEntityClass %> getUpdatedAssociated<%= pascalizedEntityClass %>()
+        {
+            var updated<%= pascalizedEntityClass %> = new <%= pascalizedEntityClass %> {
+                <%_ let i = 0;
+                if (fields.length != 0) {
+                    while (i < fields.length - 1) {
+                        const fieldType = equivalentCSharpType(fields[i].fieldType); _%>
+                <%= fields[i].fieldNamePascalized %> = <%- updatedValue(fieldType) %>,
+                        <%_ i ++;
+                    }
+                    const fieldType = equivalentCSharpType(fields[i].fieldType); _%>
+                <%= fields[i].fieldNamePascalized %> = <%- updatedValue(fieldType) %>
+                <%_ }_%>
+            };
+
+            return updated<%= pascalizedEntityClass %>;
+        }
+    }
+}
