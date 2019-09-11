@@ -172,6 +172,9 @@ function hasManyToOneOrManyToManyWithDateTimeTypeField() {
 }
 if (hasDateTimeTypeField() || hasManyToOneOrManyToManyWithDateTimeTypeField()) { _%>
 using System;
+<%_ }
+if (entityClassHasManyToOne || entityClassHasManyToMany) { _%>
+using System.Collections.Generic;
 <%_ } _%>
 using System.Linq;
 using System.Net;
@@ -272,36 +275,14 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ relationships.forEach(relationship => {
             if (relationship.relationshipType === 'many-to-one') { _%>
         [Fact]
-        public async Task Create<%= pascalizedEntityClass %>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>()
+        public async Task Create<%= pascalizedEntityClass %>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>Relationship()
         {
             <%_ if (relationship.otherEntityName.toUpperCase() === 'USER' || relationship.otherEntityName.toUpperCase() === 'USERROLE' || relationship.otherEntityName.toUpperCase() === 'ROLE') { _%>
             // Get a <%= relationship.otherEntityNamePascalized %> to referenced
             var <%= relationship.otherEntityNameCamelCased %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[0];
             <%_ } else { _%>
             // Create a <%= relationship.otherEntityNamePascalized %> to referenced
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ let j = 0;
-                let found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
             <%_ } _%>
@@ -329,6 +310,17 @@ namespace <%= namespace %>.Test.Controllers {
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
             <%_ }); _%>
             test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>);
+
+            <%_ if (relationship.otherEntityName.toUpperCase() !== 'USER' && relationship.otherEntityName.toUpperCase() !== 'USERROLE' && relationship.otherEntityName.toUpperCase() !== 'ROLE') { _%>
+            // Validate the <%= relationship.otherEntityNamePascalized %> in the database
+            var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
+            test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
+            <%_ } _%>
         }
 
             <%_ }
@@ -336,33 +328,11 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ relationships.forEach(relationship => {
             if (relationship.relationshipType === 'many-to-many') { _%>
         [Fact]
-        public async Task Create<%= pascalizedEntityClass%>WithManyToManyAssociationWith<%= relationship.otherEntityNamePascalized %>()
+        public async Task Create<%= pascalizedEntityClass%>WithManyToManyAssociationReferencing<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>Relationship()
         {
             <%_ if (relationship.ownerSide) { _%>
             // Create a <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
 
@@ -384,29 +354,7 @@ namespace <%= namespace %>.Test.Controllers {
             var <%= camelCasedEntityClass %> = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList()[0];
 
             // Create an <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             <%= relationship.otherEntityNameCamelCased %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(<%= camelCasedEntityClass %>);
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
@@ -431,21 +379,8 @@ namespace <%= namespace %>.Test.Controllers {
                     .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
         }
 
@@ -567,7 +502,7 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ relationships.forEach(relationship => {
             if (relationship.relationshipType === 'many-to-one') { _%>
         [Fact]
-        public async Task Update<%= pascalizedEntityClass %>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>()
+        public async Task Update<%= pascalizedEntityClass %>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>Relationship()
         {
             <%_ if (relationship.otherEntityName.toUpperCase() === 'USER' || relationship.otherEntityName.toUpperCase() === 'USERROLE' || relationship.otherEntityName.toUpperCase() === 'ROLE') { _%>
             // Get two <%= relationship.otherEntityNamePascalizedPlural %> to referenced
@@ -575,52 +510,8 @@ namespace <%= namespace %>.Test.Controllers {
             var updated<%= relationship.otherEntityNamePascalized %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[1];
             <%_ } else { _%>
             // Create two <%= relationship.otherEntityNamePascalizedPlural %> to referenced
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
-            var updated<%= relationship.otherEntityNamePascalized %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
+            var updated<%= relationship.otherEntityNamePascalized %> = AssociatedEntityFactories.getUpdatedAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
             await _applicationDatabaseContext.SaveChangesAsync();
@@ -663,46 +554,20 @@ namespace <%= namespace %>.Test.Controllers {
 
             // Validate the updated<%= relationship.otherEntityNamePascalized %> in the database
             var testUpdated<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
-                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == updated<%= relationship.otherEntityNamePascalized %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(updated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
-            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= pascalizedEntityClassPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(testUpdated<%= relationship.otherEntityNamePascalized %>, updated<%= relationship.otherEntityNamePascalized %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
+            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
 
             // Validate the <%= relationship.otherEntityNameCamelCased %> in the database
             var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
-                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
             <%_ } _%>
         }
@@ -712,36 +577,14 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ relationships.forEach(relationship => {
             if (relationship.relationshipType === 'many-to-one' && !relationship.relationshipRequired) { _%>
         [Fact]
-        public async Task Update<%= pascalizedEntityClass %>WithReferenced<%= relationship.otherEntityNamePascalized %>ToNull()
+        public async Task Update<%= pascalizedEntityClass %>WithReferenced<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>RelationshipToNull()
         {
             <%_ if (relationship.otherEntityName.toUpperCase() === 'USER' || relationship.otherEntityName.toUpperCase() === 'USERROLE' || relationship.otherEntityName.toUpperCase() === 'ROLE') { _%>
             // Get a <%= relationship.otherEntityNamePascalized %> to referenced
             var <%= relationship.otherEntityNameCamelCased %> = _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.ToList()[0];
             <%_ } else { _%>
             // Create a <%= relationship.otherEntityNamePascalized %> to referenced
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
             <%_ } _%>
@@ -783,24 +626,11 @@ namespace <%= namespace %>.Test.Controllers {
 
             // Validate the <%= relationship.otherEntityNameCamelCased %> in the database
             var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
-                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
             <%_ } _%>
         }
@@ -810,56 +640,12 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ relationships.forEach(relationship => {
             if (relationship.relationshipType === 'many-to-many') { _%>
         [Fact]
-        public async Task Update<%= pascalizedEntityClass%>WithManyToManyAssociationWith<%= relationship.otherEntityNamePascalized %>()
+        public async Task Update<%= pascalizedEntityClass%>WithManyToManyAssociationReferencing<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>Relationship()
         {
             <%_ if (relationship.ownerSide) { _%>
             // Create two <%= relationship.otherEntityNamePascalizedPlural %> to test the ManyToMany association
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
-            var updated<%= relationship.otherEntityNamePascalized %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
+            var updated<%= relationship.otherEntityNamePascalized %> = AssociatedEntityFactories.getUpdatedAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
             await _applicationDatabaseContext.SaveChangesAsync();
@@ -893,29 +679,7 @@ namespace <%= namespace %>.Test.Controllers {
             await _applicationDatabaseContext.SaveChangesAsync();
 
             // Create an <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             <%= relationship.otherEntityNameCamelCased %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(_<%= camelCasedEntityClass %>);
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
@@ -935,29 +699,7 @@ namespace <%= namespace %>.Test.Controllers {
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Create a second <%= relationship.otherEntityNamePascalized %> to update the ManyToMany association
-            var updated<%= relationship.otherEntityNamePascalized %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- updatedValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var updated<%= relationship.otherEntityNamePascalized %> = AssociatedEntityFactories.getUpdatedAssociated<%= relationship.otherEntityNamePascalized %>();
             updated<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(updated<%= pascalizedEntityClass %>);
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(updated<%= relationship.otherEntityNamePascalized %>);
             await _applicationDatabaseContext.SaveChangesAsync();
@@ -987,21 +729,8 @@ namespace <%= namespace %>.Test.Controllers {
                     .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == updated<%= relationship.otherEntityNamePascalized %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            testUpdated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(updated<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(testUpdated<%= relationship.otherEntityNamePascalized %>, updated<%= relationship.otherEntityNamePascalized %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             testUpdated<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>[0].Should().Be(test<%= pascalizedEntityClass %>);
 
             // Validate the <%= relationship.otherEntityNameCamelCased %> in the database and in particular there is no more <%= pascalizedEntityClass%> referenced
@@ -1010,21 +739,8 @@ namespace <%= namespace %>.Test.Controllers {
                     .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             <%_ if (relationship.ownerSide) { _%>
             test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
             <%_ } else { _%>
@@ -1055,32 +771,10 @@ namespace <%= namespace %>.Test.Controllers {
             if (relationship.relationshipType === 'many-to-one' && relationship.otherEntityName.toUpperCase() !== 'USER'
                 && relationship.otherEntityName.toUpperCase() !== 'USERROLE' && relationship.otherEntityName.toUpperCase() !== 'ROLE') { _%>
         [Fact]
-        public async Task Delete<%= pascalizedEntityClass%>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>()
+        public async Task Delete<%= pascalizedEntityClass%>WithExistingReferenced<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>Relationship()
         {
             // Create a <%= relationship.otherEntityNamePascalized %> to referenced
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
 
@@ -1104,24 +798,11 @@ namespace <%= namespace %>.Test.Controllers {
 
             // Validate the <%= relationship.otherEntityNamePascalized %> in the database and in particular there is no more <%= pascalizedEntityClass %> referenced
             var test<%= relationship.otherEntityNamePascalized %> = await _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>
-                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= pascalizedEntityClassPlural %>)
+                .Include(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
         }
 
@@ -1130,33 +811,11 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ relationships.forEach(relationship => {
             if (relationship.relationshipType === 'many-to-many') { _%>
         [Fact]
-        public async Task Delete<%= pascalizedEntityClass%>WithManyToManyAssociationWith<%= relationship.otherEntityNamePascalized %>()
+        public async Task Delete<%= pascalizedEntityClass%>WithManyToManyAssociationReferencing<%= relationship.otherEntityNamePascalized %>On<%= relationship.relationshipNamePascalized %>Relationship()
         {
             <%_ if (relationship.ownerSide) { _%>
             // Create a <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
 
@@ -1173,29 +832,7 @@ namespace <%= namespace %>.Test.Controllers {
             await _applicationDatabaseContext.SaveChangesAsync();
 
             // Create an <%= relationship.otherEntityNamePascalized %> to test the ManyToMany association
-            var <%= relationship.otherEntityNameCamelCased %> = new <%= relationship.otherEntityNamePascalized %> {
-                <%_ j = 0;
-                found = false;
-                while (j < entities.length && !found) {
-                    const entity = entities[j];
-                    if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                        let k = 0;
-                        if (entity.definition.fields.length != 0) {
-                            while (k < entity.definition.fields.length - 1) {
-                                const field = entity.definition.fields[k];
-                                const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>,
-                                <%_ k ++;
-                            }
-                            const field = entity.definition.fields[k];
-                            const fieldType = equivalentCSharpType(field.fieldType); _%>
-                <%= toPascalCase(field.fieldName) %> = <%- defaultValue(fieldType) %>
-                        <%_ }
-                        found = true;
-                    }
-                    j ++;
-                } _%>
-            };
+            var <%= relationship.otherEntityNameCamelCased %> = AssociatedEntityFactories.getDefaultAssociated<%= relationship.otherEntityNamePascalized %>();
             <%= relationship.otherEntityNameCamelCased %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Add(_<%= camelCasedEntityClass %>);
             _applicationDatabaseContext.<%= relationship.otherEntityNamePascalizedPlural %>.Add(<%= relationship.otherEntityNameCamelCased %>);
             await _applicationDatabaseContext.SaveChangesAsync();
@@ -1218,21 +855,8 @@ namespace <%= namespace %>.Test.Controllers {
                     .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= pascalizedEntityClass %>)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(<%= (relationship.otherEntityNameCamelCased).charAt(0) %> => <%= (relationship.otherEntityNameCamelCased).charAt(0) %>.Id == <%= relationship.otherEntityNameCamelCased %>.Id);
-            <%_ j = 0;
-            found = false;
-            while (j < entities.length && !found) {
-                const entity = entities[j];
-                if(entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length) {
-                        const field = entity.definition.fields[k]; _%>
-            test<%= relationship.otherEntityNamePascalized %>.<%= toPascalCase(field.fieldName) %>.Should().Be(<%= relationship.otherEntityNameCamelCased %>.<%= toPascalCase(field.fieldName) %>);
-                        <%_ k ++;
-                    }
-                    found = true;
-                }
-                j ++;
-            } _%>
+            HashSet<string> navProperties = TestUtil.GetNavigationProperties(_applicationDatabaseContext, typeof(<%= relationship.otherEntityNamePascalized %>));
+            TestUtil.CompareObjects(test<%= relationship.otherEntityNamePascalized %>, <%= relationship.otherEntityNameCamelCased %>, navProperties, _applicationDatabaseContext).Should().BeTrue();
             test<%= relationship.otherEntityNamePascalized %>.<%= relationship.otherEntityRelationshipFieldNamePascalizedPlural %>.Should().BeEmpty();
         }
 

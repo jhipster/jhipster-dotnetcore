@@ -196,7 +196,7 @@ namespace <%= namespace %>.Test.Setup {
         public static <%= entity.name %> getUpdatedAssociated<%= entity.name %>()
         {
             var updated<%= entity.name %> = new <%= entity.name %> {
-                <%_ let i = 0;
+                <%_ i = 0;
                 if (entity.definition.fields.length != 0) {
                     while (i < entity.definition.fields.length - 1) {
                         const field = entity.definition.fields[i];
@@ -236,7 +236,7 @@ namespace <%= namespace %>.Test.Setup {
         public static <%= pascalizedEntityClass %> getUpdatedAssociated<%= pascalizedEntityClass %>()
         {
             var updated<%= pascalizedEntityClass %> = new <%= pascalizedEntityClass %> {
-                <%_ let i = 0;
+                <%_ i = 0;
                 if (fields.length != 0) {
                     while (i < fields.length - 1) {
                         const fieldType = equivalentCSharpType(fields[i].fieldType); _%>

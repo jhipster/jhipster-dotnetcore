@@ -6,6 +6,7 @@ const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
 const constants = require('../generator-dotnetcore-constants');
+const prompts = require('./prompts');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -34,8 +35,21 @@ module.exports = class extends EntityGenerator {
     }
 
     get prompting() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._prompting();
+        return {
+            /* pre entity hook needs to be written here */
+            askForMicroserviceJson: prompts.askForMicroserviceJson,
+            /* ask question to user if s/he wants to update entity */
+            askForUpdate: prompts.askForUpdate,
+            askForFields: prompts.askForFields,
+            askForFieldsToRemove: prompts.askForFieldsToRemove,
+            askForRelationships: prompts.askForRelationships,
+            askForRelationsToRemove: prompts.askForRelationsToRemove,
+            askForTableName: prompts.askForTableName,
+            askForService: prompts.askForService,
+            askForDTO: prompts.askForDTO,
+            askForFiltering: prompts.askForFiltering,
+            askForPagination: prompts.askForPagination
+        };
     }
 
     get configuring() {
@@ -54,6 +68,7 @@ module.exports = class extends EntityGenerator {
                 context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
+                context.entityClassHasManyToOne = false;
                 context.entities = this.getExistingEntities();
                 context.toPascalCase = toPascalCase;
                 context.pluralize = pluralize;
@@ -69,28 +84,36 @@ module.exports = class extends EntityGenerator {
 
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
+                    relationship.relationshipNamePascalized = toPascalCase(relationship.relationshipName);
                     relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
+                    relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
                     relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
                     relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
                     relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
                         relationship.otherEntityRelationshipFieldNamePascalized
                     );
                     if (relationship.ownerSide) {
-                        relationship.joinEntityName = context.entityClass + _.upperFirst(relationship.otherEntityName);
-                        relationship.joinEntityNamePascalized = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
+                        relationship.joinEntityName =
+                            relationship.otherEntityRelationshipName + _.upperFirst(relationship.relationshipName);
+                        relationship.joinEntityNamePascalized =
+                            relationship.otherEntityRelationshipNamePascalized + relationship.relationshipNamePascalized;
                     } else {
-                        relationship.joinEntityName = relationship.otherEntityName + _.upperFirst(context.entityClass);
-                        relationship.joinEntityNamePascalized = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
+                        relationship.joinEntityName =
+                            relationship.relationshipName + _.upperFirst(relationship.otherEntityRelationshipName);
+                        relationship.joinEntityNamePascalized =
+                            relationship.relationshipNamePascalized + relationship.otherEntityRelationshipNamePascalized;
                     }
                     relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
                     relationship.joinEntityNameCamelCased = _.camelCase(relationship.joinEntityName);
                     relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
                     if (relationship.relationshipType === 'many-to-many') {
                         context.entityClassHasManyToMany = true;
+                    } else if (relationship.relationshipType === 'many-to-one') {
+                        context.entityClassHasManyToOne = true;
                     }
                     relationship.joinEntityGenerated = false;
                 });

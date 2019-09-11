@@ -36,9 +36,9 @@ namespace <%= namespace %>.Data {
                 <%_ entity.definition.relationships.forEach(relationship => {
                     if (relationship.relationshipType === 'many-to-many') {
                         if (relationship.ownerSide) {
-                            let entityClassNamePascalized = entity.name;
-                            let otherEntityClassNamePascalized = toPascalCase(relationship.otherEntityName);
-                            let joinEntityClassNamePascalized = entityClassNamePascalized + otherEntityClassNamePascalized; _%>
+                            let relationshipNamePascalized = toPascalCase(relationship.relationshipName);
+                            let otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
+                            let joinEntityClassNamePascalized = otherEntityRelationshipNamePascalized + relationshipNamePascalized; _%>
         public DbSet<<%= joinEntityClassNamePascalized %>> <%= pluralize(joinEntityClassNamePascalized) %> { get; set; }
                         <%_ }
                     }
@@ -83,13 +83,15 @@ namespace <%= namespace %>.Data {
                     entity.definition.relationships.forEach(relationship => {
                         if (relationship.relationshipType === 'many-to-many') {
                             if (relationship.ownerSide) {
+                                let relationshipNamePascalized = toPascalCase(relationship.relationshipName);
+                                let otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
+                                let joinEntityClassNamePascalized = otherEntityRelationshipNamePascalized + relationshipNamePascalized;
                                 let entityClassNamePascalized = entity.name;
                                 let otherEntityClassNamePascalized = toPascalCase(relationship.otherEntityName);
-                                let joinEntityClassNamePascalized = entityClassNamePascalized + otherEntityClassNamePascalized;
                                 let ownerRelationshipFieldName = entityClassNamePascalized;
                                 let nonOwnerRelationshipFieldName = otherEntityClassNamePascalized; _%>
             builder.Entity<<%= joinEntityClassNamePascalized %>>()
-                .HasKey(t => new { t.<%= ownerRelationshipFieldName %>Id, t.<%= toPascalCase(nonOwnerRelationshipFieldName) %>Id });
+                .HasKey(t => new { t.<%= ownerRelationshipFieldName %>Id, t.<%= nonOwnerRelationshipFieldName %>Id });
 
                             <%_ }
                         }
