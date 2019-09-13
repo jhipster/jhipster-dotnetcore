@@ -56,7 +56,7 @@ module.exports = class extends ServerGenerator {
             displayLogo() {
                 this.printJHipsterNetLogo();
             },
-            setupServeronsts() {
+            setupServerConsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
                 const configuration = this.getAllJhipsterConfig(this, true);
