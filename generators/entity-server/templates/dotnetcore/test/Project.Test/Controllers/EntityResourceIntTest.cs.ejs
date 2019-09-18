@@ -82,55 +82,6 @@ function updatedValue(cSharpType) {
 
     return updatedValue;
 }
-function equivalentCSharpType(javaType) {
-    let cSharpType;
-
-    switch(javaType) {
-        case 'String':
-            cSharpType = 'string';
-            break;
-        case 'Integer':
-            cSharpType = 'int?';
-            break;
-        case 'Long':
-            cSharpType = 'long?';
-            break;
-        case 'Float':
-            cSharpType = 'float?';
-            break;
-        case 'Double':
-            cSharpType = 'double?';
-            break;
-        case 'BigDecimal':
-            cSharpType = 'decimal?';
-            break;
-        case 'LocalDate':
-            cSharpType = 'DateTime?';
-            break;
-        case 'Instant':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'ZonedDateTime':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'Duration':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'Boolean':
-            cSharpType = 'bool?';
-            break;
-        case 'Enumeration':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'Blob':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        default:
-            cSharpType = 'UNKNOWN_TYPE';
-    }
-
-    return cSharpType;
-}
 function hasDateTimeTypeField() {
     let dateTimeTypeField = false;
     let idx = 0;
@@ -142,35 +93,7 @@ function hasDateTimeTypeField() {
     }
     return dateTimeTypeField;
 }
-function hasManyToOneOrManyToManyWithDateTimeTypeField() {
-    let dateTimeTypeField = false;
-    let i = 0;
-    while (i < relationships.length && !dateTimeTypeField) {
-        let relationship = relationships[i];
-        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'many-to-many') {
-            let found = false;
-            let j = 0;
-            while (j < entities.length && !found) {
-                let entity = entities[j];
-                if (entity.name.toUpperCase() === relationship.otherEntityName.toUpperCase()) {
-                    let k = 0;
-                    while (k < entity.definition.fields.length && !dateTimeTypeField) {
-                        let field = entity.definition.fields[k];
-                        if (field.fieldType === 'LocalDate') {
-                            dateTimeTypeField = true;
-                        }
-                        k++;
-                    }
-                    found = true;
-                }
-                j++;
-            }
-        }
-        i ++;
-    }
-    return dateTimeTypeField;
-}
-if (hasDateTimeTypeField() || hasManyToOneOrManyToManyWithDateTimeTypeField()) { _%>
+if (hasDateTimeTypeField()) { _%>
 using System;
 <%_ } _%>
 using System.Linq;
@@ -199,7 +122,7 @@ namespace <%= namespace %>.Test.Controllers {
 
         <%_ fields.forEach(field => {
             const fieldType = equivalentCSharpType(field.fieldType);
-            if (field.fieldType == 'String') { _%>
+            if (field.fieldType === 'String') { _%>
         private const <%= fieldType %> Default<%= field.fieldNamePascalized %> = <%- defaultValue(fieldType) %>;
         private const <%= fieldType %> Updated<%= field.fieldNamePascalized %> = <%- updatedValue(fieldType) %>;
             <%_ } else { _%>
@@ -221,10 +144,10 @@ namespace <%= namespace %>.Test.Controllers {
                 <%_ let i = 0;
                 if (fields.length != 0) {
                     while (i < fields.length - 1) { _%>
-                    <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
+                <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
                         <%_ i ++;
                     }; _%>
-                    <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>
+                <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>
                 <%_ }_%>
             };
         }

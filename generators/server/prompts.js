@@ -38,7 +38,7 @@ function askForServerSideOpts() {
 
     const done = this.async();
 
-    this.prompt(prompts).then((prompt) => {
+    this.prompt(prompts).then(prompt => {
         this.namespace = prompt.namespace;
         this.databaseType = 'sql';
         this.devDatabaseType = 'h2Memory';
@@ -50,8 +50,7 @@ function askForServerSideOpts() {
 module.exports = {
     askForModuleName,
     askForServerSideOpts
-//    askForSomething
-    // askForServerSideOpts,
+//    askForSomething,
     // askForOptionalItems,
     // askFori18n
 };
