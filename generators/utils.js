@@ -22,7 +22,8 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 module.exports = {
     copyI18n,
-    copyEnumI18n
+    copyEnumI18n,
+    equivalentCSharpType
 }
 
 /**
@@ -67,4 +68,54 @@ function copyEnumI18n(language, enumInfo, prefix = '') {
         // An exception is thrown if the folder doesn't exist
         // do nothing
     }
+}
+
+function equivalentCSharpType(javaType) {
+    let cSharpType;
+
+    switch (javaType) {
+        case 'String':
+            cSharpType = 'string';
+            break;
+        case 'Integer':
+            cSharpType = 'int?';
+            break;
+        case 'Long':
+            cSharpType = 'long?';
+            break;
+        case 'Float':
+            cSharpType = 'float?';
+            break;
+        case 'Double':
+            cSharpType = 'double?';
+            break;
+        case 'BigDecimal':
+            cSharpType = 'decimal?';
+            break;
+        case 'LocalDate':
+            cSharpType = 'DateTime?';
+            break;
+        case 'Instant':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'ZonedDateTime':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Duration':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'Boolean':
+            cSharpType = 'bool?';
+            break;
+        case 'enum':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        case 'byte[]':
+            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            break;
+        default:
+            cSharpType = 'UNKNOWN_TYPE';
+    }
+
+    return cSharpType;
 }
