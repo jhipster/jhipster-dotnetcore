@@ -69,22 +69,28 @@ module.exports = class extends EntityGenerator {
 
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
+                    relationship.relationshipNamePascalized = toPascalCase(relationship.relationshipName);
                     relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
+                    relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
                     relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
                     relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
                     relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
                         relationship.otherEntityRelationshipFieldNamePascalized
                     );
                     if (relationship.ownerSide) {
-                        relationship.joinEntityName = context.entityClass + _.upperFirst(relationship.otherEntityName);
-                        relationship.joinEntityNamePascalized = context.pascalizedEntityClass + relationship.otherEntityNamePascalized;
+                        relationship.joinEntityName =
+                            relationship.otherEntityRelationshipName + _.upperFirst(relationship.relationshipName);
+                        relationship.joinEntityNamePascalized =
+                            relationship.otherEntityRelationshipNamePascalized + relationship.relationshipNamePascalized;
                     } else {
-                        relationship.joinEntityName = relationship.otherEntityName + _.upperFirst(context.entityClass);
-                        relationship.joinEntityNamePascalized = relationship.otherEntityNamePascalized + context.pascalizedEntityClass;
+                        relationship.joinEntityName =
+                            relationship.relationshipName + _.upperFirst(relationship.otherEntityRelationshipName);
+                        relationship.joinEntityNamePascalized =
+                            relationship.relationshipNamePascalized + relationship.otherEntityRelationshipNamePascalized;
                     }
                     relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
                     relationship.joinEntityNameCamelCased = _.camelCase(relationship.joinEntityName);

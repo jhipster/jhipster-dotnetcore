@@ -56,9 +56,7 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= camelCasedEntityClass %>}");
             if (<%= camelCasedEntityClass %>.Id != 0)
-                throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName,
-                    "idexists");
-
+                throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
             <%_ if (relationships.length != 0) { _%>
             _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
             <%_ } else { _%>
@@ -107,23 +105,10 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
             var page = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
-            <%_ const reachedEntities = [];
-            reachedEntities.push(camelCasedEntityClass);
-            relationships.forEach( relationship => {
+            <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
-                    <%_ let idx = 0;
-                    while (idx < entities.length && entities[idx].name.toUpperCase() !== relationship.otherEntityName.toUpperCase()) {
-                        idx ++;
-                    }
-                    if (idx < entities.length) {
-                        entities[idx].definition.relationships.forEach(r => {
-                            if ((r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one') && !reachedEntities.includes(r.otherEntityName)) { _%>
-                    .ThenInclude(<%= _.camelCase(entities[idx].name) %> => <%= _.camelCase(entities[idx].name) %>.<%= toPascalCase(r.relationshipName) %>)
-                            <%_ }
-                        });
-                    }
-                }
+                <%_ }
             }); _%>
                 .UsePageable(pageable);
             var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
@@ -135,23 +120,10 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
             var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
-            <%_ const reachedEntities2 = [];
-            reachedEntities2.push(camelCasedEntityClass);
-            relationships.forEach( relationship => {
+            <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
-                    <%_ let idx = 0;
-                    while (idx < entities.length && entities[idx].name.toUpperCase() !== relationship.otherEntityName.toUpperCase()) {
-                        idx ++;
-                    }
-                    if (idx < entities.length) {
-                        entities[idx].definition.relationships.forEach(r => {
-                            if (r.relationshipType === 'many-to-one' || r.relationshipType === 'one-to-one' && !reachedEntities2.includes(r.otherEntityName)) { _%>
-                    .ThenInclude(<%= _.camelCase(entities[idx].name) %> => <%= _.camelCase(entities[idx].name) %>.<%= toPascalCase(r.relationshipName) %>)
-                            <%_ }
-                        });
-                    }
-                } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
                     .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
                 <%_ }
