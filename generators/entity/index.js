@@ -5,7 +5,9 @@ const EntityGenerator = require('generator-jhipster/generators/entity');
 const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
+const utilsNet = require('../utils');
 const constants = require('../generator-dotnetcore-constants');
+const prompts = require('./prompts');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -34,8 +36,21 @@ module.exports = class extends EntityGenerator {
     }
 
     get prompting() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._prompting();
+        return {
+            /* pre entity hook needs to be written here */
+            // askForMicroserviceJson: prompts.askForMicroserviceJson,
+            /* ask question to user if s/he wants to update entity */
+            askForUpdate: prompts.askForUpdate,
+            askForFields: prompts.askForFields,
+            askForFieldsToRemove: prompts.askForFieldsToRemove,
+            askForRelationships: prompts.askForRelationships,
+            askForRelationsToRemove: prompts.askForRelationsToRemove,
+            askForTableName: prompts.askForTableName,
+            // askForService: prompts.askForService,
+            // askForDTO: prompts.askForDTO,
+            // askForFiltering: prompts.askForFiltering,
+            askForPagination: prompts.askForPagination
+        };
     }
 
     get configuring() {
@@ -58,6 +73,7 @@ module.exports = class extends EntityGenerator {
                 context.toPascalCase = toPascalCase;
                 context.pluralize = pluralize;
                 context._ = _;
+                context.equivalentCSharpType = utilsNet.equivalentCSharpType;
                 context.mainAngularDir = `${context.mainProjectDir}/ClientApp/app`;
                 context.mainClientDir = `${context.mainProjectDir}/ClientApp`;
 

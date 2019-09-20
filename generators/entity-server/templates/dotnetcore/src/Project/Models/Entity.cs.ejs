@@ -16,56 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ function equivalentCSharpType(javaType) {
-    let cSharpType;
-
-    switch(javaType) {
-        case 'String':
-            cSharpType = 'string';
-            break;
-        case 'Integer':
-            cSharpType = 'int?';
-            break;
-        case 'Long':
-            cSharpType = 'long?';
-            break;
-        case 'Float':
-            cSharpType = 'float?';
-            break;
-        case 'Double':
-            cSharpType = 'double?';
-            break;
-        case 'BigDecimal':
-            cSharpType = 'decimal?';
-            break;
-        case 'LocalDate':
-            cSharpType = 'DateTime?';
-            break;
-        case 'Instant':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'ZonedDateTime':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'Duration':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'Boolean':
-            cSharpType = 'bool?';
-            break;
-        case 'Enumeration':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        case 'Blob':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
-            break;
-        default:
-            cSharpType = 'UNKNOWN_TYPE';
-    }
-
-    return cSharpType;
-}
-let importJsonIgnore = false;
+<%_ let importJsonIgnore = false;
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
