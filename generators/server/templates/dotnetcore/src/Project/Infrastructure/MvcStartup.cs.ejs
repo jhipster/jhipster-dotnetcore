@@ -32,12 +32,12 @@ namespace <%= namespace %>.Infrastructure {
             @this.AddHealthChecks();
 
             //TODO use AddMvcCore + config
-            @this.AddMvc(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(options => {
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                });
+            @this.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddNewtonsoftJson(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
 
             return @this;
         }
@@ -47,7 +47,12 @@ namespace <%= namespace %>.Infrastructure {
             @this.UseDefaultFiles();
             @this.UseStaticFiles();
 
-            @this.UseMvc();
+            @this.UseRouting(); 
+
+            @this.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             @this.UseHealthChecks("/health");
 

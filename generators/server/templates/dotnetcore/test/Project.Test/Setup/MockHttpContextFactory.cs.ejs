@@ -12,26 +12,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 
 namespace <%= namespace %>.Test.Setup {
     public class MockHttpContextFactory : IHttpContextFactory {
-        private readonly HttpContextFactory _delegate;
+        private readonly DefaultHttpContextFactory _delegate;
         private readonly MockClaimsPrincipalProvider _mockClaimsPrincipalProvider;
 
         public MockHttpContextFactory(IOptions<FormOptions> formOptions,
-            MockClaimsPrincipalProvider mockClaimsPrincipalProvider)
+            MockClaimsPrincipalProvider mockClaimsPrincipalProvider, IServiceProvider serviceProvider)
         {
-            _delegate = new HttpContextFactory(formOptions);
+            _delegate = new DefaultHttpContextFactory(serviceProvider);
             _mockClaimsPrincipalProvider = mockClaimsPrincipalProvider;
         }
 
         public MockHttpContextFactory(IOptions<FormOptions> formOptions, IHttpContextAccessor httpContextAccessor,
-            MockClaimsPrincipalProvider mockClaimsPrincipalProvider)
+            MockClaimsPrincipalProvider mockClaimsPrincipalProvider, IServiceProvider serviceProvider)
         {
-            _delegate = new HttpContextFactory(formOptions, httpContextAccessor);
+            _delegate = new DefaultHttpContextFactory(serviceProvider);
             _mockClaimsPrincipalProvider = mockClaimsPrincipalProvider;
         }
 
