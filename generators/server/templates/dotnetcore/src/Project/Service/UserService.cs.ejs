@@ -159,8 +159,7 @@ namespace <%= namespace %>.Service {
                 if (!removed) throw new LoginAlreadyUsedException();
             }
 
-            existingUser = _userManager.Users.SingleOrDefault(it =>
-                string.Equals(it.Email, userDto.Email, StringComparison.CurrentCultureIgnoreCase));
+            existingUser = _userManager.Users.FirstOrDefault(it =>it.Email == userDto.Email);
             if (existingUser != null) {
                 var removed = await RemoveNonActivatedUser(existingUser);
                 if (!removed) throw new EmailAlreadyUsedException();
