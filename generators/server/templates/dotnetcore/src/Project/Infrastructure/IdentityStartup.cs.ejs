@@ -44,8 +44,8 @@ namespace <%= namespace %>.Infrastructure {
         private static IEnumerable<Role> Roles()
         {
             return new List<Role> {
-                new Role {Name = "ROLE_ADMIN"},
-                new Role {Name = "ROLE_USER"}
+                new Role {Id = "role_admin", Name = "ROLE_ADMIN"},
+                new Role {Id = "role_user",Name = "ROLE_USER"}
             };
         }
 

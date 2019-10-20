@@ -14,6 +14,7 @@
 -%>
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace <%= namespace %>.Infrastructure {
@@ -21,7 +22,7 @@ namespace <%= namespace %>.Infrastructure {
         public static IServiceCollection AddSwaggerModule(this IServiceCollection @this)
         {
             @this.AddSwaggerGen(c => {
-                c.SwaggerDoc("v2", new Info {Title = "nhipsterSampleApplication API", Version = "0.0.1"});
+                c.SwaggerDoc("v2", new OpenApiInfo {Title = "<%=pascalizedBaseName%> API", Version = "0.0.1"});
             });
 
             return @this;
@@ -31,7 +32,7 @@ namespace <%= namespace %>.Infrastructure {
         {
             @this.UseSwagger();
             @this.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "nhipsterSampleApplication API");
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "<%=pascalizedBaseName%> API");
             });
             return @this;
         }
