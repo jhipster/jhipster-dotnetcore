@@ -70,12 +70,14 @@ module.exports = class extends EntityGenerator {
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
                 context.entities = this.getExistingEntities();
+                context.mainAngularDir = `${context.mainProjectDir}/ClientApp/app`;
+                context.mainClientDir = `${context.mainProjectDir}/ClientApp`;
+
+                // Embed functions to use in EJS templates
                 context.toPascalCase = toPascalCase;
                 context.pluralize = pluralize;
                 context._ = _;
                 context.equivalentCSharpType = utilsNet.equivalentCSharpType;
-                context.mainAngularDir = `${context.mainProjectDir}/ClientApp/app`;
-                context.mainClientDir = `${context.mainProjectDir}/ClientApp`;
 
                 // Load in-memory data for .Net Blueprint fields
                 context.fields.forEach(field => {
@@ -91,29 +93,35 @@ module.exports = class extends EntityGenerator {
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
-                    relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
-                    relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
-                    relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
-                    relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
-                        relationship.otherEntityRelationshipFieldNamePascalized
-                    );
-                    if (relationship.ownerSide) {
-                        relationship.joinEntityName =
-                            relationship.otherEntityRelationshipName + _.upperFirst(relationship.relationshipName);
-                        relationship.joinEntityNamePascalized =
-                            relationship.otherEntityRelationshipNamePascalized + relationship.relationshipNamePascalized;
-                    } else {
-                        relationship.joinEntityName =
-                            relationship.relationshipName + _.upperFirst(relationship.otherEntityRelationshipName);
-                        relationship.joinEntityNamePascalized =
-                            relationship.relationshipNamePascalized + relationship.otherEntityRelationshipNamePascalized;
+
+                    if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many' ||
+                        relationship.relationshipType === 'one-to-one' || relationship.otherEntityName.toLowerCase() === 'user') {
+                        relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
+                        relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
+                        relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
+                        relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
+                            relationship.otherEntityRelationshipFieldNamePascalized
+                        );
                     }
-                    relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
-                    relationship.joinEntityNameCamelCased = _.camelCase(relationship.joinEntityName);
-                    relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
+
                     if (relationship.relationshipType === 'many-to-many') {
+                        if (relationship.ownerSide) {
+                            relationship.joinEntityName =
+                                relationship.otherEntityRelationshipName + _.upperFirst(relationship.relationshipName);
+                            relationship.joinEntityNamePascalized =
+                                relationship.otherEntityRelationshipNamePascalized + relationship.relationshipNamePascalized;
+                        } else {
+                            relationship.joinEntityName =
+                                relationship.relationshipName + _.upperFirst(relationship.otherEntityRelationshipName);
+                            relationship.joinEntityNamePascalized =
+                                relationship.relationshipNamePascalized + relationship.otherEntityRelationshipNamePascalized;
+                        }
+                        relationship.joinEntityNameSnakeCased = _.snakeCase(relationship.joinEntityName);
+                        relationship.joinEntityNameCamelCased = _.camelCase(relationship.joinEntityName);
+                        relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
                         context.entityClassHasManyToMany = true;
                     }
+
                     relationship.joinEntityGenerated = false;
                 });
             }
