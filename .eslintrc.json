@@ -6,7 +6,7 @@
     "extends": ["airbnb-base", "plugin:prettier/recommended"],
     "rules": {
         "prettier/prettier": "error",
-        "indent": [2, 4],
+        "indent": [2, 4, {"SwitchCase": 1}],
         "linebreak-style": 0,
         "eol-last": 2,
         "quotes": [2, "single", { "avoidEscape": true }],

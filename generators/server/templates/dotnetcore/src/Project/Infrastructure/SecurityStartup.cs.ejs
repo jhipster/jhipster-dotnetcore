@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2019 the original author or authors from the JHipster project.
+ Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,7 +103,7 @@ namespace <%= namespace %>.Infrastructure {
         {
             @this.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));
             @this.UseAuthentication();
-            @this.UseAuthorization(); 
+            @this.UseAuthorization();
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             @this.UseHsts();
             @this.UseHttpsRedirection();
