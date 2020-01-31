@@ -28,9 +28,7 @@ function askForServerSideOpts() {
             type: 'input',
             name: 'namespace',
             validate: input =>
-                /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input)
-                    ? true
-                    : 'The namespace you have provided is not a valid C# namespace',
+                /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
             message: 'What is your default C# namespace?',
             default: 'MyCompany'
         }
@@ -50,7 +48,7 @@ function askForServerSideOpts() {
 module.exports = {
     askForModuleName,
     askForServerSideOpts
-//    askForSomething,
+    //    askForSomething,
     // askForOptionalItems,
     // askFori18n
 };

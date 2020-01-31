@@ -35,7 +35,8 @@ const serverFiles = {
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`
+                    renameTo: generator =>
+                        `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`
                 }
             ]
         },
@@ -94,7 +95,7 @@ const serverFiles = {
             ]
         }
     ]
-}
+};
 
 function writeFiles() {
     return {
