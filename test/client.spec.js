@@ -6,7 +6,7 @@ describe('Subgenerator client of dotnetcore JHipster blueprint', () => {
     describe('Sample test', () => {
         before(done => {
             helpers
-                .run('generator-jhipster/generators/client')
+                .run('generator-jhipster/generators/app')
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
@@ -15,14 +15,14 @@ describe('Subgenerator client of dotnetcore JHipster blueprint', () => {
                 })
                 .withGenerators([
                     [
-                        require('../generators/client/index.js'), // eslint-disable-line global-require
+                        require('../generators/client'), // eslint-disable-line global-require
                         'jhipster-dotnetcore:client',
                         path.join(__dirname, '../generators/client/index.js')
                     ]
                 ])
                 .withPrompts({
                     baseName: 'sampleMysql',
-                    packageName: 'com.mycompany.myapp',
+                    packageName: 'myapp',
                     applicationType: 'monolith',
                     databaseType: 'sql',
                     devDatabaseType: 'h2Disk',
