@@ -36,6 +36,8 @@ module.exports = class extends CommonGenerator {
         this.configOptions = jhContext.configOptions || {};
     }
 
+    
+
     get initializing() {
         return super._initializing();
     }
@@ -59,8 +61,40 @@ module.exports = class extends CommonGenerator {
         return super._default();
     }
 
-    get writing() {
-        const phaseFromJHipster = super._writing();
+    get writing() {        
+        const commonFiles = {
+            global: [
+                {
+                    templates: [
+                        'README.md',
+                        {
+                            file: 'gitignore',
+                            renameTo: () => '.gitignore'
+                        },
+                        {
+                            file: 'gitattributes',
+                            renameTo: () => '.gitattributes',
+                            method: 'copy'
+                        },
+                        {
+                            file: 'editorconfig',
+                            renameTo: () => '.editorconfig',
+                            method: 'copy'
+                        }
+                    ]
+                }
+            ]
+        };
+        
+        function writeCommonFiles() {
+            return {
+                writeFiles() {
+                    this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
+                }
+            };
+        }
+
+        const phaseFromJHipster = writeCommonFiles();
         const jhipsterNetPhaseSteps = writeFiles();
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }

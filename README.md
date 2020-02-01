@@ -104,6 +104,31 @@ docker run -d -p [A host port]:80 [Image name]:[Image tag]
 
 3. Open your favorite browser at ```localhost:[Chosen host port]``` and enjoy ! :whale:
 
+# Running SonarQube
+
+## By Script : 
+
+1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
+   
+2. Wait container was up Run ```SonarAnalysis.ps1``` and go to http://localhost:9001
+
+## Manually : 
+
+1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
+
+2. Install sonar scanner for .net :
+   
+ ```dotnet tool install --global dotnet-sonarscanner```
+
+3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001"```
+
+4. Build your application : ```dotnet build```
+
+5. Publish sonar results : ```dotnet sonarscanner end /d:sonar.login=admin /d:sonar.password=admin```
+
+6. Go to http://localhost:9001
+
+
 # License
 
 Apache-2.0 © [Daniel Petisme]()
