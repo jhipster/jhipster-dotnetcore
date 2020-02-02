@@ -26,14 +26,13 @@ namespace <%= namespace %>.Infrastructure {
         {
             @this.AddHttpContextAccessor();
 
-            @this.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            @this.AddMvc();
 
             //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
             @this.AddHealthChecks();
 
             //TODO use AddMvcCore + config
             @this.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
