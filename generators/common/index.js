@@ -25,7 +25,7 @@ const writeFiles = require('./files').writeFiles;
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -35,8 +35,6 @@ module.exports = class extends CommonGenerator {
 
         this.configOptions = jhContext.configOptions || {};
     }
-
-    
 
     get initializing() {
         return super._initializing();
@@ -61,7 +59,7 @@ module.exports = class extends CommonGenerator {
         return super._default();
     }
 
-    get writing() {        
+    get writing() {
         const commonFiles = {
             global: [
                 {
@@ -85,7 +83,7 @@ module.exports = class extends CommonGenerator {
                 }
             ]
         };
-        
+
         function writeCommonFiles() {
             return {
                 writeFiles() {
