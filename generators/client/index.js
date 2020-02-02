@@ -29,7 +29,7 @@ const writeAngularFiles = require('./files-angular').writeFiles;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -160,7 +160,7 @@ module.exports = class extends ClientGenerator {
                 });
             }
         };
-        return Object.assign(phaseFromJHipster, customPhaseSteps );
+        return Object.assign(phaseFromJHipster, customPhaseSteps);
     }
 
     get default() {

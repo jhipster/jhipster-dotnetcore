@@ -24,7 +24,7 @@ module.exports = {
     copyI18n,
     copyEnumI18n,
     equivalentCSharpType
-}
+};
 
 /**
  * Copy I18N

@@ -11,7 +11,7 @@ const prompts = require('./prompts');
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -94,11 +94,17 @@ module.exports = class extends EntityGenerator {
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
 
-                    if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many' ||
-                        relationship.relationshipType === 'one-to-one' || relationship.otherEntityName.toLowerCase() === 'user') {
+                    if (
+                        relationship.relationshipType === 'one-to-many' ||
+                        relationship.relationshipType === 'many-to-many' ||
+                        relationship.relationshipType === 'one-to-one' ||
+                        relationship.otherEntityName.toLowerCase() === 'user'
+                    ) {
                         relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
                         relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
-                        relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
+                        relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(
+                            relationship.otherEntityRelationshipFieldName
+                        );
                         relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
                             relationship.otherEntityRelationshipFieldNamePascalized
                         );
