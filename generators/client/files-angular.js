@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+const angularFiles = require('generator-jhipster/generators/client/files-angular').files;
 const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 // const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-
-const angularFiles = require('generator-jhipster/generators/client/files-angular').files;
 
 const fileDestinationMapping = {
     common: generator => `${SERVER_SRC_DIR}/${generator.mainProjectDir}`,
@@ -48,7 +48,7 @@ for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
     for (let j = 0, blockTemplates = angularFiles[blocks[i]]; j < blockTemplates.length; j++) {
         const blockTemplate = blockTemplates[j];
         const udpatedBlockTemplate = {};
-        var previousPath = '';
+        let previousPath = '';
         if (blockTemplate.path) {
             previousPath = blockTemplate.path;
             udpatedBlockTemplate.path = '';
@@ -60,12 +60,10 @@ for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
             let file = '';
             if (typeof templateObj === 'string') {
                 file = templateObj;
-            } else {
-                if (typeof templateObj.file === 'string') {
-                    file = templateObj.file;
-                } else if (typeof templateObj.file === 'function') {
-                    file = templateObj.file(generator);
-                }
+            } else if (typeof templateObj.file === 'string') {
+                file = templateObj.file;
+            } else if (typeof templateObj.file === 'function') {
+                file = templateObj.file(generator);
             }
             const updatedTemplateObj = {
                 file: `${previousPath}/${file}`,

@@ -4,7 +4,7 @@ const SpringControllerGenerator = require('generator-jhipster/generators/spring-
 
 module.exports = class extends SpringControllerGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 

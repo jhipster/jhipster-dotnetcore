@@ -19,19 +19,17 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const _ = require('lodash');
-const os = require('os');
-const shelljs = require('shelljs');
-const packagejs = require('../../package.json');
-const prompts = require('./prompts');
-const writeFiles = require('./files').writeFiles;
 const ServerGenerator = require('generator-jhipster/generators/server');
+const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
-const toPascalCase = require('to-pascal-case');
+const writeFiles = require('./files').writeFiles;
+const prompts = require('./prompts');
+const packagejs = require('../../package.json');
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
-        super(args, Object.assign({ fromBlueprint: true }, opts)); // fromBlueprint variable is important
+        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
@@ -70,12 +68,36 @@ module.exports = class extends ServerGenerator {
 
     printJHipsterNetLogo() {
         this.log('\n');
-        this.log(`${chalk.green('        ██╗')}${chalk.red(' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗')}${chalk.magenta('    ███╗   ██╗███████╗████████╗')}`);
-        this.log(`${chalk.green('        ██║')}${chalk.red(' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗')}${chalk.magenta('   ████╗  ██║██╔════╝╚══██╔══╝')}`);
-        this.log(`${chalk.green('        ██║')}${chalk.red(' ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝')}${chalk.magenta('   ██╔██╗ ██║█████╗     ██║')}`);
-        this.log(`${chalk.green('  ██╗   ██║')}${chalk.red(' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║')}${chalk.magenta('    ██║╚██╗██║██╔══╝     ██║')}`);
-        this.log(`${chalk.green('  ╚██████╔╝')}${chalk.red(' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗')}${chalk.magenta('██╗██║ ╚████║███████╗   ██║')}`);
-        this.log(`${chalk.green('   ╚═════╝ ')}${chalk.red(' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝')}${chalk.magenta('╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝')}\n`);
+        this.log(
+            `${chalk.green('        ██╗')}${chalk.red(
+                ' ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗'
+            )}${chalk.magenta('    ███╗   ██╗███████╗████████╗')}`
+        );
+        this.log(
+            `${chalk.green('        ██║')}${chalk.red(
+                ' ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗'
+            )}${chalk.magenta('   ████╗  ██║██╔════╝╚══██╔══╝')}`
+        );
+        this.log(
+            `${chalk.green('        ██║')}${chalk.red(
+                ' ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝'
+            )}${chalk.magenta('   ██╔██╗ ██║█████╗     ██║')}`
+        );
+        this.log(
+            `${chalk.green('  ██╗   ██║')}${chalk.red(
+                ' ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║'
+            )}${chalk.magenta('    ██║╚██╗██║██╔══╝     ██║')}`
+        );
+        this.log(
+            `${chalk.green('  ╚██████╔╝')}${chalk.red(
+                ' ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗'
+            )}${chalk.magenta('██╗██║ ╚████║███████╗   ██║')}`
+        );
+        this.log(
+            `${chalk.green('   ╚═════╝ ')}${chalk.red(
+                ' ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝'
+            )}${chalk.magenta('╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝')}\n`
+        );
         this.log(chalk.white.bold('                            https://www.jhipster.tech\n'));
         this.log(chalk.white('Welcome to JHipster.NET ') + chalk.yellow(`v${packagejs.version}`));
         this.log(chalk.white(`Application files will be generated in folder: ${chalk.yellow(process.cwd())}`));
@@ -165,9 +187,7 @@ module.exports = class extends ServerGenerator {
                         dotnet.slnAdd(`${this.solutionName}.sln`, [
                             'src/JHipsterNet/JHipsterNet.csproj',
                             `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
-                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${
-                                constants.PROJECT_TEST_SUFFIX
-                            }.csproj`
+                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`
                         ])
                     )
                     .catch(err => {
@@ -178,9 +198,7 @@ module.exports = class extends ServerGenerator {
                         this.log(
                             chalk.green(
                                 `Run your .Net Core application:\n${chalk.yellow.bold(
-                                    `dotnet run --verbosity normal --project ./${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${
-                                        this.pascalizedBaseName
-                                    }.csproj`
+                                    `dotnet run --verbosity normal --project ./${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`
                                 )}`
                             )
                         );
