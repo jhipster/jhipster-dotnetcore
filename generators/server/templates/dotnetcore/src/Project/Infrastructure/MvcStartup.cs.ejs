@@ -47,7 +47,7 @@ namespace <%= namespace %>.Infrastructure {
             @this.UseStaticFiles();
 
             @this.UseRouting();
-
+            @this.UseAuthorization();
             @this.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
