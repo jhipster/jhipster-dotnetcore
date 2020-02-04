@@ -60,7 +60,39 @@ module.exports = class extends CommonGenerator {
     }
 
     get writing() {
-        const phaseFromJHipster = super._writing();
+        const commonFiles = {
+            global: [
+                {
+                    templates: [
+                        'README.md',
+                        {
+                            file: 'gitignore',
+                            renameTo: () => '.gitignore'
+                        },
+                        {
+                            file: 'gitattributes',
+                            renameTo: () => '.gitattributes',
+                            method: 'copy'
+                        },
+                        {
+                            file: 'editorconfig',
+                            renameTo: () => '.editorconfig',
+                            method: 'copy'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function writeCommonFiles() {
+            return {
+                writeFiles() {
+                    this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
+                }
+            };
+        }
+
+        const phaseFromJHipster = writeCommonFiles();
         const jhipsterNetPhaseSteps = writeFiles();
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
