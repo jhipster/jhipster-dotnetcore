@@ -819,7 +819,11 @@ const serverFiles = {
     docker: [
         {
             path: DOCKER_DIR,
-            templates: ['app.yml']
+            templates: ['app.yml', 'sonar.yml']
+        },
+        {
+            path: '',
+            templates: [{ file: 'SonarAnalysis.ps1', renameTo: () => 'SonarAnalysis.ps1' }]
         }
     ]
     // ],
