@@ -111,7 +111,7 @@ Apache-2.0 © [Daniel Petisme]()
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-dotnetcore.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-dotnetcore
-[travis-image]: https://travis-ci.org/danielpetisme/generator-jhipster-dotnetcore.svg?branch=master
-[travis-url]: https://travis-ci.org/danielpetisme/generator-jhipster-dotnetcore
-[daviddm-image]: https://david-dm.org/danielpetisme/generator-jhipster-dotnetcore.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/danielpetisme/generator-jhipster-dotnetcore
+[travis-image]: https://api.travis-ci.com/jhipster/jhipster-dotnetcore.svg?branch=master
+[travis-url]: https://travis-ci.com/jhipster/jhipster-dotnetcore
+[daviddm-image]: https://david-dm.org/jhipster/jhipster-dotnetcore.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/jhipster/jhipster-dotnetcore
