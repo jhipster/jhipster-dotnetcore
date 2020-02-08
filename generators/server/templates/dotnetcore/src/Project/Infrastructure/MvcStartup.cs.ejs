@@ -14,7 +14,7 @@
 -%>
 using JHipsterNet.Pagination.Binders;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -41,7 +41,7 @@ namespace <%= namespace %>.Infrastructure {
             return @this;
         }
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder @this, IHostingEnvironment env)
+        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder @this, IHostEnvironment env)
         {
             @this.UseDefaultFiles();
             @this.UseStaticFiles();

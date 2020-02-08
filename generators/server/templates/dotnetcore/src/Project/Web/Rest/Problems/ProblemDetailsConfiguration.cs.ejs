@@ -16,19 +16,19 @@ using System;
 using System.Diagnostics;
 using System.Security.Authentication;
 using Hellang.Middleware.ProblemDetails;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
 namespace <%= namespace %>.Web.Rest.Problems {
     public class ProblemDetailsConfiguration : IConfigureOptions<ProblemDetailsOptions> {
-        public ProblemDetailsConfiguration(IHostingEnvironment environment, IHttpContextAccessor httpContextAccessor)
+        public ProblemDetailsConfiguration(IHostEnvironment environment, IHttpContextAccessor httpContextAccessor)
         {
             _environment = environment;
             _HttpContextAccessor = httpContextAccessor;
         }
 
-        private IHostingEnvironment _environment { get; }
+        private IHostEnvironment _environment { get; }
         private IHttpContextAccessor _HttpContextAccessor { get; }
 
         public void Configure(ProblemDetailsOptions options)
