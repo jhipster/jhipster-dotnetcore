@@ -31,6 +31,22 @@ function askForServerSideOpts() {
                 /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
             message: 'What is your default C# namespace?',
             default: 'MyCompany'
+        },
+        {
+            type: 'list',
+            name: 'database',
+            message: 'Wchich database do you want to use',
+            choices: [
+                {
+                    value: 'sqllite',
+                    name: 'sql lite in memory'
+                },
+                {
+                    value: 'mssql',
+                    name: 'ms sql server'
+                }
+            ],
+            default: 0
         }
     ];
 
@@ -38,7 +54,7 @@ function askForServerSideOpts() {
 
     this.prompt(prompts).then(prompt => {
         this.namespace = prompt.namespace;
-        this.databaseType = 'sql';
+        this.databaseType = prompt.database;
         this.devDatabaseType = 'h2Memory';
         this.prodDatabaseType = 'mysql';
         done();
