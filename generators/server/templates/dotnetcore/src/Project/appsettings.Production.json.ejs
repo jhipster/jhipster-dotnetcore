@@ -36,6 +36,13 @@
         ]
     },
     "EntityFramework": {
+        <%_ switch(databaseType) {
+            case 'sqllite': _%>
         "DataSource": ":memory:"
+            <%_ break;
+            case 'mssql': _%>
+        "DataSource": "Server=YOURSERVERNAME; Database=YOURDATABASENAME; Trusted_Connection=True;"
+            <%_ break;
+        } _%>
     }
 }
