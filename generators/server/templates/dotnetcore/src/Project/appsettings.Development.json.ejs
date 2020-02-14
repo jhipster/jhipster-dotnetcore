@@ -25,14 +25,21 @@
             }
         ]
     },
+    <%_ switch(databaseType) {
+        case 'sqllite': _%>
     "EntityFramework": {
-        <%_ switch(databaseType) {
-            case 'sqllite': _%>
         "DataSource": ":memory:"
+    },
             <%_ break;
             case 'mssql': _%>
-        "DataSource": "Server=YOURSERVERNAME; Database=YOURDATABASENAME; Trusted_Connection=True;"
+    "ConnectionStrings": {
+        "AppDbContext": "Server=***;Database=jhipster;Trusted_Connection=True;"
+    },
             <%_ break;
-        } _%>
-    }
+            case 'postgres': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=***;Database=jhipster;Port=5432;User Id=***;Password=***"
+    },
+            <%_ break;
+    }_%>
 }
