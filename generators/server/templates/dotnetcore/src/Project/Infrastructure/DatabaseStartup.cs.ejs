@@ -60,10 +60,14 @@ namespace <%= namespace %>.Infrastructure {
         public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder @this,
             IServiceProvider serviceProvider, IHostEnvironment environment)
         {
-            if (environment.IsDevelopment() || environment.IsProduction()) {
-                var context = serviceProvider.GetRequiredService<ApplicationDatabaseContext>();
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
+            if (environment.IsDevelopment() || environment.IsProduction())
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
+                    context.Database.OpenConnection();
+                    context.Database.EnsureCreated();
+                }
             }
 
             return @this;
