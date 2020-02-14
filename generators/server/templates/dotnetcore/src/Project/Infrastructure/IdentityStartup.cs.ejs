@@ -107,26 +107,41 @@ namespace <%= namespace %>.Infrastructure {
         }
 
         private static async Task SeedRoles(RoleManager<Role> roleManager)
-        {
-            foreach (var role in Roles())
-                if (await roleManager.FindByNameAsync(role.Name) == null)
-                    await roleManager.CreateAsync(role);
-                else
-                    await roleManager.UpdateAsync(role);
-        }
-
-        private static async Task SeedUsers(UserManager<User> userManager)
-        {
-            foreach (var user in Users())
-                if (await userManager.FindByIdAsync(user.Id) == null)
-                    await userManager.CreateAsync(user);
-                else
-                    await userManager.UpdateAsync(user);
-        }
+            {
+                foreach (var role in Roles())
+                {
+                    var dbRole = await roleManager.FindByNameAsync(role.Name);
+                    if (dbRole == null)
+                    {
+                        await roleManager.CreateAsync(role);
+                    }
+                    else
+                    {
+                        await roleManager.UpdateAsync(dbRole);
+                    }
+                }
+            }
+    
+            private static async Task SeedUsers(UserManager<User> userManager)
+            {
+                foreach (var user in Users())
+                {
+                    var dbUser = await userManager.FindByIdAsync(user.Id);
+                    if (dbUser == null)
+                    {
+                        await userManager.CreateAsync(user);
+                    }
+                    else
+                    {
+                        await userManager.UpdateAsync(dbUser);
+                    }
+                }
+            }
 
         private static async Task SeedUserRoles(UserManager<User> userManager)
         {
-            foreach (var (id, roles) in UserRoles()) {
+            foreach (var (id, roles) in UserRoles()) 
+            {
                 var user = await userManager.FindByIdAsync(id);
                 await userManager.AddToRolesAsync(user, roles);
             }
