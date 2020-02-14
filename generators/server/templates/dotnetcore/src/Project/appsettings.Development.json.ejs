@@ -30,16 +30,21 @@
     "EntityFramework": {
         "DataSource": ":memory:"
     },
-            <%_ break;
-            case 'mssql': _%>
+        <%_ break;
+        case 'mssql': _%>
     "ConnectionStrings": {
         "AppDbContext": "Server=***;Database=jhipster;Trusted_Connection=True;"
     },
-            <%_ break;
-            case 'postgres': _%>
+        <%_ break;
+        case 'postgres': _%>
     "ConnectionStrings": {
         "AppDbContext": "Server=***;Database=jhipster;Port=5432;User Id=***;Password=***"
     },
-            <%_ break;
+        <%_ break;
+        case 'mysql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=***;Port=3306;Database=jhipster;User=***;Password=***;"
+    },
+        <%_ break;
     }_%>
 }

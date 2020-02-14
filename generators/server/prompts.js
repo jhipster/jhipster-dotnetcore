@@ -48,6 +48,10 @@ function askForServerSideOpts() {
                 {
                     value: 'postgres',
                     name: 'PostgreSQL'
+                },
+                {
+                    value: 'mysql',
+                    name: 'MySQL'
                 }
             ],
             default: 0

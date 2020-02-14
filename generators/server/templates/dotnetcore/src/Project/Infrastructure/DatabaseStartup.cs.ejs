@@ -23,6 +23,10 @@ using Microsoft.Data.Sqlite;
     case 'mssql': _%>
 using Microsoft.Data.SqlClient;
     <%_ break;
+    case 'mysql': _%>
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
+    <%_ break;
  } _%>
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -51,7 +55,15 @@ namespace <%= namespace %>.Infrastructure {
             var connection = configuration.GetConnectionString("AppDbContext");
 
             @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connection); });
-                    <%_ break;
+                <%_ break;
+                case 'mysql': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+    
+            @this.AddDbContext<ApplicationDatabaseContext>(options =>
+                options.UseMySql(connection, mySqlOptions =>
+                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
+            ));
+                <%_ break;
             } _%>
 
             return @this;

@@ -39,6 +39,11 @@
         "AppDbContext": "Server=***;Database=jhipster;Port=5432;User Id=***;Password=***"
     },
             <%_ break;
+            case 'mysql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=***;Port=3306;Database=jhipster;User=***;Password=***;"
+    },
+            <%_ break;
     }_%>
     "jhipster": {
         "Security": {
