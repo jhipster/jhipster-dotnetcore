@@ -43,12 +43,15 @@ namespace <%= namespace %>.Infrastructure {
             @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(connection); });
                 <%_ break;
                 case 'mssql': _%>
-            var connection = new SqlConnection(new SqlConnectionStringBuilder {
-                DataSource = entityFrameworkConfiguration["DataSource"]
-            }.ToString());
+            var connection = configuration.GetConnectionString("AppDbContext");
 
             @this.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connection));
                 <%_ break;
+                case 'postgres': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+
+            @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connection); });
+                    <%_ break;
             } _%>
 
             return @this;

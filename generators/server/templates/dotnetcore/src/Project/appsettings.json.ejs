@@ -23,16 +23,23 @@
         "Enrich": [ "FromLogContext", "WithProcessId", "WithThreadId" ]
     },
     "AllowedHosts": "*",
-    "EntityFramework": {
-        <%_ switch(databaseType) {
+    <%_ switch(databaseType) {
             case 'sqllite': _%>
+    "EntityFramework": {
         "DataSource": ":memory:"
+    },
             <%_ break;
             case 'mssql': _%>
-        "DataSource": "Server=YOURSERVERNAME; Database=YOURDATABASENAME; Trusted_Connection=True;"
-            <%_ break;
-        } _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=***;Database=jhipster;Trusted_Connection=True;"
     },
+            <%_ break;
+            case 'postgres': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=***;Database=jhipster;Port=5432;User Id=***;Password=***"
+    },
+            <%_ break;
+    }_%>
     "jhipster": {
         "Security": {
             "Authentication": {

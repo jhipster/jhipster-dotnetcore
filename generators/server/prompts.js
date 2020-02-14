@@ -44,6 +44,10 @@ function askForServerSideOpts() {
                 {
                     value: 'mssql',
                     name: 'ms sql server'
+                },
+                {
+                    value: 'postgres',
+                    name: 'PostgreSQL'
                 }
             ],
             default: 0
