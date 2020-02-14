@@ -1,0 +1,55 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using JHipsterNet.Config;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using <%= namespace %>.Data;
+using System;
+
+namespace <%= namespace %>.Test.Setup 
+{
+    public class TestStartup : Startup
+    {
+        public TestStartup(IConfiguration configuration) : base(configuration)
+        {
+        }
+
+        public override void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider, 
+            ApplicationDatabaseContext context, IOptions<JHipsterSettings> jhipsterSettingsOptions)
+        {
+            base.Configure(app, env, serviceProvider, context, jhipsterSettingsOptions);
+        }
+
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            base.ConfigureServices(services);
+        }
+
+        protected override void AddDatabase(IServiceCollection services)
+        {
+            var connection = new SqliteConnection(new SqliteConnectionStringBuilder
+            {
+                DataSource = ":memory:"
+            }.ToString());
+
+            services.AddDbContext<ApplicationDatabaseContext>(context => context.UseSqlite(connection));
+        }
+    }
+}

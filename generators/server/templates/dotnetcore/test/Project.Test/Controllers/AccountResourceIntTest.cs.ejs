@@ -35,7 +35,7 @@ namespace <%= namespace %>.Test.Controllers {
     public class AccountResourceIntTest {
         public AccountResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<Startup>();
+            _factory = new NhipsterWebApplicationFactory<TestStartup>();
 //            _factory.WithWebHostBuilder(builder => {
 //                var mockMailService = A.Fake<IMailService>();
 //                A.CallTo(() => mockMailService.SendActivationEmail(A<User>.Ignored)).Returns(Task.CompletedTask);
@@ -46,7 +46,7 @@ namespace <%= namespace %>.Test.Controllers {
 //            });
         }
 
-        private readonly NhipsterWebApplicationFactory<Startup> _factory;
+        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
 
         [Fact]
         public async Task TestActivateAccount()
