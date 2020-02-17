@@ -46,5 +46,10 @@
         "AppDbContext": "Server=***;Port=3306;Database=jhipster;User=***;Password=***;"
     },
         <%_ break;
+        case 'oracle': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "User Id=***;Password=***;Data Source=localhost:1521/xe"
+    },
+        <%_ break;
     }_%>
 }

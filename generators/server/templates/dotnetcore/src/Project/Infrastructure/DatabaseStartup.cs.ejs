@@ -58,11 +58,17 @@ namespace <%= namespace %>.Infrastructure {
                 <%_ break;
                 case 'mysql': _%>
             var connection = configuration.GetConnectionString("AppDbContext");
-    
+
             @this.AddDbContext<ApplicationDatabaseContext>(options =>
                 options.UseMySql(connection, mySqlOptions =>
                     mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
             ));
+                <%_ break;
+                case 'oracle': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+
+            @this.AddDbContext<ApplicationDatabaseContext>(options =>
+                options.UseOracle(connection));
                 <%_ break;
             } _%>
 
