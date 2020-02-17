@@ -52,6 +52,10 @@ function askForServerSideOpts() {
                 {
                     value: 'mysql',
                     name: 'MySQL'
+                },
+                {
+                    value: 'oracle',
+                    name: 'Oracle'
                 }
             ],
             default: 0

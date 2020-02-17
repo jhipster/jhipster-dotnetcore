@@ -37,26 +37,36 @@
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="2.2.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Analyzers" Version="2.2.0" />
         <%_ switch(databaseType) {
             case 'sqllite': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
             <%_ break;
             case 'mssql': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
             <%_ break;
             case 'postgres': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.1" />
             <%_ break;
             case 'mysql': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+            <%_ break;
+            case 'oracle': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="2.19.60" />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
             <%_ break;
          } _%>
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
