@@ -39,11 +39,11 @@ function askForServerSideOpts() {
             choices: [
                 {
                     value: 'sqllite',
-                    name: 'sql lite in memory'
+                    name: 'SQLite in-memory'
                 },
                 {
                     value: 'mssql',
-                    name: 'ms sql server'
+                    name: 'Microsoft SQL Server'
                 },
                 {
                     value: 'postgres',
