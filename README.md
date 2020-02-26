@@ -104,6 +104,20 @@ docker run -d -p [A host port]:80 [Image name]:[Image tag]
 
 3. Open your favorite browser at ```localhost:[Chosen host port]``` and enjoy ! :whale:
 
+Docker compose file can be used to start the application with database as a service. To build images, run
+
+```bash
+docker-compose -f docker/app.yml build
+```
+
+To start services, use
+
+```bash
+docker-compose -f docker/app.yml up
+```
+
+In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md)
+
 # Running SonarQube
 
 ## By Script : 
