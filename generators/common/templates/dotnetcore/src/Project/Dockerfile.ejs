@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 COPY ["src/JHipsterNet/JHipsterNet.csproj", "src/JHipsterNet/"]
 COPY ["src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj", "src/<%= mainProjectDir %>/"]
@@ -28,7 +28,7 @@ RUN npm install
 RUN rm -rf wwwroot && \
     dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.0 AS runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 EXPOSE 80
 COPY --from=build /app/out .
