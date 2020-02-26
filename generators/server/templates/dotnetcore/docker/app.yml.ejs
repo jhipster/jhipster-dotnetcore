@@ -14,9 +14,9 @@
 -%>
 version: '2'
 services:
-    db:
 <%_ switch(databaseType) {
     case 'mysql': _%>
+    db:
         container_name: db
         image: mysql:8.0.19
         environment:
@@ -26,6 +26,7 @@ services:
             - "3308:3306"
     <%_ break;
     case 'mssql': _%>
+    db:
         container_name: db
         image: mcr.microsoft.com/mssql/server
         environment:
@@ -33,6 +34,7 @@ services:
             ACCEPT_EULA: "Y"
     <%_ break;
     case 'postgres': _%>
+    db:
         container_name: db
         image: postgres:latest
         restart: always
@@ -43,14 +45,10 @@ services:
         ports:
             - "5432"
     <%_ break;
-    case 'oracle': _%>
-        container_name: db
-        image: quay.io/maksymbilenko/oracle-12c
-    <%_ break;
 } _%>
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-    <%_ if (databaseType !== 'sqlite') { _%>
+    <%_ if (databaseType !== 'sqlite' && databaseType !== 'oracle') { _%>
         depends_on:
             - db
         build:
