@@ -35,7 +35,31 @@
             }
         ]
     },
+    <%_ switch(databaseType) {
+        case 'sqllite': _%>
     "EntityFramework": {
         "DataSource": ":memory:"
-    }
+    },
+            <%_ break;
+            case 'mssql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=db;Database=master;User=sa;Password=Password!12;Trusted_Connection=False;"
+    },
+            <%_ break;
+            case 'postgres': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=db;Database=jhipster;Port=5432;User Id=postgres;Password=postgres;Integrated Security=true;Pooling=true;"
+    },
+            <%_ break;
+            case 'mysql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=db;Port=3306;Database=jhipster;User=root;Password=root;"
+    },
+            <%_ break;
+            case 'oracle': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "User Id=system;Password=oracle;Data Source=db:1521/xe"
+    },
+            <%_ break;
+    }_%>
 }

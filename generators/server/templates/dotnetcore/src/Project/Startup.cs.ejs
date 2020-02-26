@@ -27,7 +27,7 @@ using Newtonsoft.Json;
 [assembly: ApiController]
 
 namespace <%= namespace %> {
-    public sealed class Startup {
+    public class Startup {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,11 +35,14 @@ namespace <%= namespace %> {
 
         private IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             services
-            .AddNhipsterModule(Configuration)
-            .AddDatabaseModule(Configuration)
+            .AddNhipsterModule(Configuration);
+
+            AddDatabase(services);
+
+            services
             .AddSecurityModule()
             .AddProblemDetailsModule()
             .AddAutoMapperModule()
@@ -54,7 +57,7 @@ namespace <%= namespace %> {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
+        public virtual void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
             ApplicationDatabaseContext context, IOptions<JHipsterSettings> jhipsterSettingsOptions)
         {
             var jhipsterSettings = jhipsterSettingsOptions.Value;
@@ -65,6 +68,11 @@ namespace <%= namespace %> {
                 .UseApplicationSwagger()
                 .UseApplicationDatabase(serviceProvider, env)
                 .UseApplicationIdentity(serviceProvider);
+        }
+
+        protected virtual void AddDatabase(IServiceCollection services)
+        {
+            services.AddDatabaseModule(Configuration);
         }
     }
 }

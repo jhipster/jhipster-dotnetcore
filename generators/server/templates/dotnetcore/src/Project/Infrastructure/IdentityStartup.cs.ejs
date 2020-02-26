@@ -25,17 +25,15 @@ namespace <%= namespace %>.Infrastructure {
         public static IApplicationBuilder UseApplicationIdentity(this IApplicationBuilder @this,
             IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
 
-            //            var op1 = new Operation {Date = DateTime.Now, Description = "An operation", Amount = (decimal) 10.0};
-//            var op2 = new Operation {Date = DateTime.Now, Description = "Another operation", Amount = (decimal) 20.0};
-//            var op3 = new Operation {Date = DateTime.Now, Description = "Last one operation", Amount = (decimal) 30.0};
-
-
-            SeedRoles(roleManager).Wait();
-            SeedUsers(userManager).Wait();
-            SeedUserRoles(userManager).Wait();
+                SeedRoles(roleManager).Wait();
+                SeedUsers(userManager).Wait();
+                SeedUserRoles(userManager).Wait();
+            }
 
             return @this;
         }
@@ -105,26 +103,41 @@ namespace <%= namespace %>.Infrastructure {
         }
 
         private static async Task SeedRoles(RoleManager<Role> roleManager)
-        {
-            foreach (var role in Roles())
-                if (await roleManager.FindByNameAsync(role.Name) == null)
-                    await roleManager.CreateAsync(role);
-                else
-                    await roleManager.UpdateAsync(role);
-        }
-
-        private static async Task SeedUsers(UserManager<User> userManager)
-        {
-            foreach (var user in Users())
-                if (await userManager.FindByIdAsync(user.Id) == null)
-                    await userManager.CreateAsync(user);
-                else
-                    await userManager.UpdateAsync(user);
-        }
+            {
+                foreach (var role in Roles())
+                {
+                    var dbRole = await roleManager.FindByNameAsync(role.Name);
+                    if (dbRole == null)
+                    {
+                        await roleManager.CreateAsync(role);
+                    }
+                    else
+                    {
+                        await roleManager.UpdateAsync(dbRole);
+                    }
+                }
+            }
+    
+            private static async Task SeedUsers(UserManager<User> userManager)
+            {
+                foreach (var user in Users())
+                {
+                    var dbUser = await userManager.FindByIdAsync(user.Id);
+                    if (dbUser == null)
+                    {
+                        await userManager.CreateAsync(user);
+                    }
+                    else
+                    {
+                        await userManager.UpdateAsync(dbUser);
+                    }
+                }
+            }
 
         private static async Task SeedUserRoles(UserManager<User> userManager)
         {
-            foreach (var (id, roles) in UserRoles()) {
+            foreach (var (id, roles) in UserRoles()) 
+            {
                 var user = await userManager.FindByIdAsync(id);
                 await userManager.AddToRolesAsync(user, roles);
             }

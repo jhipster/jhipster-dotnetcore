@@ -704,6 +704,15 @@ const serverFiles = {
                     renameTo: generator => `${generator.testProjectDir}/Setup/NhipsterWebApplicationFactory.cs`
                 }
             ]
+        },
+        {
+            path: SERVER_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Test/Setup/TestStartup.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Setup/TestStartup.cs`
+                }
+            ]
         }
     ],
     serverMisc: [

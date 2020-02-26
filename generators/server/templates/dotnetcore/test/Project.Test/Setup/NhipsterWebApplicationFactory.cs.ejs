@@ -19,8 +19,10 @@ using System.Security.Claims;
 using <%= namespace %>.Infrastructure;
 using <%= namespace %>.Security;
 using <%= namespace %>.Test.Infrastructure;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -32,15 +34,23 @@ namespace <%= namespace %>.Test.Setup {
         private IServiceProvider _serviceProvider;
         private ClaimsPrincipal _user { get; set; }
 
+        protected override IWebHostBuilder CreateWebHostBuilder()
+        {
+            return WebHost.CreateDefaultBuilder()
+                          .UseStartup<TEntryPoint>();
+        }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureServices(services => {
-                services
-                    .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
-                services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
-                    ServiceLifetime.Transient));
-                services.AddTransient(sp => new MockClaimsPrincipalProvider(_user));
-            });
+            builder
+                .UseSolutionRelativeContentRoot("<%= SERVER_SRC_DIR %><%= solutionName %>")
+                .ConfigureServices(services => {
+                    services
+                        .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
+                    services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
+                        ServiceLifetime.Transient));
+                    services.AddTransient(sp => new MockClaimsPrincipalProvider(_user));
+                });
         }
 
         public TService GetRequiredService<TService>()

@@ -16,7 +16,18 @@ using System;
 using <%= namespace %>.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+<%_ switch(databaseType) {
+    case 'sqllite': _%>
 using Microsoft.Data.Sqlite;
+    <%_ break;
+    case 'mssql': _%>
+using Microsoft.Data.SqlClient;
+    <%_ break;
+    case 'mysql': _%>
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
+    <%_ break;
+ } _%>
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +37,40 @@ namespace <%= namespace %>.Infrastructure {
         public static IServiceCollection AddDatabaseModule(this IServiceCollection @this, IConfiguration configuration)
         {
             var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
+
+            <%_ switch(databaseType) {
+                case 'sqllite': _%>
             var connection = new SqliteConnection(new SqliteConnectionStringBuilder {
                 DataSource = entityFrameworkConfiguration["DataSource"]
             }.ToString());
 
             @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(connection); });
+                <%_ break;
+                case 'mssql': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+
+            @this.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connection));
+                <%_ break;
+                case 'postgres': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+
+            @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connection); });
+                <%_ break;
+                case 'mysql': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+
+            @this.AddDbContext<ApplicationDatabaseContext>(options =>
+                options.UseMySql(connection, mySqlOptions =>
+                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
+            ));
+                <%_ break;
+                case 'oracle': _%>
+            var connection = configuration.GetConnectionString("AppDbContext");
+
+            @this.AddDbContext<ApplicationDatabaseContext>(options =>
+                options.UseOracle(connection));
+                <%_ break;
+            } _%>
 
             return @this;
         }
@@ -38,10 +78,14 @@ namespace <%= namespace %>.Infrastructure {
         public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder @this,
             IServiceProvider serviceProvider, IHostEnvironment environment)
         {
-            if (environment.IsDevelopment() || environment.IsProduction()) {
-                var context = serviceProvider.GetRequiredService<ApplicationDatabaseContext>();
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
+            if (environment.IsDevelopment() || environment.IsProduction())
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
+                    context.Database.OpenConnection();
+                    context.Database.EnsureCreated();
+                }
             }
 
             return @this;
