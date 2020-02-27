@@ -1,0 +1,84 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+version: '<%= DOCKER_COMPOSE_FORMAT_VERSION %>'
+services:
+  <%= baseName.toLowerCase() %>-influxdb:
+    # Full tag list: https://hub.docker.com/r/library/influxdb/tags/
+    image: docker.io/influxdb:latest
+    volumes:
+      # Mount for influxdb data directory
+      - ./influxdb/data:/var/lib/influxdb
+      # Mount for influxdb configuration
+      - ./influxdb/config/:/etc/influxdb/
+    ports:
+      # The API for InfluxDB is served on port 8086
+      - "8086:8086"
+      - "8082:8082"
+      # UDP Port
+      - "8089:8089/udp"
+
+  <%= baseName.toLowerCase() %>-telegraf:
+    # Full tag list: https://hub.docker.com/r/library/telegraf/tags/
+    image: docker.io/telegraf:latest
+    environment:
+      HOSTNAME: "tick-host"
+    # Telegraf requires network access to InfluxDB
+    links:
+      - <%= baseName.toLowerCase() %>-influxdb
+    ports:
+      - "8094:8094"
+      - "6514:6514"
+    volumes:
+      # Mount for telegraf configuration
+      - ./telegraf/:/etc/telegraf/
+      # Mount for Docker API access
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - <%= baseName.toLowerCase() %>-influxdb
+
+  <%= baseName.toLowerCase() %>-kapacitor:
+    # Full tag list: https://hub.docker.com/r/library/kapacitor/tags/
+    image: docker.io/kapacitor:latest
+    volumes:
+      # Mount for kapacitor data directory
+      - ./kapacitor/data/:/var/lib/kapacitor
+      # Mount for kapacitor configuration
+      - ./kapacitor/config/:/etc/kapacitor/
+    # Kapacitor requires network access to Influxdb
+    links:
+      - <%= baseName.toLowerCase() %>-influxdb
+    ports:
+      # The API for Kapacitor is served on port 9092
+      - "9092:9092"
+
+  <%= baseName.toLowerCase() %>-chronograf:
+    # Full tag list: https://hub.docker.com/r/library/chronograf/tags/
+    image: docker.io/chronograf:latest
+    environment:
+      RESOURCES_PATH: "/usr/share/chronograf/resources"
+    volumes:
+      # Mount for chronograf database
+      - ./chronograf/data/:/var/lib/chronograf/
+    links:
+      # Chronograf requires network access to InfluxDB and Kapacitor
+      - <%= baseName.toLowerCase() %>-influxdb
+      - <%= baseName.toLowerCase() %>-kapacitor
+    ports:
+      # The WebUI for Chronograf is served on port 8888
+      - "8888:8888"
+    depends_on:
+      - <%= baseName.toLowerCase() %>-kapacitor
+      - <%= baseName.toLowerCase() %>-influxdb
+      - <%= baseName.toLowerCase() %>-telegraf

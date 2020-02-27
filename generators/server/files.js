@@ -828,7 +828,19 @@ const serverFiles = {
     docker: [
         {
             path: DOCKER_DIR,
-            templates: ['app.yml', 'sonar.yml']
+            templates: ['app.yml', 'sonar.yml','monitoring.yml']
+        },
+        {
+            path: DOCKER_DIR,
+            templates: [{ file: 'telegraf/telegraf.conf', renameTo: () => 'telegraf/telegraf.conf' }]
+        },
+        {
+            path: DOCKER_DIR,
+            templates: [{ file: 'kapacitor/config/kapacitor.conf', renameTo: () => 'kapacitor/config/kapacitor.conf' }]
+        },
+        {
+            path: DOCKER_DIR,
+            templates: [{ file: 'influxdb/config/influxdb.conf', renameTo: () => 'influxdb/config/influxdb.conf' }]
         },
         {
             path: '',

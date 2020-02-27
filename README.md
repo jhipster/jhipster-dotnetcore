@@ -141,7 +141,18 @@ In case of Oracle database, see [official documentation](https://github.com/orac
 5. Publish sonar results : ```dotnet sonarscanner end /d:sonar.login=admin /d:sonar.password=admin```
 
 6. Go to http://localhost:9001
+   
+# Monitoring your app
 
+1. Run container : ```docker-compose -f ./docker/monitoring.yml up -d```
+
+2. go to http://localhost:8888 
+   
+3. Change influxdb connection string by ```YourApp-influxdb```
+
+3. Change kapacitor connection string by ```YourApp-kapacitor```
+   
+4. You can now add dashboard (like docker), see your app log in Cronograf Log viewer and send alert with kapacitor
 
 # License
 
