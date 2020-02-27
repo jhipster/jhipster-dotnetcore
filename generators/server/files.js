@@ -828,7 +828,7 @@ const serverFiles = {
     docker: [
         {
             path: DOCKER_DIR,
-            templates: ['app.yml','sonar.yml','monitoring.yml']
+            templates: ['app.yml', 'sonar.yml', 'monitoring.yml']
         },
         {
             path: DOCKER_DIR,
