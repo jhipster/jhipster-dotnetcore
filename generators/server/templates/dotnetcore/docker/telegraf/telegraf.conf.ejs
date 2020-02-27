@@ -14,8 +14,8 @@
   omit_hostname = false
 
 [[outputs.influxdb]]
-  urls = ["http://influxdb:8086"]
-  database = "<%= baseName.toLowerCase() %>-telegraf"
+  urls = ["http://<%= baseName.toLowerCase() %>-influxdb:8086"]
+  database = "telegraf"
   username = ""
   password = ""
   retention_policy = ""

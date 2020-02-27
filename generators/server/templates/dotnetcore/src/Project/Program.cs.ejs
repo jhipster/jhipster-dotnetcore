@@ -18,7 +18,9 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.IO;
+using System.Security.Authentication;
 using JHipsterNet.Logging;
+using Serilog.Sinks.Syslog;
 using ILogger = Serilog.ILogger;
 
 using static JHipsterNet.Boot.BannerPrinter;
@@ -91,7 +93,7 @@ namespace <%= namespace %> {
                 : "JhipsterApp";
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.With<LoggerNameEnricher>()
-                .WriteTo.TcpSyslog(url, port, appName)
+                .WriteTo.TcpSyslog("localhost",6514,"testappserilog", FramingType.OCTET_COUNTING,SyslogFormat.RFC5424,Facility.Local0,SslProtocols.None, new CertificateFileProvider(certFilename, String.Empty),CertValidationCallback)
                 .ReadFrom.Configuration(appConfiguration);
 
             return loggerConfiguration.CreateLogger();
