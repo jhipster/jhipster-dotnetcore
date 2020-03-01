@@ -93,7 +93,7 @@ namespace <%= namespace %> {
                 : "JhipsterApp";
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.With<LoggerNameEnricher>()
-                .WriteTo.TcpSyslog("localhost",6514,"testappserilog", FramingType.OCTET_COUNTING,SyslogFormat.RFC5424,Facility.Local0,SslProtocols.None, new CertificateFileProvider(certFilename, String.Empty),CertValidationCallback)
+                .WriteTo.TcpSyslog(url,port,appName, FramingType.OCTET_COUNTING,SyslogFormat.RFC5424,Facility.Local0,SslProtocols.None, new CertificateFileProvider(certFilename, String.Empty),CertValidationCallback)
                 .ReadFrom.Configuration(appConfiguration);
 
             return loggerConfiguration.CreateLogger();

@@ -146,7 +146,7 @@ In case of Oracle database, see [official documentation](https://github.com/orac
 
 1. Run container : ```docker-compose -f ./docker/monitoring.yml up -d```
 
-2. go to http://localhost:8888 
+2. Go to http://localhost:8888 
    
 3. Change influxdb connection string by ```YourApp-influxdb```
 
