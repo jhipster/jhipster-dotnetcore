@@ -844,11 +844,15 @@ const serverFiles = {
         },
         {
             path: DOCKER_DIR,
-            templates: [{ file: 'grafana/data/dashboard/default-dashboard.yaml', renameTo: () => 'grafana/data/dashboard/default-dashboard.yaml' }]
+            templates: [
+                { file: 'grafana/data/dashboard/default-dashboard.yaml', renameTo: () => 'grafana/data/dashboard/default-dashboard.yaml' }
+            ]
         },
         {
             path: DOCKER_DIR,
-            templates: [{ file: 'grafana/data/dashboard/Docker Monitoring.json', renameTo: () => 'grafana/data/dashboard/Docker Monitoring.json' }]
+            templates: [
+                { file: 'grafana/data/dashboard/Docker Monitoring.json', renameTo: () => 'grafana/data/dashboard/Docker Monitoring.json' }
+            ]
         },
         {
             path: DOCKER_DIR,
