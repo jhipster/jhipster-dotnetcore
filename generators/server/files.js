@@ -843,6 +843,18 @@ const serverFiles = {
             templates: [{ file: 'influxdb/config/influxdb.conf', renameTo: () => 'influxdb/config/influxdb.conf' }]
         },
         {
+            path: DOCKER_DIR,
+            templates: [{ file: 'grafana/data/dashboard/default-dashboard.yaml', renameTo: () => 'grafana/data/dashboard/default-dashboard.yaml' }]
+        },
+        {
+            path: DOCKER_DIR,
+            templates: [{ file: 'grafana/data/dashboard/Docker Monitoring.json', renameTo: () => 'grafana/data/dashboard/Docker Monitoring.json' }]
+        },
+        {
+            path: DOCKER_DIR,
+            templates: [{ file: 'grafana/data/provisioning/influxdb.yml', renameTo: () => 'grafana/data/provisioning/influxdb.yml' }]
+        },
+        {
             path: '',
             templates: [{ file: 'SonarAnalysis.ps1', renameTo: () => 'SonarAnalysis.ps1' }]
         }
