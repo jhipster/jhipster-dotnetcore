@@ -18,13 +18,20 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
 using System.IO;
+using System.Security.Authentication;
 using JHipsterNet.Logging;
+using Serilog.Sinks.Syslog;
 using ILogger = Serilog.ILogger;
 
 using static JHipsterNet.Boot.BannerPrinter;
 
 namespace <%= namespace %> {
     public class Program {
+        
+        const string SerilogSection = "Serilog";
+        const string SyslogPort = "SyslogPort";
+        const string SyslogUrl = "SyslogUrl";
+        const string SyslogAppName = "SyslogAppName";
 
         public static int Main(string[] args)
         {
@@ -66,11 +73,27 @@ namespace <%= namespace %> {
         private static ILogger CreateLogger()
         {
             var appConfiguration = GetAppConfiguration();
+            var port = 6514;
 
             // for logger configuration
             // https://github.com/serilog/serilog-settings-configuration
+            if (appConfiguration.GetSection(SerilogSection)[SyslogPort] != null)
+            {
+                if(int.TryParse(appConfiguration.GetSection(SerilogSection)[SyslogPort], out var portFromConf))
+                {
+                    port = portFromConf; 
+                }
+            }
+
+            var url = appConfiguration.GetSection(SerilogSection)[SyslogUrl] != null
+                ? appConfiguration.GetSection(SerilogSection)[SyslogUrl]
+                : "localhost";
+            var appName = appConfiguration.GetSection(SerilogSection)[SyslogAppName] != null
+                ? appConfiguration.GetSection(SerilogSection)[SyslogAppName]
+                : "JhipsterApp";
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.With<LoggerNameEnricher>()
+                .WriteTo.TcpSyslog(url,port,appName, FramingType.OCTET_COUNTING,SyslogFormat.RFC5424,Facility.Local0,SslProtocols.None, new CertificateFileProvider(certFilename, String.Empty),CertValidationCallback)
                 .ReadFrom.Configuration(appConfiguration);
 
             return loggerConfiguration.CreateLogger();

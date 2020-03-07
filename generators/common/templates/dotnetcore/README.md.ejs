@@ -143,7 +143,33 @@ To launch your application's tests, run:
 
 ### Code quality
 
-// TODO
+1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
+
+2. Install sonar scanner for .net :
+   
+ ```dotnet tool install --global dotnet-sonarscanner```
+
+3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001"```
+
+4. Build your application : ```dotnet build```
+
+5. Publish sonar results : ```dotnet sonarscanner end /d:sonar.login=admin /d:sonar.password=admin```
+
+6. Go to http://localhost:9001
+
+### Monitoring
+
+1. Run container : ```docker-compose -f ./docker/monitoring.yml up -d```
+
+2. Go to http://localhost:8888 
+   
+3. Change influxdb connection string by ```YourApp-influxdb```
+
+3. Change kapacitor connection string by ```YourApp-kapacitor```
+   
+4. You can now add dashboard (like docker), see your app log in Cronograf Log viewer and send alert with kapacitor 
+
+//TODO
 
 ## Using Docker to simplify development (optional)
 

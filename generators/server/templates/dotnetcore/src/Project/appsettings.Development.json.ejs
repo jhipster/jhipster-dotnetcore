@@ -15,6 +15,9 @@
 {
     "Serilog": {
         "MinimumLevel": "Debug",
+        "SyslogUrl": "localhost",
+        "SyslogPort": "6514",
+        "SyslogAppName": "<%= baseName %>",
         "WriteTo": [
             {
                 "Name": "Console",
