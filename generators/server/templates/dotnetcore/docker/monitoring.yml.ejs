@@ -48,32 +48,32 @@ services:
     depends_on:
       - <%= baseName.toLowerCase() %>-influxdb
 
-      <%= baseName.toLowerCase() %>-grafana:
-      image: grafana/grafana:latest
-      ports: 
-          - 3000:3000
-      links:
-          - <%= baseName.toLowerCase() %>-influxdb:influxdb
-      environment:
-          GF_SECURITY_ADMIN_USER: admin
-          GF_SECURITY_ADMIN_PASSWORD: admin
-          GF_SECURITY_SECRET_KEY: grafana
-          GF_USERS_ALLOW_SIGN_UP: "true"
-          GF_USERS_ALLOW_ORG_CREATE: "true"
-          GF_AUTH_ANONYMOUS_ENABLED: "true"
-          GF_AUTH_ANONYMOUS_ORG_NAME: grafana
-          GF_DASHBOARDS_JSON_ENABLED: "true"
-          GF_DASHBOARDS_JSON_PATH: /opt/grafana
-      volumes:
-          - ./grafana/data/:/var/lib/grafana
-          - ./grafana/data/log:/var/log/grafana
-          - ./grafana/data/plugins:/var/lib/grafana/plugins
-          - ./grafana/data/provisioning:/etc/grafana/provisioning/datasources
-          - ./grafana/data/dashboard:/etc/grafana/provisioning/dashboards
-      restart: always
-      depends_on:
-        - <%= baseName.toLowerCase() %>-influxdb
-        - <%= baseName.toLowerCase() %>-telegraf
+  <%= baseName.toLowerCase() %>-grafana:
+    image: grafana/grafana:latest
+    ports: 
+        - 3000:3000
+    links:
+        - <%= baseName.toLowerCase() %>-influxdb:influxdb
+    environment:
+        GF_SECURITY_ADMIN_USER: admin
+        GF_SECURITY_ADMIN_PASSWORD: admin
+        GF_SECURITY_SECRET_KEY: grafana
+        GF_USERS_ALLOW_SIGN_UP: "true"
+        GF_USERS_ALLOW_ORG_CREATE: "true"
+        GF_AUTH_ANONYMOUS_ENABLED: "true"
+        GF_AUTH_ANONYMOUS_ORG_NAME: grafana
+        GF_DASHBOARDS_JSON_ENABLED: "true"
+        GF_DASHBOARDS_JSON_PATH: /opt/grafana
+    volumes:
+        - ./grafana/data/:/var/lib/grafana
+        - ./grafana/data/log:/var/log/grafana
+        - ./grafana/data/plugins:/var/lib/grafana/plugins
+        - ./grafana/data/provisioning:/etc/grafana/provisioning/datasources
+        - ./grafana/data/dashboard:/etc/grafana/provisioning/dashboards
+    restart: always
+    depends_on:
+      - <%= baseName.toLowerCase() %>-influxdb
+      - <%= baseName.toLowerCase() %>-telegraf
       
 #  <%= baseName.toLowerCase() %>-kapacitor:
 #    # Full tag list: https://hub.docker.com/r/library/kapacitor/tags/
