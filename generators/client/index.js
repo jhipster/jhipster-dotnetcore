@@ -82,6 +82,7 @@ module.exports = class extends ClientGenerator {
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
                 this.relativeMainClientDir = 'ClientApp';
                 this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
+                this.MAIN_SRC_DIR = `${this.relativeMainClientDir}/`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
                 // TODO PROMPT
                 this.authenticationType = 'jwt';
