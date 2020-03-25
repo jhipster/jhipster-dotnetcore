@@ -861,6 +861,15 @@ const serverFiles = {
         {
             path: '',
             templates: [{ file: 'SonarAnalysis.ps1', renameTo: () => 'SonarAnalysis.ps1' }]
+        },
+        {
+            condition: generator => generator.authenticationType === 'oauth2' && generator.applicationType !== 'microservice',
+            path: DOCKER_DIR,
+            templates: [
+                'keycloak.yml',
+                { file: 'keycloak/config/realm-config/jhipster-realm.json', renameTo: () => 'rkeycloak/config/ealm-config/jhipster-realm.json' },
+                { file: 'keycloak/config/realm-config/jhipster-users-0.json', method: 'copy', renameTo: () => 'keycloak/config/realm-config/jhipster-users-0.json' }
+            ]
         }
     ]
     // ],

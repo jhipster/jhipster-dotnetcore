@@ -62,6 +62,8 @@ module.exports = class extends ClientGenerator {
         // };
         // If the prompts need to be overriden then use the code commented out above instead
         //        return super._prompting();
+        //this.authenticationType = 'oauth2';
+        //this.skipUserManagement = true;
         return {};
     }
 
