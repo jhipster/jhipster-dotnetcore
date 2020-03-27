@@ -218,16 +218,18 @@ const serverFiles = {
         {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
-            templates: [{
+            templates: [
+                {
                     file: 'Project/Models/Role.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Role.cs` 
+                    renameTo: generator => `${generator.mainProjectDir}/Models/Role.cs`
                 }
             ]
         },
         {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
-            templates: [{ 
+            templates: [
+                {
                     file: 'Project/Models/UserRole.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Models/UserRole.cs`
                 }
@@ -275,9 +277,9 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
-                { 
-                    file: 'Project/Service/MailService.cs', 
-                    renameTo: generator => `${generator.mainProjectDir}/Service/MailService.cs` 
+                {
+                    file: 'Project/Service/MailService.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Service/MailService.cs`
                 }
             ]
         },
@@ -285,9 +287,9 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
-                { 
+                {
                     file: 'Project/Service/UserService.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/UserService.cs` 
+                    renameTo: generator => `${generator.mainProjectDir}/Service/UserService.cs`
                 }
             ]
         },
@@ -422,9 +424,9 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
-                { 
+                {
                     file: 'Project/Models/Vm/LoginVM.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/Models/Vm/LoginVM.cs` 
+                    renameTo: generator => `${generator.mainProjectDir}/Security/Models/Vm/LoginVM.cs`
                 }
             ]
         },
@@ -488,7 +490,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project/Security/Jwt/RoleClaimsTransformation.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Security/Jwt/RoleClaimsTransformation.cs`
                 }
@@ -497,8 +499,8 @@ const serverFiles = {
         {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
-            templates: [                {
-                    
+            templates: [
+                {
                     file: 'Project/Security/Jwt/TokenProvider.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Security/Jwt/TokenProvider.cs`
                 }
@@ -508,7 +510,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project/Controllers/UserJwtController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/UserJwtController.cs`
                 }
@@ -738,7 +740,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project.Test/Infrastructure/TestMvcStartup.cs',
                     renameTo: generator => `${generator.testProjectDir}/Infrastructure/TestMvcStartup.cs`
                 }
@@ -748,7 +750,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project.Test/Setup/MockClaimsPrincipalProvider.cs',
                     renameTo: generator => `${generator.testProjectDir}/Infrastructure/MockClaimsPrincipalProvider.cs`
                 }
@@ -758,7 +760,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project.Test/Setup/MockHttpContextFactory.cs',
                     renameTo: generator => `${generator.testProjectDir}/Setup/MockHttpContextFactory.cs`
                 }
@@ -768,7 +770,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project.Test/Setup/NhipsterWebApplicationFactory.cs',
                     renameTo: generator => `${generator.testProjectDir}/Setup/NhipsterWebApplicationFactory.cs`
                 }
@@ -778,7 +780,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project.Test/Setup/TestStartup.cs',
                     renameTo: generator => `${generator.testProjectDir}/Setup/TestStartup.cs`
                 }
@@ -795,7 +797,7 @@ const serverFiles = {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
-                {                    
+                {
                     file: 'Project.Test/Controllers/TestUtil.cs',
                     renameTo: generator => `${generator.testProjectDir}/Controllers/TestUtil.cs`
                 }
@@ -939,8 +941,15 @@ const serverFiles = {
             path: DOCKER_DIR,
             templates: [
                 'keycloak.yml',
-                { file: 'keycloak/config/realm-config/jhipster-realm.json', renameTo: () => 'keycloak/config/realm-config/jhipster-realm.json' },
-                { file: 'keycloak/config/realm-config/jhipster-users-0.json', method: 'copy', renameTo: () => 'keycloak/config/realm-config/jhipster-users-0.json' }
+                {
+                    file: 'keycloak/config/realm-config/jhipster-realm.json',
+                    renameTo: () => 'keycloak/config/realm-config/jhipster-realm.json'
+                },
+                {
+                    file: 'keycloak/config/realm-config/jhipster-users-0.json',
+                    method: 'copy',
+                    renameTo: () => 'keycloak/config/realm-config/jhipster-users-0.json'
+                }
             ]
         }
     ]

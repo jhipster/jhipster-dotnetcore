@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-const chalk = require('chalk'); 
+const chalk = require('chalk');
+
 function askForModuleName() {
     if (this.baseName) return;
 
@@ -64,7 +65,7 @@ function askForServerSideOpts() {
             default: 0
         },
         {
-            when: response => applicationType === 'monolith', 
+            when: response => applicationType === 'monolith',
             type: 'list',
             name: 'authenticationType',
             message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
@@ -79,10 +80,10 @@ function askForServerSideOpts() {
                         name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
                     }
                 ];
-                return opts;                
+                return opts;
             },
             default: 0
-        },
+        }
     ];
 
     const done = this.async();

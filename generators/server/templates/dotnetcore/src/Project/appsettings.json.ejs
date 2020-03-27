@@ -66,9 +66,16 @@
                 "OAuth2": {
                     "Provider": {
                         "IssuerUri": "http://localhost:9080/auth/realms/jhipster",
+                        "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
                         "ClientId": "web_app",
                         "ClientSecret": "web_app"
-                    }
+                      }
+                      //"Provider": {
+                      //  "IssuerUri": "https://{yourOktaDomain}/oauth2/default",
+                      //  "LogOutUri": "https://{yourOktaDomain}/oauth2/default/v1/logout",
+                      //  "ClientId": "client_id",
+                      //  "ClientSecret": "client_secret"
+                      //}
                 }    
                 <%_ } _%>
             }

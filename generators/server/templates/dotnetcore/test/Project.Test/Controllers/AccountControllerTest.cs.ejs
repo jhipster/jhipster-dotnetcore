@@ -26,6 +26,7 @@ namespace MyCompany.Test.Controllers
             // Arrange
             var mockUser = new GenericPrincipal(new ClaimsIdentity(new List<Claim>()
                 {
+                    new Claim("preferred_username","admin@test"),
                     new Claim(ClaimTypes.GivenName,"admin"),
                     new Claim(ClaimTypes.Email,"admin@test"),
                     new Claim("role",RolesConstants.ADMIN)
@@ -67,6 +68,7 @@ namespace MyCompany.Test.Controllers
             // Arrange
             var mockUser = new GenericPrincipal(new ClaimsIdentity(new List<Claim>()
                 {
+                    new Claim("preferred_username","user@test"),
                     new Claim(ClaimTypes.GivenName,"user"),
                     new Claim(ClaimTypes.Email,"user@test"),
                     new Claim("role",RolesConstants.USER)

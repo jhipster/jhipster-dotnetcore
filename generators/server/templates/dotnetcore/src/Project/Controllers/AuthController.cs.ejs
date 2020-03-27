@@ -22,18 +22,23 @@ namespace MyCompany.Controllers
         [HttpGet("oauth2/authorization/oidc")]
         public async Task LogIn()
         {
-            await HttpContext.ChallengeAsync(new AuthenticationProperties() { RedirectUri = "/" });
+            await HttpContext.ChallengeAsync(new AuthenticationProperties { RedirectUri = "/" });
+        }
+
+        [HttpPost("login/oauth2/code/oidc")]
+        public IActionResult CallBack()
+        {
+            return Redirect("/");
         }
 
         [HttpPost("api/logout")]
         public async Task<IActionResult> LogOut()
         {
-            var idToken = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier));
             await HttpContext.SignOutAsync();
             return Ok(new
             {
-                logoutUrl = $"{_settings.Security.Authentication.OAuth2.Provider.IssuerUri}/protocol/openid-connect/logout",
-                idToken = idToken
+                logoutUrl = _settings.Security.Authentication.OAuth2.Provider.LogOutUri,
+                idToken = await HttpContext.GetTokenAsync("id_token")
             });
         }
     }

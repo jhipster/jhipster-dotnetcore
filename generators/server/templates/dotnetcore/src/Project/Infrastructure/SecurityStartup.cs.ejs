@@ -133,10 +133,9 @@ namespace <%= namespace %>.Infrastructure {
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
                 options.Scope.Add("email");
-                options.Scope.Add("claims");
-                options.Scope.Add("roles");
-                options.Scope.Add("jhipster");
-                options.ClaimActions.MapJsonKey("role","roles","role");
+                options.CallbackPath = new PathString("/login/oauth2/code/oidc");
+                options.ClaimActions.MapJsonKey("role", "roles", "role");
+                options.ClaimActions.MapJsonKey("role", "groups", "role");
             });
 
             @this.AddAuthorization();
