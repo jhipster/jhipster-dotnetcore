@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+const chalk = require('chalk'); 
 function askForModuleName() {
     if (this.baseName) return;
 
@@ -23,6 +25,7 @@ function askForModuleName() {
 }
 
 function askForServerSideOpts() {
+    const applicationType = this.applicationType;
     const prompts = [
         {
             type: 'input',
@@ -59,7 +62,27 @@ function askForServerSideOpts() {
                 }
             ],
             default: 0
-        }
+        },
+        {
+            when: response => applicationType === 'monolith', 
+            type: 'list',
+            name: 'authenticationType',
+            message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
+            choices: response => {
+                const opts = [
+                    {
+                        value: 'jwt',
+                        name: 'JWT authentication (stateless, with a token)'
+                    },
+                    {
+                        value: 'oauth2',
+                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
+                    }
+                ];
+                return opts;                
+            },
+            default: 0
+        },
     ];
 
     const done = this.async();
@@ -67,6 +90,7 @@ function askForServerSideOpts() {
     this.prompt(prompts).then(prompt => {
         this.namespace = prompt.namespace;
         this.databaseType = prompt.database;
+        this.authenticationType = prompt.authenticationType;
         this.devDatabaseType = 'h2Memory';
         this.prodDatabaseType = 'mysql';
         done();

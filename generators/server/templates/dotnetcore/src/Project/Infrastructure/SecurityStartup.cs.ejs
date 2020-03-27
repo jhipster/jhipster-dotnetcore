@@ -13,6 +13,7 @@
  limitations under the License.
 -%>
 using System;
+<%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using JHipsterNet.Config;
@@ -33,15 +34,31 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using AuthenticationService = <%= namespace %>.Service.AuthenticationService;
 using IAuthenticationService = <%= namespace %>.Service.IAuthenticationService;
+<%_ } else { _%>
+using JHipsterNet.Config;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+<%_ } _%>
 
 namespace <%= namespace %>.Infrastructure {
     public static class SecurityStartup {
 
+        <%_ if (authenticationType === 'jwt') { _%>
         public const string UserNameClaimType = JwtRegisteredClaimNames.Sub;
+        <%_ } _%>
 
+        <%_ if (authenticationType === 'jwt') { _%>
         public static IServiceCollection AddSecurityModule(this IServiceCollection @this)
+        <%_ } else { _%>
+        public static IServiceCollection AddSecurityModule(this IServiceCollection @this, JHipsterSettings jhipsterSettings) 
+        <%_ } _%>   
         {
-
+            <%_ if (authenticationType === 'jwt') { _%>
             //TODO Retrieve the signing key properly (DRY with TokenProvider)
             var opt = @this.BuildServiceProvider().GetRequiredService<IOptions<JHipsterSettings>>();
             var jhipsterSettings = opt.Value;
@@ -66,7 +83,8 @@ namespace <%= namespace %>.Infrastructure {
                     UserRole, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>>()
                 .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
                 >()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders();         
+
 
             @this
                 .AddAuthentication(options => {
@@ -95,14 +113,45 @@ namespace <%= namespace %>.Infrastructure {
             @this.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
             @this.AddSingleton<IMailService, MailService>();
 
-            return @this;
+            <%_ } else { _%>  
+            @this.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddOpenIdConnect(options =>
+            {
+                options.Authority = jhipsterSettings.Security.Authentication.OAuth2.Provider.IssuerUri;
+                options.ClientId = jhipsterSettings.Security.Authentication.OAuth2.Provider.ClientId;
+                options.ClientSecret = jhipsterSettings.Security.Authentication.OAuth2.Provider.ClientSecret;
+                options.SaveTokens = true;
+                options.ResponseType = OpenIdConnectResponseType.Code;
+                options.RequireHttpsMetadata = false; // dev only
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.Scope.Add("email");
+                options.Scope.Add("claims");
+                options.Scope.Add("roles");
+                options.Scope.Add("jhipster");
+                options.ClaimActions.MapJsonKey("role","roles","role");
+            });
+
+            @this.AddAuthorization();
+            <%_ } _%>
+            return @this;            
         }
 
         public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder @this,
             JHipsterSettings jhipsterSettings)
         {
-            @this.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));
+            @this.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));            
             @this.UseAuthentication();
+            <%_ if (authenticationType === 'oauth2') { _%>
+            @this.UseAuthorization();
+            <%_ } _%>
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             @this.UseHsts();
             @this.UseHttpsRedirection();

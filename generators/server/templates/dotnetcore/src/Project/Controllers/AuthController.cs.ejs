@@ -1,0 +1,40 @@
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using JHipsterNet.Config;
+using Microsoft.Extensions.Options;
+
+namespace MyCompany.Controllers
+{
+    [Route("")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        private readonly JHipsterSettings _settings;
+
+        public AuthController(IOptions<JHipsterSettings> settings)
+        {
+            _settings = settings.Value;
+        }
+
+        [HttpGet("oauth2/authorization/oidc")]
+        public async Task LogIn()
+        {
+            await HttpContext.ChallengeAsync(new AuthenticationProperties() { RedirectUri = "/" });
+        }
+
+        [HttpPost("api/logout")]
+        public async Task<IActionResult> LogOut()
+        {
+            var idToken = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier));
+            await HttpContext.SignOutAsync();
+            return Ok(new
+            {
+                logoutUrl = $"{_settings.Security.Authentication.OAuth2.Provider.IssuerUri}/protocol/openid-connect/logout",
+                idToken = idToken
+            });
+        }
+    }
+}

@@ -1,0 +1,121 @@
+using System.Collections.Generic;
+using FluentAssertions;
+using System.Security.Claims;
+using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MyCompany.Controllers;
+using MyCompany.Security;
+using MyCompany.Service.Dto;
+using Xunit;
+
+namespace MyCompany.Test.Controllers
+{
+    public class AccountControllerTest
+    {
+        private readonly AccountController _accountController;
+
+        public AccountControllerTest()
+        {
+            _accountController = new AccountController();
+        }
+
+        [Fact]
+        public void TestGetExistingAdminAccount()
+        {
+            // Arrange
+            var mockUser = new GenericPrincipal(new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.GivenName,"admin"),
+                    new Claim(ClaimTypes.Email,"admin@test"),
+                    new Claim("role",RolesConstants.ADMIN)
+                }),
+                new string[] { });
+            _accountController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = mockUser
+                }
+            };
+
+            // Act 
+            var result = _accountController.GetAccount();
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert 
+            okResult.Should().NotBeNull();
+            var user = okResult.Value as UserDto;
+            user.Should().NotBeNull();
+            user.Should().BeEquivalentTo(new UserDto
+            {
+                Activated = true,
+                FirstName = "admin",
+                Email = "admin@test",
+                Login = "admin@test",
+                LangKey = "en",
+                Roles = new HashSet<string>
+                {
+                    RolesConstants.ADMIN
+                }
+            });
+        }
+
+        [Fact]
+        public void TestGetExistingUserAccount()
+        {
+            // Arrange
+            var mockUser = new GenericPrincipal(new ClaimsIdentity(new List<Claim>()
+                {
+                    new Claim(ClaimTypes.GivenName,"user"),
+                    new Claim(ClaimTypes.Email,"user@test"),
+                    new Claim("role",RolesConstants.USER)
+                }),
+              new string[] {});
+            _accountController.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = mockUser
+                }
+            };
+
+            // Act 
+            var result = _accountController.GetAccount();
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert 
+            okResult.Should().NotBeNull();
+            var user = okResult.Value as UserDto;
+            user.Should().NotBeNull();
+            user.Should().BeEquivalentTo(new UserDto
+            {
+                Activated = true,
+                FirstName = "user",
+                Email = "user@test",
+                Login = "user@test",
+                LangKey = "en",
+                Roles = new HashSet<string>
+                {
+                    RolesConstants.USER
+                }
+            });
+        }
+
+
+        [Fact]
+        public void TestGetUnknownAccount()
+        {
+            // Arrange
+
+            // Act 
+            var result = _accountController.GetAccount();
+
+            // Assert
+            var response = result.Result as UnauthorizedObjectResult;
+            response.Should().NotBeNull();
+            response.StatusCode.Should().Be(401);
+        }
+
+    }
+}
