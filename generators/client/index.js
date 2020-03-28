@@ -62,8 +62,6 @@ module.exports = class extends ClientGenerator {
         // };
         // If the prompts need to be overriden then use the code commented out above instead
         //        return super._prompting();
-        //this.authenticationType = 'oauth2';
-        //this.skipUserManagement = true;
         return {};
     }
 
@@ -86,8 +84,6 @@ module.exports = class extends ClientGenerator {
                 this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
                 this.MAIN_SRC_DIR = `${this.relativeMainClientDir}/`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                // TODO PROMPT
-                this.authenticationType = 'jwt';
             },
             saveConfigDotnetcore() {
                 const config = {};
