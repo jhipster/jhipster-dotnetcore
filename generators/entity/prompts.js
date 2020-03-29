@@ -436,9 +436,9 @@ function askForPagination() {
 function askForField(done) {
     const context = this.context;
     this.log(chalk.green(`\nGenerating field #${context.fields.length + 1}\n`));
-    const skipServer = context.skipServer;
+    // const skipServer = context.skipServer;
     const prodDatabaseType = context.prodDatabaseType;
-    const databaseType = context.databaseType;
+    // const databaseType = context.databaseType;
     const clientFramework = context.clientFramework;
     const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
