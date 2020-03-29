@@ -185,7 +185,7 @@ JHipster is a [Yeoman Generator](http://yeoman.io/), so you must follow the [Yeo
 
 Here are the most important steps.
 
-### Fork the jhipster-vuejs project
+### Fork the jhipster-dotnetcore project
 
 Go to the [jhipster-dotnetcore project](https://github.com/jhipster/jhipster-dotnetcore) and click on the "fork" button. You can then clone your own fork of the project, and start working on it.
 
@@ -195,7 +195,7 @@ Go to the [jhipster-dotnetcore project](https://github.com/jhipster/jhipster-dot
 
 In your cloned `jhipster-dotnetcore` project, type `npm link` or `yarn && yarn link` depending on the package manager you use.
 
-This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster --blueprints dotnetcore`, you will now use the development version of JHipster.
+This will do a symbolic link from the global `node_modules` version to point to this folder, so when we run `jhipster --blueprint dotnetcore`, you will now use the development version of JHipster.
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
@@ -237,7 +237,7 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `travis/samples/app-sample-dev` folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl+Shift+D). This will start the generator in debug mode and generate files in the `test-integration/samples/app-sample-dev` folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
