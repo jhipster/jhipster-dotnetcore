@@ -14,6 +14,7 @@
     "url": ""
   },
   "files": [
+    "cli",
     "generators"
   ],
   "main": "generators/app/index.js",
