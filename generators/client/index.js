@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
+const path = require('path');
 const chalk = require('chalk');
 const _ = require('lodash');
 const ClientGenerator = require('generator-jhipster/generators/client');
@@ -26,6 +27,7 @@ const fs = require('fs');
 const constants = require('../generator-dotnetcore-constants');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
+const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -40,6 +42,8 @@ module.exports = class extends ClientGenerator {
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
+
+        this.options.outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined);  
     }
 
     get initializing() {
@@ -89,77 +93,10 @@ module.exports = class extends ClientGenerator {
                 const config = {};
                 this.config.set(config);
             },
-            configuringNeedlesNetBlueprint() {
-                const needleClientAngular = this.fetchFromInstalledJHipster('client/needle-api/needle-client-angular.js');
-                // modify path in needle-client-angular
-                fs.readFile(needleClientAngular, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    const result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-
-                    fs.writeFile(needleClientAngular, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-
-                const needleClientI18n = this.fetchFromInstalledJHipster('client/needle-api/needle-client-i18n.js');
-                // modify path in needle-client-i18n
-                fs.readFile(needleClientI18n, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    const result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-
-                    fs.writeFile(needleClientI18n, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-
-                const needleClient = this.fetchFromInstalledJHipster('client/needle-api/needle-client.js');
-                // modify path in needle-client
-                fs.readFile(needleClient, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    const result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-
-                    fs.writeFile(needleClient, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-
-                const needleClientWebpack = this.fetchFromInstalledJHipster('client/needle-api/needle-client-webpack.js');
-                // modify path in needle-client-webpack
-                fs.readFile(needleClientWebpack, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    let result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-                    result = result.replace(
-                        /CLIENT_WEBPACK_DIR =(.*);/,
-                        `CLIENT_WEBPACK_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/';`
-                    );
-
-                    fs.writeFile(needleClientWebpack, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-            }
+            
         };
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
+        //return Object.assign(phaseFromJHipster, customPhaseSteps);r
+        return phaseFromJHipster; 
     }
 
     get default() {
@@ -175,19 +112,21 @@ module.exports = class extends ClientGenerator {
                 writeAngularFiles.call(this);
             }
         };
-        return customPhase;
+        return jhipsterPhase;
     }
 
     get install() {
         // Override default yeoman installDependencies
         const customPhase = {
             installDependencies() {
-                this.log(
-                    `\n\nI'm all done. Running ${chalk.green.bold(
-                        `npm install `
-                    )}for you to install the required dependencies. If this fails, try running the command yourself.`
-                );
-                this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`});
+                if (!this.options['skip-install']) {
+                    this.log(
+                        `\n\nI'm all done. Running ${chalk.green.bold(
+                            `npm install `
+                        )}for you to install the required dependencies. If this fails, try running the command yourself.`
+                    );
+                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`});
+                }
             }
         };
         return customPhase;
