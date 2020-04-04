@@ -43,7 +43,7 @@ module.exports = class extends ClientGenerator {
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
 
-        this.options.outputPathCustomizer = paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined);  
+        //this.options.outputPathCustomizer = paths => (paths ? path.normalize(paths).replace(/^src\\main\\webapp([/$])\\/g, 'src/main/webapp2$1') : undefined);  
     }
 
     get initializing() {

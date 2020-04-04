@@ -1,3 +1,4 @@
+const path = require('path');
 module.exports = {
-    outputPathCustomizer: paths => (paths ? paths.replace(/^src\/main\/webapp([/$])/, 'src/main/webapp2$1') : undefined)
+    outputPathCustomizer: paths => (paths ? path.normalize(paths).replace(/^src\\main\\webapp\\/g, 'src/main/webapp2/') : undefined)
 };
