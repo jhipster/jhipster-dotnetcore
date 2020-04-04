@@ -25,6 +25,7 @@ const ClientGenerator = require('generator-jhipster/generators/client');
 const toPascalCase = require('to-pascal-case');
 const fs = require('fs');
 const constants = require('../generator-dotnetcore-constants');
+const normalize = require('normalize-path');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -43,7 +44,10 @@ module.exports = class extends ClientGenerator {
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext);
 
-        //this.options.outputPathCustomizer = paths => (paths ? path.normalize(paths).replace(/^src\\main\\webapp([/$])\\/g, 'src/main/webapp2$1') : undefined);  
+        this.options.outputPathCustomizer = [
+            paths => (paths ? normalize(paths).replace(/^src\/main\/webapp([\/$])/,  `${this.mainProjectDir}/ClientApp$1`) : undefined),
+            paths => (paths ? normalize(paths).replace(/^src\/main\/webapp$/, `${this.mainProjectDir}/ClientApp`) : undefined)
+        ];
     }
 
     get initializing() {
@@ -66,7 +70,7 @@ module.exports = class extends ClientGenerator {
         // };
         // If the prompts need to be overriden then use the code commented out above instead
         //        return super._prompting();
-        return {};
+        return super._prompting();
     }
 
     get configuring() {
@@ -95,8 +99,7 @@ module.exports = class extends ClientGenerator {
             },
             
         };
-        //return Object.assign(phaseFromJHipster, customPhaseSteps);r
-        return phaseFromJHipster; 
+        return Object.assign(phaseFromJHipster, customPhaseSteps);
     }
 
     get default() {
@@ -107,12 +110,7 @@ module.exports = class extends ClientGenerator {
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here
-        const customPhase = {
-            writeAngularFilesDotnetcore() {
-                writeAngularFiles.call(this);
-            }
-        };
-        return jhipsterPhase;
+        return super._writing();
     }
 
     get install() {
