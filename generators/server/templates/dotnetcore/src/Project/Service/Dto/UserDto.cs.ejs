@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 
 namespace <%= namespace %>.Service.Dto {
     public class UserDto {
+        <%_ if (authenticationType === 'jwt') { _%>
         public UserDto()
         {
         }
@@ -40,6 +41,7 @@ namespace <%= namespace %>.Service.Dto {
                 ? user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()
                 : new HashSet<string>();
         }
+        <%_ } _%>
 
         public string Id { get; set; }
 
