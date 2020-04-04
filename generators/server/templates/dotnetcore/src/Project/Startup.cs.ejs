@@ -42,8 +42,18 @@ namespace <%= namespace %> {
 
             AddDatabase(services);
 
+            <%_ if (authenticationType === 'oauth2') { _%>   
+            // Build an intermediate service provider
+            var sp = services.BuildServiceProvider();
+            var jhipsterSettings = sp.GetService<IOptions<JHipsterSettings>>().Value;
+            <%_ } _%>    
+
             services
+            <%_ if (authenticationType === 'jwt') { _%>   
             .AddSecurityModule()
+            <%_ } else { _%>
+            .AddSecurityModule(jhipsterSettings)
+            <%_ } _%>
             .AddProblemDetailsModule()
             .AddAutoMapperModule()
             .AddWebModule()
@@ -66,8 +76,11 @@ namespace <%= namespace %> {
                 .UseApplicationProblemDetails()
                 .UseApplicationWeb(env)
                 .UseApplicationSwagger()
-                .UseApplicationDatabase(serviceProvider, env)
+                .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2') { _%>;<%_ } _%>
+                <%_ if (authenticationType === 'jwt') { _%>   
                 .UseApplicationIdentity(serviceProvider);
+                <%_ } _%>
+                
         }
 
         protected virtual void AddDatabase(IServiceCollection services)

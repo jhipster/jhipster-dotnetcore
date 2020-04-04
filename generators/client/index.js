@@ -84,8 +84,6 @@ module.exports = class extends ClientGenerator {
                 this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
                 this.MAIN_SRC_DIR = `${this.relativeMainClientDir}/`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                // TODO PROMPT
-                this.authenticationType = 'jwt';
             },
             saveConfigDotnetcore() {
                 const config = {};

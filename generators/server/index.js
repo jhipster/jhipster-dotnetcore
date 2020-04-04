@@ -140,6 +140,7 @@ module.exports = class extends ServerGenerator {
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.devDatabaseType = this.devDatabaseType;
                 this.configOptions.prodDatabaseType = this.prodDatabaseType;
+                this.configOptions.authenticationType = this.authenticationType;
             }
         };
     }

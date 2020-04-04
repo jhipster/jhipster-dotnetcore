@@ -153,12 +153,6 @@ function updateTsConfigJson() {
     this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "wwwwroot/app"', true);
 }
 
-function updateTsConfigAotJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`, 'src/main/webapp', this.relativeMainClientDir, true);
-    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`, '"outDir": ".*"', '"outDir": "wwwwroot/app"', true);
-    this.replaceContent(`${SERVER_SRC_DIR}/${this.mainProjectDir}/tsconfig-aot.json`, '"genDir": ".*"', '"genDir": "bin/aot"', true);
-}
-
 function updatePackageJson() {
     this.replaceContent(
         `${SERVER_SRC_DIR}/${this.mainProjectDir}/package.json`,
@@ -195,7 +189,6 @@ function writeFiles() {
     angularJson.call(this);
     updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
-    updateTsConfigAotJson.call(this);
     updatePackageJson.call(this);
     updateHomeTitle.call(this);
     updateVendorScss.call(this);

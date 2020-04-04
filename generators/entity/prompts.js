@@ -436,9 +436,9 @@ function askForPagination() {
 function askForField(done) {
     const context = this.context;
     this.log(chalk.green(`\nGenerating field #${context.fields.length + 1}\n`));
-    const skipServer = context.skipServer;
+    // const skipServer = context.skipServer;
     const prodDatabaseType = context.prodDatabaseType;
-    const databaseType = context.databaseType;
+    // const databaseType = context.databaseType;
     const clientFramework = context.clientFramework;
     const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
@@ -483,7 +483,7 @@ function askForField(done) {
             message: 'What is the name of your field?'
         },
         {
-            when: response => response.fieldAdd === true && (skipServer || ['sql', 'mongodb', 'couchbase'].includes(databaseType)),
+            when: response => response.fieldAdd === true,
             type: 'list',
             name: 'fieldType',
             message: 'What is the type of your field?',
