@@ -1,4 +1,4 @@
-const path = require('path');
+const normalize = require('normalize-path');
 module.exports = {
-    outputPathCustomizer: paths => (paths ? path.normalize(paths).replace(/^src\\main\\webapp\\/g, 'src/main/webapp2/') : undefined)
+    outputPathCustomizer: paths => (paths ? normalize(paths).replace(/^src\/main\/webapp([\/$])/g, 'src/main/webapp2$1') : undefined)
 };
