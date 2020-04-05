@@ -17,66 +17,10 @@
  * limitations under the License.
  */
 
-const angularFiles = require('generator-jhipster/generators/client/files-angular').files;
-const constants = require('../generator-dotnetcore-constants');
+//const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
-// const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-
-const fileDestinationMapping = {
-    common: generator => `${SERVER_SRC_DIR}/${generator.mainProjectDir}`,
-    sass: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    image: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    swagger: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    commonWeb: generator => `${SERVER_SRC_DIR}/${generator.mainClientDir}`,
-    angularApp: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularMain: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularAccountModule: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularAdminModule: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularCore: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularShared: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    angularAuthService: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`,
-    clientTestFw: generator => `${SERVER_SRC_DIR}/${generator.mainAngularDir}`
-};
-
-const files = {};
-
-for (let i = 0, blocks = Object.keys(angularFiles); i < blocks.length; i++) {
-    const blockKey = blocks[i];
-    files[blockKey] = [];
-    for (let j = 0, blockTemplates = angularFiles[blocks[i]]; j < blockTemplates.length; j++) {
-        const blockTemplate = blockTemplates[j];
-        const udpatedBlockTemplate = {};
-        let previousPath = '';
-        if (blockTemplate.path) {
-            previousPath = blockTemplate.path;
-            udpatedBlockTemplate.path = '';
-        }
-        if (blockTemplate.condition) {
-            udpatedBlockTemplate.condition = blockTemplate.condition;
-        }
-        udpatedBlockTemplate.templates = blockTemplate.templates.map(templateObj => {
-            let file = '';
-            if (typeof templateObj === 'string') {
-                file = templateObj;
-            } else if (typeof templateObj.file === 'string') {
-                file = templateObj.file;
-            } else if (typeof templateObj.file === 'function') {
-                file = templateObj.file(generator);
-            }
-            const updatedTemplateObj = {
-                file: `${previousPath}/${file}`,
-                renameTo: generator => `${fileDestinationMapping[blockKey](generator)}/${file}`
-            };
-            if (templateObj.method) {
-                updatedTemplateObj.method = templateObj.method;
-            }
-            return updatedTemplateObj;
-        });
-        files[blockKey].push(udpatedBlockTemplate);
-    }
-}
 
 function updateWebpackCommonJs() {
     this.replaceContent(
@@ -182,7 +126,6 @@ function updateVendorScss() {
 }
 
 function writeFiles() {
-    this.writeFilesToDisk(files, this, false, this.fetchFromInstalledJHipster('client/templates/angular'));
     updateWebpackCommonJs.call(this);
     updateWebpackDevJs.call(this);
     updateWebpackProdJs.call(this);
@@ -196,5 +139,4 @@ function writeFiles() {
 
 module.exports = {
     writeFiles,
-    files
 };
