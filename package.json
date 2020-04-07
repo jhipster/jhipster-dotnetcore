@@ -57,12 +57,14 @@
     "prettier": "1.19.1",
     "sinon": "7.2.5",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "2.2.0"
+    "yeoman-test": "2.2.0",
+    "sonarqube-scanner": "2.5.0"
   },
   "scripts": {
     "lint": "eslint .",
     "lint-fix": "npm run lint -- --fix",
     "pretest": "npm run lint",
+    "sonar:scanner": "sonar-scanner",
     "test": "npm run test:unit -- test/*.spec.js",
     "test:unit": "mocha --timeout 300000 --slow 0 --reporter spec",
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
