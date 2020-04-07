@@ -1,5 +1,14 @@
 # generator-jhipster-dotnetcore
-[![NPM version][npm-image]][npm-url] [![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Dependency Status][daviddm-image]][daviddm-url] 
+[![NPM version][npm-image]][npm-url] 
+[![Generator Build Status][github-actions-generator-image]][github-actions-url]
+[![Dependency Status][daviddm-image]][daviddm-url] 
+[![Sonar Cloud Quality Gate][sonar-gate-image]][sonar-url]
+[![Sonar Cloud Coverage Rate][sonar-coverage-image]][sonar-coverage-url]
+[![Sonar Cloud Reliability Rate][sonar-reliability-image]][sonar-url]
+[![Sonar Cloud Security Rate][sonar-security-image]][sonar-url]
+[![Sonar Cloud Maintainability Rate][sonar-maintainability-image]][sonar-url]
+[![Sonar Cloud Duplicated Code][sonar-duplication-image]][sonar-url]
+
 > JHipster blueprint, 
 
 # Introduction
@@ -230,3 +239,11 @@ Apache-2.0 © [Daniel Petisme]()
 [daviddm-url]: https://david-dm.org/jhipster/jhipster-dotnetcore
 [github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg?branch=master
 [github-actions-url]: https://github.com/jhipster/jhipster-dotnetcore/actions
+[sonar-url]: https://sonarcloud.io/dashboard?branch=master&id=jhipster_jhipster-dotnetcore
+[sonar-coverage-url]: https://sonarcloud.io/component_measures?branch=master&id=jhipster_jhipster-dotnetcore&metric=coverage&view=list
+[sonar-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=alert_status
+[sonar-coverage-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=coverage
+[sonar-reliability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=reliability_rating
+[sonar-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=security_rating
+[sonar-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=sqale_rating
+[sonar-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=duplicated_lines_density
