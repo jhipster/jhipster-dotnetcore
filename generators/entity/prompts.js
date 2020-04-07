@@ -257,7 +257,7 @@ function askForTableName() {
         !context.relationships ||
         context.relationships.length === 0 ||
         entityTableName.length <= 30
-        /* (prodDatabaseType === 'oracle' && entityTableName.length > 14) || */ 
+        /* (prodDatabaseType === 'oracle' && entityTableName.length > 14) || */
     ) {
         return;
     }
@@ -1125,14 +1125,14 @@ function logFieldsAndRelationships() {
     if (context.relationships.length > 0) {
         this.log(chalk.white('Relationships'));
         context.relationships.forEach(relationship => {
-            const validationDetails = [];
+            // const validationDetails = [];
             /* if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                 validationDetails.push('required');
             } */
             this.log(
                 `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
                     relationship.relationshipType
-                )}`// ${chalk.cyan(validationDetails.join(' '))}`
+                )}` // ${chalk.cyan(validationDetails.join(' '))}`
             );
         });
         this.log();
