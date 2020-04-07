@@ -228,5 +228,5 @@ Apache-2.0 © [Daniel Petisme]()
 [npm-url]: https://npmjs.org/package/generator-jhipster-dotnetcore
 [daviddm-image]: https://david-dm.org/jhipster/jhipster-dotnetcore.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/jhipster-dotnetcore
-[github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg
+[github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg?branch=master
 [github-actions-url]: https://github.com/jhipster/jhipster-dotnetcore/actions
