@@ -170,7 +170,6 @@ module.exports = class extends ClientGenerator {
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here
-        const jhipsterPhase = super._writing();
         const customPhase = {
             writeAngularFilesDotnetcore() {
                 writeAngularFiles.call(this);
@@ -181,7 +180,6 @@ module.exports = class extends ClientGenerator {
 
     get install() {
         // Override default yeoman installDependencies
-        const jhipsterPhase = super._writing();
         const customPhase = {
             installDependencies() {
                 this.log(
@@ -196,7 +194,6 @@ module.exports = class extends ClientGenerator {
     }
 
     get end() {
-        const jhipsterPhase = super._writing();
         const customPhase = {
             end() {
                 if (this.skipClient) return;

@@ -256,7 +256,8 @@ function askForTableName() {
         skipCheckLengthOfIdentifier ||
         !context.relationships ||
         context.relationships.length === 0 ||
-        !(/* (prodDatabaseType === 'oracle' && entityTableName.length > 14) || */ (entityTableName.length > 30))
+        entityTableName.length <= 30
+        /* (prodDatabaseType === 'oracle' && entityTableName.length > 14) || */ 
     ) {
         return;
     }
@@ -1131,7 +1132,7 @@ function logFieldsAndRelationships() {
             this.log(
                 `${chalk.red(relationship.relationshipName)} ${chalk.white(`(${_.upperFirst(relationship.otherEntityName)})`)} ${chalk.cyan(
                     relationship.relationshipType
-                )} ${chalk.cyan(validationDetails.join(' '))}`
+                )}`// ${chalk.cyan(validationDetails.join(' '))}`
             );
         });
         this.log();
