@@ -22,17 +22,33 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
-function angularJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainProjectDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainProjectDir}/`, "", false);
+function updateHomeTitle() {
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/app/modules/home/home.tsx`, 'Java', '.Net Core', false);
 }
 
-function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
+function updateJestConf(){
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/app/jest.conf.js`,
+        '/src/test/javascript',
+        `/${this.relativeMainAppDir}`,
+        true
+    );
 }
+
+function updateEsLinIgnore(){
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/.eslintignore`,
+        'src/test/javascript',
+        `${this.relativeMainAppDir}`,
+        true
+    );
+}
+
 
 function writeFiles() {
-    angularJson.call(this);
-    updateHomeTitle.call(this);
+    updateHomeTitle.call(this);    
+    updateJestConf.call(this);
+    updateEsLinIgnore.call(this);
 }
 
 module.exports = {

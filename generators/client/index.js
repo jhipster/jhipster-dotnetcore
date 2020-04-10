@@ -23,9 +23,13 @@ const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
-const normalize = require('normalize-path');
+const baseConstants = require('generator-jhipster/generators/generator-constants');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
+const writeReactFiles = require('./files-react').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
+
+const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -40,6 +44,7 @@ module.exports = class extends ClientGenerator {
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
         jhContext.setupClientOptions(this, jhContext); 
+       
     }
 
     get initializing() {
@@ -81,18 +86,12 @@ module.exports = class extends ClientGenerator {
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
                 this.relativeMainClientDir = 'ClientApp';
-                this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
-                this.MAIN_SRC_DIR = `${this.relativeMainClientDir}/`;
+                this.relativeMainAppDir = `${this.relativeMainClientDir}/app`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                
-                //this.options.outputPathCustomizer = [
-                //    paths => (paths ? normalize(paths).replace(/^src\/main\/webapp([\/$])/,  `src/${this.mainClientDir}$1`) : undefined),
-                //    paths => (paths ? normalize(paths).replace(/^src\/main\/webapp$/, `src/${this.mainClientDir}`) : undefined),
-                //];
+                this.authenticationType = 'jwt';
 
                 this.options.outputPathCustomizer = [
-                    paths => paths ? normalize(paths) : paths,
-                    paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/,  `src/${this.mainClientDir}$1`) : paths),
+                    paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/,  `src/${this.mainClientDir}$1/`) : paths),
                     paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/,  `src/${this.mainAngularDir}$1`) : paths),
                     paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/,  `src/${this.mainProjectDir}/$1`) : paths),
                     paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
@@ -105,7 +104,7 @@ module.exports = class extends ClientGenerator {
             },
             
         };
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
+        return Object.assign(customPhaseSteps,phaseFromJHipster,);
     }
 
     get default() {
@@ -119,11 +118,17 @@ module.exports = class extends ClientGenerator {
         const phaseFromJHipster = super._writing();
         const customPhase = {
             writeAngularFilesDotnetcore() {
-                writeAngularFiles.call(this);
+                if (this.skipClient) return;
+                writeCommonFiles.call(this);
+                switch (this.clientFramework) {
+                    case REACT:
+                        return writeReactFiles.call(this);
+                    default:
+                        return writeAngularFiles.call(this);
+                }
             }
         };
         return Object.assign(phaseFromJHipster, customPhase);
-        //return phaseFromJHipster; 
     }
 
     get install() {
