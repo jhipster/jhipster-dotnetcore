@@ -87,12 +87,14 @@ module.exports = class extends ClientGenerator {
                 this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
                 this.relativeMainClientDir = 'ClientApp';
                 this.relativeMainAppDir = `${this.relativeMainClientDir}/app`;
+                this.relativeMainTestDir = `${this.relativeMainClientDir}/test`;
                 this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
+                this.clientTestProject = `${this.mainClientDir}/test/`
                 this.authenticationType = 'jwt';
 
                 this.options.outputPathCustomizer = [
                     paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/,  `src/${this.mainClientDir}$1/`) : paths),
-                    paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/,  `src/${this.mainAngularDir}$1`) : paths),
+                    paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/,  `src/${this.clientTestProject}$1`) : paths),
                     paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/,  `src/${this.mainProjectDir}/$1`) : paths),
                     paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
                     paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
