@@ -101,11 +101,40 @@ function updatePackageJson() {
         '"cleanup": "rimraf bin/aot && rimraf wwwroot/*"',
         true
     );
-
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainProjectDir}/package.json`,
         '"clean-www": ".*"',
         '"clean-www": "rimraf wwwroot/{src,target/}"',
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/package.json`,
+        'src/test/javascript',
+        `${this.relativeMainAppDir}`,
+        true
+    );
+}
+
+function updateJestConf(){
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/app/jest.conf.js`,
+        '/src/test/javascript',
+        `/${this.relativeMainAppDir}`,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/app/jest.conf.js`,
+        '\\.\\./\\.\\./\\.\\.',
+        '../..',
+        true
+    );
+}
+
+function updateEsLinIgnore(){
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/.eslintignore`,
+        'src/test/javascript',
+        `${this.relativeMainAppDir}`,
         true
     );
 }
@@ -116,7 +145,9 @@ function writeFiles() {
     updateWebpackProdJs.call(this);
     updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
-    updatePackageJson.call(this);
+    updatePackageJson.call(this);    
+    updateJestConf.call(this);
+    updateEsLinIgnore.call(this);
 }
 
 module.exports = {

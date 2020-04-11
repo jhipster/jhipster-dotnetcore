@@ -26,29 +26,8 @@ function updateHomeTitle() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/app/modules/home/home.tsx`, 'Java', '.Net Core', false);
 }
 
-function updateJestConf(){
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/app/jest.conf.js`,
-        '/src/test/javascript',
-        `/${this.relativeMainAppDir}`,
-        true
-    );
-}
-
-function updateEsLinIgnore(){
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/.eslintignore`,
-        'src/test/javascript',
-        `${this.relativeMainAppDir}`,
-        true
-    );
-}
-
-
 function writeFiles() {
-    updateHomeTitle.call(this);    
-    updateJestConf.call(this);
-    updateEsLinIgnore.call(this);
+    updateHomeTitle.call(this);
 }
 
 module.exports = {
