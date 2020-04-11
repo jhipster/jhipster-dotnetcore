@@ -113,6 +113,12 @@ function updatePackageJson() {
         `${this.relativeMainAppDir}`,
         true
     );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/package.json`,
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/${this.relativeMainAppDir}`,
+        `${this.relativeMainAppDir}/`,
+        false
+    );
 }
 
 function updateJestConf(){
@@ -139,6 +145,17 @@ function updateEsLinIgnore(){
     );
 }
 
+function updateTestFramework(){
+    if(this.protractorTests){    
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/app/protractor.conf.js`,
+            'http://localhost:8080',
+            'http://localhost:5000',
+            false
+        );
+    }
+}
+
 function writeFiles() {
     updateWebpackCommonJs.call(this);
     updateWebpackDevJs.call(this);
@@ -148,6 +165,7 @@ function writeFiles() {
     updatePackageJson.call(this);    
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
+    updateTestFramework.call(this);
 }
 
 module.exports = {

@@ -95,8 +95,9 @@ module.exports = class extends ClientGenerator {
                     paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/,  `src/${this.mainAngularDir}$1`) : paths),
                     paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/,  `src/${this.mainProjectDir}/$1`) : paths),
                     paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
+                    paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
+                    paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/,  `src/${this.mainProjectDir}/$1`) : paths)
                 ];
-                
             },
             saveConfigDotnetcore() {
                 const config = {};
