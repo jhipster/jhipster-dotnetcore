@@ -143,6 +143,12 @@ function updateEsLinIgnore(){
         `${this.relativeMainTestDir}`,
         true
     );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/tsconfig.e2e.json`,
+        `/${SERVER_SRC_DIR}${this.mainProjectDir}`,
+        "",
+        true
+    );
 }
 
 function updateTestFramework(){
