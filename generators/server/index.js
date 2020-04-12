@@ -50,7 +50,7 @@ module.exports = class extends ServerGenerator {
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
-        const jhipsterNetPhaseSteps = {            
+        const jhipsterNetPhaseSteps = {
             setupServerConsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
@@ -61,7 +61,7 @@ module.exports = class extends ServerGenerator {
             }
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
-    }    
+    }
 
     get prompting() {
         return {
