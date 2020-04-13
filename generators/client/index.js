@@ -80,7 +80,7 @@ module.exports = class extends ClientGenerator {
                 this.config.set(config);
             },            
         };
-        return Object.assign(customPhaseSteps,phaseFromJHipster,);
+        return Object.assign(customPhaseSteps,phaseFromJHipster);
     }
 
     get default() {

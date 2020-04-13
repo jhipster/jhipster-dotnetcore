@@ -131,6 +131,7 @@ module.exports = class extends ServerGenerator {
     }
 
     get prompting() {
+        if (this.existingProject) return;
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
