@@ -2,15 +2,15 @@
 
 
 if [[ $1 == "" ]]; then
-    APP_FOLDER="app-sample-dev"
-else
-    APP_FOLDER=$1
-fi
-
-if [[ $3 == "" ]]; then
     DEST_FOLDER=$HOME
 else
-    DEST_FOLDER=$3
+    DEST_FOLDER=$1
+fi
+
+if [[ $2 == "" ]]; then
+    APP_FOLDER="app-sample-dev"
+else
+    APP_FOLDER=$2
 fi
 
 if [[ $GITHUB_WORKSPACE == "" ]]; then

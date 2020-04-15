@@ -33,7 +33,7 @@ jobs:
             - name: PREPARE jhipster env
               run: sudo sh test-integration/00-install-all-jhipster.sh
             - name: 'GENERATE JHipster.NET app'
-              run: sudo sh test-integration/02-generate-app-sample.sh $HOME $JHI_APP $JHI_ARG
+              run: sudo sh test-integration/02-generate-app-sample.sh $HOME $JHI_APP
             - name: 'INSTALL DEPENDENCIES of generated app'
               run: sudo sh test-integration/03-install-dependencies-app-sample.sh $HOME $JHI_APP            
             - name: 'RUN CLIENT UNIT TESTS of generated app'

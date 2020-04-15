@@ -25,7 +25,7 @@ sudo npm link generator-jhipster-dotnetcore
 # $2 : service or controller
 # $3 : name
 #-------------------------------------------------------------------------------
-echo "*** run generation" $2 $3 "with dotnetcore blueprint for : "$1
+echo "*** run generation" $2 $3 "with dotnetcore blueprint for : "$APP_FOLDER
 
 componentGenerator="spring-$2 $3"
 runOptions="$componentGenerator --blueprints dotnetcore --force"
