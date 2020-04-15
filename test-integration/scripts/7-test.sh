@@ -1,0 +1,1 @@
+echo $(dirname $0)/01-init-env.sh

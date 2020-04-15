@@ -18,7 +18,7 @@ if [[ $GITHUB_WORKSPACE == "" ]]; then
 else
     WORKSPACE=$GITHUB_WORKSPACE
 fi
-
+echo $WORKSPACE
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
