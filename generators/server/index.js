@@ -65,9 +65,7 @@ module.exports = class extends ServerGenerator {
                 this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
 
                 const serverConfigFound =
-                this.namespace !== undefined &&
-                this.databaseType !== undefined &&
-                this.authenticationType !== undefined;
+                    this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     this.log(
@@ -147,8 +145,8 @@ module.exports = class extends ServerGenerator {
         );
     }
 
-    get prompting() {       
-        return {            
+    get prompting() {
+        return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
 
