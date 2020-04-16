@@ -4,7 +4,7 @@ set -e
 
 RED='\033[0;31m'
 
-. $(dirname $0)/01-init-env.sh
+source $(dirname $0)/01-init-env.sh
 
 #-------------------------------------------------------------------------------
 # Change in template directory

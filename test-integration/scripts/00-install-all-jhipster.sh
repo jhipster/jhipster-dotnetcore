@@ -18,7 +18,6 @@ npm install -g yo
 #-------------------------------------------------------------------------------
 # Install JHipster.NET
 #-------------------------------------------------------------------------------
-
 echo "*** generator-jhipster-dotnetcore: use current branch version"
 npm ci
 npm link

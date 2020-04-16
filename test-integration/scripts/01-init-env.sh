@@ -1,18 +1,18 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
+if [[ $1 == "" ]]; then
     APP_FOLDER="app-sample-dev"
 else
     APP_FOLDER=$1
 fi
 
-if [ -z "$3" ]; then
+if [[ $3 == "" ]]; then
     DEST_FOLDER=$HOME
 else
     DEST_FOLDER=$3
 fi
 
-if [ -z "$GITHUB_WORKSPACE" ]; then
+if [[ $GITHUB_WORKSPACE == "" ]]; then
     WORKSPACE=`pwd`
 else
     WORKSPACE=$GITHUB_WORKSPACE
