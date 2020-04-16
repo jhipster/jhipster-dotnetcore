@@ -36,5 +36,7 @@ jobs:
               run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
             - name: 'INSTALL DEPENDENCIES of generated app'
               run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP            
-            - name: 'RUN CLIENT UNIT TESTS of generated app'
+            #- name: 'RUN CLIENT UNIT TESTS of generated app'
+            #  run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
+            - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-app-sample.sh $JHI_APP
