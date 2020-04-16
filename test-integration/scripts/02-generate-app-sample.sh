@@ -5,10 +5,7 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 
-ls 
-echo $(dirname $0)/01-init-env.sh
-
-source $(dirname $0)/01-init-env.sh
+. $(dirname $0)/01-init-env.sh
 
 #-------------------------------------------------------------------------------
 # Run JHipster.NET Generator
