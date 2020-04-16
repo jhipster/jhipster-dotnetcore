@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 if [[ $1 == "" ]]; then
     APP_FOLDER="app-sample-dev"
 else
@@ -18,7 +17,7 @@ if [[ $GITHUB_WORKSPACE == "" ]]; then
 else
     WORKSPACE=$GITHUB_WORKSPACE
 fi
-echo $WORKSPACE
+
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
