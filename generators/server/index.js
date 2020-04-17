@@ -173,7 +173,8 @@ module.exports = class extends ServerGenerator {
             saveConfig() {
                 const config = {
                     namespace: this.namespace,
-                    databaseType: this.databaseType
+                    databaseType: this.databaseType,
+                    authenticationType: this.authenticationType
                 };
                 this.config.set(config);
             }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $1 == "" ]]; then
-    APP_FOLDER="app-sample-dev"
+    APP_FOLDER="jwt-with-angular-app"
 else
     APP_FOLDER=$1
 fi

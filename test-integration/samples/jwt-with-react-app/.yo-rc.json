@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "namespace": "MyCompany",
+    "databaseType": "sqllite",
+    "authenticationType": "jwt",
+    "jhipsterVersion": "6.8.0",
+    "applicationType": "monolith",
+    "baseName": "debugVsCodeFolder",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "react",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1587112984699,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "0.3.0"
+      }
+    ],
+    "enableTranslation": false,
+    "blueprints": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "0.3.0"
+      }
+    ]
+  }
+}
