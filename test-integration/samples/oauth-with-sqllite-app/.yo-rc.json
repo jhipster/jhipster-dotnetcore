@@ -3,7 +3,7 @@
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "packageName": "JhipsterSampleApplication",
-    "authenticationType": "jwt",
+    "authenticationType": "oauth2",
     "databaseType": "sqllite",
     "enableTranslation": false,
     "namespace": "MyCompany",
