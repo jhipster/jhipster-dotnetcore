@@ -6,10 +6,10 @@ else
     APP_FOLDER=$1
 fi
 
-if [[ $3 == "" ]]; then
+if [[ $2 == "" ]]; then
     DEST_FOLDER=$HOME
 else
-    DEST_FOLDER=$3
+    DEST_FOLDER=$2
 fi
 
 if [[ $GITHUB_WORKSPACE == "" ]]; then
