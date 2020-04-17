@@ -15,7 +15,6 @@ jobs:
                     - jwt-with-angular-app
                     - jwt-with-mssql-app
                     - jwt-with-mysql-app
-                    - jwt-with-oracle-app
                     - jwt-with-postgres-app
                     - jwt-with-react-app
                 include:
@@ -24,8 +23,6 @@ jobs:
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
-                      arg: 'no'
-                    - app-type: jwt-with-oracle-app
                       arg: 'no'
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
