@@ -24,14 +24,14 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function updateWebpackCommonJs() {
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.common.js`,
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
         "",
         true
     );
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.common.js`,
-        `src\\/${this.mainProjectDir}\\/`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+        `src\\/`,
         "",
         false
     );
@@ -39,25 +39,25 @@ function updateWebpackCommonJs() {
 
 function updateWebpackDevJs() {
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.dev.js`,
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
         "",
         true
     );
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.dev.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
         'path: utils.root(.*),',
-        "path: utils.root('wwwroot'),",
+        "path: utils.root('dist'),",
         true
     );
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.dev.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
         "contentBase: '.*'",
-        "contentBase: './wwwroot'",
+        "contentBase: './dist'",
         true
     );
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.dev.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
         'cacheDirectory: path.resolve(.*)',
         "cacheDirectory: path.resolve('bin/cache-loader')",
         true
@@ -66,22 +66,22 @@ function updateWebpackDevJs() {
 
 function updateWebpackProdJs() {
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.prod.js`,
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
         "",
         true
     );
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.prod.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
         'path: utils.root(.*),',
-        "path: utils.root('wwwroot'),",
+        "path: utils.root('dist'),",
         true
     );
 }
 
 function updateProxyConfJson() {
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/proxy.conf.json`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/proxy.conf.json`,
         '"target": "http://localhost:8080"',
         '"target": "http://localhost:5000"',
         false
@@ -89,23 +89,23 @@ function updateProxyConfJson() {
 }
 
 function updateTsConfigJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainProjectDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainProjectDir}/`,"", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainProjectDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainProjectDir}/`,"", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainProjectDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "wwwwroot/app"', true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
 }
 
 function updatePackageJson() {
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/package.json`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/package.json`,
         '"cleanup": ".*"',
-        '"cleanup": "rimraf bin/aot && rimraf wwwroot/*"',
+        '"cleanup": "rimraf bin/aot && rimraf dist/*"',
         true
     );
 
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/package.json`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/package.json`,
         '"clean-www": ".*"',
-        '"clean-www": "rimraf wwwroot/{src,target/}"',
+        '"clean-www": "rimraf dist/{src,target/}"',
         true
     );
 }

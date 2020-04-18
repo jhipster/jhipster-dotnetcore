@@ -5,8 +5,8 @@ const LanguageGenerator = require('generator-jhipster/generators/languages');
 const jhipsterUtils = require('generator-jhipster/generators/utils');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
 
 module.exports = class extends LanguageGenerator {
     constructor(args, opts) {
@@ -41,20 +41,7 @@ module.exports = class extends LanguageGenerator {
         const phaseFromJHipster = super._configuring();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-                this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                this.relativeMainClientDir = 'ClientApp';
-                this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
-            },
+            configureGlobalDotnetcore,
             saveConfigDotnetcore() {
                 return {
                     saveConfig() {
@@ -155,7 +142,7 @@ module.exports = class extends LanguageGenerator {
     _updateLanguagesInLanguagePipeDotNetCore(languages) {
         const fullPath =
             this.clientFramework === 'angularX'
-                ? `${constants.SERVER_SRC_DIR}${this.mainAngularDir}/shared/language/find-language-from-key.pipe.ts`
+                ? `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/shared/language/find-language-from-key.pipe.ts`
                 : `${constants.SERVER_SRC_DIR}${this.mainClientDir}/app/config/translation.ts`;
         try {
             let content = '{\n';
@@ -188,7 +175,7 @@ module.exports = class extends LanguageGenerator {
         if (this.clientFramework !== 'angularX') {
             return;
         }
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainAngularDir}/core/language/language.constants.ts`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {

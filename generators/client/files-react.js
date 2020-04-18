@@ -23,12 +23,12 @@ const constants = require('../generator-dotnetcore-constants');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/app/modules/home/home.tsx`, 'Java', '.Net Core', false);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/modules/home/home.tsx`, 'Java', '.Net Core', false);
 }
 
 function updateJestConf(){
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/app/jest.conf.js`,
+        `${SERVER_SRC_DIR}${this.mainClientAppDir}/jest.conf.js`,
         '/src/test/javascript',
         `/${this.relativeMainAppDir}`,
         true
@@ -37,7 +37,7 @@ function updateJestConf(){
 
 function updateEsLinIgnore(){
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainProjectDir}/.eslintignore`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
         'src/test/javascript',
         `${this.relativeMainAppDir}`,
         true

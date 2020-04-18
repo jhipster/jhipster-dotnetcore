@@ -85,16 +85,16 @@ function configureGlobalDotnetcore() {
     this.solutionName = this.pascalizedBaseName;
     this.mainProjectDir = this.pascalizedBaseName;
     this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-    this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
+    this.mainClientAppDir = `${this.mainProjectDir}/ClientApp/src`;
     this.relativeMainClientDir = 'ClientApp';
-    this.relativeMainAppDir = `${this.relativeMainClientDir}/app`;
+    this.relativeMainAppDir = `${this.relativeMainClientDir}/src`;
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
 
     this.options.outputPathCustomizer = [
-        paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientDir}$1/`) : paths),
-        paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/, `src/${this.mainAngularDir}$1`) : paths),
-        paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainProjectDir}/$1`) : paths),
-        paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainProjectDir}/$1`) : paths)
+        paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientAppDir}$1/`) : paths),
+        paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/, `src/${this.mainClientAppDir}$1`) : paths),
+        paths => (paths ? paths.replace(/^((?!.huskyrc).[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths)
     ];
 }
 

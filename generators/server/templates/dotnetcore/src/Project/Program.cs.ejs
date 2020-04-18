@@ -63,6 +63,7 @@ namespace <%= namespace %> {
         {
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"))
                 .UseSerilog();
         }
 
