@@ -6,7 +6,7 @@ const jhipsterUtils = require('generator-jhipster/generators/utils');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends LanguageGenerator {
     constructor(args, opts) {
