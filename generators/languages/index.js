@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const _ = require('lodash');
 const chalk = require('chalk');
 const LanguageGenerator = require('generator-jhipster/generators/languages');
 const jhipsterUtils = require('generator-jhipster/generators/utils');
