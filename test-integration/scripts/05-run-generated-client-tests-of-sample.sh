@@ -9,7 +9,7 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
-cd src/JhipsterSampleApplication
+cd src/JhipsterSampleApplication/ClientApp
 echo "*** changed directory in : `pwd`" 
 
 
