@@ -6,7 +6,7 @@ describe('Subgenerator client of dotnetcore JHipster blueprint', () => {
     describe('Sample test', () => {
         before(done => {
             helpers
-                .run('generator-jhipster/generators/app')
+                .run('generator-jhipster/generators/client')
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,

@@ -1,10 +1,8 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
-
-const writeFiles = require('./files').writeFiles;
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
@@ -20,15 +18,17 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get configuring() {
-        return {
-            configureGlobal() {
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-            }
+        const phaseFromJHipster = super._configuring();
+
+        const customPhaseSteps = {
+            configureGlobalDotnetcore
         };
+
+        return Object.assign(customPhaseSteps, phaseFromJHipster);
     }
 
     get writing() {
-        return writeFiles();
+        return super._writing();
     }
 
     rebuildClient() {

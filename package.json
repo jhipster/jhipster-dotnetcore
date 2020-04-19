@@ -14,6 +14,7 @@
     "url": ""
   },
   "files": [
+    "cli",
     "generators"
   ],
   "main": "generators/app/index.js",
@@ -24,7 +25,7 @@
   "dependencies": {
     "chalk": "2.4.2",
     "ejs": "2.6.1",
-    "generator-jhipster": "6.8.0",
+    "generator-jhipster": "git://github.com/jhipster/generator-jhipster.git",
     "glob": "7.1.6",
     "gulp-filter": "5.1.0",
     "insight": "0.10.1",
