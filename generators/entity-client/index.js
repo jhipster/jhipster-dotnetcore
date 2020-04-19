@@ -34,7 +34,7 @@ module.exports = class extends EntityClientGenerator {
     rebuildClient() {
         const done = this.async();
         this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-        this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}`, 'run', 'webpack:build']).on(
+        this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(
             'close',
             () => {
                 done();
@@ -43,15 +43,6 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get end() {
-        const jhipsterPhase = super._end();
-        const customPhase = {
-            end() {
-                if (!this.options['skip-install'] && !this.skipClient) {
-                    this.rebuildClient();
-                }
-                this.log(chalk.bold.green(`Entity ${this.entityNameCapitalized} generated successfully.`));
-            }
-        };
-        return Object.assign(jhipsterPhase, customPhase);
+        return super._end();
     }
 };
