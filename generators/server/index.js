@@ -108,7 +108,7 @@ module.exports = class extends ServerGenerator {
                     namespace: this.namespace,
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
-                    prodDatabaseType: "mysql"//set only for jdl-importer compatibility 
+                    prodDatabaseType: 'mysql' // set only for jdl-importer compatibility
                 };
                 this.config.set(config);
             }
