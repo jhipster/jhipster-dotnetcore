@@ -1,12 +1,11 @@
 /* eslint-disable consistent-return */
-const _ = require('lodash');
 const chalk = require('chalk');
 const LanguageGenerator = require('generator-jhipster/generators/languages');
 const jhipsterUtils = require('generator-jhipster/generators/utils');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends LanguageGenerator {
     constructor(args, opts) {
@@ -41,20 +40,7 @@ module.exports = class extends LanguageGenerator {
         const phaseFromJHipster = super._configuring();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-                this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                this.relativeMainClientDir = 'ClientApp';
-                this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
-            },
+            configureGlobalDotnetcore,
             saveConfigDotnetcore() {
                 return {
                     saveConfig() {
@@ -75,7 +61,7 @@ module.exports = class extends LanguageGenerator {
         return {
             translateFile() {
                 const from = 'src/main/webapp/';
-                const to = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/`;
+                const to = `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/`;
                 this.languagesToApply.forEach(language => {
                     if (!this.skipClient) {
                         this._installI18nClientFilesByLanguageDotNetCore(from, to, language);
@@ -85,7 +71,7 @@ module.exports = class extends LanguageGenerator {
                     // }
                     // statistics.sendSubGenEvent('languages/language', language);
                     this.replaceContent(
-                        `${constants.SERVER_SRC_DIR}${this.mainClientDir}/i18n/${language}/home.json`,
+                        `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/i18n/${language}/home.json`,
                         'Java',
                         '.Net Core',
                         false
@@ -155,7 +141,7 @@ module.exports = class extends LanguageGenerator {
     _updateLanguagesInLanguagePipeDotNetCore(languages) {
         const fullPath =
             this.clientFramework === 'angularX'
-                ? `${constants.SERVER_SRC_DIR}${this.mainAngularDir}/shared/language/find-language-from-key.pipe.ts`
+                ? `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/shared/language/find-language-from-key.pipe.ts`
                 : `${constants.SERVER_SRC_DIR}${this.mainClientDir}/app/config/translation.ts`;
         try {
             let content = '{\n';
@@ -188,7 +174,7 @@ module.exports = class extends LanguageGenerator {
         if (this.clientFramework !== 'angularX') {
             return;
         }
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainAngularDir}/core/language/language.constants.ts`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {
@@ -217,13 +203,13 @@ module.exports = class extends LanguageGenerator {
     }
 
     _updateLanguagesInWebpackDotNetCore(languages) {
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.common.js`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`;
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./${
-                    this.relativeMainClientDir
-                }/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                    { pattern: "./src/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${
+                    i !== languages.length - 1 ? ',' : ''
+                }\n`;
             });
             content +=
                 '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
@@ -250,7 +236,7 @@ module.exports = class extends LanguageGenerator {
     }
 
     _updateLanguagesInMomentWebpackNgxDotNetCore(languages) {
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.prod.js`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`;
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {

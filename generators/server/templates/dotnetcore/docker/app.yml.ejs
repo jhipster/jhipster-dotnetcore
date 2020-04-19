@@ -47,7 +47,7 @@ services:
 } _%>
     <%= baseName.toLowerCase() %>-app:
         image: <%= baseName.toLowerCase() %>
-    <%_ if (databaseType !== 'sqlite' && databaseType !== 'oracle') { _%>
+    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle') { _%>
         depends_on:
             - db
         build:
