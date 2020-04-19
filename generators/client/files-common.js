@@ -144,6 +144,12 @@ function updateEsLinIgnore(){
         true
     );
     this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainProjectDir}/.eslintignore`,
+        'target/',
+        `wwwroot/`,
+        true
+    );
+    this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainProjectDir}/tsconfig.e2e.json`,
         `/${SERVER_SRC_DIR}${this.mainProjectDir}`,
         "",
