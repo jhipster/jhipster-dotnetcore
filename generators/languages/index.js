@@ -61,7 +61,7 @@ module.exports = class extends LanguageGenerator {
         return {
             translateFile() {
                 const from = 'src/main/webapp/';
-                const to = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/`;
+                const to = `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/`;
                 this.languagesToApply.forEach(language => {
                     if (!this.skipClient) {
                         this._installI18nClientFilesByLanguageDotNetCore(from, to, language);
@@ -71,7 +71,7 @@ module.exports = class extends LanguageGenerator {
                     // }
                     // statistics.sendSubGenEvent('languages/language', language);
                     this.replaceContent(
-                        `${constants.SERVER_SRC_DIR}${this.mainClientDir}/i18n/${language}/home.json`,
+                        `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/i18n/${language}/home.json`,
                         'Java',
                         '.Net Core',
                         false
@@ -203,13 +203,11 @@ module.exports = class extends LanguageGenerator {
     }
 
     _updateLanguagesInWebpackDotNetCore(languages) {
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.common.js`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`;
         try {
             let content = 'groupBy: [\n';
             languages.forEach((language, i) => {
-                content += `                    { pattern: "./${
-                    this.relativeMainClientDir
-                }/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
+                content += `                    { pattern: "./src/i18n/${language}/*.json", fileName: "./i18n/${language}.json" }${i !== languages.length - 1 ? ',' : ''}\n`;
             });
             content +=
                 '                    // jhipster-needle-i18n-language-webpack - JHipster will add/remove languages in this array\n' +
@@ -236,7 +234,7 @@ module.exports = class extends LanguageGenerator {
     }
 
     _updateLanguagesInMomentWebpackNgxDotNetCore(languages) {
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/webpack.prod.js`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`;
         try {
             let content = 'localesToKeep: [\n';
             languages.forEach((language, i) => {

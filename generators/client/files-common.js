@@ -101,13 +101,71 @@ function updatePackageJson() {
         '"cleanup": "rimraf bin/aot && rimraf dist/*"',
         true
     );
-
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/package.json`,
         '"clean-www": ".*"',
         '"clean-www": "rimraf dist/{src,target/}"',
         true
     );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/package.json`,
+        'src/test/javascript',
+        'test',
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/package.json`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+        '',
+        true
+    );
+}
+
+function updateJestConf(){
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
+        '/src/test/javascript',
+        `/test`,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
+        '\\.\\./\\.\\./\\.\\.',
+        '..',
+        true
+    );
+}
+
+function updateEsLinIgnore(){
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
+        'src/test/javascript',
+        `/test`,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
+        'target/',
+        `dist/`,
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.e2e.json`,
+        `/${SERVER_SRC_DIR}${this.mainClientDir}`,
+        "",
+        true
+    );
+}
+
+function updateTestFramework(){
+    if(this.protractorTests){    
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/test/protractor.conf.js`,
+            'http://localhost:8080',
+            'http://localhost:5000',
+            false
+        );
+    }
 }
 
 function writeFiles() {
@@ -116,7 +174,10 @@ function writeFiles() {
     updateWebpackProdJs.call(this);
     updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
-    updatePackageJson.call(this);
+    updatePackageJson.call(this);    
+    updateJestConf.call(this);
+    updateEsLinIgnore.call(this);
+    updateTestFramework.call(this);
 }
 
 module.exports = {
