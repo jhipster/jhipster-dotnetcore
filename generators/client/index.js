@@ -18,12 +18,11 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -38,7 +37,7 @@ module.exports = class extends ClientGenerator {
         const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
         if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
+            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints dotnetcore')}`);
         }
 
         this.configOptions = jhContext.configOptions || {};
@@ -75,37 +74,11 @@ module.exports = class extends ClientGenerator {
         const phaseFromJHipster = super._configuring();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-                this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
-                this.relativeMainClientDir = 'ClientApp';
-                this.relativeMainAppDir = `${this.relativeMainClientDir}/app`;
-                this.relativeMainTestDir = `${this.relativeMainClientDir}/test`;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                this.clientTestProject = `${this.mainClientDir}/test/`
-                this.authenticationType = 'jwt';
-
-                this.options.outputPathCustomizer = [
-                    paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/,  `src/${this.mainClientDir}$1/`) : paths),
-                    paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/,  `src/${this.clientTestProject}$1`) : paths),
-                    paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/,  `src/${this.mainProjectDir}/$1`) : paths),
-                    paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
-                    paths => (paths ? paths.replace(/^(webpack\/.*)$/,  `src/${this.mainProjectDir}/$1`) : paths),
-                    paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/,  `src/${this.mainProjectDir}/$1`) : paths)
-                ];
-            },
+            configureGlobalDotnetcore,
             saveConfigDotnetcore() {
                 const config = {};
                 this.config.set(config);
-            },
-            
+            },            
         };
         return Object.assign(customPhaseSteps,phaseFromJHipster,);
     }
