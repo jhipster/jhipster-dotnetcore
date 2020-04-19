@@ -19,7 +19,7 @@ echo "*** changed directory in : `pwd`"
 echo "*** run unit test in client for :  `pwd`"
 
 if [ -f "ClientApp/app/app.tsx" ]; then
-  npm run lint:fix && npm test-ci
+  npm run lint:fix && npm run test-ci
 else
   npm run lint:fix && npm test
 fi
