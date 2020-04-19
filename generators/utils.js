@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const _ = require('lodash');
+const toPascalCase = require('to-pascal-case');
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -23,7 +25,8 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 module.exports = {
     copyI18n,
     copyEnumI18n,
-    equivalentCSharpType
+    equivalentCSharpType,
+    configureGlobalDotnetcore
 };
 
 /**
@@ -68,6 +71,31 @@ function copyEnumI18n(language, enumInfo, prefix = '') {
         // An exception is thrown if the folder doesn't exist
         // do nothing
     }
+}
+
+/**
+ * Configure dotnet
+ */
+function configureGlobalDotnetcore() {
+    this.camelizedBaseName = _.camelCase(this.baseName);
+    this.dasherizedBaseName = _.kebabCase(this.baseName);
+    this.pascalizedBaseName = toPascalCase(this.baseName);
+    this.lowercaseBaseName = this.baseName.toLowerCase();
+    this.humanizedBaseName = _.startCase(this.baseName);
+    this.solutionName = this.pascalizedBaseName;
+    this.mainProjectDir = this.pascalizedBaseName;
+    this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
+    this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
+    this.relativeMainClientDir = 'ClientApp';
+    this.relativeMainAppDir = `${this.relativeMainClientDir}/app`;
+    this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
+
+    this.options.outputPathCustomizer = [
+        paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientDir}$1/`) : paths),
+        paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/, `src/${this.mainAngularDir}$1`) : paths),
+        paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainProjectDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainProjectDir}/$1`) : paths)
+    ];
 }
 
 function equivalentCSharpType(javaType) {

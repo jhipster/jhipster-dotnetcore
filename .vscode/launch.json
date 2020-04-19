@@ -31,7 +31,7 @@
                 "--skip-git",
                 "--skip-cache",
                 "--skip-install",
-                "--blueprint",
+                "--blueprints",
                 "dotnetcore"
                 ],
             "cwd": "${workspaceFolder}/test-integration/samples/app-sample-dev",

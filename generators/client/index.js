@@ -18,14 +18,17 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const toPascalCase = require('to-pascal-case');
-const fs = require('fs');
 const constants = require('../generator-dotnetcore-constants');
+const baseConstants = require('generator-jhipster/generators/generator-constants');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
 
 const writeAngularFiles = require('./files-angular').writeFiles;
+const writeReactFiles = require('./files-react').writeFiles;
+const writeCommonFiles = require('./files-common').writeFiles;
+
+const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -39,7 +42,8 @@ module.exports = class extends ClientGenerator {
 
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext);
+        jhContext.setupClientOptions(this, jhContext); 
+       
     }
 
     get initializing() {
@@ -62,7 +66,7 @@ module.exports = class extends ClientGenerator {
         // };
         // If the prompts need to be overriden then use the code commented out above instead
         //        return super._prompting();
-        return {};
+        return super._prompting();
     }
 
     get configuring() {
@@ -70,96 +74,13 @@ module.exports = class extends ClientGenerator {
         const phaseFromJHipster = super._configuring();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-                this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
-                this.relativeMainClientDir = 'ClientApp';
-                this.relativeMainAngularDir = `${this.relativeMainClientDir}/app`;
-                this.MAIN_SRC_DIR = `${this.relativeMainClientDir}/`;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-            },
+            configureGlobalDotnetcore,
             saveConfigDotnetcore() {
                 const config = {};
                 this.config.set(config);
-            },
-            configuringNeedlesNetBlueprint() {
-                const needleClientAngular = this.fetchFromInstalledJHipster('client/needle-api/needle-client-angular.js');
-                // modify path in needle-client-angular
-                fs.readFile(needleClientAngular, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    const result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-
-                    fs.writeFile(needleClientAngular, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-
-                const needleClientI18n = this.fetchFromInstalledJHipster('client/needle-api/needle-client-i18n.js');
-                // modify path in needle-client-i18n
-                fs.readFile(needleClientI18n, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    const result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-
-                    fs.writeFile(needleClientI18n, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-
-                const needleClient = this.fetchFromInstalledJHipster('client/needle-api/needle-client.js');
-                // modify path in needle-client
-                fs.readFile(needleClient, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    const result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-
-                    fs.writeFile(needleClient, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-
-                const needleClientWebpack = this.fetchFromInstalledJHipster('client/needle-api/needle-client-webpack.js');
-                // modify path in needle-client-webpack
-                fs.readFile(needleClientWebpack, 'utf8', (err, data) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    let result = data.replace(
-                        /CLIENT_MAIN_SRC_DIR =(.*);/,
-                        `CLIENT_MAIN_SRC_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/ClientApp/';`
-                    );
-                    result = result.replace(
-                        /CLIENT_WEBPACK_DIR =(.*);/,
-                        `CLIENT_WEBPACK_DIR = '${constants.SERVER_SRC_DIR}${this.mainProjectDir}/webpack/';`
-                    );
-
-                    fs.writeFile(needleClientWebpack, result, 'utf8', err => {
-                        if (err) return console.log(err);
-                    });
-                });
-            }
+            },            
         };
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
+        return Object.assign(customPhaseSteps,phaseFromJHipster,);
     }
 
     get default() {
@@ -169,25 +90,35 @@ module.exports = class extends ClientGenerator {
 
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
-        // If the templates doesnt need to be overrriden then just return `super._writing()` here
+        // If the templates doesnt need to be overrriden then just return `super._writing()` here        
+        const phaseFromJHipster = super._writing();
         const customPhase = {
             writeAngularFilesDotnetcore() {
-                writeAngularFiles.call(this);
+                if (this.skipClient) return;
+                writeCommonFiles.call(this);
+                switch (this.clientFramework) {
+                    case REACT:
+                        return writeReactFiles.call(this);
+                    default:
+                        return writeAngularFiles.call(this);
+                }
             }
         };
-        return customPhase;
+        return Object.assign(phaseFromJHipster, customPhase);
     }
 
     get install() {
         // Override default yeoman installDependencies
         const customPhase = {
             installDependencies() {
-                this.log(
-                    `\n\nI'm all done. Running ${chalk.green.bold(
-                        `npm install `
-                    )}for you to install the required dependencies. If this fails, try running the command yourself.`
-                );
-                this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`});
+                if (!this.options['skip-install']) {
+                    this.log(
+                        `\n\nI'm all done. Running ${chalk.green.bold(
+                            `npm install `
+                        )}for you to install the required dependencies. If this fails, try running the command yourself.`
+                    );
+                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`});
+                }
             }
         };
         return customPhase;
