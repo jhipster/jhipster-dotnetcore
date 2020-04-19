@@ -58,6 +58,21 @@ module.exports = class extends ServerGenerator {
                 this.SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
                 this.SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                this.databaseType = configuration.get('databaseType') || this.configOptions.databaseType;
+                this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
+
+                const serverConfigFound =
+                    this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
+
+                if (this.baseName !== undefined && serverConfigFound) {
+                    this.log(
+                        chalk.green(
+                            'This is an existing project, using the configuration from your .yo-rc.json file \n' +
+                                'to re-generate the project...\n'
+                        )
+                    );
+                    this.existingProject = true;
+                }
             }
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
@@ -71,8 +86,6 @@ module.exports = class extends ServerGenerator {
             setSharedConfigOptions() {
                 this.configOptions.namespace = this.namespace;
                 this.configOptions.databaseType = this.databaseType;
-                this.configOptions.devDatabaseType = this.devDatabaseType;
-                this.configOptions.prodDatabaseType = this.prodDatabaseType;
                 this.configOptions.authenticationType = this.authenticationType;
             }
         };
@@ -94,8 +107,7 @@ module.exports = class extends ServerGenerator {
                 const config = {
                     namespace: this.namespace,
                     databaseType: this.databaseType,
-                    devDatabaseType: this.devDatabaseType,
-                    prodDatabaseType: this.prodDatabaseType
+                    authenticationType: this.authenticationType
                 };
                 this.config.set(config);
             }

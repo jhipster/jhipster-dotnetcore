@@ -1,0 +1,54 @@
+name: Test Integration JWT
+on: [push, pull_request]
+jobs:
+    applications:
+        name: ${{ matrix.app-type }}
+        runs-on: ${{ matrix.os }}
+        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+        timeout-minutes: 40
+        strategy:
+            fail-fast: false
+            matrix:
+                node_version: [12.14.0]
+                os: [ubuntu-latest]
+                app-type:
+                    - jwt-with-angular-app
+                    - jwt-with-mssql-app
+                    - jwt-with-mysql-app
+                    - jwt-with-postgres-app
+                    - jwt-with-react-app
+                include:
+                    - app-type: jwt-with-angular-app
+                      arg: 'no'
+                    - app-type: jwt-with-mssql-app
+                      arg: 'no'
+                    - app-type: jwt-with-mysql-app
+                      arg: 'no'
+                    - app-type: jwt-with-postgres-app
+                      arg: 'no'
+                    - app-type: jwt-with-react-app
+                      arg: 'no'                      
+        env:
+            JHI_APP: ${{ matrix.app-type }}
+            JHI_ARG: ${{ matrix.arg }}
+
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - uses: actions/setup-dotnet@v1
+              with:
+                dotnet-version: '3.1.100' 
+            - name: git history
+              run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
+            - name: PREPARE jhipster env
+              run: sudo sh ./test-integration/scripts/00-install-all-jhipster.sh
+            - name: 'GENERATE JHipster.NET app'
+              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
+            - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
+              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP            
+            - name: 'RUN CLIENT UNIT TESTS of generated app'
+              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
+            - name: 'RUN SERVER UNIT TESTS of generated app'
+              run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
