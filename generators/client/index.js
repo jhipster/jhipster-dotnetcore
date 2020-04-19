@@ -117,7 +117,7 @@ module.exports = class extends ClientGenerator {
                             `npm install `
                         )}for you to install the required dependencies. If this fails, try running the command yourself.`
                     );
-                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`});
+                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}`});
                 }
             }
         };
@@ -131,7 +131,7 @@ module.exports = class extends ClientGenerator {
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
                 if (!this.options['skip-install']) {
-                    this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainProjectDir}`, 'run', 'cleanup']);
+                    this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
                 }
             }
         };
