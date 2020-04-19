@@ -18,14 +18,14 @@ COPY ["src/JHipsterNet/JHipsterNet.csproj", "src/JHipsterNet/"]
 COPY ["src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj", "src/<%= mainProjectDir %>/"]
 RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
 COPY . ./
-WORKDIR /app/src/<%= mainProjectDir %>
+WORKDIR src/<%= mainProjectDir %>
 RUN apt-get update -yq && apt-get install -yq curl
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get update && \
     apt-get install -yq nodejs && \
     rm -rf /var/lib/apt/lists/*
-RUN npm install
-RUN rm -rf wwwroot && \
+RUN cd ClientApp && npm install
+RUN rm -rf ClientApp/dist && \
     dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime

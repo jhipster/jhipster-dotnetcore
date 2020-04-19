@@ -69,14 +69,6 @@ const serverFiles = {
             ]
         }
     ],
-    serverWwwroot: [
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                { file: 'Project/wwwroot/.gitkeep', method: 'copy', renameTo: generator => `${generator.mainProjectDir}/wwwroot/.gitkeep` }
-            ]
-        }
-    ],
     serverProgram: [
         {
             path: SERVER_SRC_DIR,

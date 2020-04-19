@@ -70,7 +70,7 @@ module.exports = class extends EntityGenerator {
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
                 context.entities = this.getExistingEntities();
-                context.mainAngularDir = `${context.mainProjectDir}/ClientApp/app`;
+                context.mainClientAppDir = `${context.mainProjectDir}/ClientApp/src`;
                 context.mainClientDir = `${context.mainProjectDir}/ClientApp`;
 
                 // Embed functions to use in EJS templates

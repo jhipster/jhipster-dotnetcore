@@ -23,11 +23,11 @@ const constants = require('../generator-dotnetcore-constants');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function angularJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainProjectDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainProjectDir}/`, "", false);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", false);
 }
 
 function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
 }
 
 function writeFiles() {

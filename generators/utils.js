@@ -40,7 +40,7 @@ function copyI18n(language, prefix = '') {
         const fileName = this.entityTranslationKey;
         this.template(
             `${prefix ? `${prefix}/` : ''}i18n/entity_${language}.json.ejs`,
-            `${SERVER_SRC_DIR}${this.mainClientDir}/i18n/${language}/${fileName}.json`
+            `${SERVER_SRC_DIR}${this.mainClientAppDir}/i18n/${language}/${fileName}.json`
         );
         this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
@@ -61,7 +61,7 @@ function copyEnumI18n(language, enumInfo, prefix = '') {
     try {
         this.template(
             `${prefix ? `${prefix}/` : ''}i18n/enum.json.ejs`,
-            `${SERVER_SRC_DIR}${this.mainClientDir}/i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
+            `${SERVER_SRC_DIR}${this.mainClientAppDir}/i18n/${language}/${enumInfo.clientRootFolder}${enumInfo.enumInstance}.json`,
             this,
             {},
             enumInfo
@@ -85,20 +85,19 @@ function configureGlobalDotnetcore() {
     this.solutionName = this.pascalizedBaseName;
     this.mainProjectDir = this.pascalizedBaseName;
     this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-    this.mainAngularDir = `${this.mainProjectDir}/ClientApp/app`;
+    this.mainClientAppDir = `${this.mainProjectDir}/ClientApp/src`;
     this.relativeMainClientDir = 'ClientApp';
-    this.relativeMainAppDir = `${this.relativeMainClientDir}/app`;
+    this.relativeMainAppDir = `${this.relativeMainClientDir}/src`;
     this.relativeMainTestDir = `${this.relativeMainClientDir}/test`;
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
 
     this.options.outputPathCustomizer = [
-        paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientDir}$1/`) : paths),
+        paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientAppDir}$1/`) : paths),
         paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/, `src/${this.clientTestProject}$1`) : paths),
-        paths => (paths ? paths.replace(/^(.[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainProjectDir}/$1`) : paths),
-        paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainProjectDir}/$1`) : paths),
-        paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainProjectDir}/$1`) : paths),
-        paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainProjectDir}/$1`) : paths)
+        paths => (paths ? paths.replace(/^((?!.huskyrc).[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths)
     ];
 }
 
