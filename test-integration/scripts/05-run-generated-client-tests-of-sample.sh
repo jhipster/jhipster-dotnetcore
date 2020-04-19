@@ -17,7 +17,12 @@ echo "*** changed directory in : `pwd`"
 # Run unit test 
 #-------------------------------------------------------------------------------
 echo "*** run unit test in client for :  `pwd`"
-npm run lint:fix && npm test
+
+if [ -f "src/JhipsterSampleApplication/CliantApp/app/app.tsx" ]; then
+  npm run lint:fix && npm test-ci
+else
+  npm run lint:fix && npm test
+fi
 if [ $? -ne 0 ]; then
   echo "${RED}FAILED CLIENT UNIT TEST COMMAND"
   exit 1
