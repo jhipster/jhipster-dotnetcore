@@ -26,6 +26,7 @@ function askForModuleName() {
 }
 
 function askForServerSideOpts() {
+    if (this.existingProject) return;
     const applicationType = this.applicationType;
     const prompts = [
         {
@@ -92,8 +93,6 @@ function askForServerSideOpts() {
         this.namespace = prompt.namespace;
         this.databaseType = prompt.database;
         this.authenticationType = prompt.authenticationType;
-        this.devDatabaseType = 'h2Memory';
-        this.prodDatabaseType = 'mysql';
         done();
     });
 }

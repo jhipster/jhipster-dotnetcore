@@ -1,6 +1,8 @@
 # generator-jhipster-dotnetcore
 [![NPM version][npm-image]][npm-url] 
 [![Generator Build Status][github-actions-generator-image]][github-actions-url]
+[![Integration JWT Build Status][github-actions-integ-jwt-image]][github-actions-url]
+[![Integration OAUTH Build Status][github-actions-integ-oauth-image]][github-actions-url]
 [![Dependency Status][daviddm-image]][daviddm-url] 
 [![Sonar Cloud Quality Gate][sonar-gate-image]][sonar-url]
 [![Sonar Cloud Coverage Rate][sonar-coverage-image]][sonar-coverage-url]
@@ -238,6 +240,8 @@ Apache-2.0 © [Daniel Petisme]()
 [daviddm-image]: https://david-dm.org/jhipster/jhipster-dotnetcore.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/jhipster-dotnetcore
 [github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg?branch=master
+[github-actions-integ-oauth-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20OAUTH/badge.svg?branch=master
+[github-actions-integ-jwt-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20JWT/badge.svg?branch=master
 [github-actions-url]: https://github.com/jhipster/jhipster-dotnetcore/actions
 [sonar-url]: https://sonarcloud.io/dashboard?branch=master&id=jhipster_jhipster-dotnetcore
 [sonar-coverage-url]: https://sonarcloud.io/component_measures?branch=master&id=jhipster_jhipster-dotnetcore&metric=coverage&view=list

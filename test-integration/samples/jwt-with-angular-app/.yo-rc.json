@@ -7,8 +7,6 @@
     "databaseType": "sqllite",
     "enableTranslation": false,
     "namespace": "MyCompany",
-    "devDatabaseType": "h2Memory",
-    "prodDatabaseType": "mysql",
     "jhipsterVersion": "6.8.0",
     "useSass": true,
     "clientPackageManager": "npm",

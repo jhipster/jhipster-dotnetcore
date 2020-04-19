@@ -32,7 +32,7 @@ namespace <%= namespace %>.Test.Controllers {
     public class UserResourceIntTest {
         public UserResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>();
+            _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
             _client = _factory.CreateClient();
 
             _userManager = _factory.GetRequiredService<UserManager<User>>();
