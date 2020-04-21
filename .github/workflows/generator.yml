@@ -25,7 +25,7 @@ jobs:
     - run: npm test
     - name: Run npm sonar:scanner
       run: npm run sonar:scanner
-      if: "github.repository == 'jhipster/jhipster-dotnetcore' && github.event_name == 'push'"
+      if: "github.repository == 'jhipster/jhipster-dotnetcore' && (github.event_name == 'push' || github.event_name == 'pull_request')"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
