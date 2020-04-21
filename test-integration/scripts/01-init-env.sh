@@ -18,6 +18,10 @@ else
     WORKSPACE=$GITHUB_WORKSPACE
 fi
 
+if [[ "$APP_FOLDER" = "jwt-with-angular-app" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/master" ]]; then
+    SONAR_ANALYSE=true    
+fi
+
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
