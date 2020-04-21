@@ -43,12 +43,21 @@ jobs:
             - name: git history
               run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
             - name: PREPARE jhipster env
-              run: sudo sh ./test-integration/scripts/00-install-all-jhipster.sh
+              run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
             - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
+              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP            
             - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP            
+              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP 
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}           
             - name: 'RUN CLIENT UNIT TESTS of generated app'
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+            - name: 'RUN SONAR ANALYZE on generated app'
+              run: ./test-integration/scripts/07-run-sonar-analyze.sh $JHI_APP
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            
