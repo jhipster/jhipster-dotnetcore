@@ -23,7 +23,7 @@ namespace JHipsterNet.Pagination.Extensions {
         {
             var entities = receiver.Skip(pageable.Offset)
                 .Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
-            return new Page<TEntity>(entities.ToList(), pageable, entities.Count());
+            return new Page<TEntity>(entities.ToList(), pageable, receiver.Count());
         }
     }
 }
