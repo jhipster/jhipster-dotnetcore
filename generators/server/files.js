@@ -408,6 +408,15 @@ const serverFiles = {
                     renameTo: generator => `${generator.testProjectDir}/Controllers/AccountControllerTest.cs`
                 }
             ]
+        },
+        {
+            path: SERVER_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Test/Controllers/ProfileInfoControllerIntTest.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Controllers/ProfileInfoControllerIntTest.cs`
+                }
+            ]
         }
     ],
     serverAuthConfig: [

@@ -1,0 +1,33 @@
+using FluentAssertions;
+using MyCompany.Test.Setup;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace MyCompany.Test.Controllers {
+    public class ProfileInfoControllerIntTest
+    {
+
+        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+
+        public ProfileInfoControllerIntTest()
+        {
+            _factory = new NhipsterWebApplicationFactory<TestStartup>();
+        }
+
+        [Fact]
+        public async Task TestGetProfileInfos()
+        {
+            var client = _factory.CreateClient();
+            var response = await client.GetAsync("/api/management/info");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectToken("$.display-ribbon-on-profiles").Value<string>().Should().Be("dev");
+            json.SelectToken("$.activeProfiles").ToObject<IEnumerable<string>>()
+                .Should().Contain(new[] { "swagger", "dev" });
+        }
+    }
+}
