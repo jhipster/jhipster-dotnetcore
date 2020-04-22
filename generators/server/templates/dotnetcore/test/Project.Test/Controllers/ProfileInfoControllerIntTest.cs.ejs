@@ -35,7 +35,7 @@ namespace MyCompany.Test.Controllers {
         public async Task TestGetProfileInfos()
         {
             var client = _factory.CreateClient();
-            var response = await client.GetAsync("/api/management/info");
+            var response = await client.GetAsync("/management/info");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
