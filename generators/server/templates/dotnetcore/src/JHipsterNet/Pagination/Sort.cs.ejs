@@ -84,7 +84,7 @@ namespace JHipsterNet.Pagination {
     }
 
     public class Order {
-        public bool IgnoreCase;
+        public bool IgnoreCase { get; set; }
 
         public Order(Direction direction, string property)
         {
