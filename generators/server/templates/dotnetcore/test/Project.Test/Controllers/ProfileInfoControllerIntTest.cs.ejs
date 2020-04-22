@@ -41,7 +41,7 @@ namespace MyCompany.Test.Controllers {
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
             json.SelectToken("$.display-ribbon-on-profiles").Value<string>().Should().Be("dev");
             json.SelectToken("$.activeProfiles").ToObject<IEnumerable<string>>()
-                .Should().Contain(new[] { "swagger", "dev" });
+                .Should().Contain(new[] { "swagger", "prod" });
         }
     }
 }
