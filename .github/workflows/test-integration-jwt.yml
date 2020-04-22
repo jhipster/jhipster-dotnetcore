@@ -19,7 +19,7 @@ jobs:
                     - jwt-with-react-app
                 include:
                     - app-type: jwt-with-angular-app
-                      arg: 'no'
+                      arg: 'import-jdl'
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
@@ -45,9 +45,9 @@ jobs:
             - name: PREPARE jhipster env
               run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
             - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP            
+              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG    
             - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP 
+              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}           

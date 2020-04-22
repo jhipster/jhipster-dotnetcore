@@ -127,13 +127,13 @@ function equivalentCSharpType(javaType) {
             cSharpType = 'DateTime?';
             break;
         case 'Instant':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            cSharpType = 'DateTime';
             break;
         case 'ZonedDateTime':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            cSharpType = 'DateTime';
             break;
         case 'Duration':
-            cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
+            cSharpType = 'TimeSpan';
             break;
         case 'Boolean':
             cSharpType = 'bool?';

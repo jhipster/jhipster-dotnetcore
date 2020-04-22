@@ -42,6 +42,9 @@
         case 'DateTime?' :
             defaultValue = "DateTime.UnixEpoch";
             break;
+        case 'DateTime' :
+            defaultValue = "DateTime.UnixEpoch";
+            break;
         case 'bool?' :
             defaultValue = "false";
             break;
@@ -75,6 +78,9 @@ function updatedValue(cSharpType) {
         case 'DateTime?' :
             updatedValue = "DateTime.Now";
             break;
+        case 'DateTime' :
+            updatedValue = "DateTime.Now";
+            break;
         case 'bool?' :
             updatedValue = "true";
             break;
@@ -86,7 +92,7 @@ function hasDateTimeTypeField() {
     let dateTimeTypeField = false;
     let idx = 0;
     while (idx < fields.length && !dateTimeTypeField) {
-        if (fields[idx].fieldType === 'LocalDate') {
+        if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'Instant' || fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Duration') {
             dateTimeTypeField = true;
         }
         idx ++;
@@ -112,7 +118,7 @@ namespace <%= namespace %>.Test.Controllers {
     public class <%= pascalizedEntityClass %>ResourceIntTest {
         public <%= pascalizedEntityClass %>ResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<Startup>();
+            _factory = new NhipsterWebApplicationFactory<Startup>().WithMockUser();
             _client = _factory.CreateClient();
 
             _applicationDatabaseContext = _factory.GetRequiredService<ApplicationDatabaseContext>();
