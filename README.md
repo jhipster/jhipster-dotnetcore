@@ -13,6 +13,15 @@
 
 > JHipster blueprint, 
 
+# Analysis of the sample project
+
+[![Sonar Cloud Quality Gate][sonar-sample-gate-image]][sonar-sample-url]
+[![Sonar Cloud Coverage Rate][sonar-sample-coverage-image]][sonar-sample-coverage-url]
+[![Sonar Cloud Reliability Rate][sonar-sample-reliability-image]][sonar-sample-url]
+[![Sonar Cloud Security Rate][sonar-sample-security-image]][sonar-sample-url]
+[![Sonar Cloud Maintainability Rate][sonar-sample-maintainability-image]][sonar-sample-url]
+[![Sonar Cloud Duplicated Code][sonar-sample-duplication-image]][sonar-sample-url]
+
 # Introduction
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
@@ -251,3 +260,12 @@ Apache-2.0 © [Daniel Petisme]()
 [sonar-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=security_rating
 [sonar-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=sqale_rating
 [sonar-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=duplicated_lines_density
+
+[sonar-sample-url]: https://sonarcloud.io/dashboard?branch=master&id=jhipster_jhipster-sample-app-dotnetcore
+[sonar-sample-coverage-url]: https://sonarcloud.io/component_measures?branch=master&id=jhipster_jhipster-sample-app-dotnetcore&metric=coverage&view=list
+[sonar-sample-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=alert_status
+[sonar-sample-coverage-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=coverage
+[sonar-sample-reliability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=reliability_rating
+[sonar-sample-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=security_rating
+[sonar-sample-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=sqale_rating
+[sonar-sample-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=duplicated_lines_density
