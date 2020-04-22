@@ -45,12 +45,14 @@ jobs:
             - name: PREPARE jhipster env
               run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
             - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG    
+              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
             - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
               run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}           
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   
+            - name: 'GENERATE JHipster.NET app'
+              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG          
             - name: 'RUN CLIENT UNIT TESTS of generated app'
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
             - name: 'RUN SERVER UNIT TESTS of generated app'
