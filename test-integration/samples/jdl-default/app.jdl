@@ -71,10 +71,6 @@ relationship OneToOne {
 	Department{location} to Location
 }
 
-relationship ManyToMany {
-	Job{PieceOfWork(title)} to PieceOfWork{job}
-}
-
 // defining multiple OneToMany relationships with comments
 relationship OneToMany {
 	Employee to Job{employee},
