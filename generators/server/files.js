@@ -929,6 +929,10 @@ const serverFiles = {
             templates: [{ file: 'SonarAnalysis.ps1', renameTo: () => 'SonarAnalysis.ps1' }]
         },
         {
+            path: '',
+            templates: [{ file: 'SonarQube.Analysis.xml', renameTo: () => 'SonarQube.Analysis.xml' }]
+        },
+        {
             condition: generator => generator.authenticationType === 'oauth2',
             path: DOCKER_DIR,
             templates: [

@@ -94,6 +94,12 @@
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>
 
+    <ItemGroup>
+        <SonarQubeSetting Include="sonar.exclusions">
+            <Value>$(SpaRoot)dist/**,$(SpaRoot)build/**,$(SpaRoot)dist,$(SpaRoot)src/content/**,$(SpaRoot)src/i18n/**,$(SpaRoot)webpack/**,$(SpaRoot)test/**</Value>
+        </SonarQubeSetting>  
+    </ItemGroup>
+
     <Target Name="NpmInstall" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('node_modules') ">
         <!-- Ensure Node.js is installed -->
         <Exec WorkingDirectory="$(SpaRoot)" Command="node --version" ContinueOnError="true">
