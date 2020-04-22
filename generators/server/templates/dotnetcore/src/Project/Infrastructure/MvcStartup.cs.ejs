@@ -36,6 +36,8 @@ namespace <%= namespace %>.Infrastructure {
             .AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.Formatting = Formatting.Indented;
             });
 
             return @this;

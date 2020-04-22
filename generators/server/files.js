@@ -341,6 +341,15 @@ const serverFiles = {
             ]
         },
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/ProfileInfoController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/ProfileInfoController.cs`
+                }
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_SRC_DIR,
             templates: [

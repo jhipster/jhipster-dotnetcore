@@ -1,0 +1,90 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace <%= namespace %>.Controllers {
+
+    [Route("management")]
+    [ApiController]
+    public class ProfileInfoController : ControllerBase
+    {
+
+        private readonly ILogger<ProfileInfoController> _log;
+        private readonly IHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
+
+        public ProfileInfoController(ILogger<ProfileInfoController> log, IHostEnvironment environment, IConfiguration configuration)
+        {
+            _log = log;
+            _environment = environment;
+            _configuration = configuration;
+        }
+
+        [HttpGet("info")]
+        public ActionResult<ProfileInfo> GetProfileInfos()
+        {
+            _log.LogDebug("REST request to get profile informations");
+            return Ok(new ProfileInfo(GetDisplayRibbonOnProfiles(), GetActiveProfile()));
+        }
+
+        private List<string> GetActiveProfile()
+        {
+            var activeProfiles = new List<string>
+            {
+                "swagger"
+            };
+
+            if (_environment.IsDevelopment())
+            {
+                activeProfiles.Add("dev");
+            }
+            else if (_environment.IsProduction())
+            {
+                activeProfiles.Add("prod");
+            }
+            else if (_environment.IsStaging())
+            {
+                activeProfiles.Add("stag");
+            }
+            return activeProfiles;
+        }
+
+        private string GetDisplayRibbonOnProfiles()
+        {
+            return _configuration.GetSection("RibbonInfo")["display-ribbon-on-profiles"];
+        }
+
+        public class ProfileInfo
+        {
+            [JsonProperty("display-ribbon-on-profiles")]
+            public string DisplayRibbonOnProfiles { get; set; }
+
+            [JsonProperty("activeProfiles")]            
+            public List<string> ActiveProfiles { get; set; }
+
+            public ProfileInfo(string displayRibbonOnProfiles, List<string> activeProfiles)
+            {
+                DisplayRibbonOnProfiles = displayRibbonOnProfiles;
+                ActiveProfiles = activeProfiles;
+
+            }
+        }
+    }
+}
