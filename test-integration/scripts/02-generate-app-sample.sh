@@ -22,7 +22,7 @@ jhipster $runOptions
 
 if [ "$2" = "post-import-jdl" ]; then
   echo "*** run import jdl after generation for : "$APP_FOLDER
-  jhipster import-jdl ./jdl-default/app.jdl $runOptions
+  jhipster import-jdl ../jdl-default/app.jdl $runOptions
 fi
 
 echo "*** check if the generation is ok for csharp classes :"
