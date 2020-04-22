@@ -59,7 +59,7 @@ namespace <%= namespace %>.Test.Setup {
 
             return _serviceProvider.GetRequiredService<TService>();
         }
-
+        <%_ if (authenticationType === 'jwt') { _%>
         public NhipsterWebApplicationFactory<TEntryPoint> WithMockUser(string name = "user",
             IEnumerable<string> roles = null, string authenticationType = "MockAuthenticationType")
         {
@@ -76,5 +76,6 @@ namespace <%= namespace %>.Test.Setup {
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));
         }
+        <%_ } _%>
     }
 }
