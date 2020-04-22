@@ -344,6 +344,15 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Controllers/Dto/ProfileInfoDTO.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/Dto/ProfileInfoDTO.cs`
+                }
+            ]
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Controllers/ProfileInfoController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/ProfileInfoController.cs`
                 }
