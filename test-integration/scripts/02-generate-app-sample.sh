@@ -15,14 +15,14 @@ echo "*** run generation app with dotnetcore blueprint for : "$APP_FOLDER
 runOptions="--blueprints dotnetcore --skip-checks --force --no-insight --skip-install"
 
 if [ "$2" = "import-jdl" ]; then
-  runOptions="import-jdl ./jdl-default/app.jdl $runOptions"
+  runOptions="import-jdl ../jdl-default/app.jdl $runOptions"
 fi
 
 jhipster $runOptions
 
 if [ "$2" = "post-import-jdl" ]; then
   echo "*** run import jdl after generation for : "$APP_FOLDER
-  jhipster import-jdl ./../jdl-default/app.jdl $runOptions
+  jhipster import-jdl ../jdl-default/app.jdl $runOptions
 fi
 
 echo "*** check if the generation is ok for csharp classes :"
