@@ -41,7 +41,7 @@
     "shelljs": "0.8.3",
     "through2": "3.0.1",
     "to-pascal-case": "1.0.0",
-    "yeoman-environment": "2.9.4",
+    "yeoman-environment": "2.9.5",
     "yeoman-generator": "4.8.2"
   },
   "devDependencies": {
