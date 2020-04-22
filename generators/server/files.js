@@ -776,7 +776,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -786,7 +785,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -796,7 +794,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
