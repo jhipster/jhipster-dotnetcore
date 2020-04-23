@@ -5,7 +5,6 @@
 [![Integration OAUTH Build Status][github-actions-integ-oauth-image]][github-actions-url]
 [![Dependency Status][daviddm-image]][daviddm-url] 
 [![Sonar Cloud Quality Gate][sonar-gate-image]][sonar-url]
-[![Sonar Cloud Coverage Rate][sonar-coverage-image]][sonar-coverage-url]
 [![Sonar Cloud Reliability Rate][sonar-reliability-image]][sonar-url]
 [![Sonar Cloud Security Rate][sonar-security-image]][sonar-url]
 [![Sonar Cloud Maintainability Rate][sonar-maintainability-image]][sonar-url]
