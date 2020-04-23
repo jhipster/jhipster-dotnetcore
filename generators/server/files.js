@@ -341,6 +341,24 @@ const serverFiles = {
             ]
         },
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/Dto/ProfileInfoDTO.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/Dto/ProfileInfoDTO.cs`
+                }
+            ]
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/ProfileInfoController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/ProfileInfoController.cs`
+                }
+            ]
+        },
+        {
             condition: generator => generator.authenticationType === 'oauth2',
             path: SERVER_SRC_DIR,
             templates: [
@@ -397,6 +415,15 @@ const serverFiles = {
                 {
                     file: 'Project.Test/Controllers/AccountControllerTest.cs',
                     renameTo: generator => `${generator.testProjectDir}/Controllers/AccountControllerTest.cs`
+                }
+            ]
+        },
+        {
+            path: SERVER_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Test/Controllers/ProfileInfoControllerIntTest.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Controllers/ProfileInfoControllerIntTest.cs`
                 }
             ]
         }
@@ -729,7 +756,6 @@ const serverFiles = {
     ],
     serverTestStartup: [
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -739,7 +765,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -749,7 +774,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -759,7 +783,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -769,7 +792,6 @@ const serverFiles = {
             ]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
