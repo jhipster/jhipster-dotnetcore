@@ -28,9 +28,9 @@ namespace <%= namespace %>.Data {
         IdentityUserToken<string>
     > {
     <%_ } else { _%>
-    public class ApplicationDatabaseContext : DbContext        
+    public class ApplicationDatabaseContext : DbContext 
     {
-    <%_ } _%>            
+    <%_ } _%>
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
         {
         }

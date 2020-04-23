@@ -32,14 +32,16 @@ module.exports = class extends EntityClientGenerator {
     }
 
     rebuildClient() {
-        const done = this.async();
-        this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-        this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(
-            'close',
-            () => {
-                done();
-            }
-        );
+        if (!this.options['skip-install'] && !this.skipClient) {
+            const done = this.async();
+            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
+            this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(
+                'close',
+                () => {
+                    done();
+                }
+            );
+        }
     }
 
     get end() {
