@@ -5,6 +5,7 @@
     "packageName": "JhipsterSampleApplication",
     "authenticationType": "jwt",
     "databaseType": "postgres",
+    "prodDatabaseType": "mysql",
     "enableTranslation": false,
     "namespace": "MyCompany",
     "jhipsterVersion": "6.8.0",

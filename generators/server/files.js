@@ -808,7 +808,6 @@ const serverFiles = {
             templates: [{ file: 'Project.Test/Fixme.cs', renameTo: generator => `${generator.testProjectDir}/Fixme.cs` }]
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [
                 {
