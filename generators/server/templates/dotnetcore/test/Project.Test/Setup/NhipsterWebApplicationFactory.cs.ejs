@@ -59,7 +59,7 @@ namespace <%= namespace %>.Test.Setup {
 
             return _serviceProvider.GetRequiredService<TService>();
         }
-        <%_ if (authenticationType === 'jwt') { _%>
+        
         public NhipsterWebApplicationFactory<TEntryPoint> WithMockUser(string name = "user",
             IEnumerable<string> roles = null, string authenticationType = "MockAuthenticationType")
         {
@@ -72,10 +72,14 @@ namespace <%= namespace %>.Test.Setup {
         {
             if (roles == null || !roles.Any()) roles = new HashSet<string> {RolesConstants.USER};
 
+            <%_ if (authenticationType === 'jwt') { _%>
             var claims = new List<Claim> {new Claim(SecurityStartup.UserNameClaimType, name)};
+            <%_ } else { _%>
+            var claims = new List<Claim> {new Claim(ClaimTypes.Name, name)};
+            <%_ } _%>
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));
         }
-        <%_ } _%>
+        
     }
 }
