@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "chalk": "2.4.2",
-    "ejs": "3.0.2",
+    "ejs": "3.1.2",
     "generator-jhipster": "git://github.com/jhipster/generator-jhipster.git",
     "glob": "7.1.6",
     "gulp-filter": "6.0.0",
