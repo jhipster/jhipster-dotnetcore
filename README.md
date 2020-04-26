@@ -66,8 +66,25 @@ yarn global upgrade generator-jhipster-dotnetcore
 To use this blueprint, run the below command
 
 ```bash
-jhipster --blueprint dotnetcore
+jhipster --blueprints dotnetcore
 ```
+
+## 🚦 What we have now
+
+✅ General App generation
+
+-   `jhipster --blueprints dotnetcore`
+    -   JWT : ✅ 
+    -   Oauth2 : ✅ 
+  
+✅ Entity generation
+
+-   `jhipster entity <entity-name>`
+
+✅ JDL Entity model support generation
+
+-   `jhipster import-jdl my_file.jdl`
+
 
 
 ## Running local Blueprint version for development
