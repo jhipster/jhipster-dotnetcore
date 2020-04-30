@@ -27,7 +27,7 @@ module.exports = class extends LanguageGenerator {
                 // Temporal fix for https://github.com/jhipster/jhipster-dotnetcore/issues/30
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.baseName = configuration.get('baseName') || this.configOptions.baseName;
-            }
+            },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
@@ -46,9 +46,9 @@ module.exports = class extends LanguageGenerator {
                     saveConfig() {
                         const config = {};
                         this.config.set(config);
-                    }
+                    },
                 };
-            }
+            },
         };
         return { ...phaseFromJHipster, ...customPhaseSteps };
     }
@@ -97,7 +97,7 @@ module.exports = class extends LanguageGenerator {
                         // }
                     );
                 }
-            }
+            },
         };
     }
 
@@ -154,7 +154,7 @@ module.exports = class extends LanguageGenerator {
                 {
                     file: fullPath,
                     pattern: /{\s*('[a-z-]*':)?([^=]*jhipster-needle-i18n-language-key-pipe[^;]*)\};/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -186,7 +186,7 @@ module.exports = class extends LanguageGenerator {
                 {
                     file: fullPath,
                     pattern: /export.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\];/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -219,7 +219,7 @@ module.exports = class extends LanguageGenerator {
                 {
                     file: fullPath,
                     pattern: /groupBy:.*\[([^\]]*jhipster-needle-i18n-language-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );
@@ -250,7 +250,7 @@ module.exports = class extends LanguageGenerator {
                 {
                     file: fullPath,
                     pattern: /localesToKeep:.*\[([^\]]*jhipster-needle-i18n-language-moment-webpack[^\]]*)\]/g,
-                    content
+                    content,
                 },
                 this
             );

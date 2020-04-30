@@ -33,7 +33,7 @@ module.exports = {
     // askForDTO,
     // askForService,
     // askForFiltering,
-    askForPagination
+    askForPagination,
 };
 
 /* function askForMicroserviceJson() {
@@ -110,23 +110,23 @@ function askForUpdate() {
             choices: [
                 {
                     value: 'regenerate',
-                    name: 'Yes, re generate the entity'
+                    name: 'Yes, re generate the entity',
                 },
                 {
                     value: 'add',
-                    name: 'Yes, add more fields and relationships'
+                    name: 'Yes, add more fields and relationships',
                 },
                 {
                     value: 'remove',
-                    name: 'Yes, remove fields and relationships'
+                    name: 'Yes, remove fields and relationships',
                 },
                 {
                     value: 'none',
-                    name: 'No, exit'
-                }
+                    name: 'No, exit',
+                },
             ],
-            default: 0
-        }
+            default: 0,
+        },
     ];
     this.prompt(prompts).then(props => {
         context.updateEntity = props.updateEntity;
@@ -166,15 +166,15 @@ function askForFieldsToRemove() {
             type: 'checkbox',
             name: 'fieldsToRemove',
             message: 'Please choose the fields you want to remove',
-            choices: context.fieldNameChoices
+            choices: context.fieldNameChoices,
         },
         {
             when: response => response.fieldsToRemove.length !== 0,
             type: 'confirm',
             name: 'confirmRemove',
             message: 'Are you sure to remove these fields?',
-            default: true
-        }
+            default: true,
+        },
     ];
     this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
@@ -222,15 +222,15 @@ function askForRelationsToRemove() {
             type: 'checkbox',
             name: 'relsToRemove',
             message: 'Please choose the relationships you want to remove',
-            choices: context.relNameChoices
+            choices: context.relNameChoices,
         },
         {
             when: response => response.relsToRemove.length !== 0,
             type: 'confirm',
             name: 'confirmRemove',
             message: 'Are you sure to remove these relationships?',
-            default: true
-        }
+            default: true,
+        },
     ];
     this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
@@ -282,8 +282,8 @@ function askForTableName() {
                 }
                 return true;
             },
-            default: entityTableName
-        }
+            default: entityTableName,
+        },
     ];
     this.prompt(prompts).then(props => {
         /* overwrite the table name for the entity using name obtained from the user */
@@ -414,15 +414,15 @@ function askForPagination() {
                 }, */
                 {
                     value: 'pagination',
-                    name: 'Yes, with pagination links'
+                    name: 'Yes, with pagination links',
                 },
                 {
                     value: 'infinite-scroll',
-                    name: 'Yes, with infinite scroll'
-                }
+                    name: 'Yes, with infinite scroll',
+                },
             ],
-            default: 0
-        }
+            default: 0,
+        },
     ];
     this.prompt(prompts).then(props => {
         context.pagination = props.pagination;
@@ -448,7 +448,7 @@ function askForField(done) {
             type: 'confirm',
             name: 'fieldAdd',
             message: 'Do you want to add a field to your entity?',
-            default: true
+            default: true,
         },
         {
             when: response => response.fieldAdd === true,
@@ -481,7 +481,7 @@ function askForField(done) {
                 }
                 return true;
             },
-            message: 'What is the name of your field?'
+            message: 'What is the name of your field?',
         },
         {
             when: response => response.fieldAdd === true,
@@ -491,31 +491,31 @@ function askForField(done) {
             choices: [
                 {
                     value: 'String',
-                    name: 'string'
+                    name: 'string',
                 },
                 {
                     value: 'Integer',
-                    name: 'int'
+                    name: 'int',
                 },
                 {
                     value: 'Long',
-                    name: 'long'
+                    name: 'long',
                 },
                 {
                     value: 'Float',
-                    name: 'float'
+                    name: 'float',
                 },
                 {
                     value: 'Double',
-                    name: 'double'
+                    name: 'double',
                 },
                 {
                     value: 'BigDecimal',
-                    name: 'decimal'
+                    name: 'decimal',
                 },
                 {
                     value: 'LocalDate',
-                    name: 'DateTime'
+                    name: 'DateTime',
                 },
                 /* {
                     value: 'Instant',
@@ -531,7 +531,7 @@ function askForField(done) {
                 }, */
                 {
                     value: 'Boolean',
-                    name: 'bool'
+                    name: 'bool',
                 } /* ,
                 {
                     value: 'enum',
@@ -540,9 +540,9 @@ function askForField(done) {
                 {
                     value: 'byte[]',
                     name: '[BETA] Blob'
-                } */
+                } */,
             ],
-            default: 0
+            default: 0,
         } /* ,
         {
             when: response => {
@@ -712,7 +712,7 @@ function askForField(done) {
             type: 'confirm',
             name: 'fieldValidate',
             message: 'Do you want to add validation rules to your field?',
-            default: false
+            default: false,
         },
         {
             when: response => response.fieldAdd === true && response.fieldValidate === true,
@@ -725,12 +725,12 @@ function askForField(done) {
                 const opts = [
                     {
                         name: 'Required',
-                        value: 'required'
+                        value: 'required',
                     } /* ,
                     {
                         name: 'Unique',
                         value: 'unique'
-                    } */
+                    } */,
                 ];
                 /* if (response.fieldType === 'String' || response.fieldTypeBlobContent === 'text') {
                     opts.push(
@@ -761,7 +761,7 @@ function askForField(done) {
                 } */
                 return opts;
             },
-            default: 0
+            default: 0,
         } /* ,
         {
             when: response =>
@@ -840,7 +840,7 @@ function askForField(done) {
             name: 'fieldValidateRulesPattern',
             message: 'What is the regular expression pattern you want to apply on your field?',
             default: '^[a-zA-Z0-9]*$'
-        } */
+        } */,
     ];
     this.prompt(prompts).then(props => {
         if (props.fieldAdd) {
@@ -862,7 +862,7 @@ function askForField(done) {
                 fieldValidateRulesMin: props.fieldValidateRulesMin,
                 fieldValidateRulesMax: props.fieldValidateRulesMax,
                 fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
-                fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes */
+                fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes */,
             };
 
             fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
@@ -890,7 +890,7 @@ function askForRelationship(done) {
             type: 'confirm',
             name: 'relationshipAdd',
             message: 'Do you want to add a relationship to another entity?',
-            default: true
+            default: true,
         },
         {
             when: response => response.relationshipAdd === true,
@@ -911,7 +911,7 @@ function askForRelationship(done) {
                 } */
                 return true;
             },
-            message: 'What is the name of the other entity?'
+            message: 'What is the name of the other entity?',
         },
         {
             when: response => response.relationshipAdd === true,
@@ -936,7 +936,7 @@ function askForRelationship(done) {
                 return true;
             },
             message: 'What is the name of the relationship?',
-            default: response => _.lowerFirst(response.otherEntityName)
+            default: response => _.lowerFirst(response.otherEntityName),
         },
         {
             when: response => response.relationshipAdd === true,
@@ -947,26 +947,26 @@ function askForRelationship(done) {
                 const opts = [
                     {
                         value: 'many-to-one',
-                        name: 'many-to-one'
+                        name: 'many-to-one',
                     },
                     {
                         value: 'many-to-many',
-                        name: 'many-to-many'
+                        name: 'many-to-many',
                     },
                     {
                         value: 'one-to-one',
-                        name: 'one-to-one'
-                    }
+                        name: 'one-to-one',
+                    },
                 ];
                 if (response.otherEntityName.toLowerCase() !== 'user') {
                     opts.unshift({
                         value: 'one-to-many',
-                        name: 'one-to-many'
+                        name: 'one-to-many',
                     });
                 }
                 return opts;
             },
-            default: 0
+            default: 0,
         },
         {
             when: response =>
@@ -976,7 +976,7 @@ function askForRelationship(done) {
             type: 'confirm',
             name: 'ownerSide',
             message: 'Is this entity the owner of the relationship?',
-            default: false
+            default: false,
         } /* ,
         {
             when: response =>
@@ -998,7 +998,7 @@ function askForRelationship(done) {
             type: 'input',
             name: 'otherEntityRelationshipName',
             message: 'What is the name of this relationship in the other entity?',
-            default: response => _.lowerFirst(name)
+            default: response => _.lowerFirst(name),
         },
         {
             when: response =>
@@ -1010,7 +1010,7 @@ function askForRelationship(done) {
             name: 'otherEntityField',
             message: response =>
                 `When you display this relationship on client-side, which field from '${response.otherEntityName}' do you want to use? This field will be displayed as a String, so it cannot be a Blob`,
-            default: 'id'
+            default: 'id',
         } /* ,
         {
             when: response =>
@@ -1038,7 +1038,7 @@ function askForRelationship(done) {
                 }
             ],
             default: 0
-        } */
+        } */,
     ];
     this.prompt(prompts).then(props => {
         if (props.relationshipAdd) {
@@ -1050,7 +1050,7 @@ function askForRelationship(done) {
                 otherEntityField: props.otherEntityField,
                 ownerSide: props.ownerSide,
                 // useJPADerivedIdentifier: props.useJPADerivedIdentifier,
-                otherEntityRelationshipName: props.otherEntityRelationshipName
+                otherEntityRelationshipName: props.otherEntityRelationshipName,
             };
 
             if (props.otherEntityName.toLowerCase() === 'user') {

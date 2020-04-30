@@ -35,7 +35,7 @@ function askForServerSideOpts() {
             validate: input =>
                 /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
             message: 'What is your default C# namespace?',
-            default: 'MyCompany'
+            default: 'MyCompany',
         },
         {
             type: 'list',
@@ -44,26 +44,26 @@ function askForServerSideOpts() {
             choices: [
                 {
                     value: 'sqllite',
-                    name: 'SQLite in-memory'
+                    name: 'SQLite in-memory',
                 },
                 {
                     value: 'mssql',
-                    name: 'Microsoft SQL Server'
+                    name: 'Microsoft SQL Server',
                 },
                 {
                     value: 'postgres',
-                    name: 'PostgreSQL'
+                    name: 'PostgreSQL',
                 },
                 {
                     value: 'mysql',
-                    name: 'MySQL'
+                    name: 'MySQL',
                 },
                 {
                     value: 'oracle',
-                    name: 'Oracle'
-                }
+                    name: 'Oracle',
+                },
             ],
-            default: 0
+            default: 0,
         },
         {
             when: response => applicationType === 'monolith',
@@ -74,17 +74,17 @@ function askForServerSideOpts() {
                 const opts = [
                     {
                         value: 'jwt',
-                        name: 'JWT authentication (stateless, with a token)'
+                        name: 'JWT authentication (stateless, with a token)',
                     },
                     {
                         value: 'oauth2',
-                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)'
-                    }
+                        name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)',
+                    },
                 ];
                 return opts;
             },
-            default: 0
-        }
+            default: 0,
+        },
     ];
 
     const done = this.async();
@@ -99,7 +99,7 @@ function askForServerSideOpts() {
 
 module.exports = {
     askForModuleName,
-    askForServerSideOpts
+    askForServerSideOpts,
     //    askForSomething,
     // askForOptionalItems,
     // askFori18n

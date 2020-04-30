@@ -73,7 +73,7 @@ module.exports = class extends ServerGenerator {
                     );
                     this.existingProject = true;
                 }
-            }
+            },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
@@ -87,7 +87,7 @@ module.exports = class extends ServerGenerator {
                 this.configOptions.namespace = this.namespace;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.authenticationType = this.authenticationType;
-            }
+            },
         };
     }
 
@@ -108,10 +108,10 @@ module.exports = class extends ServerGenerator {
                     namespace: this.namespace,
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
-                    prodDatabaseType: 'mysql' // set only for jdl-importer compatibility
+                    prodDatabaseType: 'mysql', // set only for jdl-importer compatibility
                 };
                 this.config.set(config);
-            }
+            },
         };
     }
 
@@ -134,7 +134,7 @@ module.exports = class extends ServerGenerator {
                         dotnet.slnAdd(`${this.solutionName}.sln`, [
                             'src/JHipsterNet/JHipsterNet.csproj',
                             `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
-                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`
+                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
                         ])
                     )
                     .catch(err => {
@@ -155,7 +155,7 @@ module.exports = class extends ServerGenerator {
                             )
                         );
                     });
-            }
+            },
         };
     }
 };

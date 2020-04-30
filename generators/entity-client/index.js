@@ -21,7 +21,7 @@ module.exports = class extends EntityClientGenerator {
         const phaseFromJHipster = super._configuring();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore
+            configureGlobalDotnetcore,
         };
 
         return Object.assign(customPhaseSteps, phaseFromJHipster);
