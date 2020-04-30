@@ -47,10 +47,10 @@ function writeFiles() {
                     utilsNet.copyI18n.call(this, language, this.fetchFromInstalledJHipster('entity-i18n/templates'));
                 });
             }
-        }
+        },
     };
 }
 
 module.exports = {
-    writeFiles
+    writeFiles,
 };

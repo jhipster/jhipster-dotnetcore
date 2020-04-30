@@ -11,14 +11,14 @@ describe('Subgenerator client of dotnetcore JHipster blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'dotnetcore',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([
                     [
                         require('../generators/client'), // eslint-disable-line global-require
                         'jhipster-dotnetcore:client',
-                        path.join(__dirname, '../generators/client/index.js')
-                    ]
+                        path.join(__dirname, '../generators/client/index.js'),
+                    ],
                 ])
                 .withPrompts({
                     baseName: 'sampleMysql',
@@ -33,7 +33,7 @@ describe('Subgenerator client of dotnetcore JHipster blueprint', () => {
                     nativeLanguage: 'en',
                     languages: ['fr', 'de'],
                     buildTool: 'maven',
-                    rememberMeKey: '2bb60a80889aa6e6767e9ccd8714982681152aa5'
+                    rememberMeKey: '2bb60a80889aa6e6767e9ccd8714982681152aa5',
                 })
                 .on('end', done);
         });

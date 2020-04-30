@@ -30,7 +30,7 @@ module.exports = class extends EntityGenerator {
             getConfigNetBlueprint() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
-            }
+            },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
@@ -49,7 +49,7 @@ module.exports = class extends EntityGenerator {
             // askForService: prompts.askForService,
             // askForDTO: prompts.askForDTO,
             // askForFiltering: prompts.askForFiltering,
-            askForPagination: prompts.askForPagination
+            askForPagination: prompts.askForPagination,
         };
     }
 
@@ -130,7 +130,7 @@ module.exports = class extends EntityGenerator {
 
                     relationship.joinEntityGenerated = false;
                 });
-            }
+            },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }

@@ -47,7 +47,7 @@ module.exports = class extends CommonGenerator {
                 this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.mainProjectDir = this.pascalizedBaseName;
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-            }
+            },
         };
     }
 
@@ -67,28 +67,28 @@ module.exports = class extends CommonGenerator {
                         'README.md',
                         {
                             file: 'gitignore',
-                            renameTo: () => '.gitignore'
+                            renameTo: () => '.gitignore',
                         },
                         {
                             file: 'gitattributes',
                             renameTo: () => '.gitattributes',
-                            method: 'copy'
+                            method: 'copy',
                         },
                         {
                             file: 'editorconfig',
                             renameTo: () => '.editorconfig',
-                            method: 'copy'
-                        }
-                    ]
-                }
-            ]
+                            method: 'copy',
+                        },
+                    ],
+                },
+            ],
         };
 
         function writeCommonFiles() {
             return {
                 writeFiles() {
                     this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
-                }
+                },
             };
         }
 

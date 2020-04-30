@@ -24,28 +24,28 @@ const files = {
     docker: [
         {
             path: SERVER_SRC_DIR,
-            templates: [{ file: 'Project/Dockerfile', renameTo: generator => `${generator.mainProjectDir}/Dockerfile` }]
+            templates: [{ file: 'Project/Dockerfile', renameTo: generator => `${generator.mainProjectDir}/Dockerfile` }],
         },
         {
-            templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }]
-        }
+            templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }],
+        },
     ],
     general: [
         {
-            templates: [{ file: 'README.md' }]
-        }
-    ]
+            templates: [{ file: 'README.md' }],
+        },
+    ],
 };
 
 function writeFiles() {
     return {
         writeDockerFiles() {
             this.writeFilesToDisk(files, this, false, 'dotnetcore');
-        }
+        },
     };
 }
 
 module.exports = {
     writeFiles,
-    files
+    files,
 };
