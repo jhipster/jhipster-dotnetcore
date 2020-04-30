@@ -7,7 +7,7 @@ const constants = {
     SERVER_SRC_DIR,
     SERVER_TEST_DIR,
     PROJECT_TEST_SUFFIX,
-    DOCKER_DIR
+    DOCKER_DIR,
 };
 
 module.exports = constants;

@@ -56,5 +56,5 @@ module.exports = {
     hasDotnet,
     newSln,
     slnAdd,
-    restore
+    restore,
 };

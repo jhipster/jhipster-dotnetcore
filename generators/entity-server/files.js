@@ -31,14 +31,14 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Entity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`
+                    renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`,
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
                     renameTo: generator =>
-                        `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`
-                }
-            ]
+                        `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`,
+                },
+            ],
         },
         {
             condition: generator => generator.entityClassHasManyToMany,
@@ -46,19 +46,19 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Interfaces/IJoinedEntity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IJoinedEntity.cs`
+                    renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IJoinedEntity.cs`,
                 },
                 {
                     file: 'Project/Models/RelationshipTools/JoinListFacade.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/RelationshipTools/JoinListFacade.cs`
-                }
-            ]
+                    renameTo: generator => `${generator.mainProjectDir}/Models/RelationshipTools/JoinListFacade.cs`,
+                },
+            ],
         },
         {
             condition: generator => generator.entityClassHasManyToMany,
             path: SERVER_SRC_DIR,
-            templates: joinEntitiesTemplates
-        }
+            templates: joinEntitiesTemplates,
+        },
     ],
     db: [
         {
@@ -66,22 +66,22 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Data/ApplicationDatabaseContext.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`
+                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`,
                 },
                 {
                     file: 'Project/Data/Extensions/DbContextExtensions.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbContextExtensions.cs`
+                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbContextExtensions.cs`,
                 },
                 {
                     file: 'Project/Data/Extensions/DbSetExtensions.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbSetExtensions.cs`
+                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbSetExtensions.cs`,
                 },
                 {
                     file: 'Project/Data/Extensions/PropertyAccessorCache.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/PropertyAccessorCache.cs`
-                }
-            ]
-        }
+                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/PropertyAccessorCache.cs`,
+                },
+            ],
+        },
     ],
     test: [
         {
@@ -90,11 +90,11 @@ const serverFiles = {
                 {
                     file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
                     renameTo: generator =>
-                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`
-                }
-            ]
-        }
-    ]
+                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`,
+                },
+            ],
+        },
+    ],
 };
 
 function writeFiles() {
@@ -104,17 +104,17 @@ function writeFiles() {
                 if (relationship.relationshipType === 'many-to-many') {
                     joinEntitiesTemplates.push({
                         file: 'Project/Models/JoinEntity.cs',
-                        renameTo: generator => `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`
+                        renameTo: generator => `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
                     });
                 }
             });
 
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
-        }
+        },
     };
 }
 
 module.exports = {
     serverFiles,
-    writeFiles
+    writeFiles,
 };

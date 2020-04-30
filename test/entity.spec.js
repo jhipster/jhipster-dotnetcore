@@ -15,14 +15,14 @@ describe('Subgenerator entity of dotnetcore JHipster blueprint', () => {
                     'from-cli': true,
                     skipInstall: true,
                     blueprint: 'dotnetcore',
-                    skipChecks: true
+                    skipChecks: true,
                 })
                 .withGenerators([
                     [
                         require('../generators/entity/index.js'), // eslint-disable-line global-require
                         'jhipster-dotnetcore:entity',
-                        path.join(__dirname, '../generators/entity/index.js')
-                    ]
+                        path.join(__dirname, '../generators/entity/index.js'),
+                    ],
                 ])
                 .withArguments(['foo'])
                 .withPrompts({
@@ -30,7 +30,7 @@ describe('Subgenerator entity of dotnetcore JHipster blueprint', () => {
                     relationshipAdd: false,
                     dto: 'no',
                     service: 'no',
-                    pagination: 'infinite-scroll'
+                    pagination: 'infinite-scroll',
                 })
                 .on('end', done);
         });
