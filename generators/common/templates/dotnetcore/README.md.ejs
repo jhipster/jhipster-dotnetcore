@@ -20,7 +20,7 @@
 <%_
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
-This application was generated using JHipster <%= jhipsterVersion %> and JHipster .Net Core 0.1.0, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
+This application was generated using JHipster <%= jhipsterVersion %> and JHipster .Net Core 0.3.0, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
 
 ## Development
 
@@ -39,7 +39,9 @@ Before you can build this project, you must install and configure the following 
 After installing Node, you should be able to run the following command to install development tools.
 You will only need to run this command when dependencies change in [package.json](package.json).
 
-    npm --prefix ./src/<%= pascalizedBaseName %> install
+In ./src/<%= pascalizedBaseName %>/ClientApp run 
+
+    npm install
 
 We use npm scripts and [Webpack][] as our build system.
 
@@ -47,13 +49,13 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
     dotnet run --verbosity normal --project ./src/<%= pascalizedBaseName %>/<%= pascalizedBaseName %>.csproj
-    npm --prefix ./src/<%= pascalizedBaseName %> start
+    npm --prefix ./src/<%= pascalizedBaseName %>/ClientApp start
 
 npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage dependencies.
 Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
 
-The `npm --prefix ./src/<%= pascalizedBaseName %> run` command will list all of the scripts available to run for this project.
+The `npm --prefix ./src/<%= pascalizedBaseName %>/ClientApp run` command will list all of the scripts available to run for this project.
 
 ### Service workers
 
@@ -77,11 +79,11 @@ Note: workbox creates the respective service worker and dynamically generate the
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
-    npm --prefix ./src/<%= pascalizedBaseName %> install --save --save-exact leaflet
+    npm --prefix ./src/<%= pascalizedBaseName %>/ClientApp install --save --save-exact leaflet
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
-    npm --prefix ./src/<%= pascalizedBaseName %> install --save-dev --save-exact @types/leaflet
+    npm --prefix ./src/<%= pascalizedBaseName %>/ClientApp install --save-dev --save-exact @types/leaflet
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
 <%_ if (clientFramework === 'angularX') { _%>
@@ -111,9 +113,9 @@ For example, the following command:
 
 will generate few files:
 
-    create <%= mainClientDir %>/app/my-component/my-component.component.html
-    create <%= mainClientDir %>/app/my-component/my-component.component.ts
-    update <%= mainClientDir %>/app/app.module.ts
+    create <%= mainClientDir %>/src/app/my-component/my-component.component.html
+    create <%= mainClientDir %>/src/app/my-component/my-component.component.ts
+    update <%= mainClientDir %>/src/app/app.module.ts
 <%_ } _%>
 
 ## Building for production
@@ -138,10 +140,21 @@ To launch your application's tests, run:
 <% if (!skipClient) { %>
 ### Client tests
 
-// TODO
+In ClientApp folder run : 
+
+    npm test
+
 <%_ } _%>
 
 ### Code quality
+
+By Script : 
+
+1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
+   
+2. Wait container was up Run ```SonarAnalysis.ps1``` and go to http://localhost:9001
+
+Manually : 
 
 1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
 
@@ -149,7 +162,7 @@ To launch your application's tests, run:
    
  ```dotnet tool install --global dotnet-sonarscanner```
 
-3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001"```
+3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001" /s:$pwd/SonarQube.Analysis.xml```
 
 4. Build your application : ```dotnet build```
 
@@ -159,21 +172,15 @@ To launch your application's tests, run:
 
 ### Monitoring
 
-1. Run container : ```docker-compose -f ./docker/monitoring.yml up -d```
+1. Run container (uncomment chronograf and kapacitor if you would use it): ```docker-compose -f ./docker/monitoring.yml up -d```
 
-2. Go to http://localhost:8888 
+2. Go to http://localhost:3000 (or http://localhost:8888 if you use chronograf)
    
-3. Change influxdb connection string by ```YourApp-influxdb```
+3. (Only for chronograf) Change influxdb connection string by ```YourApp-influxdb```
 
-3. Change kapacitor connection string by ```YourApp-kapacitor```
+4. (Only for chronograf) Change kapacitor connection string by ```YourApp-kapacitor```
    
-4. You can now add dashboard (like docker), see your app log in Cronograf Log viewer and send alert with kapacitor 
-
-//TODO
-
-## Using Docker to simplify development (optional)
-
-// TODO
+5. (Only for chronograf) You can now add dashboard (like docker), see your app log in Cronograf Log viewer and send alert with kapacitor 
 
 ## Build a Docker image
 
@@ -184,10 +191,6 @@ You can also fully dockerize your application and all the services that it depen
 Then run:
 
     docker run -p 80:80 <%= baseName %>
-
-## Continuous Integration (optional)
-
-// TODO
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if (!skipClient) {_%>

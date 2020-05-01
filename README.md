@@ -12,7 +12,8 @@
 
 > JHipster blueprint, 
 
-# Analysis of the sample project
+# Analysis of the sample project 
+https://github.com/jhipster/jhipster-sample-app-dotnetcore
 
 [![Sonar Cloud Quality Gate][sonar-sample-gate-image]][sonar-sample-url]
 [![Sonar Cloud Coverage Rate][sonar-sample-coverage-image]][sonar-sample-coverage-url]
@@ -170,7 +171,7 @@ In case of Oracle database, see [official documentation](https://github.com/orac
    
  ```dotnet tool install --global dotnet-sonarscanner```
 
-3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001"```
+3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001" /s:$pwd/SonarQube.Analysis.xml```
 
 4. Build your application : ```dotnet build```
 
