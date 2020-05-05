@@ -26,6 +26,7 @@ const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
+const writeBlazorFiles = require('./files-blazor').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
 
 const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
@@ -92,18 +93,28 @@ module.exports = class extends ClientGenerator {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here        
         const phaseFromJHipster = super._writing();
-        const customPhase = {
-            writeAngularFilesDotnetcore() {
-                if (this.skipClient) return;
-                writeCommonFiles.call(this);
-                switch (this.clientFramework) {
-                    case REACT:
-                        return writeReactFiles.call(this);
-                    default:
-                        return writeAngularFiles.call(this);
+        const customPhase;
+        const blazor = true;
+        if(blazor){           
+            customPhase = {
+                writeBlazorFiles(){
+                    return writeBlazorFiles.call(this);
                 }
             }
-        };
+        }else{
+            customPhase = {
+                writeAngularFilesDotnetcore() {
+                    if (this.skipClient) return;
+                    writeCommonFiles.call(this);
+                    switch (this.clientFramework) {
+                        case REACT:
+                            return writeReactFiles.call(this);
+                        default:
+                            return writeAngularFiles.call(this);
+                    }
+                }
+            };
+        }
         return Object.assign(phaseFromJHipster, customPhase);
     }
 
