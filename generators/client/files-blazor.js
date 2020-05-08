@@ -19,7 +19,7 @@
 const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
-const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+const CLIENT_SRC_DIR = constants.CLIENT_SRC_DIR;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -28,7 +28,7 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const files = {
     blazorAppModels: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Models/JwtToken.cs',
@@ -37,7 +37,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Models/LoginModel.cs',
@@ -46,7 +46,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Models/UserModel.cs',
@@ -57,7 +57,7 @@ const files = {
     ],
     blazorAppPages: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Pages/Utils/INavigationService.cs',
@@ -66,7 +66,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Pages/Utils/NavigationService.cs',
@@ -75,7 +75,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Pages/Index.razor.cs',
@@ -84,7 +84,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Pages/Index.razor',
@@ -93,7 +93,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Pages/Login.razor',
@@ -102,7 +102,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Pages/Login.razor.cs',
@@ -113,7 +113,7 @@ const files = {
     ],
     blazorAppProperties: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Properties/launchSettings.json',
@@ -124,7 +124,7 @@ const files = {
     ],
     blazorAppProperties: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Services/EntityServices/AbstractEntityService.cs',
@@ -133,7 +133,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Services/IAuthenticationService.cs',
@@ -142,7 +142,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Services/AuthenticationService.cs',
@@ -151,7 +151,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Services/Configuration.cs',
@@ -162,7 +162,7 @@ const files = {
     ],
     blazorAppShared: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Shared/MainLayout.razor',
@@ -171,7 +171,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Shared/NavMenu.razor',
@@ -180,10 +180,10 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Shared/NavMenu.cs.razor',
+                    file: 'Project/Shared/NavMenu.razor.cs',
                     renameTo: generator => `${generator.mainClientDir}/Shared/NavMenu.cs.razor`,
                 },
             ],
@@ -191,7 +191,7 @@ const files = {
     ],
     blazorAppWeb: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_0.svg',
@@ -201,7 +201,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_1.svg',
@@ -211,7 +211,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_2.svg',
@@ -221,7 +221,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_3.svg',
@@ -231,7 +231,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-192.png',
@@ -241,7 +241,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-192.png',
@@ -251,7 +251,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-192.png',
@@ -261,7 +261,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_3_head-192.png',
@@ -271,7 +271,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-256.png',
@@ -281,7 +281,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-256.png',
@@ -291,7 +291,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-256.png',
@@ -301,7 +301,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-256.png',
@@ -311,7 +311,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-384.png',
@@ -321,7 +321,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-384.png',
@@ -331,7 +331,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-384.png',
@@ -341,7 +341,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_3_head-384.png',
@@ -351,7 +351,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-512.png',
@@ -361,7 +361,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-512.png',
@@ -371,7 +371,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-512.png',
@@ -381,7 +381,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/jhipster_family_member_3_head-512.png',
@@ -391,7 +391,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/content/images/logo-jhipster.png',
@@ -401,37 +401,37 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
-                    file: 'Project/wwwroot/scss/_bootstrap-varibales.scss',
+                    file: 'Project/wwwroot/content/scss/_bootstrap-variables.scss',
                     method: 'copy',
-                    renameTo: generator => `${generator.mainClientDir}/wwwroot/scss/_bootstrap-varibales.scss`,
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/_bootstrap-variables.scss`,
                 },
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
-                    file: 'Project/wwwroot/scss/global.scss',
+                    file: 'Project/wwwroot/content/scss/global.scss',
                     method: 'copy',
-                    renameTo: generator => `${generator.mainClientDir}/wwwroot/scss/global.scss`,
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/global.scss`,
                 },
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
-                    file: 'Project/wwwroot/scss/vendor.scss',
+                    file: 'Project/wwwroot/content/scss/vendor.scss',
                     method: 'copy',
-                    renameTo: generator => `${generator.mainClientDir}/wwwroot/scss/vendor.scss`,
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/vendor.scss`,
                 },
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/favicon.ico',
@@ -441,7 +441,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [                
                 {
                     file: 'Project/wwwroot/index.html',
@@ -453,7 +453,7 @@ const files = {
     ],
     blazorAppRoot: [
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/_Imports.razor',
@@ -462,7 +462,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/App.razor',
@@ -471,16 +471,16 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/App.cs.razor',
-                    renameTo: generator => `${generator.mainClientDir}/App.cs.razor`,
+                    file: 'Project/App.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/App.razor.cs`,
                 },
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/compilerconfig.json.defaults',
@@ -489,7 +489,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/compilerconfig.json',
@@ -498,7 +498,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/libman.json',
@@ -507,7 +507,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Program.cs',
@@ -516,7 +516,7 @@ const files = {
             ],
         },
         {
-            path: SERVER_SRC_DIR,
+            path: CLIENT_SRC_DIR,
             templates: [
                 {
                     file: 'Project/Project.Client.csproj',
@@ -533,10 +533,6 @@ module.exports = {
 };
 
 function writeFiles() {
-    return {
-        writeFiles() {
-            this.writeFilesToDisk(serverFiles, this, false, 'blazor/src/');
-        },
-    };
+    this.writeFilesToDisk(files, this, false, 'blazor');
 }
 

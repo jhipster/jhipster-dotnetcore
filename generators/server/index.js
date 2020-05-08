@@ -127,7 +127,7 @@ module.exports = class extends ServerGenerator {
     get end() {
         return {
             end() {
-                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution.\n`));
+                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
                 dotnet
                     .newSln(this.solutionName)
                     .then(() =>

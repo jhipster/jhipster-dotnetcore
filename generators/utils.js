@@ -95,6 +95,11 @@ function configureGlobalDotnetcore() {
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
 
+    const blazor = true
+    if(blazor){
+        this.mainClientDir = `${this.pascalizedBaseName}.Client`;
+    }
+
     this.options.outputPathCustomizer = [
         paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientAppDir}$1/`) : paths),
         paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/, `src/${this.clientTestProject}$1`) : paths),

@@ -22,7 +22,8 @@ const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const dotnet = require('../dotnet');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -43,8 +44,8 @@ module.exports = class extends ClientGenerator {
 
         this.configOptions = jhContext.configOptions || {};
         // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext); 
-       
+        jhContext.setupClientOptions(this, jhContext);
+
     }
 
     get initializing() {
@@ -79,9 +80,9 @@ module.exports = class extends ClientGenerator {
             saveConfigDotnetcore() {
                 const config = {};
                 this.config.set(config);
-            },            
+            },
         };
-        return Object.assign(customPhaseSteps,phaseFromJHipster);
+        return Object.assign(customPhaseSteps, phaseFromJHipster);
     }
 
     get default() {
@@ -93,15 +94,16 @@ module.exports = class extends ClientGenerator {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here        
         const phaseFromJHipster = super._writing();
-        const customPhase;
+        let customPhase = {};
         const blazor = true;
-        if(blazor){           
+        if (blazor) {
             customPhase = {
-                writeBlazorFiles(){
+                writeBlazorFiles() {
                     return writeBlazorFiles.call(this);
                 }
             }
-        }else{
+            return customPhase;
+        } else {
             customPhase = {
                 writeAngularFilesDotnetcore() {
                     if (this.skipClient) return;
@@ -114,8 +116,8 @@ module.exports = class extends ClientGenerator {
                     }
                 }
             };
+            return Object.assign(phaseFromJHipster, customPhase);
         }
-        return Object.assign(phaseFromJHipster, customPhase);
     }
 
     get install() {
@@ -128,7 +130,7 @@ module.exports = class extends ClientGenerator {
                             `npm install `
                         )}for you to install the required dependencies. If this fails, try running the command yourself.`
                     );
-                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}`});
+                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}` });
                 }
             }
         };
@@ -136,16 +138,39 @@ module.exports = class extends ClientGenerator {
     }
 
     get end() {
-        const customPhase = {
-            end() {
-                if (this.skipClient) return;
-                this.log(chalk.green.bold('\nClient application generated successfully.\n'));
-
-                if (!this.options['skip-install']) {
-                    this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
-                }
+        let customPhase = {};
+        const blazor = true;
+        if (blazor) {
+            customPhase = {
+                end() {
+                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                    dotnet
+                        .newSln(this.solutionName)
+                        .then(() =>
+                            dotnet.slnAdd(`${this.solutionName}.sln`, [
+                                `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.Client.csproj`,
+                            ])
+                        )
+                        .catch(err => {
+                            this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+                        })
+                        .finally(() => {
+                            this.log(chalk.green.bold('\Client application generated successfully.\n'));
+                        });
+                },
             }
-        };
+        } else {            
+            customPhase = {
+                end() {
+                    if (this.skipClient) return;
+                    this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+
+                    if (!this.options['skip-install']) {
+                        this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
+                    }
+                }
+            };            
+        }
         return customPhase;
     }
 };
