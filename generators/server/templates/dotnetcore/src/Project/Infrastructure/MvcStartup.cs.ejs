@@ -39,6 +39,10 @@ namespace <%= namespace %>.Infrastructure {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Formatting = Formatting.Indented;
             });
+            @this.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
 
             return @this;
         }
@@ -56,6 +60,15 @@ namespace <%= namespace %>.Infrastructure {
             });
 
             @this.UseHealthChecks("/health");
+
+            @this.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
+            });
+            if (!env.IsDevelopment())
+            {
+                @this.UseSpaStaticFiles();
+            }
 
             return @this;
         }
