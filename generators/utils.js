@@ -95,8 +95,8 @@ function configureGlobalDotnetcore() {
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
 
-    const blazor = true
-    if(blazor){
+    const blazor = true;
+    if (blazor) {
         this.mainClientDir = `${this.pascalizedBaseName}.Client`;
     }
 

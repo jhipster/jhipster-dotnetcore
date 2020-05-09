@@ -49,8 +49,34 @@ module.exports = class extends ClientGenerator {
     }
 
     get initializing() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const blazor = true;
+        if (blazor) {
+            const jhipsterNetPhaseSteps = {
+                setupClientConsts() {
+                    const configuration = this.getAllJhipsterConfig(this, true);
+                    this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                    this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
+
+                    const serverConfigFound =
+                        this.namespace !== undefined && this.authenticationType !== undefined;
+
+                    if (this.baseName !== undefined && serverConfigFound) {
+                        this.log(
+                            chalk.green(
+                                'This is an existing project, using the configuration from your .yo-rc.json file \n' +
+                                'to re-generate the project...\n'
+                            )
+                        );
+                        this.existingProject = true;
+                    }
+                },
+            };
+
+            return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+        } else {
+            return phaseFromJHipster;
+        }
     }
 
     get prompting() {
@@ -78,7 +104,10 @@ module.exports = class extends ClientGenerator {
         const customPhaseSteps = {
             configureGlobalDotnetcore,
             saveConfigDotnetcore() {
-                const config = {};
+                const config = {
+                    namespace: this.namespace,
+                    authenticationType: this.authenticationType,
+                };
                 this.config.set(config);
             },
         };
@@ -159,7 +188,7 @@ module.exports = class extends ClientGenerator {
                         });
                 },
             }
-        } else {            
+        } else {
             customPhase = {
                 end() {
                     if (this.skipClient) return;
@@ -169,7 +198,7 @@ module.exports = class extends ClientGenerator {
                         this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
                     }
                 }
-            };            
+            };
         }
         return customPhase;
     }
