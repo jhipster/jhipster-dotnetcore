@@ -520,7 +520,7 @@ const files = {
             templates: [
                 {
                     file: 'Project/Project.Client.csproj',
-                    renameTo: generator => `${generator.mainProjectDir}/${generator.pascalizedBaseName}.Client.csproj`,
+                    renameTo: generator => `${generator.mainClientDir}/${generator.pascalizedBaseName}.Client.csproj`,
                 },
             ],
         },

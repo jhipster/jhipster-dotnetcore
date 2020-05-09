@@ -142,13 +142,13 @@ module.exports = class extends ClientGenerator {
         const blazor = true;
         if (blazor) {
             customPhase = {
-                end() {
+                async end() {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-                    dotnet
+                    await dotnet
                         .newSln(this.solutionName)
                         .then(() =>
                             dotnet.slnAdd(`${this.solutionName}.sln`, [
-                                `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.Client.csproj`,
+                                `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
                             ])
                         )
                         .catch(err => {

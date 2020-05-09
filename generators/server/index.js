@@ -126,9 +126,9 @@ module.exports = class extends ServerGenerator {
 
     get end() {
         return {
-            end() {
+            async end() {
                 this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-                dotnet
+                await dotnet
                     .newSln(this.solutionName)
                     .then(() =>
                         dotnet.slnAdd(`${this.solutionName}.sln`, [
