@@ -20,7 +20,6 @@
 const chalk = require('chalk');
 const _ = require('lodash');
 const ServerGenerator = require('generator-jhipster/generators/server');
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;

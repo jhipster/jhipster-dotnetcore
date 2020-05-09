@@ -22,6 +22,8 @@ const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
+const basePrompts = require('generator-jhipster/generators/client/prompts');
+const prompts = require('./prompts');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const dotnet = require('../dotnet');
 
@@ -31,6 +33,7 @@ const writeBlazorFiles = require('./files-blazor').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
 
 const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -50,27 +53,13 @@ module.exports = class extends ClientGenerator {
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
-        const blazor = true;
-        if (blazor) {
+        if (this.clientFramework == BLAZOR) {
             const jhipsterNetPhaseSteps = {
                 setupClientConsts() {
                     const configuration = this.getAllJhipsterConfig(this, true);
                     this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-
-                    const configFound = this.namespace !== undefined;
-
-                    if (this.baseName !== undefined && configFound) {
-                        this.log(
-                            chalk.green(
-                                'This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                                'to re-generate the project...\n'
-                            )
-                        );
-                        this.existingProject = true;
-                    }
                 },
             };
-
             return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
         } else {
             return phaseFromJHipster;
@@ -78,21 +67,20 @@ module.exports = class extends ClientGenerator {
     }
 
     get prompting() {
-        // The prompting phase is being overriden so that we can ask our own questions
-        // return {
-        //     askForClient: prompts.askForClient,
-        //     askForClientSideOpts: prompts.askForClientSideOpts,
+        return {
+            askForModuleName: basePrompts.askForModuleName,
+            askForClient: prompts.askForClient,
+            askFori18n: basePrompts.askFori18n,
+            askForClientTheme: basePrompts.askForClientTheme,
+            askForClientThemeVariant: basePrompts.askForClientThemeVariant,
 
-        //     setSharedConfigOptions() {
-        //         this.configOptions.lastQuestion = this.currentQuestion;
-        //         this.configOptions.totalQuestions = this.totalQuestions;
-        //         this.configOptions.clientFramework = this.clientFramework;
-        //         this.configOptions.useSass = this.useSass;
-        //     }
-        // };
-        // If the prompts need to be overriden then use the code commented out above instead
-        //        return super._prompting();
-        return super._prompting();
+            setSharedConfigOptions() {
+                this.configOptions.skipClient = this.skipClient;
+                this.configOptions.clientFramework = this.clientFramework;
+                this.configOptions.clientTheme = this.clientTheme;
+                this.configOptions.clientThemeVariant = this.clientThemeVariant;
+            },
+        };
     }
 
     get configuring() {
@@ -114,8 +102,7 @@ module.exports = class extends ClientGenerator {
         // If the templates doesnt need to be overrriden then just return `super._writing()` here        
         const phaseFromJHipster = super._writing();
         let customPhase = {};
-        const blazor = true;
-        if (blazor) {
+        if (this.clientFramework == BLAZOR) {
             customPhase = {
                 writeBlazorFiles() {
                     return writeBlazorFiles.call(this);
@@ -158,8 +145,7 @@ module.exports = class extends ClientGenerator {
 
     get end() {
         let customPhase = {};
-        const blazor = true;
-        if (blazor) {
+        if (this.clientFramework == BLAZOR) {
             customPhase = {
                 async end() {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));

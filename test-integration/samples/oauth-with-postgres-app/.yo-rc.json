@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "namespace": "MyCompany",
+    "namespace": "JhipsterSampleApplication",
     "databaseType": "postgres",
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",

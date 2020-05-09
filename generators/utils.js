@@ -23,6 +23,7 @@ const getEnumInfo = require('generator-jhipster/generators/utils').getEnumInfo;
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+const BLAZOR = constants.BLAZOR;
 
 module.exports = {
     copyI18n,
@@ -95,8 +96,7 @@ function configureGlobalDotnetcore() {
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
 
-    const blazor = true;
-    if (blazor) {
+    if (this.clientFramework == BLAZOR) {
         this.mainClientDir = `${this.pascalizedBaseName}.Client`;
     }
 

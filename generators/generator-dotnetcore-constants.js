@@ -8,6 +8,7 @@ const DOCKER_DIR = 'docker/';
 const PROJECT_CROSSCUTTING_SUFFIX = '.Crosscutting';
 const PROJECT_INFRASTRUCTURE_SUFFIX = '.Infrastructure';
 const PROJECT_SERVICE_SUFFIX = '.Domain.Services';
+const BLAZOR = 'Blazor';
 
 const constants = {
     SERVER_SRC_DIR,
@@ -20,6 +21,7 @@ const constants = {
     PROJECT_CROSSCUTTING_SUFFIX,
     PROJECT_INFRASTRUCTURE_SUFFIX,
     PROJECT_SERVICE_SUFFIX,
+    BLAZOR,
 };
 
 module.exports = constants;

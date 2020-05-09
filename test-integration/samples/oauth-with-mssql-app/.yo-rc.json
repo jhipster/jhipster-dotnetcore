@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "namespace": "MyCompany",
+    "namespace": "JhipsterSampleApplication",
     "databaseType": "mssql",
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",

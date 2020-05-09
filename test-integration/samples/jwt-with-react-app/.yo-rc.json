@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "namespace": "MyCompany",
+    "namespace": "JhipsterSampleApplication",
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
     "authenticationType": "jwt",
