@@ -26,6 +26,10 @@ https://github.com/jhipster/jhipster-sample-app-dotnetcore
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
 
+# Gitter
+
+https://gitter.im/JHipster-NET/jhipster-dotnetcore
+
 # Prerequisites
 
 As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
