@@ -23,6 +23,7 @@ const ServerGenerator = require('generator-jhipster/generators/server');
 const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
@@ -92,16 +93,7 @@ module.exports = class extends ServerGenerator {
 
     get configuring() {
         return {
-            configureGlobal() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-            },
+            configureGlobalDotnetcore,
             saveConfig() {
                 const config = {
                     databaseType: this.databaseType,
