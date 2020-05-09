@@ -56,12 +56,10 @@ module.exports = class extends ClientGenerator {
                 setupClientConsts() {
                     const configuration = this.getAllJhipsterConfig(this, true);
                     this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-                    this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
 
-                    const serverConfigFound =
-                        this.namespace !== undefined && this.authenticationType !== undefined;
+                    const configFound = this.namespace !== undefined;
 
-                    if (this.baseName !== undefined && serverConfigFound) {
+                    if (this.baseName !== undefined && configFound) {
                         this.log(
                             chalk.green(
                                 'This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -99,19 +97,7 @@ module.exports = class extends ClientGenerator {
 
     get configuring() {
         // Here we are not overriding this phase and hence its being handled by JHipster
-        const phaseFromJHipster = super._configuring();
-
-        const customPhaseSteps = {
-            configureGlobalDotnetcore,
-            saveConfigDotnetcore() {
-                const config = {
-                    namespace: this.namespace,
-                    authenticationType: this.authenticationType,
-                };
-                this.config.set(config);
-            },
-        };
-        return Object.assign(customPhaseSteps, phaseFromJHipster);
+        return super._configuring();
     }
 
     get default() {

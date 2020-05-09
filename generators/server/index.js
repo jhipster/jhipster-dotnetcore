@@ -84,7 +84,6 @@ module.exports = class extends ServerGenerator {
             askForServerSideOpts: prompts.askForServerSideOpts,
 
             setSharedConfigOptions() {
-                this.configOptions.namespace = this.namespace;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.authenticationType = this.authenticationType;
             },
@@ -105,7 +104,6 @@ module.exports = class extends ServerGenerator {
             },
             saveConfig() {
                 const config = {
-                    namespace: this.namespace,
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
                     prodDatabaseType: 'mysql', // set only for jdl-importer compatibility
