@@ -184,7 +184,7 @@ const files = {
             templates: [
                 {
                     file: 'Project/Shared/NavMenu.razor.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Shared/NavMenu.cs.razor`,
+                    renameTo: generator => `${generator.mainClientDir}/Shared/NavMenu.razor.cs`,
                 },
             ],
         },
