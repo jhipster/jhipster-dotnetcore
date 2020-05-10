@@ -53,17 +53,13 @@ module.exports = class extends ClientGenerator {
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
-        if (this.clientFramework == BLAZOR) {
-            const jhipsterNetPhaseSteps = {
-                setupClientConsts() {
-                    const configuration = this.getAllJhipsterConfig(this, true);
-                    this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-                },
-            };
-            return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
-        } else {
-            return phaseFromJHipster;
-        }
+        const jhipsterNetPhaseSteps = {
+            setupClientConsts() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+            },
+        };
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get prompting() {
@@ -100,30 +96,21 @@ module.exports = class extends ClientGenerator {
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
         // If the templates doesnt need to be overrriden then just return `super._writing()` here        
-        const phaseFromJHipster = super._writing();
-        let customPhase = {};
-        if (this.clientFramework == BLAZOR) {
-            customPhase = {
-                writeBlazorFiles() {
-                    return writeBlazorFiles.call(this);
+        return {
+            writeFilesDotnetcore() {
+                if (this.skipClient) return;
+                switch (this.clientFramework) {
+                    case BLAZOR:
+                        return writeBlazorFiles.call(this);
+                    case REACT:
+                        writeCommonFiles.call(this);
+                        return writeReactFiles.call(this);
+                    default:
+                        writeCommonFiles.call(this);
+                        return writeAngularFiles.call(this);
                 }
             }
-            return customPhase;
-        } else {
-            customPhase = {
-                writeAngularFilesDotnetcore() {
-                    if (this.skipClient) return;
-                    writeCommonFiles.call(this);
-                    switch (this.clientFramework) {
-                        case REACT:
-                            return writeReactFiles.call(this);
-                        default:
-                            return writeAngularFiles.call(this);
-                    }
-                }
-            };
-            return Object.assign(phaseFromJHipster, customPhase);
-        }
+        };
     }
 
     get install() {
@@ -144,10 +131,9 @@ module.exports = class extends ClientGenerator {
     }
 
     get end() {
-        let customPhase = {};
-        if (this.clientFramework == BLAZOR) {
-            customPhase = {
-                async end() {
+        return {
+            async end() {
+                if (this.clientFramework == BLAZOR) {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
                     await dotnet
                         .newSln(this.solutionName)
@@ -162,11 +148,7 @@ module.exports = class extends ClientGenerator {
                         .finally(() => {
                             this.log(chalk.green.bold('\Client application generated successfully.\n'));
                         });
-                },
-            }
-        } else {
-            customPhase = {
-                end() {
+                } else {
                     if (this.skipClient) return;
                     this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
@@ -174,8 +156,7 @@ module.exports = class extends ClientGenerator {
                         this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
                     }
                 }
-            };
+            },
         }
-        return customPhase;
     }
 };

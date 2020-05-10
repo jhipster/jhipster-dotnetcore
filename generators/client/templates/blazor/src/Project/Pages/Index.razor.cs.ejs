@@ -13,6 +13,7 @@
  limitations under the License.
 -%>
 using System.Threading.Tasks;
+using Blazored.Modal.Services;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services;
@@ -26,7 +27,14 @@ namespace <%= namespace %>.Client.Pages
         [Inject]
         private AuthenticationStateProvider AuthenticationService { get; set; }
 
+        [Inject]
+        private IModalService ModalService { get; set; }
+
         private UserModel CurrentUser => (AuthenticationService as IAuthenticationService)?.CurrentUser;
-        
+
+        private async Task SignIn()
+        {
+            ModalService.Show<Login>("Sign In");
+        }
     }
 }

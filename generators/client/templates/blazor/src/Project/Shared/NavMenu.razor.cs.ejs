@@ -13,6 +13,8 @@
  limitations under the License.
 -%>
 using System.Threading.Tasks;
+using Blazored.Modal.Services;
+using <%= namespace %>.Client.Pages;
 using <%= namespace %>.Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -26,6 +28,14 @@ namespace <%= namespace %>.Client.Shared
 
         [Inject]
         private NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        private IModalService ModalService { get; set; }
+
+        private async Task SignIn()
+        {
+            ModalService.Show<Login>("Sign In");
+        }
         
         public async Task SignOut()
         {

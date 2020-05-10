@@ -14,6 +14,7 @@
 -%>
 using System.Reflection;
 using System.Threading.Tasks;
+using Blazored.Modal;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Services;
 using Microsoft.AspNetCore.Components;
@@ -26,8 +27,8 @@ namespace <%= namespace %>.Client.Pages
         [Inject]
         public AuthenticationStateProvider AuthenticationService { get; set; }
 
-        [Inject] 
-        public NavigationManager NavigationManager { get; set; }
+        [CascadingParameter] 
+        BlazoredModalInstance BlazoredModal { get; set; }
 
         public LoginModel LoginModel { get; set; } = new LoginModel();
 
@@ -40,11 +41,8 @@ namespace <%= namespace %>.Client.Pages
             LoginModel = new LoginModel();
             if (result)
             {
-                NavigationManager.NavigateTo("/");
+                BlazoredModal.Close();
             }
         }
-
-
-
     }
 }
