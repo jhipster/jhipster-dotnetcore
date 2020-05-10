@@ -1,14 +1,12 @@
-<Bar Style="height: 64px;" Class="navbar navbar-dark navbar-expand-md bg-dark" Breakpoint="Breakpoint.Desktop">
+<Bar Breakpoint="Breakpoint.Desktop" Background="Background.Dark" ThemeContrast="ThemeContrast.Dark">
+    <BarBrand Class="navbar-brand logo">
+        <span class="logo-img"></span>
+        <span class="navbar-title">DebugVsCodeFolder</span> <span class="navbar-version">{{ version }}</span>
+    </BarBrand>
+    <BarToggler>
+    </BarToggler>
     <BarMenu>
         <BarStart>
-            <BarItem Class="navbar-brand logo">
-                <span class="logo-img"></span>
-                <span class="navbar-title">DebugVsCodeFolder</span> <span class="navbar-version">{{ version }}</span>
-            </BarItem>
-            <BarItem Class="navbar-toggler d-lg-none" href="#" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <fa-icon icon="bars"></fa-icon>
-            </BarItem>
-
         </BarStart>
         <BarEnd>
             <BarItem>
@@ -72,7 +70,3 @@
         </BarEnd>
     </BarMenu>
 </Bar>
-
-@code {
-
-}
