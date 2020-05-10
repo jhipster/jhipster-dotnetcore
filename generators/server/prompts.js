@@ -19,12 +19,6 @@
 
 const chalk = require('chalk');
 
-function askForModuleName() {
-    if (this.baseName) return;
-
-    this.askModuleName(this);
-}
-
 function askForServerSideOpts() {
     if (this.existingProject) return;
     const applicationType = this.applicationType;

@@ -22,27 +22,28 @@ function askForModuleName() {
     if (this.existingProject) return;
     const done = this.async();
     const defaultAppBaseName = toPascalCase(this.getDefaultAppName());
-    const prompts = [{
-        type: 'input',
-        name: 'baseName',
-        validate: input => {
-            if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                return 'Your base name cannot contain special characters or a blank space';
-            }
-            return true;
+    const prompts = [
+        {
+            type: 'input',
+            name: 'baseName',
+            validate: input => {
+                if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+                    return 'Your base name cannot contain special characters or a blank space';
+                }
+                return true;
+            },
+            message: 'What is the base name of your application?',
+            default: defaultAppBaseName,
         },
-        message: 'What is the base name of your application?',
-        default: defaultAppBaseName,
-    },
-    {
-        type: 'input',
-        name: 'namespace',
-        validate: input =>
-            /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
-        message: 'What is your default C# namespace?',
-        default: defaultAppBaseName,
-    },
-    ]
+        {
+            type: 'input',
+            name: 'namespace',
+            validate: input =>
+                /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
+            message: 'What is your default C# namespace?',
+            default: defaultAppBaseName,
+        },
+    ];
     this.prompt(prompts).then(prompt => {
         this.baseName = prompt.baseName;
         this.namespace = prompt.namespace;
@@ -51,5 +52,5 @@ function askForModuleName() {
 }
 
 module.exports = {
-    askForModuleName
+    askForModuleName,
 };
