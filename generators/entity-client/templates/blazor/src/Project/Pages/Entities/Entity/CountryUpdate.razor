@@ -1,0 +1,58 @@
+﻿@page "/country/new"
+@page "/country/{Id:int}/edit"
+
+<div class="row justify-content-center">
+    <div class="col-8">
+            <EditForm Model="@CountryModel" OnValidSubmit="@Save">
+                <h2 id="jhi-country-heading">Create or edit a Country</h2>
+                <div>
+                    @*
+                    TODO ADD ERROR
+                    <jhi-alert-error></jhi-alert-error>
+                    *@
+                    
+                    @if(Id != 0){
+                        <div class="form-group">
+                            <label for="id">ID</label>
+                            <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly @bind-value="@CountryModel.Id" />
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_countryName">Country Name</label>
+                        <input type="text" class="form-control" name="countryName" id="field_countryName"
+                               formControlName="countryName" @bind-value="@CountryModel.CountryName" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_region">Region</label>
+                        <select class="form-control" id="field_region" name="region" formControlName="region" @bind="@RegionId">
+                            <option value="null"></option>
+                            @foreach (var region in Regions)
+                            {
+                                if (Id != 0 && region == CountryModel?.Region?.Id)
+                                {
+                                    <option selected="selected">@region</option>
+                                }
+                                else
+                                {
+                                    <option>@region</option>
+                                }
+                            }
+                        </select>
+                           
+                    </div>
+                </div>
+
+                <div>
+                    <button type="button" id="cancel-save" class="btn btn-secondary" @onclick="Back">
+                        <Icon Name='"fa-ban"' />&nbsp;<span>Cancel</span>
+                    </button>
+
+                    <button type="submit" id="save-entity" class="btn btn-primary">
+                        <Icon Name='"fa-save"' />&nbsp;<span>Save</span>
+                    </button>
+                </div>
+            </EditForm>
+    </div>
+</div>
