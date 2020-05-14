@@ -23,6 +23,8 @@ const ClientGenerator = require('generator-jhipster/generators/client');
 const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const basePrompts = require('generator-jhipster/generators/client/prompts');
+const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
+const baseWriteReactFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
 const prompts = require('./prompts');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const dotnet = require('../dotnet');
@@ -95,7 +97,7 @@ module.exports = class extends ClientGenerator {
 
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
-        // If the templates doesnt need to be overrriden then just return `super._writing()` here        
+        // If the templates doesnt need to be overrriden then just return `super._writing()` here
         return {
             writeFilesDotnetcore() {
                 if (this.skipClient) return;
@@ -103,9 +105,11 @@ module.exports = class extends ClientGenerator {
                     case BLAZOR:
                         return writeBlazorFiles.call(this);
                     case REACT:
+                        baseWriteReactFiles.call(this);
                         writeCommonFiles.call(this);
                         return writeReactFiles.call(this);
                     default:
+                        baseWriteAngularFiles.call(this);
                         writeCommonFiles.call(this);
                         return writeAngularFiles.call(this);
                 }
