@@ -35,6 +35,12 @@ function updateWebpackCommonJs() {
         "",
         false
     );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+        "utils.root('src/main/webapp/index.html')",
+        "utils.root('src/index.html')",
+        false
+    );
 }
 
 function updateWebpackDevJs() {
