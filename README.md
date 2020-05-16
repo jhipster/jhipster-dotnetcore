@@ -129,6 +129,31 @@ jhipster -d --blueprint dotnetcore
 
 ```
 
+## Using database migrations
+
+1. Create the initial database migration
+
+```bash
+dotnet ef migrations add InitialCreate --project Project.csproj
+```
+
+2. Run database migrations
+
+```bash
+dotnet ef database update --project Project.csproj
+```
+
+If you had alredy run the application before creating your first migration, some tables might be alredy automatically
+created first startup run (see DatabaseStartup.cs for more details). 
+
+So you have the options of removing conflicting tables or editing the migration you just created.
+
+Tip: 
+Change connection string on appsettings.json to point to your database.
+When creating/editing entities you need to create the migration and upgrade your database. 
+It is a good practice to check your migrations and backup yout database before making any changes to it.
+
+
 ## Running the generated app in a Docker container
 
 1. Build the Docker image of the app
