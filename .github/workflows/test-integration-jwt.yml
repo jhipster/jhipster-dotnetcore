@@ -13,6 +13,7 @@ jobs:
                 os: [ubuntu-latest]
                 app-type:
                     - jwt-with-angular-app
+                    - jwt-with-blazor-app
                     - jwt-with-mssql-app
                     - jwt-with-mysql-app
                     - jwt-with-postgres-app
@@ -20,6 +21,8 @@ jobs:
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
+                    - app-type: jwt-with-blazor-app
+                      arg: 'no'
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
