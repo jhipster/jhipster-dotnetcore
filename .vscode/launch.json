@@ -22,7 +22,7 @@
             "type": "node",
             "request": "launch",
             "name": "jhipster generate dotnetcore blueprint",
-            "runtimeExecutable": "jhipster",
+            "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "timeout": 100000,
             "args": [
                 "-d",
@@ -41,7 +41,7 @@
             "type": "node",
             "request": "launch",
             "name": "jhipster entity",            
-            "runtimeExecutable": "jhipster",
+            "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
                 "entity",
                 "BankAccount",
@@ -54,7 +54,7 @@
             "type": "node",
             "request": "launch",
             "name": "jhipster info",            
-            "runtimeExecutable": "jhipster",
+            "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
                 "info"
             ],
@@ -65,7 +65,7 @@
             "type": "node",
             "request": "launch",
             "name": "jhipster language",
-            "runtimeExecutable": "jhipster",
+            "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
                 "language"
             ],
@@ -76,7 +76,7 @@
             "type": "node",
             "request": "launch",
             "name": "jhipster upgrade",
-            "runtimeExecutable": "jhipster",
+            "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
                 "upgrade"
             ],
