@@ -162,10 +162,12 @@ In case of Oracle database, see [official documentation](https://github.com/orac
 
 ## Using database migrations
 
-If you had alredy run the application before creating your first migration, some database tables might be alredy 
-created automatically on application startup (see EnsureCreated() method on DatabaseStartup.cs file for more details).
+If you had already run the application before creating your first migration, some database tables might be alredy 
+created automatically on application startup.
 So you have the options of removing conflicting tables or editing the migration you just created.
-Also, currently it is up to the user to create migrations.
+If you wish to automatically apply database migrations when the application is started replace method 
+EnsureCreated() by Migrate() at DatabaseStartup.cs file. Be aware of the implications of doing so.
+Currently it is up to the user to create migrations.
 
 1. Add EF Core cli tools
 
