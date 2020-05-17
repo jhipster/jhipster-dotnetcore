@@ -162,7 +162,7 @@ In case of Oracle database, see [official documentation](https://github.com/orac
 
 ## Using database migrations
 
-If you had already run the application before creating your first migration, some database tables might be alredy 
+If you had already run the application before creating your first migration, some database tables might be already 
 created automatically on application startup.
 So you have the options of removing conflicting tables or editing the migration you just created.
 If you wish to automatically apply database migrations when the application is started replace method 
