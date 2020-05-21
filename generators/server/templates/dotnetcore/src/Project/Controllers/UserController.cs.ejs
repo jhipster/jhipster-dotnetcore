@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace <%= namespace %>.Controllers {
     [Route("api")]
@@ -88,7 +89,10 @@ namespace <%= namespace %>.Controllers {
         public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var page = _userManager.Users.Select(user => new UserDto(user)).UsePageable(pageable);
+            var page = _userManager.Users
+                .Include(it => it.UserRoles)
+                .ThenInclude(r => r.Role)
+                .Select(user => new UserDto(user)).UsePageable(pageable);
             var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
             return Ok(page.Content).WithHeaders(headers);
         }
