@@ -12,14 +12,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace JHipsterNet.Pagination {
     public class Sort {
         public const Direction DefaultDirection = Direction.Asc;
         public static readonly Sort Unsorted = new Sort();
-
+        public IList<Order> Orders { get; }
 
         public Sort(IList<Order> orders)
         {
@@ -30,7 +32,6 @@ namespace JHipsterNet.Pagination {
             .Select(it => new Order(direction, it)).ToList())
         {
         }
-
 
         public Sort(IEnumerable<string> properties) : this(DefaultDirection, properties)
         {
@@ -44,8 +45,6 @@ namespace JHipsterNet.Pagination {
         public Sort(params string[] properties) : this(DefaultDirection, properties as IEnumerable<string>)
         {
         }
-
-        public IList<Order> Orders { get; }
 
         public Sort Ascending()
         {
@@ -80,7 +79,18 @@ namespace JHipsterNet.Pagination {
             return new Sort(orders);
         }
 
-        //TODO add Equals
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Orders.GetHashCode());
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj) return true;
+            if (obj == null || GetType() != obj.GetType()) return false;
+            var sort = obj as Sort;
+            return Orders.Equals(sort.Orders);
+        }
     }
 
     public class Order {
@@ -91,7 +101,6 @@ namespace JHipsterNet.Pagination {
             Direction = direction;
             Property = property;
         }
-
         public Direction Direction { get; }
         public string Property { get; }
     }
@@ -111,5 +120,11 @@ namespace JHipsterNet.Pagination {
         {
             return direction.Equals(Direction.Desc);
         }
+    }
+
+    public class SortExpression<TEntity, TEntityKey>
+    {
+        public Expression<Func<TEntity, TEntityKey>> Expression { get; set; }
+        public bool IsDescending { get; set; }
     }
 }

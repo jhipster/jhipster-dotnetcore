@@ -87,8 +87,9 @@ namespace <%= namespace %>.Controllers {
         public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var page = _userManager.Users.UsePageable(pageable);
-            var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
+            var sortExpressions = <%= namespace %>.Models.User.GetSortExpressions(pageable.Sort);
+            var page = _userManager.Users.UsePageable(pageable, sortExpressions);
+            var headers = PaginationUtil.GeneratePaginationHttpHeaders(page);
             return Ok(page.Content).WithHeaders(headers);
         }
 

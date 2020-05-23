@@ -832,6 +832,10 @@ const serverFiles = {
         },
         {
             path: SERVER_SRC_DIR,
+            templates: [{ file: 'JHipsterNet/Pagination/SortExpressions.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpressions.cs' }],
+        },
+        {
+            path: SERVER_SRC_DIR,
             templates: [{ file: 'JHipsterNet/Pagination/Page.cs', renameTo: () => 'JHipsterNet/Pagination/Page.cs' }],
         },
         {
