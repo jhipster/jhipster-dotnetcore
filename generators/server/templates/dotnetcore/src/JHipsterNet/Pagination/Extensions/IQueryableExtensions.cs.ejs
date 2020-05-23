@@ -14,16 +14,22 @@
 -%>
 using System;
 using System.Linq;
+using JHipsterNet.Pagination;
 using JHipsterNet.Pagination.Binders;
 
 namespace JHipsterNet.Pagination.Extensions {
     public static class QueryableExtensions {
-        public static IPage<TEntity> UsePageable<TEntity>(this IQueryable<TEntity> receiver, IPageable pageable)
+        public static IPage<TEntity> UsePageable<TEntity>(this IQueryable<TEntity> query, IPageable pageable, SortExpressions<TEntity> sorts)
             where TEntity : class
         {
-            var entities = receiver.Skip(pageable.Offset)
-                .Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
-            return new Page<TEntity>(entities.ToList(), pageable, receiver.Count());
+            var entities = query.ApplySort(sorts).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
+            return new Page<TEntity>(entities.ToList(), pageable, entities.Count());
+        }
+
+        private static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> query, SortExpressions<TEntity> sorts)
+        {
+            if (sorts == null || !sorts.IsValid()) return query;
+            return SortExpressions<TEntity>.ApplySorts(query, sorts);
         }
     }
 }
