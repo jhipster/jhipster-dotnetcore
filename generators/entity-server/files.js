@@ -101,6 +101,7 @@ function writeFiles() {
     return {
         writeServerFiles() {
             this.relationships.forEach(relationship => {
+                // const relationship = relationship;
                 if (relationship.relationshipType === 'many-to-many') {
                     joinEntitiesTemplates.push({
                         file: 'Project/Models/JoinEntity.cs',
