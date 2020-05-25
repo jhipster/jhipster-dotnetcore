@@ -23,7 +23,7 @@ namespace JHipsterNet.Pagination.Extensions {
             where TEntity : class
         {
             var entities = query.ApplySort(sorts).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
-            return new Page<TEntity>(entities.ToList(), pageable, entities.Count());
+            return new Page<TEntity>(entities.ToList(), pageable, query.Count());
         }
 
         private static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> query, SortExpressions<TEntity> sorts)
