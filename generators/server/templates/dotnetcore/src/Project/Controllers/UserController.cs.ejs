@@ -13,6 +13,7 @@
  limitations under the License.
 -%>
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JHipsterNet.Pagination;
 using JHipsterNet.Pagination.Extensions;
@@ -28,6 +29,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace <%= namespace %>.Controllers {
     [Route("api")]
@@ -87,7 +89,13 @@ namespace <%= namespace %>.Controllers {
         public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var page = _userManager.Users.UsePageable(pageable);
+            var page = _userManager.Users
+                .Include(it => it.UserRoles)
+                .ThenInclude(r => r.Role)
+                .ToList()
+                .Select(user => new UserDto(user))
+                .AsQueryable()
+                .UsePageable(pageable);
             var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
             return Ok(page.Content).WithHeaders(headers);
         }
@@ -103,8 +111,11 @@ namespace <%= namespace %>.Controllers {
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
-            var result = await _userManager.FindByNameAsync(login);
-            //TODO adopt a more idiomatic syntax with LINQ Select/Where cf. cancelation token
+            var result = await _userManager.Users
+                .Where(user => user.Login == login)
+                .Include(it => it.UserRoles)
+                .ThenInclude(r => r.Role)
+                .SingleOrDefaultAsync();
             var userDto = result != null ? new UserDto(result) : null;
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
