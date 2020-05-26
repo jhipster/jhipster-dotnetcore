@@ -112,8 +112,11 @@ namespace <%= namespace %>.Controllers {
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
-            var result = await _userManager.FindByNameAsync(login);
-            //TODO adopt a more idiomatic syntax with LINQ Select/Where cf. cancelation token
+            var result = await _userManager.Users
+                .Where(user => user.Login == login)
+                .Include(it => it.UserRoles)
+                .ThenInclude(r => r.Role)
+                .SingleOrDefaultAsync();
             var userDto = result != null ? new UserDto(result) : null;
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
