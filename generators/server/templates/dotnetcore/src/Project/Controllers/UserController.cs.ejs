@@ -89,8 +89,7 @@ namespace <%= namespace %>.Controllers {
             _log.LogDebug("REST request to get a page of Users");
             var sortExpressions = <%= namespace %>.Models.User.GetSortExpressions(pageable.Sort);
             var page = _userManager.Users.UsePageable(pageable, sortExpressions);
-            var headers = PaginationUtil.GeneratePaginationHttpHeaders(page);
-            return Ok(page.Content).WithHeaders(headers);
+            return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
         }
 
         [HttpGet("users/authorities")]

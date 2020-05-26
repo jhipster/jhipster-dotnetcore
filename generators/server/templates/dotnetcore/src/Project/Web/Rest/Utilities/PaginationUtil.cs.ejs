@@ -20,7 +20,7 @@ namespace <%= namespace %>.Web.Rest.Utilities {
     public static class PaginationUtil {
         private const string _XTotalCountHeaderName = "X-Total-Count";
         private const string _XPaginationHeaderName = "X-Pagination";
-        public static IHeaderDictionary GeneratePaginationHttpHeaders<T>(IPage<T> page)
+        public static IHeaderDictionary GeneratePaginationHttpHeaders<T>(this IPage<T> page)
             where T : class
         {
             IHeaderDictionary headers = new HeaderDictionary();

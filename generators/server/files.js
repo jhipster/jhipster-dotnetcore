@@ -832,11 +832,23 @@ const serverFiles = {
         },
         {
             path: SERVER_SRC_DIR,
+            templates: [{ file: 'JHipsterNet/Pagination/SortExpression.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpression.cs' }],
+        },
+        {
+            path: SERVER_SRC_DIR,
             templates: [{ file: 'JHipsterNet/Pagination/SortExpressions.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpressions.cs' }],
         },
         {
             path: SERVER_SRC_DIR,
+            templates: [{ file: 'JHipsterNet/Pagination/Order.cs', renameTo: () => 'JHipsterNet/Pagination/Order.cs' }],
+        },
+        {
+            path: SERVER_SRC_DIR,
             templates: [{ file: 'JHipsterNet/Pagination/Page.cs', renameTo: () => 'JHipsterNet/Pagination/Page.cs' }],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [{ file: 'JHipsterNet/Pagination/PageResponse.cs', renameTo: () => 'JHipsterNet/Pagination/PageResponse.cs' }],
         },
         {
             path: SERVER_SRC_DIR,

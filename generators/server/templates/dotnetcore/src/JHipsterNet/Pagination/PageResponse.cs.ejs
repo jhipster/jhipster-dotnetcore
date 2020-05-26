@@ -12,23 +12,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace JHipsterNet.Pagination {
-    public class Page<T> : Chunk<T>, IPage<T> where T : class {
-        public Page(List<T> content, IPageable pageable, int total) : base(content, pageable)
-        {
-            Total = total;
-        }
+    public class PageResponse
+    {
+        [JsonProperty("totalCount")]
+        public int TotalCount { get; set; }
 
-        public int Total { get; }
+        [JsonProperty("size")]
+        public int Size { get; set; }
 
-        public override bool HasNext => Number + 1 < TotalPages;
+        [JsonProperty("page")]
+        public int Page { get; set; }
 
-        public new bool IsLast => !HasNext;
+        [JsonProperty("totalPages")]
+        public int TotalPages { get; set; }
 
-        public int TotalPages => Size == 0 ? 1 : Total / Size;
+        [JsonProperty("isFirst")]
+        public bool IsFirst { get; set; }
 
-        public int TotalElements => Total;
-    }
+        [JsonProperty("isLast")]
+        public bool IsLast { get; set; }
+
+        [JsonProperty("hasNext")]
+        public bool HasNext { get; set; }
+
+        [JsonProperty("hasPrevious")]
+        public bool HasPrevious { get; set; }
+    }    
 }
