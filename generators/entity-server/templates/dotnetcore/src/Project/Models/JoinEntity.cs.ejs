@@ -21,12 +21,12 @@ let joinEntityTableName;
 let joinEntityClassName;
 let ownerSide;
 let idx = 0;
-while (idx < relationships.length && !relationship) {
-    if (relationships[idx].relationshipType == 'many-to-many' && !relationships[idx].joinEntityGenerated) {
-        relationship = relationships[idx];
+while (idx < relationships.length) {
+    relationship = relationships[idx];
+    joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
+    joinEntityClassName = relationships[idx].joinEntityNamePascalized;
+    if (relationships[idx].relationshipType == 'many-to-many') {
         relationships[idx].joinEntityGenerated = true;
-        joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
-        joinEntityClassName = relationships[idx].joinEntityNamePascalized;
         ownerSide = relationships[idx].ownerSide;
     }
     idx++;
