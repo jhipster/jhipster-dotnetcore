@@ -13,23 +13,49 @@
  limitations under the License.
 -%>
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using JHipsterNet.Pagination;
+using System.Linq.Expressions;
+using System.Reflection;
 using JHipsterNet.Pagination.Binders;
 
 namespace JHipsterNet.Pagination.Extensions {
     public static class QueryableExtensions {
-        public static IPage<TEntity> UsePageable<TEntity>(this IQueryable<TEntity> query, IPageable pageable, SortExpressions<TEntity> sorts)
+        public static IPage<TEntity> UsePageable<TEntity>(this IQueryable<TEntity> query, IPageable pageable)
             where TEntity : class
         {
-            var entities = query.ApplySort(sorts).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
+            var entities = query.ApplySort(pageable.Sort).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
             return new Page<TEntity>(entities.ToList(), pageable, query.Count());
         }
 
-        private static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> query, SortExpressions<TEntity> sorts)
+        private static IQueryable<TEntity> ApplySort<TEntity>(this IQueryable<TEntity> query, Sort sort)
         {
-            if (sorts == null || !sorts.IsValid()) return query;
-            return SortExpressions<TEntity>.ApplySorts(query, sorts);
+            if (!query.Any() || sort == null || sort.IsUnsorted()) return query;
+
+            var sortExpressions = new SortExpressions<TEntity>();
+            var propertyInfos = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            IList<Order> orders = sort.Orders;
+            foreach (var order in orders)
+            {
+                if (order == null || order.Property == null) continue;
+                bool isDescending = order.Direction.IsDescending();
+
+                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(order.Property, StringComparison.InvariantCultureIgnoreCase));
+
+                if (objectProperty == null) continue;
+
+                var type = typeof(TEntity);
+                var parameter = Expression.Parameter(type, "p");
+
+                var property = type.GetProperty(objectProperty.Name);
+                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
+
+                var expressionFunc = Expression.Lambda<Func<TEntity, object>>(propertyAccess, parameter);
+
+                sortExpressions.Add(expressionFunc, isDescending);
+            }
+            return SortExpressions<TEntity>.ApplySorts(query, sortExpressions);
         }
     }
 }

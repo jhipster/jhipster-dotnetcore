@@ -104,14 +104,13 @@ namespace <%= namespace %>.Controllers {
         public ActionResult<IEnumerable<<%= pascalizedEntityClass %>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
-            var sortExpressions = <%= pascalizedEntityClass %>.GetSortExpressions(pageable.Sort);
             var page = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                 <%_ }
             }); _%>
-                .UsePageable(pageable, sortExpressions);
+                .UsePageable(pageable);
             return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
         }
 
