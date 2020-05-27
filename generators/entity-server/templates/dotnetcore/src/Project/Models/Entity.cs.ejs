@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using JHipsterNet.Pagination;
 <%_ if (hasManyToMany) { _%>
 using <%= namespace %>.Models.RelationshipTools;
 <%_ } if (importJsonIgnore === true || hasManyToMany) { _%>
@@ -128,47 +127,6 @@ namespace <%= namespace %>.Models {
                     $", <%= fieldNamePascalized %>='{<%= fieldNamePascalized %>}'" +
             <%_ } _%>
                     "}";
-        }
-        
-        public static SortExpressions<<%= entityClassName %>> GetSortExpressions(Sort sort)
-        {
-            var sortExpressions = new SortExpressions<<%= entityClassName %>>();
-            if (sort != null && sort.IsSorted())
-            {
-                IList<Order> orders = sort.Orders;
-                foreach (var order in orders)
-                {
-                    AddSortExpression(sortExpressions, order);                    
-                }
-
-            }
-            return sortExpressions;
-        }
-
-        private static void AddSortExpression(SortExpressions<<%= entityClassName %>> sortExpressions, Order order)
-        {
-            if (sortExpressions == null || order == null || order.Property == null) return;
-            bool isDescending = order.Direction.IsDescending();
-            switch (order.Property.ToLower())
-            {
-                case "id":
-                    {
-                        sortExpressions.Add(x => x.Id, isDescending);
-                        break;
-                    }
-
-                <%_ for (idx in fields) {
-                    const fieldNamePascalized = fields[idx].fieldNamePascalized; _%>
-                case "<%= fieldNamePascalized.toLowerCase() %>":
-                    {
-                        sortExpressions.Add(x => x.<%= fieldNamePascalized %>, isDescending);
-                        break;
-                    }
-                <%_ } _%>
-
-                default:
-                    break;
-            }
         }
     }
 }

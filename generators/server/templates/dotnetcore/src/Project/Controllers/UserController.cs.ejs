@@ -95,7 +95,7 @@ namespace <%= namespace %>.Controllers {
                 .ThenInclude(r => r.Role)
                 .ToList()
                 .AsQueryable()
-                .UsePageable(pageable, sortExpressions);
+                .UsePageable(pageable);
             var userDtos = page.Content.Select(user => new UserDto(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);

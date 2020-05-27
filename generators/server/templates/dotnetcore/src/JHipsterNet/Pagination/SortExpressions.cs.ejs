@@ -21,16 +21,16 @@ namespace JHipsterNet.Pagination
 {
     public class SortExpressions<TEntity>
     {
-        private readonly List<dynamic> _expressionList;
+        private readonly List<SortExpression<TEntity, object>> _expressionList;
 
         public SortExpressions()
         {
-            _expressionList = new List<dynamic>();
+            _expressionList = new List<SortExpression<TEntity, object>>();
         }
 
-        public void Add<TKey>(Expression<Func<TEntity, TKey>> expression, bool isDescending = false)
+        public void Add(Expression<Func<TEntity, object>> expression, bool isDescending = false)
         {
-            _expressionList.Add(new SortExpression<TEntity, TKey>
+            _expressionList.Add(new SortExpression<TEntity, object>
             {
                 Expression = expression,
                 IsDescending = isDescending
