@@ -67,7 +67,6 @@ namespace JHipsterNet.Pagination.Binders {
         {
             if (queryString == null) return null;
             string[] sortParts = queryString.GetParameterValues(_binderConfig.SortParameterName);
-
             var orders = new List<Order>();
             foreach (var sortPart in sortParts)
             {
