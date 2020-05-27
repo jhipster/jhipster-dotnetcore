@@ -89,7 +89,6 @@ namespace <%= namespace %>.Controllers {
         public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var sortExpressions = <%= namespace %>.Models.User.GetSortExpressions(pageable.Sort);
             var page = _userManager.Users
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
