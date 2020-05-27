@@ -24,7 +24,7 @@ namespace JHipsterNet.Pagination.Extensions {
         public static IPage<TEntity> UsePageable<TEntity>(this IQueryable<TEntity> query, IPageable pageable)
             where TEntity : class
         {
-            var entities = query.ApplySort(pageable.Sort).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
+            IQueryable<TEntity> entities = query.ApplySort(pageable.Sort).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
             return new Page<TEntity>(entities.ToList(), pageable, query.Count());
         }
 
@@ -32,7 +32,7 @@ namespace JHipsterNet.Pagination.Extensions {
         {
             if (!query.Any() || sort == null || sort.IsUnsorted()) return query;
 
-            var sortExpressions = new SortExpressions<TEntity>();
+            var sortExpressions = new SortExpressions<TEntity, object>();
             var propertyInfos = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             IList<Order> orders = sort.Orders;
@@ -41,18 +41,20 @@ namespace JHipsterNet.Pagination.Extensions {
                 if (order == null || order.Property == null) continue;
                 
                 bool isDescending = order.Direction.IsDescending();
-                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(order.Property, StringComparison.InvariantCultureIgnoreCase));
-                if (objectProperty == null) continue;
+                PropertyInfo propertyInfo = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(order.Property, StringComparison.InvariantCultureIgnoreCase));
+                if (propertyInfo == null) continue;
 
-                var type = typeof(TEntity);
-                var parameter = Expression.Parameter(type, "p");
-                var property = type.GetProperty(objectProperty.Name);
-                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                var expressionFunc = Expression.Lambda<Func<TEntity, object>>(propertyAccess, parameter);
-
+                var expressionFunc = GetExpression<TEntity, object>(propertyInfo);
                 sortExpressions.Add(expressionFunc, isDescending);
             }
-            return SortExpressions<TEntity>.ApplySorts(query, sortExpressions);
+            return SortExpressions<TEntity, object>.ApplySorts(query, sortExpressions);
+        }
+
+        private static Expression<Func<TEntity, TKey>> GetExpression<TEntity, TKey>(PropertyInfo propertyInfo)
+        {
+            ParameterExpression ep = Expression.Parameter(typeof(TEntity), "x");
+            MemberExpression em = Expression.Property(ep, propertyInfo);
+            return Expression.Lambda<Func<TEntity, TKey>>(Expression.Convert(em, typeof(object)), ep);
         }
     }
 }
