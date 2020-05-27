@@ -12,6 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace JHipsterNet.Pagination {
     public class Sort {
         public const Direction DefaultDirection = Direction.Asc;
         public static readonly Sort Unsorted = new Sort();
-
+        public IList<Order> Orders { get; }
 
         public Sort(IList<Order> orders)
         {
@@ -30,7 +31,6 @@ namespace JHipsterNet.Pagination {
             .Select(it => new Order(direction, it)).ToList())
         {
         }
-
 
         public Sort(IEnumerable<string> properties) : this(DefaultDirection, properties)
         {
@@ -44,8 +44,6 @@ namespace JHipsterNet.Pagination {
         public Sort(params string[] properties) : this(DefaultDirection, properties as IEnumerable<string>)
         {
         }
-
-        public IList<Order> Orders { get; }
 
         public Sort Ascending()
         {
@@ -80,36 +78,17 @@ namespace JHipsterNet.Pagination {
             return new Sort(orders);
         }
 
-        //TODO add Equals
-    }
-
-    public class Order {
-        public bool IgnoreCase { get; set; }
-
-        public Order(Direction direction, string property)
+        public override int GetHashCode()
         {
-            Direction = direction;
-            Property = property;
+            return HashCode.Combine(Orders.GetHashCode());
         }
 
-        public Direction Direction { get; }
-        public string Property { get; }
-    }
-
-    public enum Direction {
-        Asc,
-        Desc
-    }
-
-    public static class DirectionExtensions {
-        public static bool IsAscending(this Direction direction)
+        public override bool Equals(object obj)
         {
-            return direction.Equals(Direction.Asc);
-        }
-
-        public static bool IsDescending(this Direction direction)
-        {
-            return direction.Equals(Direction.Desc);
+            if (this == obj) return true;
+            if (obj == null || GetType() != obj.GetType()) return false;
+            var sort = obj as Sort;
+            return Orders.Equals(sort.Orders);
         }
     }
 }

@@ -111,8 +111,7 @@ namespace <%= namespace %>.Controllers {
                 <%_ }
             }); _%>
                 .UsePageable(pageable);
-            var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
-            return Ok(page.Content).WithHeaders(headers);
+            return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
         }
 
         [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]

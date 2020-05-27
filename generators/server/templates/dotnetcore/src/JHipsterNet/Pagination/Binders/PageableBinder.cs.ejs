@@ -13,6 +13,7 @@
  limitations under the License.
 -%>
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using JHipsterNet.Pagination.Extensions;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,11 @@ namespace JHipsterNet.Pagination.Binders {
             var pageNumber = ParseIntOrDefault(pageNumberString, _binderConfig.FallbackPageable.PageNumber);
             var pageSize = ParseIntOrDefault(pageSizeString, _binderConfig.FallbackPageable.PageSize,
                 _binderConfig.MaxPageSize);
+            
+            Sort sort = ResolveSortArgument(queryString);
+            if (sort != null) {
+                return Pageable.Of(pageNumber, pageSize, sort);
+            }
 
             return Pageable.Of(pageNumber, pageSize);
         }
@@ -55,6 +61,24 @@ namespace JHipsterNet.Pagination.Binders {
             value = value > upper ? upper : value;
 
             return value;
+        }
+
+        private Sort ResolveSortArgument(QueryString queryString)
+        {
+            if (queryString == null) return null;
+            string[] sortParts = queryString.GetParameterValues(_binderConfig.SortParameterName);
+            var orders = new List<Order>();
+            foreach (var sortPart in sortParts)
+            {
+                string[] sortSpt = sortPart.Split(_binderConfig.SortDelimiter);
+                string property = sortSpt?[0];
+                Direction direction = sortSpt != null && sortSpt.Length == 2 && sortSpt[1] == "desc" ? Direction.Desc : Sort.DefaultDirection;
+                if (!string.IsNullOrEmpty(property))
+                {
+                    orders.Add(new Order(direction, property));
+                }
+            }
+            return new Sort(orders);
         }
     }
 }

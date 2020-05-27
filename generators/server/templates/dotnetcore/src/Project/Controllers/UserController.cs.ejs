@@ -93,11 +93,11 @@ namespace <%= namespace %>.Controllers {
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .ToList()
-                .Select(user => new UserDto(user))
                 .AsQueryable()
                 .UsePageable(pageable);
-            var headers = PaginationUtil.GeneratePaginationHttpHeaders(page, HttpContext.Request);
-            return Ok(page.Content).WithHeaders(headers);
+            var userDtos = page.Content.Select(user => new UserDto(user));
+            var headers = page.GeneratePaginationHttpHeaders();
+            return Ok(userDtos).WithHeaders(headers);
         }
 
         [HttpGet("users/authorities")]
