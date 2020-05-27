@@ -49,7 +49,7 @@ jobs:
             - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
               run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
             - name: 'GENERATE JHipster.NET entities'
-              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP
+              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
