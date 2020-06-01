@@ -36,14 +36,6 @@ namespace <%= namespace %>.Test.Controllers {
         public AccountResourceIntTest()
         {
             _factory = new NhipsterWebApplicationFactory<TestStartup>();
-//            _factory.WithWebHostBuilder(builder => {
-//                var mockMailService = A.Fake<IMailService>();
-//                A.CallTo(() => mockMailService.SendActivationEmail(A<User>.Ignored)).Returns(Task.CompletedTask);
-//                builder.ConfigureServices(services => {
-//                    services.Replace(new ServiceDescriptor(typeof(IMailService), sp => mockMailService,
-//                        ServiceLifetime.Scoped));
-//                });
-//            });
         }
 
         private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
@@ -362,7 +354,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
 
             var response = await client.GetAsync("/api/account");
-            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
         [Fact]

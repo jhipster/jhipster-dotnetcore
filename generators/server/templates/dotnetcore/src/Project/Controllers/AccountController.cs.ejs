@@ -29,15 +29,11 @@ using Microsoft.AspNetCore.Mvc;
 using <%= namespace %>.Models.Vm;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-<%_ } else { _%>
-using Microsoft.AspNetCore.Authorization;
 <%_ } _%>
+using Microsoft.AspNetCore.Authorization;
 
 namespace <%= namespace %>.Controllers {
 
-    <%_ if (authenticationType === 'oauth2') { _%>
-    [Authorize]
-    <%_ } _%>
     [Route("api")]
     [ApiController]
     public class AccountController : ControllerBase {
@@ -85,6 +81,7 @@ namespace <%= namespace %>.Controllers {
             return _userManager.GetUserName(User);
         }
 
+        [Authorize]
         [HttpGet("account")]
         public async Task<ActionResult<UserDto>> GetAccount()
         {
@@ -94,6 +91,7 @@ namespace <%= namespace %>.Controllers {
             return Ok(new UserDto(user));
         }
 
+        [Authorize]
         [HttpPost("account")]
         [ValidateModel]
         public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
@@ -114,6 +112,7 @@ namespace <%= namespace %>.Controllers {
             return Ok();
         }
 
+        [Authorize]
         [HttpPost("account/change-password")]
         [ValidateModel]
         public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDto passwordChangeDto)
@@ -152,7 +151,8 @@ namespace <%= namespace %>.Controllers {
                    password.Length >= ManagedUserVM.PasswordMinLength &&
                    password.Length <= ManagedUserVM.PasswordMaxLength;
         }
-        <%_ } else { _%>  
+        <%_ } else { _%>
+        [Authorize] 
         [HttpGet("account")]
         public ActionResult<UserDto> GetAccount()
         {
