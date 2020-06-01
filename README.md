@@ -213,7 +213,7 @@ Tips:
    
  ```dotnet tool install --global dotnet-sonarscanner```
 
-3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"AwesomeKey" /d:sonar.host.url="http://localhost:9001" /s:$pwd/SonarQube.Analysis.xml```
+3. Run ```dotnet sonarscanner begin /d:sonar.login=admin /d:sonar.password=admin /k:"YourProject" /d:sonar.host.url="http://localhost:9001" /s:"`pwd`/SonarQube.Analysis.xml"```
 
 4. Build your application : ```dotnet build```
 
