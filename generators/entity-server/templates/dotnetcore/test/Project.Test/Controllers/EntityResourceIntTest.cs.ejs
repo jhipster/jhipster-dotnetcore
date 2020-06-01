@@ -118,7 +118,7 @@ namespace <%= namespace %>.Test.Controllers {
     public class <%= pascalizedEntityClass %>ResourceIntTest {
         public <%= pascalizedEntityClass %>ResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<Startup>().WithMockUser();
+            _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser();
             _client = _factory.CreateClient();
 
             _applicationDatabaseContext = _factory.GetRequiredService<ApplicationDatabaseContext>();
