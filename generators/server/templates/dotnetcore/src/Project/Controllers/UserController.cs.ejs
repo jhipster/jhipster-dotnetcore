@@ -32,15 +32,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
 namespace <%= namespace %>.Controllers {
+    [Authorize]
     [Route("api")]
     [ApiController]
     public class UserController : ControllerBase {
-        private readonly ILogger<UserJwtController> _log;
+        private readonly ILogger<UserController> _log;
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
 
-        public UserController(ILogger<UserJwtController> log, UserManager<User> userManager, IUserService userService,
+        public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
             IMailService mailService)
         {
             _log = log;
