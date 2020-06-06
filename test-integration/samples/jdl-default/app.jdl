@@ -60,7 +60,9 @@ enum Language {
     FRENCH, ENGLISH, SPANISH
 }
 
-
+relationship ManyToMany {
+  Job{chore(title)} to PieceOfWork{job}
+}
 
 relationship OneToOne {
 	Country{region} to Region
