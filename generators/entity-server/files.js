@@ -23,7 +23,6 @@ const constants = require('../generator-dotnetcore-constants');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 
-
 const serverFiles = {
     server: [
         {
@@ -92,24 +91,24 @@ const serverFiles = {
     ],
 };
 
-
-
-
 function writeFiles() {
     return {
         writeServerFiles() {
             this.relationships.forEach(relationship => {
                 // const relationship = relationship;
                 if (relationship.relationshipType === 'many-to-many') {
-                    let files = {
+                    const files = {
                         server: [
                             {
                                 condition: generator => generator.entityClassHasManyToMany,
                                 path: SERVER_SRC_DIR,
-                                templates:  [{
-                                    file: 'Project/Models/JoinEntity.cs',
-                                    renameTo: generator => `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
-                                }],
+                                templates: [
+                                    {
+                                        file: 'Project/Models/JoinEntity.cs',
+                                        renameTo: generator =>
+                                            `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
+                                    },
+                                ],
                             },
                         ],
                     };
