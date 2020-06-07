@@ -68,7 +68,7 @@ module.exports = class extends ClientGenerator {
         return {
             askForModuleName: basePrompts.askForModuleName,
             askForClient: prompts.askForClient,
-            askFori18n: basePrompts.askFori18n,
+            askFori18n: basePrompts.askForI18n,
             askForClientTheme: basePrompts.askForClientTheme,
             askForClientThemeVariant: basePrompts.askForClientThemeVariant,
 
