@@ -16,16 +16,20 @@
 let ownerRelationshipFieldName;
 let nonOwnerEntityClassName;
 let nonOwnerRelationshipFieldName;
+let relationship;
 let joinEntityTableName;
 let joinEntityClassName;
 let ownerSide;
 let idx = 0;
-relationship = relationships[idx];
-joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
-joinEntityClassName = relationships[idx].joinEntityNamePascalized;
-if (relationships[idx].relationshipType === 'many-to-many') {
-    relationships[idx].joinEntityGenerated = true;
-    ownerSide = relationships[idx].ownerSide;
+while (idx < relationships.length) {
+    relationship = relationships[idx];
+    joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
+    joinEntityClassName = relationships[idx].joinEntityNamePascalized;
+    if (relationships[idx].relationshipType == 'many-to-many') {
+        relationships[idx].joinEntityGenerated = true;
+        ownerSide = relationships[idx].ownerSide;
+    }
+    idx++;
 }
 if (ownerSide) {
     ownerEntityClassName = pascalizedEntityClass;
