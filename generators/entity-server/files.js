@@ -112,6 +112,7 @@ function writeFiles() {
                             },
                         ],
                     };
+                    this.currentRelation = relationship.joinEntityNamePascalized;
                     this.writeFilesToDisk(files, this, false, 'dotnetcore');
                 }
             });

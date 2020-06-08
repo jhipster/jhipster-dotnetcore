@@ -22,12 +22,14 @@ let joinEntityClassName;
 let ownerSide;
 let idx = 0;
 while (idx < relationships.length) {
-    relationship = relationships[idx];
-    joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
-    joinEntityClassName = relationships[idx].joinEntityNamePascalized;
-    if (relationships[idx].relationshipType == 'many-to-many') {
-        relationships[idx].joinEntityGenerated = true;
-        ownerSide = relationships[idx].ownerSide;
+    relationship = relationships[idx];    
+    if(currentRelation == relationship.joinEntityNamePascalized){
+        joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
+        joinEntityClassName = relationships[idx].joinEntityNamePascalized;
+        if (relationships[idx].relationshipType == 'many-to-many') {
+            relationships[idx].joinEntityGenerated = true;
+            ownerSide = relationships[idx].ownerSide;
+        }
     }
     idx++;
 }
