@@ -22,26 +22,28 @@ let joinEntityClassName;
 let ownerSide;
 let idx = 0;
 while (idx < relationships.length) {
-    relationship = relationships[idx];
-    joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
-    joinEntityClassName = relationships[idx].joinEntityNamePascalized;
-    if (relationships[idx].relationshipType == 'many-to-many') {
-        relationships[idx].joinEntityGenerated = true;
-        ownerSide = relationships[idx].ownerSide;
+    relationship = relationships[idx];    
+    if(currentRelation == relationship.joinEntityNamePascalized){
+        joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
+        joinEntityClassName = relationships[idx].joinEntityNamePascalized;
+        if (relationships[idx].relationshipType == 'many-to-many') {
+            relationships[idx].joinEntityGenerated = true;
+            ownerSide = relationships[idx].ownerSide;
+        }
+        if (ownerSide) {
+            ownerEntityClassName = pascalizedEntityClass;
+            ownerRelationshipFieldName = pascalizedEntityClass;
+            nonOwnerEntityClassName = relationship.otherEntityNamePascalized;
+            nonOwnerRelationshipFieldName = relationship.otherEntityNamePascalized;
+        } else {
+            ownerEntityClassName = relationship.otherEntityNamePascalized;
+            ownerRelationshipFieldName = relationship.otherEntityNamePascalized;
+            nonOwnerEntityClassName = pascalizedEntityClass;
+            nonOwnerRelationshipFieldName = pascalizedEntityClass;
+        }
     }
     idx++;
-}
-if (ownerSide) {
-    ownerEntityClassName = pascalizedEntityClass;
-    ownerRelationshipFieldName = pascalizedEntityClass;
-    nonOwnerEntityClassName = relationship.otherEntityNamePascalized;
-    nonOwnerRelationshipFieldName = relationship.otherEntityNamePascalized;
-} else {
-    ownerEntityClassName = relationship.otherEntityNamePascalized;
-    ownerRelationshipFieldName = relationship.otherEntityNamePascalized;
-    nonOwnerEntityClassName = pascalizedEntityClass;
-    nonOwnerRelationshipFieldName = pascalizedEntityClass;
-} _%>
+}_%>
 using <%= namespace %>.Models.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 

@@ -22,7 +22,6 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-const joinEntitiesTemplates = [];
 
 const serverFiles = {
     server: [
@@ -53,11 +52,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.mainProjectDir}/Models/RelationshipTools/JoinListFacade.cs`,
                 },
             ],
-        },
-        {
-            condition: generator => generator.entityClassHasManyToMany,
-            path: SERVER_SRC_DIR,
-            templates: joinEntitiesTemplates,
         },
     ],
     db: [
@@ -103,13 +97,25 @@ function writeFiles() {
             this.relationships.forEach(relationship => {
                 // const relationship = relationship;
                 if (relationship.relationshipType === 'many-to-many') {
-                    joinEntitiesTemplates.push({
-                        file: 'Project/Models/JoinEntity.cs',
-                        renameTo: generator => `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
-                    });
+                    const files = {
+                        server: [
+                            {
+                                condition: generator => generator.entityClassHasManyToMany,
+                                path: SERVER_SRC_DIR,
+                                templates: [
+                                    {
+                                        file: 'Project/Models/JoinEntity.cs',
+                                        renameTo: generator =>
+                                            `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
+                                    },
+                                ],
+                            },
+                        ],
+                    };
+                    this.currentRelation = relationship.joinEntityNamePascalized;
+                    this.writeFilesToDisk(files, this, false, 'dotnetcore');
                 }
             });
-
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
         },
     };
