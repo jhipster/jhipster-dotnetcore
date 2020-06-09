@@ -3,7 +3,8 @@ entity Region {
 }
 
 entity Country {
-	countryName String
+	countryName String,
+    language Language
 }
 
 // an ignored comment

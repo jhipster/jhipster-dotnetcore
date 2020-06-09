@@ -18,6 +18,8 @@
  */
 const _ = require('lodash');
 const toPascalCase = require('to-pascal-case');
+const buildEnumInfo = require('generator-jhipster/generators/utils').buildEnumInfo;
+
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -27,6 +29,7 @@ module.exports = {
     copyEnumI18n,
     equivalentCSharpType,
     configureGlobalDotnetcore,
+    buildEnumInfo,
 };
 
 /**

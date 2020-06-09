@@ -532,18 +532,18 @@ function askForField(done) {
                 {
                     value: 'Boolean',
                     name: 'bool',
-                } /* ,
+                },
                 {
                     value: 'enum',
-                    name: 'Enumeration (Java enum type)'
-                },
+                    name: 'Enumeration',
+                } /* ,
                 {
                     value: 'byte[]',
                     name: '[BETA] Blob'
                 } */,
             ],
             default: 0,
-        } /* ,
+        },
         {
             when: response => {
                 if (response.fieldType === 'enum') {
@@ -572,7 +572,7 @@ function askForField(done) {
                 }
                 return true;
             },
-            message: 'What is the class name of your enumeration?'
+            message: 'What is the class name of your enumeration?',
         },
         {
             when: response => response.fieldIsEnum,
@@ -595,7 +595,7 @@ function askForField(done) {
                     return `Enum values cannot contain duplicates (typed values: ${input})`;
                 }
                 for (let i = 0; i < enums.length; i++) {
-                    if (/^[0-9]. */ /* .test(enums[i])) {
+                    if (/^[0-9].*/.test(enums[i])) {
                         return `Enum value "${enums[i]}" cannot start with a number`;
                     }
                     if (enums[i] === '') {
@@ -610,8 +610,8 @@ function askForField(done) {
                     return 'What are the values of your enumeration (separated by comma, no spaces)?';
                 }
                 return 'What are the new values of your enumeration (separated by comma, no spaces)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
-            }
-        },
+            },
+        } /* ,
         {
             when: response => response.fieldAdd === true && databaseType === 'cassandra',
             type: 'list',
@@ -844,10 +844,10 @@ function askForField(done) {
     ];
     this.prompt(prompts).then(props => {
         if (props.fieldAdd) {
-            /* if (props.fieldIsEnum) {
+            if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
                 props.fieldValues = props.fieldValues.toUpperCase();
-            } */
+            }
 
             const field = {
                 fieldName: props.fieldName,

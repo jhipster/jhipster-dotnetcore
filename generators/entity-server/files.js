@@ -18,6 +18,7 @@
  */
 
 const constants = require('../generator-dotnetcore-constants');
+const utils = require('../utils');
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -116,6 +117,24 @@ function writeFiles() {
                     this.writeFilesToDisk(files, this, false, 'dotnetcore');
                 }
             });
+
+            this.fields.forEach(field => {
+                if (field.fieldIsEnum) {
+                    if (!this.skipServer) {
+                        const enumInfo = utils.buildEnumInfo(field, this.angularAppName, this.packageName, this.clientRootFolder);
+                        enumInfo.namespace = this.namespace;
+                        const fieldType = field.fieldType;
+                        this.template(
+                            'dotnetcore/src/Project/Models/Enum.cs.ejs',
+                            `src/${this.mainProjectDir}/Models/${fieldType}.cs`,
+                            this,
+                            {},
+                            enumInfo
+                        );
+                    }
+                }
+            });
+
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
         },
     };
