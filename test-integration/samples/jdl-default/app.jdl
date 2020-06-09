@@ -59,6 +59,8 @@ enum Language {
     FRENCH, ENGLISH, SPANISH
 }
 
+
+
 relationship OneToOne {
 	Country{region} to Region
 }
@@ -93,6 +95,10 @@ relationship OneToOne {
 	JobHistory{job} to Job,
 	JobHistory{department} to Department,
 	JobHistory{employee} to Employee
+}
+
+relationship ManyToMany {
+	Job{chore(title)} to PieceOfWork{job}
 }
 
 // Set pagination options
