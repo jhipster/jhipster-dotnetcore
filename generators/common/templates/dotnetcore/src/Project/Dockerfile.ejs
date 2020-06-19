@@ -12,24 +12,40 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+# Based on Microsoft's docker samples for dotnet core
+# available at https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+# First install nodejs - required to build generated client app
 WORKDIR /app
-COPY ["src/JHipsterNet/JHipsterNet.csproj", "src/JHipsterNet/"]
-COPY ["src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj", "src/<%= mainProjectDir %>/"]
-RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
-COPY . ./
-WORKDIR src/<%= mainProjectDir %>
 RUN apt-get update -yq && apt-get install -yq curl
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get update && \
     apt-get install -yq nodejs && \
     rm -rf /var/lib/apt/lists/*
+
+# Restore dependencies of .net core projects
+COPY ["src/JHipsterNet/JHipsterNet.csproj", "src/JHipsterNet/"]
+COPY ["src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj", "src/<%= mainProjectDir %>/"]
+RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
+
+# Copy everything else and build app
+COPY . ./
+WORKDIR src/<%= mainProjectDir %>
 RUN cd ClientApp && npm install
 RUN rm -rf ClientApp/dist && \
     dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+# Final stage/image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS runtime
 WORKDIR /app
 EXPOSE 80
 COPY --from=build /app/out .
+
+# See: https://github.com/dotnet/announcements/issues/20
+# Uncomment to enable globalization APIs (or delete)
+#ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+#RUN apk add --no-cache icu-libs
+#ENV LC_ALL en_US.UTF-8
+#ENV LANG en_US.UTF-8
+
 ENTRYPOINT ["dotnet", "<%= kebabCasedBaseName %>.dll"]
