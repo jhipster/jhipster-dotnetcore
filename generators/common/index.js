@@ -64,11 +64,6 @@ module.exports = class extends CommonGenerator {
             global: [
                 {
                     templates: [
-                        'README.md',
-                        {
-                            file: 'gitignore',
-                            renameTo: () => '.gitignore',
-                        },
                         {
                             file: 'gitattributes',
                             renameTo: () => '.gitattributes',
