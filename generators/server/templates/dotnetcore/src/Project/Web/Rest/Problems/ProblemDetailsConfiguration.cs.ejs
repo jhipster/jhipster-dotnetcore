@@ -33,18 +33,18 @@ namespace <%= namespace %>.Web.Rest.Problems {
 
         public void Configure(ProblemDetailsOptions options)
         {
-            options.IncludeExceptionDetails = ctx => _environment.IsDevelopment();
+            options.IncludeExceptionDetails = (ctx , details) => _environment.IsDevelopment();
 
-            options.OnBeforeWriteDetails = details => {
+            options.OnBeforeWriteDetails = (ctx, details) => {
                 // keep consistent with asp.net core 2.2 conventions that adds a tracing value
                 var traceId = Activity.Current?.Id ?? _HttpContextAccessor.HttpContext.TraceIdentifier;
                 details.Extensions["traceId"] = traceId;
             };
 
-            options.Map<AuthenticationException>(exception =>
-                new ExceptionProblemDetails(exception, StatusCodes.Status401Unauthorized));
+            options.Map<AuthenticationException>(exception  =>
+                new StatusCodeProblemDetails(401));
             options.Map<NotImplementedException>(exception =>
-                new ExceptionProblemDetails(exception, StatusCodes.Status501NotImplemented));
+                new StatusCodeProblemDetails(501));
 
             //TODO add Headers to HTTP responses
         }
