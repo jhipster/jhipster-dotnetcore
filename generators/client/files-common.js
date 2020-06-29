@@ -186,7 +186,7 @@ function writeFiles() {
     updateWebpackProdJs.call(this);
     updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
-    updatePackageJson.call(this);    
+    updatePackageJson.call(this);
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
     updateTestFramework.call(this);
