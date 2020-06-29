@@ -41,10 +41,13 @@ namespace <%= namespace %>.Web.Rest.Problems {
                 details.Extensions["traceId"] = traceId;
             };
 
-            options.Map<AuthenticationException>(exception  =>
-                new StatusCodeProblemDetails(401));
-            options.Map<NotImplementedException>(exception =>
-                new StatusCodeProblemDetails(501));
+            // Those ones will catch the NotImplementedException and HttpRequestException
+            options.MapToStatusCode<AuthenticationException>(StatusCodes.Status401Unauthorized);
+            options.MapToStatusCode<NotImplementedException>(StatusCodes.Status501NotImplemented);
+
+            // Because exceptions are handled polymorphically, this will act as a "catch all" mapping, which is why it's added last.
+            // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
+            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
 
             //TODO add Headers to HTTP responses
         }
