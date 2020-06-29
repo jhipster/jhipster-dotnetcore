@@ -68,6 +68,12 @@ function updateWebpackDevJs() {
         "cacheDirectory: path.resolve('bin/cache-loader')",
         true
     );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+        '8080',
+        '5000',
+        false
+    );
 }
 
 function updateWebpackProdJs() {
