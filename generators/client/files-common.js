@@ -101,8 +101,8 @@ function updateProxyConfJson() {
 }
 
 function updateTsConfigJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`,
