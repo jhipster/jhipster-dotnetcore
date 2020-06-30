@@ -68,6 +68,12 @@ function updateWebpackDevJs() {
         "cacheDirectory: path.resolve('bin/cache-loader')",
         true
     );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+        '8080',
+        '5000',
+        false
+    );
 }
 
 function updateWebpackProdJs() {
@@ -95,9 +101,17 @@ function updateProxyConfJson() {
 }
 
 function updateTsConfigJson() {
+     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`,
+        `/${SERVER_SRC_DIR}${this.mainClientDir}`,
+        "",
+        true
+    );
 }
 
 function updatePackageJson() {
@@ -180,7 +194,7 @@ function writeFiles() {
     updateWebpackProdJs.call(this);
     updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
-    updatePackageJson.call(this);    
+    updatePackageJson.call(this);
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
     updateTestFramework.call(this);

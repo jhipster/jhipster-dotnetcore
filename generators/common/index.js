@@ -22,6 +22,7 @@ const CommonGenerator = require('generator-jhipster/generators/common');
 const toPascalCase = require('to-pascal-case');
 const _ = require('lodash');
 const writeFiles = require('./files').writeFiles;
+const packagejs = require('../../package.json');
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
@@ -47,6 +48,7 @@ module.exports = class extends CommonGenerator {
                 this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.mainProjectDir = this.pascalizedBaseName;
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
+                this.jhipsterDotnetVersion = packagejs.version;
             },
         };
     }
@@ -64,11 +66,6 @@ module.exports = class extends CommonGenerator {
             global: [
                 {
                     templates: [
-                        'README.md',
-                        {
-                            file: 'gitignore',
-                            renameTo: () => '.gitignore',
-                        },
                         {
                             file: 'gitattributes',
                             renameTo: () => '.gitattributes',
