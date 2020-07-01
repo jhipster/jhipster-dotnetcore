@@ -28,7 +28,7 @@ namespace <%= namespace %>.Data {
         IdentityUserToken<string>
     > {
     <%_ } else { _%>
-    public class ApplicationDatabaseContext : DbContext 
+    public class ApplicationDatabaseContext : DbContext
     {
     <%_ } _%>
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
@@ -85,6 +85,13 @@ namespace <%= namespace %>.Data {
                 .OnDelete(DeleteBehavior.Cascade);
             <%_ } _%>
             <%_ entities.forEach(entity => {
+                fields.forEach(field => {
+                    if (entity.name == entityClass && field.fieldIsEnum){ _%>
+            builder.Entity<<%= entity.name %>>()
+                .Property(e => e.<%= field.fieldNamePascalized %>)
+                .HasConversion<string>();
+                <%_ }
+                });
                 if(entity.name.toUpperCase() !== entityClass.toUpperCase()) {
                     entity.definition.relationships.forEach(relationship => {
                         if (relationship.relationshipType === 'many-to-many') {

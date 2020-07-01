@@ -88,6 +88,22 @@ function updatedValue(cSharpType) {
 
     return updatedValue;
 }
+function enumDefaultValue(field) {
+    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+    if (enums.length > 0) {
+        return field.fieldType + '.' + enums[0];
+    } else {
+        return 'null';
+    }
+}
+function enumUpdatedValue(field) {
+    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+    if (enums.length > 1) {
+        return field.fieldType + '.' + enums[1];
+    } else {
+        return 'null';
+    }
+}
 function hasDateTimeTypeField() {
     let dateTimeTypeField = false;
     let idx = 0;
@@ -127,8 +143,11 @@ namespace <%= namespace %>.Test.Controllers {
         }
 
         <%_ fields.forEach(field => {
-            const fieldType = equivalentCSharpType(field.fieldType);
-            if (field.fieldType === 'String') { _%>
+            const fieldType = equivalentCSharpType(field.fieldType, field);
+            if (field.fieldIsEnum) { _%>
+        private const <%= field.fieldType %> Default<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
+        private const <%= field.fieldType %> Updated<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
+        <%_ } else if (field.fieldType === 'String') { _%>
         private const <%= fieldType %> Default<%= field.fieldNamePascalized %> = <%- defaultValue(fieldType) %>;
         private const <%= fieldType %> Updated<%= field.fieldNamePascalized %> = <%- updatedValue(fieldType) %>;
             <%_ } else { _%>
@@ -238,7 +257,7 @@ namespace <%= namespace %>.Test.Controllers {
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
             json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
             <%_ fields.forEach(field => { _%>
-            json.SelectTokens("$.[*].<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %>);
+            json.SelectTokens("$.[*].<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
             <%_ }); _%>
         }
 
@@ -256,7 +275,7 @@ namespace <%= namespace %>.Test.Controllers {
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
             json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
             <%_ fields.forEach(field => { _%>
-            json.SelectTokens("$.<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %>);
+            json.SelectTokens("$.<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
             <%_ }); _%>
         }
 

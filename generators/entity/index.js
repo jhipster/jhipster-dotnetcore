@@ -83,6 +83,29 @@ module.exports = class extends EntityGenerator {
                 context.fields.forEach(field => {
                     field.fieldNamePascalized = toPascalCase(field.fieldName);
                     field.fieldNameCamelCased = _.camelCase(field.fieldName);
+
+                    const fieldType = field.fieldType;
+
+                    field.fieldIsEnum = ![
+                        'String',
+                        'Integer',
+                        'Long',
+                        'Float',
+                        'Double',
+                        'BigDecimal',
+                        'LocalDate',
+                        'Instant',
+                        'ZonedDateTime',
+                        'Duration',
+                        'UUID',
+                        'Boolean',
+                        'byte[]',
+                        'ByteBuffer',
+                    ].includes(fieldType);
+
+                    if (field.fieldIsEnum === true) {
+                        context.i18nToLoad.push(field.enumInstance);
+                    }
                 });
 
                 // Load in-memory data for .Net Blueprint relationships
