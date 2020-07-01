@@ -4,7 +4,7 @@
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",
-    "jhipsterVersion": "6.8.0",
+    "jhipsterVersion": "6.9.1",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "useSass": true,
@@ -20,14 +20,14 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "0.3.0"
+        "version": "1.0.0"
       }
     ],
     "enableTranslation": false,
     "blueprints": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "0.3.0"
+        "version": "1.0.0"
       }
     ]
   }
