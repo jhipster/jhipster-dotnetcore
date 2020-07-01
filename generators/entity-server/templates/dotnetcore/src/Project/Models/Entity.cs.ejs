@@ -52,8 +52,11 @@ namespace <%= namespace %>.Models {
             if (required) { _%>
         [Required]
             <%_ } _%>
+            <%_ if (fields[idx].fieldIsEnum) { _%>
+        public <%= fields[idx].fieldType %>? <%= fieldNamePascalized %> { get; set; }
+                <%_ } else { _%>
         public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
-
+            <%_ } _%>
         <%_ }
         for (idx in relationships) {
             const relationshipType = relationships[idx].relationshipType;

@@ -1,0 +1,22 @@
+{
+    "name": "Order",
+    "fields": [
+        {
+            "fieldName": "status",
+            "fieldType": "OrderStatus",
+            "fieldValues": "IN_PROGRESS,FINISHED"
+          }
+    ],
+    "relationships": [],
+    "changelogDate": "20200415193919",
+    "entityTableName": "a",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}
