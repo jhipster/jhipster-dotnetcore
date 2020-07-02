@@ -1,0 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using <%= namespace %>.Service;
+
+namespace <%= namespace %>.Controllers.RepositoryLayer
+{
+    public interface IUnitOfWork : IDisposable
+    {
+        IUserService Set<T>() where T : class;
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+    }
+}

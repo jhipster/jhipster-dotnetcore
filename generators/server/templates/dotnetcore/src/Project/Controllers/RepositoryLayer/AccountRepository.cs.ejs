@@ -1,0 +1,76 @@
+using System.Security.Claims;
+using System.Threading.Tasks;
+using <%= namespace %>.Models;
+using <%= namespace %>.Models.Vm;
+using <%= namespace %>.Service;
+using <%= namespace %>.Web.Rest.Problems;
+
+namespace <%= namespace %>.Controllers.RepositoryLayer
+{
+    public interface IAccountRepository : IGenericRepository<User>
+    {
+        Task<User> RegisterUserAndSendMail(ManagedUserVM managedUserVm);
+        Task<User> ActivateAccount(string key);
+        string GetUserName(ClaimsPrincipal claimsPrincipal);
+        Task<User> FindByEmailAsync(string mail);
+        Task<User> FindByNameAsync(string name);
+
+        Task RequestPasswordResetAndSend(string mail);
+        Task RequestKeyPasswordReset(KeyAndPasswordVM keyAndPasswordVm);
+
+
+    }
+
+    public class AccountRepository : GenericRepository<User>, IAccountRepository
+    {
+        private readonly IMailService _mailService;
+
+        public AccountRepository(IUnitOfWork context, IMailService mailService) : base(context)
+        {
+            _mailService = mailService;
+        }
+
+        public async Task<User> FindByEmailAsync(string mail)
+        {
+            return await _userManager.FindByEmailAsync(mail);
+        }
+
+        public async Task<User> FindByNameAsync(string name)
+        {
+            return await _userManager.FindByNameAsync(name);
+        }
+
+        public async Task RequestPasswordResetAndSend(string mail)
+        {
+            var user = await _dbService.RequestPasswordReset(mail);
+            if (user == null) throw new EmailNotFoundException();
+            await _mailService.SendPasswordResetMail(user);
+        }
+
+        public async Task RequestKeyPasswordReset(KeyAndPasswordVM keyAndPasswordVm)
+        {
+
+            var user = await _dbService.CompletePasswordReset(keyAndPasswordVm.NewPassword, keyAndPasswordVm.Key);
+
+            if (user == null) throw new InternalServerErrorException("No user was found for this reset key");
+        }
+
+        public async Task<User> RegisterUserAndSendMail(ManagedUserVM managedUserVm)
+        {
+            var user = await _dbService.RegisterUser(managedUserVm, managedUserVm.Password);
+            await _mailService.SendActivationEmail(user);
+            return user;
+        }
+
+        public async Task<User> ActivateAccount(string key)
+        {
+            return await _dbService.ActivateRegistration(key);
+        }
+
+        public string GetUserName(ClaimsPrincipal claimsPrincipal)
+        {
+            return _userManager.GetUserName(claimsPrincipal);
+        }
+
+    }
+}

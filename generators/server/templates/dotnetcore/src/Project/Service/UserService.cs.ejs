@@ -41,6 +41,7 @@ namespace <%= namespace %>.Service {
 
         Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
         Task<User> GetUserWithUserRoles();
+        UserManager<User> GetUserManager();
     }
 
     public class UserService : IUserService {
@@ -258,6 +259,11 @@ namespace <%= namespace %>.Service {
         {
             var roles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user, roles);
+        }
+
+        public UserManager<User> GetUserManager()
+        {
+            return _userManager;
         }
     }
 }

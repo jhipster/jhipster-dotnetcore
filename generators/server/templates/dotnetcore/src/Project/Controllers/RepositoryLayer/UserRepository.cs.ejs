@@ -1,0 +1,60 @@
+using System.Linq;
+using System.Threading.Tasks;
+using JHipsterNet.Pagination;
+using JHipsterNet.Pagination.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using <%= namespace %>.Models;
+using <%= namespace %>.Service;
+using <%= namespace %>.Service.Dto;
+
+namespace <%= namespace %>.Controllers.RepositoryLayer
+{
+    public interface IUserRepository : IGenericRepository<User>
+    {
+        Task<User> CreateUserAndSendMail([FromBody] UserDto userDto);
+
+        IPage<User> GetAllUserFromPage(IPageable pageable);
+        Task<User> GetUser(string login);
+
+    }
+
+    public class UserRepository : GenericRepository<User>, IUserRepository
+    {
+        private readonly IMailService _mailService;
+
+        public UserRepository(IUnitOfWork context, IMailService mailService):base(context)
+        {
+            _mailService = mailService;
+        }
+
+        public async Task<User> CreateUserAndSendMail([FromBody] UserDto userDto)
+        {
+            var newUser = await CreateUser(userDto);
+            await _mailService.SendCreationEmail(newUser);
+            return newUser;
+        }
+
+        public IPage<User> GetAllUserFromPage(IPageable pageable)
+        {
+            return _userManager.Users
+                .Include(it => it.UserRoles)
+                .ThenInclude(r => r.Role)
+                .ToList()
+                .AsQueryable()
+                .UsePageable(pageable);
+        }
+
+        public async Task<User> GetUser(string login)
+        {
+            return await _userManager.Users
+                .Where(user => user.Login == login)
+                .Include(it => it.UserRoles)
+                .ThenInclude(r => r.Role)
+                .SingleOrDefaultAsync();
+        }
+
+
+
+    }
+}

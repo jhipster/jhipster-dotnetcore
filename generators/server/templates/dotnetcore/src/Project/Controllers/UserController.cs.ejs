@@ -30,6 +30,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using <%= namespace %>.Controllers.RepositoryLayer;
+
 
 namespace <%= namespace %>.Controllers {
     [Authorize]
@@ -37,17 +39,12 @@ namespace <%= namespace %>.Controllers {
     [ApiController]
     public class UserController : ControllerBase {
         private readonly ILogger<UserController> _log;
-        private readonly IMailService _mailService;
-        private readonly UserManager<User> _userManager;
-        private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
 
-        public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
-            IMailService mailService)
+        public UserController(ILogger<UserController> log, IUnitOfWork context, IMailService mailService)
         {
             _log = log;
-            _userManager = userManager;
-            _userService = userService;
-            _mailService = mailService;
+            _userRepository = new UserRepository(context, mailService);
         }
 
         [HttpPost("users")]
@@ -58,14 +55,9 @@ namespace <%= namespace %>.Controllers {
             if (userDto.Id != null)
                 throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement",
                     "idexists");
-            // Lowercase the user login before comparing with database
-            if (await _userManager.FindByNameAsync(userDto.Login.ToLowerInvariant()) != null)
-                throw new LoginAlreadyUsedException();
-            if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
-                throw new EmailAlreadyUsedException();
 
-            var newUser = await _userService.CreateUser(userDto);
-            await _mailService.SendCreationEmail(newUser);
+            var newUser = await _userRepository.CreateUserAndSendMail(userDto);
+            
             return CreatedAtAction(nameof(GetUser), new {login = newUser.Login}, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
         }
@@ -75,12 +67,8 @@ namespace <%= namespace %>.Controllers {
         public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to update User : {userDto}");
-            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
-            if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new EmailAlreadyUsedException();
-            existingUser = await _userManager.FindByNameAsync(userDto.Login);
-            if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
 
-            var updatedUser = await _userService.UpdateUser(userDto);
+            var updatedUser = await _userRepository.UpdateUser(userDto);
 
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
@@ -90,12 +78,9 @@ namespace <%= namespace %>.Controllers {
         public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var page = _userManager.Users
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .ToList()
-                .AsQueryable()
-                .UsePageable(pageable);
+
+            var page = _userRepository.GetAllUserFromPage(pageable);
+
             var userDtos = page.Content.Select(user => new UserDto(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
@@ -105,18 +90,16 @@ namespace <%= namespace %>.Controllers {
         [Authorize(Roles = RolesConstants.ADMIN)]
         public ActionResult<IEnumerable<string>> GetAuthorities()
         {
-            return Ok(_userService.GetAuthorities());
+            return Ok(_userRepository.GetAuthorities());
         }
 
         [HttpGet("users/{login}")]
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
-            var result = await _userManager.Users
-                .Where(user => user.Login == login)
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .SingleOrDefaultAsync();
+
+            var result = await _userRepository.GetUser(login);
+
             var userDto = result != null ? new UserDto(result) : null;
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
@@ -126,7 +109,7 @@ namespace <%= namespace %>.Controllers {
         public async Task<IActionResult> DeleteUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to delete User : {login}");
-            await _userService.DeleteUser(login);
+            await _userRepository.DeleteUser(login);
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
         }
     }

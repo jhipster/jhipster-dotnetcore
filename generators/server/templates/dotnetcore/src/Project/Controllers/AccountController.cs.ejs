@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 <%_ } _%>
 using Microsoft.AspNetCore.Authorization;
+using <%= namespace %>.Controllers.RepositoryLayer;
 
 namespace <%= namespace %>.Controllers {
 
@@ -40,19 +41,14 @@ namespace <%= namespace %>.Controllers {
         
         <%_ if (authenticationType === 'jwt') { _%>
         private readonly ILogger<AccountController> _log;
-        private readonly IMailService _mailService;
-        private readonly UserManager<User> _userManager;
         private readonly IMapper _userMapper;
-        private readonly IUserService _userService;
+        private readonly IAccountRepository _accountRepository;
 
-        public AccountController(ILogger<AccountController> log, UserManager<User> userManager, IUserService userService,
-            IMapper userMapper, IMailService mailService)
+        public AccountController(ILogger<AccountController> log, IMapper userMapper, IMailService mailService, IUnitOfWork context)
         {
             _log = log;
-            _userManager = userManager;
-            _userService = userService;
             _userMapper = userMapper;
-            _mailService = mailService;
+            _accountRepository = new AccountRepository(context, mailService);
         }
 
         [HttpPost("register")]
@@ -61,8 +57,8 @@ namespace <%= namespace %>.Controllers {
         {
             if (!CheckPasswordLength(managedUserVm.Password)) throw new InvalidPasswordException();
 
-            var user = await _userService.RegisterUser(managedUserVm, managedUserVm.Password);
-            await _mailService.SendActivationEmail(user);
+            var user = await _accountRepository.RegisterUserAndSendMail(managedUserVm);
+
             return CreatedAtAction(nameof(GetAccount), user);
         }
 
@@ -70,7 +66,7 @@ namespace <%= namespace %>.Controllers {
         [ValidateModel]
         public async Task ActivateAccount([FromQuery(Name = "key")] string key)
         {
-            var user = await _userService.ActivateRegistration(key);
+            var user = await _accountRepository.ActivateAccount(key);
             if (user == null) throw new InternalServerErrorException("Not user was found for this activation key");
         }
 
@@ -78,14 +74,14 @@ namespace <%= namespace %>.Controllers {
         public string IsAuthenticated()
         {
             _log.LogDebug("REST request to check if the current user is authenticated");
-            return _userManager.GetUserName(User);
+            return _accountRepository.GetUserName(User);
         }
 
         [Authorize]
         [HttpGet("account")]
         public async Task<ActionResult<UserDto>> GetAccount()
         {
-            var user = await _userService.GetUserWithUserRoles();
+            var user = await _accountRepository.GetUserWithUserRoles();
             if (user == null) throw new InternalServerErrorException("User could not be found");
 
             return Ok(new UserDto(user));
@@ -96,19 +92,18 @@ namespace <%= namespace %>.Controllers {
         [ValidateModel]
         public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
         {
-            var userName = _userManager.GetUserName(User);
+            var userName = _accountRepository.GetUserName(User);
             if (userName == null) throw new InternalServerErrorException("Current user login not found");
 
-            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            var existingUser = await _accountRepository.FindByEmailAsync(userDto.Email);
             if (existingUser != null &&
                 !string.Equals(existingUser.Login, userName, StringComparison.InvariantCultureIgnoreCase))
                 throw new EmailAlreadyUsedException();
 
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _accountRepository.FindByNameAsync(userName);
             if (user == null) throw new InternalServerErrorException("User could not be found");
 
-            await _userService.UpdateUser(userDto.FirstName, userDto.LastName, userDto.Email, userDto.LangKey,
-                userDto.ImageUrl);
+            await _accountRepository.UpdateUser(userDto);
             return Ok();
         }
 
@@ -119,7 +114,7 @@ namespace <%= namespace %>.Controllers {
         {
             if (!CheckPasswordLength(passwordChangeDto.NewPassword)) throw new InvalidPasswordException();
 
-            await _userService.ChangePassword(passwordChangeDto.CurrentPassword, passwordChangeDto.NewPassword);
+            await _accountRepository.ChangePassword(passwordChangeDto.CurrentPassword, passwordChangeDto.NewPassword);
             return Ok();
         }
 
@@ -127,10 +122,7 @@ namespace <%= namespace %>.Controllers {
         public async Task<ActionResult> RequestPasswordReset()
         {
             var mail = await Request.BodyAsStringAsync();
-            var user = await _userService.RequestPasswordReset(mail);
-            if (user == null) throw new EmailNotFoundException();
-
-            await _mailService.SendPasswordResetMail(user);
+            await _accountRepository.RequestPasswordResetAndSend(mail);
             return Ok();
         }
 
@@ -140,9 +132,7 @@ namespace <%= namespace %>.Controllers {
         {
             if (!CheckPasswordLength(keyAndPasswordVm.NewPassword)) throw new InvalidPasswordException();
 
-            var user = await _userService.CompletePasswordReset(keyAndPasswordVm.NewPassword, keyAndPasswordVm.Key);
-
-            if (user == null) throw new InternalServerErrorException("No user was found for this reset key");
+            await _accountRepository.RequestKeyPasswordReset(keyAndPasswordVm);
         }
 
         private static bool CheckPasswordLength(string password)

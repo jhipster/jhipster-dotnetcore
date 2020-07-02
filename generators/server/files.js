@@ -256,6 +256,42 @@ const serverFiles = {
             ],
         },
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Domain/UnitOfWork.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Domain/UnitOfWork.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Domain/GenericRepository.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Domain/GenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/RepositoryLayer/AccountRepository.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/RepositoryLayer/AccountRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/RepositoryLayer/UserRepository.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/RepositoryLayer/UserRepository.cs`,
+                },
+            ],
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [

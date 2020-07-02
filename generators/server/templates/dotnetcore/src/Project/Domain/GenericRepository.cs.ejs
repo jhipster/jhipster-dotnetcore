@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using <%= namespace %>.Models;
+using <%= namespace %>.Service;
+using <%= namespace %>.Service.Dto;
+using <%= namespace %>.Web.Rest.Problems;
+
+namespace <%= namespace %>.Controllers.RepositoryLayer
+{
+    public interface IGenericRepository<TEntity> : IUserService where TEntity : class
+    {
+
+    }
+
+    public class GenericRepository<TEntity> : IDisposable, IGenericRepository<TEntity> where TEntity : class
+    {
+        private IUnitOfWork _context;
+        public IUserService _dbService;
+        public UserManager<User> _userManager;
+
+        public GenericRepository(IUnitOfWork context)
+        {
+            _context = context;
+            _dbService = context.Set<TEntity>();
+            _userManager = _dbService.GetUserManager();
+        }
+
+
+        public virtual async Task<User> CreateUser(UserDto userDto)
+        {
+            // Lowercase the user login before comparing with database
+            if (await _userManager.FindByNameAsync(userDto.Login.ToLowerInvariant()) != null)
+                throw new LoginAlreadyUsedException();
+            if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
+                throw new EmailAlreadyUsedException();
+            return await _dbService.CreateUser(userDto);
+        }
+
+        public virtual IEnumerable<string> GetAuthorities()
+        {
+            return _dbService.GetAuthorities();
+        }
+
+        public virtual async Task DeleteUser(string login)
+        {
+            await _dbService.DeleteUser(login);
+        }
+
+        public virtual async Task<User> UpdateUser(UserDto userDto)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new EmailAlreadyUsedException();
+            existingUser = await _userManager.FindByNameAsync(userDto.Login);
+            if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
+            return await _dbService.UpdateUser(userDto);
+        }
+
+        public virtual async Task<User> CompletePasswordReset(string newPassword, string key)
+        {
+            return await _dbService.CompletePasswordReset(newPassword, key);
+        }
+
+        public virtual async Task<User> RequestPasswordReset(string mail)
+        {
+            return await _dbService.RequestPasswordReset(mail);
+        }
+
+        public virtual async Task ChangePassword(string currentPassword, string newPassword)
+        {
+            await _dbService.ChangePassword(currentPassword, newPassword);
+        }
+
+        public virtual async Task<User> ActivateRegistration(string key)
+        {
+            return await _dbService.ActivateRegistration(key);
+        }
+
+        public virtual async Task<User> RegisterUser(UserDto userDto, string password)
+        {
+            return await _dbService.RegisterUser(userDto, password);
+        }
+
+        public virtual async Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl)
+        {
+            await _dbService.UpdateUser(firstName, lastName, email, langKey, imageUrl);
+        }
+
+        public virtual async Task<User> GetUserWithUserRoles()
+        {
+            return await _dbService.GetUserWithUserRoles();
+        }
+
+
+        public UserManager<User> GetUserManager()
+        {
+            return _userManager;
+        }
+        
+
+        public void Dispose()
+        {
+            _context.Dispose();
+        }
+    }
+}
