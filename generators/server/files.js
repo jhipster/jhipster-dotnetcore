@@ -21,6 +21,8 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
+const PROJECT_DOMAIN_SUFFIX = constants.PROJECT_DOMAIN_SUFFIX;
+const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
 const DOCKER_DIR = constants.DOCKER_DIR;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.CROSSCUTTING_SUFFIX;
 
@@ -48,6 +50,26 @@ const serverFiles = {
         {
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/xunit.runner.json', renameTo: generator => `${generator.testProjectDir}/xunit.runner.json` }],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}.csproj`,
+                },
+            ],
         },
     ],
     crosscuttingCsproj: [
@@ -329,18 +351,17 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Mapper/UserProfile.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/UserProfile.cs`,
+                    file: 'Project/Service/Utilities/RandomUtil.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Utilities/RandomUtil.cs`,
                 },
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Utilities/RandomUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Utilities/RandomUtil.cs`,
+                    file: 'Project/Service/Mapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
                 },
             ],
         },
