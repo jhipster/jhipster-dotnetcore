@@ -30,8 +30,8 @@ module.exports = {
     askForRelationships,
     askForRelationsToRemove,
     askForTableName,
-    // askForDTO,
-    // askForService,
+    askForDTO,
+    askForService,
     // askForFiltering,
     askForPagination,
 };
@@ -325,7 +325,7 @@ function askForTableName() {
     });
 } */
 
-/* function askForDTO() {
+function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
     if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
@@ -341,23 +341,23 @@ function askForTableName() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No, use the entity directly'
+                    name: 'No, use the entity directly',
                 },
                 {
                     value: 'mapstruct',
-                    name: 'Yes, generate a DTO with MapStruct'
-                }
+                    name: 'Yes, generate a DTO with AutoMapper',
+                },
             ],
-            default: 0
-        }
+            default: 0,
+        },
     ];
     this.prompt(prompts).then(props => {
         context.dto = props.dto;
         done();
     });
-} */
+}
 
-/* function askForService() {
+function askForService() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped
     if (context.useConfigurationFile || context.skipServer) {
@@ -372,25 +372,21 @@ function askForTableName() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No, the REST controller should use the repository directly'
-                },
-                {
-                    value: 'serviceClass',
-                    name: 'Yes, generate a separate service class'
+                    name: 'No, the REST controller should use the repository directly',
                 },
                 {
                     value: 'serviceImpl',
-                    name: 'Yes, generate a separate service interface and implementation'
-                }
+                    name: 'Yes, generate a separate service interface and implementation',
+                },
             ],
-            default: 0
-        }
+            default: 0,
+        },
     ];
     this.prompt(prompts).then(props => {
         context.service = props.service;
         done();
     });
-} */
+}
 
 function askForPagination() {
     const context = this.context;

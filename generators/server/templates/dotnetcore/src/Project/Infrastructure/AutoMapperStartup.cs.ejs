@@ -14,12 +14,13 @@
 -%>
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using <%= namespace %>.Service.Mapper;
 
 namespace <%= namespace %>.Infrastructure {
     public static class AutoMapperStartup {
         public static IServiceCollection AddAutoMapperModule(this IServiceCollection @this)
         {
-            @this.AddAutoMapper(typeof(Startup));
+            @this.AddAutoMapper(typeof(AutoMapperProfile));
             return @this;
         }
     }
