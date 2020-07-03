@@ -23,7 +23,7 @@ const utils = require('../utils');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-const PROJECT_CROSSCUTTING_SUFFIX = constants.CROSSCUTTING_SUFFIX;
+const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 
 const serverFiles = {
     server: [
@@ -109,6 +109,23 @@ const serverFiles = {
                     file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
                     renameTo: generator =>
                         `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`,
+                },
+            ],
+        },
+    ],
+    service: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Service/Service.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${generator.entityClass}Service.cs`,
+                },
+                {
+                    file: 'Project/Service/IService.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/Interfaces/I${generator.entityClass}Service.cs`,
                 },
             ],
         },
