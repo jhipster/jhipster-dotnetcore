@@ -26,12 +26,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 <%_ if (hasManyToMany) { _%>
-using <%= namespace %>.Models.RelationshipTools;
+using <%= namespace %>.Domain.RelationshipTools;
 <%_ } if (importJsonIgnore === true || hasManyToMany) { _%>
 using Newtonsoft.Json;
 <%_ } _%>
 
-namespace <%= namespace %>.Models {
+namespace <%= namespace %>.Domain {
     [Table("<%= entityTableName %>")]
     public class <%= entityClassName %> {
         [Key]

@@ -15,7 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using <%= namespace %>.Models;
+using <%= namespace %>.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -117,7 +117,7 @@ namespace <%= namespace %>.Infrastructure {
                     }
                 }
             }
-    
+
             private static async Task SeedUsers(UserManager<User> userManager)
             {
                 foreach (var user in Users())
@@ -136,7 +136,7 @@ namespace <%= namespace %>.Infrastructure {
 
         private static async Task SeedUserRoles(UserManager<User> userManager)
         {
-            foreach (var (id, roles) in UserRoles()) 
+            foreach (var (id, roles) in UserRoles())
             {
                 var user = await userManager.FindByIdAsync(id);
                 await userManager.AddToRolesAsync(user, roles);

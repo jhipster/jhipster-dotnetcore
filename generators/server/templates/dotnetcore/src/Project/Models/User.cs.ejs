@@ -16,11 +16,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using <%= namespace %>.Models.Interfaces;
+using <%= namespace %>.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
-namespace <%= namespace %>.Models {
+namespace <%= namespace %>.Domain {
     public class User : IdentityUser, IAuditedEntityBase {
         public string Login {
             get => UserName;

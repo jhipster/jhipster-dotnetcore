@@ -18,7 +18,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using JHipsterNet.Config;
 using <%= namespace %>.Data;
-using <%= namespace %>.Models;
+using <%= namespace %>.Domain;
 using <%= namespace %>.Security;
 using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Service;
@@ -56,8 +56,8 @@ namespace <%= namespace %>.Infrastructure {
         <%_ if (authenticationType === 'jwt') { _%>
         public static IServiceCollection AddSecurityModule(this IServiceCollection @this)
         <%_ } else { _%>
-        public static IServiceCollection AddSecurityModule(this IServiceCollection @this, JHipsterSettings jhipsterSettings) 
-        <%_ } _%>   
+        public static IServiceCollection AddSecurityModule(this IServiceCollection @this, JHipsterSettings jhipsterSettings)
+        <%_ } _%>
         {
             <%_ if (authenticationType === 'jwt') { _%>
             //TODO Retrieve the signing key properly (DRY with TokenProvider)
@@ -84,7 +84,7 @@ namespace <%= namespace %>.Infrastructure {
                     UserRole, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>>()
                 .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
                 >()
-                .AddDefaultTokenProviders();         
+                .AddDefaultTokenProviders();
 
 
             @this
@@ -114,7 +114,7 @@ namespace <%= namespace %>.Infrastructure {
             @this.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
             @this.AddSingleton<IMailService, MailService>();
 
-            <%_ } else { _%>  
+            <%_ } else { _%>
             @this.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -141,13 +141,13 @@ namespace <%= namespace %>.Infrastructure {
 
             @this.AddAuthorization();
             <%_ } _%>
-            return @this;            
+            return @this;
         }
 
         public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder @this,
             JHipsterSettings jhipsterSettings)
         {
-            @this.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));            
+            @this.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));
             @this.UseAuthentication();
             <%_ if (authenticationType === 'oauth2') { _%>
             @this.UseAuthorization();
