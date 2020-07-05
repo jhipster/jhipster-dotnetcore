@@ -12,12 +12,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Models.Interfaces;
+using <%= namespace %>.Domain.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace <%= namespace %>.Models.RelationshipTools {
+namespace <%= namespace %>.Domain.RelationshipTools {
     public class JoinListFacade<TEntity, TOtherEntity, TJoinEntity>
     : IList<TEntity>
     where TJoinEntity : IJoinedEntity<TEntity>, IJoinedEntity<TOtherEntity>, new() {

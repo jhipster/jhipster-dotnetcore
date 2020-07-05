@@ -17,10 +17,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using <%= namespace %>.Infrastructure;
-using <%= namespace %>.Models;
+using <%= namespace %>.Domain;
 using Newtonsoft.Json;
 
-namespace <%= namespace %>.Service.Dto {
+namespace <%= namespace %>.Dto {
     public class UserDto {
         <%_ if (authenticationType === 'jwt') { _%>
         public UserDto()

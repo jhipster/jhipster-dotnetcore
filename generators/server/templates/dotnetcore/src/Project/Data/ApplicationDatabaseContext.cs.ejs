@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Models;
+using <%= namespace %>.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +28,7 @@ namespace <%= namespace %>.Data {
         IdentityUserToken<string>
     > {
     <%_ } else { _%>
-    public class ApplicationDatabaseContext : DbContext 
+    public class ApplicationDatabaseContext : DbContext
     {
     <%_ } _%>
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options) : base(options)
