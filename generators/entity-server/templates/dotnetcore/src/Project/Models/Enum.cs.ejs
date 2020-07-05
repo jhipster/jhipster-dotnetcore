@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 
-namespace <%= namespace %>.Models {
+namespace <%= namespace %>.Domain {
     public enum <%= enumName %> {
     <%_ for (var i = 0; i < enums.length; i++) { _%>
         <%= enums[i] %><%_ if (i !== enums.length) { _%>,<%_ } _%>

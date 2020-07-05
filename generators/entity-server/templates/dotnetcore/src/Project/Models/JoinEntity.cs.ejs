@@ -22,7 +22,7 @@ let joinEntityClassName;
 let ownerSide;
 let idx = 0;
 while (idx < relationships.length) {
-    relationship = relationships[idx];    
+    relationship = relationships[idx];
     if(currentRelation == relationship.joinEntityNamePascalized){
         joinEntityTableName = relationships[idx].joinEntityNameSnakeCased;
         joinEntityClassName = relationships[idx].joinEntityNamePascalized;
@@ -44,10 +44,10 @@ while (idx < relationships.length) {
     }
     idx++;
 }_%>
-using <%= namespace %>.Models.Interfaces;
+using <%= namespace %>.Domain.Interfaces;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace <%= namespace %>.Models {
+namespace <%= namespace %>.Domain {
     [Table("<%= joinEntityTableName %>")]
     public class <%= joinEntityClassName %> : IJoinedEntity<<%= ownerEntityClassName %>>, IJoinedEntity<<%= nonOwnerEntityClassName %>> {
         public long <%= ownerRelationshipFieldName %>Id { get; set; }
