@@ -20,7 +20,8 @@
 namespace <%= namespace %>.Domain {
     public enum <%= enumName %> {
     <%_ for (var i = 0; i < enums.length; i++) { _%>
-        <%= enums[i] %><%_ if (i !== enums.length) { _%>,<%_ } _%>
+        <%= enums[i] %><%_ if (i < enums.length - 1) { _%>,<%_ } _%>
+
     <%_ } _%>
     }
 }
