@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using <%= namespace %>.Crosscutting.Enums;
 <%_ if (hasManyToMany) { _%>
 using <%= namespace %>.Domain.RelationshipTools;
 <%_ } if (importJsonIgnore === true || hasManyToMany) { _%>

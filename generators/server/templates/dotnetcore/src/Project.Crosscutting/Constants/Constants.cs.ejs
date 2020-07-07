@@ -12,10 +12,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Security {
-    public static class RolesConstants {
-        public const string ADMIN = "ROLE_ADMIN";
-        public const string USER = "ROLE_USER";
-        public const string ANONYMOUS = "ROLE_ANONYMOUS";
+namespace <%= namespace %>.Crosscutting.Constants {
+//TODO Use Constants
+    public static class Constants {
+        // Regex for acceptable logins
+        public const string LoginRegex = "^[_.@A-Za-z0-9-]*$";
+        public const string SystemAccount = "system";
+        public const string AnonymousUser = "anonymoususer";
+        public const string DefaultLangKey = "en";
     }
 }

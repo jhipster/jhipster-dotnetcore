@@ -33,7 +33,7 @@
         <BuildServerSideRenderer>false</BuildServerSideRenderer>
     </PropertyGroup>
 
-    <ItemGroup>        
+    <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
@@ -76,10 +76,10 @@
         <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
         <PackageReference Include="Serilog.Sinks.SyslogMessages" Version="1.0.5" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.0" />       
-        <PackageReference Include="LanguageExt.Core" Version="3.4.15" />        
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.0" />
+        <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
         <%_ if (authenticationType === 'jwt') { _%>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.6.0" />            
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
         <%_ } else { _%>
@@ -89,6 +89,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
     </ItemGroup>
 <%_ if(!skipClient) { _%>
     <!-- https://stackoverflow.com/questions/46720148/exclude-wwwroot-dist-from-build-asp-net-dotnet-core-2-0 -->
@@ -105,7 +106,7 @@
         </SonarQubeSetting>
         <SonarQubeSetting Include="sonar.testExecutionReportPaths">
             <Value>$(SpaRoot)build/test-results/jest/TESTS-results-sonar.xml</Value>
-        </SonarQubeSetting>  
+        </SonarQubeSetting>
         <SonarQubeSetting Include="sonar.javascript.lcov.reportPaths">
             <Value>$(SpaRoot)build/test-results/lcov.info</Value>
         </SonarQubeSetting>

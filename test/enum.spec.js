@@ -11,6 +11,7 @@ function getPreCondition() {
     return helpers
         .run('generator-jhipster/generators/entity')
         .inTmpDir(dir => {
+            console.log(`Test temp dir: ${dir}`);
             fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
             fse.copySync(path.join(__dirname, '../test/templates/enums'), dir);
         })
@@ -39,7 +40,7 @@ function getPreCondition() {
 describe('Subgenerator entity of dotnetcore JHipster blueprint - testing enum generation', () => {
     context('generating enum', () => {
         const orderClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Models/Order.cs`;
-        const orderStatusEnum = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Models/OrderStatus.cs`;
+        const orderStatusEnum = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Crosscutting/Enums/OrderStatus.cs`;
         const efMappings = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Data/ApplicationDatabaseContext.cs`;
 
         before(done => {
