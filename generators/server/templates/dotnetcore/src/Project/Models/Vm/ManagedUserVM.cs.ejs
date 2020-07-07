@@ -15,8 +15,8 @@
 using System.ComponentModel.DataAnnotations;
 using <%= namespace %>.Dto;
 
-namespace <%= namespace %>.Models.Vm {
-    public class ManagedUserVM : UserDto {
+namespace <%= namespace %>.Dto {
+    public class ManagedUserDTO : UserDTO {
         public const int PasswordMinLength = 4;
 
         public const int PasswordMaxLength = 100;
@@ -28,7 +28,7 @@ namespace <%= namespace %>.Models.Vm {
 
         public override string ToString()
         {
-            return "ManagedUserVM{} " + base.ToString();
+            return "ManagedUserDTO{} " + base.ToString();
         }
     }
 }

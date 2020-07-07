@@ -29,15 +29,15 @@ using Microsoft.Extensions.Logging;
 
 namespace <%= namespace %>.Service {
     public interface IUserService {
-        Task<User> CreateUser(UserDto userDto);
+        Task<User> CreateUser(UserDTO userDto);
         IEnumerable<string> GetAuthorities();
         Task DeleteUser(string login);
-        Task<User> UpdateUser(UserDto userDto);
+        Task<User> UpdateUser(UserDTO userDto);
         Task<User> CompletePasswordReset(string newPassword, string key);
         Task<User> RequestPasswordReset(string mail);
         Task ChangePassword(string currentPassword, string newPassword);
         Task<User> ActivateRegistration(string key);
-        Task<User> RegisterUser(UserDto userDto, string password);
+        Task<User> RegisterUser(UserDTO userDto, string password);
 
         Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
         Task<User> GetUserWithUserRoles();
@@ -61,7 +61,7 @@ namespace <%= namespace %>.Service {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<User> CreateUser(UserDto userDto)
+        public async Task<User> CreateUser(UserDTO userDto)
         {
             var user = new User {
                 UserName = userDto.Login.ToLower(),
@@ -81,7 +81,7 @@ namespace <%= namespace %>.Service {
             return user;
         }
 
-        public async Task<User> UpdateUser(UserDto userDto)
+        public async Task<User> UpdateUser(UserDTO userDto)
         {
             //TODO use Optional
             var user = await _userManager.FindByIdAsync(userDto.Id);
@@ -151,7 +151,7 @@ namespace <%= namespace %>.Service {
         }
 
 
-        public async Task<User> RegisterUser(UserDto userDto, string password)
+        public async Task<User> RegisterUser(UserDTO userDto, string password)
         {
             var existingUser = await _userManager.FindByNameAsync(userDto.Login.ToLower());
             if (existingUser != null) {
