@@ -87,8 +87,8 @@ namespace <%= namespace %>.Controllers {
         {
             var user = await _userService.GetUserWithUserRoles();
             if (user == null) throw new InternalServerErrorException("User could not be found");
-
-            return Ok(new UserDTO(user));
+            var userDto = _userMapper.Map<UserDTO>(user);
+            return Ok(userDto);
         }
 
         [Authorize]
