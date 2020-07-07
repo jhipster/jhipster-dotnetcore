@@ -19,22 +19,22 @@ using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Service.Mapper {
     public class UserMapper {
-        public IEnumerable<UserDto> UsersToUserDtos(IEnumerable<User> users)
+        public IEnumerable<UserDTO> UsersToUserDtos(IEnumerable<User> users)
         {
             return users.Filter(it => it != null).Map(UserToUserDto);
         }
 
-        public UserDto UserToUserDto(User user)
+        public UserDTO UserToUserDto(User user)
         {
-            return new UserDto(user);
+            return new UserDTO(user);
         }
 
-        public IEnumerable<User> UserDtosToUsers(IEnumerable<UserDto> userDtos)
+        public IEnumerable<User> UserDtosToUsers(IEnumerable<UserDTO> userDtos)
         {
             return userDtos.Filter(it => it != null).Map(UserDtoToUser);
         }
 
-        public User UserDtoToUser(UserDto userDto)
+        public User UserDtoToUser(UserDTO userDto)
         {
             if (userDto == null) return null;
 

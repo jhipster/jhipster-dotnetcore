@@ -26,7 +26,6 @@ using <%= namespace %>.Infrastructure;
 using <%= namespace %>.Crosscutting.Constants;
 using Microsoft.AspNetCore.Mvc;
 <%_ if (authenticationType === 'jwt') { _%>
-using <%= namespace %>.Models.Vm;
 using <%= namespace %>.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -58,11 +57,11 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("register")]
         [ValidateModel]
-        public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserVM managedUserVm)
+        public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserDTO managedUserDto)
         {
-            if (!CheckPasswordLength(managedUserVm.Password)) throw new InvalidPasswordException();
+            if (!CheckPasswordLength(managedUserDto.Password)) throw new InvalidPasswordException();
 
-            var user = await _userService.RegisterUser(managedUserVm, managedUserVm.Password);
+            var user = await _userService.RegisterUser(managedUserDto, managedUserDto.Password);
             await _mailService.SendActivationEmail(user);
             return CreatedAtAction(nameof(GetAccount), user);
         }
@@ -84,18 +83,18 @@ namespace <%= namespace %>.Controllers {
 
         [Authorize]
         [HttpGet("account")]
-        public async Task<ActionResult<UserDto>> GetAccount()
+        public async Task<ActionResult<UserDTO>> GetAccount()
         {
             var user = await _userService.GetUserWithUserRoles();
             if (user == null) throw new InternalServerErrorException("User could not be found");
 
-            return Ok(new UserDto(user));
+            return Ok(new UserDTO(user));
         }
 
         [Authorize]
         [HttpPost("account")]
         [ValidateModel]
-        public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
+        public async Task<ActionResult> SaveAccount([FromBody] UserDTO userDto)
         {
             var userName = _userManager.GetUserName(User);
             if (userName == null) throw new InternalServerErrorException("Current user login not found");
@@ -116,7 +115,7 @@ namespace <%= namespace %>.Controllers {
         [Authorize]
         [HttpPost("account/change-password")]
         [ValidateModel]
-        public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDto passwordChangeDto)
+        public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDTO passwordChangeDto)
         {
             if (!CheckPasswordLength(passwordChangeDto.NewPassword)) throw new InvalidPasswordException();
 
@@ -137,11 +136,11 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("account/reset-password/finish")]
         [ValidateModel]
-        public async Task RequestPasswordReset([FromBody] KeyAndPasswordVM keyAndPasswordVm)
+        public async Task RequestPasswordReset([FromBody] KeyAndPasswordDTO keyAndPasswordDto)
         {
-            if (!CheckPasswordLength(keyAndPasswordVm.NewPassword)) throw new InvalidPasswordException();
+            if (!CheckPasswordLength(keyAndPasswordDto.NewPassword)) throw new InvalidPasswordException();
 
-            var user = await _userService.CompletePasswordReset(keyAndPasswordVm.NewPassword, keyAndPasswordVm.Key);
+            var user = await _userService.CompletePasswordReset(keyAndPasswordDto.NewPassword, keyAndPasswordDto.Key);
 
             if (user == null) throw new InternalServerErrorException("No user was found for this reset key");
         }
@@ -149,18 +148,18 @@ namespace <%= namespace %>.Controllers {
         private static bool CheckPasswordLength(string password)
         {
             return !string.IsNullOrEmpty(password) &&
-                   password.Length >= ManagedUserVM.PasswordMinLength &&
-                   password.Length <= ManagedUserVM.PasswordMaxLength;
+                   password.Length >= ManagedUserDTO.PasswordMinLength &&
+                   password.Length <= ManagedUserDTO.PasswordMaxLength;
         }
         <%_ } else { _%>
         [Authorize]
         [HttpGet("account")]
-        public ActionResult<UserDto> GetAccount()
+        public ActionResult<UserDTO> GetAccount()
         {
-            UserDto user = null;
+            UserDTO user = null;
             if (User != null)
             {
-                user = new UserDto
+                user = new UserDTO
                 {
                     Login = User.Claims.FirstOrDefault(claim => claim.Type.Equals("preferred_username"))?.Value,
                     Activated = true,

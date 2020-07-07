@@ -14,9 +14,8 @@
 -%>
 using FluentAssertions;
 using <%= namespace %>.Domain;
-using <%= namespace %>.Models.Vm;
-using <%= namespace %>.Security;
 using <%= namespace %>.Dto;
+using <%= namespace %>.Security;
 using <%= namespace %>.Service.Mapper;
 using <%= namespace %>.Test.Setup;
 using <%= namespace %>.Crosscutting.Constants;
@@ -103,7 +102,7 @@ namespace <%= namespace %>.Test.Controllers {
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
             // Create the User
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Login = DefaultLogin,
                 Password = DefaultPassword,
                 FirstName = DefaultFirstname,
@@ -117,7 +116,7 @@ namespace <%= namespace %>.Test.Controllers {
                 }
             };
 
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Validate the User in the database
@@ -139,7 +138,7 @@ namespace <%= namespace %>.Test.Controllers {
             await _userManager.CreateAsync(_user);
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Login = "anotherlogin", // this email should already be used
                 Password = DefaultPassword,
                 FirstName = DefaultFirstname,
@@ -154,7 +153,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
 
             // Create the User
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the User in the database
@@ -167,7 +166,7 @@ namespace <%= namespace %>.Test.Controllers {
         {
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Id = "id",
                 Login = DefaultLogin,
                 Password = DefaultPassword,
@@ -183,7 +182,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
 
             // An entity with an existing ID cannot be created, so this API call must fail
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the User in the database
@@ -198,7 +197,7 @@ namespace <%= namespace %>.Test.Controllers {
             await _userManager.CreateAsync(_user);
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Login = DefaultLogin, // this login should already be used
                 Password = DefaultPassword,
                 FirstName = DefaultFirstname,
@@ -213,7 +212,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
 
             // Create the User
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the User in the database
@@ -297,7 +296,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public void TestUserDtoToUser()
         {
-            var userDto = new UserDto {
+            var userDto = new UserDTO {
                 Id = DefaultId,
                 Login = DefaultLogin,
                 FirstName = DefaultFirstname,
@@ -376,7 +375,7 @@ namespace <%= namespace %>.Test.Controllers {
             //Update the user
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Id = updatedUser.Id,
                 Login = updatedUser.Login,
                 Password = UpdatedPassword,
@@ -391,7 +390,7 @@ namespace <%= namespace %>.Test.Controllers {
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the User in the database
@@ -429,7 +428,7 @@ namespace <%= namespace %>.Test.Controllers {
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
             //TODO Add CreatedBy, CreatedDate, ModifiedBy, ModidfieDate
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Id = updatedUser.Id,
                 Login = updatedUser.Login,
                 Password = updatedUser.PasswordHash,
@@ -444,7 +443,7 @@ namespace <%= namespace %>.Test.Controllers {
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -470,7 +469,7 @@ namespace <%= namespace %>.Test.Controllers {
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
             //TODO Add CreatedBy, CreatedDate, ModifiedBy, ModidfieDate
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Id = updatedUser.Id,
                 Login = "jhipster", //this login should be already used by anotherUser
                 Password = updatedUser.PasswordHash,
@@ -485,7 +484,7 @@ namespace <%= namespace %>.Test.Controllers {
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -500,7 +499,7 @@ namespace <%= namespace %>.Test.Controllers {
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
             //TODO Add CreatedBy, CreatedDate, ModifiedBy, ModidfieDate
-            var managedUserVM = new ManagedUserVM {
+            var managedUserDto = new ManagedUserDTO {
                 Id = updatedUser.Id,
                 Login = UpdatedLogin,
                 Password = UpdatedPassword,
@@ -515,7 +514,7 @@ namespace <%= namespace %>.Test.Controllers {
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserVM));
+            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the User in the database

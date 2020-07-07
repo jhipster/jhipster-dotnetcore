@@ -21,13 +21,13 @@ using <%= namespace %>.Domain;
 using Newtonsoft.Json;
 
 namespace <%= namespace %>.Dto {
-    public class UserDto {
+    public class UserDTO {
         <%_ if (authenticationType === 'jwt') { _%>
-        public UserDto()
+        public UserDTO()
         {
         }
 
-        public UserDto(User user)
+        public UserDTO(User user)
         {
             Id = user.Id;
             Login = user.UserName;
