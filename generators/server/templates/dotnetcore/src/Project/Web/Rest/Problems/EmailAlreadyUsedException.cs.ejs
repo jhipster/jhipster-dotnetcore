@@ -12,6 +12,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using <%= namespace %>.Crosscutting.Constants;
+
 namespace <%= namespace %>.Web.Rest.Problems {
     public class EmailAlreadyUsedException : BadRequestAlertException {
         public EmailAlreadyUsedException() : base(ErrorConstants.EmailAlreadyUsedType, "Email is already in use!",

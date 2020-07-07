@@ -22,6 +22,7 @@ const constants = require('../generator-dotnetcore-constants');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const DOCKER_DIR = constants.DOCKER_DIR;
+const PROJECT_CROSSCUTTING_SUFFIX = constants.CROSSCUTTING_SUFFIX;
 
 const serverFiles = {
     serverCsProj: [
@@ -47,6 +48,18 @@ const serverFiles = {
         {
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/xunit.runner.json', renameTo: generator => `${generator.testProjectDir}/xunit.runner.json` }],
+        },
+    ],
+    crosscuttingCsproj: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Crosscutting/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
+                },
+            ],
         },
     ],
     serverProperties: [
@@ -126,8 +139,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/Constants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/Constants.cs`,
+                    file: 'Project.Crosscutting/Constants/Constants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/Constants.cs`,
                 },
             ],
         },
@@ -472,8 +485,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Security/RolesConstants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/RolesConstants.cs`,
+                    file: 'Project.Crosscutting/Constants/RolesConstants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/RolesConstants.cs`,
                 },
             ],
         },
@@ -500,8 +513,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Security/Jwt/JwtConstants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/Jwt/JwtConstants.cs`,
+                    file: 'Project.Crosscutting/Constants/JwtConstants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/JwtConstants.cs`,
                 },
             ],
         },
@@ -694,8 +707,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/ErrorConstants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ErrorConstants.cs`,
+                    file: 'Project.Crosscutting/Constants/ErrorConstants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/ErrorConstants.cs`,
                 },
             ],
         },
