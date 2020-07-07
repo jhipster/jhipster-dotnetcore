@@ -23,6 +23,7 @@ const utils = require('../utils');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
+const PROJECT_CROSSCUTTING_SUFFIX = constants.CROSSCUTTING_SUFFIX;
 
 const serverFiles = {
     server: [
@@ -126,7 +127,7 @@ function writeFiles() {
                         const fieldType = field.fieldType;
                         this.template(
                             'dotnetcore/src/Project/Models/Enum.cs.ejs',
-                            `src/${this.mainProjectDir}/Models/${fieldType}.cs`,
+                            `src/${this.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Enums/${fieldType}.cs`,
                             this,
                             {},
                             enumInfo

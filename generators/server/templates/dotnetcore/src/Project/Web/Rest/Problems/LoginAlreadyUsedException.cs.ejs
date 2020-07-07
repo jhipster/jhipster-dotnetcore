@@ -12,6 +12,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using <%= namespace %>.Crosscutting.Constants;
+
 namespace <%= namespace %>.Web.Rest.Problems {
     public class LoginAlreadyUsedException : BadRequestAlertException {
         public LoginAlreadyUsedException() : base(ErrorConstants.EmailAlreadyUsedType, "Login name is already in use!",
