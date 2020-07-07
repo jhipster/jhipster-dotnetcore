@@ -435,6 +435,15 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Service/Mapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Controllers/AccountController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/AccountController.cs`,
                 },
