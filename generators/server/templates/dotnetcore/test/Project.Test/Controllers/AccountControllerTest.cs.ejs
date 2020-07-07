@@ -47,9 +47,9 @@ namespace <%= namespace %>.Test.Controllers
 
             // Assert
             okResult.Should().NotBeNull();
-            var user = okResult.Value as UserDto;
+            var user = okResult.Value as UserDTO;
             user.Should().NotBeNull();
-            user.Should().BeEquivalentTo(new UserDto
+            user.Should().BeEquivalentTo(new UserDTO
             {
                 Activated = true,
                 FirstName = "admin",
@@ -89,9 +89,9 @@ namespace <%= namespace %>.Test.Controllers
 
             // Assert
             okResult.Should().NotBeNull();
-            var user = okResult.Value as UserDto;
+            var user = okResult.Value as UserDTO;
             user.Should().NotBeNull();
-            user.Should().BeEquivalentTo(new UserDto
+            user.Should().BeEquivalentTo(new UserDTO
             {
                 Activated = true,
                 FirstName = "user",

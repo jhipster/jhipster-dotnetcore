@@ -53,7 +53,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("users")]
         [ValidateModel]
-        public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
+        public async Task<ActionResult<User>> CreateUser([FromBody] UserDTO userDto)
         {
             _log.LogDebug($"REST request to save User : {userDto}");
             if (userDto.Id != null)
@@ -73,7 +73,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPut("users")]
         [ValidateModel]
-        public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDto)
         {
             _log.LogDebug($"REST request to update User : {userDto}");
             var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
@@ -97,7 +97,7 @@ namespace <%= namespace %>.Controllers {
                 .ToList()
                 .AsQueryable()
                 .UsePageable(pageable);
-            var userDtos = page.Content.Select(user => new UserDto(user));
+            var userDtos = page.Content.Select(user => new UserDTO(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }
@@ -118,7 +118,7 @@ namespace <%= namespace %>.Controllers {
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .SingleOrDefaultAsync();
-            var userDto = result != null ? new UserDto(result) : null;
+            var userDto = result != null ? new UserDTO(result) : null;
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
 

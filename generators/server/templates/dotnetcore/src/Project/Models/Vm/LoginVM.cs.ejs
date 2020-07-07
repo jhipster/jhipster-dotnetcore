@@ -14,8 +14,8 @@
 -%>
 using System.ComponentModel.DataAnnotations;
 
-namespace <%= namespace %>.Models.Vm {
-    public class LoginVm {
+namespace <%= namespace %>.Dto {
+    public class LoginDTO {
         [Required]
         [StringLength(50, MinimumLength = 1)]
         public string Username { get; set; }
@@ -28,7 +28,7 @@ namespace <%= namespace %>.Models.Vm {
 
         public override string ToString()
         {
-            return "LoginVm{" +
+            return "LoginDto{" +
                    $"Username='{Username}'" +
                    $", Password='{Password}'" +
                    $", RememberMe='{RememberMe}'" +

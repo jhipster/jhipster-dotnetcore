@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Models.Vm;
+using <%= namespace %>.Dto;
 using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Service;
 using <%= namespace %>.Web.Extensions;
@@ -43,10 +43,10 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("authenticate")]
         [ValidateModel]
-        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginVm loginVm)
+        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDTO LoginDto)
         {
-            var user = await _authenticationService.Authenticate(loginVm.Username, loginVm.Password);
-            var rememberMe = loginVm.RememberMe;
+            var user = await _authenticationService.Authenticate(LoginDto.Username, LoginDto.Password);
+            var rememberMe = LoginDto.RememberMe;
             var jwt = _tokenProvider.CreateToken(user, rememberMe);
             var httpHeaders = new HeaderDictionary {
                 [JwtConstants.AuthorizationHeader] = $"{JwtConstants.BearerPrefix} {jwt}"

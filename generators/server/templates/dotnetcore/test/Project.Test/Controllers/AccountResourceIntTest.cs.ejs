@@ -17,7 +17,6 @@ using FluentAssertions;
 using FluentAssertions.Extensions;
 using <%= namespace %>.Infrastructure;
 using <%= namespace %>.Domain;
-using <%= namespace %>.Models.Vm;
 using <%= namespace %>.Security;
 using <%= namespace %>.Dto;
 using <%= namespace %>.Test.Setup;
@@ -104,7 +103,7 @@ namespace <%= namespace %>.Test.Controllers {
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDTO {
                     CurrentPassword = currentPassword,
                     NewPassword = "new password"
                 }));
@@ -134,7 +133,7 @@ namespace <%= namespace %>.Test.Controllers {
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDTO {
                     CurrentPassword = currentPassword,
                     NewPassword = ""
                 })
@@ -164,7 +163,7 @@ namespace <%= namespace %>.Test.Controllers {
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDTO {
                     CurrentPassword = currentPassword,
                     NewPassword = TestUtil.RandomAlphabetic(101)
                 }));
@@ -193,7 +192,7 @@ namespace <%= namespace %>.Test.Controllers {
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDTO {
                     CurrentPassword = currentPassword,
                     NewPassword = TestUtil.RandomAlphabetic(3)
                 }));
@@ -222,7 +221,7 @@ namespace <%= namespace %>.Test.Controllers {
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDTO {
                     CurrentPassword = $"1{currentPassword}",
                     NewPassword = "new password"
                 }));
@@ -254,7 +253,7 @@ namespace <%= namespace %>.Test.Controllers {
 
             await userManager.CreateAsync(user);
 
-            var keyAndPassword = new KeyAndPasswordVM {
+            var keyAndPassword = new KeyAndPasswordDTO {
                 Key = user.ResetKey,
                 NewPassword = "new password"
             };
@@ -287,7 +286,7 @@ namespace <%= namespace %>.Test.Controllers {
 
             await userManager.CreateAsync(user);
 
-            var keyAndPassword = new KeyAndPasswordVM {
+            var keyAndPassword = new KeyAndPasswordDTO {
                 Key = user.ResetKey,
                 NewPassword = TestUtil.RandomAlphabetic(3)
             };
@@ -307,7 +306,7 @@ namespace <%= namespace %>.Test.Controllers {
         public async Task TestFinishPasswordResetWrongKey()
         {
             var client = _factory.CreateClient();
-            var keyAndPassword = new KeyAndPasswordVM {
+            var keyAndPassword = new KeyAndPasswordDTO {
                 Key = TestUtil.RandomAlphabetic(60),
                 NewPassword = TestUtil.RandomAlphabetic(60)
             };
@@ -375,7 +374,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
-            var validUser = new ManagedUserVM {
+            var validUser = new ManagedUserDTO {
                 Login = "badguy",
                 Password = "password",
                 FirstName = "Bad",
@@ -405,7 +404,7 @@ namespace <%= namespace %>.Test.Controllers {
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
             // First user
-            var firstUser = new ManagedUserVM {
+            var firstUser = new ManagedUserDTO {
                 Login = "test-register-duplicate-email",
                 Password = "password",
                 FirstName = "Alice",
@@ -426,7 +425,7 @@ namespace <%= namespace %>.Test.Controllers {
             testUser1.Should().NotBeNull();
 
             // Duplicate email, different login
-            var secondUser = new ManagedUserVM {
+            var secondUser = new ManagedUserDTO {
                 Login = "test-register-duplicate-email-2",
                 Password = firstUser.Password,
                 FirstName = firstUser.FirstName,
@@ -449,7 +448,7 @@ namespace <%= namespace %>.Test.Controllers {
             testUser3.Should().NotBeNull();
 
             // Duplicate email - with uppercase email address
-            var userWithUpperCaseEmail = new ManagedUserVM {
+            var userWithUpperCaseEmail = new ManagedUserDTO {
                 Id = firstUser.Id,
                 Login = "test-register-duplicate-email-3",
                 Password = firstUser.Password,
@@ -484,7 +483,7 @@ namespace <%= namespace %>.Test.Controllers {
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
             // First registration
-            var firstUser = new ManagedUserVM {
+            var firstUser = new ManagedUserDTO {
                 Login = "test-register-duplicate-email",
                 Password = "password",
                 FirstName = "Alice",
@@ -498,7 +497,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
 
             // Duplicate login, different email
-            var secondUser = new ManagedUserVM {
+            var secondUser = new ManagedUserDTO {
                 Login = firstUser.Login,
                 Password = firstUser.Password,
                 FirstName = firstUser.FirstName,
@@ -536,7 +535,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
-            var invalidUser = new ManagedUserVM {
+            var invalidUser = new ManagedUserDTO {
                 Login = "bob",
                 Password = "password",
                 FirstName = "Bob",
@@ -563,7 +562,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
-            var invalidUser = new ManagedUserVM {
+            var invalidUser = new ManagedUserDTO {
                 Login = "funky-log!n", // <-- invalid
                 Password = "password",
                 FirstName = "Bob",
@@ -590,7 +589,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
-            var invalidUser = new ManagedUserVM {
+            var invalidUser = new ManagedUserDTO {
                 Login = "bob",
                 Password = "123", // password with only 3 digits
                 FirstName = "Bob",
@@ -617,7 +616,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
-            var invalidUser = new ManagedUserVM {
+            var invalidUser = new ManagedUserDTO {
                 Login = "bob",
                 Password = null, // invalid null password
                 FirstName = "Bob",
@@ -644,7 +643,7 @@ namespace <%= namespace %>.Test.Controllers {
             var client = _factory.CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
 
-            var validUser = new ManagedUserVM {
+            var validUser = new ManagedUserDTO {
                 Login = "test-register-valid",
                 Password = "password",
                 FirstName = "Alice",
@@ -733,7 +732,7 @@ namespace <%= namespace %>.Test.Controllers {
 
             await userManager.CreateAsync(user);
 
-            var userDto = new UserDto {
+            var userDto = new UserDTO {
                 Login = "not-used",
                 FirstName = "firstname",
                 LastName = "lastname",
@@ -792,7 +791,7 @@ namespace <%= namespace %>.Test.Controllers {
             await userManager.CreateAsync(anotherUser);
 
 
-            var userDto = new UserDto {
+            var userDto = new UserDTO {
                 Login = "not-used",
                 FirstName = "firstname",
                 LastName = "lastname",
@@ -828,7 +827,7 @@ namespace <%= namespace %>.Test.Controllers {
 
             await userManager.CreateAsync(user);
 
-            var userDto = new UserDto {
+            var userDto = new UserDTO {
                 Login = "not-used",
                 FirstName = "firstname",
                 LastName = "lastname",
@@ -864,7 +863,7 @@ namespace <%= namespace %>.Test.Controllers {
 
             await userManager.CreateAsync(user);
 
-            var userDto = new UserDto {
+            var userDto = new UserDTO {
                 Login = "not-used",
                 FirstName = "firstname",
                 LastName = "lastname",
