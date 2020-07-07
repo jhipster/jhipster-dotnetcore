@@ -24,11 +24,12 @@ const entityVariableName = camelCasedEntityClass; _%>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using <%= namespace %>.Crosscutting.Enums;
 <%_ if (importJsonIgnore === true || hasManyToMany) { _%>
 using Newtonsoft.Json;
 <%_ } _%>
 
-namespace <%= namespace %>.Service.Dto {
+namespace <%= namespace %>.Dto {
 
     public class <%= asDto(entityClassName) %> {
 
