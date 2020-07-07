@@ -179,7 +179,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Dto/PasswordChangeDto.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/PasswordChangeDTO.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/PasswordChangeDTO.cs`,
                 },
             ],
         },
@@ -207,7 +208,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Vm/KeyAndPasswordVM.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/KeyAndPasswordDTO.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/KeyAndPasswordDTO.cs`,
                 },
             ],
         },
