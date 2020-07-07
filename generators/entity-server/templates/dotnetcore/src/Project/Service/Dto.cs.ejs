@@ -61,7 +61,7 @@ namespace <%= namespace %>.Service.Dto {
             const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
             const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
             if (relationshipType === 'one-to-one'){_%>
-        public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
+        public <%= asDto(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
             <%_}
             if(relationshipType === 'one-to-many') { _%>
         public IList<<%= asDto(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asDto(otherEntityNamePascalized) %>>();
