@@ -32,7 +32,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Entity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${generator.asEntity(generator.entityClass)}.cs`,
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
@@ -47,11 +48,32 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Interfaces/IJoinedEntity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IJoinedEntity.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Interfaces/IJoinedEntity.cs`,
                 },
                 {
                     file: 'Project/Models/RelationshipTools/JoinListFacade.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/RelationshipTools/JoinListFacade.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/RelationshipTools/JoinListFacade.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Service/Mapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.dto === 'mapstruct',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Service/Dto.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${generator.asDto(generator.entityClass)}.cs`,
                 },
             ],
         },
@@ -108,7 +130,7 @@ function writeFiles() {
                                     {
                                         file: 'Project/Models/JoinEntity.cs',
                                         renameTo: generator =>
-                                            `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
+                                            `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${relationship.joinEntityNamePascalized}.cs`,
                                     },
                                 ],
                             },
