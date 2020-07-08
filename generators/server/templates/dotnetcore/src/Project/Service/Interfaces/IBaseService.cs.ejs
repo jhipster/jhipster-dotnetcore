@@ -28,7 +28,7 @@ using <%= namespace %>.Models;
 
 namespace <%= namespace %>.Service
 {
-    public interface I<%= pascalizedEntityClass %>Service
+    public interface IBaseService<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>
     {
         Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> Save(<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>);
 
