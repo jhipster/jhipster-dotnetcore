@@ -16,6 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%
+let hasDto = dto === 'mapstruct';
+%>
+<%_ if (hasDto) { _%>
+using AutoMapper;
+<%_ } _%>
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JHipsterNet.Pagination;
@@ -24,6 +30,10 @@ using <%= namespace %>.Data;
 using <%= namespace %>.Data.Extensions;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Crosscutting.Enums;
+<%_ if (hasDto) { _%>
+using <%= namespace %>.Dto;
+using <%= namespace %>.Service.Mapper;
+<%_ } _%>
 using <%= namespace %>.Web.Extensions;
 using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Web.Rest.Problems;
@@ -41,23 +51,39 @@ namespace <%= namespace %>.Controllers {
         private const string EntityName = "<%= camelCasedEntityClass %>";
 
         private readonly ApplicationDatabaseContext _applicationDatabaseContext;
-
+        <%_ if (hasDto) { _%>
+        private readonly IMapper _mapper;
+        <%_ } _%>
         private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
 
         public <%= pascalizedEntityClass %>Controller(ILogger<<%= pascalizedEntityClass %>Controller> log,
+            <%_ if (hasDto) { _%>
+            IMapper mapper,
+            <%_ } _%>
             ApplicationDatabaseContext applicationDatabaseContext)
         {
             _log = log;
+            <%_ if (hasDto) { _%>
+            _mapper = mapper;
+            <%_ } _%>
             _applicationDatabaseContext = applicationDatabaseContext;
         }
 
         [HttpPost("<%= kebabCasedEntityClassPlural %>")]
         [ValidateModel]
+        <%_ if (hasDto) { _%>
+        public async Task<ActionResult<<%= asDto(pascalizedEntityClass) %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= asDto(pascalizedEntityClass) %> <%= asDto(camelCasedEntityClass) %>)
+        <%_ } else { _%>
         public async Task<ActionResult<<%= pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        <%_ } _%>
         {
-            _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= camelCasedEntityClass %>}");
-            if (<%= camelCasedEntityClass %>.Id != 0)
+            _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
+            if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id != 0)
                 throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
+
+            <%_ if (hasDto) { _%>
+            <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
+            <%_ } _%>
             <%_ if (relationships.length != 0) { _%>
             _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
             <%_ } else { _%>
@@ -70,11 +96,20 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPut("<%= kebabCasedEntityClassPlural %>")]
         [ValidateModel]
+        <%_ if (hasDto) { _%>
+        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= asDto(pascalizedEntityClass) %> <%= asDto(camelCasedEntityClass) %>)
+        <%_ } else { _%>
         public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        <%_ } _%>
         {
-            _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= camelCasedEntityClass %>}");
-            if (<%= camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
+            _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
+            if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
+
             //TODO catch //DbUpdateConcurrencyException into problem
+
+            <%_ if (hasDto) { _%>
+            <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
+            <%_ } _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
             _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
@@ -102,16 +137,24 @@ namespace <%= namespace %>.Controllers {
         }
 
         [HttpGet("<%= kebabCasedEntityClassPlural %>")]
-        public ActionResult<IEnumerable<<%= pascalizedEntityClass %>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
+        <%_ if (hasDto) { _%>
+        public async Task<ActionResult<IEnumerable<<%= asDto(pascalizedEntityClass) %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
+        <%_ } else { _%>
+        public async Task<ActionResult<IEnumerable<<%= pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
+        <%_ } _%>
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
-            var page = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+            var page = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                 <%_ }
             }); _%>
-                .UsePageable(pageable);
+            <%_ if (hasDto) { _%>
+                .UsePageableAsDtoAsync<<%= pascalizedEntityClass %>, <%= asDto(pascalizedEntityClass) %>>(pageable, _mapper);
+            <%_ } else { _%>
+                .UsePageableAsync(pageable);
+            <%_ }_%>
             return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
         }
 
@@ -129,7 +172,11 @@ namespace <%= namespace %>.Controllers {
                 <%_ }
             }); _%>
                 .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
+            <%_ if (hasDto) { _%>
+            return ActionResultUtil.WrapOrNotFoundAsDto<<%= asDto(pascalizedEntityClass) %>>(result, _mapper);
+            <%_ } else { _%>
             return ActionResultUtil.WrapOrNotFound(result);
+            <%_ }_%>
         }
 
         [HttpDelete("<%= kebabCasedEntityClassPlural %>/{id}")]

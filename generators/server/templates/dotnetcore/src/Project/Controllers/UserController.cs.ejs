@@ -12,6 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,14 +42,16 @@ namespace <%= namespace %>.Controllers {
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
         public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
-            IMailService mailService)
+            IMapper mapper, IMailService mailService)
         {
             _log = log;
             _userManager = userManager;
             _userService = userService;
             _mailService = mailService;
+            _mapper = mapper;
         }
 
         [HttpPost("users")]
@@ -97,7 +100,7 @@ namespace <%= namespace %>.Controllers {
                 .ToList()
                 .AsQueryable()
                 .UsePageable(pageable);
-            var userDtos = page.Content.Select(user => new UserDTO(user));
+            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDTO>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }
@@ -118,7 +121,7 @@ namespace <%= namespace %>.Controllers {
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .SingleOrDefaultAsync();
-            var userDto = result != null ? new UserDTO(result) : null;
+            var userDto = _mapper.Map<UserDTO>(result);
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
 

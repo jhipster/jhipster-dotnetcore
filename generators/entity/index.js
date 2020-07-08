@@ -46,8 +46,8 @@ module.exports = class extends EntityGenerator {
             askForRelationships: prompts.askForRelationships,
             askForRelationsToRemove: prompts.askForRelationsToRemove,
             askForTableName: prompts.askForTableName,
-            // askForService: prompts.askForService,
-            // askForDTO: prompts.askForDTO,
+            askForService: prompts.askForService,
+            askForDTO: prompts.askForDTO,
             // askForFiltering: prompts.askForFiltering,
             askForPagination: prompts.askForPagination,
         };

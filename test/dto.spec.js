@@ -11,9 +11,8 @@ function getPreCondition() {
     return helpers
         .run('generator-jhipster/generators/entity')
         .inTmpDir(dir => {
-            console.log(`Test temp dir: ${dir}`);
             fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
-            fse.copySync(path.join(__dirname, '../test/templates/enums'), dir);
+            fse.copySync(path.join(__dirname, '../test/templates/dto'), dir);
         })
         .withOptions({
             'from-cli': true,
@@ -37,41 +36,36 @@ function getPreCondition() {
         ]);
 }
 
-describe('Subgenerator entity of dotnetcore JHipster blueprint - testing enum generation', () => {
-    context('generating enum', () => {
-        const orderClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Order.cs`;
-        const orderStatusEnum = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Crosscutting/Enums/OrderStatus.cs`;
-        const efMappings = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Data/ApplicationDatabaseContext.cs`;
+describe('testing dto', () => {
+    context('generating dto', () => {
+        const personClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Person.cs`;
+        const personDto = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Dto/PersonDTO.cs`;
+        const dtoMappingFile = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Service/Mapper/AutoMapperProfile.cs`;
 
         before(done => {
             getPreCondition()
-                .withArguments(['Order'])
+                .withArguments(['Person'])
                 .withPrompts({
                     fieldAdd: false,
                     relationshipAdd: false,
-                    dto: 'no',
-                    service: 'no',
-                    pagination: 'infinite-scroll',
+                    dto: 'mapstruct',
+                    service: 'serviceImpl',
+                    pagination: 'no',
                 })
                 .on('end', done);
         });
 
-        it('copies entity file', () => {
-            assert.file('.jhipster/Order.json');
+        it('check if required files for dto are copied', () => {
+            assert.file('.jhipster/Person.json');
             assert.file('.yo-rc.json');
         });
 
-        it('creates entity class', () => {
-            assert.file(orderClass);
-        });
-
-        it('generates the enum', () => {
-            assert.file(orderStatusEnum);
-            assert.fileContent(orderStatusEnum, /IN_PROGRESS,\s+FINISHED/);
-        });
-
-        it('generates the enum to string mapping at ApplicationDatabaseContext', () => {
-            assert.fileContent(efMappings, /builder\.Entity<Order>\(\)\s+\.Property\(e => e.Status\)\s+\.HasConversion<string>\(\);/);
+        it('checks dto files', () => {
+            assert.file(personClass);
+            assert.file(personDto);
+            assert.file(dtoMappingFile);
+            assert.fileContent(personDto, /public class PersonDTO/);
+            assert.fileContent(dtoMappingFile, /public class AutoMapperProfile : Profile/);
         });
     });
 });

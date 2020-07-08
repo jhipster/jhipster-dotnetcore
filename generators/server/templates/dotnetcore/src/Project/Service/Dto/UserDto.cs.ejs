@@ -17,32 +17,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using <%= namespace %>.Crosscutting.Constants;
-using <%= namespace %>.Domain;
 using Newtonsoft.Json;
 
 namespace <%= namespace %>.Dto {
     public class UserDTO {
-        <%_ if (authenticationType === 'jwt') { _%>
-        public UserDTO()
-        {
-        }
-
-        public UserDTO(User user)
-        {
-            Id = user.Id;
-            Login = user.UserName;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Email = user.Email;
-            Activated = user.Activated;
-            ImageUrl = user.ImageUrl;
-            LangKey = user.LangKey;
-            Roles = user.UserRoles != null
-                ? user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()
-                : new HashSet<string>();
-        }
-        <%_ } _%>
-
         public string Id { get; set; }
 
         [Required]
