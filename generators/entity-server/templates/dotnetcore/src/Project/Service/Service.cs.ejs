@@ -29,7 +29,6 @@ using <%= namespace %>.Service.Interfaces;
 namespace <%= namespace %>.Service {
     public class <%= pascalizedEntityClass %>Service : I<%= pascalizedEntityClass %>Service {
         private readonly ApplicationDatabaseContext _applicationDatabaseContext;
-
         private readonly ILogger<<%= pascalizedEntityClass %>Service> _log;
 
         public <%= pascalizedEntityClass %>Service(
