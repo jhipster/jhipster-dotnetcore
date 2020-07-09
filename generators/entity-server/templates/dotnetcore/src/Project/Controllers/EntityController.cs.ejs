@@ -40,6 +40,7 @@ fields.forEach(field => {
 if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
 <%_ } _%>
+using <%= namespace %>.Crosscutting.Exceptions;
 <%_ if (hasDto) { _%>
 using <%= namespace %>.Dto;
 <%_ } _%>

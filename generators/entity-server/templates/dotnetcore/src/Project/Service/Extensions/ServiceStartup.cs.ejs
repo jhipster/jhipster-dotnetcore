@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<<<<<<< HEAD:generators/entity-server/templates/dotnetcore/src/Project/Service/Extensions/ServiceStartup.cs.ejs
 using Microsoft.Extensions.DependencyInjection;
 using <%= namespace %>.Service;
 using <%= namespace %>.Service.Interfaces;
@@ -30,6 +31,15 @@ namespace <%= namespace %>.Infrastructure {
             @this.AddScoped<<%= service.serviceInterface %>, <%= service.serviceClass %>>();
             <%_ }); _%>
             return @this;
+=======
+using <%= namespace %>.Crosscutting.Constants;
+
+namespace <%= namespace %>.Crosscutting.Exceptions {
+    public class InvalidPasswordException : BaseException {
+        public InvalidPasswordException() : base(ErrorConstants.InvalidPasswordType, "Incorrect Password")
+        {
+            //Status = StatusCodes.Status400BadRequest
+>>>>>>> c46138b... Exceptions/ProblemDetails refactoring and mapping:generators/server/templates/dotnetcore/src/Project.Crosscutting/Exceptions/InvalidPasswordException.cs.ejs
         }
     }
 }

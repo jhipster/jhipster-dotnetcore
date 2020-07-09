@@ -650,8 +650,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Extensions/ActionResultExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Extensions/ActionResultExtensions.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Extensions/ActionResultExtensions.cs`,
                 },
             ],
         },
@@ -660,8 +659,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Extensions/ActionResultWithHeaders.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Extensions/ActionResultWithHeaders.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Extensions/ActionResultWithHeaders.cs`,
                 },
             ],
         },
@@ -670,8 +668,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Extensions/HttpRequestExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Extensions/HttpRequestExtensions.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Extensions/HttpRequestExtensions.cs`,
                 },
             ],
         },
@@ -680,8 +677,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Filters/ValidateModelAttribute.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Filters/ValidateModelAttribute.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Filters/ValidateModelAttribute.cs`,
                 },
             ],
         },
@@ -690,8 +686,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Utilities/ActionResultUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/ActionResultUtil.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/ActionResultUtil.cs`,
                 },
             ],
         },
@@ -759,8 +754,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Problems/ExceptionTranslator.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/ExceptionTranslator.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ExceptionTranslator.cs`,
                 },
             ],
         },
@@ -799,8 +793,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Problems/ProblemDetailsConfiguration.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/ProblemDetailsConfiguration.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ProblemDetailsConfiguration.cs`,
                 },
             ],
         },
@@ -809,8 +802,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Problems/ValidationFailedException.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/ValidationFailedException.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ValidationFailedException.cs`,
                 },
             ],
         },
