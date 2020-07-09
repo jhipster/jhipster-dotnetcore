@@ -19,14 +19,12 @@
 <%
 let hasDto = dto === 'mapstruct';
 %>
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JHipsterNet.Pagination;
-using <%= namespace %>.Data;
-using <%= namespace %>.Data.Extensions;
-using <%= namespace %>.Models;
+using <%= namespace %>.Domain;
+using <%= namespace %>.Dto;
 
-namespace <%= namespace %>.Service
+namespace <%= namespace %>.Service.Interfaces
 {
     public interface I<%= pascalizedEntityClass %>Service
     {
@@ -34,8 +32,8 @@ namespace <%= namespace %>.Service
 
         Task<IPage<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> FindAll(IPageable pageable);
 
-        Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> FindOne(Long id);
+        Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> FindOne(long id);
 
-        Task Delete(Long id);
+        Task Delete(long id);
     }
 }

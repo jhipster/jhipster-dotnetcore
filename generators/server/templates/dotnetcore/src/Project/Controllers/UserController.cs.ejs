@@ -91,16 +91,14 @@ namespace <%= namespace %>.Controllers {
         }
 
         [HttpGet("users")]
-        public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var page = _userManager.Users
+            var page = await _userManager.Users
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
-                .ToList()
-                .AsQueryable()
-                .UsePageable(pageable);
-            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDto>(user));
+                .UsePageableAsync(pageable);
+            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDTO>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }

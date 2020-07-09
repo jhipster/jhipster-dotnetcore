@@ -17,15 +17,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using <%= namespace %>.Crosscutting.Constants;
+using <%= namespace %>.Crosscutting.Exceptions;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Dto;
 using <%= namespace %>.Service.Utilities;
-using <%= namespace %>.Web.Rest.Problems;
 using LanguageExt.UnitsOfMeasure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MyCompany.Web.Rest.Problems;
 
 namespace <%= namespace %>.Service {
     public interface IUserService {
@@ -101,7 +102,7 @@ namespace <%= namespace %>.Service {
         public async Task<User> CompletePasswordReset(string newPassword, string key)
         {
             _log.LogDebug($"Reset user password for reset key {key}");
-            var user = _userManager.Users.SingleOrDefault(it => it.ResetKey == key);
+            var user = await _userManager.Users.SingleOrDefaultAsync(it => it.ResetKey == key);
             if (user == null || user.ResetDate <= DateTime.Now.Subtract(86400.Seconds())) return null;
             user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
             user.ResetKey = null;
@@ -141,7 +142,7 @@ namespace <%= namespace %>.Service {
         public async Task<User> ActivateRegistration(string key)
         {
             _log.LogDebug($"Activating user for activation key {key}");
-            var user = _userManager.Users.SingleOrDefault(it => it.ActivationKey == key);
+            var user = await _userManager.Users.SingleOrDefaultAsync(it => it.ActivationKey == key);
             if (user == null) return null;
             user.Activated = true;
             user.ActivationKey = null;
