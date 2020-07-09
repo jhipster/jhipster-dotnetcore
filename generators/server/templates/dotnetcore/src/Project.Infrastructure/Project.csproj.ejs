@@ -16,17 +16,17 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <RootNamespace><%= namespace %>.Service</RootNamespace>
+        <RootNamespace><%= namespace %>.Infrastructure</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
-        <ProjectReference Include="..\<%= pascalizedBaseName %>.Infrastructure\<%= pascalizedBaseName %>.Infrastructure.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />

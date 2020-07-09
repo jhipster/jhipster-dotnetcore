@@ -24,6 +24,8 @@ const utils = require('../utils');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
+const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 
 const serverFiles = {
     server: [
@@ -62,7 +64,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Mapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Mapper/AutoMapperProfile.cs`,
                 },
             ],
         },
@@ -84,19 +86,19 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Data/ApplicationDatabaseContext.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
                 },
                 {
                     file: 'Project/Data/Extensions/DbContextExtensions.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbContextExtensions.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
                 },
                 {
                     file: 'Project/Data/Extensions/DbSetExtensions.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbSetExtensions.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
                 },
                 {
                     file: 'Project/Data/Extensions/PropertyAccessorCache.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/PropertyAccessorCache.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
                 },
             ],
         },

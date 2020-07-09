@@ -5,6 +5,7 @@ const PROJECT_DTO_SUFFIX = '.Dto';
 const PROJECT_DOMAIN_SUFFIX = '.Domain';
 const DOCKER_DIR = 'docker/';
 const PROJECT_CROSSCUTTING_SUFFIX = '.Crosscutting';
+const PROJECT_INFRASTRUCTURE_SUFFIX = '.Infrastructure';
 const PROJECT_SERVICE_SUFFIX = '.Service';
 
 const constants = {
@@ -15,6 +16,7 @@ const constants = {
     PROJECT_TEST_SUFFIX,
     DOCKER_DIR,
     PROJECT_CROSSCUTTING_SUFFIX,
+    PROJECT_INFRASTRUCTURE_SUFFIX,
     PROJECT_SERVICE_SUFFIX,
 };
 
