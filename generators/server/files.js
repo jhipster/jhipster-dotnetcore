@@ -628,8 +628,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Extensions/ActionResultExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Extensions/ActionResultExtensions.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Extensions/ActionResultExtensions.cs`,
                 },
             ],
         },
@@ -638,8 +637,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Extensions/ActionResultWithHeaders.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Extensions/ActionResultWithHeaders.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Extensions/ActionResultWithHeaders.cs`,
                 },
             ],
         },
@@ -648,8 +646,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Extensions/HttpRequestExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Extensions/HttpRequestExtensions.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Extensions/HttpRequestExtensions.cs`,
                 },
             ],
         },
@@ -658,8 +655,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Filters/ValidateModelAttribute.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Filters/ValidateModelAttribute.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Filters/ValidateModelAttribute.cs`,
                 },
             ],
         },
@@ -668,8 +664,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Utilities/ActionResultUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/ActionResultUtil.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/ActionResultUtil.cs`,
                 },
             ],
         },
@@ -678,8 +673,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Utilities/HeaderUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/HeaderUtil.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/HeaderUtil.cs`,
                 },
             ],
         },
@@ -688,8 +682,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
                 },
             ],
         },
@@ -697,9 +690,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
+                    file: 'Project.Crosscutting/Exceptions/BaseException.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/BaseException.cs`,
                 },
             ],
         },
@@ -707,9 +699,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
+                    file: 'Project.Crosscutting/Exceptions/BadRequestAlertException.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/BadRequestAlertException.cs`,
                 },
             ],
         },
@@ -717,9 +709,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
+                    file: 'Project.Crosscutting/Exceptions/EmailAlreadyUsedException.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/EmailAlreadyUsedException.cs`,
                 },
             ],
         },
@@ -727,69 +719,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
+                    file: 'Project.Crosscutting/Exceptions/EmailNotFoundException.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/BadRequestAlertException.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/BadRequestAlertException.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/EmailAlreadyUsedException.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/EmailAlreadyUsedException.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/EmailNotFoundException.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/EmailNotFoundException.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/EmailNotFoundException.cs`,
                 },
             ],
         },
@@ -798,8 +730,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Problems/ExceptionTranslator.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/ExceptionTranslator.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ExceptionTranslator.cs`,
                 },
             ],
         },
@@ -807,9 +738,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/InternalServerErrorException.cs',
+                    file: 'Project.Crosscutting/Exceptions/InternalServerErrorException.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/InternalServerErrorException.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/InternalServerErrorException.cs`,
                 },
             ],
         },
@@ -817,9 +748,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/InvalidPasswordException.cs',
+                    file: 'Project.Crosscutting/Exceptions/InvalidPasswordException.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/InvalidPasswordException.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/InvalidPasswordException.cs`,
                 },
             ],
         },
@@ -827,9 +758,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/LoginAlreadyUsedException.cs',
+                    file: 'Project.Crosscutting/Exceptions/LoginAlreadyUsedException.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/LoginAlreadyUsedException.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/LoginAlreadyUsedException.cs`,
                 },
             ],
         },
@@ -838,8 +769,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Problems/ProblemDetailsConfiguration.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/ProblemDetailsConfiguration.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ProblemDetailsConfiguration.cs`,
                 },
             ],
         },
@@ -848,8 +778,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Problems/ValidationFailedException.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Problems/ValidationFailedException.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ValidationFailedException.cs`,
                 },
             ],
         },

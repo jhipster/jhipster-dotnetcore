@@ -80,11 +80,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("<%= kebabCasedEntityClassPlural %>")]
         [ValidateModel]
-        <%_ if (hasDto) { _%>
-        public async Task<ActionResult<<%= asDto(pascalizedEntityClass) %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= asDto(pascalizedEntityClass) %> <%= asDto(camelCasedEntityClass) %>)
-        <%_ } else { _%>
-        public async Task<ActionResult<<%= pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
-        <%_ } _%>
+        public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id != 0)
@@ -105,11 +101,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPut("<%= kebabCasedEntityClassPlural %>")]
         [ValidateModel]
-        <%_ if (hasDto) { _%>
-        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= asDto(pascalizedEntityClass) %> <%= asDto(camelCasedEntityClass) %>)
-        <%_ } else { _%>
-        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
-        <%_ } _%>
+        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
@@ -146,11 +138,7 @@ namespace <%= namespace %>.Controllers {
         }
 
         [HttpGet("<%= kebabCasedEntityClassPlural %>")]
-        <%_ if (hasDto) { _%>
-        public async Task<ActionResult<IEnumerable<<%= asDto(pascalizedEntityClass) %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
-        <%_ } else { _%>
-        public async Task<ActionResult<IEnumerable<<%= pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
-        <%_ } _%>
+        public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
             var page = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>

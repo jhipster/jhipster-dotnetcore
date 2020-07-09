@@ -12,18 +12,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Hellang.Middleware.ProblemDetails;
 using <%= namespace %>.Crosscutting.Constants;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
-namespace <%= namespace %>.Web.Rest.Problems {
-    public class EmailNotFoundException : ProblemDetailsException {
-        public EmailNotFoundException() : base(new ProblemDetails {
-            Type = ErrorConstants.EmailNotFoundType,
-            Detail = "Email address not registered",
-            Status = StatusCodes.Status400BadRequest
-        })
+namespace <%= namespace %>.Crosscutting.Exceptions {
+    public class LoginAlreadyUsedException : BadRequestAlertException {
+        public LoginAlreadyUsedException() : base(ErrorConstants.EmailAlreadyUsedType, "Login name is already in use!",
+            "userManagement", "userexists")
         {
         }
     }

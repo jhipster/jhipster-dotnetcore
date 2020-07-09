@@ -24,6 +24,7 @@ using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Crosscutting.Constants;
+using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 <%_ if (authenticationType === 'jwt') { _%>
 using <%= namespace %>.Service;

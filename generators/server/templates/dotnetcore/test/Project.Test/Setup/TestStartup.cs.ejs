@@ -23,15 +23,15 @@ using Microsoft.Extensions.Options;
 using <%= namespace %>.Data;
 using System;
 
-namespace <%= namespace %>.Test.Setup 
+namespace <%= namespace %>.Test.Setup
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IConfiguration configuration) : base(configuration)
+        public TestStartup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {
         }
 
-        public override void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider, 
+        public override void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
             ApplicationDatabaseContext context, IOptions<JHipsterSettings> jhipsterSettingsOptions)
         {
             base.Configure(app, env, serviceProvider, context, jhipsterSettingsOptions);

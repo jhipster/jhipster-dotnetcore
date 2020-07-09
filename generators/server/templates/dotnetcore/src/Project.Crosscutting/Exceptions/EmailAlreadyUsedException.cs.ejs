@@ -12,18 +12,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Hellang.Middleware.ProblemDetails;
 using <%= namespace %>.Crosscutting.Constants;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
-namespace <%= namespace %>.Web.Rest.Problems {
-    public class InvalidPasswordException : ProblemDetailsException {
-        public InvalidPasswordException() : base(new ProblemDetails {
-            Type = ErrorConstants.InvalidPasswordType,
-            Detail = "Incorrect Password",
-            Status = StatusCodes.Status400BadRequest
-        })
+namespace <%= namespace %>.Crosscutting.Exceptions {
+    public class EmailAlreadyUsedException : BadRequestAlertException {
+        public EmailAlreadyUsedException() : base(ErrorConstants.EmailAlreadyUsedType, "Email is already in use!",
+            "userManagement", "emailexists")
         {
         }
     }

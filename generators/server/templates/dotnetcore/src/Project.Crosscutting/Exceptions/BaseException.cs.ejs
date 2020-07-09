@@ -12,12 +12,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using System.Security.Authentication;
+using System;
 
 namespace <%= namespace %>.Crosscutting.Exceptions {
-    public class UserNotActivatedException : AuthenticationException {
-        public UserNotActivatedException(string message) : base(message)
+    public abstract class BaseException : Exception
+    {
+        public BaseException(string type, string detail) : this(type, detail, null, null)
         {
         }
+
+        public BaseException(string type, string detail, string entityName) : this(type, detail, entityName, null)
+        {
+        }
+
+        public BaseException(string type, string detail, string entityName, string errorKey) : base(detail)
+        {
+            this.Type = type;
+            this.Detail = detail;
+            this.EntityName = entityName;
+            this.ErrorKey = errorKey;
+        }
+
+        public string Type { get; set; }
+        public string Detail { get; set; }
+        public string EntityName { get; set; }
+        public string ErrorKey { get; set; }
     }
 }
