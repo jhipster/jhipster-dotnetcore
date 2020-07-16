@@ -188,6 +188,15 @@ function updateTestFramework(){
     }
 }
 
+function updateVendor() {
+   this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientAppDir}/content/scss/vendor.scss`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/src/content`,
+        "..",
+        true
+    );
+}
+
 function writeFiles() {
     updateWebpackCommonJs.call(this);
     updateWebpackDevJs.call(this);
@@ -198,6 +207,7 @@ function writeFiles() {
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
     updateTestFramework.call(this);
+    updateVendor.call(this); 
 }
 
 module.exports = {
