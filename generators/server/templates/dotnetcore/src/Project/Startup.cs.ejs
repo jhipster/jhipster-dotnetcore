@@ -38,7 +38,7 @@ namespace <%= namespace %> {
         public virtual void ConfigureServices(IServiceCollection services)
         {
             services
-            .AddNhipsterModule(Configuration);
+                .AddNhipsterModule(Configuration);
 
             AddDatabase(services);
 
@@ -50,14 +50,14 @@ namespace <%= namespace %> {
 
             services
             <%_ if (authenticationType === 'jwt') { _%>   
-            .AddSecurityModule()
+                .AddSecurityModule()
             <%_ } else { _%>
-            .AddSecurityModule(jhipsterSettings)
+                .AddSecurityModule(jhipsterSettings)
             <%_ } _%>
-            .AddProblemDetailsModule()
-            .AddAutoMapperModule()
-            .AddWebModule()
-            .AddSwaggerModule();
+                .AddProblemDetailsModule()
+                .AddAutoMapperModule()
+                .AddSwaggerModule()
+                .AddWebModule();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,10 +68,11 @@ namespace <%= namespace %> {
             app
                 .UseApplicationSecurity(jhipsterSettings)
                 .UseApplicationProblemDetails()
-                .UseApplicationWeb(env)
                 .UseApplicationSwagger()
+                .UseApplicationWeb(env)
                 .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2') { _%>;<%_ } _%>
-                <%_ if (authenticationType === 'jwt') { _%>   
+
+                <%_ if (authenticationType === 'jwt') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>
                 
