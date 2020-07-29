@@ -168,7 +168,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Vm/ManagedUserVM.cs',
+                    file: 'Project.Dto/ManagedUserDTO.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/ManagedUserDTO.cs`,
                 },
             ],
@@ -178,7 +178,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Dto/PasswordChangeDto.cs',
+                    file: 'Project.Dto/PasswordChangeDTO.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/PasswordChangeDTO.cs`,
                 },
@@ -188,7 +188,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Dto/UserDto.cs',
+                    file: 'Project.Dto/UserDTO.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/UserDTO.cs`,
                 },
             ],
@@ -197,7 +197,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Controllers/Dto/ProfileInfoDTO.cs',
+                    file: 'Project.Dto/ProfileInfoDTO.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/ProfileInfo/ProfileInfoDTO.cs`,
                 },
             ],
@@ -207,7 +207,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Vm/KeyAndPasswordVM.cs',
+                    file: 'Project.Dto/KeyAndPasswordDTO.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/KeyAndPasswordDTO.cs`,
                 },
@@ -218,7 +218,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Vm/LoginVM.cs',
+                    file: 'Project.Dto/LoginDTO.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/LoginDTO.cs`,
                 },
             ],
