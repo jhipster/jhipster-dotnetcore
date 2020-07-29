@@ -24,7 +24,7 @@ const utils = require('../utils');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
-const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+// const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 
 const serverFiles = {
@@ -64,7 +64,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Mapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Mapper/AutoMapperProfile.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
                 },
             ],
         },
@@ -126,12 +126,12 @@ const serverFiles = {
                 {
                     file: 'Project/Service/Service.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${generator.entityClass}Service.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Service/${generator.entityClass}Service.cs`,
                 },
                 {
                     file: 'Project/Service/IService.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/Interfaces/I${generator.entityClass}Service.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/I${generator.entityClass}Service.cs`,
                 },
             ],
         },

@@ -420,8 +420,29 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Service/IAuthenticationService.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IAuthenticationService.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Service/AuthenticationService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/AuthenticationService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/AuthenticationService.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Service/IMailService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IMailService.cs`,
                 },
             ],
         },
@@ -431,7 +452,17 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/MailService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/MailService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/MailService.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Service/IUserService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IUserService.cs`,
                 },
             ],
         },
@@ -441,7 +472,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/UserService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/UserService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/UserService.cs`,
                 },
             ],
         },
@@ -451,7 +482,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Utilities/RandomUtil.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Utilities/RandomUtil.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Utilities/RandomUtil.cs`,
                 },
             ],
         },
@@ -461,7 +492,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Mapper/UserMapper.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Mapper/UserMapper.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/UserMapper.cs`,
                 },
             ],
         },
@@ -470,16 +501,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Mapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Mapper/AutoMapperProfile.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Service/Mapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Mapper/AutoMapperProfile.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
                 },
             ],
         },
