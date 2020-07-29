@@ -35,13 +35,22 @@ namespace <%= namespace %>.Service.Mapper {
                 .ForPath(user => user.UserRoles, opt => opt.MapFrom(userDto => userDto.Roles.Select(role => new UserRole { Role = new Role { Name = role }, UserId = userDto.Id }).ToHashSet()));
             <%_ } _%>
 
-            <%_ entities.forEach(entity => {
+
+            <%_ if(entities.length !== 0) {
+                entities.forEach(entity => {
                     if(entity.definition.dto === 'mapstruct') { _%>
             CreateMap<<%= entity.name %>, <%= asDto(entity.name) %>>().ReverseMap();
             <%_
                     }
                 });
+            }
+            else {
+                if(dto === 'mapstruct') { _%>
+            CreateMap<<%= entity.name %>, <%= asDto(entity.name) %>>().ReverseMap();
+                <%_
+            }} _%>
             %>
+
         }
     }
 }
