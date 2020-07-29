@@ -16,23 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
-let hasDto = dto === 'mapstruct';
-%>
 using System.Threading.Tasks;
 using JHipsterNet.Pagination;
 using <%= namespace %>.Domain;
-using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Service.Interfaces
 {
     public interface I<%= pascalizedEntityClass %>Service
     {
-        Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> Save(<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>);
+        Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>);
 
-        Task<IPage<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> FindAll(IPageable pageable);
+        Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable);
 
-        Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> FindOne(long id);
+        Task<<%= pascalizedEntityClass %>> FindOne(long id);
 
         Task Delete(long id);
     }

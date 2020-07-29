@@ -16,12 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
-let hasDto = dto === 'mapstruct';
-%>
-<%_ if (hasDto) { _%>
-using AutoMapper;
-<%_ } _%>
 using System.Threading.Tasks;
 using JHipsterNet.Pagination;
 using JHipsterNet.Pagination.Extensions;
@@ -30,36 +24,24 @@ using MyCompany.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Data;
-using <%= namespace %>.Dto;
 using <%= namespace %>.Service.Interfaces;
 
 namespace <%= namespace %>.Service {
     public class <%= pascalizedEntityClass %>Service : I<%= pascalizedEntityClass %>Service {
         private readonly ApplicationDatabaseContext _applicationDatabaseContext;
-        <%_ if (hasDto) { _%>
-        private readonly IMapper _mapper;
-        <%_ } _%>
+
         private readonly ILogger<<%= pascalizedEntityClass %>Service> _log;
 
         public <%= pascalizedEntityClass %>Service(
             ILogger<<%= pascalizedEntityClass %>Service> log,
-            <%_ if (hasDto) { _%>
-            IMapper mapper,
-            <%_ } _%>
             ApplicationDatabaseContext applicationDatabaseContext)
         {
             _log = log;
-            <%_ if (hasDto) { _%>
-            _mapper = mapper;
-            <%_ } _%>
             _applicationDatabaseContext = applicationDatabaseContext;
         }
 
-        public async Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> Save(<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
+        public async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
-            <%_ if (hasDto) { _%>
-            <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
-            <%_ } _%>
             <%_ if (relationships.length != 0) { _%>
             _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
             <%_ } else { _%>
@@ -67,14 +49,10 @@ namespace <%= namespace %>.Service {
             <%_ } _%>
             await _applicationDatabaseContext.SaveChangesAsync();
 
-            <%_ if (hasDto) { _%>
-            return _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(<%= camelCasedEntityClass %>);
-            <%_ } else { _%>
             return <%= camelCasedEntityClass %> %>;
-            <%_ } _%>
         }
 
-        public async Task<IPage<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> FindAll(IPageable pageable)
+        public async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
         {
             var page = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
@@ -82,15 +60,11 @@ namespace <%= namespace %>.Service {
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                 <%_ }
             }); _%>
-            <%_ if (hasDto) { _%>
-                .UsePageableAsDtoAsync<<%= pascalizedEntityClass %>, <%= asDto(pascalizedEntityClass) %>>(pageable, _mapper);
-            <%_ } else { _%>
                 .UsePageableAsync(pageable);
-            <%_ }_%>
             return page;
         }
 
-        public async Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> FindOne(long id)
+        public async Task<<%= pascalizedEntityClass %>> FindOne(long id)
         {
             var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
@@ -102,11 +76,7 @@ namespace <%= namespace %>.Service {
                 <%_ }
             }); _%>
                 .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
-            <%_ if (hasDto) { _%>
-            return _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(result);
-            <%_ } else { _%>
             return result;
-            <%_ }_%>
         }
 
         public async Task Delete(long id)
