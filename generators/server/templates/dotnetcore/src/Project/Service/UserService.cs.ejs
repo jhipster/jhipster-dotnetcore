@@ -29,21 +29,6 @@ using Microsoft.Extensions.Logging;
 using MyCompany.Crosscutting.Exceptions;
 
 namespace <%= namespace %>.Service {
-    public interface IUserService {
-        Task<User> CreateUser(UserDto userDto);
-        IEnumerable<string> GetAuthorities();
-        Task DeleteUser(string login);
-        Task<User> UpdateUser(UserDto userDto);
-        Task<User> CompletePasswordReset(string newPassword, string key);
-        Task<User> RequestPasswordReset(string mail);
-        Task ChangePassword(string currentPassword, string newPassword);
-        Task<User> ActivateRegistration(string key);
-        Task<User> RegisterUser(UserDto userDto, string password);
-
-        Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
-        Task<User> GetUserWithUserRoles();
-    }
-
     public class UserService : IUserService {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<UserService> _log;
