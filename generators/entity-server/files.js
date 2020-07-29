@@ -24,7 +24,7 @@ const utils = require('../utils');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
-const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+// const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 
 const serverFiles = {
@@ -67,7 +67,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Mapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Mapper/AutoMapperProfile.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
                 },
             ],
         },
