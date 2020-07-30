@@ -18,6 +18,7 @@
 -%>
 <%
 let hasDto = dto === 'mapstruct';
+let hasService = service === 'serviceImpl';
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
@@ -41,7 +42,9 @@ using <%= namespace %>.Crosscutting.Enums;
 <%_ } _%>
 <%_ if (hasDto) { _%>
 using <%= namespace %>.Dto;
-using <%= namespace %>.Service.Mapper;
+<%_ } _%>
+<%_ if (hasService) { _%>
+using <%= namespace %>.Service.Interfaces;
 <%_ } _%>
 using <%= namespace %>.Web.Extensions;
 using <%= namespace %>.Web.Filters;
@@ -63,17 +66,26 @@ namespace <%= namespace %>.Controllers {
         <%_ if (hasDto) { _%>
         private readonly IMapper _mapper;
         <%_ } _%>
+        <%_ if (hasService) { _%>
+        private readonly I<%= pascalizedEntityClass %>Service _<%= camelCasedEntityClass %>Service;
+        <%_ } _%>
         private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
 
         public <%= pascalizedEntityClass %>Controller(ILogger<<%= pascalizedEntityClass %>Controller> log,
             <%_ if (hasDto) { _%>
             IMapper mapper,
             <%_ } _%>
+            <%_ if (hasService) { _%>
+            I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service,
+            <%_ } _%>
             ApplicationDatabaseContext applicationDatabaseContext)
         {
             _log = log;
             <%_ if (hasDto) { _%>
             _mapper = mapper;
+            <%_ } _%>
+            <%_ if (hasService) { _%>
+            _<%= camelCasedEntityClass %>Service = <%= camelCasedEntityClass %>Service;
             <%_ } _%>
             _applicationDatabaseContext = applicationDatabaseContext;
         }
@@ -111,6 +123,9 @@ namespace <%= namespace %>.Controllers {
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
+            <%_ if (hasService) { _%>
+            await _<%= camelCasedEntityClass %>Service.Save(<%= camelCasedEntityClass %>);
+            <%_ } else { _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
             _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
@@ -133,6 +148,7 @@ namespace <%= namespace %>.Controllers {
                 }
             }); _%>
             await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ }_%>
             return Ok(<%= camelCasedEntityClass %>)
                 .WithHeaders(HeaderUtil.CreateEntityUpdateAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
@@ -141,6 +157,10 @@ namespace <%= namespace %>.Controllers {
         public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
+            <%_ if (hasService) { _%>
+            var result = await _<%= camelCasedEntityClass %>Service.FindAll(pageable);
+            var page = _mapper.Map<IPage<<%= pascalizedEntityClass %>>>(result);
+            <%_ } else { _%>
             var page = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
@@ -152,6 +172,7 @@ namespace <%= namespace %>.Controllers {
             <%_ } else { _%>
                 .UsePageableAsync(pageable);
             <%_ }_%>
+            <%_ }_%>
             return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
         }
 
@@ -159,16 +180,20 @@ namespace <%= namespace %>.Controllers {
         public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] long id)
         {
             _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
+            <%_ if (hasService) { _%>
+            var result = await _<%= camelCasedEntityClass %>Service.FindOne(id);
+            <%_ } else { _%>
             var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
-            <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+            <%_     relationships.forEach( relationship => {
+                        if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
-                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                <%_     } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
-                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
-                <%_ }
-            }); _%>
+                .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
+                <%_     }
+                    }); _%>
                 .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
+            <%_ } _%>
             <%_ if (hasDto) { _%>
             return ActionResultUtil.WrapOrNotFoundAsDto<<%= asDto(pascalizedEntityClass) %>>(result, _mapper);
             <%_ } else { _%>
@@ -180,8 +205,12 @@ namespace <%= namespace %>.Controllers {
         public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] long id)
         {
             _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
+            <%_ if (hasService) { _%>
+            await _<%= camelCasedEntityClass %>Service.Delete(id);
+            <%_ } else {_%>
             _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.RemoveById(id);
             await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ }_%>
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
         }
     }

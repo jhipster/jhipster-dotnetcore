@@ -110,7 +110,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Interfaces/IAuditedEntityBase.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Interfaces/IAuditedEntityBase.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/Interfaces/IAuditedEntityBase.cs`,
                 },
             ],
         },
@@ -120,7 +121,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/User.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/User.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/User.cs`,
                 },
             ],
         },
@@ -130,7 +131,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Role.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Role.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/Role.cs`,
                 },
             ],
         },
@@ -140,7 +141,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/UserRole.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/UserRole.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/UserRole.cs`,
                 },
             ],
         },
@@ -422,7 +423,7 @@ const serverFiles = {
                 {
                     file: 'Project/Service/IAuthenticationService.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IAuthenticationService.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IAuthenticationService.cs`,
                 },
             ],
         },
@@ -432,7 +433,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/AuthenticationService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/AuthenticationService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/AuthenticationService.cs`,
                 },
             ],
         },
@@ -442,7 +443,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/IMailService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IMailService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IMailService.cs`,
                 },
             ],
         },
@@ -452,7 +453,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/MailService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/MailService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/MailService.cs`,
                 },
             ],
         },
@@ -462,7 +463,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/IUserService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IUserService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IUserService.cs`,
                 },
             ],
         },
@@ -472,7 +473,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/UserService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/UserService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/UserService.cs`,
                 },
             ],
         },
@@ -482,7 +483,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/Utilities/RandomUtil.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Utilities/RandomUtil.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Utilities/RandomUtil.cs`,
                 },
             ],
         },

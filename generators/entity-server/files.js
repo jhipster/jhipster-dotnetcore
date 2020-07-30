@@ -35,7 +35,9 @@ const serverFiles = {
                 {
                     file: 'Project/Models/Entity.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${generator.asEntity(generator.entityClass)}.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/${generator.asEntity(
+                            generator.entityClass
+                        )}.cs`,
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
@@ -50,12 +52,13 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Models/Interfaces/IJoinedEntity.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Interfaces/IJoinedEntity.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/Interfaces/IJoinedEntity.cs`,
                 },
                 {
                     file: 'Project/Models/RelationshipTools/JoinListFacade.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/RelationshipTools/JoinListFacade.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/RelationshipTools/JoinListFacade.cs`,
                 },
             ],
         },
@@ -126,12 +129,12 @@ const serverFiles = {
                 {
                     file: 'Project/Service/Service.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Service/${generator.entityClass}Service.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${generator.entityClass}Service.cs`,
                 },
                 {
                     file: 'Project/Service/IService.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/I${generator.entityClass}Service.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/I${generator.entityClass}Service.cs`,
                 },
             ],
         },
@@ -153,7 +156,7 @@ function writeFiles() {
                                     {
                                         file: 'Project/Models/JoinEntity.cs',
                                         renameTo: generator =>
-                                            `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${relationship.joinEntityNamePascalized}.cs`,
+                                            `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/${relationship.joinEntityNamePascalized}.cs`,
                                     },
                                 ],
                             },

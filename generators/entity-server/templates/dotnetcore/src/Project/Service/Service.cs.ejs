@@ -48,8 +48,7 @@ namespace <%= namespace %>.Service {
             _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
             <%_ } _%>
             await _applicationDatabaseContext.SaveChangesAsync();
-
-            return <%= camelCasedEntityClass %> %>;
+            return <%= camelCasedEntityClass %>;
         }
 
         public async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
