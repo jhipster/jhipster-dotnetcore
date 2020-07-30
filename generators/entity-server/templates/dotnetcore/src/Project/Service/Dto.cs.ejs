@@ -24,7 +24,16 @@ const entityVariableName = camelCasedEntityClass; _%>
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+<%_
+let hasEnumField = false;
+fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
 <%_ if (importJsonIgnore === true || hasManyToMany) { _%>
 using Newtonsoft.Json;
 <%_ } _%>

@@ -29,7 +29,7 @@ namespace <%= namespace %>.Service.Mapper {
         public AutoMapperProfile()
         {
             <%_ if (authenticationType === 'jwt') { _%>
-            CreateMap<User, UserDTO>()
+            CreateMap<User, UserDto>()
                 .ForMember(userDto => userDto.Roles, opt => opt.MapFrom(user => user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()))
             .ReverseMap()
                 .ForPath(user => user.UserRoles, opt => opt.MapFrom(userDto => userDto.Roles.Select(role => new UserRole { Role = new Role { Name = role }, UserId = userDto.Id }).ToHashSet()));

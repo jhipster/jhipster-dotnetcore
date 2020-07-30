@@ -43,7 +43,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("authenticate")]
         [ValidateModel]
-        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDTO LoginDto)
+        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDto LoginDto)
         {
             var user = await _authenticationService.Authenticate(LoginDto.Username, LoginDto.Password);
             var rememberMe = LoginDto.RememberMe;

@@ -57,7 +57,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("register")]
         [ValidateModel]
-        public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserDTO managedUserDto)
+        public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserDto managedUserDto)
         {
             if (!CheckPasswordLength(managedUserDto.Password)) throw new InvalidPasswordException();
 
@@ -83,18 +83,18 @@ namespace <%= namespace %>.Controllers {
 
         [Authorize]
         [HttpGet("account")]
-        public async Task<ActionResult<UserDTO>> GetAccount()
+        public async Task<ActionResult<UserDto>> GetAccount()
         {
             var user = await _userService.GetUserWithUserRoles();
             if (user == null) throw new InternalServerErrorException("User could not be found");
-            var userDto = _userMapper.Map<UserDTO>(user);
+            var userDto = _userMapper.Map<UserDto>(user);
             return Ok(userDto);
         }
 
         [Authorize]
         [HttpPost("account")]
         [ValidateModel]
-        public async Task<ActionResult> SaveAccount([FromBody] UserDTO userDto)
+        public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
         {
             var userName = _userManager.GetUserName(User);
             if (userName == null) throw new InternalServerErrorException("Current user login not found");
@@ -115,7 +115,7 @@ namespace <%= namespace %>.Controllers {
         [Authorize]
         [HttpPost("account/change-password")]
         [ValidateModel]
-        public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDTO passwordChangeDto)
+        public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDto passwordChangeDto)
         {
             if (!CheckPasswordLength(passwordChangeDto.NewPassword)) throw new InvalidPasswordException();
 
@@ -136,7 +136,7 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("account/reset-password/finish")]
         [ValidateModel]
-        public async Task RequestPasswordReset([FromBody] KeyAndPasswordDTO keyAndPasswordDto)
+        public async Task RequestPasswordReset([FromBody] KeyAndPasswordDto keyAndPasswordDto)
         {
             if (!CheckPasswordLength(keyAndPasswordDto.NewPassword)) throw new InvalidPasswordException();
 
@@ -148,18 +148,18 @@ namespace <%= namespace %>.Controllers {
         private static bool CheckPasswordLength(string password)
         {
             return !string.IsNullOrEmpty(password) &&
-                   password.Length >= ManagedUserDTO.PasswordMinLength &&
-                   password.Length <= ManagedUserDTO.PasswordMaxLength;
+                   password.Length >= ManagedUserDto.PasswordMinLength &&
+                   password.Length <= ManagedUserDto.PasswordMaxLength;
         }
         <%_ } else { _%>
         [Authorize]
         [HttpGet("account")]
-        public ActionResult<UserDTO> GetAccount()
+        public ActionResult<UserDto> GetAccount()
         {
-            UserDTO user = null;
+            UserDto user = null;
             if (User != null)
             {
-                user = new UserDTO
+                user = new UserDto
                 {
                     Login = User.Claims.FirstOrDefault(claim => claim.Type.Equals("preferred_username"))?.Value,
                     Activated = true,
