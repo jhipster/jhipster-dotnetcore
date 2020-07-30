@@ -69,7 +69,7 @@ namespace <%= namespace %>.Controllers {
             if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
                 throw new EmailAlreadyUsedException();
 
-            var newUser = await _userService.CreateUser(userDto);
+            var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
             await _mailService.SendCreationEmail(newUser);
             return CreatedAtAction(nameof(GetUser), new {login = newUser.Login}, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
@@ -85,7 +85,7 @@ namespace <%= namespace %>.Controllers {
             existingUser = await _userManager.FindByNameAsync(userDto.Login);
             if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
 
-            var updatedUser = await _userService.UpdateUser(userDto);
+            var updatedUser = await _userService.UpdateUser(_mapper.Map<User>(userDto));
 
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));

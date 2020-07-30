@@ -47,40 +47,40 @@ namespace <%= namespace %>.Service {
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<User> CreateUser(UserDto userDto)
+        public async Task<User> CreateUser(User userToCreate)
         {
             var user = new User {
-                UserName = userDto.Login.ToLower(),
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email.ToLower(),
-                ImageUrl = userDto.ImageUrl,
-                LangKey = userDto.LangKey ?? Constants.DefaultLangKey,
+                UserName = userToCreate.Login.ToLower(),
+                FirstName = userToCreate.FirstName,
+                LastName = userToCreate.LastName,
+                Email = userToCreate.Email.ToLower(),
+                ImageUrl = userToCreate.ImageUrl,
+                LangKey = userToCreate.LangKey ?? Constants.DefaultLangKey,
                 PasswordHash = _userManager.PasswordHasher.HashPassword(null, RandomUtil.GeneratePassword()),
                 ResetKey = RandomUtil.GenerateResetKey(),
                 ResetDate = DateTime.Now,
                 Activated = true
             };
             await _userManager.CreateAsync(user);
-            await CreateUserRoles(user, userDto.Roles);
+            await CreateUserRoles(user, userToCreate.UserRoles.Select(iur => iur.Role.Name).ToHashSet());
             _log.LogDebug($"Created Information for User: {user}");
             return user;
         }
 
-        public async Task<User> UpdateUser(UserDto userDto)
+        public async Task<User> UpdateUser(User userToUpdate)
         {
             //TODO use Optional
-            var user = await _userManager.FindByIdAsync(userDto.Id);
-            user.Login = userDto.Login.ToLower();
-            user.UserName = userDto.Login.ToLower();
-            user.FirstName = userDto.FirstName;
-            user.LastName = userDto.LastName;
-            user.Email = userDto.Email;
-            user.ImageUrl = userDto.ImageUrl;
-            user.Activated = userDto.Activated;
-            user.LangKey = userDto.LangKey;
+            var user = await _userManager.FindByIdAsync(userToUpdate.Id);
+            user.Login = userToUpdate.Login.ToLower();
+            user.UserName = userToUpdate.Login.ToLower();
+            user.FirstName = userToUpdate.FirstName;
+            user.LastName = userToUpdate.LastName;
+            user.Email = userToUpdate.Email;
+            user.ImageUrl = userToUpdate.ImageUrl;
+            user.Activated = userToUpdate.Activated;
+            user.LangKey = userToUpdate.LangKey;
             await _userManager.UpdateAsync(user);
-            await UpdateUserRoles(user, userDto.Roles);
+            await UpdateUserRoles(user, userToUpdate.UserRoles.Select(iur => iur.Role.Name).ToHashSet());
             return user;
         }
 
@@ -137,29 +137,29 @@ namespace <%= namespace %>.Service {
         }
 
 
-        public async Task<User> RegisterUser(UserDto userDto, string password)
+        public async Task<User> RegisterUser(User userToRegister, string password)
         {
-            var existingUser = await _userManager.FindByNameAsync(userDto.Login.ToLower());
+            var existingUser = await _userManager.FindByNameAsync(userToRegister.Login.ToLower());
             if (existingUser != null) {
                 var removed = await RemoveNonActivatedUser(existingUser);
                 if (!removed) throw new LoginAlreadyUsedException();
             }
 
-            existingUser = _userManager.Users.FirstOrDefault(it =>it.Email == userDto.Email);
+            existingUser = _userManager.Users.FirstOrDefault(it =>it.Email == userToRegister.Email);
             if (existingUser != null) {
                 var removed = await RemoveNonActivatedUser(existingUser);
                 if (!removed) throw new EmailAlreadyUsedException();
             }
 
             var newUser = new User {
-                Login = userDto.Login,
+                Login = userToRegister.Login,
                 // new user gets initially a generated password
                 PasswordHash = _passwordHasher.HashPassword(null, password),
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email.ToLowerInvariant(),
-                ImageUrl = userDto.ImageUrl,
-                LangKey = userDto.LangKey,
+                FirstName = userToRegister.FirstName,
+                LastName = userToRegister.LastName,
+                Email = userToRegister.Email.ToLowerInvariant(),
+                ImageUrl = userToRegister.ImageUrl,
+                LangKey = userToRegister.LangKey,
                 // new user is not active
                 Activated = false,
                 // new user gets registration key
