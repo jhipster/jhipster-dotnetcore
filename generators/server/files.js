@@ -442,17 +442,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Service/AuthenticationService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/AuthenticationService.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Service/IMailService.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Service/Interfaces/IMailService.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/AuthenticationService.cs`,
                 },
             ],
         },
