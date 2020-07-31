@@ -102,7 +102,7 @@ namespace <%= namespace %>.Test.Controllers {
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
             // Create the User
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Login = DefaultLogin,
                 Password = DefaultPassword,
                 FirstName = DefaultFirstname,
@@ -138,7 +138,7 @@ namespace <%= namespace %>.Test.Controllers {
             await _userManager.CreateAsync(_user);
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Login = "anotherlogin", // this email should already be used
                 Password = DefaultPassword,
                 FirstName = DefaultFirstname,
@@ -166,7 +166,7 @@ namespace <%= namespace %>.Test.Controllers {
         {
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Id = "id",
                 Login = DefaultLogin,
                 Password = DefaultPassword,
@@ -197,7 +197,7 @@ namespace <%= namespace %>.Test.Controllers {
             await _userManager.CreateAsync(_user);
             var databaseSizeBeforeCreate = _userManager.Users.Count();
 
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Login = DefaultLogin, // this login should already be used
                 Password = DefaultPassword,
                 FirstName = DefaultFirstname,
@@ -296,7 +296,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public void TestUserDtoToUser()
         {
-            var userDto = new UserDTO {
+            var userDto = new UserDto {
                 Id = DefaultId,
                 Login = DefaultLogin,
                 FirstName = DefaultFirstname,
@@ -340,7 +340,7 @@ namespace <%= namespace %>.Test.Controllers {
         }
 
         [Fact]
-        public void TestUserToUserDTO()
+        public void TestUserToUserDto()
         {
             _user.Id = DefaultId;
             //TODO set CreatedBy etc
@@ -375,7 +375,7 @@ namespace <%= namespace %>.Test.Controllers {
             //Update the user
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Id = updatedUser.Id,
                 Login = updatedUser.Login,
                 Password = UpdatedPassword,
@@ -428,7 +428,7 @@ namespace <%= namespace %>.Test.Controllers {
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
             //TODO Add CreatedBy, CreatedDate, ModifiedBy, ModidfieDate
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Id = updatedUser.Id,
                 Login = updatedUser.Login,
                 Password = updatedUser.PasswordHash,
@@ -469,7 +469,7 @@ namespace <%= namespace %>.Test.Controllers {
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
             //TODO Add CreatedBy, CreatedDate, ModifiedBy, ModidfieDate
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Id = updatedUser.Id,
                 Login = "jhipster", //this login should be already used by anotherUser
                 Password = updatedUser.PasswordHash,
@@ -499,7 +499,7 @@ namespace <%= namespace %>.Test.Controllers {
             var updatedUser = await _userManager.FindByIdAsync(_user.Id);
 
             //TODO Add CreatedBy, CreatedDate, ModifiedBy, ModidfieDate
-            var managedUserDto = new ManagedUserDTO {
+            var managedUserDto = new ManagedUserDto {
                 Id = updatedUser.Id,
                 Login = UpdatedLogin,
                 Password = UpdatedPassword,

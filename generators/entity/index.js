@@ -30,6 +30,7 @@ module.exports = class extends EntityGenerator {
             getConfigNetBlueprint() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                this.context.dtoSuffix = 'Dto';
             },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);

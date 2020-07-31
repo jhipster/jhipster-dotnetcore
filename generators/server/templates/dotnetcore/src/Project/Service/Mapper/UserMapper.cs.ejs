@@ -27,22 +27,22 @@ namespace <%= namespace %>.Service.Mapper {
             _mapper = mapper;
         }
 
-        public IEnumerable<UserDTO> UsersToUserDtos(IEnumerable<User> users)
+        public IEnumerable<UserDto> UsersToUserDtos(IEnumerable<User> users)
         {
             return users.Filter(it => it != null).Map(UserToUserDto);
         }
 
-        public UserDTO UserToUserDto(User user)
+        public UserDto UserToUserDto(User user)
         {
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<UserDto>(user);
         }
 
-        public IEnumerable<User> UserDtosToUsers(IEnumerable<UserDTO> userDtos)
+        public IEnumerable<User> UserDtosToUsers(IEnumerable<UserDto> userDtos)
         {
             return userDtos.Filter(it => it != null).Map(UserDtoToUser);
         }
 
-        public User UserDtoToUser(UserDTO userDto)
+        public User UserDtoToUser(UserDto userDto)
         {
             return _mapper.Map<User>(userDto);
         }
