@@ -404,6 +404,15 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Infrastructure/ServiceStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/ServiceStartup.cs`,
+                },
+            ],
+        },
     ],
     serverUserManagement: [
         {

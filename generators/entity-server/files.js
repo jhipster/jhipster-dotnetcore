@@ -184,6 +184,44 @@ function writeFiles() {
                 }
             });
 
+            if (!this.skipServer) {
+                const services = this.entities
+                    .filter(entity => entity.definition.service === 'serviceImpl')
+                    .map(entity => {
+                        return {
+                            entityName: entity.name,
+                            serviceInterface: `I${entity.name}Service`,
+                            serviceClass: `${entity.name}Service`,
+                        };
+                    });
+
+                // add current entity being created if it has service option selected
+                if (this.service === 'serviceImpl' && !services.some(e => e.entityName === this.entityClass)) {
+                    services.push({
+                        entityName: this.entityClass,
+                        serviceInterface: `I${this.entityClass}Service`,
+                        serviceClass: `${this.entityClass}Service`,
+                    });
+                }
+
+                const files = {
+                    server: [
+                        {
+                            path: SERVER_SRC_DIR,
+                            templates: [
+                                {
+                                    file: 'Project/Service/Extensions/ServiceStartup.cs',
+                                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/ServiceStartup.cs`,
+                                },
+                            ],
+                        },
+                    ],
+                };
+
+                this.services = services;
+                this.writeFilesToDisk(files, this, false, 'dotnetcore');
+            }
+
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
         },
     };
