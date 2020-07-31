@@ -358,7 +358,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
             _user.UserRoles = userRoles;
 
-            var userDto = _mapper.Map<UserDTO>(_user);
+            var userDto = _mapper.Map<UserDto>(_user);
             userDto.Id.Should().Be(DefaultId);
             userDto.Login.Should().Be(DefaultLogin);
             userDto.FirstName.Should().Be(DefaultFirstname);

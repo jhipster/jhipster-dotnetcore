@@ -99,7 +99,7 @@ namespace <%= namespace %>.Controllers {
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .UsePageableAsync(pageable);
-            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDTO>(user));
+            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }
