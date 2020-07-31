@@ -6,7 +6,7 @@ const PROJECT_DOMAIN_SUFFIX = '.Domain';
 const DOCKER_DIR = 'docker/';
 const PROJECT_CROSSCUTTING_SUFFIX = '.Crosscutting';
 const PROJECT_INFRASTRUCTURE_SUFFIX = '.Infrastructure';
-const PROJECT_SERVICE_SUFFIX = '.Service';
+const PROJECT_SERVICE_SUFFIX = '.Domain.Services';
 
 const constants = {
     SERVER_SRC_DIR,

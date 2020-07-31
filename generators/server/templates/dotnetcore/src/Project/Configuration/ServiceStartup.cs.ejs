@@ -17,9 +17,6 @@
  limitations under the License.
 -%>
 using Microsoft.Extensions.DependencyInjection;
-using <%= namespace %>.Service;
-using <%= namespace %>.Service.Interfaces;
-
 
 namespace <%= namespace %>.Infrastructure {
     public static class ServiceStartup
@@ -27,6 +24,7 @@ namespace <%= namespace %>.Infrastructure {
         public static IServiceCollection AddServiceModule(this IServiceCollection @this)
         {
             // services will be added here by the generator
+            return @this;
         }
     }
 }

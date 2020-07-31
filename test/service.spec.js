@@ -40,8 +40,8 @@ function getPreCondition() {
 describe('testing service interface and implementation', () => {
     context('generating service interface and implementation', () => {
         // const personClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Person.cs`;
-        const personService = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Service/PersonService.cs`;
-        const personServiceInterface = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Service/Interfaces/IPersonService.cs`;
+        const personService = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain.Services/PersonService.cs`;
+        const personServiceInterface = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Services/Interfaces/IPersonService.cs`;
 
         before(done => {
             getPreCondition()
