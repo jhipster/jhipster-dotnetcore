@@ -42,11 +42,35 @@ namespace <%= namespace %>.Service {
 
         public async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
-            <%_ if (relationships.length != 0) { _%>
-            _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
-            <%_ } else { _%>
-            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
-            <%_ } _%>
+            if (<%= camelCasedEntityClass %>.Id != 0 && _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Exists(x => x.Id == <%= camelCasedEntityClass %>.Id)) {
+                <%_ relationships.forEach( relationship => {
+                    if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
+                    <%_ }
+                }); _%>
+                <%_ let first = true;
+                let suffix = 0;
+                relationships.forEach( relationship => {
+                    if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
+                        if (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-one') {
+                            if (first) { _%>
+                /* Force the reference navigation property to be in "modified" state.
+                This allows to modify it with a null value (the field is nullable).
+                This takes into consideration the case of removing the association between the two instances. */
+                                <%_ first = false;
+                            } _%>
+                _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>).IsModified = true;
+                    <%_ }
+                    }
+                }); _%>
+                _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Update(<%= camelCasedEntityClass %>);
+            } else {
+                <%_ if (relationships.length != 0) { _%>
+                _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
+                <%_ } else { _%>
+                _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
+                <%_ } _%>
+            }
             await _applicationDatabaseContext.SaveChangesAsync();
             return <%= camelCasedEntityClass %>;
         }
