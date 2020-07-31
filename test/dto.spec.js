@@ -11,6 +11,7 @@ function getPreCondition() {
     return helpers
         .run('generator-jhipster/generators/entity')
         .inTmpDir(dir => {
+            console.log(`Test temp dir: ${dir}`);
             fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
             fse.copySync(path.join(__dirname, '../test/templates/dto'), dir);
         })
@@ -39,7 +40,7 @@ function getPreCondition() {
 describe('testing dto', () => {
     context('generating dto', () => {
         const personClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Person.cs`;
-        const personDto = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Dto/PersonDTO.cs`;
+        const personDto = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Dto/PersonDto.cs`;
         const dtoMappingFile = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Service/Mapper/AutoMapperProfile.cs`;
 
         before(done => {
@@ -64,7 +65,7 @@ describe('testing dto', () => {
             assert.file(personClass);
             assert.file(personDto);
             assert.file(dtoMappingFile);
-            assert.fileContent(personDto, /public class PersonDTO/);
+            assert.fileContent(personDto, /public class PersonDto/);
             assert.fileContent(dtoMappingFile, /public class AutoMapperProfile : Profile/);
         });
     });

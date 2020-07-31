@@ -71,7 +71,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Dto.cs',
+                    file: 'Project.Dto/Dto.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${generator.asDto(generator.entityClass)}.cs`,
                 },
