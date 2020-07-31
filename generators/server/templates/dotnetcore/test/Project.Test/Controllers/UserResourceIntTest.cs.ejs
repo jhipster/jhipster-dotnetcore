@@ -12,6 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using AutoMapper;
 using FluentAssertions;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Dto;
@@ -34,10 +35,15 @@ namespace <%= namespace %>.Test.Controllers {
         {
             _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
             _client = _factory.CreateClient();
-
             _userManager = _factory.GetRequiredService<UserManager<User>>();
-            _userMapper = _factory.GetRequiredService<UserMapper>();
             _passwordHasher = _userManager.PasswordHasher;
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+
+            _mapper = config.CreateMapper();
 
             InitTest();
         }
@@ -70,7 +76,7 @@ namespace <%= namespace %>.Test.Controllers {
 
 
         private readonly UserManager<User> _userManager;
-        private readonly UserMapper _userMapper;
+        private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
         private User _user;
 
@@ -310,7 +316,7 @@ namespace <%= namespace %>.Test.Controllers {
                     RolesConstants.USER
                 }
             };
-            var user = _userMapper.UserDtoToUser(userDto);
+            var user = _mapper.Map<User>(userDto);
             user.Id.Should().Be(DefaultId);
             user.Login.Should().Be(DefaultLogin);
             user.FirstName.Should().Be(DefaultFirstname);
@@ -352,7 +358,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
             _user.UserRoles = userRoles;
 
-            var userDto = _userMapper.UserToUserDto(_user);
+            var userDto = _mapper.Map<UserDTO>(_user);
             userDto.Id.Should().Be(DefaultId);
             userDto.Login.Should().Be(DefaultLogin);
             userDto.FirstName.Should().Be(DefaultFirstname);

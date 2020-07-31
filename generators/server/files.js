@@ -497,16 +497,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Service/Mapper/UserMapper.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/UserMapper.cs`,
-                },
-            ],
-        },
-        {
             path: SERVER_SRC_DIR,
             templates: [
                 {
