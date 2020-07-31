@@ -56,7 +56,7 @@ namespace <%= namespace %> {
             <%_ } else { _%>
                 .AddSecurityModule(jhipsterSettings)
             <%_ } _%>
-                .AddProblemDetailsModule()
+                .AddProblemDetailsModule(Environment)
                 .AddAutoMapperModule()
                 .AddSwaggerModule()
                 .AddWebModule()
