@@ -29,7 +29,16 @@ using JHipsterNet.Pagination.Extensions;
 using <%= namespace %>.Data;
 using <%= namespace %>.Data.Extensions;
 using <%= namespace %>.Domain;
+<%_
+let hasEnumField = false;
+fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
 <%_ if (hasDto) { _%>
 using <%= namespace %>.Dto;
 using <%= namespace %>.Service.Mapper;
