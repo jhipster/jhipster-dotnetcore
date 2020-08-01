@@ -13,7 +13,18 @@
  limitations under the License.
 -%>
 using <%= namespace %>.Domain;
+<%_
+let hasEnumField = false;
+entities.forEach(entity => {
+    fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+});
+if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
