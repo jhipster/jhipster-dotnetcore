@@ -22,6 +22,9 @@ module.exports = class extends EntityClientGenerator {
 
         const customPhaseSteps = {
             configureGlobalDotnetcore,
+            dtoWorkaround() {
+                this.dto = 'no';
+            },
         };
 
         return Object.assign(customPhaseSteps, phaseFromJHipster);
