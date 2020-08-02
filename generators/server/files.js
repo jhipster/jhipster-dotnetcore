@@ -87,7 +87,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Service/Project.csproj',
+                    file: 'Project.Domain.Services/Project.csproj',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}.csproj`,
                 },
@@ -109,7 +109,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Interfaces/IAuditedEntityBase.cs',
+                    file: 'Project.Domain/Entities/Interfaces/IAuditedEntityBase.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/Interfaces/IAuditedEntityBase.cs`,
                 },
@@ -120,7 +120,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/User.cs',
+                    file: 'Project.Domain/Entities/User.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/User.cs`,
                 },
             ],
@@ -130,7 +130,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Role.cs',
+                    file: 'Project.Domain/Entities/Role.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/Role.cs`,
                 },
             ],
@@ -140,7 +140,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/UserRole.cs',
+                    file: 'Project.Domain/Entities/UserRole.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/UserRole.cs`,
                 },
             ],
@@ -419,7 +419,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Data/ApplicationDatabaseContext.cs',
+                    file: 'Project.Infrastructure/Data/ApplicationDatabaseContext.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
                 },
@@ -430,7 +430,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/IAuthenticationService.cs',
+                    file: 'Project.Domain/Services/Interfaces/IAuthenticationService.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IAuthenticationService.cs`,
                 },
@@ -441,7 +441,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/AuthenticationService.cs',
+                    file: 'Project.Domain.Services/AuthenticationService.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/AuthenticationService.cs`,
                 },
             ],
@@ -451,7 +451,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/IMailService.cs',
+                    file: 'Project.Domain/Services/Interfaces/IMailService.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IMailService.cs`,
                 },
             ],
@@ -461,7 +461,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/MailService.cs',
+                    file: 'Project.Domain.Services/MailService.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/MailService.cs`,
                 },
             ],
@@ -471,7 +471,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/IUserService.cs',
+                    file: 'Project.Domain/Services/Interfaces/IUserService.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IUserService.cs`,
                 },
             ],
@@ -481,7 +481,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/UserService.cs',
+                    file: 'Project.Domain.Services/UserService.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/UserService.cs`,
                 },
             ],
@@ -491,8 +491,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Utilities/RandomUtil.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/Utilities/RandomUtil.cs`,
+                    file: 'Project.Crosscutting/Utilities/RandomUtil.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Utilities/RandomUtil.cs`,
                 },
             ],
         },
@@ -500,8 +500,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Mapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/AutoMapperProfile.cs`,
+                    file: 'Project/Infrastructure/AutoMapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/AutoMapper/AutoMapperProfile.cs`,
                 },
             ],
         },

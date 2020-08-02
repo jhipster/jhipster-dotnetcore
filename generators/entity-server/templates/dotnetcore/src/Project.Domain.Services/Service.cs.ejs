@@ -24,9 +24,9 @@ using MyCompany.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Data;
-using <%= namespace %>.Service.Interfaces;
+using <%= namespace %>.Domain.Services.Interfaces;
 
-namespace <%= namespace %>.Service {
+namespace <%= namespace %>.Domain.Services {
     public class <%= pascalizedEntityClass %>Service : I<%= pascalizedEntityClass %>Service {
         private readonly ApplicationDatabaseContext _applicationDatabaseContext;
         private readonly ILogger<<%= pascalizedEntityClass %>Service> _log;

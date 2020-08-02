@@ -15,9 +15,10 @@
 using System.Threading.Tasks;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace <%= namespace %>.Service {
+namespace <%= namespace %>.Domain.Services {
     public class MailService : IMailService {
         private readonly JHipsterSettings _jhipsterSettings;
 

@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
 using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Dto;
 using <%= namespace %>.Service.Utilities;
 using LanguageExt.UnitsOfMeasure;
@@ -28,7 +29,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MyCompany.Crosscutting.Exceptions;
 
-namespace <%= namespace %>.Service {
+namespace <%= namespace %>.Domain.Services {
     public class UserService : IUserService {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<UserService> _log;

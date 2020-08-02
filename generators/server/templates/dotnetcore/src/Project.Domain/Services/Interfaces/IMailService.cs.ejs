@@ -15,7 +15,7 @@
 using System.Threading.Tasks;
 using <%= namespace %>.Domain;
 
-namespace <%= namespace %>.Service {
+namespace <%= namespace %>.Domain.Services.Interfaces {
     public interface IMailService {
         Task SendPasswordResetMail(User user);
         Task SendActivationEmail(User user);

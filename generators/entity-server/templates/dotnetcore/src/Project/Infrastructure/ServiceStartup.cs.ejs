@@ -16,20 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using System.Threading.Tasks;
-using JHipsterNet.Pagination;
-using <%= namespace %>.Domain;
+using Microsoft.Extensions.DependencyInjection;
+using <%= namespace %>.Domain.Services;
+using <%= namespace %>.Domain.Services.Interfaces;
 
-namespace <%= namespace %>.Service.Interfaces
-{
-    public interface I<%= pascalizedEntityClass %>Service
+
+namespace <%= namespace %>.Infrastructure {
+    public static class ServiceStartup
     {
-        Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>);
-
-        Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable);
-
-        Task<<%= pascalizedEntityClass %>> FindOne(long id);
-
-        Task Delete(long id);
+        public static IServiceCollection AddServiceModule(this IServiceCollection @this)
+        {
+            <%_ services.forEach(service => { _%>
+            @this.AddScoped<<%= service.serviceInterface %>, <%= service.serviceClass %>>();
+            <%_ }); _%>
+            return @this;
+        }
     }
 }
