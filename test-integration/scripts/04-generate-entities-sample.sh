@@ -17,11 +17,15 @@ if [ "$2" = "import-jdl" ]; then
   runOptions="import-jdl ../jdl-default/app.jdl $runOptions"  
   jhipster $runOptions
   
-  if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
+ if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
       if "$SONAR_ANALYSE" ; then
         dotnet tool install --global dotnet-sonarscanner --version 4.9.0
         dotnet tool install --global coverlet.console
-        dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
+        if [["$GITHUB_REF" = "refs/heads/master"]];then 
+          dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
+        else 
+          dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml" /d:sonar.branch.name=$GITHUB_REF
+        fi
       fi
       dotnet build
       echo "${GREEN}GENERATION OK"
@@ -30,4 +34,5 @@ if [ "$2" = "import-jdl" ]; then
       exit 1
   fi
 fi
+
 
