@@ -34,6 +34,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JHipsterNet.Core" Version="1.0.1" />
+        <PackageReference Include="JHipsterNet.Web" Version="1.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
@@ -88,7 +90,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />

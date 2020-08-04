@@ -16,7 +16,7 @@ using System;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using JHipsterNet.Config;
+using JHipsterNet.Web.Config;
 using <%= namespace %>.Data;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Security;
@@ -35,7 +35,7 @@ using Microsoft.IdentityModel.Tokens;
 using AuthenticationService = <%= namespace %>.Service.AuthenticationService;
 using IAuthenticationService = <%= namespace %>.Service.IAuthenticationService;
 <%_ } else { _%>
-using JHipsterNet.Config;
+using JHipsterNet.Web.Config;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;

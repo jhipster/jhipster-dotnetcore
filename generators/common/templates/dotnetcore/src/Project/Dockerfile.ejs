@@ -24,7 +24,6 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     rm -rf /var/lib/apt/lists/*
 
 # Restore dependencies of .net core projects
-COPY ["src/JHipsterNet/JHipsterNet.csproj", "src/JHipsterNet/"]
 COPY ["src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj", "src/<%= mainProjectDir %>/"]
 RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
 
