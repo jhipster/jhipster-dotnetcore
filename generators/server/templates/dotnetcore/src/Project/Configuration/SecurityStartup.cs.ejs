@@ -13,10 +13,10 @@
  limitations under the License.
 -%>
 using System;
+using <%= namespace %>.Configuration;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using JHipsterNet.Web.Config;
 using <%= namespace %>.Data;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Security;
@@ -26,7 +26,7 @@ using <%= namespace %>.Service.Mapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Cors.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,18 +35,17 @@ using Microsoft.IdentityModel.Tokens;
 using AuthenticationService = <%= namespace %>.Service.AuthenticationService;
 using IAuthenticationService = <%= namespace %>.Service.IAuthenticationService;
 <%_ } else { _%>
-using JHipsterNet.Web.Config;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Cors.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 <%_ } _%>
 
-namespace <%= namespace %>.Infrastructure {
+namespace <%= namespace %>.Configuration {
     public static class SecurityStartup {
 
         <%_ if (authenticationType === 'jwt') { _%>

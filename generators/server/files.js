@@ -255,8 +255,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/ApplicationSettings.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ApplicationSettings.cs`,
+                    file: 'Project/Configuration/JHipsterSettings.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/JHipsterSettings.cs`,
                 },
             ],
         },
@@ -292,8 +292,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/AutoMapperStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/AutoMapperStartup.cs`,
+                    file: 'Project/Configuration/AutoMapperStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapperStartup.cs`,
                 },
             ],
         },
@@ -301,8 +301,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/DatabaseStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/DatabaseStartup.cs`,
+                    file: 'Project/Configuration/DatabaseStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/DatabaseStartup.cs`,
                 },
             ],
         },
@@ -311,8 +311,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/IdentityStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/IdentityStartup.cs`,
+                    file: 'Project/Configuration/IdentityStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/IdentityStartup.cs`,
                 },
             ],
         },
@@ -320,8 +320,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/MvcStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/MvcStartup.cs`,
+                    file: 'Project/Configuration/MvcStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/MvcStartup.cs`,
                 },
             ],
         },
@@ -329,8 +329,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/NhipsterStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/NhipsterStartup.cs`,
+                    file: 'Project/Configuration/NhipsterStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/NhipsterStartup.cs`,
                 },
             ],
         },
@@ -338,8 +338,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/ProblemDetailsStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/ProblemDetailsStartup.cs`,
+                    file: 'Project/Configuration/ProblemDetailsStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ProblemDetailsStartup.cs`,
                 },
             ],
         },
@@ -347,8 +347,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/SecurityStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/SecurityStartup.cs`,
+                    file: 'Project/Configuration/SecurityStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/SecurityStartup.cs`,
                 },
             ],
         },
@@ -356,8 +356,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/SwaggerStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/SwaggerStartup.cs`,
+                    file: 'Project/Configuration/SwaggerStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/SwaggerStartup.cs`,
                 },
             ],
         },
@@ -811,8 +811,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Infrastructure/TestMvcStartup.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Infrastructure/TestMvcStartup.cs`,
+                    file: 'Project.Test/Configuration/TestMvcStartup.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Configuration/TestMvcStartup.cs`,
                 },
             ],
         },
@@ -821,7 +821,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project.Test/Setup/MockClaimsPrincipalProvider.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Infrastructure/MockClaimsPrincipalProvider.cs`,
+                    renameTo: generator => `${generator.testProjectDir}/Configuration/MockClaimsPrincipalProvider.cs`,
                 },
             ],
         },

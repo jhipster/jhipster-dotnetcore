@@ -12,28 +12,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Microsoft.AspNetCore.Builder;
+using <%= namespace %>.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 
-namespace <%= namespace %>.Infrastructure {
-    public static class SwaggerConfiguration {
-        public static IServiceCollection AddSwaggerModule(this IServiceCollection @this)
+namespace <%= namespace %>.Configuration {
+    public static class NhipsterSettingsConfiguration {
+        public static IServiceCollection AddNhipsterModule(this IServiceCollection @this, IConfiguration configuration)
         {
-            @this.AddSwaggerGen(c => {
-                c.SwaggerDoc("v2", new OpenApiInfo {Title = "<%=pascalizedBaseName%> API", Version = "0.0.1"});
-            });
-
-            return @this;
-        }
-
-        public static IApplicationBuilder UseApplicationSwagger(this IApplicationBuilder @this)
-        {
-            @this.UseSwagger();
-            @this.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "<%=pascalizedBaseName%> API");
-            });
+            @this.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
             return @this;
         }
     }
