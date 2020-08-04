@@ -12,15 +12,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using <%= namespace %>.Service.Mapper;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
-namespace <%= namespace %>.Infrastructure {
-    public static class AutoMapperStartup {
-        public static IServiceCollection AddAutoMapperModule(this IServiceCollection @this)
+namespace <%= namespace %>.Configuration {
+    public static class SwaggerConfiguration {
+        public static IServiceCollection AddSwaggerModule(this IServiceCollection @this)
         {
-            @this.AddAutoMapper(typeof(Startup));
+            @this.AddSwaggerGen(c => {
+                c.SwaggerDoc("v2", new OpenApiInfo {Title = "<%=pascalizedBaseName%> API", Version = "0.0.1"});
+            });
+
+            return @this;
+        }
+
+        public static IApplicationBuilder UseApplicationSwagger(this IApplicationBuilder @this)
+        {
+            @this.UseSwagger();
+            @this.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/v2/swagger.json", "<%=pascalizedBaseName%> API");
+            });
             return @this;
         }
     }

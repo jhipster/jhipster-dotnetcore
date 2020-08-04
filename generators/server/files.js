@@ -255,8 +255,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/ApplicationSettings.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ApplicationSettings.cs`,
+                    file: 'Project/Configuration/JHipsterSettings.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/JHipsterSettings.cs`,
                 },
             ],
         },
@@ -292,8 +292,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/AutoMapperStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/AutoMapperStartup.cs`,
+                    file: 'Project/Configuration/AutoMapperStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapperStartup.cs`,
                 },
             ],
         },
@@ -301,8 +301,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/DatabaseStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/DatabaseStartup.cs`,
+                    file: 'Project/Configuration/DatabaseStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/DatabaseStartup.cs`,
                 },
             ],
         },
@@ -311,8 +311,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/IdentityStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/IdentityStartup.cs`,
+                    file: 'Project/Configuration/IdentityStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/IdentityStartup.cs`,
                 },
             ],
         },
@@ -320,8 +320,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/MvcStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/MvcStartup.cs`,
+                    file: 'Project/Configuration/MvcStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/MvcStartup.cs`,
                 },
             ],
         },
@@ -329,8 +329,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/NhipsterStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/NhipsterStartup.cs`,
+                    file: 'Project/Configuration/NhipsterStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/NhipsterStartup.cs`,
                 },
             ],
         },
@@ -338,8 +338,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/ProblemDetailsStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/ProblemDetailsStartup.cs`,
+                    file: 'Project/Configuration/ProblemDetailsStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ProblemDetailsStartup.cs`,
                 },
             ],
         },
@@ -347,8 +347,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/SecurityStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/SecurityStartup.cs`,
+                    file: 'Project/Configuration/SecurityStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/SecurityStartup.cs`,
                 },
             ],
         },
@@ -356,8 +356,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/SwaggerStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/SwaggerStartup.cs`,
+                    file: 'Project/Configuration/SwaggerStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/SwaggerStartup.cs`,
                 },
             ],
         },
@@ -811,8 +811,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Infrastructure/TestMvcStartup.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Infrastructure/TestMvcStartup.cs`,
+                    file: 'Project.Test/Configuration/TestMvcStartup.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Configuration/TestMvcStartup.cs`,
                 },
             ],
         },
@@ -821,7 +821,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project.Test/Setup/MockClaimsPrincipalProvider.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Infrastructure/MockClaimsPrincipalProvider.cs`,
+                    renameTo: generator => `${generator.testProjectDir}/Configuration/MockClaimsPrincipalProvider.cs`,
                 },
             ],
         },
@@ -867,117 +867,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.testProjectDir}/Controllers/TestUtil.cs`,
                 },
             ],
-        },
-    ],
-    serverJhipsterNet: [
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Boot/Ansi/AnsiColor.cs', renameTo: () => 'JHipsterNet/Boot/Ansi/AnsiColor.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Boot/BannerPrinter.cs', renameTo: () => 'JHipsterNet/Boot/BannerPrinter.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Sort.cs', renameTo: () => 'JHipsterNet/Pagination/Sort.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/SortExpression.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpression.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/SortExpressions.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpressions.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Order.cs', renameTo: () => 'JHipsterNet/Pagination/Order.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Page.cs', renameTo: () => 'JHipsterNet/Pagination/Page.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/PageResponse.cs', renameTo: () => 'JHipsterNet/Pagination/PageResponse.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Chunk.cs', renameTo: () => 'JHipsterNet/Pagination/Chunk.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Extensions/IQueryableExtensions.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Extensions/IQueryableExtensions.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Extensions/QueryStringExtensions.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Extensions/QueryStringExtensions.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/IPage.cs', renameTo: () => 'JHipsterNet/Pagination/IPage.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/IPageable.cs', renameTo: () => 'JHipsterNet/Pagination/IPageable.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/ISlice.cs', renameTo: () => 'JHipsterNet/Pagination/ISlice.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Binders/PageableBinderConfig.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Binders/PageableBinderConfig.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Binders/PageableBinder.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Binders/PageableBinder.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Binders/PageableBinderProvider.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Binders/PageableBinderProvider.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Pageable.cs', renameTo: () => 'JHipsterNet/Pagination/Pageable.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Config/JHipsterSettings.cs', renameTo: () => 'JHipsterNet/Config/JHipsterSettings.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Logging/LoggerNameEnricher.cs', renameTo: () => 'JHipsterNet/Logging/LoggerNameEnricher.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/JHipsterNet.csproj', renameTo: () => 'JHipsterNet/JHipsterNet.csproj' }],
         },
     ],
     docker: [
