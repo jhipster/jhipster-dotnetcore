@@ -13,19 +13,14 @@
  limitations under the License.
 -%>
 using System;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
-namespace JHipsterNet.Pagination.Binders {
-    public class PageableBinderProvider : IModelBinderProvider {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
+namespace <%= namespace %>.Test.Configuration {
+    public class TestMvcStartup {
+        public static Action<MvcOptions> ConfigureMvcAuthorization()
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            if (context.Metadata.ModelType == typeof(IPageable))
-                return new BinderTypeModelBinder(typeof(PageableBinder));
-
-            return null;
+            return options => { options.Filters.Add(new AllowAnonymousFilter()); };
         }
     }
 }

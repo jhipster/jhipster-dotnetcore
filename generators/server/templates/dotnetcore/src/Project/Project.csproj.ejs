@@ -34,6 +34,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JHipsterNet.Core" Version="1.0.1" />
+        <PackageReference Include="JHipsterNet.Web" Version="1.0.1" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
@@ -62,12 +64,12 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
             <%_ break;
             case 'oracle': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
-        <PackageReference Include="Oracle.EntityFrameworkCore" Version="2.19.60" />
-        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.5" />
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.0-beta2" />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.80" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
             <%_ break;
          } _%>
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
@@ -88,7 +90,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />

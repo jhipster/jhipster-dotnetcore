@@ -132,7 +132,6 @@ module.exports = class extends ServerGenerator {
                     .newSln(this.solutionName)
                     .then(() =>
                         dotnet.slnAdd(`${this.solutionName}.sln`, [
-                            'src/JHipsterNet/JHipsterNet.csproj',
                             `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
                             `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
                             `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.CROSSCUTTING_SUFFIX}/${this.pascalizedBaseName}${constants.CROSSCUTTING_SUFFIX}.csproj`,
