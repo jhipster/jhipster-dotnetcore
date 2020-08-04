@@ -868,7 +868,7 @@ const serverFiles = {
                 },
             ],
         },
-    ],    
+    ],
     docker: [
         {
             path: DOCKER_DIR,
