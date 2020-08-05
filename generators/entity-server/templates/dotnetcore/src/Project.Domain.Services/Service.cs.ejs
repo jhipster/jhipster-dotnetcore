@@ -16,9 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_
+const serviceClassName = entityClass + 'Service';
+const serviceInterface = 'I' + serviceClassName;
+_%>
 using System.Threading.Tasks;
-using JHipsterNet.Pagination;
-using JHipsterNet.Pagination.Extensions;
+using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
 using Microsoft.Extensions.Logging;
 using MyCompany.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -27,15 +31,11 @@ using <%= namespace %>.Data;
 using <%= namespace %>.Domain.Services.Interfaces;
 
 namespace <%= namespace %>.Domain.Services {
-    public class <%= pascalizedEntityClass %>Service : I<%= pascalizedEntityClass %>Service {
+    public class <%= serviceClassName %> : <%= serviceInterface %> {
         private readonly ApplicationDatabaseContext _applicationDatabaseContext;
-        private readonly ILogger<<%= pascalizedEntityClass %>Service> _log;
 
-        public <%= pascalizedEntityClass %>Service(
-            ILogger<<%= pascalizedEntityClass %>Service> log,
-            ApplicationDatabaseContext applicationDatabaseContext)
+        public <%= serviceClassName %>(ApplicationDatabaseContext applicationDatabaseContext)
         {
-            _log = log;
             _applicationDatabaseContext = applicationDatabaseContext;
         }
 
@@ -103,7 +103,6 @@ namespace <%= namespace %>.Domain.Services {
 
         public async Task Delete(long id)
         {
-            _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
             _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.RemoveById(id);
             await _applicationDatabaseContext.SaveChangesAsync();
         }

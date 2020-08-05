@@ -41,7 +41,7 @@ describe('testing dto', () => {
     context('generating dto', () => {
         const personClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Entities/Person.cs`;
         const personDto = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Dto/PersonDto.cs`;
-        const dtoMappingFile = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Infrastructure/AutoMapper/AutoMapperProfile.cs`;
+        const dtoMappingFile = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Configuration/AutoMapper/AutoMapperProfile.cs`;
 
         before(done => {
             getPreCondition()

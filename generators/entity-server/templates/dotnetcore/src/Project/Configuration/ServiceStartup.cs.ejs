@@ -21,11 +21,12 @@ using <%= namespace %>.Domain.Services;
 using <%= namespace %>.Domain.Services.Interfaces;
 
 
-namespace <%= namespace %>.Infrastructure {
+namespace <%= namespace %>.Configuration {
     public static class ServiceStartup
     {
         public static IServiceCollection AddServiceModule(this IServiceCollection @this)
         {
+            // services will be added here by the generator
             <%_ services.forEach(service => { _%>
             @this.AddScoped<<%= service.serviceInterface %>, <%= service.serviceClass %>>();
             <%_ }); _%>

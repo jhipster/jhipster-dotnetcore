@@ -408,8 +408,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/ServiceStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/ServiceStartup.cs`,
+                    file: 'Project/Configuration/ServiceStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ServiceStartup.cs`,
                 },
             ],
         },
@@ -500,8 +500,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/AutoMapper/AutoMapperProfile.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/AutoMapper/AutoMapperProfile.cs`,
+                    file: 'Project/Configuration/AutoMapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapper/AutoMapperProfile.cs`,
                 },
             ],
         },

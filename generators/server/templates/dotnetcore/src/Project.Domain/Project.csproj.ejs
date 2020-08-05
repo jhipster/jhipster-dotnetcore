@@ -22,16 +22,12 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <%_ if(databaseType === 'oracle') { _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-        <%_ } else { %>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
-        <%_ } %>
         <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+        <PackageReference Include="JHipsterNet.Web" Version="1.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
     </ItemGroup>
 
