@@ -21,11 +21,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="JHipsterNet.Core" Version="1.0.4" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />        
+        <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Infrastructure\<%= pascalizedBaseName %>.Infrastructure.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
