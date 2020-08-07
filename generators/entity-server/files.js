@@ -128,7 +128,6 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    
                     file: 'Project.Domain.Services/Service.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/${generator.entityClass}Service.cs`,
                 },
