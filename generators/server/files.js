@@ -299,7 +299,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Configuration/JHipsterSettings.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/JHipsterSettings.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/JHipsterSettings.cs`,
                 },
             ],
         },
