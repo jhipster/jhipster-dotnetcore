@@ -23,8 +23,9 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -yq nodejs && \
     rm -rf /var/lib/apt/lists/*
 
-# Restore dependencies of .net core projects
-COPY ["src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj", "src/<%= mainProjectDir %>/"]
+# Restore dependencies of .net core projects taking advantage of docker layer caching
+COPY src/*/*.csproj ./src/
+RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
 
 # Copy everything else and build app
