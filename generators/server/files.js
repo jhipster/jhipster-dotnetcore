@@ -298,7 +298,7 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/JHipsterSettings.cs',
+                    file: 'Project.Infrastructure/Configuration/JHipsterSettings.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/JHipsterSettings.cs`,
                 },
