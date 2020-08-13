@@ -12,17 +12,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Configuration;
-using <%= namespace %>.Infrastructure.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using <%= namespace %>.Crosscutting.Constants;
 
-namespace <%= namespace %>.Configuration {
-    public static class NhipsterSettingsConfiguration {
-        public static IServiceCollection AddNhipsterModule(this IServiceCollection @this, IConfiguration configuration)
+namespace <%= namespace %>.Crosscutting.Exceptions {
+    public class EmailAlreadyUsedException : BadRequestAlertException {
+        public EmailAlreadyUsedException() : base(ErrorConstants.EmailAlreadyUsedType, "Email is already in use!",
+            "userManagement", "emailexists")
         {
-            @this.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
-            return @this;
         }
     }
 }

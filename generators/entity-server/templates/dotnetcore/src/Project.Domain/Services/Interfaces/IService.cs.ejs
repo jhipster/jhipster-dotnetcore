@@ -16,24 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using AutoMapper;
-using System.Linq;
+using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
 using <%= namespace %>.Domain;
-using <%= namespace %>.Dto;
 
-
-namespace <%= namespace %>.Service.Mapper {
-
-    public class AutoMapperProfile : Profile
+namespace <%= namespace %>.Domain.Services.Interfaces
+{
+    public interface I<%= pascalizedEntityClass %>Service
     {
-        public AutoMapperProfile()
-        {
-            <%_ if (authenticationType === 'jwt') { _%>
-            CreateMap<User, UserDto>()
-                .ForMember(userDto => userDto.Roles, opt => opt.MapFrom(user => user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()))
-            .ReverseMap()
-                .ForPath(user => user.UserRoles, opt => opt.MapFrom(userDto => userDto.Roles.Select(role => new UserRole { Role = new Role { Name = role }, UserId = userDto.Id }).ToHashSet()));
-            <%_ } _%>
-        }
+        Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>);
+
+        Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable);
+
+        Task<<%= pascalizedEntityClass %>> FindOne(long id);
+
+        Task Delete(long id);
     }
 }

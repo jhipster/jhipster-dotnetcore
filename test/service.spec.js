@@ -11,9 +11,9 @@ function getPreCondition() {
     return helpers
         .run('generator-jhipster/generators/entity')
         .inTmpDir(dir => {
-            console.log(`Test temp dir: ${dir}`);
+            console.log(dir);
             fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
-            fse.copySync(path.join(__dirname, '../test/templates/dto'), dir);
+            // fse.copySync(path.join(__dirname, '../test/templates/services'), dir);
         })
         .withOptions({
             'from-cli': true,
@@ -37,11 +37,11 @@ function getPreCondition() {
         ]);
 }
 
-describe('testing dto', () => {
-    context('generating dto', () => {
-        const personClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Entities/Person.cs`;
-        const personDto = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Dto/PersonDto.cs`;
-        const dtoMappingFile = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint/Configuration/AutoMapper/AutoMapperProfile.cs`;
+describe('testing service interface and implementation', () => {
+    context('generating service interface and implementation', () => {
+        // const personClass = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Person.cs`;
+        const personService = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain.Services/PersonService.cs`;
+        const personServiceInterface = `${SERVER_MAIN_SRC_DIR}JhipsterBlueprint.Domain/Services/Interfaces/IPersonService.cs`;
 
         before(done => {
             getPreCondition()
@@ -56,17 +56,20 @@ describe('testing dto', () => {
                 .on('end', done);
         });
 
-        it('check if required files for dto are copied', () => {
-            assert.file('.jhipster/Person.json');
+        it('check if required files are copied', () => {
+            // assert.file('.jhipster/Person.json');
             assert.file('.yo-rc.json');
         });
 
-        it('checks dto files', () => {
-            assert.file(personClass);
-            assert.file(personDto);
-            assert.file(dtoMappingFile);
-            assert.fileContent(personDto, /public class PersonDto/);
-            assert.fileContent(dtoMappingFile, /public class AutoMapperProfile : Profile/);
+        it('checks if service interface and implementation files exist', () => {
+            // assert.file(personClass);
+            assert.file(personService);
+            assert.file(personServiceInterface);
+        });
+
+        it('checks service interface and implementation contents', () => {
+            assert.fileContent(personService, /public class PersonService/);
+            assert.fileContent(personServiceInterface, /public interface IPersonService/);
         });
     });
 });

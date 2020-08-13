@@ -24,9 +24,10 @@ using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Crosscutting.Constants;
+using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 <%_ if (authenticationType === 'jwt') { _%>
-using <%= namespace %>.Service;
+using <%= namespace %>.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 <%_ } _%>
@@ -61,7 +62,7 @@ namespace <%= namespace %>.Controllers {
         {
             if (!CheckPasswordLength(managedUserDto.Password)) throw new InvalidPasswordException();
 
-            var user = await _userService.RegisterUser(managedUserDto, managedUserDto.Password);
+            var user = await _userService.RegisterUser(_userMapper.Map<User>(managedUserDto), managedUserDto.Password);
             await _mailService.SendActivationEmail(user);
             return CreatedAtAction(nameof(GetAccount), user);
         }

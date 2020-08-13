@@ -12,17 +12,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Configuration;
-using <%= namespace %>.Infrastructure.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using <%= namespace %>.Crosscutting.Constants;
 
-namespace <%= namespace %>.Configuration {
-    public static class NhipsterSettingsConfiguration {
-        public static IServiceCollection AddNhipsterModule(this IServiceCollection @this, IConfiguration configuration)
+namespace <%= namespace %>.Crosscutting.Exceptions {
+    public class BadRequestAlertException : BaseException {
+        public BadRequestAlertException(string detail, string entityName, string errorKey) : this(
+            ErrorConstants.DefaultType, detail, entityName, errorKey)
         {
-            @this.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
-            return @this;
+        }
+
+        public BadRequestAlertException(string type, string detail, string entityName, string errorKey) : base(type, detail, entityName, errorKey)
+        {
         }
     }
 }
