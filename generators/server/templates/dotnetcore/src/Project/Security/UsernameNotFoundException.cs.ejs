@@ -14,7 +14,7 @@
 -%>
 using System.Security.Authentication;
 
-namespace <%= namespace %>.Security {
+namespace <%= namespace %>.Crosscutting.Exceptions {
     public class UsernameNotFoundException : AuthenticationException {
         public UsernameNotFoundException(string message) : base(message)
         {

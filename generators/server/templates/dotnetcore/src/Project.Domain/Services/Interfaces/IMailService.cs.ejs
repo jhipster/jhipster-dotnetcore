@@ -12,19 +12,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Hellang.Middleware.ProblemDetails;
-using <%= namespace %>.Crosscutting.Constants;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using <%= namespace %>.Domain;
 
-namespace <%= namespace %>.Web.Rest.Problems {
-    public class EmailNotFoundException : ProblemDetailsException {
-        public EmailNotFoundException() : base(new ProblemDetails {
-            Type = ErrorConstants.EmailNotFoundType,
-            Detail = "Email address not registered",
-            Status = StatusCodes.Status400BadRequest
-        })
-        {
-        }
+namespace <%= namespace %>.Domain.Services.Interfaces {
+    public interface IMailService {
+        Task SendPasswordResetMail(User user);
+        Task SendActivationEmail(User user);
+        Task SendCreationEmail(User user);
     }
 }
