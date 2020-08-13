@@ -12,19 +12,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JHipsterNet.Pagination;
-using JHipsterNet.Pagination.Extensions;
-using <%= namespace %>.Models;
+using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
+using <%= namespace %>.Domain;
 using <%= namespace %>.Security;
-using <%= namespace %>.Service;
-using <%= namespace %>.Service.Dto;
+using <%= namespace %>.Domain.Services.Interfaces;
+using <%= namespace %>.Dto;
 using <%= namespace %>.Web.Extensions;
 using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Web.Rest.Utilities;
+using <%= namespace %>.Crosscutting.Constants;
+using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,14 +43,16 @@ namespace <%= namespace %>.Controllers {
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
         public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
-            IMailService mailService)
+            IMapper mapper, IMailService mailService)
         {
             _log = log;
             _userManager = userManager;
             _userService = userService;
             _mailService = mailService;
+            _mapper = mapper;
         }
 
         [HttpPost("users")]
@@ -64,7 +69,7 @@ namespace <%= namespace %>.Controllers {
             if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
                 throw new EmailAlreadyUsedException();
 
-            var newUser = await _userService.CreateUser(userDto);
+            var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
             await _mailService.SendCreationEmail(newUser);
             return CreatedAtAction(nameof(GetUser), new {login = newUser.Login}, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
@@ -80,23 +85,21 @@ namespace <%= namespace %>.Controllers {
             existingUser = await _userManager.FindByNameAsync(userDto.Login);
             if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
 
-            var updatedUser = await _userService.UpdateUser(userDto);
+            var updatedUser = await _userService.UpdateUser(_mapper.Map<User>(userDto));
 
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
         }
 
         [HttpGet("users")]
-        public ActionResult<IEnumerable<User>> GetAllUsers(IPageable pageable)
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            var page = _userManager.Users
+            var page = await _userManager.Users
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
-                .ToList()
-                .AsQueryable()
-                .UsePageable(pageable);
-            var userDtos = page.Content.Select(user => new UserDto(user));
+                .UsePageableAsync(pageable);
+            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }
@@ -117,7 +120,7 @@ namespace <%= namespace %>.Controllers {
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .SingleOrDefaultAsync();
-            var userDto = result != null ? new UserDto(result) : null;
+            var userDto = _mapper.Map<UserDto>(result);
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
 

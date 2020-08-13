@@ -16,9 +16,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using <%= namespace %>.Infrastructure;
+using <%= namespace %>.Crosscutting.Constants;
+using <%= namespace %>.Configuration;
 using <%= namespace %>.Security;
-using <%= namespace %>.Test.Infrastructure;
+using <%= namespace %>.Test.Configuration;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -59,7 +60,7 @@ namespace <%= namespace %>.Test.Setup {
 
             return _serviceProvider.GetRequiredService<TService>();
         }
-        
+
         public NhipsterWebApplicationFactory<TEntryPoint> WithMockUser(string name = "user",
             IEnumerable<string> roles = null, string authenticationType = "MockAuthenticationType")
         {
@@ -80,6 +81,6 @@ namespace <%= namespace %>.Test.Setup {
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));
         }
-        
+
     }
 }

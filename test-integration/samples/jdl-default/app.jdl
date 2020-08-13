@@ -52,7 +52,8 @@ entity Job {
 
 entity JobHistory {
 	startDate Instant,
-	endDate Instant
+	endDate Instant,
+    language Language
 }
 
 enum Language {
@@ -106,7 +107,7 @@ paginate JobHistory, Employee with infinite-scroll
 paginate Job with pagination
 
 // Use Data Transfert Objects (DTO)
-// dto * with mapstruct
+dto * with mapstruct
 
 // Set service options to all except few
 service all with serviceImpl except Employee, Job

@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using <%= namespace %>.Controllers.Dto;
+using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Controllers {
 
@@ -38,10 +38,10 @@ namespace <%= namespace %>.Controllers {
         }
 
         [HttpGet("info")]
-        public ActionResult<ProfileInfoDTO> GetProfileInfos()
+        public ActionResult<ProfileInfoDto> GetProfileInfos()
         {
             _log.LogDebug("REST request to get profile informations");
-            return Ok(new ProfileInfoDTO(GetDisplayRibbonOnProfiles(), GetActiveProfile()));
+            return Ok(new ProfileInfoDto(GetDisplayRibbonOnProfiles(), GetActiveProfile()));
         }
 
         private List<string> GetActiveProfile()

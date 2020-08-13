@@ -141,7 +141,7 @@ module.exports = class extends LanguageGenerator {
     _updateLanguagesInLanguagePipeDotNetCore(languages) {
         const fullPath =
             this.clientFramework === 'angularX'
-                ? `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/shared/language/find-language-from-key.pipe.ts`
+                ? `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/app/shared/language/find-language-from-key.pipe.ts`
                 : `${constants.SERVER_SRC_DIR}${this.mainClientDir}/app/config/translation.ts`;
         try {
             let content = '{\n';
@@ -174,7 +174,7 @@ module.exports = class extends LanguageGenerator {
         if (this.clientFramework !== 'angularX') {
             return;
         }
-        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/core/language/language.constants.ts`;
+        const fullPath = `${constants.SERVER_SRC_DIR}${this.mainClientAppDir}/app/core/language/language.constants.ts`;
         try {
             let content = 'export const LANGUAGES: string[] = [\n';
             languages.forEach((language, i) => {

@@ -30,8 +30,8 @@ module.exports = {
     askForRelationships,
     askForRelationsToRemove,
     askForTableName,
-    // askForDTO,
-    // askForService,
+    askForDTO,
+    askForService,
     // askForFiltering,
     askForPagination,
 };
@@ -325,7 +325,7 @@ function askForTableName() {
     });
 } */
 
-/* function askForDTO() {
+function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
     if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
@@ -341,23 +341,23 @@ function askForTableName() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No, use the entity directly'
+                    name: 'No, use the entity directly',
                 },
                 {
                     value: 'mapstruct',
-                    name: 'Yes, generate a DTO with MapStruct'
-                }
+                    name: 'Yes, generate a DTO with AutoMapper',
+                },
             ],
-            default: 0
-        }
+            default: 0,
+        },
     ];
     this.prompt(prompts).then(props => {
         context.dto = props.dto;
         done();
     });
-} */
+}
 
-/* function askForService() {
+function askForService() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped
     if (context.useConfigurationFile || context.skipServer) {
@@ -372,25 +372,21 @@ function askForTableName() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No, the REST controller should use the repository directly'
-                },
-                {
-                    value: 'serviceClass',
-                    name: 'Yes, generate a separate service class'
+                    name: 'No, the REST controller should use the repository directly',
                 },
                 {
                     value: 'serviceImpl',
-                    name: 'Yes, generate a separate service interface and implementation'
-                }
+                    name: 'Yes, generate a separate service interface and implementation',
+                },
             ],
-            default: 0
-        }
+            default: 0,
+        },
     ];
     this.prompt(prompts).then(props => {
         context.service = props.service;
         done();
     });
-} */
+}
 
 function askForPagination() {
     const context = this.context;
@@ -532,18 +528,18 @@ function askForField(done) {
                 {
                     value: 'Boolean',
                     name: 'bool',
-                } /* ,
+                },
                 {
                     value: 'enum',
-                    name: 'Enumeration (Java enum type)'
-                },
+                    name: 'Enumeration',
+                } /* ,
                 {
                     value: 'byte[]',
                     name: '[BETA] Blob'
                 } */,
             ],
             default: 0,
-        } /* ,
+        },
         {
             when: response => {
                 if (response.fieldType === 'enum') {
@@ -554,7 +550,7 @@ function askForField(done) {
                 return false;
             },
             type: 'input',
-            name: 'fieldType',
+            name: 'enumType',
             validate: input => {
                 if (input === '') {
                     return 'Your class name cannot be empty.';
@@ -572,7 +568,7 @@ function askForField(done) {
                 }
                 return true;
             },
-            message: 'What is the class name of your enumeration?'
+            message: 'What is the class name of your enumeration?',
         },
         {
             when: response => response.fieldIsEnum,
@@ -595,7 +591,7 @@ function askForField(done) {
                     return `Enum values cannot contain duplicates (typed values: ${input})`;
                 }
                 for (let i = 0; i < enums.length; i++) {
-                    if (/^[0-9]. */ /* .test(enums[i])) {
+                    if (/^[0-9].*/.test(enums[i])) {
                         return `Enum value "${enums[i]}" cannot start with a number`;
                     }
                     if (enums[i] === '') {
@@ -610,8 +606,8 @@ function askForField(done) {
                     return 'What are the values of your enumeration (separated by comma, no spaces)?';
                 }
                 return 'What are the new values of your enumeration (separated by comma, no spaces)?\nThe new values will replace the old ones.\nNothing will be done if there are no new values.';
-            }
-        },
+            },
+        } /* ,
         {
             when: response => response.fieldAdd === true && databaseType === 'cassandra',
             type: 'list',
@@ -844,16 +840,16 @@ function askForField(done) {
     ];
     this.prompt(prompts).then(props => {
         if (props.fieldAdd) {
-            /* if (props.fieldIsEnum) {
+            if (props.fieldIsEnum) {
                 props.fieldType = _.upperFirst(props.fieldType);
                 props.fieldValues = props.fieldValues.toUpperCase();
-            } */
+            }
 
             const field = {
                 fieldName: props.fieldName,
-                fieldType: props.fieldType,
-                /* fieldTypeBlobContent: props.fieldTypeBlobContent,
-                fieldValues: props.fieldValues, */
+                fieldType: props.enumType || props.fieldType,
+                /* fieldTypeBlobContent: props.fieldTypeBlobContent, */
+                fieldValues: props.fieldValues,
                 fieldValidateRules:
                     props.fieldValidateRules /* ,
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
