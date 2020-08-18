@@ -20,14 +20,14 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.0.0"
+        "version": "1.1.0"
       }
     ],
     "enableTranslation": false,
     "blueprints": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.0.0"
+        "version": "1.1.0"
       }
     ]
   }
