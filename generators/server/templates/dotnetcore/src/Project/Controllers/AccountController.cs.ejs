@@ -17,16 +17,17 @@ using System;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Security.Claims;
-using <%= namespace %>.Models;
-using <%= namespace %>.Service;
-using <%= namespace %>.Service.Dto;
+using <%= namespace %>.Domain;
+using <%= namespace %>.Dto;
 using <%= namespace %>.Web.Extensions;
 using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Web.Rest.Problems;
-using <%= namespace %>.Infrastructure;
+using <%= namespace %>.Configuration;
+using <%= namespace %>.Crosscutting.Constants;
+using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-<%_ if (authenticationType === 'jwt') { _%>    
-using <%= namespace %>.Models.Vm;
+<%_ if (authenticationType === 'jwt') { _%>
+using <%= namespace %>.Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 <%_ } _%>
@@ -37,7 +38,7 @@ namespace <%= namespace %>.Controllers {
     [Route("api")]
     [ApiController]
     public class AccountController : ControllerBase {
-        
+
         <%_ if (authenticationType === 'jwt') { _%>
         private readonly ILogger<AccountController> _log;
         private readonly IMailService _mailService;
@@ -57,11 +58,11 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("register")]
         [ValidateModel]
-        public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserVM managedUserVm)
+        public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserDto managedUserDto)
         {
-            if (!CheckPasswordLength(managedUserVm.Password)) throw new InvalidPasswordException();
+            if (!CheckPasswordLength(managedUserDto.Password)) throw new InvalidPasswordException();
 
-            var user = await _userService.RegisterUser(managedUserVm, managedUserVm.Password);
+            var user = await _userService.RegisterUser(_userMapper.Map<User>(managedUserDto), managedUserDto.Password);
             await _mailService.SendActivationEmail(user);
             return CreatedAtAction(nameof(GetAccount), user);
         }
@@ -87,8 +88,8 @@ namespace <%= namespace %>.Controllers {
         {
             var user = await _userService.GetUserWithUserRoles();
             if (user == null) throw new InternalServerErrorException("User could not be found");
-
-            return Ok(new UserDto(user));
+            var userDto = _userMapper.Map<UserDto>(user);
+            return Ok(userDto);
         }
 
         [Authorize]
@@ -136,11 +137,11 @@ namespace <%= namespace %>.Controllers {
 
         [HttpPost("account/reset-password/finish")]
         [ValidateModel]
-        public async Task RequestPasswordReset([FromBody] KeyAndPasswordVM keyAndPasswordVm)
+        public async Task RequestPasswordReset([FromBody] KeyAndPasswordDto keyAndPasswordDto)
         {
-            if (!CheckPasswordLength(keyAndPasswordVm.NewPassword)) throw new InvalidPasswordException();
+            if (!CheckPasswordLength(keyAndPasswordDto.NewPassword)) throw new InvalidPasswordException();
 
-            var user = await _userService.CompletePasswordReset(keyAndPasswordVm.NewPassword, keyAndPasswordVm.Key);
+            var user = await _userService.CompletePasswordReset(keyAndPasswordDto.NewPassword, keyAndPasswordDto.Key);
 
             if (user == null) throw new InternalServerErrorException("No user was found for this reset key");
         }
@@ -148,11 +149,11 @@ namespace <%= namespace %>.Controllers {
         private static bool CheckPasswordLength(string password)
         {
             return !string.IsNullOrEmpty(password) &&
-                   password.Length >= ManagedUserVM.PasswordMinLength &&
-                   password.Length <= ManagedUserVM.PasswordMaxLength;
+                   password.Length >= ManagedUserDto.PasswordMinLength &&
+                   password.Length <= ManagedUserDto.PasswordMaxLength;
         }
         <%_ } else { _%>
-        [Authorize] 
+        [Authorize]
         [HttpGet("account")]
         public ActionResult<UserDto> GetAccount()
         {

@@ -33,7 +33,9 @@
         <BuildServerSideRenderer>false</BuildServerSideRenderer>
     </PropertyGroup>
 
-    <ItemGroup>        
+    <ItemGroup>
+        <PackageReference Include="JHipsterNet.Core" Version="1.0.4" />
+        <PackageReference Include="JHipsterNet.Web" Version="1.0.4" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
@@ -62,12 +64,12 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
             <%_ break;
             case 'oracle': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.6" />
-        <PackageReference Include="Oracle.EntityFrameworkCore" Version="2.19.60" />
-        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.5" />
+        <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.0-beta2" />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.80" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
             <%_ break;
          } _%>
         <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
@@ -76,10 +78,10 @@
         <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
         <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
         <PackageReference Include="Serilog.Sinks.SyslogMessages" Version="1.0.5" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.0" />       
-        <PackageReference Include="LanguageExt.Core" Version="3.4.15" />        
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.0" />
+        <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
         <%_ if (authenticationType === 'jwt') { _%>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.6.0" />            
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.6.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
         <%_ } else { _%>
@@ -88,7 +90,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\JHipsterNet\JHipsterNet.csproj" />
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Infrastructure\<%= pascalizedBaseName %>.Infrastructure.csproj" />
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain.Services\<%= pascalizedBaseName %>.Domain.Services.csproj" />
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
     </ItemGroup>
 <%_ if(!skipClient) { _%>
     <!-- https://stackoverflow.com/questions/46720148/exclude-wwwroot-dist-from-build-asp-net-dotnet-core-2-0 -->
@@ -105,7 +111,7 @@
         </SonarQubeSetting>
         <SonarQubeSetting Include="sonar.testExecutionReportPaths">
             <Value>$(SpaRoot)build/test-results/jest/TESTS-results-sonar.xml</Value>
-        </SonarQubeSetting>  
+        </SonarQubeSetting>
         <SonarQubeSetting Include="sonar.javascript.lcov.reportPaths">
             <Value>$(SpaRoot)build/test-results/lcov.info</Value>
         </SonarQubeSetting>

@@ -160,6 +160,32 @@ docker-compose -f docker/app.yml up
 In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md)
 
 
+## Generating Services
+
+You can use services to move business logic away from controllers. It also allows you to use DTOs.
+
+You can generate services using the entity generator:
+
+`jhipster entity newentity`
+
+Or by using JDL:
+
+ `service all with serviceImpl except Employee, Job`
+
+ Notice that only the service with interface option (serviceImpl) is enabled on this generator.
+
+
+## Using DTOs
+
+Notice that this blueprint uses [AutoMapper](https://automapper.org/) to handle dto conversion instead of Java's mapstruct.
+
+Example using JDL:
+
+ ```dto * with mapstruct```
+
+ See [JHispter's documentation](https://www.jhipster.tech/using-dtos/) for more details about using DTOs.
+
+
 ## Using database migrations
 
 If you had already run the application before creating your first migration, some database tables might be already 

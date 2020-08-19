@@ -14,8 +14,8 @@
 -%>
 using FluentAssertions;
 using FluentAssertions.Json;
-using <%= namespace %>.Models;
-using <%= namespace %>.Models.Vm;
+using <%= namespace %>.Domain;
+using <%= namespace %>.Dto;
 using <%= namespace %>.Test.Setup;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json.Linq;
@@ -53,7 +53,7 @@ namespace <%= namespace %>.Test.Controllers {
             };
             await _userManager.CreateAsync(user);
 
-            var login = new LoginVm {
+            var login = new LoginDto {
                 Username = "user-jwt-controller",
                 Password = "test"
             };
@@ -74,7 +74,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task TestAuthorizeFails()
         {
-            var login = new LoginVm {
+            var login = new LoginDto {
                 Username = "wrong-user",
                 Password = "wrong-password"
             };
@@ -101,7 +101,7 @@ namespace <%= namespace %>.Test.Controllers {
 
             await _userManager.CreateAsync(user);
 
-            var login = new LoginVm {
+            var login = new LoginDto {
                 Username = "user-jwt-controller",
                 Password = "test",
                 RememberMe = true

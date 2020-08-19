@@ -22,6 +22,11 @@ const constants = require('../generator-dotnetcore-constants');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const DOCKER_DIR = constants.DOCKER_DIR;
+const PROJECT_DOMAIN_SUFFIX = constants.PROJECT_DOMAIN_SUFFIX;
+const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
+const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
+const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
+const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
 
 const serverFiles = {
     serverCsProj: [
@@ -47,6 +52,219 @@ const serverFiles = {
         {
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/xunit.runner.json', renameTo: generator => `${generator.testProjectDir}/xunit.runner.json` }],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Crosscutting/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain.Services/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
+                },
+            ],
+        },
+    ],
+    domainFiles: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/Interfaces/IAuditedEntityBase.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/Interfaces/IAuditedEntityBase.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/User.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/User.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/Role.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/Role.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/UserRole.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/UserRole.cs`,
+                },
+            ],
+        },
+    ],
+    crosscuttingFiles: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Crosscutting/Constants/Constants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/Constants.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Crosscutting/Constants/JwtConstants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/JwtConstants.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Crosscutting/Constants/RolesConstants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/RolesConstants.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Crosscutting/Constants/ErrorConstants.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Constants/ErrorConstants.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Security/UsernameNotFoundException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/UsernameNotFoundException.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Security/UserNotActivatedException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/UserNotActivatedException.cs`,
+                },
+            ],
+        },
+    ],
+    dtoFiles: [
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/ManagedUserDto.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/ManagedUserDto.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/PasswordChangeDto.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/PasswordChangeDto.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/UserDto.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/UserDto.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/ProfileInfoDto.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/ProfileInfo/ProfileInfoDto.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/KeyAndPasswordDto.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/KeyAndPasswordDto.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/LoginDto.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/LoginDto.cs`,
+                },
+            ],
         },
     ],
     serverProperties: [
@@ -80,8 +298,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/ApplicationSettings.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ApplicationSettings.cs`,
+                    file: 'Project.Infrastructure/Configuration/JHipsterSettings.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/JHipsterSettings.cs`,
                 },
             ],
         },
@@ -117,8 +336,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/AutoMapperStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/AutoMapperStartup.cs`,
+                    file: 'Project/Configuration/AutoMapperStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapperStartup.cs`,
                 },
             ],
         },
@@ -126,17 +345,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/Constants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/Constants.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Infrastructure/DatabaseStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/DatabaseStartup.cs`,
+                    file: 'Project/Configuration/DatabaseStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/DatabaseStartup.cs`,
                 },
             ],
         },
@@ -145,8 +355,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/IdentityStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/IdentityStartup.cs`,
+                    file: 'Project/Configuration/IdentityStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/IdentityStartup.cs`,
                 },
             ],
         },
@@ -154,8 +364,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/MvcStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/MvcStartup.cs`,
+                    file: 'Project/Configuration/MvcStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/MvcStartup.cs`,
                 },
             ],
         },
@@ -163,8 +373,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/NhipsterStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/NhipsterStartup.cs`,
+                    file: 'Project/Configuration/NhipsterStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/NhipsterStartup.cs`,
                 },
             ],
         },
@@ -172,8 +382,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/ProblemDetailsStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/ProblemDetailsStartup.cs`,
+                    file: 'Project/Configuration/ProblemDetailsStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ProblemDetailsStartup.cs`,
                 },
             ],
         },
@@ -181,8 +391,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/SecurityStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/SecurityStartup.cs`,
+                    file: 'Project/Configuration/SecurityStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/SecurityStartup.cs`,
                 },
             ],
         },
@@ -190,20 +400,29 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Infrastructure/SwaggerStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Infrastructure/SwaggerStartup.cs`,
+                    file: 'Project/Configuration/SwaggerStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/SwaggerStartup.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/ServiceStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ServiceStartup.cs`,
                 },
             ],
         },
     ],
     serverUserManagement: [
         {
-            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/User.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/User.cs`,
+                    file: 'Project.Infrastructure/Data/ApplicationDatabaseContext.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
                 },
             ],
         },
@@ -212,8 +431,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Role.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Role.cs`,
+                    file: 'Project.Domain/Services/Interfaces/IAuthenticationService.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IAuthenticationService.cs`,
                 },
             ],
         },
@@ -222,17 +442,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/UserRole.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/UserRole.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Models/Interfaces/IAuditedEntityBase.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IAuditedEntityBase.cs`,
+                    file: 'Project.Domain.Services/AuthenticationService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/AuthenticationService.cs`,
                 },
             ],
         },
@@ -241,17 +452,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Vm/ManagedUserVM.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/Models/Vm/ManagedUserVM.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Data/ApplicationDatabaseContext.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`,
+                    file: 'Project.Domain/Services/Interfaces/IMailService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IMailService.cs`,
                 },
             ],
         },
@@ -260,8 +462,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/AuthenticationService.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/AuthenticationService.cs`,
+                    file: 'Project.Domain.Services/MailService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/MailService.cs`,
                 },
             ],
         },
@@ -270,8 +472,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/MailService.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/MailService.cs`,
+                    file: 'Project.Domain/Services/Interfaces/IUserService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/IUserService.cs`,
                 },
             ],
         },
@@ -280,8 +482,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/UserService.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/UserService.cs`,
+                    file: 'Project.Domain.Services/UserService.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/UserService.cs`,
                 },
             ],
         },
@@ -290,44 +492,17 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Service/Dto/PasswordChangeDto.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Dto/PasswordChangeDto.cs`,
+                    file: 'Project.Crosscutting/Utilities/RandomUtil.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Utilities/RandomUtil.cs`,
                 },
             ],
         },
         {
             path: SERVER_SRC_DIR,
             templates: [
-                { file: 'Project/Service/Dto/UserDto.cs', renameTo: generator => `${generator.mainProjectDir}/Service/Dto/UserDto.cs` },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
                 {
-                    file: 'Project/Service/Mapper/UserMapper.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/UserMapper.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Service/Mapper/UserProfile.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Mapper/UserProfile.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Service/Utilities/RandomUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Service/Utilities/RandomUtil.cs`,
+                    file: 'Project/Configuration/AutoMapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapper/AutoMapperProfile.cs`,
                 },
             ],
         },
@@ -337,15 +512,6 @@ const serverFiles = {
                 {
                     file: 'Project/Controllers/AccountController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/AccountController.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Controllers/Dto/ProfileInfoDTO.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Controllers/Dto/ProfileInfoDTO.cs`,
                 },
             ],
         },
@@ -434,26 +600,6 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Vm/KeyAndPasswordVM.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Vm/KeyAndPasswordVM.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Models/Vm/LoginVM.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/Models/Vm/LoginVM.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
                     file: 'Project/Security/BCryptPasswordHasher.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Security/BCryptPasswordHasher.cs`,
                 },
@@ -465,43 +611,6 @@ const serverFiles = {
                 {
                     file: 'Project/Security/PoliciesConstants.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Security/PoliciesConstants.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Security/RolesConstants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/RolesConstants.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Security/UserNotActivatedException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/UserNotActivatedException.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Security/UsernameNotFoundException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/UsernameNotFoundException.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Security/Jwt/JwtConstants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Security/Jwt/JwtConstants.cs`,
                 },
             ],
         },
@@ -587,7 +696,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Utilities/HeaderUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/HeaderUtil.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/HeaderUtil.cs`,
                 },
             ],
         },
@@ -596,7 +706,8 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Web/Rest/Utilities/PaginationUtil.cs`,
                 },
             ],
         },
@@ -604,8 +715,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
+                    file: 'Project.Crosscutting/Exceptions/BaseException.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/BaseException.cs`,
                 },
             ],
         },
@@ -613,8 +724,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
+                    file: 'Project.Crosscutting/Exceptions/BadRequestAlertException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/BadRequestAlertException.cs`,
                 },
             ],
         },
@@ -622,8 +734,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
+                    file: 'Project.Crosscutting/Exceptions/EmailAlreadyUsedException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/EmailAlreadyUsedException.cs`,
                 },
             ],
         },
@@ -631,71 +744,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Utilities/PaginationUtil.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/PaginationUtil.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/BadRequestAlertException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/BadRequestAlertException.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/EmailAlreadyUsedException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/EmailAlreadyUsedException.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/EmailNotFoundException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/EmailNotFoundException.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Web/Rest/Problems/ErrorConstants.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ErrorConstants.cs`,
+                    file: 'Project.Crosscutting/Exceptions/EmailNotFoundException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/EmailNotFoundException.cs`,
                 },
             ],
         },
@@ -712,8 +763,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/InternalServerErrorException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/InternalServerErrorException.cs`,
+                    file: 'Project.Crosscutting/Exceptions/InternalServerErrorException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/InternalServerErrorException.cs`,
                 },
             ],
         },
@@ -721,8 +773,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/InvalidPasswordException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/InvalidPasswordException.cs`,
+                    file: 'Project.Crosscutting/Exceptions/InvalidPasswordException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/InvalidPasswordException.cs`,
                 },
             ],
         },
@@ -730,8 +783,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Web/Rest/Problems/LoginAlreadyUsedException.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/LoginAlreadyUsedException.cs`,
+                    file: 'Project.Crosscutting/Exceptions/LoginAlreadyUsedException.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/LoginAlreadyUsedException.cs`,
                 },
             ],
         },
@@ -759,8 +813,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Infrastructure/TestMvcStartup.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Infrastructure/TestMvcStartup.cs`,
+                    file: 'Project.Test/Configuration/TestMvcStartup.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Configuration/TestMvcStartup.cs`,
                 },
             ],
         },
@@ -769,7 +823,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project.Test/Setup/MockClaimsPrincipalProvider.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Infrastructure/MockClaimsPrincipalProvider.cs`,
+                    renameTo: generator => `${generator.testProjectDir}/Configuration/MockClaimsPrincipalProvider.cs`,
                 },
             ],
         },
@@ -815,117 +869,6 @@ const serverFiles = {
                     renameTo: generator => `${generator.testProjectDir}/Controllers/TestUtil.cs`,
                 },
             ],
-        },
-    ],
-    serverJhipsterNet: [
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Boot/Ansi/AnsiColor.cs', renameTo: () => 'JHipsterNet/Boot/Ansi/AnsiColor.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Boot/BannerPrinter.cs', renameTo: () => 'JHipsterNet/Boot/BannerPrinter.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Sort.cs', renameTo: () => 'JHipsterNet/Pagination/Sort.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/SortExpression.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpression.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/SortExpressions.cs', renameTo: () => 'JHipsterNet/Pagination/SortExpressions.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Order.cs', renameTo: () => 'JHipsterNet/Pagination/Order.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Page.cs', renameTo: () => 'JHipsterNet/Pagination/Page.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/PageResponse.cs', renameTo: () => 'JHipsterNet/Pagination/PageResponse.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Chunk.cs', renameTo: () => 'JHipsterNet/Pagination/Chunk.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Extensions/IQueryableExtensions.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Extensions/IQueryableExtensions.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Extensions/QueryStringExtensions.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Extensions/QueryStringExtensions.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/IPage.cs', renameTo: () => 'JHipsterNet/Pagination/IPage.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/IPageable.cs', renameTo: () => 'JHipsterNet/Pagination/IPageable.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/ISlice.cs', renameTo: () => 'JHipsterNet/Pagination/ISlice.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Binders/PageableBinderConfig.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Binders/PageableBinderConfig.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Binders/PageableBinder.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Binders/PageableBinder.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'JHipsterNet/Pagination/Binders/PageableBinderProvider.cs',
-                    renameTo: () => 'JHipsterNet/Pagination/Binders/PageableBinderProvider.cs',
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Pagination/Pageable.cs', renameTo: () => 'JHipsterNet/Pagination/Pageable.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Config/JHipsterSettings.cs', renameTo: () => 'JHipsterNet/Config/JHipsterSettings.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/Logging/LoggerNameEnricher.cs', renameTo: () => 'JHipsterNet/Logging/LoggerNameEnricher.cs' }],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'JHipsterNet/JHipsterNet.csproj', renameTo: () => 'JHipsterNet/JHipsterNet.csproj' }],
         },
     ],
     docker: [

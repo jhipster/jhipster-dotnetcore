@@ -13,9 +13,9 @@
  limitations under the License.
 -%>
 using System;
-using JHipsterNet.Config;
 using <%= namespace %>.Data;
-using <%= namespace %>.Infrastructure;
+using <%= namespace %>.Configuration;
+using <%= namespace %>.Infrastructure.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,36 +28,40 @@ using Newtonsoft.Json;
 
 namespace <%= namespace %> {
     public class Startup {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         private IConfiguration Configuration { get; }
 
+        public IHostEnvironment Environment { get; }
+
         public virtual void ConfigureServices(IServiceCollection services)
         {
             services
-            .AddNhipsterModule(Configuration);
+                .AddNhipsterModule(Configuration);
 
             AddDatabase(services);
 
-            <%_ if (authenticationType === 'oauth2') { _%>   
+            <%_ if (authenticationType === 'oauth2') { _%>
             // Build an intermediate service provider
             var sp = services.BuildServiceProvider();
             var jhipsterSettings = sp.GetService<IOptions<JHipsterSettings>>().Value;
-            <%_ } _%>    
+            <%_ } _%>
 
             services
-            <%_ if (authenticationType === 'jwt') { _%>   
+            <%_ if (authenticationType === 'jwt') { _%>
             .AddSecurityModule()
             <%_ } else { _%>
-            .AddSecurityModule(jhipsterSettings)
+                .AddSecurityModule(jhipsterSettings)
             <%_ } _%>
-            .AddProblemDetailsModule()
-            .AddAutoMapperModule()
-            .AddWebModule()
-            .AddSwaggerModule();
+                .AddProblemDetailsModule(Environment)
+                .AddAutoMapperModule()
+                .AddSwaggerModule()
+                .AddWebModule()
+                .AddServiceModule();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,13 +72,13 @@ namespace <%= namespace %> {
             app
                 .UseApplicationSecurity(jhipsterSettings)
                 .UseApplicationProblemDetails()
-                .UseApplicationWeb(env)
                 .UseApplicationSwagger()
+                .UseApplicationWeb(env)
                 .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2') { _%>;<%_ } _%>
-                <%_ if (authenticationType === 'jwt') { _%>   
+                <%_ if (authenticationType === 'jwt') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>
-                
+
         }
 
         protected virtual void AddDatabase(IServiceCollection services)

@@ -23,6 +23,9 @@ const utils = require('../utils');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
+const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
+const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 
 const serverFiles = {
     server: [
@@ -30,8 +33,11 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Entity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/${generator.asEntity(generator.entityClass)}.cs`,
+                    file: 'Project.Domain/Entities/Entity.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/${generator.asEntity(
+                            generator.entityClass
+                        )}.cs`,
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
@@ -45,12 +51,34 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/Interfaces/IJoinedEntity.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/Interfaces/IJoinedEntity.cs`,
+                    file: 'Project.Domain/Entities/Interfaces/IJoinedEntity.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/Interfaces/IJoinedEntity.cs`,
                 },
                 {
-                    file: 'Project/Models/RelationshipTools/JoinListFacade.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Models/RelationshipTools/JoinListFacade.cs`,
+                    file: 'Project.Domain/Entities/RelationshipTools/JoinListFacade.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/RelationshipTools/JoinListFacade.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/AutoMapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapper/AutoMapperProfile.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.dto === 'mapstruct',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/Dto.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${generator.asDto(generator.entityClass)}.cs`,
                 },
             ],
         },
@@ -60,20 +88,24 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Data/ApplicationDatabaseContext.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/ApplicationDatabaseContext.cs`,
+                    file: 'Project.Infrastructure/Data/ApplicationDatabaseContext.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
                 },
                 {
-                    file: 'Project/Data/Extensions/DbContextExtensions.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbContextExtensions.cs`,
+                    file: 'Project.Infrastructure/Data/Extensions/DbContextExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
                 },
                 {
-                    file: 'Project/Data/Extensions/DbSetExtensions.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/DbSetExtensions.cs`,
+                    file: 'Project.Infrastructure/Data/Extensions/DbSetExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
                 },
                 {
-                    file: 'Project/Data/Extensions/PropertyAccessorCache.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Data/Extensions/PropertyAccessorCache.cs`,
+                    file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
                 },
             ],
         },
@@ -86,6 +118,23 @@ const serverFiles = {
                     file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
                     renameTo: generator =>
                         `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`,
+                },
+            ],
+        },
+    ],
+    service: [
+        {
+            condition: generator => generator.service === 'serviceImpl',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain.Services/Service.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/${generator.entityClass}Service.cs`,
+                },
+                {
+                    file: 'Project.Domain/Services/Interfaces/IService.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/I${generator.entityClass}Service.cs`,
                 },
             ],
         },
@@ -105,9 +154,9 @@ function writeFiles() {
                                 path: SERVER_SRC_DIR,
                                 templates: [
                                     {
-                                        file: 'Project/Models/JoinEntity.cs',
+                                        file: 'Project.Domain/Entities/JoinEntity.cs',
                                         renameTo: generator =>
-                                            `${generator.mainProjectDir}/Models/${relationship.joinEntityNamePascalized}.cs`,
+                                            `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/${relationship.joinEntityNamePascalized}.cs`,
                                     },
                                 ],
                             },
@@ -125,8 +174,8 @@ function writeFiles() {
                         enumInfo.namespace = this.namespace;
                         const fieldType = field.fieldType;
                         this.template(
-                            'dotnetcore/src/Project/Models/Enum.cs.ejs',
-                            `src/${this.mainProjectDir}/Models/${fieldType}.cs`,
+                            'dotnetcore/src/Project.Crosscutting/Enums/Enum.cs.ejs',
+                            `src/${this.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Enums/${fieldType}.cs`,
                             this,
                             {},
                             enumInfo
@@ -134,6 +183,44 @@ function writeFiles() {
                     }
                 }
             });
+
+            if (!this.skipServer) {
+                const services = this.entities
+                    .filter(entity => entity.definition.service === 'serviceImpl')
+                    .map(entity => {
+                        return {
+                            entityName: entity.name,
+                            serviceInterface: `I${entity.name}Service`,
+                            serviceClass: `${entity.name}Service`,
+                        };
+                    });
+
+                // add current entity being created if it has service option selected
+                if (this.service === 'serviceImpl' && !services.some(e => e.entityName === this.entityClass)) {
+                    services.push({
+                        entityName: this.entityClass,
+                        serviceInterface: `I${this.entityClass}Service`,
+                        serviceClass: `${this.entityClass}Service`,
+                    });
+                }
+
+                const files = {
+                    server: [
+                        {
+                            path: SERVER_SRC_DIR,
+                            templates: [
+                                {
+                                    file: 'Project/Configuration/ServiceStartup.cs',
+                                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ServiceStartup.cs`,
+                                },
+                            ],
+                        },
+                    ],
+                };
+
+                this.services = services;
+                this.writeFilesToDisk(files, this, false, 'dotnetcore');
+            }
 
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
         },

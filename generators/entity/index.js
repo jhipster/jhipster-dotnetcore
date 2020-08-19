@@ -30,6 +30,7 @@ module.exports = class extends EntityGenerator {
             getConfigNetBlueprint() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                this.context.dtoSuffix = 'Dto';
             },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
@@ -46,8 +47,8 @@ module.exports = class extends EntityGenerator {
             askForRelationships: prompts.askForRelationships,
             askForRelationsToRemove: prompts.askForRelationsToRemove,
             askForTableName: prompts.askForTableName,
-            // askForService: prompts.askForService,
-            // askForDTO: prompts.askForDTO,
+            askForService: prompts.askForService,
+            askForDTO: prompts.askForDTO,
             // askForFiltering: prompts.askForFiltering,
             askForPagination: prompts.askForPagination,
         };

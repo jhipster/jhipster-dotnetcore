@@ -118,13 +118,33 @@ function hasDateTimeTypeField() {
 if (hasDateTimeTypeField()) { _%>
 using System;
 <%_ } _%>
+<%
+let hasDto = dto === 'mapstruct';
+%>
+<%_ if (hasDto) { _%>
+using AutoMapper;
+<%_ } _%>
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using <%= namespace %>.Data;
-using <%= namespace %>.Models;
+using <%= namespace %>.Domain;
+<%_
+let hasEnumField = false;
+fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+if (hasEnumField) { _%>
+using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
+<%_ if (hasDto) { _%>
+using <%= namespace %>.Dto;
+using <%= namespace %>.Configuration.AutoMapper;
+<%_ } _%>
 using <%= namespace %>.Test.Setup;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -138,6 +158,15 @@ namespace <%= namespace %>.Test.Controllers {
             _client = _factory.CreateClient();
 
             _applicationDatabaseContext = _factory.GetRequiredService<ApplicationDatabaseContext>();
+
+            <%_ if (hasDto) { _%>
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+
+            _mapper = config.CreateMapper();
+            <%_ } _%>
 
             InitTest();
         }
@@ -162,6 +191,10 @@ namespace <%= namespace %>.Test.Controllers {
         private readonly ApplicationDatabaseContext _applicationDatabaseContext;
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
+
+        <%_ if (hasDto) { _%>
+        private readonly IMapper _mapper;
+        <%_ } _%>
 
         private <%= pascalizedEntityClass %> CreateEntity()
         {
@@ -188,7 +221,12 @@ namespace <%= namespace %>.Test.Controllers {
             var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
 
             // Create the <%= pascalizedEntityClass %>
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
             var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Validate the <%= pascalizedEntityClass %> in the database
@@ -209,8 +247,13 @@ namespace <%= namespace %>.Test.Controllers {
             _<%= camelCasedEntityClass %>.Id = 1L;
 
             // An entity with an existing ID cannot be created, so this API call must fail
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
             var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            <%_ } _%>
 
             // Validate the <%= pascalizedEntityClass %> in the database
             var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
@@ -234,7 +277,12 @@ namespace <%= namespace %>.Test.Controllers {
             _<%= camelCasedEntityClass %>.<%= field.fieldNamePascalized %> = null;
 
             // Create the <%= pascalizedEntityClass %>, which fails.
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
             var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
@@ -304,7 +352,12 @@ namespace <%= namespace %>.Test.Controllers {
             updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
             <%_ }); _%>
 
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> updated<%= asDto(pascalizedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= asDto(pascalizedEntityClass) %>));
+            <%_ } else { _%>
             var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the <%= pascalizedEntityClass %> in the database
@@ -322,7 +375,12 @@ namespace <%= namespace %>.Test.Controllers {
             var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
 
             // If the entity doesn't have an ID, it will throw BadRequestAlertException
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
             var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the <%= pascalizedEntityClass %> in the database
