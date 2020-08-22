@@ -63,12 +63,13 @@ namespace <%= namespace %>.Controllers {
     public class <%= pascalizedEntityClass %>Controller : ControllerBase {
         private const string EntityName = "<%= camelCasedEntityClass %>";
 
-        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
         <%_ if (hasDto) { _%>
         private readonly IMapper _mapper;
         <%_ } _%>
         <%_ if (hasService) { _%>
         private readonly I<%= pascalizedEntityClass %>Service _<%= camelCasedEntityClass %>Service;
+        <%_ } else { _%>
+        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
         <%_ } _%>
         private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
 
@@ -77,9 +78,9 @@ namespace <%= namespace %>.Controllers {
             IMapper mapper,
             <%_ } _%>
             <%_ if (hasService) { _%>
-            I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service,
-            <%_ } _%>
-            ApplicationDatabaseContext applicationDatabaseContext)
+            I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service)
+            <%_ } else { _%>
+            ApplicationDatabaseContext applicationDatabaseContext)<%_ } _%>
         {
             _log = log;
             <%_ if (hasDto) { _%>
@@ -87,8 +88,9 @@ namespace <%= namespace %>.Controllers {
             <%_ } _%>
             <%_ if (hasService) { _%>
             _<%= camelCasedEntityClass %>Service = <%= camelCasedEntityClass %>Service;
-            <%_ } _%>
+            <%_ } else { _%>
             _applicationDatabaseContext = applicationDatabaseContext;
+            <%_ } _%>
         }
 
         [HttpPost("<%= kebabCasedEntityClassPlural %>")]
@@ -102,12 +104,16 @@ namespace <%= namespace %>.Controllers {
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
-            <%_ if (relationships.length != 0) { _%>
-            _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
+            <%_ if (hasService) { _%>
+            await _<%= camelCasedEntityClass %>Service.Save(<%= camelCasedEntityClass %>);
             <%_ } else { _%>
+                <%_ if (relationships.length != 0) { _%>
+            _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
+                <%_ } else { _%>
             _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
-            <%_ } _%>
+                <%_ } _%>
             await _applicationDatabaseContext.SaveChangesAsync();
+            <%_ }_%>
             return CreatedAtAction(nameof(Get<%= pascalizedEntityClass %>), new { id = <%= camelCasedEntityClass %>.Id }, <%= camelCasedEntityClass %>)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
@@ -127,11 +133,11 @@ namespace <%= namespace %>.Controllers {
             <%_ if (hasService) { _%>
             await _<%= camelCasedEntityClass %>Service.Save(<%= camelCasedEntityClass %>);
             <%_ } else { _%>
-            <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                <%_ relationships.forEach( relationship => {
+                    if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
             _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
                 <%_ }
-            }); _%>
+                   }); _%>
             _applicationDatabaseContext.Update(<%= camelCasedEntityClass %>);
             <%_ let first = true;
             let suffix = 0;
@@ -196,7 +202,8 @@ namespace <%= namespace %>.Controllers {
                 .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
             <%_ } _%>
             <%_ if (hasDto) { _%>
-            return ActionResultUtil.WrapOrNotFoundAsDto<<%= asDto(pascalizedEntityClass) %>>(result, _mapper);
+            <%= asDto(pascalizedEntityClass) %> <%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(result);
+            return ActionResultUtil.WrapOrNotFound(<%= asDto(camelCasedEntityClass) %>);
             <%_ } else { _%>
             return ActionResultUtil.WrapOrNotFound(result);
             <%_ }_%>
