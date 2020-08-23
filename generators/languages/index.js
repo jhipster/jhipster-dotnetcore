@@ -24,8 +24,7 @@ module.exports = class extends LanguageGenerator {
         const phaseFromJHipster = super._initializing();
         const jhipsterNetPhaseSteps = {
             setupServerConsts() {
-                // Temporal fix for https://github.com/jhipster/jhipster-dotnetcore/issues/30
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config; 
                 this.baseName = configuration.get('baseName') || this.configOptions.baseName;
             },
         };
@@ -103,9 +102,6 @@ module.exports = class extends LanguageGenerator {
 
     _installI18nClientFilesByLanguageDotNetCore(from, to, lang) {
         const prefix = this.fetchFromInstalledJHipster('languages/templates');
-        if (this.databaseType !== 'no' && this.databaseType !== 'cassandra') {
-            this._copyI18nFilesByNameDotNetCore(from, to, 'audits.json', lang);
-        }
         if (this.applicationType === 'gateway' && this.serviceDiscoveryType) {
             this._copyI18nFilesByNameDotNetCore(from, to, 'gateway.json', lang);
         }

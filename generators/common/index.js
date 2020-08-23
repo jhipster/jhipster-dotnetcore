@@ -38,7 +38,14 @@ module.exports = class extends CommonGenerator {
     }
 
     get initializing() {
-        return super._initializing();
+        const phaseFromJHipster = super._initializing();
+        const jhipsterNetPhaseSteps = {
+            setupServerConsts() {
+                const configuration = this.config; 
+                this.baseName = configuration.get('baseName') || this.configOptions.baseName;
+            },
+        };
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     _configuring() {

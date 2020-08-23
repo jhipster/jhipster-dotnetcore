@@ -26,9 +26,10 @@ const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
+const writeVueFiles = require('./files-vue').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
 
-const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -39,15 +40,9 @@ module.exports = class extends ClientGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints dotnetcore')}`);
         }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext); 
-       
     }
 
     get initializing() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
         return super._initializing();
     }
 
@@ -71,21 +66,17 @@ module.exports = class extends ClientGenerator {
 
     get configuring() {
         // Here we are not overriding this phase and hence its being handled by JHipster
-        const phaseFromJHipster = super._configuring();
+        return super._configuring();
 
-        const customPhaseSteps = {
-            configureGlobalDotnetcore,
-            saveConfigDotnetcore() {
-                const config = {};
-                this.config.set(config);
-            },            
-        };
-        return Object.assign(customPhaseSteps,phaseFromJHipster);
     }
 
     get default() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._default();
+        const phaseFromJHipster = super._default();
+
+        const customPhaseSteps = {
+            configureGlobalDotnetcore
+        };
+        return Object.assign(phaseFromJHipster,customPhaseSteps);
     }
 
     get writing() {
@@ -99,8 +90,12 @@ module.exports = class extends ClientGenerator {
                 switch (this.clientFramework) {
                     case REACT:
                         return writeReactFiles.call(this);
-                    default:
+                    case ANGULAR:
                         return writeAngularFiles.call(this);
+                    case VUE:
+                        return writeVueFiles.call(this);
+                    default:
+                    // do nothing by default
                 }
             }
         };

@@ -28,10 +28,11 @@ module.exports = class extends EntityGenerator {
         const phaseFromJHipster = super._initializing();
         const jhipsterNetPhaseSteps = {
             getConfigNetBlueprint() {
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
                 this.context.dtoSuffix = 'Dto';
             },
+            
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }

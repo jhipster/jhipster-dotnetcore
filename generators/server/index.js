@@ -54,7 +54,7 @@ module.exports = class extends ServerGenerator {
             setupServerConsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
                 this.SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
@@ -87,6 +87,7 @@ module.exports = class extends ServerGenerator {
                 this.configOptions.namespace = this.namespace;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.authenticationType = this.authenticationType;
+                this.configOptions.serverPort = 5000;
             },
         };
     }

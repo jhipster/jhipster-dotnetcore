@@ -12,8 +12,6 @@ module.exports = class extends AppGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints dotnetcore')}`);
         }
-
-        this.configOptions = jhContext.configOptions || {};
     }
 
     get initializing() {
