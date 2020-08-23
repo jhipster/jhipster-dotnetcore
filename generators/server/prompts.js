@@ -20,14 +20,14 @@
 const chalk = require('chalk');
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.jhipsterConfig.baseName) return;
 
     this.askModuleName(this);
 }
 
 function askForServerSideOpts() {
     if (this.existingProject) return;
-    const applicationType = this.applicationType;
+    const applicationType = this.jhipsterConfig.applicationType;
     const prompts = [
         {
             type: 'input',
@@ -90,9 +90,9 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
-        this.namespace = prompt.namespace;
-        this.databaseType = prompt.database;
-        this.authenticationType = prompt.authenticationType;
+        this.namespace = this.jhipsterConfig.namespace = prompt.namespace;
+        this.databaseType = this.jhipsterConfig.databaseType = prompt.database;
+        this.authenticationType = this.jhipsterConfig.authenticationType = prompt.authenticationType;
         done();
     });
 }

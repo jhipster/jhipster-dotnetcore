@@ -28,7 +28,7 @@ function updateHomeTitle() {
 }
 
 function writeFiles() {
-    //updateHomeTitle.call(this);
+    updateHomeTitle.call(this);
 }
 
 module.exports = {

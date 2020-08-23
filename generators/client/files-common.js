@@ -64,6 +64,12 @@ function updateWebpackDevJs() {
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+        "target/classes/static/",
+        "dist",
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
         "contentBase: '.*'",
         "contentBase: './dist'",
         true
@@ -93,6 +99,12 @@ function updateWebpackProdJs() {
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
         'path: utils.root(.*),',
         "path: utils.root('dist'),",
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+        "target/classes/static/",
+        "dist",
         true
     );
 }

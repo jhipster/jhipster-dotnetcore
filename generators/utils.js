@@ -19,7 +19,7 @@
 const _ = require('lodash');
 const toPascalCase = require('to-pascal-case');
 const getEnumInfo = require('generator-jhipster/generators/utils').getEnumInfo;
-
+const packagejs = require('../package.json');
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -94,6 +94,8 @@ function configureGlobalDotnetcore() {
     this.relativeMainTestDir = `${this.relativeMainClientDir}/test`;
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
+    this.kebabCasedBaseName = _.kebabCase(this.baseName);
+    this.jhipsterDotnetVersion = packagejs.version;
 
     this.options.outputPathCustomizer = [
         paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientAppDir}$1/`) : paths),

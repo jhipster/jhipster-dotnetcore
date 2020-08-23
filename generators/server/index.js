@@ -26,6 +26,7 @@ const dotnet = require('../dotnet');
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
@@ -42,10 +43,6 @@ module.exports = class extends ServerGenerator {
                 "The 'dotnet' command is not present in the PATH, use it at your own risk! If you encounter a bug, please install .Net Core first (https://dotnet.microsoft.com/download/dotnet-core)."
             );
         });
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupServerOptions(this, jhContext);
     }
 
     get initializing() {
@@ -54,12 +51,11 @@ module.exports = class extends ServerGenerator {
             setupServerConsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
-                const configuration = this.config;
                 this.SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
                 this.SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-                this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-                this.databaseType = configuration.get('databaseType') || this.configOptions.databaseType;
-                this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
+                this.namespace = this.jhipsterConfig.namespace;
+                this.databaseType = this.jhipsterConfig.databaseType;
+                this.authenticationType = this.jhipsterConfig.authenticationType;
 
                 const serverConfigFound =
                     this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
@@ -82,43 +78,25 @@ module.exports = class extends ServerGenerator {
         return {
             askForModuleName: prompts.askForModuleName,
             askForServerSideOpts: prompts.askForServerSideOpts,
-
-            setSharedConfigOptions() {
-                this.configOptions.namespace = this.namespace;
-                this.configOptions.databaseType = this.databaseType;
-                this.configOptions.authenticationType = this.authenticationType;
-                this.configOptions.serverPort = 5000;
-            },
         };
     }
 
     get configuring() {
-        return {
-            configureGlobal() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-            },
-            saveConfig() {
-                const config = {
-                    namespace: this.namespace,
-                    databaseType: this.databaseType,
-                    authenticationType: this.authenticationType,
-                    prodDatabaseType: 'mysql', // set only for jdl-importer compatibility
-                };
-                this.config.set(config);
-            },
-        };
+        return super._configuring();
     }
 
     get default() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._default();
+        const phaseFromJHipster = super._default();
+
+        const customPhaseSteps = {
+            configureGlobalDotnetcore,
+            fixConfig() {
+                this.jhipsterConfig.serverPort = 5000; 
+                this.jhipsterConfig.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
+            },
+        };
+        
+        return Object.assign(phaseFromJHipster,customPhaseSteps);
     }
 
     get writing() {

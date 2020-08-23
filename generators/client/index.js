@@ -66,17 +66,23 @@ module.exports = class extends ClientGenerator {
 
     get configuring() {
         // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._configuring();
+        const phaseFromJHipster = super._configuring();
 
+        const customPhaseSteps = {
+            loadSharedConfig() {
+                this.loadAppConfig();
+                this.loadClientConfig();
+                this.loadServerConfig();
+                this.loadTranslationConfig();
+            },
+            configureGlobalDotnetcore
+        };
+        
+        return Object.assign(customPhaseSteps,phaseFromJHipster);
     }
 
     get default() {
-        const phaseFromJHipster = super._default();
-
-        const customPhaseSteps = {
-            configureGlobalDotnetcore
-        };
-        return Object.assign(phaseFromJHipster,customPhaseSteps);
+        return super._default();
     }
 
     get writing() {

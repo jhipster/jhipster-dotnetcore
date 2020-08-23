@@ -22,6 +22,7 @@ const CommonGenerator = require('generator-jhipster/generators/common');
 const toPascalCase = require('to-pascal-case');
 const _ = require('lodash');
 const writeFiles = require('./files').writeFiles;
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
 const packagejs = require('../../package.json');
 
 module.exports = class extends CommonGenerator {
@@ -33,39 +34,24 @@ module.exports = class extends CommonGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
-
-        this.configOptions = jhContext.configOptions || {};
     }
 
     get initializing() {
-        const phaseFromJHipster = super._initializing();
-        const jhipsterNetPhaseSteps = {
-            setupServerConsts() {
-                const configuration = this.config; 
-                this.baseName = configuration.get('baseName') || this.configOptions.baseName;
-            },
-        };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
-    }
-
-    _configuring() {
-        return {
-            configureGlobal() {
-                this.kebabCasedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-                this.jhipsterDotnetVersion = packagejs.version;
-            },
-        };
+        return super._initializing();
     }
 
     get configuring() {
-        return this._configuring();
+        return super._configuring();
     }
 
     get default() {
-        return super._default();
+        const phaseFromJHipster = super._default();
+
+        const customPhaseSteps = {
+            configureGlobalDotnetcore
+        };
+
+        return Object.assign(phaseFromJHipster,customPhaseSteps);
     }
 
     get writing() {
