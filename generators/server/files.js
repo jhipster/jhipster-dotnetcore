@@ -267,6 +267,27 @@ const serverFiles = {
             ],
         },
     ],
+    services: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Services/Interfaces/ServicesInterfacesAssemblyHelper.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/ServicesInterfacesAssemblyHelper.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain.Services/ServicesClassesAssemblyHelper.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/ServicesClassesAssemblyHelper.cs`,
+                },
+            ],
+        },
+    ],
     serverProperties: [
         {
             path: SERVER_SRC_DIR,
