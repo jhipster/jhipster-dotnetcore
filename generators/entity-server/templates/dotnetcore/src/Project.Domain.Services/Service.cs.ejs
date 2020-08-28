@@ -38,7 +38,7 @@ namespace <%= namespace %>.Domain.Services {
             _applicationDatabaseContext = applicationDatabaseContext;
         }
 
-        public async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        public virtual async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
@@ -77,7 +77,7 @@ namespace <%= namespace %>.Domain.Services {
             return <%= camelCasedEntityClass %>;
         }
 
-        public async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
+        public virtual async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
         {
             var page = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
@@ -89,7 +89,7 @@ namespace <%= namespace %>.Domain.Services {
             return page;
         }
 
-        public async Task<<%= pascalizedEntityClass %>> FindOne(long id)
+        public virtual async Task<<%= pascalizedEntityClass %>> FindOne(long id)
         {
             var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
             <%_ relationships.forEach( relationship => {
@@ -104,7 +104,7 @@ namespace <%= namespace %>.Domain.Services {
             return result;
         }
 
-        public async Task Delete(long id)
+        public virtual async Task Delete(long id)
         {
             _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.RemoveById(id);
             await _applicationDatabaseContext.SaveChangesAsync();
