@@ -13,8 +13,6 @@ module.exports = class extends EntityClientGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
-
-        this.configOptions = jhContext.configOptions || {};
     }
 
     get configuring() {
@@ -35,7 +33,7 @@ module.exports = class extends EntityClientGenerator {
     }
 
     rebuildClient() {
-        if (!this.options['skip-install'] && !this.skipClient) {
+        if (!this.options.skipInstall && !this.skipClient) {
             const done = this.async();
             this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
             this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(

@@ -5,6 +5,9 @@ const EntityGenerator = require('generator-jhipster/generators/entity');
 const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
+const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('generator-jhipster/utils/entity');
+const { prepareFieldForTemplates } = require('generator-jhipster/utils/field');
+const { prepareRelationshipForTemplates } = require('generator-jhipster/utils/relationship');
 const utilsNet = require('../utils');
 const constants = require('../generator-dotnetcore-constants');
 const prompts = require('./prompts');
@@ -18,10 +21,6 @@ module.exports = class extends EntityGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext);
     }
 
     get initializing() {
@@ -32,7 +31,6 @@ module.exports = class extends EntityGenerator {
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
                 this.context.dtoSuffix = 'Dto';
             },
-            
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
@@ -58,6 +56,23 @@ module.exports = class extends EntityGenerator {
     get configuring() {
         const phaseFromJHipster = super._configuring();
         const jhipsterNetPhaseSteps = {
+            loadConfig() {
+                // Update current context with config from file.
+                Object.assign(this.context, this.entityStorage.getAll());
+                loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
+            },
+            prepareForTemplates() {
+                const entity = this.context;
+                prepareEntityForTemplates(entity, this);
+
+                this.context.fields.forEach(field => {
+                    prepareFieldForTemplates(entity, field, this);
+                });
+
+                this.context.relationships.forEach(relationship => {
+                    prepareRelationshipForTemplates(entity, relationship, this);
+                });
+            },
             loadInMemoryDataNetBlueprint() {
                 const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
@@ -109,6 +124,7 @@ module.exports = class extends EntityGenerator {
                         context.i18nToLoad.push(field.enumInstance);
                     }
                 });
+                this.entityConfig.fields = context.fields;
 
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
@@ -155,9 +171,14 @@ module.exports = class extends EntityGenerator {
 
                     relationship.joinEntityGenerated = false;
                 });
+                this.entityConfig.relationships = context.relationships;
             },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+    }
+
+    get default() {
+        return super._default();
     }
 
     get writing() {

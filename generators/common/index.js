@@ -19,11 +19,8 @@
 const chalk = require('chalk');
 const CommonGenerator = require('generator-jhipster/generators/common');
 // eslint-disable-next-line import/no-extraneous-dependencies,import/order
-const toPascalCase = require('to-pascal-case');
-const _ = require('lodash');
 const writeFiles = require('./files').writeFiles;
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
-const packagejs = require('../../package.json');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
@@ -48,10 +45,10 @@ module.exports = class extends CommonGenerator {
         const phaseFromJHipster = super._default();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore
+            configureGlobalDotnetcore,
         };
 
-        return Object.assign(phaseFromJHipster,customPhaseSteps);
+        return Object.assign(phaseFromJHipster, customPhaseSteps);
     }
 
     get writing() {

@@ -18,15 +18,13 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const ServerGenerator = require('generator-jhipster/generators/server');
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
@@ -82,7 +80,7 @@ module.exports = class extends ServerGenerator {
     }
 
     get configuring() {
-        return super._configuring();
+        return {};
     }
 
     get default() {
@@ -91,12 +89,12 @@ module.exports = class extends ServerGenerator {
         const customPhaseSteps = {
             configureGlobalDotnetcore,
             fixConfig() {
-                this.jhipsterConfig.serverPort = 5000; 
+                this.jhipsterConfig.serverPort = 5000;
                 this.jhipsterConfig.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
             },
         };
-        
-        return Object.assign(phaseFromJHipster,customPhaseSteps);
+
+        return Object.assign(phaseFromJHipster, customPhaseSteps);
     }
 
     get writing() {

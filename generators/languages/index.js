@@ -24,7 +24,7 @@ module.exports = class extends LanguageGenerator {
         const phaseFromJHipster = super._initializing();
         const jhipsterNetPhaseSteps = {
             setupServerConsts() {
-                const configuration = this.config; 
+                const configuration = this.config;
                 this.baseName = configuration.get('baseName') || this.configOptions.baseName;
             },
         };
