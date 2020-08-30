@@ -97,7 +97,7 @@ module.exports = class extends ClientGenerator {
         // Override default yeoman installDependencies
         const customPhase = {
             installDependencies() {
-                if (!this.options['skip-install']) {
+                if (!this.options.skipInstall) {
                     this.log(
                         `\n\nI'm all done. Running ${chalk.green.bold(
                             `npm install `
@@ -116,7 +116,7 @@ module.exports = class extends ClientGenerator {
                 if (this.skipClient) return;
                 this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-                if (!this.options['skip-install']) {
+                if (!this.options.skipInstall) {
                     this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
                 }
             }
