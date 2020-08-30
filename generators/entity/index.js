@@ -31,6 +31,9 @@ module.exports = class extends EntityGenerator {
                 this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
                 this.context.dtoSuffix = 'Dto';
             },
+            fixConfig() {
+                this.context.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
+            },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
