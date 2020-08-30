@@ -1073,7 +1073,7 @@ function askForRelationship(done) {
  */
 function logFieldsAndRelationships() {
     const context = this.context;
-    if (this.entityConfig.fields.length > 0 || this.entityConfig.fields.length > 0) {
+    if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
         this.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
     }
     if (this.entityConfig.fields.length > 0) {
