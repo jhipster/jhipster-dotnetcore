@@ -45,7 +45,12 @@ namespace <%= namespace %>.Domain.Services {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
                 _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
                     <%_ }
+                        if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
+                <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User.Id;
+                <%= camelCasedEntityClass %>.User = null; 
+                    <%_ }
                 }); _%>
+                _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Update(<%= camelCasedEntityClass %>);
                 <%_ let first = true;
                 let suffix = 0;
                 relationships.forEach( relationship => {
@@ -61,7 +66,6 @@ namespace <%= namespace %>.Domain.Services {
                     <%_ }
                     }
                 }); _%>
-                _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Update(<%= camelCasedEntityClass %>);
             } else {
                 <%_ if (relationships.length != 0) { _%>
                 _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
