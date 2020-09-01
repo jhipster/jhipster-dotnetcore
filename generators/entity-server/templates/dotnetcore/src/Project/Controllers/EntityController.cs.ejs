@@ -107,7 +107,14 @@ namespace <%= namespace %>.Controllers {
             <%_ if (hasService) { _%>
             await _<%= camelCasedEntityClass %>Service.Save(<%= camelCasedEntityClass %>);
             <%_ } else { _%>
-                <%_ if (relationships.length != 0) { _%>
+            <%_ if (relationships.length != 0) {
+                if (hasDto) {
+                    relationships.forEach( relationship => {
+                        if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
+            <%= camelCasedEntityClass %>.User = null;
+                        <%_ }
+                    }); 
+                } _%>
             _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
                 <%_ } else { _%>
             _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
@@ -137,7 +144,11 @@ namespace <%= namespace %>.Controllers {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
             _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
                 <%_ }
-                   }); _%>
+                if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
+            <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User.Id;
+            <%= camelCasedEntityClass %>.User = null; 
+                <%_ }
+            }); _%>
             _applicationDatabaseContext.Update(<%= camelCasedEntityClass %>);
             <%_ let first = true;
             let suffix = 0;
