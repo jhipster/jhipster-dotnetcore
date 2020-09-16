@@ -17,7 +17,7 @@ if [ "$2" = "import-jdl" ]; then
   runOptions="import-jdl ../jdl-default/app.jdl $runOptions"  
   jhipster $runOptions
 
-dotnet tool install Excubo.WebCompiler
+dotnet tool install Excubo.WebCompiler --global
 
   if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
       if "$SONAR_ANALYSE" ; then
