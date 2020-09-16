@@ -57,7 +57,7 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
             - name: 'RUN CLIENT UNIT TESTS of generated app'
-              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
+              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
             - name: 'RUN SONAR ANALYZE on generated app'
