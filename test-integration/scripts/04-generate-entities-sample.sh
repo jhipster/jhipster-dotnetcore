@@ -23,6 +23,7 @@ if [ "$2" = "import-jdl" ]; then
         dotnet tool install --global coverlet.console
         dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
       fi
+      dotnet restore
       dotnet build
       echo "${GREEN}GENERATION OK"
   else
