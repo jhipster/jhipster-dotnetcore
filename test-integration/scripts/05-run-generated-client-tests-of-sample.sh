@@ -22,7 +22,7 @@ echo "*** changed directory in : `pwd`"
 #-------------------------------------------------------------------------------
 echo "*** run unit test in client for :  `pwd`"
 if [ "$2" = "blazor" ]; then
-  
+  dotnet --version
 else
   if [ -f "src/app/app.tsx" ]; then
     npm run lint:fix && npm run test-ci
