@@ -75,6 +75,15 @@
     <PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
   </ItemGroup>
 
+  <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">
+    <Exec Command="webcompiler -r wwwroot" StandardOutputImportance="high" />
+  </Target>
+
+  <ItemGroup>
+    <!--specify file extensions here as needed-->
+    <Watch Include="**\*.scss" />
+  </ItemGroup>
+
 
   <ProjectExtensions><VisualStudio><UserProperties compilerconfig_1json__JsonSchema="http://json.schemastore.org/coffeelint" /></VisualStudio></ProjectExtensions>
 
