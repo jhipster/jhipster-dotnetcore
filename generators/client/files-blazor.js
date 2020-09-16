@@ -122,7 +122,7 @@ const files = {
             ],
         },
     ],
-    blazorAppProperties: [
+    blazorAppServices: [
         {
             path: CLIENT_SRC_DIR,
             templates: [
