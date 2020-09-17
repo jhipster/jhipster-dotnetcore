@@ -78,7 +78,7 @@
   <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">
     <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable" ContinueOnError="true" StandardOutputImportance="low" StandardErrorImportance="low" LogStandardErrorAsError="false" IgnoreExitCode="true" />
     <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable -m disable" ContinueOnError="true" StandardOutputImportance="low" StandardErrorImportance="low" LogStandardErrorAsError="false" IgnoreExitCode="true"/>
-   </Target>
+  </Target>
 
   <ItemGroup>
     <!--specify file extensions here as needed-->

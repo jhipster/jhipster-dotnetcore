@@ -117,7 +117,7 @@ const files = {
             templates: [
                 {
                     file: 'Project/Properties/launchSettings.json',
-                    renameTo: generator => `${generator.mainClientDir}/Properties/launchSettings.cs`,
+                    renameTo: generator => `${generator.mainClientDir}/Properties/launchSettings.json`,
                 },
             ],
         },
