@@ -35,7 +35,7 @@ namespace <%= namespace %>.Client.Test
     public class AlertErrorTest : TestContext
     {
         [Fact]
-        public async void Should_Display404_When_404()
+        public async Task Should_Display404_When_404()
         {
             HttpResponseMessage response = new HttpResponseMessage
             {
@@ -55,7 +55,7 @@ namespace <%= namespace %>.Client.Test
         }
 
         [Fact]
-        public async void Should_DisplayNotReach_When_NotReach()
+        public async Task Should_DisplayNotReach_When_NotReach()
         {
             var alertComponent = await InitAlertErrorTest(null);
 
@@ -68,7 +68,7 @@ namespace <%= namespace %>.Client.Test
         }
 
         [Fact]
-        public async void Should_DisplayErrorHeader_When_Error()
+        public async Task Should_DisplayErrorHeader_When_Error()
         {
             HttpResponseMessage response = new HttpResponseMessage
             {
@@ -88,7 +88,7 @@ namespace <%= namespace %>.Client.Test
         }
 
         [Fact]
-        public async void Should_NotAddError_When_BadRequest_Without_ErrorHeader()
+        public async Task Should_NotAddError_When_BadRequest_Without_ErrorHeader()
         {
             HttpResponseMessage response = new HttpResponseMessage
             {

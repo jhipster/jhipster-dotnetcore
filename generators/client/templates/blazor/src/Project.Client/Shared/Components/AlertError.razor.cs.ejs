@@ -42,7 +42,7 @@ namespace <%= namespace %>.Client.Shared.Components
             return base.OnInitializedAsync();
         }
 
-        public async void AddAlert(JhiAlert alert)
+        public async Task AddAlert(JhiAlert alert)
         {
             Alerts.Add(alert);
             if (alert.Timeout != 0)
@@ -52,7 +52,7 @@ namespace <%= namespace %>.Client.Shared.Components
             await InvokeAsync(StateHasChanged);
         }
 
-        public async void RemoveAlert(JhiAlert alert)
+        public async Task RemoveAlert(JhiAlert alert)
         {
             Alerts.Remove(alert);
             await InvokeAsync(StateHasChanged);
