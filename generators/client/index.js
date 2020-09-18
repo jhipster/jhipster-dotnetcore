@@ -139,19 +139,21 @@ module.exports = class extends ClientGenerator {
             async end() {
                 if (this.clientFramework == BLAZOR) {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-                    await dotnet
-                        .newSln(this.solutionName)
-                        .then(() =>
-                            dotnet.slnAdd(`${this.solutionName}.sln`, [
-                                `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
-                            ])
-                        )
-                        .catch(err => {
-                            this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
-                        })
-                        .finally(() => {
-                            this.log(chalk.green.bold('\Client application generated successfully.\n'));
-                        });
+                    try {
+                        await dotnet.newSln(this.solutionName);
+                    } catch (err) {
+                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+                    }
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.mainClientDir}.csproj`,
+                    ]);
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.clientTestProject}/${this.clientTestProject}.csproj`,
+                    ]);
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.sharedClientDir}.csproj`,
+                    ]);
+                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
                 } else {
                     if (this.skipClient) return;
                     this.log(chalk.green.bold('\nClient application generated successfully.\n'));

@@ -31,7 +31,34 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/JwtToken.cs',
+                    file: 'Project.Client/Models/Register/RegisterModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/Register/RegisterModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Models/Register/RegisterResultRequest.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/Register/RegisterResultRequest.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Models/Register/UserSaveModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/Register/UserSaveModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Models/JwtToken.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/JwtToken.cs`,
                 },
             ],
@@ -40,7 +67,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/LoginModel.cs',
+                    file: 'Project.Client/Models/LoginModel.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/LoginModel.cs`,
                 },
             ],
@@ -49,7 +76,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Models/UserModel.cs',
+                    file: 'Project.Client/Models/UserModel.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/UserModel.cs`,
                 },
             ],
@@ -60,7 +87,79 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Pages/Utils/INavigationService.cs',
+                    file: 'Project.Client/Pages/Account/Register.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Account/Register.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Account/Register.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Account/Register.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Admin/UserManagement/UserDetail.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Admin/UserManagement/UserDetail.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Admin/UserManagement/UserDetail.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Admin/UserManagement/UserDetail.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Admin/UserManagement/UserManagement.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Admin/UserManagement/UserManagement.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Admin/UserManagement/UserManagement.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Admin/UserManagement/UserManagement.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Admin/UserManagement/UserUpdate.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Admin/UserManagement/UserUpdate.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Admin/UserManagement/UserUpdate.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Pages/Admin/UserManagement/UserUpdate.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Pages/Utils/INavigationService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Pages/Utils/INavigationService.cs`,
                 },
             ],
@@ -69,7 +168,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Pages/Utils/NavigationService.cs',
+                    file: 'Project.Client/Pages/Utils/NavigationService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Pages/Utils/NavigationService.cs`,
                 },
             ],
@@ -78,7 +177,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Pages/Index.razor.cs',
+                    file: 'Project.Client/Pages/Index.razor.cs',
                     renameTo: generator => `${generator.mainClientDir}/Pages/Index.razor.cs`,
                 },
             ],
@@ -87,7 +186,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Pages/Index.razor',
+                    file: 'Project.Client/Pages/Index.razor',
                     renameTo: generator => `${generator.mainClientDir}/Pages/Index.razor`,
                 },
             ],
@@ -96,7 +195,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Pages/Login.razor',
+                    file: 'Project.Client/Pages/Login.razor',
                     renameTo: generator => `${generator.mainClientDir}/Pages/Login.razor`,
                 },
             ],
@@ -105,7 +204,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Pages/Login.razor.cs',
+                    file: 'Project.Client/Pages/Login.razor.cs',
                     renameTo: generator => `${generator.mainClientDir}/Pages/Login.razor.cs`,
                 },
             ],
@@ -116,7 +215,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Properties/launchSettings.json',
+                    file: 'Project.Client/Properties/launchSettings.json',
                     renameTo: generator => `${generator.mainClientDir}/Properties/launchSettings.json`,
                 },
             ],
@@ -127,7 +226,43 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Services/EntityServices/AbstractEntityService.cs',
+                    file: 'Project.Client/Services/AccountServices/IRegisterService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/AccountServices/IRegisterService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Services/AccountServices/RegisterService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/AccountServices/RegisterService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Services/EntityServices/User/IUserService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/EntityServices/User/IUserService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Services/EntityServices/User/UserService.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Services/EntityServices/User/UserService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Services/EntityServices/AbstractEntityService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Services/EntityServices/AbstractEntityService.cs`,
                 },
             ],
@@ -136,7 +271,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Services/IAuthenticationService.cs',
+                    file: 'Project.Client/Services/IAuthenticationService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Services/IAuthenticationService.cs`,
                 },
             ],
@@ -145,7 +280,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Services/AuthenticationService.cs',
+                    file: 'Project.Client/Services/AuthenticationService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Services/AuthenticationService.cs`,
                 },
             ],
@@ -154,7 +289,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Services/Configuration.cs',
+                    file: 'Project.Client/Services/Configuration.cs',
                     renameTo: generator => `${generator.mainClientDir}/Services/Configuration.cs`,
                 },
             ],
@@ -165,7 +300,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Shared/MainLayout.razor',
+                    file: 'Project.Client/Shared/MainLayout.razor',
                     renameTo: generator => `${generator.mainClientDir}/Shared/MainLayout.razor`,
                 },
             ],
@@ -174,7 +309,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Shared/NavMenu.razor',
+                    file: 'Project.Client/Shared/NavMenu.razor',
                     renameTo: generator => `${generator.mainClientDir}/Shared/NavMenu.razor`,
                 },
             ],
@@ -183,8 +318,53 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Shared/NavMenu.razor.cs',
+                    file: 'Project.Client/Shared/NavMenu.razor.cs',
                     renameTo: generator => `${generator.mainClientDir}/Shared/NavMenu.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Shared/DeleteModal.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Shared/DeleteModal.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Shared/DeleteModal.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Shared/DeleteModal.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Shared/Components/AlertError.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Shared/Components/AlertError.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Shared/Components/AlertError.razor.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Shared/Components/AlertError.razor.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Shared/Components/DynInputText.razor',
+                    renameTo: generator => `${generator.mainClientDir}/Shared/Components/DynInputText.razor`,
                 },
             ],
         },
@@ -192,9 +372,9 @@ const files = {
     blazorAppWeb: [
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_0.svg',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_0.svg',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_0.svg`,
                 },
@@ -202,9 +382,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_1.svg',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_1.svg',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_1.svg`,
                 },
@@ -212,9 +392,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_2.svg',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_2.svg',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_2.svg`,
                 },
@@ -222,9 +402,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_3.svg',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_3.svg',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_3.svg`,
                 },
@@ -232,9 +412,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-192.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_0_head-192.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_0_head-192.png`,
                 },
@@ -242,9 +422,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-192.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_1_head-192.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_1_head-192.png`,
                 },
@@ -252,9 +432,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-192.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_2_head-192.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_2_head-192.png`,
                 },
@@ -262,9 +442,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_3_head-192.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_3_head-192.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_3_head-192.png`,
                 },
@@ -272,9 +452,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-256.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_0_head-256.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_0_head-256.png`,
                 },
@@ -282,9 +462,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-256.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_1_head-256.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_1_head-256.png`,
                 },
@@ -292,9 +472,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-256.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_2_head-256.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_2_head-256.png`,
                 },
@@ -302,9 +482,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-256.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_0_head-256.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_0_head-256.png`,
                 },
@@ -312,9 +492,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-384.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_0_head-384.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_0_head-384.png`,
                 },
@@ -322,9 +502,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-384.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_1_head-384.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_1_head-384.png`,
                 },
@@ -332,9 +512,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-384.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_2_head-384.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_2_head-384.png`,
                 },
@@ -342,9 +522,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_3_head-384.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_3_head-384.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_3_head-384.png`,
                 },
@@ -352,9 +532,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_0_head-512.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_0_head-512.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_0_head-512.png`,
                 },
@@ -362,9 +542,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_1_head-512.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_1_head-512.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_1_head-512.png`,
                 },
@@ -372,9 +552,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_2_head-512.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_2_head-512.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_2_head-512.png`,
                 },
@@ -382,9 +562,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/jhipster_family_member_3_head-512.png',
+                    file: 'Project.Client/wwwroot/content/images/jhipster_family_member_3_head-512.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/jhipster_family_member_3_head-512.png`,
                 },
@@ -392,9 +572,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/images/logo-jhipster.png',
+                    file: 'Project.Client/wwwroot/content/images/logo-jhipster.png',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/images/logo-jhipster.png`,
                 },
@@ -402,9 +582,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/scss/_bootstrap-variables.scss',
+                    file: 'Project.Client/wwwroot/content/scss/_bootstrap-variables.scss',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/_bootstrap-variables.scss`,
                 },
@@ -412,9 +592,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/scss/global.scss',
+                    file: 'Project.Client/wwwroot/content/scss/global.scss',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/global.scss`,
                 },
@@ -422,9 +602,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/content/scss/vendor.scss',
+                    file: 'Project.Client/wwwroot/content/scss/vendor.scss',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/vendor.scss`,
                 },
@@ -432,9 +612,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/favicon.ico',
+                    file: 'Project.Client/wwwroot/favicon.ico',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/favicon.ico`,
                 },
@@ -442,9 +622,9 @@ const files = {
         },
         {
             path: CLIENT_SRC_DIR,
-            templates: [                
+            templates: [
                 {
-                    file: 'Project/wwwroot/index.html',
+                    file: 'Project.Client/wwwroot/index.html',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/index.html`,
                 },
@@ -456,7 +636,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/_Imports.razor',
+                    file: 'Project.Client/_Imports.razor',
                     renameTo: generator => `${generator.mainClientDir}/_Imports.razor`,
                 },
             ],
@@ -465,7 +645,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/App.razor',
+                    file: 'Project.Client/App.razor',
                     renameTo: generator => `${generator.mainClientDir}/App.razor`,
                 },
             ],
@@ -474,7 +654,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/App.razor.cs',
+                    file: 'Project.Client/App.razor.cs',
                     renameTo: generator => `${generator.mainClientDir}/App.razor.cs`,
                 },
             ],
@@ -483,25 +663,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/compilerconfig.json.defaults',
-                    renameTo: generator => `${generator.mainClientDir}/compilerconfig.json.defaults`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/compilerconfig.json',
-                    renameTo: generator => `${generator.mainClientDir}/compilerconfig.json`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/libman.json',
+                    file: 'Project.Client/libman.json',
                     renameTo: generator => `${generator.mainClientDir}/libman.json`,
                 },
             ],
@@ -510,7 +672,7 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Program.cs',
+                    file: 'Project.Client/Program.cs',
                     renameTo: generator => `${generator.mainClientDir}/Program.cs`,
                 },
             ],
@@ -519,8 +681,161 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Project.Client.csproj',
-                    renameTo: generator => `${generator.mainClientDir}/${generator.pascalizedBaseName}.Client.csproj`,
+                    file: 'Project.Client/Project.Client.csproj',
+                    renameTo: generator => `${generator.mainClientDir}/${generator.mainClientDir}.csproj`,
+                },
+            ],
+        },
+    ],
+    blazorTestHelpers: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Helpers/AuthorizationHelper.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Helpers/AuthorizationHelper.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Helpers/MockAuthenticationService.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Helpers/MockAuthenticationService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Helpers/MockAuthorizationPolicyProvider.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Helpers/MockAuthorizationPolicyProvider.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Helpers/MockAuthorizationService.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Helpers/MockAuthorizationService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Helpers/MockRegisterService.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Helpers/MockRegisterService.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Helpers/TestPolicyRequirement.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Helpers/TestPolicyRequirement.cs`,
+                },
+            ],
+        }
+    ],
+    blazorTestPages: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/Admin/UserManagement/UserDetailTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/Pages/Admin/UserManagement/UserDetailTest.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/TestPages/TestAlertError.razor',
+                    renameTo: generator => `${generator.clientTestProject}/Pages/TestPages/TestAlertError.razor`,
+                },
+            ],
+        },
+    ],
+    blazorTestRoot: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/AlertErrorTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/AlertErrorTest.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/IndexTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/IndexTest.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/LoginTest.cs',
+                    renameTo: generator => `${generator.clientTestProject}/LoginTest.cs`,
+                },
+            ],
+        },
+        
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Project.Client.Test.csproj',
+                    renameTo: generator => `${generator.clientTestProject}/${generator.clientTestProject}.csproj`,
+                },
+            ],
+        },
+    ],
+    blazorShared: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Shared/Constants/ErrorConst.cs',
+                    renameTo: generator => `${generator.sharedClientDir}/Constants/ErrorConst.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Shared/Constants/TypeAlert.cs',
+                    renameTo: generator => `${generator.sharedClientDir}/Constants/TypeAlert.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Shared/Models/JhiAlert.cs',
+                    renameTo: generator => `${generator.sharedClientDir}/Models/JhiAlert.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Shared/Project.Client.Shared.csproj',
+                    renameTo: generator => `${generator.sharedClientDir}/${generator.sharedClientDir}.csproj`,
                 },
             ],
         },

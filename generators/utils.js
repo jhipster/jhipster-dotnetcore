@@ -98,6 +98,8 @@ function configureGlobalDotnetcore() {
 
     if (this.clientFramework === BLAZOR) {
         this.mainClientDir = `${this.pascalizedBaseName}.Client`;
+        this.clientTestProject = `${this.pascalizedBaseName}.Client${constants.PROJECT_TEST_SUFFIX}`;
+        this.sharedClientDir = `${this.pascalizedBaseName}.Client.Shared`;
     }
 
     this.options.outputPathCustomizer = [
