@@ -42,7 +42,7 @@ module.exports = class extends EntityClientGenerator {
                 },
             };
         }
-        return super.writing();
+        return super._writing();
     }
 
     rebuildClient() {

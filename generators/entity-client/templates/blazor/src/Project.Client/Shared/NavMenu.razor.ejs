@@ -1,0 +1,78 @@
+<Bar Style="height: 64px;" Class="navbar navbar-dark navbar-expand-md bg-dark" Breakpoint="Breakpoint.Desktop">
+    <BarMenu>
+        <BarStart>
+            <BarItem Class="navbar-brand logo">
+                <span class="logo-img"></span>
+                <span class="navbar-title">DebugVsCodeFolder</span> <span class="navbar-version">{{ version }}</span>
+            </BarItem>
+            <BarItem Class="navbar-toggler d-lg-none" href="#" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <fa-icon icon="bars"></fa-icon>
+            </BarItem>
+
+        </BarStart>
+        <BarEnd>
+            <BarItem>
+                <BarLink To="/">
+                    <Icon Name='"fa-home"' />
+                    Home
+                </BarLink>
+            </BarItem>
+            <AuthorizeView>
+                <Authorized>
+                    <BarItem>
+                        <BarDropdown Class="nav-link">
+                            <BarDropdownToggle Class="nav-item dropdown pointer">
+                                <Icon Name='"fa-th-list"' />
+                                Entities
+                            </BarDropdownToggle>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <BarDropdownItem Class="dropdown-item" To="region">
+                                    <Icon Name='"fa-asterisk"' />
+                                    Region
+                                </BarDropdownItem>
+                                <BarDropdownItem Class="dropdown-item" To="country">
+                                    <Icon Name='"fa-asterisk"' />
+                                    Country
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                    </BarItem>
+                </Authorized>
+            </AuthorizeView>
+            <BarItem>
+                <BarDropdown>
+                    <BarDropdownToggle Class="nav-item dropdown pointer">
+                        <Icon Name='"fa-user"' />
+                        Account
+                    </BarDropdownToggle>
+                    <AuthorizeView>
+                        <Authorized>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <BarDropdownItem Class="dropdown-item" @onclick="@SignOut">
+                                    <Icon Name='"fa-sign-in-alt"' />
+                                    Sign out
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </Authorized>
+                        <NotAuthorized>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <BarDropdownItem Class="dropdown-item" To="login">
+                                    <Icon Name='"fa-sign-in-alt"' />
+                                    Sign in
+                                </BarDropdownItem>
+                                <BarDropdownItem Class="dropdown-item" To="register">
+                                    <Icon Name='"fa-user-plus"' />
+                                    Register
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </BarDropdown>
+            </BarItem>
+        </BarEnd>
+    </BarMenu>
+</Bar>
+
+@code {
+
+}
