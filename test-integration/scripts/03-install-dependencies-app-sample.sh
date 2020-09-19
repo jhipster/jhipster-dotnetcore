@@ -13,6 +13,7 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 echo "*** install dependencies and build : `pwd`"
 
+dotnet tool install Microsoft.Web.LibraryManager.Cli --global
 dotnet tool install Excubo.WebCompiler --global
 dotnet build
 

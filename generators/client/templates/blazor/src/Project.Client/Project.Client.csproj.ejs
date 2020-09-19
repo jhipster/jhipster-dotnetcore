@@ -69,6 +69,10 @@
     <PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
   </ItemGroup>
 
+  <Target Name="RestoreFrontEndLibraries" BeforeTargets="BeforeBuild">
+    <Exec Command="libman restore" LogStandardErrorAsError="true" ContinueOnError="true"/>
+  </Target>
+
   <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">
     <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable" StandardOutputImportance="high" />
     <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable -m disable" StandardOutputImportance="high" />
