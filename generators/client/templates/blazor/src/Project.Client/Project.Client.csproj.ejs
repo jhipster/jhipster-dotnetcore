@@ -70,7 +70,7 @@
   </ItemGroup>
 
   <Target Name="RestoreFrontEndLibraries" BeforeTargets="BeforeBuild">
-    <Exec Command="libman restore" LogStandardErrorAsError="true" ContinueOnError="true"/>
+    <Exec Command="libman restore" LogStandardErrorAsError="true"/>
   </Target>
 
   <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">

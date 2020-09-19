@@ -10,7 +10,7 @@ source $(dirname $0)/01-init-env.sh
 # Change in template directory
 #-------------------------------------------------------------------------------
 if [ "$2" = "blazor" ]; then
-  cd src/JhipsterSampleApplication.Client
+  cd test/JhipsterSampleApplication.Client.Test
 else
   cd src/JhipsterSampleApplication/ClientApp
 fi
@@ -22,7 +22,7 @@ echo "*** changed directory in : `pwd`"
 #-------------------------------------------------------------------------------
 echo "*** run unit test in client for :  `pwd`"
 if [ "$2" = "blazor" ]; then
-  dotnet --version
+  dotnet test
 else
   if [ -f "src/app/app.tsx" ]; then
     npm run lint:fix && npm run test-ci
