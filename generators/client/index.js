@@ -145,13 +145,9 @@ module.exports = class extends ClientGenerator {
                         this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
                     }
                     await dotnet.slnAdd(`${this.solutionName}.sln`, [
-                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.mainClientDir}.csproj`,
-                    ]);
-                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
-                        `${constants.CLIENT_SRC_DIR}${this.clientTestProject}/${this.clientTestProject}.csproj`,
-                    ]);
-                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
-                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.sharedClientDir}.csproj`,
+                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Shared.csproj`,
+                        `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
                     ]);
                     this.log(chalk.green.bold('\Client application generated successfully.\n'));
                 } else {

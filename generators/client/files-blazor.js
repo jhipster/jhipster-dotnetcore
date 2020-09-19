@@ -20,6 +20,7 @@ const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
 const CLIENT_SRC_DIR = constants.CLIENT_SRC_DIR;
+const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -584,6 +585,16 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Client/wwwroot/content/css/loading.css',
+                    method: 'copy',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/content/css/loading.css`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Client/wwwroot/content/scss/_bootstrap-variables.scss',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/_bootstrap-variables.scss`,
@@ -682,14 +693,14 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Project.Client.csproj',
-                    renameTo: generator => `${generator.mainClientDir}/${generator.mainClientDir}.csproj`,
+                    renameTo: generator => `${generator.mainClientDir}/${generator.pascalizedBaseName}.Client.csproj`,
                 },
             ],
         },
     ],
     blazorTestHelpers: [
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Helpers/AuthorizationHelper.cs',
@@ -698,7 +709,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Helpers/MockAuthenticationService.cs',
@@ -707,7 +718,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Helpers/MockAuthorizationPolicyProvider.cs',
@@ -716,7 +727,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Helpers/MockAuthorizationService.cs',
@@ -725,7 +736,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Helpers/MockRegisterService.cs',
@@ -734,7 +745,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Helpers/TestPolicyRequirement.cs',
@@ -745,7 +756,7 @@ const files = {
     ],
     blazorTestPages: [
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Pages/Admin/UserManagement/UserDetailTest.cs',
@@ -754,7 +765,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Pages/TestPages/TestAlertError.razor',
@@ -765,7 +776,7 @@ const files = {
     ],
     blazorTestRoot: [
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/AlertErrorTest.cs',
@@ -774,7 +785,7 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/IndexTest.cs',
@@ -783,21 +794,20 @@ const files = {
             ],
         },
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/LoginTest.cs',
                     renameTo: generator => `${generator.clientTestProject}/LoginTest.cs`,
                 },
             ],
-        },
-        
+        },        
         {
-            path: CLIENT_SRC_DIR,
+            path: CLIENT_TEST_DIR,
             templates: [
                 {
                     file: 'Project.Client.Test/Project.Client.Test.csproj',
-                    renameTo: generator => `${generator.clientTestProject}/${generator.clientTestProject}.csproj`,
+                    renameTo: generator => `${generator.clientTestProject}/${generator.pascalizedBaseName}.Client.Test.csproj`,
                 },
             ],
         },
@@ -835,7 +845,7 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client.Shared/Project.Client.Shared.csproj',
-                    renameTo: generator => `${generator.sharedClientDir}/${generator.sharedClientDir}.csproj`,
+                    renameTo: generator => `${generator.sharedClientDir}/${generator.pascalizedBaseName}.Client.Shared.csproj`,
                 },
             ],
         },

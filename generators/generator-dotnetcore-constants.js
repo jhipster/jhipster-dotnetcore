@@ -1,5 +1,6 @@
 const SERVER_SRC_DIR = 'src/';
 const CLIENT_SRC_DIR = 'src/';
+const CLIENT_TEST_DIR = 'test/';
 const SERVER_TEST_DIR = 'test/';
 const PROJECT_TEST_SUFFIX = '.Test';
 const PROJECT_DTO_SUFFIX = '.Dto';
@@ -13,6 +14,7 @@ const BLAZOR = 'Blazor';
 const constants = {
     SERVER_SRC_DIR,
     CLIENT_SRC_DIR,
+    CLIENT_TEST_DIR,
     SERVER_TEST_DIR,
     PROJECT_DTO_SUFFIX,
     PROJECT_DOMAIN_SUFFIX,
