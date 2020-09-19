@@ -12,21 +12,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using System;
-using System.Threading.Tasks;
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; 
+_%>
+using System.Net.Http;
 using <%= namespace %>.Client.Models;
+using Microsoft.AspNetCore.Components.Authorization;
 
-namespace <%= namespace %>.Client.Services
+namespace <%= namespace %>.Client.Services.EntityServices.EntityService.<%= entityClassName %>
 {
-    public interface IAuthenticationService
+    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>>,I<%= entityClassName %>Service
     {
-        public bool IsAuthenticated { get; set; }
-        public UserModel CurrentUser { get; set; }
-        public JwtToken JwtToken { get; set; }
-
-        Task<bool> SignIn(LoginModel loginModel);
-        public Task SignOut();
-
-
+        public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider) 
+            : base(httpClient, authenticationStateProvider, "/api/<%= lowerCasedEntityClassPlural %>")
+        {
+        }
     }
 }

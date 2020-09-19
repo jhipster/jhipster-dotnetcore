@@ -8,6 +8,7 @@ const _ = require('lodash');
 const utilsNet = require('../utils');
 const constants = require('../generator-dotnetcore-constants');
 const prompts = require('./prompts');
+const asModel = require('../utils').asModel;
 
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
@@ -69,6 +70,7 @@ module.exports = class extends EntityGenerator {
                 context.camelCasedEntityClass = _.camelCase(context.entityClass);
                 context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
+                context.lowerCasedEntityClassPlural = _.lowerCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
                 context.entities = this.getExistingEntities();
                 context.mainClientAppDir = `${context.mainProjectDir}/ClientApp/src`;
@@ -79,6 +81,7 @@ module.exports = class extends EntityGenerator {
                 context.pluralize = pluralize;
                 context._ = _;
                 context.equivalentCSharpType = utilsNet.equivalentCSharpType;
+                context.asModel = asModel; 
 
                 // Load in-memory data for .Net Blueprint fields
                 context.fields.forEach(field => {

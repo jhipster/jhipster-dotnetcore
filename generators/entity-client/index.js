@@ -3,6 +3,8 @@ const chalk = require('chalk');
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
 const constants = require('../generator-dotnetcore-constants');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const writeBlazorFiles = require('./files-blazor').writeFiles;
+const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
@@ -31,7 +33,19 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get writing() {
-        return super._writing();
+        if (this.clientFramework === BLAZOR) {
+            return {
+                writeFilesDotnetcore() {
+                    if (this.skipClient) return;
+                    switch (this.clientFramework) {
+                        case BLAZOR:
+                            return writeBlazorFiles.call(this);
+                    }
+                }
+            };
+        } else {
+            return super.writing();
+        }
     }
 
     rebuildClient() {
@@ -50,4 +64,5 @@ module.exports = class extends EntityClientGenerator {
     get end() {
         return super._end();
     }
+
 };

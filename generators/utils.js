@@ -31,6 +31,7 @@ module.exports = {
     equivalentCSharpType,
     configureGlobalDotnetcore,
     getEnumInfo,
+    asModel,
 };
 
 /**
@@ -95,6 +96,7 @@ function configureGlobalDotnetcore() {
     this.relativeMainTestDir = `${this.relativeMainClientDir}/test`;
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
+    this.modelSuffix = "Model"; 
 
     if (this.clientFramework === BLAZOR) {
         this.mainClientDir = `client/${this.pascalizedBaseName}.Client`;
@@ -109,6 +111,10 @@ function configureGlobalDotnetcore() {
         paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
+}
+
+function asModel(name) {
+    return name + this.modelSuffix;
 }
 
 function equivalentCSharpType(javaType) {

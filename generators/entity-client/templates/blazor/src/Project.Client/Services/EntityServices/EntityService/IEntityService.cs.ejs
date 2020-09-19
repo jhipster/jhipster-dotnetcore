@@ -12,10 +12,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Client.Services
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; 
+_%>
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using <%= namespace %>.Client.Models;
+
+namespace <%= namespace %>.Client.Services.EntityServices.EntityService.<%= entityClassName %>
 {
-    public static class Configuration
+    public interface I<%= entityClassName %>Service
     {
-        public const string BaseUri = "https://localhost:44338/";
+        public Task<IList<<%= asModel(entityClassName) %>>> GetAll();
+
+        public Task<<%= asModel(entityClassName) %>> Get(string id);
+
+        public Task Add(<%= asModel(entityClassName) %> model);
+
+        Task Update(<%= asModel(entityClassName) %> model);
     }
 }
