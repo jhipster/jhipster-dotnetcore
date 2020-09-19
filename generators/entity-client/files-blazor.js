@@ -20,7 +20,7 @@ const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
 const CLIENT_SRC_DIR = constants.CLIENT_SRC_DIR;
-const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
+const BlazorNeedle = require('../client/needle-api/needle-client-blazor');
 
 /**
  * The default is to use a file path string. It implies use of the template method.
@@ -33,9 +33,7 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Models/Model.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Models/${generator.asModel(
-                        generator.entityClass,
-                    )}.cs`,
+                    renameTo: generator => `${generator.mainClientDir}/Models/${generator.asModel(generator.entityClass)}.cs`,
                 },
             ],
         },
@@ -44,7 +42,8 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Services/EntityServices/EntityService/EntityService.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Services/EntityServices/EntityService/${generator.entityClass}/${generator.entityClass}Service.cs`,
+                    renameTo: generator =>
+                        `${generator.mainClientDir}/Services/EntityServices/EntityService/${generator.entityClass}/${generator.entityClass}Service.cs`,
                 },
             ],
         },
@@ -53,7 +52,8 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/Services/EntityServices/EntityService/IEntityService.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Services/EntityServices/EntityService/${generator.entityClass}/I${generator.entityClass}Service.cs`,
+                    renameTo: generator =>
+                        `${generator.mainClientDir}/Services/EntityServices/EntityService/${generator.entityClass}/I${generator.entityClass}Service.cs`,
                 },
             ],
         },
@@ -67,5 +67,6 @@ module.exports = {
 
 function writeFiles() {
     this.writeFilesToDisk(files, this, false, 'blazor');
+    const blazorNeedle = new BlazorNeedle(this);
+    blazorNeedle.addEntityToMenu(this.entityClass);
 }
-

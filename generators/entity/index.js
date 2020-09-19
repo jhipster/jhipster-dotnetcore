@@ -81,7 +81,7 @@ module.exports = class extends EntityGenerator {
                 context.pluralize = pluralize;
                 context._ = _;
                 context.equivalentCSharpType = utilsNet.equivalentCSharpType;
-                context.asModel = asModel; 
+                context.asModel = asModel;
 
                 // Load in-memory data for .Net Blueprint fields
                 context.fields.forEach(field => {
