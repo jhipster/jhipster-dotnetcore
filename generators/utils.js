@@ -23,7 +23,6 @@ const getEnumInfo = require('generator-jhipster/generators/utils').getEnumInfo;
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
-const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
 const BLAZOR = constants.BLAZOR;
 
 module.exports = {
