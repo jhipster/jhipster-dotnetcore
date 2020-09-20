@@ -41,7 +41,7 @@ namespace <%= namespace %>.Client.Pages
             LoginModel = new LoginModel();
             if (result)
             {
-                BlazoredModal.Close();
+                await BlazoredModal.Close();
             }
         }
     }
