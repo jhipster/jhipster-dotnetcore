@@ -130,5 +130,5 @@ function writeFiles() {
     const blazorNeedle = new BlazorNeedle(this);
     blazorNeedle.addEntityToMenu(this.entityClass);
     blazorNeedle.addServiceInDI(this.entityClass);
-    blazorNeedle.addUsingForService(this.namespace,this.entityClass);
+    blazorNeedle.addUsingForService(this.namespace, this.entityClass);
 }
