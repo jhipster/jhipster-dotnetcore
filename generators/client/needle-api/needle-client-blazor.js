@@ -46,4 +46,26 @@ module.exports = class extends needleBase {
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
+
+    addServiceInDI(entityName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
+        const programPath = `src/${this.mainClientDir}/Program.cs`;
+        const serviceEntry =
+            // prettier-ignore
+            this.generator.stripMargin(`|builder.Services.AddSingleton<I${entityName}Service, ${entityName}Service>();`);
+        const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    addUsingForService(namespace,entityName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
+        const programPath = `src/${this.mainClientDir}/Program.cs`;
+        const usingEntry =
+            // prettier-ignore
+            this.generator.stripMargin(`|using ${namespace}.Client.Services.EntityServices.${entityName};`);
+        const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-using-for-services', usingEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
 };

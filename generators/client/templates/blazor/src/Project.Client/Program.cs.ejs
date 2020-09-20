@@ -9,6 +9,7 @@ using Blazorise.Icons.FontAwesome;
 using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services;
 using <%= namespace %>.Client.Services.EntityServices;
+// jhipster-needle-add-using-for-services - JHipster will add using services
 using <%= namespace %>.Client.Services.EntityServices.User;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -40,6 +41,8 @@ namespace <%= namespace %>.Client
             builder.Services.AddSingleton<INavigationService, NavigationService>();
             
             builder.Services.AddSingleton<IUserService, UserService>();
+
+            // jhipster-needle-add-services-in-di - JHipster will add services in DI
 
             builder.Services.AddHttpClientInterceptor();
             builder.Services.AddTransient(sp => new HttpClient
