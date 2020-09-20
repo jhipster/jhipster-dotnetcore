@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using <%= namespace %>.Client.Models;
 
-namespace <%= namespace %>.Client.Services.EntityServices.EntityService.<%= entityClassName %>
+namespace <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>
 {
     public interface I<%= entityClassName %>Service
     {
@@ -33,5 +33,7 @@ namespace <%= namespace %>.Client.Services.EntityServices.EntityService.<%= enti
         public Task Add(<%= asModel(entityClassName) %> model);
 
         Task Update(<%= asModel(entityClassName) %> model);
+
+        Task Delete(string id);
     }
 }

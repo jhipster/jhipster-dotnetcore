@@ -70,6 +70,7 @@ module.exports = class extends EntityGenerator {
                 context.camelCasedEntityClass = _.camelCase(context.entityClass);
                 context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
+                context.lowerCasedEntityClass = _.lowerCase(context.entityClass);
                 context.lowerCasedEntityClassPlural = _.lowerCase(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
                 context.entities = this.getExistingEntities();
