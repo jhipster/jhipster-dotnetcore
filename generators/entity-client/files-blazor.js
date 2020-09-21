@@ -20,6 +20,7 @@ const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
 const CLIENT_SRC_DIR = constants.CLIENT_SRC_DIR;
+const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
 const BlazorNeedle = require('../client/needle-api/needle-client-blazor');
 
 /**
@@ -114,6 +115,26 @@ const files = {
                     file: 'Project.Client/Pages/Entities/Entity/EntityUpdate.razor',
                     renameTo: generator =>
                         `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Update.razor`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/Entities/Entity/EntityTest.cs',
+                    renameTo: generator =>
+                        `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Test.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/Entities/Entity/EntityUpdateTest.cs',
+                    renameTo: generator =>
+                        `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}UpdateTest.cs`,
                 },
             ],
         },

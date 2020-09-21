@@ -1,0 +1,121 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass;
+const entityClassNamePluralized = pascalizedEntityClassPlural;
+_%>
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoFixture;
+using Blazored.Modal;
+using Blazored.Modal.Services;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+using Bunit;
+using Bunit.Rendering;
+using FluentAssertions;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
+using <%= namespace %>.Client.Shared;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
+using Xunit;
+
+namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
+{
+    public class <%= entityClassName %>Test : TestContext
+    {
+        private readonly Mock<I<%= entityClassName %>Service> _<%= entityVariableName %>Service;
+        private readonly Mock<IModalService> _modalService;
+        private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
+
+        public <%= entityClassName %>Test()
+        {
+            _<%= entityVariableName %>Service = new Mock<I<%= entityClassName %>Service>();
+            _modalService = new Mock<IModalService>();
+            Services.AddSingleton<I<%= entityClassName %>Service>(_<%= entityVariableName %>Service.Object);
+            Services.AddSingleton<IModalService>(_modalService.Object);
+            Services.AddBlazorise(options =>
+                {
+                    options.ChangeTextOnKeyPress = true;
+                })
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
+            Services.AddHttpClientInterceptor();
+        }
+
+
+        [Fact]
+        public void Should_DisplayAll<%= pascalizedEntityClassPlural %>_When_<%= pascalizedEntityClassPlural %>ArePresent()
+        {
+            //Arrange
+            var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
+            _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
+            var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>();
+
+
+            // Act
+            var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
+
+            // Assert
+            <%= camelCasedEntityClassPlural %>TableBody.ChildElementCount.Should().Be(10);
+        }
+
+        [Fact]
+        public void Should_DisplayNoCountry_When_<%= pascalizedEntityClassPlural %>LengthIsZero()
+        {
+            //Arrange
+            var <%= camelCasedEntityClassPlural %> = new List<<%= asModel(entityClassName) %>>();
+            _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
+            var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>();
+
+
+            // Act
+            var span = <%= entityVariableName %>Page.Find("div>span");
+
+            // Assert
+            span.MarkupMatches("<span>No <%= camelCasedEntityClassPlural %> found</span>");
+        }
+
+        [Fact]
+        public void Should_Delete<%= entityClassName %>_WhenDeleteButtonClicked()
+        {
+            //Arrange
+            var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
+            _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
+           
+            var modalRef = new Mock<IModalReference>();
+            modalRef.Setup(mock => mock.Result).Returns(Task.FromResult(ModalResult.Ok(new { })));
+            _modalService.Setup(service => service.Show<DeleteModal>(It.IsAny<string>())).Returns(modalRef.Object);
+            var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>(ComponentParameterFactory.CascadingValue(_modalService.Object));
+            // Act
+            var <%= entityVariableName %>ToDelete = <%= camelCasedEntityClassPlural %>.First();
+
+
+            // Assert
+            <%= entityVariableName %>Page.Find("td>div>button").Click();
+            _<%= entityVariableName %>Service.Verify(service => service.Delete(<%= entityVariableName %>ToDelete.Id.ToString()), Times.Once);
+            var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
+            <%= camelCasedEntityClassPlural %>TableBody.ChildElementCount.Should().Be(9);
+        }
+
+    }
+}
