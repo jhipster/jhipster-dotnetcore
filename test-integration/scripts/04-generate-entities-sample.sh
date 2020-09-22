@@ -20,6 +20,7 @@ if [ "$2" = "import-jdl" ]; then
   if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
       # copy files required for testing automatic service class/interface registration on dependency injection container
       cp ../csharp-di-test/CountryExtendedService.cs src/JhipsterSampleApplication.Domain.Services/
+      mkdir test/JhipsterSampleApplication.Test/AutomaticServiceDI/
       cp ../csharp-di-test/DependencyInjectionTest.cs test/JhipsterSampleApplication.Test/AutomaticServiceDI/
 
       if "$SONAR_ANALYSE" ; then
