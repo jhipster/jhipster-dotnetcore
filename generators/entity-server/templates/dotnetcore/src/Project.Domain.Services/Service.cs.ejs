@@ -31,7 +31,7 @@ using <%= namespace %>.Domain.Services.Interfaces;
 
 namespace <%= namespace %>.Domain.Services {
     public class <%= serviceClassName %> : <%= serviceInterface %> {
-        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
+        protected readonly ApplicationDatabaseContext _applicationDatabaseContext;
 
         public <%= serviceClassName %>(ApplicationDatabaseContext applicationDatabaseContext)
         {
