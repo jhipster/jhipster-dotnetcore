@@ -18,6 +18,10 @@ if [ "$2" = "import-jdl" ]; then
   jhipster $runOptions
 
   if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
+      # copy files required for testing automatic service class/interface registration on dependency injection container
+      cp ../csharp-di-test/CountryExtendedService.cs src/JhipsterSampleApplication.Domain.Services/
+      cp ../csharp-di-test/DependencyInjectionTest.cs test/JhipsterSampleApplication.Test/AutomaticServiceDI/
+
       if "$SONAR_ANALYSE" ; then
         dotnet tool install --global dotnet-sonarscanner --version 4.9.0
         dotnet tool install --global coverlet.console
