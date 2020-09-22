@@ -176,20 +176,20 @@ Notice that only the service with interface option (serviceImpl) is enabled on t
 
 ### Extending and Customizing Services 
 
-One common use case is to customize service classes to suit different business needs. When using the jhipster generator to edit an existing entity or upgrading the generator's version, changes to the generated service classes might be overwritten.
+One common use case is to customize service classes to suit different business needs. When using the jhipster generator to edit an existing entity or upgrading the generator's version, changes to the generated service classes might be overwritten. Altough it is possible to make changes directly to generated service classes, It might get tricky keeping track of changes.
 
 Optionally, you can extend and customize service classes to avoid service class code overwriting.
 
 Example:
-Add a country entity with service generation enabled by using the generator's cli. 
+Add an Author entity with service generation enabled by using the generator's cli. 
 Then create the following class named `AuthorExtendedService.cs`:
+
 ```csharp
 namespace MyCompany.Domain.Services {
     public class AuthorExtendedService : AuthorService, IAuthorService 
     {
         public CountryExtendedService(ApplicationDatabaseContext applicationDatabaseContext) : base(applicationDatabaseContext)
         {   
-            _applicationDatabaseContext = applicationDatabaseContext;
         }
         
         public override async Task Delete(long id) 
@@ -201,10 +201,13 @@ namespace MyCompany.Domain.Services {
 }
 ```
 
-It will automatically be registered with the dotnet container as the implementation for the IAuthorService interface. 
+AuthorExtendedService class will override one specific method of its base class (or more if you wish) adding custom business logic and AuthorExtendedService class will be automatically be registered with the dotnet container. Any code using the IAuthorService dependency will use this class for its implementation.
+
+Currently the automatic registration strategy for class/interface is used only for service classes/interfaces and more details are explained below.
 
 ### Automatic Service Registration In DI Container
-Under the hood this project uses reflection for assembly scanning to automatically register classes/interfaces with dotnet's dependency injection container. Currently this registration strategy is used only for service classes/interfaces.
+
+Under the hood this project uses reflection for assembly scanning to automatically register service classes/interfaces with dotnet's dependency injection container.  Implementation details can be found at `ServiceStartup.cs` file located at `src/ProjectName/Configuration/` folder.
 
 The following steps are used to automatically register service classes and interfaces:
 - Scan `ProjectName.Domain.Services.Interfaces` namespace (at `ProjectName.Domain` assembly) for service interfaces and `ProjectName.Domain.Services` namespace (at `ProjectName.Domain.Services` assembly) for service classes.
