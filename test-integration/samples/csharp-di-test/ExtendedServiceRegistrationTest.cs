@@ -7,8 +7,8 @@ using MyCompany.Domain.Services.Interfaces;
 using MyCompany.Domain.Services;
 
 namespace MyCompany.Test.DependencyInjection {
-    public class DependencyInjectionTest {
-        public DependencyInjectionTest()
+    public class ExtendedServiceRegistrationTest {
+        public ExtendedServiceRegistrationTest()
         {
             _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser();
             _countryService = _factory.GetRequiredService<ICountryService>();
