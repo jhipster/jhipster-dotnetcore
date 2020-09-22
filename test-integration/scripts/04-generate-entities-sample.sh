@@ -16,7 +16,7 @@ if [ "$2" = "import-jdl" ]; then
 
   runOptions="import-jdl ../jdl-default/app.jdl $runOptions"  
   jhipster $runOptions
-  
+
   if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
       if "$SONAR_ANALYSE" ; then
         dotnet tool install --global dotnet-sonarscanner --version 4.9.0

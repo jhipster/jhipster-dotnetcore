@@ -1,0 +1,137 @@
+﻿@page "/admin/user-management/new"
+@page "/admin/user-management/{Id}/edit"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "ROLE_ADMIN")]
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        <EditForm Model="@CurrentUser" OnValidSubmit="@Save">
+            <h2 id="myUserLabel">
+                Create or edit a User
+            </h2>
+            @if (CurrentUser != null)
+            {
+<div>
+    @*TODO <jhi-alert-error></jhi-alert-error>*@
+
+    @if (!string.IsNullOrWhiteSpace(CurrentUser.Id))
+    {
+<div class="form-group">
+    <label>ID</label>
+    <input type="text" class="form-control" name="id" @bind-value="@CurrentUser.Id" readonly>
+</div>
+    }
+
+    <div class="form-group">
+        <label class="form-control-label">Login</label>
+        <input type="text" class="form-control" name="login"
+               @bind-value="@CurrentUser.Login">
+
+        @*TODO <div *ngIf="editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('login')?.errors?.required">
+                    This field is required.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('login')?.errors?.maxlength">
+                    This field cannot be longer than 50 characters.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('login')?.errors?.pattern">
+                    This field can only contain letters, digits and e-mail addresses.
+                </small>
+            </div>*@
+    </div>
+
+    <div class="form-group">
+        <label class="form-control-label">First Name</label>
+        <input type="text" class="form-control" name="firstName" @bind-value="@CurrentUser.FirstName">
+
+        @*TODO <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('firstName')?.errors?.maxlength">
+                    This field cannot be longer than 50 characters.
+                </small>
+            </div>*@
+    </div>
+
+    <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastName"
+               @bind-value="@CurrentUser.LastName">
+
+        @*TODO <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('lastName')?.errors?.maxlength">
+                    This field cannot be longer than 50 characters.
+                </small>
+            </div>*@
+    </div>
+
+    <div class="form-group">
+        <label class="form-control-label">Email</label>
+        <input type="email" class="form-control" name="email" @bind-value="@CurrentUser.Email">
+
+        @*TODO <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('email')?.errors?.required">
+                    This field is required.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('email')?.errors?.maxlength">
+                    This field cannot be longer than 100 characters.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('email')?.errors?.minlength">
+                    This field is required to be at least 5 characters.
+                </small>
+
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('email')?.errors?.email">
+                    Your email is invalid.
+                </small>
+            </div>*@
+    </div>
+
+    <div class="form-check">
+        <label class="form-check-label" for="activated">
+            @if (string.IsNullOrWhiteSpace(CurrentUser.Id) || AuthenticationService.CurrentUser.Login == CurrentUser.Login)
+            {
+<input class="form-check-input" disabled="disabled"
+       type="checkbox" id="activated" name="activated" @bind="@CurrentUser.Activated"> }
+                    else
+                    {
+<input class="form-check-input"
+       type="checkbox" id="activated" name="activated" @bind="@CurrentUser.Activated">}
+            <span>Activated</span>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>Profiles</label>
+        <Select TValue="string" Multiple="true" SelectedValues="@CurrentAuthorities" SelectedValuesChanged="@OnSelectAuthoritiesChanged">
+            @foreach (var authority in Authorities)
+            {
+<SelectItem Value="@authority">@authority</SelectItem>}
+        </Select>
+    </div>
+</div>
+
+                    <div>
+                        <button type="button" class="btn btn-secondary" @onclick="@Back">
+                            <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                        </button>
+
+                        @* TODO [disabled]="editForm.invalid || isSaving" *@
+                        <button type="submit" class="btn btn-primary">
+                            <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                        </button>
+                    </div>}
+        </EditForm>
+    </div>
+</div>

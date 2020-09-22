@@ -18,11 +18,10 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const ServerGenerator = require('generator-jhipster/generators/server');
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
@@ -84,7 +83,6 @@ module.exports = class extends ServerGenerator {
             askForServerSideOpts: prompts.askForServerSideOpts,
 
             setSharedConfigOptions() {
-                this.configOptions.namespace = this.namespace;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.authenticationType = this.authenticationType;
             },
@@ -93,19 +91,9 @@ module.exports = class extends ServerGenerator {
 
     get configuring() {
         return {
-            configureGlobal() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-            },
+            configureGlobalDotnetcore,
             saveConfig() {
                 const config = {
-                    namespace: this.namespace,
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
                     prodDatabaseType: 'mysql', // set only for jdl-importer compatibility
@@ -126,9 +114,9 @@ module.exports = class extends ServerGenerator {
 
     get end() {
         return {
-            end() {
-                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution.\n`));
-                dotnet
+            async end() {
+                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                await dotnet
                     .newSln(this.solutionName)
                     .then(() =>
                         dotnet.slnAdd(`${this.solutionName}.sln`, [

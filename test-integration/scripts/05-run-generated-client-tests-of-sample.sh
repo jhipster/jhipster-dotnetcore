@@ -9,7 +9,11 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
-cd src/JhipsterSampleApplication/ClientApp
+if [ "$2" = "blazor" ]; then
+  cd test/JhipsterSampleApplication.Client.Test
+else
+  cd src/JhipsterSampleApplication/ClientApp
+fi
 echo "*** changed directory in : `pwd`" 
 
 
@@ -17,13 +21,16 @@ echo "*** changed directory in : `pwd`"
 # Run unit test 
 #-------------------------------------------------------------------------------
 echo "*** run unit test in client for :  `pwd`"
-
-if [ -f "src/app/app.tsx" ]; then
-  npm run lint:fix && npm run test-ci
+if [ "$2" = "blazor" ]; then
+  dotnet test
 else
-  npm run lint:fix && npm test
-fi
-if [ $? -ne 0 ]; then
-  echo "${RED}FAILED CLIENT UNIT TEST COMMAND"
-  exit 1
+  if [ -f "src/app/app.tsx" ]; then
+    npm run lint:fix && npm run test-ci
+  else
+    npm run lint:fix && npm test
+  fi
+  if [ $? -ne 0 ]; then
+   echo "${RED}FAILED CLIENT UNIT TEST COMMAND"
+   exit 1
+  fi
 fi

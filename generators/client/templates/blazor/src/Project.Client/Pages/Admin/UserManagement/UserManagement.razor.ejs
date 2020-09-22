@@ -1,0 +1,129 @@
+﻿@page "/admin/user-management"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "ROLE_ADMIN")]
+
+<div>
+    <h2>
+        <span id="user-management-page-heading">Users</span>
+
+        <a class="btn btn-primary float-right jh-create-entity" href="/admin/user-management/new">
+            <Icon Name='"fa-plus"' />
+            <span>Create a new User</span>
+        </a>
+    </h2>
+
+    @*<jhi-alert-error></jhi-alert-error>*@
+
+    @*<jhi-alert></jhi-alert>*@
+
+    @if (UserModels != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped" aria-describedby="user-management-page-heading">
+                <thead>
+                    <tr>
+                        <th scope="col" jhiSortBy="id"><span>ID</span> <Icon Name='"fa-sort"' /></th>
+                        <th scope="col" jhiSortBy="login"><span>Login</span> <Icon Name='"fa-sort"' /></th>
+                        <th scope="col" jhiSortBy="email"><span>Email</span> <Icon Name='"fa-sort"' /></th>
+                        <th scope="col"></th>
+                        <th scope="col"><span>Profiles</span></th>
+                        <th scope="col" jhiSortBy="createdDate"><span>Created Date</span> <Icon Name='"fa-sort"' /></th>
+                        <th scope="col" jhiSortBy="lastModifiedBy"><span>Last Modified By</span> <Icon Name='"fa-sort"' /></th>
+                        <th scope="col" jhiSortBy="lastModifiedDate"><span>Last Modified Date</span> <Icon Name='"fa-sort"' /></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in UserModels)
+                    {
+                        <tr>
+                            <td><a href="/user-management/@user.Login/view">@user.Id</a></td>
+                            <td>@user.Login</td>
+                            <td>@user.Email</td>
+                            <td>
+                                @if (user.Activated)
+                                {
+                                    @if (AuthenticationService.CurrentUser.Login == user.Login)
+                                    {
+                                        <button class="btn btn-success btn-sm" disabled @onclick=@(() => ActiveUser(user, false))>
+                                            Activated
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success btn-sm" @onclick=@(() => ActiveUser(user, false))>
+                                            Activated
+                                        </button>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <button class="btn btn-danger btn-sm" @onclick=@(() => ActiveUser(user, true))>Deactivated</button>
+
+                                }
+                            </td>
+                            <td>
+                                @foreach (var authority in user.Authorities)
+                                {
+                                    <div>
+                                        <span class="badge badge-info">@authority</span>
+                                    </div>
+                                }
+                            </td>
+                            <td>@($"{user.CreatedDate:dd/MM/yy HH:mm}")</td>
+                            <td>@user.LastModifiedBy</td>
+                            <td>@($"{user.LastModifiedDate:dd/MM/yy HH:mm}")</td>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <a type="submit"
+                                       href="/admin/user-management/@user.Login/view"
+                                       class="btn btn-info btn-sm">
+                                        <Icon Name='"fa-eye"' />
+                                        <span class="d-none d-md-inline">View</span>
+                                    </a>
+
+                                    <a type="submit"
+                                       href="/admin/user-management/@user.Login/edit"
+                                       class="btn btn-primary btn-sm">
+                                        <Icon Name='"fa-pencil-alt"' />
+                                        <span class="d-none d-md-inline">Edit</span>
+                                    </a>
+
+                                    @if (AuthenticationService.CurrentUser.Login == user.Login)
+                                    {
+                                        <button type="button" @onclick=@(() => DeleteUser(user.Login)) disabled
+                                                class="btn btn-danger btn-sm">
+                                            <Icon Name='"fa-times"' />
+                                            <span class="d-none d-md-inline">Delete</span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" @onclick=@(() => DeleteUser(user.Login))
+                                                class="btn btn-danger btn-sm">
+                                            <Icon Name='"fa-times"' />
+                                            <span class="d-none d-md-inline">Delete</span>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        @*<div *ngIf="users">
+                <div class="row justify-content-center">
+                    <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+                </div>
+
+                <div class="row justify-content-center">
+                    <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+                </div>
+            </div>*@
+    }
+</div>

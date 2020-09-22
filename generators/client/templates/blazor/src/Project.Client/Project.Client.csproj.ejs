@@ -1,0 +1,99 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RazorLangVersion>3.0</RazorLangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\content\images\jhipster_family_member_0.svg" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_0_head-192.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_0_head-256.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_0_head-384.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_0_head-512.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_1.svg" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_1_head-192.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_1_head-256.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_1_head-384.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_1_head-512.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_2.svg" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_2_head-192.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_2_head-256.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_2_head-384.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_2_head-512.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_3.svg" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_3_head-192.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_3_head-256.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_3_head-384.png" />
+    <Content Remove="wwwroot\content\images\jhipster_family_member_3_head-512.png" />
+    <Content Remove="wwwroot\content\images\logo-jhipster.png" />
+    <Content Remove="wwwroot\content\scss\vendor.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\content\images\jhipster_family_member_0.svg" />
+    <None Include="wwwroot\content\images\jhipster_family_member_0_head-192.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_0_head-256.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_0_head-384.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_0_head-512.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_1.svg" />
+    <None Include="wwwroot\content\images\jhipster_family_member_1_head-192.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_1_head-256.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_1_head-384.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_1_head-512.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_2.svg" />
+    <None Include="wwwroot\content\images\jhipster_family_member_2_head-192.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_2_head-256.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_2_head-384.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_2_head-512.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_3.svg" />
+    <None Include="wwwroot\content\images\jhipster_family_member_3_head-192.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_3_head-256.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_3_head-384.png" />
+    <None Include="wwwroot\content\images\jhipster_family_member_3_head-512.png" />
+    <None Include="wwwroot\content\images\logo-jhipster.png" />
+    <None Include="wwwroot\content\scss\vendor.scss" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.Modal" Version="5.1.0" />
+    <PackageReference Include="Blazored.SessionStorage" Version="1.0.12" />
+    <PackageReference Include="Blazorise.Bootstrap" Version="0.9.1.2" />
+    <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.1" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.76" />
+    <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
+    <PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
+  </ItemGroup>
+
+  <Target Name="RestoreFrontEndLibraries" BeforeTargets="BeforeBuild">
+    <Exec Command="libman restore" LogStandardErrorAsError="true"/>
+  </Target>
+
+  <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">
+    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable" StandardOutputImportance="high" />
+    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable -m disable" StandardOutputImportance="high" />
+   </Target>
+
+  <ItemGroup>
+    <!--specify file extensions here as needed-->
+    <Watch Include="**\*.scss" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\<%= namespace %>.Client.Shared\<%= namespace %>.Client.Shared.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="wwwroot\content\css\" />
+  </ItemGroup>
+
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
+</Project>

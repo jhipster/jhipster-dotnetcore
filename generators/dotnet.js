@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const shelljs = require('shelljs');
+const fs = require('fs');
 
 function exec(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -39,7 +40,12 @@ function hasDotnet() {
 }
 async function newSln(solutionName) {
     await hasDotnet();
-    return exec(`dotnet new sln --name ${solutionName}`);
+    try {
+        await fs.promises.access(`${solutionName}.sln`);
+        return Promise.resolve(true);
+    } catch (error) {
+        return exec(`dotnet new sln --name ${solutionName}`);
+    }
 }
 
 async function slnAdd(solutionFile, projects) {

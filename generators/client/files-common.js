@@ -70,8 +70,8 @@ function updateWebpackDevJs() {
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        '8080',
-        '5000',
+        "target: `http${options.tls ? 's' : ''}://localhost:8080`",
+        "target: `http${options.tls ? 's://localhost:5001' : '://localhost:5000'}`",
         false
     );
 }

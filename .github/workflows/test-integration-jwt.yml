@@ -13,6 +13,7 @@ jobs:
                 os: [ubuntu-latest]
                 app-type:
                     - jwt-with-angular-app
+                    - jwt-with-blazor-app
                     - jwt-with-mssql-app
                     - jwt-with-mysql-app
                     - jwt-with-postgres-app
@@ -20,6 +21,8 @@ jobs:
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
+                    - app-type: jwt-with-blazor-app
+                      arg: 'blazor'
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
@@ -39,7 +42,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
             - uses: actions/setup-dotnet@v1
               with:
-                dotnet-version: '3.1.100' 
+                dotnet-version: '3.1.401' 
             - name: git history
               run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
             - name: PREPARE jhipster env
@@ -54,7 +57,7 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
             - name: 'RUN CLIENT UNIT TESTS of generated app'
-              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
+              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
             - name: 'RUN SONAR ANALYZE on generated app'

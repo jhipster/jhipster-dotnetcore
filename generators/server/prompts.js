@@ -30,14 +30,6 @@ function askForServerSideOpts() {
     const applicationType = this.applicationType;
     const prompts = [
         {
-            type: 'input',
-            name: 'namespace',
-            validate: input =>
-                /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
-            message: 'What is your default C# namespace?',
-            default: 'MyCompany',
-        },
-        {
             type: 'list',
             name: 'database',
             message: 'Wchich database do you want to use',
@@ -90,7 +82,6 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
-        this.namespace = prompt.namespace;
         this.databaseType = prompt.database;
         this.authenticationType = prompt.authenticationType;
         done();
@@ -100,7 +91,4 @@ function askForServerSideOpts() {
 module.exports = {
     askForModuleName,
     askForServerSideOpts,
-    //    askForSomething,
-    // askForOptionalItems,
-    // askFori18n
 };
