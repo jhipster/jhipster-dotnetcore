@@ -1,0 +1,16 @@
+﻿<div class="alerts" role="alert">
+    @foreach(var alert in Alerts)
+    {
+        @if (alert != null && !string.IsNullOrEmpty(alert.Msg))
+        {
+            <div>
+
+                <Alert Color="@GetColorAlert(alert)" Visible="true">
+                    <AlertMessage>@((MarkupString) alert.Msg)</AlertMessage>
+                    <CloseButton Clicked="@(() => RemoveAlert(alert))"/>
+                </Alert>
+
+            </div>
+        }
+    }
+</div>

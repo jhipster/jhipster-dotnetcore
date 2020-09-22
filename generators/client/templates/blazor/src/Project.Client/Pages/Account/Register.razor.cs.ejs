@@ -1,0 +1,133 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Blazored.Modal.Services;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Services.AccountServices;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Net.Http.Json;
+using <%= namespace %>.Client.Shared.Constants;
+
+namespace <%= namespace %>.Client.Pages.Account
+{
+    public partial class Register : ComponentBase
+    {
+        [Inject]
+        private IRegisterService RegisterService{ get; set; }
+
+        [CascadingParameter]
+        private IModalService ModalService { get; set; }
+
+        public RegisterModel RegisterModel = new RegisterModel();
+
+        private EditContext EditContext { get; set; }
+
+        private EditForm editForm;
+
+        public bool Success { get; private set; }
+        public bool Error { get; private set; }
+        public bool ErrorEmailExists { get; private set; }
+        public bool ErrorUserExists { get; private set; }
+
+        private bool IsInvalid { get; set; }
+        
+
+        protected override async Task OnInitializedAsync()
+        {
+            IsInvalid = true;
+            EditContext = new EditContext(RegisterModel);
+            EditContext.OnFieldChanged += IsInvalidForm;
+            await base.OnInitializedAsync();
+        }
+
+        private void IsInvalidForm(object s, FieldChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(RegisterModel.Username) &&
+                !string.IsNullOrEmpty(RegisterModel.ConfirmPassword) &&
+                !string.IsNullOrEmpty(RegisterModel.Password) &&
+                !string.IsNullOrEmpty(RegisterModel.Email))
+            {
+                if (editForm?.EditContext.Validate() == true)
+                {
+                    IsInvalid = false;
+                    return;
+                }
+            }
+
+            IsInvalid = true;
+        }
+
+        private async Task HandleSubmit()
+        {
+            SetAllErrorFalse();
+            var result = await RegisterService.Save(new UserSaveModel{
+                Email = RegisterModel.Email,
+                Login = RegisterModel.Username,
+                Password = RegisterModel.Password,
+                LangKey = "en"
+            });
+            if (result.IsSuccessStatusCode)
+            {
+                Success = true;
+            }
+            else
+            {
+                await ProcessError(result);
+            }
+        }
+
+        private void SetAllErrorFalse()
+        {
+            Success = false;
+            Error = false;
+            ErrorEmailExists = false;
+            ErrorUserExists = false;
+        }
+
+        private async Task ProcessError(HttpResponseMessage result)
+        {
+            if (result.StatusCode != HttpStatusCode.BadRequest) // other status code
+            {
+                Error = true;
+                return;
+            }
+
+            try
+            {
+                var res = await result.Content.ReadFromJsonAsync<RegisterResultRequest>();
+                ErrorEmailExists = res.Type == ErrorConst.EmailAlreadyUsedType;
+                ErrorUserExists = res.Type == ErrorConst.LoginAlreadyUsedType;
+                if (!ErrorEmailExists && !ErrorUserExists) // if unknown error
+                {
+                    Error = true;
+                }
+            }
+            catch (Exception)
+            {
+                Error = true; // json pars error
+            }
+            
+        }
+
+        private async Task SignIn()
+        {
+            ModalService.Show<Login>("Sign In");
+        }
+    }
+}

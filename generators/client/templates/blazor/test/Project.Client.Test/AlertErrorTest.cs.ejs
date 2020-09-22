@@ -1,0 +1,164 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Bunit;
+using FluentAssertions;
+using <%= namespace %>.Client.Services;
+using <%= namespace %>.Client.Shared.Components;
+using <%= namespace %>.Client.Test.Pages.TestPages;
+using Moq;
+using Moq.Protected;
+using <%= namespace %>.Client.Shared.Constants;
+using <%= namespace %>.Client.Shared.Models;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
+using Xunit;
+
+namespace <%= namespace %>.Client.Test
+{
+    public class AlertErrorTest : TestContext
+    {
+        [Fact]
+        public async Task Should_Display404_When_404()
+        {
+            HttpResponseMessage response = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Content = new StringContent(@""),
+                
+            };
+
+            var alertComponent = await InitAlertErrorTest(response);
+
+            alertComponent.WaitForAssertion(() =>
+            {
+                var alerts = alertComponent.Instance.AlertError.GetAlerts();
+                (alerts.Count > 0).Should().BeTrue();
+                alerts.First(a => a.Msg == AlertError.NotFoundError).Should().NotBeNull();
+            });
+        }
+
+        [Fact]
+        public async Task Should_DisplayNotReach_When_NotReach()
+        {
+            var alertComponent = await InitAlertErrorTest(null);
+
+            alertComponent.WaitForAssertion(() =>
+            {
+                var alerts = alertComponent.Instance.AlertError.GetAlerts();
+                (alerts.Count > 0).Should().BeTrue();
+                alerts.First(a => a.Msg == AlertError.NotReachableError).Should().NotBeNull();
+            });
+        }
+
+        [Fact]
+        public async Task Should_DisplayErrorHeader_When_Error()
+        {
+            HttpResponseMessage response = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Content = new StringContent(@"Error Test"),
+            };
+            response.Headers.Add($"test-{AlertError.HttpErrorHeader}", "test");
+
+            var alertComponent = await InitAlertErrorTest(response);
+
+            alertComponent.WaitForAssertion(() =>
+            {
+                var alerts = alertComponent.Instance.AlertError.GetAlerts();
+                (alerts.Count > 0).Should().BeTrue();
+                alerts.First(a => a.Msg == $"test").Should().NotBeNull();
+            });
+        }
+
+        [Fact]
+        public async Task Should_NotAddError_When_BadRequest_Without_ErrorHeader()
+        {
+            HttpResponseMessage response = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Content = new StringContent(@"Error Test"),
+            };
+
+            var alertComponent = await InitAlertErrorTest(response);
+
+            alertComponent.WaitForAssertion(() =>
+            {
+                var alerts = alertComponent.Instance.AlertError.GetAlerts();
+                (alerts.Count == 0).Should().BeTrue();
+            });
+        }
+
+        [Fact]
+        public void Should_Add_And_Remove_When_AlertTimout()
+        {
+            Services.AddHttpClientInterceptor();
+            var alertComponent = RenderComponent<TestAlertError>(); 
+
+            var alert = new JhiAlert
+            {
+                Msg = "test",
+                Type = TypeAlert.Danger,
+                Timeout = 100
+            };
+
+            alertComponent.Instance.AlertError.AddAlert(alert);
+
+            alertComponent.WaitForAssertion(() =>
+            {
+                var alerts = alertComponent.Instance.AlertError.GetAlerts();
+                (alerts.Count > 0).Should().BeTrue();
+                alerts.First(a => a.Msg == $"test").Should().NotBeNull();
+            });
+            alertComponent.WaitForAssertion(() =>
+            {
+                var alerts = alertComponent.Instance.AlertError.GetAlerts();
+                (alerts.Count == 0).Should().BeTrue();
+            });
+        }
+
+        private async Task<IRenderedComponent<TestAlertError>> InitAlertErrorTest(HttpResponseMessage response)
+        {
+            Services.AddHttpClientInterceptor();
+            var alertComponent = RenderComponent<TestAlertError>();
+            var handlerMock = new Mock<HttpMessageHandler>();
+
+            handlerMock
+                .Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(response);
+            var httpClient = new HttpClient(handlerMock.Object);
+            httpClient.EnableIntercept(Services);
+            httpClient.Timeout = TimeSpan.FromMilliseconds(60);
+            try
+            {
+                await httpClient.GetAsync(Configuration.BaseUri);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return alertComponent;
+        }
+    }
+}
