@@ -1,11 +1,6 @@
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
-using JHipsterNet.Core.Pagination.Extensions;
-using MyCompany.Data.Extensions;
-using Microsoft.EntityFrameworkCore;
-using MyCompany.Domain;
 using MyCompany.Data;
-using MyCompany.Domain.Services.Interfaces;
 
 namespace MyCompany.Domain.Services {
     public class CountryExtendedService : CountryService, ICountryService 
