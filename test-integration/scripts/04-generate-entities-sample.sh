@@ -17,12 +17,9 @@ if [ "$2" = "import-jdl" ]; then
   runOptions="import-jdl ../jdl-default/app.jdl $runOptions"  
   jhipster $runOptions
 
+  # copy files required for testing automatic service class/interface registration on dependency injection container
   if [[ -n $(find src -type f -name "*CountryService.cs") ]]; then 
-      # copy files required for testing automatic service class/interface registration on dependency injection container
-      echo 'debugging integration test'
       cp ../csharp-di-test/CountryExtendedService.cs src/JhipsterSampleApplication.Domain.Services/
-      ls src/JhipsterSampleApplication.Domain.Services/
-
       mkdir test/JhipsterSampleApplication.Test/AutomaticServiceDI/
       cp ../csharp-di-test/ExtendedServiceRegistrationTest.cs test/JhipsterSampleApplication.Test/AutomaticServiceDI/
   fi

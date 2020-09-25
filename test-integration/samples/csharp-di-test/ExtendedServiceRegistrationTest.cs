@@ -1,12 +1,11 @@
-
-
 using FluentAssertions;
-using MyCompany.Test.Setup;
+using JhipsterSampleApplication.Domain.Services;
+using JhipsterSampleApplication.Domain.Services.Interfaces;
+using JhipsterSampleApplication.Test.Setup;
 using Xunit;
-using MyCompany.Domain.Services.Interfaces;
-using MyCompany.Domain.Services;
 
-namespace MyCompany.Test.DependencyInjection {
+namespace JhipsterSampleApplication.Test.DependencyInjection
+{
     public class ExtendedServiceRegistrationTest {
         public ExtendedServiceRegistrationTest()
         {
