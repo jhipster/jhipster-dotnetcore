@@ -7,7 +7,7 @@ coverage
 atlassian-ide-plugin.xml
 /.project
 test/temp/
-docs
+docs/_build
 *debug.log*
 yarn.lock
 .DS_Store
