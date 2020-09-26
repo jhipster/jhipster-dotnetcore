@@ -74,11 +74,6 @@ namespace <%= namespace %>.Client.Models
                 <%_ } _%>
         public <%= asModel(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
             <%_  } else if (relationshipType === 'many-to-many') {
-                const ownerSide = relationships[idx].ownerSide; _%>
-
-                <%_ if (!ownerSide) { _%>
-        [JsonIgnore]
-                <%_ } _%>
         public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
             <%_ } _%>
 
