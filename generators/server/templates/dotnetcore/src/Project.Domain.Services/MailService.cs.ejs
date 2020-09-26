@@ -30,19 +30,19 @@ namespace <%= namespace %>.Domain.Services {
         //     _jhipsterSettings = jhipsterSettings.Value;
         // }
 
-        public Task SendPasswordResetMail(User user)
+        public virtual Task SendPasswordResetMail(User user)
         {
             //TODO send reset Email
             return Task.FromResult(Task.CompletedTask);
         }
 
-        public Task SendActivationEmail(User user)
+        public virtual Task SendActivationEmail(User user)
         {
             //TODO Activation Email
             return Task.FromResult(Task.CompletedTask);
         }
 
-        public Task SendCreationEmail(User user)
+        public virtual Task SendCreationEmail(User user)
         {
             //TODO Creation Email
             return Task.FromResult(Task.CompletedTask);

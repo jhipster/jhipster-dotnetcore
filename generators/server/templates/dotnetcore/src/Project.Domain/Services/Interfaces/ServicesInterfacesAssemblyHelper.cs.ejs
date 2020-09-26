@@ -16,21 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Microsoft.Extensions.DependencyInjection;
-using <%= namespace %>.Domain.Services;
-using <%= namespace %>.Domain.Services.Interfaces;
-
-
-namespace <%= namespace %>.Configuration {
-    public static class ServiceStartup
+namespace <%= namespace %>.Domain.Services.Interfaces
+{
+    // This class is used as a helper type for assembly scanning
+    public class ServicesInterfacesAssemblyHelper
     {
-        public static IServiceCollection AddServiceModule(this IServiceCollection @this)
-        {
-            // services will be added here by the generator
-            <%_ services.forEach(service => { _%>
-            @this.AddScoped<<%= service.serviceInterface %>, <%= service.serviceClass %>>();
-            <%_ }); _%>
-            return @this;
-        }
+        public static string Namespace = "<%= namespace %>.Domain.Services.Interfaces";
     }
 }

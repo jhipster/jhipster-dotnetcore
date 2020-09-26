@@ -104,13 +104,10 @@ namespace <%= namespace %>.Configuration {
                     };
                 });
 
-            @this.AddScoped<IAuthenticationService, AuthenticationService>();
             @this.AddScoped<ITokenProvider, TokenProvider>();
-            @this.AddScoped<IUserService, UserService>();
             @this.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
             @this.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
             @this.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-            @this.AddSingleton<IMailService, MailService>();
 
             <%_ } else { _%>
             @this.AddAuthentication(options =>
