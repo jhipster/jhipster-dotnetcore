@@ -11,7 +11,11 @@
 [![Sonar Cloud Maintainability Rate][sonar-maintainability-image]][sonar-url]
 [![Sonar Cloud Duplicated Code][sonar-duplication-image]][sonar-url]
 
-> JHipster blueprint, 
+> JHipster blueprint
+
+Documentation and information about  `JHipster.NET ` is available [here](https://jhipsternet.readthedocs.io/en/latest/)
+
+Full documentation and information about JHipster is available [here](https://www.jhipster.tech/) 
 
 # Analysis of the sample project 
 https://github.com/jhipster/jhipster-sample-app-dotnetcore
