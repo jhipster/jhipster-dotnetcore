@@ -1,5 +1,6 @@
 # generator-jhipster-dotnetcore
 [![NPM version][npm-image]][npm-url] 
+[![Documentation Status](https://readthedocs.org/projects/jhipsternet/badge/?version=latest)](https://jhipsternet.readthedocs.io/en/latest/?badge=latest)
 [![Generator Build Status][github-actions-generator-image]][github-actions-url]
 [![Integration JWT Build Status][github-actions-integ-jwt-image]][github-actions-url]
 [![Integration OAUTH Build Status][github-actions-integ-oauth-image]][github-actions-url]
