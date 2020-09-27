@@ -36,7 +36,6 @@ namespace <%= namespace %>.Client.Models
     public class <%= asModel(entityClassName) %>
     {
         public long Id { get; set; }
-
         <%_ for (idx in fields){
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
@@ -73,7 +72,7 @@ namespace <%= namespace %>.Client.Models
         [Required]
                 <%_ } _%>
         public <%= asModel(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
-            <%_  } else if (relationshipType === 'many-to-many') {
+            <%_  } else if (relationshipType === 'many-to-many') { _%>
         public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
             <%_ } _%>
 
