@@ -21,7 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Serilog;
 
-namespace <%= namespace %>.Data.Extensions {
+namespace <%= namespace %>.Infrastructure.Data.Extensions {
     public static class DbSetExtensions {
         public static EntityEntry<TEntity> RemoveById<TEntity>(this DbSet<TEntity> receiver, object id)
             where TEntity : class
