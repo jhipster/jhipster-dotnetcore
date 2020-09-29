@@ -1,0 +1,29 @@
+before script:
+  stage: install with npm
+    - npm install -g generator-jhipster-dotnetcore
+  stage: update with npm
+    - npm update -g generator-jhipster-dotnetcore
+  stage: install with yarn
+    - yarn global add generator-jhipster-dotnetcore
+  stage: update with yarn
+    - yarn global upgrade generator-jhipster-dotnetcore
+
+after script:
+  stage: usage 
+    - jhipster --blueprints dotnetcore
+  stage: link your blueprint locally
+    - cd dotnetcore
+    - npm link
+    - mkdir my-app && cd my-app
+    - npm link generator-jhipster-dotnetcore
+    - jhipster -d --blueprint dotnetcore
+  stage: compose docker file
+    - docker-compose -f docker/app.yml build
+  stage: start services
+    - docker-compose -f docker/app.yml up
+  stage: generate services
+    - jhipster entity newentity
+    
+cache:
+  paths:
+    - node_modules/
