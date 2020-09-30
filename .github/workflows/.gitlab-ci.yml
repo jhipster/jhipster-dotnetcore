@@ -1,3 +1,6 @@
+on: [push]
+
+
 cache:
   paths:
     - node_modules
