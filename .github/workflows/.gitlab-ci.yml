@@ -1,0 +1,77 @@
+cache:
+  paths:
+    - node_modules
+
+
+stages:
+  - install
+  - build
+  - test
+
+install:
+  stage: install
+  script:
+    - npm install
+    - npm --prefix ./src/Jhipster/ClientApp install --save --save-exact leaflet
+    - npm --prefix ./src/Jhipster/ClientApp install --save-dev --save-exact @types/leaflet
+
+
+build:
+  stage: build
+  script:
+    - cd ./src/Jhipster
+    - rm -rf ./src/Jhipster/wwwroot
+    - dotnet publish --verbosity normal -c Release -o ./app/out ./Jhipster.csproj
+
+#Unit tests
+test:unit:npm:
+  stage: test
+  script: 
+    - npm test
+
+test:unit:npm:
+  stage: test
+  script: 
+    - dotnet test --list-tests --verbosity normal
+# before script:
+#   install_with_npm:
+#     script:
+#       - npm install -g generator-jhipster-dotnetcore
+#   update_with_npm:
+#     needs: [install_with_npm]
+#     script: 
+#       - npm update -g generator-jhipster-dotnetcore
+#   install_with_yarn:
+#     script: 
+#       - yarn global add generator-jhipster-dotnetcore
+#   update_with_yarn:
+#     needs: [install_with_yarn]
+#     script:
+#       - yarn global upgrade generator-jhipster-dotnetcore
+
+# after script:
+#   usage:
+#     script: 
+#       - jhipster --blueprints dotnetcore
+#   link_your_blueprint_locally: 
+#     needs: [usage]
+#       script:
+#         - cd dotnetcore
+#         - npm link
+#         - mkdir my-app && cd my-app
+#         - npm link generator-jhipster-dotnetcore
+#         - jhipster -d --blueprint dotnetcore
+#   compose_docker_file:
+#     script: 
+#       - docker-compose -f docker/app.yml build
+#   start_services:
+#     needs: [compose_docker_file]
+#     script:  
+#       - docker-compose -f docker/app.yml up
+#   generate_services:
+#     script:
+#       - jhipster entity newentity
+    
+# cache:
+#   paths:
+#     - node_modules/
