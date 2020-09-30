@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Data {
+namespace <%= namespace %>.Infrastructure.Data {
     <%_ if (authenticationType === 'jwt') { _%>
     public class ApplicationDatabaseContext : IdentityDbContext<
         User, Role, string,
