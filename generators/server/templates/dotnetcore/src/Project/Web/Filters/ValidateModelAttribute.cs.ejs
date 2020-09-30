@@ -21,7 +21,7 @@ namespace <%= namespace %>.Web.Filters {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)
-                context.Result = new BadRequestObjectResult(new ValidationFailedProblem(context.ModelState));
+                context.Result = new BadRequestObjectResult(new ValidationFailedProblemException(context.ModelState));
         }
     }
 }

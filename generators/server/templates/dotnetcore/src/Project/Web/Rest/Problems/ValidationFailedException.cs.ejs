@@ -18,8 +18,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace <%= namespace %>.Web.Rest.Problems {
     //https://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
-    public class ValidationFailedProblem : ProblemDetailsException {
-        public ValidationFailedProblem(ModelStateDictionary modelState) : base(new ValidationProblemDetails(modelState))
+    public class ValidationFailedProblemException : ProblemDetailsException {
+        public ValidationFailedProblemException(ModelStateDictionary modelState) : base(new ValidationProblemDetails(modelState))
         {
         }
     }

@@ -12,13 +12,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using <%= namespace %>.Crosscutting.Constants;
-using <%= namespace %>.Crosscutting.Exceptions;
-using <%= namespace %>.Domain;
 
 namespace <%= namespace %>.Domain.Services.Interfaces {
     public interface IUserService {
@@ -26,12 +21,12 @@ namespace <%= namespace %>.Domain.Services.Interfaces {
         IEnumerable<string> GetAuthorities();
         Task DeleteUser(string login);
         Task<User> UpdateUser(User userToUpdate);
+        Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
         Task<User> CompletePasswordReset(string newPassword, string key);
         Task<User> RequestPasswordReset(string mail);
         Task ChangePassword(string currentPassword, string newPassword);
         Task<User> ActivateRegistration(string key);
         Task<User> RegisterUser(User user, string password);
-        Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
         Task<User> GetUserWithUserRoles();
     }
 }

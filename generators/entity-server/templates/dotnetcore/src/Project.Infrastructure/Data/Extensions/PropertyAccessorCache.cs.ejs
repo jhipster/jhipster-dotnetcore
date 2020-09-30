@@ -20,7 +20,7 @@ namespace <%= namespace %>.Data.Extensions {
     public static class PropertyAccessorCache<T> where T : class {
         private static readonly IDictionary<string, LambdaExpression> _cache;
 
-        static PropertyAccessorCache()
+        PropertyAccessorCache()
         {
             var storage = new Dictionary<string, LambdaExpression>();
 

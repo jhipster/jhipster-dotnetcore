@@ -105,7 +105,7 @@ namespace <%= namespace %>.Data.Extensions {
             return source.Provider.CreateQuery<T>(resultExpression);
         }
 
-        private static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> f, T1 unused1, T2 unused2)
+        private static MethodInfo GetMethodInfo<T1, T2, T3>(Func<T1, T2, T3> f)
         {
             return f.Method;
         }

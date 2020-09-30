@@ -18,9 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
-using <%= namespace %>.Domain;
 using <%= namespace %>.Domain.Services.Interfaces;
-using <%= namespace %>.Dto;
 using <%= namespace %>.Service.Utilities;
 using LanguageExt.UnitsOfMeasure;
 using Microsoft.AspNetCore.Http;
@@ -84,6 +82,21 @@ namespace <%= namespace %>.Domain.Services {
             return user;
         }
 
+        public virtual async Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl)
+        {
+            var userName = _userManager.GetUserName(_httpContextAccessor.HttpContext.User);
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user != null) {
+                user.FirstName = firstName;
+                user.LastName = lastName;
+                user.Email = email;
+                user.LangKey = langKey;
+                user.ImageUrl = imageUrl;
+                await _userManager.UpdateAsync(user);
+                _log.LogDebug($"Changed Information for User: {user}");
+            }
+        }
+
         public virtual async Task<User> CompletePasswordReset(string newPassword, string key)
         {
             _log.LogDebug($"Reset user password for reset key {key}");
@@ -106,14 +119,14 @@ namespace <%= namespace %>.Domain.Services {
             return user;
         }
 
-        public virtual async Task ChangePassword(string currentClearTextPassword, string newPassword)
+        public virtual async Task ChangePassword(string currentPassword, string newPassword)
         {
             var userName = _userManager.GetUserName(_httpContextAccessor.HttpContext.User);
             var user = await _userManager.FindByNameAsync(userName);
             if (user != null) {
                 var currentEncryptedPassword = user.PasswordHash;
                 var isInvalidPassword =
-                    _passwordHasher.VerifyHashedPassword(user, currentEncryptedPassword, currentClearTextPassword) !=
+                    _passwordHasher.VerifyHashedPassword(user, currentEncryptedPassword, currentPassword) !=
                     PasswordVerificationResult.Success;
                 if (isInvalidPassword) throw new InvalidPasswordException();
 
@@ -137,29 +150,29 @@ namespace <%= namespace %>.Domain.Services {
         }
 
 
-        public virtual async Task<User> RegisterUser(User userToRegister, string password)
+        public virtual async Task<User> RegisterUser(User user, string password)
         {
-            var existingUser = await _userManager.FindByNameAsync(userToRegister.Login.ToLower());
+            var existingUser = await _userManager.FindByNameAsync(user.Login.ToLower());
             if (existingUser != null) {
                 var removed = await RemoveNonActivatedUser(existingUser);
                 if (!removed) throw new LoginAlreadyUsedException();
             }
 
-            existingUser = _userManager.Users.FirstOrDefault(it =>it.Email == userToRegister.Email);
+            existingUser = _userManager.Users.FirstOrDefault(it =>it.Email == user.Email);
             if (existingUser != null) {
                 var removed = await RemoveNonActivatedUser(existingUser);
                 if (!removed) throw new EmailAlreadyUsedException();
             }
 
             var newUser = new User {
-                Login = userToRegister.Login,
+                Login = user.Login,
                 // new user gets initially a generated password
                 PasswordHash = _passwordHasher.HashPassword(null, password),
-                FirstName = userToRegister.FirstName,
-                LastName = userToRegister.LastName,
-                Email = userToRegister.Email.ToLowerInvariant(),
-                ImageUrl = userToRegister.ImageUrl,
-                LangKey = userToRegister.LangKey,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email.ToLowerInvariant(),
+                ImageUrl = user.ImageUrl,
+                LangKey = usercurrentClearTextPassword.LangKey,
                 // new user is not active
                 Activated = false,
                 // new user gets registration key
@@ -169,21 +182,6 @@ namespace <%= namespace %>.Domain.Services {
             await _userManager.CreateAsync(newUser);
             _log.LogDebug($"Created Information for User: {newUser}");
             return newUser;
-        }
-
-        public virtual async Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl)
-        {
-            var userName = _userManager.GetUserName(_httpContextAccessor.HttpContext.User);
-            var user = await _userManager.FindByNameAsync(userName);
-            if (user != null) {
-                user.FirstName = firstName;
-                user.LastName = lastName;
-                user.Email = email;
-                user.LangKey = langKey;
-                user.ImageUrl = imageUrl;
-                await _userManager.UpdateAsync(user);
-                _log.LogDebug($"Changed Information for User: {user}");
-            }
         }
 
         public virtual async Task<User> GetUserWithUserRoles()
