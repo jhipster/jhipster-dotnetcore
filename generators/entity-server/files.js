@@ -19,6 +19,7 @@
 
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const constants = require('../generator-dotnetcore-constants');
+const baseConstants = require('generator-jhipster/generators/generator-constants');
 const utils = require('../utils');
 
 /* Constants use throughout */
@@ -214,4 +215,5 @@ function writeFiles() {
 module.exports = {
     serverFiles,
     writeFiles,
+    writeGatlingFiles
 };
