@@ -18,9 +18,12 @@
  */
 
 const constants = require('../generator-dotnetcore-constants');
+const baseConstants = require('generator-jhipster/generators/generator-constants');
 const utils = require('../utils');
 
 /* Constants use throughout */
+
+const INTERPOLATE_REGEX = baseConstants.INTERPOLATE_REGEX;
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
@@ -141,6 +144,22 @@ const serverFiles = {
     ],
 };
 
+const gatlingTestsFiles = {
+    gatlingTests: [
+        {
+            condition: generator => generator.gatlingTests,
+            path: SERVER_TEST_DIR,
+            templates: [
+                {
+                    file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
+                    options: { interpolate: INTERPOLATE_REGEX },
+                    renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
+                },
+            ],
+        },
+    ]
+};
+
 function writeFiles() {
     return {
         writeServerFiles() {
@@ -186,10 +205,14 @@ function writeFiles() {
 
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
         },
+        writeFilesGatling() {
+            this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates/src'));
+        },
     };
 }
 
 module.exports = {
     serverFiles,
     writeFiles,
+    writeGatlingFiles
 };

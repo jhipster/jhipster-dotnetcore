@@ -59,6 +59,7 @@ module.exports = class extends ServerGenerator {
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
                 this.databaseType = configuration.get('databaseType') || this.configOptions.databaseType;
                 this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
+                this.serverPort = 5000; 
 
                 const serverConfigFound =
                     this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
