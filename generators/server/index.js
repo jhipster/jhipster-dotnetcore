@@ -129,6 +129,7 @@ module.exports = class extends ServerGenerator {
                             `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
                         ])
                     )
+                    .then(() => dotnet.format())
                     .catch(err => {
                         this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
                     })
@@ -141,6 +142,7 @@ module.exports = class extends ServerGenerator {
                                 )}`
                             )
                         );
+                        this.log(chalk.green(`Format your .Net Core application:\n${chalk.yellow.bold('dotnet format')}`));
                         this.log(
                             chalk.green(
                                 `Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --list-tests --verbosity normal')}`

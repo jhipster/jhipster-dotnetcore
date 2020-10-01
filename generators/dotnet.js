@@ -58,9 +58,15 @@ async function restore() {
     return exec('dotnet restore');
 }
 
+async function format() {
+    await hasDotnet();
+    return exec('dotnet format');
+}
+
 module.exports = {
     hasDotnet,
     newSln,
     slnAdd,
     restore,
+    format,
 };
