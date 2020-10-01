@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
 using JhipsterSampleApplication.Domain;
-using JhipsterSampleApplication.Data;
+using JhipsterSampleApplication.Infrastructure.Data;
 using JhipsterSampleApplication.Domain.Services.Interfaces;
 using JhipsterSampleApplication.Domain.Services;
 
