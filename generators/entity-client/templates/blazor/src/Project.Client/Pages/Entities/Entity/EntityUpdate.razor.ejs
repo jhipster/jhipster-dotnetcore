@@ -36,6 +36,28 @@ _%>
                            @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
                 </div>
                 <%_ }); _%>
+
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>">Region</label>
+                    <select class="form-control" id="field_<%= relation.otherEntityNameLowerCased %>" name="<%= relation.otherEntityNameLowerCased %>" @bind="@<%= relation.otherEntityNamePascalized %>Id">
+                        <option value="0"></option>
+                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.relationshipFieldNamePascalizedPlural %>)
+                        {
+                            if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.otherEntityNamePascalized %>?.Id)
+                            {
+                                <option selected="selected">@<%= relation.otherEntityNameLowerCased %></option>
+                            }
+                            else
+                            {
+                                <option>@<%= relation.otherEntityNameLowerCased %></option>
+                            }
+                        }
+                    </select>
+                </div>
+                <%_ }
+            }); _%>
             </div>
 
             <div>

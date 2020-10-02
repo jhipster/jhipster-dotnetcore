@@ -63,6 +63,11 @@ _%>
                         <%_ fields.forEach(field => { _%>
                         <th scope="col"><span><%= field.fieldNameHumanized %></span></th>
                         <%_ }); _%>
+                        <%_ relationships.forEach(relation => { 
+                            if(relation.relationshipType === 'one-to-one') { _%>
+                        <th scope="col"><span><%= relation.relationshipNameHumanized %></span></th>
+                            <%_ }
+                        }); _%>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -74,6 +79,18 @@ _%>
                             <%_ fields.forEach(field => { _%>
                             <td>@<%= lowerCasedEntityClass %>.<%= field.fieldNamePascalized %></td>
                             <%_ }); _%>
+                            <%_ relationships.forEach(relation => { 
+                                if(relation.relationshipType === 'one-to-one') { _%>
+                            <td>
+                                @if (<%= lowerCasedEntityClass %>.Region != null)
+                                {
+                                    <div>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id/view">@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id</a>
+                                    </div>
+                                }
+                            </td>
+                                <%_ }
+                            }); _%>
                             <td class="text-right">
                                 <div class="btn-group">
                                     <a href="/<%= lowerCasedEntityClass %>/@<%= lowerCasedEntityClass %>.Id/view" class="btn btn-info btn-sm">

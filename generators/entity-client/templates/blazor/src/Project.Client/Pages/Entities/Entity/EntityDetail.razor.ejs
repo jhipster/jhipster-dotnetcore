@@ -12,7 +12,7 @@ _%>
 
 <div class="row justify-content-center">
     <div class="col-8">
-        @if (<%= entityClassName %> != null)
+        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0)
         {
             <div>
                 <h2><span><%= entityClassName %></span>@<%= entityClassName %>.Id</h2>
@@ -28,6 +28,19 @@ _%>
                         <span>@<%= entityClassName %>.<%= field.fieldNamePascalized %></span>
                     </dd>
                     <%_ }); _%>
+                    <%_ relationships.forEach(relation => { 
+                        if(relation.relationshipType === 'one-to-one') { _%>
+                    <dt><span><%= relation.otherEntityNamePascalized %></span></dt>
+                    <dd>
+                        @if (<%= entityClassName %>.<%= relation.otherEntityNamePascalized %> != null)
+                        {
+                            <div>
+                                <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= entityClassName %>.Id/view">@<%= entityClassName %>.<%= relation.otherEntityNamePascalized %>.Id</a>
+                            </div>
+                        }
+                    </dd>
+                        <%_ }
+                    }); _%>
                 </dl>
 
                 <button @onclick="Back" class="btn btn-info">
