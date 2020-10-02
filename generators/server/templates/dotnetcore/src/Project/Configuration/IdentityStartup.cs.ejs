@@ -22,7 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace <%= namespace %>.Configuration {
     public static class IdentityConfiguration {
-        public static IApplicationBuilder UseApplicationIdentity(this IApplicationBuilder @this,
+        public static IApplicationBuilder UseApplicationIdentity(this IApplicationBuilder builder,
             IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
@@ -35,7 +35,7 @@ namespace <%= namespace %>.Configuration {
                 SeedUserRoles(userManager).Wait();
             }
 
-            return @this;
+            return builder;
         }
 
 

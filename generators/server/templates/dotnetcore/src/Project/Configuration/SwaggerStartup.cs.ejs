@@ -19,22 +19,22 @@ using Swashbuckle.AspNetCore.Swagger;
 
 namespace <%= namespace %>.Configuration {
     public static class SwaggerConfiguration {
-        public static IServiceCollection AddSwaggerModule(this IServiceCollection @this)
+        public static IServiceCollection AddSwaggerModule(this IServiceCollection services)
         {
-            @this.AddSwaggerGen(c => {
+            services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v2", new OpenApiInfo {Title = "<%=pascalizedBaseName%> API", Version = "0.0.1"});
             });
 
-            return @this;
+            return services;
         }
 
-        public static IApplicationBuilder UseApplicationSwagger(this IApplicationBuilder @this)
+        public static IApplicationBuilder UseApplicationSwagger(this IApplicationBuilder app)
         {
-            @this.UseSwagger();
-            @this.UseSwaggerUI(c => {
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/v2/swagger.json", "<%=pascalizedBaseName%> API");
             });
-            return @this;
+            return app;
         }
     }
 }

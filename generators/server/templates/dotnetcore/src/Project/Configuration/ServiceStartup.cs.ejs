@@ -24,9 +24,9 @@ using <%= namespace %>.Domain.Services.Interfaces;
 namespace <%= namespace %>.Configuration {
     public static class ServiceStartup
     {
-        public static IServiceCollection AddServiceModule(this IServiceCollection @this)
+        public static IServiceCollection AddServiceModule(this IServiceCollection services)
         {
-            @this.Scan(scan => scan
+            services.Scan(scan => scan
                 .FromAssembliesOf(typeof(ServicesInterfacesAssemblyHelper), typeof(ServicesClassesAssemblyHelper))
                     // Find services and register its matching interfaces/implementations. 
                     // For example: JobService matches IJobService, EmployeeService matches IEmployeeService, etc...
@@ -45,7 +45,7 @@ namespace <%= namespace %>.Configuration {
                         .AsImplementedInterfaces()
                         .WithScopedLifetime()                    
             );
-            return @this;
+            return services;
         }
     }
 }
