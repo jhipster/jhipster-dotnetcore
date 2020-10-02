@@ -1,0 +1,37 @@
+image: mcr.microsoft.com/dotnet/core/sdk:3.1
+
+on: [push]
+
+cache:
+  paths:
+    - node_modules
+
+stages:
+  - install
+  - build
+  - test
+
+install:
+  stage: install
+  script:
+    - npm install
+    - npm --prefix ./src/Jhipster/ClientApp install --save --save-exact leaflet
+    - npm --prefix ./src/Jhipster/ClientApp install --save-dev --save-exact @types/leaflet
+
+build:
+  stage: build
+  script:
+    - cd ./src/Jhipster
+    - rm -rf ./src/Jhipster/wwwroot
+    - dotnet publish --verbosity normal -c Release -o ./app/out ./Jhipster.csproj
+
+#Unit tests
+test:unit:npm:
+  stage: test
+  script: 
+    - npm test
+
+test:unit:npm:
+  stage: test
+  script: 
+    - dotnet test --list-tests --verbosity normal
