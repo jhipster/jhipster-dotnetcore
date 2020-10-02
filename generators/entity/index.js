@@ -122,6 +122,8 @@ module.exports = class extends EntityGenerator {
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
+                    relationship.otherEntityNameLowerCased = _.lowerCase(relationship.otherEntityName);
+                    relationship.otherEntityNameLowerCasedPlural = _.lowerCase(relationship.otherEntityNamePlural);
 
                     if (
                         relationship.relationshipType === 'one-to-many' ||

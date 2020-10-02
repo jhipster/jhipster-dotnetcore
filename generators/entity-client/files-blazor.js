@@ -138,6 +138,16 @@ const files = {
                 },
             ],
         },
+        {
+            path: CLIENT_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Test/Pages/Entities/Entity/EntityDetailTest.cs',
+                    renameTo: generator =>
+                        `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}DetailTest.cs`,
+                },
+            ],
+        },
     ],
 };
 
