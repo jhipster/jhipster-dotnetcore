@@ -29,14 +29,10 @@ namespace <%= namespace %>.Controllers {
     [ApiController]
     public class UserJwtController : ControllerBase {
         private readonly IAuthenticationService _authenticationService;
-
-        private readonly ILogger<UserJwtController> _log;
         private readonly ITokenProvider _tokenProvider;
 
-        public UserJwtController(ILogger<UserJwtController> log, IAuthenticationService authenticationService,
-            ITokenProvider tokenProvider)
+        public UserJwtController(IAuthenticationService authenticationService, ITokenProvider tokenProvider)
         {
-            _log = log;
             _authenticationService = authenticationService;
             _tokenProvider = tokenProvider;
         }
