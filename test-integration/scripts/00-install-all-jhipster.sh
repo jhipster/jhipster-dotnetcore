@@ -21,3 +21,5 @@ npm install -g yo
 echo "*** generator-jhipster-dotnetcore: use current branch version"
 npm ci
 npm link
+
+echo $GITHUB_REF
