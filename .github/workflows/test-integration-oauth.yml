@@ -1,5 +1,5 @@
 name: Test Integration OAUTH
-on: [push, pull_request_target]
+on: [push, pull_request]
 jobs:
     applications:
         name: ${{ matrix.app-type }}
