@@ -28,9 +28,9 @@ namespace <%= namespace %>.Domain.Services.Interfaces {
         Task<User> UpdateUser(User userToUpdate);
         Task<User> CompletePasswordReset(string newPassword, string key);
         Task<User> RequestPasswordReset(string mail);
-        Task ChangePassword(string currentPassword, string newPassword);
+        Task ChangePassword(string currentClearTextPassword, string newPassword);
         Task<User> ActivateRegistration(string key);
-        Task<User> RegisterUser(User user, string password);
+        Task<User> RegisterUser(User userToRegister, string password);
         Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
         Task<User> GetUserWithUserRoles();
     }
