@@ -950,9 +950,8 @@ const serverFiles = {
                 },
             ],
         },
-    ], 
+    ],
 };
-
 
 const gatlingTestsFiles = {
     gatlingTests: [
@@ -973,7 +972,7 @@ const gatlingTestsFiles = {
                 'gatling/conf/logback.xml',
             ],
         },
-    ]
+    ],
 };
 
 function writeFiles() {

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
+const constants = require('../generator-dotnetcore-constants');
 const utils = require('../utils');
 
 /* Constants use throughout */
@@ -157,7 +157,7 @@ const gatlingTestsFiles = {
                 },
             ],
         },
-    ]
+    ],
 };
 
 function writeFiles() {
@@ -214,5 +214,4 @@ function writeFiles() {
 module.exports = {
     serverFiles,
     writeFiles,
-    writeGatlingFiles
 };
