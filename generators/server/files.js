@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const mkdirp = require('mkdirp');
 const constants = require('../generator-dotnetcore-constants');
 
 /* Constants use throughout */
@@ -950,29 +951,37 @@ const serverFiles = {
             ],
         },
     ],
-    // ],
-    // serverProgram: [
-    //     {
-    //         path: SERVER_PROJECT_DIR,
-    //         templates: 'Program.cs',
-    //         renameTo: generator =>`${generator.projectDir}/Program.cs`
-    //     }
-    // ]
-    // serverStartup: [
+};
 
-    // ],
-    // serverConfiguration: [
-
-    // ],
-    // serverControllers: [
-
-    // ],
+const gatlingTestsFiles = {
+    gatlingTests: [
+        {
+            condition: generator => {
+                if (generator.gatlingTests) {
+                    mkdirp(`${SERVER_TEST_DIR}gatling/user-files/data`);
+                    mkdirp(`${SERVER_TEST_DIR}gatling/user-files/bodies`);
+                    mkdirp(`${SERVER_TEST_DIR}gatling/user-files/simulations`);
+                    return true;
+                }
+                return false;
+            },
+            path: SERVER_TEST_DIR,
+            templates: [
+                // Create Gatling test files
+                'gatling/conf/gatling.conf',
+                'gatling/conf/logback.xml',
+            ],
+        },
+    ],
 };
 
 function writeFiles() {
     return {
         writeFiles() {
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
+        },
+        writeFilesGatling() {
+            this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src'));
         },
     };
 }
