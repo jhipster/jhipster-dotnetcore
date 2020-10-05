@@ -30,9 +30,11 @@ namespace <%= namespace %>.Configuration {
 
         public static IApplicationBuilder UseApplicationSwagger(this IApplicationBuilder app)
         {
-            app.UseSwagger();
+            app.UseSwagger(c => {
+                c.RouteTemplate = "{documentName}/api-docs";
+            });
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "<%=pascalizedBaseName%> API");
+                c.SwaggerEndpoint("/v2/api-docs", "<%=pascalizedBaseName%> API");
             });
             return app;
         }
