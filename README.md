@@ -79,6 +79,35 @@ To use this blueprint, run the below command
 jhipster --blueprints dotnetcore
 ```
 
+## Using Docker
+
+Download the Dockerfile:
+
+```bash
+mkdir docker
+cd docker
+wget https://github.com/jhipster/jhipster-dotnetcore/raw/master/docker/Dockerfile
+```
+
+Build the Docker images:
+
+```bash
+docker build -t jhipster-generator-dotnetcore:latest .
+```
+
+Make a folder where you want to generate the Service:
+
+```bash
+mkdir service
+cd service
+```
+
+Run the generator from image to generate service:
+
+```bash
+docker run -it --rm -v $PWD:/home/jhipster/app jhipster-generator-dotnetcore
+```
+
 ## 🚦 What we have now
 
 ✅ General App generation
