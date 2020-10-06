@@ -884,7 +884,7 @@ const serverFiles = {
                 {
                     file: 'Project/Controllers/SwaggerController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/SwaggerController.cs`,
-                }
+                },
             ],
         },
         {
