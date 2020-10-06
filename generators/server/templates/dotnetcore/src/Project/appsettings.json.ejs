@@ -53,6 +53,16 @@
     },
             <%_ break;
     }_%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    "Consul": {
+        "Enabled": true,
+        "Host": "http://localhost:8500",
+        "service": "<%= lowercaseBaseName %>-service",
+        "address": "localhost",
+        "Port": <%= serverPortSecured %>,
+        "PingEnabled": false
+    },
+    <%_ } _%>
     "jhipster": {
         "Security": {
             "Authentication": {

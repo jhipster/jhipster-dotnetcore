@@ -16,6 +16,14 @@ using System;
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Infrastructure.Configuration;
+<%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+using <%= namespace %>.Configuration.Consul;
+<%_ } _%>
+<%_ if ( applicationType === 'gateway') { _%>
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using Ocelot.Provider.Consul;
+<%_ } _%>
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +61,7 @@ namespace <%= namespace %> {
 
             services
             <%_ if (authenticationType === 'jwt') { _%>
-            .AddSecurityModule()
+                .AddSecurityModule()
             <%_ } else { _%>
                 .AddSecurityModule(jhipsterSettings)
             <%_ } _%>
@@ -61,7 +69,17 @@ namespace <%= namespace %> {
                 .AddAutoMapperModule()
                 .AddSwaggerModule()
                 .AddWebModule()
+            <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
+                .AddConsul(Configuration)
+            <%_ } _%>
                 .AddServiceModule();
+
+            <%_ if (applicationType === 'gateway') { _%>
+            services
+                .AddOcelot()
+                .AddConsul();
+            <%_ } _%>
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,10 +92,18 @@ namespace <%= namespace %> {
                 .UseApplicationProblemDetails()
                 .UseApplicationSwagger()
                 .UseApplicationWeb(env)
+                <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+                .UseConsul(Configuration)
+                <%_ } _%>
                 .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2') { _%>;<%_ } _%>
+                
                 <%_ if (authenticationType === 'jwt') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>
+
+            <%_ if (applicationType === 'gateway') { _%>
+            app.UseOcelot().Wait(); 
+            <%_ } _%>
 
         }
 

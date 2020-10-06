@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,10 +12,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Client.Services
+using Microsoft.Extensions.Configuration;
+
+namespace <%= namespace %>.Configuration
 {
-    public static class Configuration
+    public static class ConfigurationHelper
     {
-        public const string BaseUri = "https://localhost:<%= serverPortSecured %>/";
+        public static TModel GetOptions<TModel>(this IConfiguration configuration, string section) where TModel : new()
+        {
+            var model = new TModel();
+            configuration.GetSection(section).Bind(model);
+
+            return model;
+        }
     }
 }

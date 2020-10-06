@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 const toPascalCase = require('to-pascal-case');
+const chalk = require('chalk');
 
 function askForModuleName() {
     if (this.existingProject) return;
@@ -51,6 +52,38 @@ function askForModuleName() {
     });
 }
 
+async function askForApplicationType() {
+    if (this.existingProject) return;
+
+    const applicationTypeChoices = [
+        {
+            value: 'monolith',
+            name: 'Monolithic application (recommended for simple projects)',
+        },
+        {
+            value: 'microservice',
+            name: 'Microservice application',
+        },
+        {
+            value: 'gateway',
+            name: 'Microservice gateway',
+        },
+    ];
+
+    const answers = await this.prompt([
+        {
+            type: 'list',
+            name: 'applicationType',
+            message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+            choices: applicationTypeChoices,
+            default: 'monolith',
+        },
+    ]);
+    this.applicationType = answers.applicationType;
+    this.serviceDiscoveryType = 'consul';
+}
+
 module.exports = {
     askForModuleName,
+    askForApplicationType,
 };

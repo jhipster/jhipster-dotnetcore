@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,10 +12,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Client.Services
+namespace <%= namespace %>.Configuration.Consul
 {
-    public static class Configuration
+    public class ConsulOptions
     {
-        public const string BaseUri = "https://localhost:<%= serverPortSecured %>/";
+        public bool Enabled { get; set; }
+        public string Host { get; set; }
+        public string Service { get; set; }
+        public string Address { get; set; }
+        public int Port { get; set; }
+        public bool PingEnabled { get; set; }
     }
 }

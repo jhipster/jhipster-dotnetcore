@@ -62,6 +62,12 @@ namespace <%= namespace %> {
         public static IWebHostBuilder CreateWebHostBuilder(params string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                <%_ if (applicationType === 'gateway') { _%>
+                .ConfigureAppConfiguration((host, config) =>
+                {
+                    config.AddJsonFile("ocelot.json");
+                })
+                <%_ } _%>
                 .UseStartup<Startup>()
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"))
                 .UseSerilog();

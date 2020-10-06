@@ -40,10 +40,13 @@ namespace <%= namespace %>.Configuration {
                 options.SerializerSettings.Formatting = Formatting.Indented;
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
             });
+
+            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            <%_ } _%>
 
             return services;
         }
@@ -62,6 +65,7 @@ namespace <%= namespace %>.Configuration {
 
             app.UseHealthChecks("/health");
 
+            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -70,6 +74,7 @@ namespace <%= namespace %>.Configuration {
             {
                 app.UseSpaStaticFiles();
             }
+            <%_ } _%>
 
             return app;
         }
