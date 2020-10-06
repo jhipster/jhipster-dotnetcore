@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Controllers
 {
@@ -30,19 +31,13 @@ namespace <%= namespace %>.Controllers
         }
 
         [HttpGet("swagger-resources")]
-        public ActionResult<IEnumerable<SwaggerResource>> GetSwaggerResources()
+        public ActionResult<IEnumerable<SwaggerResourceDto>> GetSwaggerResources()
         {
             _log.LogDebug("REST request to get Swagger Resources");
-            SwaggerResource sr1 = new SwaggerResource() { Name = "<%=pascalizedBaseName%>", Location = "/v2/api-docs" };
-            List<SwaggerResource> swaggerResources = new List<SwaggerResource>();
+            SwaggerResourceDto sr1 = new SwaggerResourceDto() { Name = "<%=pascalizedBaseName%>", Location = "/v2/api-docs" };
+            List<SwaggerResourceDto> swaggerResources = new List<SwaggerResourceDto>();
             swaggerResources.Add(sr1);
             return Ok(swaggerResources);
         }
-    }
-
-    public class SwaggerResource
-    {
-        public string Name { get; set; }
-        public string Location { get; set; }
     }
 }
