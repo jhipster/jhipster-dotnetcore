@@ -267,6 +267,15 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/SwaggerResourceDto.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/SwaggerResourceDto.cs`,
+                },
+            ],
+        },
     ],
     services: [
         {
@@ -878,6 +887,15 @@ const serverFiles = {
         },
     ],
     serverMisc: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/SwaggerController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/SwaggerController.cs`,
+                },
+            ],
+        },
         {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
