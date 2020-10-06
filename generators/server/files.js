@@ -879,6 +879,15 @@ const serverFiles = {
     ],
     serverMisc: [
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/SwaggerController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/SwaggerController.cs`,
+                }
+            ],
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/Fixme.cs', renameTo: generator => `${generator.testProjectDir}/Fixme.cs` }],
