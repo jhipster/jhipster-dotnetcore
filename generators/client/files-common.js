@@ -71,7 +71,7 @@ function updateWebpackDevJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
         "target: `http${options.tls ? 's' : ''}://localhost:8080`",
-        `target: 'http\${options.tls ? 's' : ''}://localhost:${this.serverPort}'`,
+        `target: \`http\${options.tls ? 's' : ''}://localhost:${this.serverPort}\``,
         false
     );
 }
