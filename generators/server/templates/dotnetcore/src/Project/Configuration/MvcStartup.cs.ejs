@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+<%_ if ( applicationType === 'gateway') { _%>
+using Ocelot.Middleware;
+<%_ } _%>
 
 namespace <%= namespace %>.Configuration {
     public static class WebConfiguration {
@@ -63,6 +66,10 @@ namespace <%= namespace %>.Configuration {
                 endpoints.MapControllers();
             });
 
+            <%_ if (applicationType === 'gateway') { _%>
+            app.Map("/services", MapApiGateway);
+            <%_ } _%>
+
             app.UseHealthChecks("/health");
 
             <%_ if (!skipClient && clientFramework != "Blazor") { _%>
@@ -78,5 +85,12 @@ namespace <%= namespace %>.Configuration {
 
             return app;
         }
+
+        <%_ if (applicationType === 'gateway') { _%>
+        private static void MapApiGateway(IApplicationBuilder app)
+        {
+            app.UseOcelot().Wait();
+        }
+        <%_ } _%>
     }
 }

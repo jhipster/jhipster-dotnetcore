@@ -994,6 +994,23 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            condition: generator =>
+                generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
+            path: DOCKER_DIR,
+            templates: [
+                { 
+                    file: 'central-server-config/application.yml',
+                    method: 'copy', 
+                    renameTo: () => 'central-server-config/application.yml' 
+                },
+                { 
+                    file: 'central-server-config/README.md',
+                    method: 'copy', 
+                    renameTo: () => 'central-server-config/README.md' 
+                },
+            ],
+        },
     ],
     serverGateway: [
         {

@@ -22,7 +22,9 @@ using System.Security.Authentication;
 using JHipsterNet.Web.Logging;
 using Serilog.Sinks.Syslog;
 using ILogger = Serilog.ILogger;
-
+<%_ if (serviceDiscoveryType === 'consul') { _%>
+using Winton.Extensions.Configuration.Consul;
+<%_ } _%>
 using static JHipsterNet.Core.Boot.BannerPrinter;
 
 namespace <%= namespace %> {
@@ -32,16 +34,37 @@ namespace <%= namespace %> {
         const string SyslogPort = "SyslogPort";
         const string SyslogUrl = "SyslogUrl";
         const string SyslogAppName = "SyslogAppName";
+        <%_ if (serviceDiscoveryType === 'consul') { _%>
+        const string ConsulSection = "Consul";
+        const string ConsulHost = "Host";
+        <%_ } _%>
 
         public static int Main(string[] args)
         {
             PrintBanner(10 * 1000);
 
             try {
+                var appConfiguration = GetAppConfiguration();
+                Log.Logger = CreateLogger(appConfiguration);
 
-                Log.Logger = CreateLogger();
-
-                CreateWebHostBuilder(args).Build().Run();
+                CreateWebHostBuilder(args)
+                <%_ if (serviceDiscoveryType === 'consul') { _%>
+                    .ConfigureAppConfiguration(
+                        builder =>
+                        builder.AddConsul(
+                            "config/application/data",
+                            options =>
+                            {
+                                options.ConsulConfigurationOptions =
+                                    cco => { cco.Address = new Uri(appConfiguration.GetSection(ConsulSection)[ConsulHost]); };
+                                //options.Optional = true;
+                                //options.PollWaitTime = TimeSpan.FromSeconds(5);
+                                //options.ReloadOnChange = true;
+                            })
+                    .AddEnvironmentVariables())
+                <%_ } _%>
+                    .Build()
+                    .Run();
 
                 return 0;
 
@@ -77,9 +100,8 @@ namespace <%= namespace %> {
         /// Create application logger from configuration.
         /// </summary>
         /// <returns></returns>
-        private static ILogger CreateLogger()
+        private static ILogger CreateLogger(IConfiguration appConfiguration)
         {
-            var appConfiguration = GetAppConfiguration();
             var port = 6514;
 
             // for logger configuration

@@ -36,13 +36,18 @@ module.exports = class extends needleBase {
         const firstRouteEntry =
             // prettier-ignore
             this.generator.stripMargin(
-                            `|{
+                            `| // Start ${microserviceName}/${entityName} routes
+                             |{
                              |  "DownstreamPathTemplate": "/api/${entityName}",
                              |  "DownstreamScheme": "https",
                              |  "ServiceName": "${microserviceName}-service",
-                             |  "UpstreamPathTemplate": "/services/${microserviceName}/api/${entityName}",
+                             |  "LoadBalancerOptions": {
+                             |    "Type": "LeastConnection"
+                             |  },
+                             |  "ReRoutesCaseSensitive": false,
+                             |  "UpstreamPathTemplate": "/${microserviceName}/api/${entityName}",
                              |  "UpstreamHttpMethod": [ "Get", "Post", "Delete","Put" ]
-                             |},`);
+                             |}, `);
         const secondRouteEntry =
             // prettier-ignore
             this.generator.stripMargin(
@@ -50,9 +55,14 @@ module.exports = class extends needleBase {
                                  |  "DownstreamPathTemplate": "/api/${entityName}/{everything}",
                                  |  "DownstreamScheme": "https",
                                  |  "ServiceName": "${microserviceName}-service",
+                                 |  "LoadBalancerOptions": {
+                                 |    "Type": "LeastConnection"
+                                 |  },
+                                 |  "ReRoutesCaseSensitive": false,
                                  |  "UpstreamPathTemplate": "/services/${microserviceName}/api/${entityName}/{everything}",
                                  |  "UpstreamHttpMethod": [ "Get", "Post", "Delete","Put" ]
-                                 |},`);
+                                 |},
+                                 |// End ${microserviceName}/${entityName} routes`);
         const firstRewriteFileModel = this.generateFileModel(ocelotConfigPath, 'jhipster-needle-add-route-to-gateway', firstRouteEntry);
         const secondRewriteFileModel = this.generateFileModel(ocelotConfigPath, 'jhipster-needle-add-route-to-gateway', secondRouteEntry);
 

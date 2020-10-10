@@ -55,14 +55,17 @@
     }_%>
     <%_ if (serviceDiscoveryType === 'consul') { _%>
     "Consul": {
-        "Enabled": true,
         "Host": "http://localhost:8500",
+        <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+        "Enabled": true,
         "service": "<%= lowercaseBaseName %>-service",
         "address": "localhost",
         "Port": <%= serverPortSecured %>,
         "PingEnabled": false
+        <%_ } _%>
     },
     <%_ } _%>
+    <%_ if (applicationType === 'monolith') { _%>
     "jhipster": {
         "Security": {
             "Authentication": {
@@ -99,6 +102,7 @@
             "MaxAge": 1800
         }
     },
+    <%_ } _%>
     "RibbonInfo": {
       "display-ribbon-on-profiles": "dev"
     }

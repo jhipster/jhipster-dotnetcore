@@ -1,17 +1,10 @@
 {
-  "ReRoutes": [
-    /*{
-        "DownstreamPathTemplate": "/api/{everything}",
-        "DownstreamScheme": "https",
-        "ServiceName": "sample-service",
-        "UpstreamPathTemplate": "/api/sample/{everything}",
-        "UpstreamHttpMethod": [ "Get" ]
-    }*/
+  "Routes": [
     // jhipster-needle-add-route-to-gateway - JHipster will add route to gateway
   ],
   "GlobalConfiguration": {
     "ServiceDiscoveryProvider": {
-      "Host": "consul",
+      "Host": "localhost",
       "Port": 8500,
       "Type": "Consul"
     }

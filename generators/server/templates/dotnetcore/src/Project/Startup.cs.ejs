@@ -100,11 +100,6 @@ namespace <%= namespace %> {
                 <%_ if (authenticationType === 'jwt') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>
-
-            <%_ if (applicationType === 'gateway') { _%>
-            app.UseOcelot().Wait(); 
-            <%_ } _%>
-
         }
 
         protected virtual void AddDatabase(IServiceCollection services)
