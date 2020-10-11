@@ -48,30 +48,30 @@ namespace <%= namespace %>.Configuration {
             return services;
         }
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder appBuilder, IHostEnvironment env)
+        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
         {
-            appBuilder.UseDefaultFiles();
-            appBuilder.UseStaticFiles();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
-            appBuilder.UseRouting();
-            appBuilder.UseAuthorization();
-            appBuilder.UseEndpoints(endpoints =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            appBuilder.UseHealthChecks("/health");
+            app.UseHealthChecks("/health");
 
-            appBuilder.UseSpa(spa =>
+            app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
             });
             if (!env.IsDevelopment())
             {
-                appBuilder.UseSpaStaticFiles();
+                app.UseSpaStaticFiles();
             }
 
-            return appBuilder;
+            return app;
         }
     }
 }
