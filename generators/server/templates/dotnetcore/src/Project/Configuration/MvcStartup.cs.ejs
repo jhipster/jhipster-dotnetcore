@@ -22,17 +22,17 @@ using Newtonsoft.Json.Serialization;
 
 namespace <%= namespace %>.Configuration {
     public static class WebConfiguration {
-        public static IServiceCollection AddWebModule(this IServiceCollection @this)
+        public static IServiceCollection AddWebModule(this IServiceCollection services)
         {
-            @this.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();
 
-            @this.AddMvc();
+            services.AddMvc();
 
             //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
-            @this.AddHealthChecks();
+            services.AddHealthChecks();
 
             //TODO use AddMvcCore + config
-            @this.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
+            services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
             .AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -40,38 +40,38 @@ namespace <%= namespace %>.Configuration {
                 options.SerializerSettings.Formatting = Formatting.Indented;
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
             });
-            @this.AddSpaStaticFiles(configuration =>
+            services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            return @this;
+            return services;
         }
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder @this, IHostEnvironment env)
+        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder appBuilder, IHostEnvironment env)
         {
-            @this.UseDefaultFiles();
-            @this.UseStaticFiles();
+            appBuilder.UseDefaultFiles();
+            appBuilder.UseStaticFiles();
 
-            @this.UseRouting();
-            @this.UseAuthorization();
-            @this.UseEndpoints(endpoints =>
+            appBuilder.UseRouting();
+            appBuilder.UseAuthorization();
+            appBuilder.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            @this.UseHealthChecks("/health");
+            appBuilder.UseHealthChecks("/health");
 
-            @this.UseSpa(spa =>
+            appBuilder.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
             });
             if (!env.IsDevelopment())
             {
-                @this.UseSpaStaticFiles();
+                appBuilder.UseSpaStaticFiles();
             }
 
-            return @this;
+            return appBuilder;
         }
     }
 }

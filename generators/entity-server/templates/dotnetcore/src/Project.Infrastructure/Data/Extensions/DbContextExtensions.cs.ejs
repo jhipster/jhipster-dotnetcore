@@ -16,9 +16,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace <%= namespace %>.Infrastructure.Data.Extensions {
     public static class DbContextExtensions {
-        public static void AddGraph(this DbContext @this, object rootObject)
+        public static void AddGraph(this DbContext dbContext, object rootObject)
         {
-            @this.ChangeTracker.TrackGraph(rootObject, e => {
+            dbContext.ChangeTracker.TrackGraph(rootObject, e => {
                 if (e.Entry.IsKeySet) {
                     e.Entry.State = EntityState.Unchanged;
                 }
