@@ -4,6 +4,7 @@
     "baseName": "JhipsterSampleApplication",
     "packageName": "JhipsterSampleApplication",
     "authenticationType": "jwt",
+    "serverPort": "5000",
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
     "enableTranslation": false,

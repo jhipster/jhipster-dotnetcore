@@ -18,6 +18,8 @@ jobs:
                     - jwt-with-mysql-app
                     - jwt-with-postgres-app
                     - jwt-with-react-app
+                    - microservice-app
+                    - gateway-app
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'

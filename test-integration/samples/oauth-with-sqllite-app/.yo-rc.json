@@ -4,6 +4,7 @@
     "baseName": "JhipsterSampleApplication",
     "packageName": "JhipsterSampleApplication",
     "authenticationType": "oauth2",
+    "serverPort": "5000",
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
     "enableTranslation": false,
