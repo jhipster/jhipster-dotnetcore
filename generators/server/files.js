@@ -158,7 +158,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt' ,
+            condition: generator => generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -1003,19 +1003,18 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator =>
-                generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
+            condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
             path: DOCKER_DIR,
             templates: [
-                { 
+                {
                     file: 'central-server-config/application.yml',
-                    method: 'copy', 
-                    renameTo: () => 'central-server-config/application.yml' 
+                    method: 'copy',
+                    renameTo: () => 'central-server-config/application.yml',
                 },
-                { 
+                {
                     file: 'central-server-config/README.md',
-                    method: 'copy', 
-                    renameTo: () => 'central-server-config/README.md' 
+                    method: 'copy',
+                    renameTo: () => 'central-server-config/README.md',
                 },
             ],
         },
@@ -1061,10 +1060,7 @@ const baseServiceDiscoveryFiles = {
         {
             condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
             path: DOCKER_DIR,
-            templates: [
-                'consul.yml',
-                { file: 'config/git2consul.json', method: 'copy' },
-            ],
+            templates: ['consul.yml', { file: 'config/git2consul.json', method: 'copy' }],
         },
     ],
 };
