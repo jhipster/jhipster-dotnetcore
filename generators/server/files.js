@@ -117,7 +117,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -127,7 +127,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -137,7 +137,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -158,7 +158,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' ,
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -186,6 +186,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -196,6 +197,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -208,7 +210,7 @@ const serverFiles = {
     ],
     dtoFiles: [
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -218,7 +220,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -229,6 +231,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -247,7 +250,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -258,7 +261,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -391,7 +394,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -467,7 +470,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -478,7 +481,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -488,7 +491,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -498,7 +501,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -508,7 +511,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -518,7 +521,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -547,6 +550,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -575,7 +579,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -585,7 +589,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -595,7 +599,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -605,7 +609,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -636,7 +640,7 @@ const serverFiles = {
     ],
     serverAuthConfig: [
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -675,7 +679,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -771,6 +775,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -781,6 +786,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -810,6 +816,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -820,6 +827,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -906,7 +914,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/Fixme.cs', renameTo: generator => `${generator.testProjectDir}/Fixme.cs` }],
         },
@@ -1056,7 +1064,6 @@ const baseServiceDiscoveryFiles = {
             templates: [
                 'consul.yml',
                 { file: 'config/git2consul.json', method: 'copy' },
-                { file: 'config/consul-config/application.yml', method: 'copy', renameTo: () => 'central-server-config/application.yml' },
             ],
         },
     ],

@@ -62,9 +62,11 @@ namespace <%= namespace %> {
             services
             <%_ if (authenticationType === 'jwt') { _%>
                 .AddSecurityModule()
-            <%_ } else { _%>
+            <%_ } else { 
+                if (applicationType !== 'microservice') { _%>
                 .AddSecurityModule(jhipsterSettings)
-            <%_ } _%>
+                <%_ }
+            } _%>
                 .AddProblemDetailsModule(Environment)
                 .AddAutoMapperModule()
                 .AddSwaggerModule()
@@ -95,9 +97,9 @@ namespace <%= namespace %> {
                 <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
                 .UseConsul(Configuration)
                 <%_ } _%>
-                .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2') { _%>;<%_ } _%>
+                .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2' || applicationType === 'microservice') { _%>;<%_ } _%>
                 
-                <%_ if (authenticationType === 'jwt') { _%>
+                <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>
         }

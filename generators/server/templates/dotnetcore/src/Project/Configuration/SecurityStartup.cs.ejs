@@ -32,8 +32,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+<%_ if (applicationType !== 'microservice') { _%>
 using AuthenticationService = <%= namespace %>.Domain.Services.AuthenticationService;
 using IAuthenticationService = <%= namespace %>.Domain.Services.Interfaces.IAuthenticationService;
+<%_ } _%>
 <%_ } else { _%>
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -74,6 +76,7 @@ namespace <%= namespace %>.Configuration {
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
 
+            <%_ if (applicationType !== 'microservice') { _%>
             services.AddIdentity<User, Role>(options => {
                     options.SignIn.RequireConfirmedEmail = true;
                     options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
@@ -84,7 +87,7 @@ namespace <%= namespace %>.Configuration {
                 .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
                 >()
                 .AddDefaultTokenProviders();
-
+            <%_ } _%>
 
             services
                 .AddAuthentication(options => {
@@ -104,11 +107,11 @@ namespace <%= namespace %>.Configuration {
                     };
                 });
 
-            services.AddScoped<ITokenProvider, TokenProvider>();
+            <%_ if (applicationType !== 'microservice') { _%>
             services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
+            <%_ } _%>            
             services.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
-            services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-
+            services.AddScoped<ITokenProvider, TokenProvider>();
             <%_ } else { _%>
             services.AddAuthentication(options =>
             {
