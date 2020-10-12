@@ -32,7 +32,7 @@ module.exports = class extends needleBase {
     }
 
     addEntityToMenu(entityName) {
-        const lowerCasedEntityName = _.lowerCase(entityName);
+        const lowerCasedEntityName = _.toLower(entityName);
         const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
         const entityMenuPath = `src/${this.mainClientDir}/Shared/NavMenu.razor`;
         const entityEntry =

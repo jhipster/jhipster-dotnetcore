@@ -40,7 +40,7 @@ module.exports = class extends EntityGenerator {
     get prompting() {
         return {
             /* pre entity hook needs to be written here */
-            // askForMicroserviceJson: prompts.askForMicroserviceJson,
+            askForMicroserviceJson: prompts.askForMicroserviceJson,
             /* ask question to user if s/he wants to update entity */
             askForUpdate: prompts.askForUpdate,
             askForFields: prompts.askForFields,
@@ -71,8 +71,8 @@ module.exports = class extends EntityGenerator {
                 context.camelCasedEntityClassPlural = _.camelCase(context.entityClassPlural);
                 context.kebabCasedEntityClass = _.kebabCase(context.entityClass);
                 context.kebabCasedEntityClassPlural = _.kebabCase(context.entityClassPlural);
-                context.lowerCasedEntityClass = _.lowerCase(context.entityClass);
-                context.lowerCasedEntityClassPlural = _.lowerCase(context.entityClassPlural);
+                context.lowerCasedEntityClass = _.toLower(context.entityClass);
+                context.lowerCasedEntityClassPlural = _.toLower(context.entityClassPlural);
                 context.entityClassHasManyToMany = false;
                 context.entities = this.getExistingEntities();
                 context.mainClientAppDir = `${context.mainProjectDir}/ClientApp/src`;
@@ -122,8 +122,8 @@ module.exports = class extends EntityGenerator {
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
                     relationship.otherEntityNameCamelCased = _.camelCase(relationship.otherEntityName);
-                    relationship.otherEntityNameLowerCased = _.lowerCase(relationship.otherEntityName);
-                    relationship.otherEntityNameLowerCasedPlural = _.lowerCase(relationship.otherEntityNamePlural);
+                    relationship.otherEntityNameLowerCased = _.toLower(relationship.otherEntityName);
+                    relationship.otherEntityNameLowerCasedPlural = _.toLower(relationship.otherEntityNamePlural);
 
                     if (
                         relationship.relationshipType === 'one-to-many' ||
@@ -167,7 +167,6 @@ module.exports = class extends EntityGenerator {
     }
 
     get writing() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
         return super._writing();
     }
 

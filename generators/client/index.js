@@ -59,6 +59,8 @@ module.exports = class extends ClientGenerator {
             setupClientConsts() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort;
+                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
             },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);

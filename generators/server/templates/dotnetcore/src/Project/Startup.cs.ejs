@@ -16,6 +16,14 @@ using System;
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Infrastructure.Configuration;
+<%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+using <%= namespace %>.Configuration.Consul;
+<%_ } _%>
+<%_ if ( applicationType === 'gateway') { _%>
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using Ocelot.Provider.Consul;
+<%_ } _%>
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -53,15 +61,27 @@ namespace <%= namespace %> {
 
             services
             <%_ if (authenticationType === 'jwt') { _%>
-            .AddSecurityModule()
-            <%_ } else { _%>
+                .AddSecurityModule()
+            <%_ } else { 
+                if (applicationType !== 'microservice') { _%>
                 .AddSecurityModule(jhipsterSettings)
-            <%_ } _%>
+                <%_ }
+            } _%>
                 .AddProblemDetailsModule(Environment)
                 .AddAutoMapperModule()
                 .AddSwaggerModule()
                 .AddWebModule()
+            <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
+                .AddConsul(Configuration)
+            <%_ } _%>
                 .AddServiceModule();
+
+            <%_ if (applicationType === 'gateway') { _%>
+            services
+                .AddOcelot()
+                .AddConsul();
+            <%_ } _%>
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,11 +94,14 @@ namespace <%= namespace %> {
                 .UseApplicationProblemDetails()
                 .UseApplicationSwagger()
                 .UseApplicationWeb(env)
-                .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2') { _%>;<%_ } _%>
-                <%_ if (authenticationType === 'jwt') { _%>
+                <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+                .UseConsul(Configuration)
+                <%_ } _%>
+                .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2' || applicationType === 'microservice') { _%>;<%_ } _%>
+                
+                <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>
-
         }
 
         protected virtual void AddDatabase(IServiceCollection services)
