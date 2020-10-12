@@ -4,6 +4,7 @@
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
     "authenticationType": "jwt",
+    "serverPort": "5000",
     "jhipsterVersion": "6.9.1",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",

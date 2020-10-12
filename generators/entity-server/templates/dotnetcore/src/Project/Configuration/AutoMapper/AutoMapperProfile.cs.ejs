@@ -31,13 +31,12 @@ namespace <%= namespace %>.Configuration.AutoMapper {
     {
         public AutoMapperProfile()
         {
-            <%_ if (authenticationType === 'jwt') { _%>
+            <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
             CreateMap<User, UserDto>()
                 .ForMember(userDto => userDto.Roles, opt => opt.MapFrom(user => user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()))
             .ReverseMap()
                 .ForPath(user => user.UserRoles, opt => opt.MapFrom(userDto => userDto.Roles.Select(role => new UserRole { Role = new Role { Name = role }, UserId = userDto.Id }).ToHashSet()));
             <%_ } _%>
-
 
             <%_ if(entities.length !== 0) {
                 entities.forEach(entity => {
@@ -53,7 +52,6 @@ namespace <%= namespace %>.Configuration.AutoMapper {
                 <%_
             }} _%>
             %>
-
         }
     }
 }

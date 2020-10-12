@@ -117,7 +117,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -127,7 +127,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -137,7 +137,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -186,6 +186,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -196,6 +197,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -208,7 +210,7 @@ const serverFiles = {
     ],
     dtoFiles: [
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -218,7 +220,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -229,6 +231,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -247,7 +250,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -258,7 +261,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -367,6 +370,15 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Configuration/ConfigurationHelper.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ConfigurationHelper.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Configuration/AutoMapperStartup.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapperStartup.cs`,
                 },
@@ -382,7 +394,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -458,7 +470,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -469,7 +481,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -479,7 +491,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -489,7 +501,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -499,7 +511,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -509,7 +521,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -538,6 +550,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -566,7 +579,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -576,7 +589,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -586,7 +599,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -596,7 +609,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [
                 {
@@ -627,7 +640,7 @@ const serverFiles = {
     ],
     serverAuthConfig: [
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -666,7 +679,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -762,6 +775,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -772,6 +786,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -801,6 +816,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -811,6 +827,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -897,7 +914,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt',
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/Fixme.cs', renameTo: generator => `${generator.testProjectDir}/Fixme.cs` }],
         },
@@ -969,6 +986,51 @@ const serverFiles = {
             ],
         },
     ],
+    serverServiceDiscovery: [
+        {
+            condition: generator =>
+                generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul' && generator.applicationType !== 'gateway',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/Consul/ConsulOptions.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/Consul/ConsulOptions.cs`,
+                },
+                {
+                    file: 'Project/Configuration/Consul/ConsulStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/Consul/ConsulStartup.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
+            path: DOCKER_DIR,
+            templates: [
+                {
+                    file: 'central-server-config/application.yml',
+                    method: 'copy',
+                    renameTo: () => 'central-server-config/application.yml',
+                },
+                {
+                    file: 'central-server-config/README.md',
+                    method: 'copy',
+                    renameTo: () => 'central-server-config/README.md',
+                },
+            ],
+        },
+    ],
+    serverGateway: [
+        {
+            condition: generator => generator.applicationType === 'gateway',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/ocelot.json',
+                    renameTo: generator => `${generator.mainProjectDir}/ocelot.json`,
+                },
+            ],
+        },
+    ],
 };
 
 const gatlingTestsFiles = {
@@ -993,6 +1055,16 @@ const gatlingTestsFiles = {
     ],
 };
 
+const baseServiceDiscoveryFiles = {
+    baseServiceDiscovery: [
+        {
+            condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
+            path: DOCKER_DIR,
+            templates: ['consul.yml', { file: 'config/git2consul.json', method: 'copy' }],
+        },
+    ],
+};
+
 function writeFiles() {
     return {
         writeFiles() {
@@ -1000,6 +1072,9 @@ function writeFiles() {
         },
         writeFilesGatling() {
             this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src'));
+        },
+        writeFilesBaseServiceDiscovery() {
+            this.writeFilesToDisk(baseServiceDiscoveryFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src/main'));
         },
     };
 }

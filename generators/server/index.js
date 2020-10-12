@@ -59,7 +59,8 @@ module.exports = class extends ServerGenerator {
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
                 this.databaseType = configuration.get('databaseType') || this.configOptions.databaseType;
                 this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
-                this.serverPort = 5000;
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort;
+                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
 
                 const serverConfigFound =
                     this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
@@ -86,6 +87,8 @@ module.exports = class extends ServerGenerator {
             setSharedConfigOptions() {
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.authenticationType = this.authenticationType;
+                this.configOptions.serverPort = this.serverPort;
+                this.configOptions.serverPortSecured = parseInt(this.serverPort, 10) + 1;
             },
         };
     }
@@ -97,6 +100,7 @@ module.exports = class extends ServerGenerator {
                 const config = {
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
+                    serverPort: this.serverPort,
                     prodDatabaseType: 'mysql', // set only for jdl-importer compatibility
                 };
                 this.config.set(config);
