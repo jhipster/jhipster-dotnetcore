@@ -86,7 +86,7 @@ Download the Dockerfile:
 ```bash
 mkdir docker
 cd docker
-wget https://github.com/jhipster/jhipster-dotnetcore/raw/master/docker/Dockerfile
+wget https://github.com/jhipster/jhipster-dotnetcore/raw/main/docker/Dockerfile
 ```
 
 Build the Docker images:
@@ -139,7 +139,7 @@ cd dotnetcore
 npm link
 ```
 
-2. Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the master branch or your own custom fork)
+2. Link a development version of JHipster to your blueprint (optional: required only if you want to use a non-released JHipster version, like the main branch or your own custom fork)
 
 You could also use Yarn for this if you prefer
 
@@ -191,7 +191,7 @@ To start services, use
 docker-compose -f docker/app.yml up
 ```
 
-In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/master/OracleDatabase/SingleInstance/README.md)
+In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/main/OracleDatabase/SingleInstance/README.md)
 
 
 ## Generating Services
@@ -409,24 +409,24 @@ Apache-2.0 © [Daniel Petisme]()
 [npm-url]: https://npmjs.org/package/generator-jhipster-dotnetcore
 [daviddm-image]: https://david-dm.org/jhipster/jhipster-dotnetcore.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/jhipster-dotnetcore
-[github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg?branch=master
-[github-actions-integ-oauth-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20OAUTH/badge.svg?branch=master
-[github-actions-integ-jwt-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20JWT/badge.svg?branch=master
+[github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg?branch=main
+[github-actions-integ-oauth-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20OAUTH/badge.svg?branch=main
+[github-actions-integ-jwt-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20JWT/badge.svg?branch=main
 [github-actions-url]: https://github.com/jhipster/jhipster-dotnetcore/actions
-[sonar-url]: https://sonarcloud.io/dashboard?branch=master&id=jhipster_jhipster-dotnetcore
-[sonar-coverage-url]: https://sonarcloud.io/component_measures?branch=master&id=jhipster_jhipster-dotnetcore&metric=coverage&view=list
-[sonar-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=alert_status
-[sonar-coverage-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=coverage
-[sonar-reliability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=reliability_rating
-[sonar-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=security_rating
-[sonar-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=sqale_rating
-[sonar-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-dotnetcore&metric=duplicated_lines_density
+[sonar-url]: https://sonarcloud.io/dashboard?branch=main&id=jhipster_jhipster-dotnetcore
+[sonar-coverage-url]: https://sonarcloud.io/component_measures?branch=main&id=jhipster_jhipster-dotnetcore&metric=coverage&view=list
+[sonar-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=alert_status
+[sonar-coverage-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=coverage
+[sonar-reliability-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=reliability_rating
+[sonar-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=security_rating
+[sonar-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=sqale_rating
+[sonar-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=duplicated_lines_density
 
-[sonar-sample-url]: https://sonarcloud.io/dashboard?branch=master&id=jhipster_jhipster-sample-app-dotnetcore
-[sonar-sample-coverage-url]: https://sonarcloud.io/component_measures?branch=master&id=jhipster_jhipster-sample-app-dotnetcore&metric=coverage&view=list
-[sonar-sample-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=alert_status
-[sonar-sample-coverage-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=coverage
-[sonar-sample-reliability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=reliability_rating
-[sonar-sample-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=security_rating
-[sonar-sample-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=sqale_rating
-[sonar-sample-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=master&project=jhipster_jhipster-sample-app-dotnetcore&metric=duplicated_lines_density
+[sonar-sample-url]: https://sonarcloud.io/dashboard?branch=main&id=jhipster_jhipster-sample-app-dotnetcore
+[sonar-sample-coverage-url]: https://sonarcloud.io/component_measures?branch=main&id=jhipster_jhipster-sample-app-dotnetcore&metric=coverage&view=list
+[sonar-sample-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=alert_status
+[sonar-sample-coverage-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=coverage
+[sonar-sample-reliability-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=reliability_rating
+[sonar-sample-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=security_rating
+[sonar-sample-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=sqale_rating
+[sonar-sample-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=duplicated_lines_density
