@@ -9,9 +9,21 @@ Welcome to JHipster.NET documentation!
 Thanks for taking a look at the JHipster.NET documentation. Please use the left hand nav to get around. I would suggest taking a look at introduction first.
 
 .. toctree::
-  :maxdepth: 1
+  :maxdepth: 2
   :hidden:
   :caption: Introduction
 
   Introduction/big-picture
   Introduction/getting-started
+
+.. toctree::
+  :maxdepth: 3
+  :hidden:
+  :caption: Features
+
+  Features/services
+  Features/dto
+  Features/database-migrations
+  Features/code-analysis
+  Features/monitoring
+  Features/security
