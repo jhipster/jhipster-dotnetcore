@@ -29,3 +29,11 @@ You can also find lot of information in https://www.jhipster.tech
   Features/code-analysis
   Features/monitoring
   Features/security
+
+.. toctree::
+  :maxdepth: 3
+  :hidden:
+  :caption: Architecture
+
+  Architecture/monolith
+  Architecture/microservices
