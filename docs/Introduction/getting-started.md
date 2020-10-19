@@ -1,12 +1,12 @@
-## Getting Started 
+# Getting Started 
 
-### Prerequisites
+## Prerequisites
 
 As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
 
 - [Installing JHipster](https://www.jhipster.tech/installation/)
 
-### Generate your first application
+## Generate your first application
 
 Installation of the blueprint 
 
