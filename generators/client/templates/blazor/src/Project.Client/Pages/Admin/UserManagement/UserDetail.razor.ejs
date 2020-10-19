@@ -1,0 +1,68 @@
+﻿@page "/admin/user-management/{Id}/view"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "ROLE_ADMIN")]
+
+<div class="row justify-content-center">
+    <div class="col-8">
+
+        @if (CurrentUser != null)
+        {
+            <div>
+                <h2>
+                    <span>User</span> [<b>@CurrentUser.Login</b>]
+                </h2>
+
+                <dl class="row-md jh-entity-details">
+                    <dt><span>Login</span></dt>
+                    <dd>
+                        <span>@CurrentUser.Login</span>
+                        @*<jhi-boolean [value]="user.activated"
+                                         textTrue="Activated"
+                                         textFalse="Deactivated">
+                            </jhi-boolean>*@
+
+                        @*TODO see https://github.com/jhipster/ng-jhipster/blob/main/src/component/jhi-boolean.component.ts*@
+                    </dd>
+
+                    <dt><span>First Name</span></dt>
+                    <dd>@CurrentUser.FirstName</dd>
+
+                    <dt><span>Last Name</span></dt>
+                    <dd>@CurrentUser.LastName</dd>
+
+                    <dt><span>Email</span></dt>
+                    <dd>@CurrentUser.Email</dd>
+
+                    <dt><span>Created By</span></dt>
+                    <dd>@CurrentUser.CreatedBy</dd>
+
+                    <dt><span>Created Date</span></dt>
+                    <dd>@($"{CurrentUser.CreatedDate:dd/MM/yy HH:mm}")</dd>
+
+                    <dt><span>Last Modified By</span></dt>
+                    <dd>@CurrentUser.LastModifiedBy</dd>
+
+                    <dt><span>Last Modified Date</span></dt>
+                    <dd>@($"{CurrentUser.LastModifiedDate:dd/MM/yy HH:mm}")</dd>
+
+                    <dt><span>Profiles</span></dt>
+                    <dd>
+                        <ul class="list-unstyled">
+                            @foreach (var authority in CurrentUser.Authorities)
+                            {
+                                <li>
+                                    <span class="badge badge-info">@authority</span>
+                                </li>
+                            }
+                        </ul>
+                    </dd>
+                </dl>
+
+                <button type="submit" @onclick="@Back" class="btn btn-info">
+                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+                </button>
+            </div>
+        }
+    </div>
+</div>

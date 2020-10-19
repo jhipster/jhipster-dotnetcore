@@ -1,9 +1,10 @@
 {
   "generator-jhipster": {
-    "namespace": "MyCompany",
+    "namespace": "JhipsterSampleApplication",
     "databaseType": "postgres",
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",
+    "serverPort": "5000",
     "jhipsterVersion": "6.9.1",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
@@ -20,14 +21,14 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.1.0"
+        "version": "1.1.2"
       }
     ],
     "enableTranslation": false,
     "blueprints": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.1.0"
+        "version": "1.1.2"
       }
     ]
   }

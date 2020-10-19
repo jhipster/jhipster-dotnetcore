@@ -23,6 +23,7 @@ const packagejs = require('../package.json');
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+const BLAZOR = constants.BLAZOR;
 
 module.exports = {
     copyI18n,
@@ -30,6 +31,7 @@ module.exports = {
     equivalentCSharpType,
     configureGlobalDotnetcore,
     getEnumInfo,
+    asModel,
 };
 
 /**
@@ -96,6 +98,13 @@ function configureGlobalDotnetcore() {
     this.clientTestProject = `${this.mainClientDir}/test/`;
     this.kebabCasedBaseName = _.kebabCase(this.baseName);
     this.jhipsterDotnetVersion = packagejs.version;
+    this.modelSuffix = 'Model';
+
+    if (this.clientFramework === BLAZOR) {
+        this.mainClientDir = `client/${this.pascalizedBaseName}.Client`;
+        this.sharedClientDir = `client/${this.pascalizedBaseName}.Client.Shared`;
+        this.clientTestProject = `${this.pascalizedBaseName}.Client${constants.PROJECT_TEST_SUFFIX}`;
+    }
 
     this.options.outputPathCustomizer = [
         paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientAppDir}$1/`) : paths),
@@ -105,6 +114,10 @@ function configureGlobalDotnetcore() {
         paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(config\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
+}
+
+function asModel(name) {
+    return name + this.modelSuffix;
 }
 
 function equivalentCSharpType(javaType) {

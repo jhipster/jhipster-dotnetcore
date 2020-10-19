@@ -38,7 +38,7 @@ namespace <%= namespace %>.Domain.Services {
             _userManager = userManager;
         }
 
-        public async Task<IPrincipal> Authenticate(string username, string password)
+        public virtual async Task<IPrincipal> Authenticate(string username, string password)
         {
             //https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.signinmanager-1.passwordsigninasync?view=aspnetcore-2.2
             // => not use because cookie

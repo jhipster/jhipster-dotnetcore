@@ -1,0 +1,105 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass;
+const entityClassNamePluralized = pascalizedEntityClassPlural;
+_%>
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Pages.Utils;
+using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
+<%_ relationships.forEach(relation => { 
+    if(relation.relationshipType === 'one-to-one') { _%>
+using <%= namespace %>.Client.Services.EntityServices.<%= relation.otherEntityNamePascalized %>;
+    <%_ }
+}); _%>
+using Microsoft.AspNetCore.Components;
+
+namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
+{
+    public partial class <%= entityClassName %>Update
+    {
+        [Parameter]
+        public int Id { get; set; }
+        
+        [Inject]
+        private I<%= entityClassName %>Service <%= entityClassName %>Service { get; set; }
+
+        <%_ relationships.forEach(relation => { 
+            if(relation.relationshipType === 'one-to-one') { _%>
+        [Inject]
+        private I<%= relation.otherEntityNamePascalized %>Service <%= relation.otherEntityNamePascalized %>Service { get; set; }
+            <%_ }
+        }); _%>
+
+        [Inject]
+        private INavigationService NavigationService { get; set; }
+
+        public <%= asModel(entityClassName) %> <%= asModel(entityClassName) %> { get; set; } = new <%= asModel(entityClassName) %>();
+
+        <%_ relationships.forEach(relation => { 
+            if(relation.relationshipType === 'one-to-one') { _%>
+        public IEnumerable<long> <%= relation.relationshipFieldNamePascalizedPlural %> { get; set; } = new List<long>();
+
+        public long <%= relation.otherEntityNamePascalized %>Id { get; set; }
+            <%_ }
+        }); _%>
+
+        protected override async Task OnInitializedAsync()
+        {
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+            <%= relation.relationshipFieldNamePascalizedPlural %> = (await <%= relation.otherEntityNamePascalized %>Service.GetAll()).Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id);
+                <%_ }
+            }); _%>
+            if (Id != 0)
+            {
+                <%= asModel(entityClassName) %> = await <%= entityClassName %>Service.Get(Id.ToString());
+                <%_ relationships.forEach(relation => { 
+                    if(relation.relationshipType === 'one-to-one') { _%>
+                <%= relation.otherEntityNamePascalized %>Id = <%= asModel(entityClassName) %>.<%= relation.otherEntityNamePascalized %>?.Id ?? 0;
+                    <%_ }
+                }); _%>
+            }
+        }
+        private void Back()
+        {
+            NavigationService.Previous();
+        }
+
+        private async Task Save()
+        {
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+            <%= asModel(entityClassName) %>.<%= relation.otherEntityNamePascalized %> = <%= relation.otherEntityNamePascalized %>Id != 0 ? new <%= asModel(relation.otherEntityNamePascalized) %> { Id = <%= relation.otherEntityNamePascalized %>Id } : null;
+                <%_ }
+            }); _%>
+            if (Id != 0)
+            {
+                await <%= entityClassName %>Service.Update(<%= asModel(entityClassName) %>);
+            }
+            else
+            {
+                await <%= entityClassName %>Service.Add(<%= asModel(entityClassName) %>);
+            }
+            NavigationService.Previous();
+        }
+    }
+}

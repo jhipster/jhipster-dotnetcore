@@ -22,14 +22,21 @@ const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore; 
+const basePrompts = require('generator-jhipster/generators/client/prompts');
+const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
+const baseWriteReactFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
+const prompts = require('./prompts');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const dotnet = require('../dotnet');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeVueFiles = require('./files-vue').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
+const writeBlazorFiles = require('./files-blazor').writeFiles;
 
 const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
+const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -52,7 +59,6 @@ module.exports = class extends ClientGenerator {
 
     get configuring() {
         const phaseFromJHipster = super._configuring();
-
         const customPhaseSteps = {
             loadSharedConfig() {
                 this.loadAppConfig();
@@ -72,16 +78,20 @@ module.exports = class extends ClientGenerator {
 
     get writing() {
         // The writing phase is being overriden so that we can write our own templates as well.
-        // If the templates doesnt need to be overrriden then just return `super._writing()` here        
-        const phaseFromJHipster = super._writing();
-        const customPhase = {
-            writeAngularFilesDotnetcore() {
+        // If the templates doesnt need to be overrriden then just return `super._writing()` here
+        return {
+            writeFilesDotnetcore() {
                 if (this.skipClient) return;
-                writeCommonFiles.call(this);
                 switch (this.clientFramework) {
+                    case BLAZOR:
+                        return writeBlazorFiles.call(this);
                     case REACT:
+                        baseWriteReactFiles.call(this);
+                        writeCommonFiles.call(this);
                         return writeReactFiles.call(this);
                     case ANGULAR:
+                        baseWriteAngularFiles.call(this);
+                        writeCommonFiles.call(this);
                         return writeAngularFiles.call(this);
                     case VUE:
                         return writeVueFiles.call(this);
@@ -90,7 +100,6 @@ module.exports = class extends ClientGenerator {
                 }
             }
         };
-        return Object.assign(phaseFromJHipster, customPhase);
     }
 
     get install() {
@@ -103,7 +112,7 @@ module.exports = class extends ClientGenerator {
                             `npm install `
                         )}for you to install the required dependencies. If this fails, try running the command yourself.`
                     );
-                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}`});
+                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}` });
                 }
             }
         };
@@ -111,16 +120,30 @@ module.exports = class extends ClientGenerator {
     }
 
     get end() {
-        const customPhase = {
-            end() {
-                if (this.skipClient) return;
-                this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+        return {
+            async end() {
+                if (this.clientFramework == BLAZOR) {
+                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                    try {
+                        await dotnet.newSln(this.solutionName);
+                    } catch (err) {
+                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+                    }
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Shared.csproj`,
+                        `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
+                    ]);
+                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
+                } else {
+                    if (this.skipClient) return;
+                    this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-                if (!this.options.skipInstall) {
-                    this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
+                    if (!this.options['skip-install']) {
+                        this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
+                    }
                 }
-            }
-        };
-        return customPhase;
+            },
+        }
     }
 };

@@ -1,0 +1,81 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; 
+_%>
+<%_
+let hasEnumField = false;
+fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+if (hasEnumField) { _%>
+using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
+using System;
+using System.Collections.Generic;
+
+namespace <%= namespace %>.Client.Models
+{
+    public class <%= asModel(entityClassName) %>
+    {
+        public long Id { get; set; }
+        <%_ for (idx in fields){
+            let required = false;
+            const fieldValidate = fields[idx].fieldValidate;
+            const fieldValidateRules = fields[idx].fieldValidateRules;
+            const fieldType = equivalentCSharpType(fields[idx].fieldType);
+            const fieldNamePascalized = fields[idx].fieldNamePascalized;
+            if (fieldValidate === true) {
+                if (fieldValidateRules.includes('required')) {
+                    required = true;
+                }
+            }
+            if (required) { _%>
+        [Required]
+            <%_ } _%>
+            <%_ if (fields[idx].fieldIsEnum) { _%>
+        public <%= fields[idx].fieldType %>? <%= fieldNamePascalized %> { get; set; }
+                <%_ } else { _%>
+        public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
+            <%_ } _%>
+        <%_ }
+        for (idx in relationships) {
+            const relationshipType = relationships[idx].relationshipType;
+            const relationshipRequired = relationships[idx].relationshipRequired;
+            const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
+            const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
+            const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
+            if (relationshipType === 'one-to-one'){_%>
+        public <%= asModel(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
+            <%_}
+            if(relationshipType === 'one-to-many') { _%>
+        public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
+            <%_  } else if (relationshipType === 'many-to-one') {
+                if (relationshipRequired) { _%>
+        [Required]
+                <%_ } _%>
+        public <%= asModel(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
+            <%_  } else if (relationshipType === 'many-to-many') { _%>
+        public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
+            <%_ } _%>
+
+        <%_ } _%>
+    }
+}

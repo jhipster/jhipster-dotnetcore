@@ -1,0 +1,74 @@
+﻿<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass;
+const entityClassNamePluralized = pascalizedEntityClassPlural;
+_%>
+@page "/<%= lowerCasedEntityClass %>/new"
+@page "/<%= lowerCasedEntityClass %>/{Id:int}/edit"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "ROLE_USER")]
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        <EditForm Model="@<%= asModel(entityClassName) %>" OnValidSubmit="@Save">
+            <h2 id="jhi-<%= lowerCasedEntityClass %>-heading">Create or edit a <%= entityClassName %></h2>
+            <div>
+                @*
+                    TODO ADD ERROR
+                    <jhi-alert-error></jhi-alert-error>
+                *@
+
+                @if (Id != 0)
+                {
+                    <div class="form-group">
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" id="id" name="id" readonly @bind-value="@<%= asModel(entityClassName) %>.Id" />
+                    </div>
+                }
+
+                <%_ fields.forEach(field => { _%>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_<%= field.fieldName %>"><%= field.fieldNameHumanized %></label>
+                    <input type="text" class="form-control" name="<%= field.fieldName %>" id="field_<%= field.fieldName %>"
+                           @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
+                </div>
+                <%_ }); _%>
+
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>">Region</label>
+                    <select class="form-control" id="field_<%= relation.otherEntityNameLowerCased %>" name="<%= relation.otherEntityNameLowerCased %>" @bind="@<%= relation.otherEntityNamePascalized %>Id">
+                        <option value="0"></option>
+                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.relationshipFieldNamePascalizedPlural %>)
+                        {
+                            if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.otherEntityNamePascalized %>?.Id)
+                            {
+                                <option selected="selected">@<%= relation.otherEntityNameLowerCased %></option>
+                            }
+                            else
+                            {
+                                <option>@<%= relation.otherEntityNameLowerCased %></option>
+                            }
+                        }
+                    </select>
+                </div>
+                <%_ }
+            }); _%>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" @onclick="Back">
+                    <Icon Name='"fa-ban"' />&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" class="btn btn-primary">
+                    <Icon Name='"fa-save"' />&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>

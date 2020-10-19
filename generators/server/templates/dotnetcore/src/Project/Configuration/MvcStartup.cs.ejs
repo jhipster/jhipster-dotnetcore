@@ -19,20 +19,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+<%_ if ( applicationType === 'gateway') { _%>
+using Ocelot.Middleware;
+<%_ } _%>
 
 namespace <%= namespace %>.Configuration {
     public static class WebConfiguration {
-        public static IServiceCollection AddWebModule(this IServiceCollection @this)
+        public static IServiceCollection AddWebModule(this IServiceCollection services)
         {
-            @this.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();
 
-            @this.AddMvc();
+            services.AddMvc();
 
             //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
-            @this.AddHealthChecks();
+            services.AddHealthChecks();
 
             //TODO use AddMvcCore + config
-            @this.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
+            services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
             .AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -40,38 +43,54 @@ namespace <%= namespace %>.Configuration {
                 options.SerializerSettings.Formatting = Formatting.Indented;
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
             });
-            @this.AddSpaStaticFiles(configuration =>
+
+            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
+            services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            <%_ } _%>
 
-            return @this;
+            return services;
         }
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder @this, IHostEnvironment env)
+        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
         {
-            @this.UseDefaultFiles();
-            @this.UseStaticFiles();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
 
-            @this.UseRouting();
-            @this.UseAuthorization();
-            @this.UseEndpoints(endpoints =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            @this.UseHealthChecks("/health");
+            <%_ if (applicationType === 'gateway') { _%>
+            app.Map("/services", MapApiGateway);
+            <%_ } _%>
 
-            @this.UseSpa(spa =>
+            app.UseHealthChecks("/health");
+
+            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
+            app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
             });
             if (!env.IsDevelopment())
             {
-                @this.UseSpaStaticFiles();
+                app.UseSpaStaticFiles();
             }
+            <%_ } _%>
 
-            return @this;
+            return app;
         }
+
+        <%_ if (applicationType === 'gateway') { _%>
+        private static void MapApiGateway(IApplicationBuilder app)
+        {
+            app.UseOcelot().Wait();
+        }
+        <%_ } _%>
     }
 }

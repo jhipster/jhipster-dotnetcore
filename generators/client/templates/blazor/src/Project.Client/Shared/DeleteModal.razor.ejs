@@ -1,0 +1,14 @@
+﻿<div class="modal-header" />
+<div class="modal-body">
+    <p id="jhi-delete-entity-heading">Are you sure you want to delete this entity?</p>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@Close">
+        <Icon Name='"fa-ban"'/>&nbsp;<span>Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-delete-country" @onclick="@Delete" class="btn btn-danger">
+        <Icon Name='"fa-times"' />&nbsp;<span>Delete</span>
+    </button>
+</div>

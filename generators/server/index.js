@@ -21,6 +21,7 @@ const chalk = require('chalk');
 const ServerGenerator = require('generator-jhipster/generators/server');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
@@ -54,6 +55,8 @@ module.exports = class extends ServerGenerator {
                 this.namespace = this.jhipsterConfig.namespace;
                 this.databaseType = this.jhipsterConfig.databaseType;
                 this.authenticationType = this.jhipsterConfig.authenticationType;
+                this.serverPort = this.jhipsterConfig.serverPort;
+                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
 
                 const serverConfigFound =
                     this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
@@ -89,7 +92,9 @@ module.exports = class extends ServerGenerator {
         const customPhaseSteps = {
             configureGlobalDotnetcore,
             fixConfig() {
-                this.jhipsterConfig.serverPort = 5000;
+                this.jhipsterConfig.databaseType,
+                this.jhipsterConfig.authenticationType,
+                this.jhipsterConfig.serverPort,
                 this.jhipsterConfig.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
             },
         };
@@ -103,9 +108,9 @@ module.exports = class extends ServerGenerator {
 
     get end() {
         return {
-            end() {
-                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution.\n`));
-                dotnet
+            async end() {
+                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                await dotnet
                     .newSln(this.solutionName)
                     .then(() =>
                         dotnet.slnAdd(`${this.solutionName}.sln`, [

@@ -17,18 +17,19 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const _ = require('lodash');
-const jhiCore = require('jhipster-core');
-
 const getFieldNameUndercored = fields =>
     ['id'].concat(
         fields.map(field => {
             return _.snakeCase(field.fieldName);
         })
     );
+const path = require('path');
+const _ = require('lodash');
+const jhiCore = require('jhipster-core');
+const shelljs = require('shelljs');
 
 module.exports = {
-    // askForMicroserviceJson,
+    askForMicroserviceJson,
     askForUpdate,
     askForFields,
     askForFieldsToRemove,
@@ -41,7 +42,7 @@ module.exports = {
     askForPagination,
 };
 
-/* function askForMicroserviceJson() {
+function askForMicroserviceJson() {
     const context = this.context;
     if (context.applicationType !== 'gateway' || context.useConfigurationFile) {
         return;
@@ -56,7 +57,7 @@ module.exports = {
             type: 'confirm',
             name: 'useMicroserviceJson',
             message: 'Do you want to generate this entity from an existing microservice?',
-            default: true
+            default: true,
         },
         {
             when: response => response.useMicroserviceJson === true || databaseType === 'no',
@@ -76,8 +77,8 @@ module.exports = {
                     return true;
                 }
                 return `${context.filename} not found in ${input}/`;
-            }
-        }
+            },
+        },
     ];
 
     this.prompt(prompts).then(props => {
@@ -91,11 +92,15 @@ module.exports = {
             context.useConfigurationFile = true;
             context.useMicroserviceJson = true;
             const fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
+
             this.loadEntityJson(fromPath);
+            if (this.context.applicationType === 'gateway') {
+                this.context.skipServer = false;
+            }
         }
         done();
     });
-} */
+}
 
 function askForUpdate() {
     const context = this.context;

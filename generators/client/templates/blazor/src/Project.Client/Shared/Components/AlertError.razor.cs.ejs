@@ -1,0 +1,146 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Timers;
+using Blazorise;
+using Microsoft.AspNetCore.Components;
+using <%= namespace %>.Client.Shared.Constants;
+using <%= namespace %>.Client.Shared.Models;
+using Toolbelt.Blazor;
+
+namespace <%= namespace %>.Client.Shared.Components
+{
+    public partial class AlertError
+    {
+        public const string NotFoundError = "Not found";
+        public const string NotReachableError = "Server not reachable";
+        public const string HttpErrorHeader = "app-error";
+
+        private List<JhiAlert> Alerts { get; } = new List<JhiAlert>();
+
+        [Inject] 
+        private HttpClientInterceptor Interceptor { get; set; }
+
+        protected override Task OnInitializedAsync()
+        {
+            Interceptor.AfterSend += HandleErrors;
+            return base.OnInitializedAsync();
+        }
+
+        public async Task AddAlert(JhiAlert alert)
+        {
+            Alerts.Add(alert);
+            if (alert.Timeout != 0)
+            {
+                RemoveAfter(alert, alert.Timeout);
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public async Task RemoveAlert(JhiAlert alert)
+        {
+            Alerts.Remove(alert);
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public IReadOnlyCollection<JhiAlert> GetAlerts()
+        {
+            return Alerts.AsReadOnly();
+    }
+
+        private void HandleErrors(object s, HttpClientInterceptorEventArgs e)
+        {
+            if (e.Response?.IsSuccessStatusCode == true)
+            {
+                return;
+            }
+            if (e.Response == null)
+            {
+                AddErrorAlert(NotReachableError);
+                return;
+            }
+            switch (e.Response.StatusCode)
+            {
+                case HttpStatusCode.BadRequest:
+                    var errorHandler = "";
+                    foreach (var httpResponseHeader in e.Response.Headers)
+                    {
+                        if (httpResponseHeader.Key.EndsWith(HttpErrorHeader))
+                        {
+                            errorHandler = e.Response.Headers.GetValues(httpResponseHeader.Key).FirstOrDefault();
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(errorHandler))
+                    {
+                        AddErrorAlert(errorHandler);
+                    }
+                    break;
+                case HttpStatusCode.NotFound:
+                    AddErrorAlert(NotFoundError);
+                    break;
+                default:
+                    AddErrorAlert(e.Response.Content.ToString());
+                    break;
+            }
+        }
+
+        private void AddErrorAlert(string errorMsg)
+        {
+            var alert = new JhiAlert
+            {
+                Type = TypeAlert.Danger,
+                Msg = errorMsg,
+                Timeout = 3000,
+                Scoped = true,
+            };
+            AddAlert(alert);
+        }
+
+        private void RemoveAfter(JhiAlert alert, double timeout)
+        {
+            var timer = new Timer { Interval = timeout };
+            timer.Elapsed += (sender, args) =>
+            {
+                if (sender is Timer senderTimer)
+                {
+                    senderTimer.Stop();
+                }
+
+                RemoveAlert(alert);
+            };
+            timer.Start();
+        }
+
+        private Color GetColorAlert(JhiAlert alert)
+        {
+            switch (alert.Type)
+            {
+                case TypeAlert.Danger:
+                    return Color.Danger;
+                case TypeAlert.Info:
+                    return Color.Info;
+                case TypeAlert.Success:
+                    return Color.Success;
+                case TypeAlert.Warning:
+                    return Color.Warning;
+                default:
+                    return Color.Danger;
+            }
+        }
+    }
+}

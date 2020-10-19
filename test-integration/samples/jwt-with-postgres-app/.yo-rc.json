@@ -4,10 +4,11 @@
     "baseName": "JhipsterSampleApplication",
     "packageName": "JhipsterSampleApplication",
     "authenticationType": "jwt",
+    "serverPort": "5000",
     "databaseType": "postgres",
     "prodDatabaseType": "mysql",
     "enableTranslation": false,
-    "namespace": "MyCompany",
+    "namespace": "JhipsterSampleApplication",
     "jhipsterVersion": "6.9.1",
     "useSass": true,
     "clientPackageManager": "npm",
@@ -20,13 +21,13 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.1.0"
+        "version": "1.1.2"
       }
     ],
     "blueprints": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.1.0"
+        "version": "1.1.2"
       }
     ]
   }

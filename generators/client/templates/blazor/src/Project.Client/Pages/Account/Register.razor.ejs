@@ -1,0 +1,84 @@
+@page "/register"
+@using <%= namespace %>.Client.Models
+@using <%= namespace %>.Client.Shared.Components
+
+    <div>
+        <div>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h1>Registration</h1>
+                    @if (Success)
+                    {
+                        <div class="alert alert-success">
+                            <strong>Registration saved!</strong> Please check your email for confirmation.
+                        </div>
+                    }
+                    @if (Error)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Registration failed!</strong> Please try again later.
+                        </div>
+                    }
+                    @if (ErrorUserExists)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Login name already registered!</strong> Please choose another one.
+                        </div>
+                    }
+                    @if (ErrorEmailExists)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Email is already in use!</strong> Please choose another one.
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    
+                    <EditForm EditContext="@EditContext" OnValidSubmit="@HandleSubmit" @ref="editForm">
+                        <DataAnnotationsValidator />
+                        <div class="form-group">
+                            <label class="form-control-label" for="login">Username</label>
+                            <DynInputText id="login" @bind-Value="RegisterModel.Username" class="form-control" placeholder="Username" />
+                            <div class="form-text text-danger">
+                                <ValidationMessage For="@(() => RegisterModel.Username)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="email">Email</label>
+                            <DynInputText id="email" @bind-Value="RegisterModel.Email" type="email" class="form-control" placeholder="Email" />
+                            <div class="form-text text-danger">
+                                <ValidationMessage For="@(() => RegisterModel.Email)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="password">New password</label>
+                            <DynInputText id="password" @bind-Value="RegisterModel.Password" type="password" class="form-control" placeholder="New password" />
+                            <div class="form-text text-danger">
+                                <ValidationMessage For="@(() => RegisterModel.Password)" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="confirmPassword">New password confirmation</label>
+                            <DynInputText id="confirmPassword" @bind-Value="RegisterModel.ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                            <div class="form-text text-danger">
+                                <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
+                            </div>
+                        </div>
+
+                        <button type="submit" disabled="@IsInvalid" class="btn btn-primary">Register</button>
+                    </EditForm>
+
+                    <div class="mt-3 alert alert-warning">
+                        <span>If you want to </span>
+                        <a class="alert-link" @onclick="@SignIn">sign in</a><span>, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and password="user").</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

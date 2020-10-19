@@ -82,8 +82,8 @@ function updateWebpackDevJs() {
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        '8080',
-        '5000',
+        "target: `http${options.tls ? 's' : ''}://localhost:8080`",
+        `target: \`http\${options.tls ? 's' : ''}://localhost:${this.serverPort}\``,
         false
     );
 }
@@ -113,7 +113,7 @@ function updateProxyConfJson() {
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/proxy.conf.json`,
         '"target": "http://localhost:8080"',
-        '"target": "http://localhost:5000"',
+        `"target": "http://localhost:${this.serverPort}"`,
         false
     );
 }
@@ -200,7 +200,7 @@ function updateTestFramework(){
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/protractor.conf.js`,
             'http://localhost:8080',
-            'http://localhost:5000',
+            `http://localhost:${this.serverPort}`,
             false
         );
     }

@@ -1,0 +1,92 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Pages.Utils;
+using <%= namespace %>.Client.Services;
+using <%= namespace %>.Client.Services.EntityServices.User;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
+
+namespace <%= namespace %>.Client.Pages.Admin.UserManagement
+{
+    public partial class UserUpdate
+    {
+        [Parameter]
+        public string Id { get; set; }
+
+        [Inject]
+        private IUserService UserService { get; set; }
+
+        [Inject]
+        private INavigationService NavigationService { get; set; }
+
+        [Inject]
+        private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+        private IAuthenticationService AuthenticationService => AuthenticationStateProvider as IAuthenticationService;
+
+        private UserModel CurrentUser { get; set; }
+
+        private IEnumerable<string> Authorities { get; set; } = new List<string>();
+
+        private IEnumerable<string> SelectedAuthorities { get; set; } = new List<string>();
+        private IReadOnlyList<string> CurrentAuthorities { get; set; } = new List<string>();
+
+        protected override async Task OnInitializedAsync()
+        {
+            CurrentUser = null;
+            if (!string.IsNullOrWhiteSpace(Id))
+            {
+                CurrentUser = await UserService.Get(Id);
+                SelectedAuthorities = CurrentUser.Authorities; 
+                CurrentAuthorities = new ReadOnlyCollection<string>(CurrentUser.Authorities.ToList());
+            }
+            else
+            {
+                CurrentUser = new UserModel();
+            }
+
+            Authorities = await UserService.GetAllAuthorities();
+        }
+
+        private void OnSelectAuthoritiesChanged(IReadOnlyList<string> selectedAuthorities)
+        {
+            SelectedAuthorities = selectedAuthorities; 
+        }
+
+        private async Task Save()
+        {
+            CurrentUser.Authorities = SelectedAuthorities;
+            if (!string.IsNullOrWhiteSpace(Id))
+            {
+                await UserService.Update(CurrentUser);
+            }
+            else
+            {
+                await UserService.Add(CurrentUser);
+            }
+            NavigationService.Previous();
+        }
+
+        private void Back()
+        {
+            NavigationService.Previous();
+        }
+    }
+}

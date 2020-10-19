@@ -1,0 +1,126 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System.Linq;
+using AngleSharp.Dom;
+using Blazored.Modal.Services;
+using Xunit;
+using Bunit;
+using FluentAssertions;
+using <%= namespace %>.Client.Pages.Account;
+using <%= namespace %>.Client.Services.AccountServices;
+using <%= namespace %>.Client.Test.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+
+namespace <%= namespace %>.Client.Test
+{
+    /// <summary>
+    /// These tests are written entirely in C#.
+    /// Learn more at https://bunit.egilhansen.com/docs/
+    /// </summary>
+    public class RegisterTest : TestContext
+    {
+        [Fact]
+        public void Should_CallSaveInMethod_When_RegisterFormIsSubmitted()
+        {
+            // Arrange
+            var register = InitTestRegister(MockRegisterService.SuccessUsername, "test@test.tests", "testtest", "testtest");
+
+            // Assert
+            register.WaitForAssertion(() => //wait register handleSubmit
+            {
+                register.Instance.Success.Should().BeTrue();
+                register.Find("div").Children.Children("div").Children("div").Children("div").First().MarkupMatches(
+                    @"<div class=""alert alert-success"">
+                            <strong>Registration saved!</strong> Please check your email for confirmation.
+                        </div>");
+            });
+            
+        }
+
+        [Fact]
+        public void Should_Error_When_RegisterFormIsSubmitted()
+        {
+            // Arrange
+            var register = InitTestRegister("test", "test@test.tests", "testtest", "testtest");
+
+            // Assert
+            register.WaitForAssertion(() => //wait register handleSubmit
+            {
+                register.Instance.Success.Should().BeFalse();
+                register.Find("div").Children.Children("div").Children("div").Children("div").First().MarkupMatches(
+                    @"<div class=""alert alert-danger"">
+                            <strong>Registration failed!</strong> Please try again later.
+                        </div>");
+            });
+        }
+
+        [Fact]
+        public void Should_ErrorEmail_When_RegisterFormIsSubmitted()
+        {
+            // Arrange
+            var register = InitTestRegister(MockRegisterService.EmailUsername, "test@test.tests", "testtest", "testtest");
+
+            // Assert
+            register.WaitForAssertion(() => //wait register handleSubmit
+            {
+                register.Instance.Success.Should().BeFalse();
+                register.Find("div").Children.Children("div").Children("div").Children("div").First().MarkupMatches(
+                    @"<div class=""alert alert-danger"">
+                            <strong>Email is already in use!</strong> Please choose another one.
+                        </div>");
+            });
+        }
+
+        [Fact]
+        public void Should_ErrorLogin_When_RegisterFormIsSubmitted()
+        {
+            // Arrange
+            var register = InitTestRegister(MockRegisterService.LoginUsername, "test@test.tests", "testtest", "testtest");
+
+            // Assert
+            register.WaitForAssertion(() => //wait register handleSubmit
+            {
+                register.Instance.Success.Should().BeFalse();
+                register.Find("div").Children.Children("div").Children("div").Children("div").First().MarkupMatches(
+                    @"<div class=""alert alert-danger"">
+                            <strong>Login name already registered!</strong> Please choose another one.
+                        </div>");
+            });
+        }
+
+        private IRenderedComponent<Register> InitTestRegister(string username, string email, string password, string confirmPassword)
+        {
+            // Arrange
+            Services.AddSingleton<IRegisterService, MockRegisterService>();
+
+            var modalService = new Mock<IModalService>();
+            Services.AddSingleton(modalService.Object);
+
+            var register = RenderComponent<Register>();
+
+            register.Instance.RegisterModel.Username = username;
+            register.Instance.RegisterModel.Email = email;
+            register.Instance.RegisterModel.Password = password;
+            register.Instance.RegisterModel.ConfirmPassword = confirmPassword;
+
+            // Act
+            var form = register.Find("form");
+            form.Submit();
+
+            return register;
+        }
+    }
+}

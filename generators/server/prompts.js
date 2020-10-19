@@ -28,14 +28,14 @@ function askForModuleName() {
 function askForServerSideOpts() {
     if (this.existingProject) return;
     const applicationType = this.jhipsterConfig.applicationType;
+    const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
         {
             type: 'input',
-            name: 'namespace',
-            validate: input =>
-                /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
-            message: 'What is your default C# namespace?',
-            default: 'MyCompany',
+            name: 'serverPort',
+            validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+            message: 'On which port would like your server to run? It should be unique to avoid port conflicts.',
+            default: defaultPort,
         },
         {
             type: 'list',
@@ -66,7 +66,7 @@ function askForServerSideOpts() {
             default: 0,
         },
         {
-            when: response => applicationType === 'monolith',
+            when: response => applicationType === 'monolith' || ['gateway', 'microservice'].includes(applicationType),
             type: 'list',
             name: 'authenticationType',
             message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
@@ -93,6 +93,8 @@ function askForServerSideOpts() {
         this.namespace = this.jhipsterConfig.namespace = prompt.namespace;
         this.databaseType = this.jhipsterConfig.databaseType = prompt.database;
         this.authenticationType = this.jhipsterConfig.authenticationType = prompt.authenticationType;
+        this.serverPort = this.jhipsterConfig.serverPort = prompt.serverPort;
+        this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
         done();
     });
 }
@@ -100,7 +102,4 @@ function askForServerSideOpts() {
 module.exports = {
     askForModuleName,
     askForServerSideOpts,
-    //    askForSomething,
-    // askForOptionalItems,
-    // askFori18n
 };
