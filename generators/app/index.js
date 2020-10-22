@@ -88,6 +88,8 @@ module.exports = class extends AppGenerator {
             getConfig() {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
                 const serverConfigFound = this.namespace !== undefined ;
 
                 if (this.baseName !== undefined && serverConfigFound) {
@@ -107,14 +109,19 @@ module.exports = class extends AppGenerator {
     get prompting() {
         return {
             askForModuleName: prompts.askForModuleName,
+            askForApplicationType: prompts.askForApplicationType,
 
             setSharedConfigOptions() {                
                 this.configOptions.baseName = this.baseName;
                 this.configOptions.namespace = this.namespace;
+                this.configOptions.applicationType = this.applicationType;
+                this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
             },
             saveConfig() {
                 const config = {
-                    namespace: this.namespace
+                    namespace: this.namespace,
+                    applicationType: this.applicationType,
+                    serviceDiscoveryType: this.serviceDiscoveryType
                 };
                 this.config.set(config);
             },

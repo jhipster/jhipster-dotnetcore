@@ -12,20 +12,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Microsoft.EntityFrameworkCore;
-
-namespace <%= namespace %>.Infrastructure.Data.Extensions {
-    public static class DbContextExtensions {
-        public static void AddGraph(this DbContext dbContext, object rootObject)
-        {
-            dbContext.ChangeTracker.TrackGraph(rootObject, e => {
-                if (e.Entry.IsKeySet) {
-                    e.Entry.State = EntityState.Unchanged;
-                }
-                else {
-                    e.Entry.State = EntityState.Added;
-                }
-            });
-        }
+namespace <%= namespace %>.Configuration.Consul
+{
+    public class ConsulOptions
+    {
+        public bool Enabled { get; set; }
+        public string Host { get; set; }
+        public string Service { get; set; }
+        public string Address { get; set; }
+        public int Port { get; set; }
+        public bool PingEnabled { get; set; }
     }
 }

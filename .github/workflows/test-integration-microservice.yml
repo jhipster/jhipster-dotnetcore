@@ -12,24 +12,12 @@ jobs:
                 node_version: [12.16.1]
                 os: [ubuntu-latest]
                 app-type:
-                    - jwt-with-angular-app
-                    - jwt-with-blazor-app
-                    - jwt-with-mssql-app
-                    - jwt-with-mysql-app
-                    - jwt-with-postgres-app
-                    - jwt-with-react-app
+                    - microservice-app
+                    - gateway-app
                 include:
-                    - app-type: jwt-with-angular-app
-                      arg: 'import-jdl'
-                    - app-type: jwt-with-blazor-app
-                      arg: 'blazor'
-                    - app-type: jwt-with-mssql-app
+                    - app-type: microservice-app
                       arg: 'no'
-                    - app-type: jwt-with-mysql-app
-                      arg: 'no'
-                    - app-type: jwt-with-postgres-app
-                      arg: 'no'
-                    - app-type: jwt-with-react-app
+                    - app-type: gateway-app
                       arg: 'no'
         env:
             JHI_APP: ${{ matrix.app-type }}
@@ -56,8 +44,6 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-            - name: 'RUN CLIENT UNIT TESTS of generated app'
-              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
             - name: 'RUN SONAR ANALYZE on generated app'

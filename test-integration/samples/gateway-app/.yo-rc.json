@@ -1,11 +1,12 @@
 {
   "generator-jhipster": {
-    "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "packageName": "JhipsterSampleApplication",
-    "authenticationType": "jwt",
+    "applicationType": "gateway",
+    "serviceDiscoveryType": "consul",
     "serverPort": "5000",
-    "databaseType": "mssql",
+    "authenticationType": "jwt",
+    "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",

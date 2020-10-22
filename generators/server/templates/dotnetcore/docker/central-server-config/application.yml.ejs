@@ -1,0 +1,21 @@
+{ 
+  "jhipster": {
+    "Security": {
+      "Authentication": {
+        "Jwt": {
+          "Base64Secret": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
+          "TokenValidityInSeconds": 86400,
+          "TokenValidityInSecondsForRememberMe": 2592000
+        }
+      }
+    },
+    "Cors": {
+      "AllowedOrigins": "*",
+      "AllowedMethods": "*",
+      "AllowedHeaders": "*",
+      "ExposedHeaders": "Authorization,Link,X-Total-Count,X-Pagination",
+      "AllowCredentials": true,
+      "MaxAge": 1800
+    }
+  }
+}
