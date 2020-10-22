@@ -47,6 +47,20 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`,
                 },
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IEntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/I${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/EntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
+                },
             ],
         },
         {
