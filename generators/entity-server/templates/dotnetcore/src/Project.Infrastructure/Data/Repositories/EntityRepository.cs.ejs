@@ -24,5 +24,24 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
     {
+        public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context) 
+        {
+        }
+
+        public async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        {
+            bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
+
+            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
+            {
+                await base.UpdateAsync(<%= camelCasedEntityClass %>);
+            }
+            else
+            {
+                _dbSet.Attach(<%= camelCasedEntityClass %>);
+            }
+            
+            return <%= camelCasedEntityClass %>;
+        }        
     }
 }

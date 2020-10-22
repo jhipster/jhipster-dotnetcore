@@ -16,9 +16,34 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
+
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
+        Task<TEntity> FindAsync(object id);
+        Task<IEnumerable<TEntity>> FindAllAsync();
+        Task<IPage<TEntity>> FindAllAsync(IPageable pageable);
+        Task<IEnumerable<TEntity>> Get(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            List<Expression<Func<TEntity, object>>> includeProperties = null,
+            int? page = null,
+            int? pageSize = null);
+        Task<TEntity> UpdateAsync(TEntity item);
+        Task InsertGraph(TEntity entity);
+        Task<bool> Exists(Expression<Func<TEntity, bool>> predicate);
+        Task Clear();
+        Task DeleteAsync(object id);
+        Task DeleteAsync(TEntity entity);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));        
+        IFluentRepository<TEntity> AsFluentRepository();
     }
 }

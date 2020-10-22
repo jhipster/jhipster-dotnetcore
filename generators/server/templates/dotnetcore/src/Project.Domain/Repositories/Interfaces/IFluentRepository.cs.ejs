@@ -16,9 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface IFluentRepository<TEntity> where TEntity : class
     {
+        IFluentRepository<TEntity> Filter(Expression<Func<TEntity, bool>> filter);
+        Task<IEnumerable<TEntity>> Get(int? index = null, int? count = null);
+        IFluentRepository<TEntity> Include(Expression<Func<TEntity, object>> expression);
+        IFluentRepository<TEntity> OrderBy(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
     }
 }

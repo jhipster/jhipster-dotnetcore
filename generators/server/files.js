@@ -303,15 +303,6 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/RepositoryStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/Configuration/RepositoryStartup.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
                     file: 'Project.Domain/Repositories/Interfaces/IFluentRepository.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IFluentRepository.cs`,

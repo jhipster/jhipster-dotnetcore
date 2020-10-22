@@ -16,11 +16,151 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
+using Microsoft.EntityFrameworkCore;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public class GenericRepository : IGenericRepository
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity>, IDisposable where TEntity : class
     {
+        protected IUnitOfWork _context;
+        protected readonly DbSet<TEntity> _dbSet;
+
+        public GenericRepository(IUnitOfWork context)
+        {
+            _context = context;
+            _dbSet = context.Set<TEntity>();
+        }
+
+        public virtual async Task<TEntity> FindAsync(object id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> FindAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
+
+        public virtual async Task<IPage<TEntity>> FindAllAsync(IPageable pageable)
+        {
+            return await _dbSet.UsePageableAsync(pageable);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> Get(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            List<Expression<Func<TEntity, object>>> includeProperties = null,
+            int? index = null,
+            int? count = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (includeProperties != null)
+            {
+                includeProperties.ForEach(i => { query = query.Include(i); });
+            }
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            if (index != null && count != null)
+            {
+                query = query.Skip((index.Value - 1) * count.Value).Take(count.Value);
+            }
+
+            return await query.ToListAsync();
+            // return await Task.FromResult(query.AsEnumerable());
+        }
+
+        public async Task<TEntity> UpdateAsync(object id, TEntity item)
+        {
+            return await UpdateAsync(item); 
+        }
+
+        public virtual async Task<bool> AddRange(params TEntity[] items)
+        {
+            await _dbSet.AddRangeAsync(items);
+            return true;
+        }
+
+        public virtual async Task<TEntity> Insert(TEntity entity)
+        {
+            await Task.Run(() =>
+            {
+                var entry = _dbSet.Attach(entity);
+                entry.State = EntityState.Added;
+            });
+            return entity; 
+        }
+
+        public virtual async Task InsertGraph(TEntity entity)
+        {
+            await _dbSet.AddAsync(entity);
+        }
+
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity)
+        {
+            await Task.FromResult(_dbSet.Update(entity));
+            return entity; 
+        }
+
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _dbSet.AsQueryable().AnyAsync(predicate);
+        }
+
+        public virtual IFluentRepository<TEntity> AsFluentRepository()
+        {
+            var fluentRepository = new FluentRepository<TEntity>(this);
+            return fluentRepository;
+        }
+
+        public async Task<IEnumerable<TEntity>> GetItems(int index, int count)
+        {
+            return await Get(index: index, count: count); 
+        }
+
+        public virtual async Task Clear()
+        {
+            var allEntities = _dbSet.AsEnumerable();
+            await Task.Run(() => _dbSet.RemoveRange(allEntities));
+        }
+
+        public virtual async Task DeleteAsync(object id)
+        {
+            var entity = await FindAsync(id);
+            await DeleteAsync(entity); 
+        }
+        
+        public virtual async Task DeleteAsync(TEntity entity)
+        {
+            await Task.FromResult(_dbSet.Remove(entity));
+        }
+
+        public virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
+        }
     }
 }

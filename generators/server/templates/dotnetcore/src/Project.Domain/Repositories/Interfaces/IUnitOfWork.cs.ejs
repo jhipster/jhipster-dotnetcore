@@ -16,9 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        DbSet<T> Set<T>() where T : class;
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class;
+        void UpdateReferenceProperty<TEntiy>(TEntiy entity, string propertyName) where TEntiy : class;
+        void UpdateState<TEntity>(TEntity entity, EntityState state);
     }
 }
