@@ -5,7 +5,7 @@ const jhipsterUtils = require('generator-jhipster/generators/utils');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 
 module.exports = class extends LanguageGenerator {
     constructor(args, opts) {
@@ -17,18 +17,16 @@ module.exports = class extends LanguageGenerator {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
 
-        this.configOptions = jhContext.configOptions || {};
+        if (this.configOptions.baseName) {
+            this.baseName = this.configOptions.baseName;
+        }
     }
 
     get initializing() {
-        const phaseFromJHipster = super._initializing();
-        const jhipsterNetPhaseSteps = {
-            setupServerConsts() {
-                const configuration = this.config;
-                this.baseName = configuration.get('baseName') || this.configOptions.baseName;
-            },
+        return {
+            ...super._initializing(),
+            customizeDotnetPaths,
         };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get prompting() {
@@ -36,24 +34,23 @@ module.exports = class extends LanguageGenerator {
     }
 
     get configuring() {
-        const phaseFromJHipster = super._configuring();
-
-        const customPhaseSteps = {
-            configureGlobalDotnetcore,
-            saveConfigDotnetcore() {
-                return {
-                    saveConfig() {
-                        const config = {};
-                        this.config.set(config);
-                    },
-                };
-            },
-        };
-        return { ...phaseFromJHipster, ...customPhaseSteps };
+        return super._configuring();
     }
 
     get default() {
         return super._default();
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
     }
 
     get writing() {
@@ -98,6 +95,10 @@ module.exports = class extends LanguageGenerator {
                 }
             },
         };
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     _installI18nClientFilesByLanguageDotNetCore(from, to, lang) {

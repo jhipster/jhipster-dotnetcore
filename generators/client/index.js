@@ -25,9 +25,11 @@ const baseConstants = require('generator-jhipster/generators/generator-constants
 const basePrompts = require('generator-jhipster/generators/client/prompts');
 const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
 const baseWriteReactFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
-const prompts = require('./prompts');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const baseWriteVueFiles = require('generator-jhipster/generators/client/files-vue').writeFiles;
+const baseWriteCommonFiles = require('generator-jhipster/generators/client/files-common').writeFiles;
+const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const dotnet = require('../dotnet');
+const prompts = require('./prompts');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
@@ -47,33 +49,49 @@ module.exports = class extends ClientGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints dotnetcore')}`);
         }
+
+        if (this.configOptions.baseName) {
+            this.baseName = this.configOptions.baseName;
+        }
     }
 
     get initializing() {
-        return super._initializing();
+        return {
+            ...super._initializing(),
+            customizeDotnetPaths
+        }
     }
 
     get prompting() {
-        return super._prompting();
+        return {
+            askForModuleName: basePrompts.askForModuleName,
+            askForClient: prompts.askForClient,
+            askFori18n: basePrompts.askForI18n,
+            askForClientTheme: basePrompts.askForClientTheme,
+            askForClientThemeVariant: basePrompts.askForClientThemeVariant
+        };
     }
 
     get configuring() {
-        const phaseFromJHipster = super._configuring();
-        const customPhaseSteps = {
-            loadSharedConfig() {
-                this.loadAppConfig();
-                this.loadClientConfig();
-                this.loadServerConfig();
-                this.loadTranslationConfig();
-            },
-            configureGlobalDotnetcore
+        return {
+            ...super._configuring(),
         };
-        
-        return Object.assign(customPhaseSteps,phaseFromJHipster);
     }
 
     get default() {
         return super._default();
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
     }
 
     get writing() {
@@ -87,19 +105,28 @@ module.exports = class extends ClientGenerator {
                         return writeBlazorFiles.call(this);
                     case REACT:
                         baseWriteReactFiles.call(this);
+                        baseWriteCommonFiles.call(this);
                         writeCommonFiles.call(this);
                         return writeReactFiles.call(this);
                     case ANGULAR:
                         baseWriteAngularFiles.call(this);
+                        baseWriteCommonFiles.call(this);
                         writeCommonFiles.call(this);
                         return writeAngularFiles.call(this);
                     case VUE:
+                        baseWriteVueFiles.call(this);
+                        baseWriteCommonFiles.call(this);
+                        writeCommonFiles.call(this);
                         return writeVueFiles.call(this);
                     default:
                     // do nothing by default
                 }
             }
         };
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     get install() {

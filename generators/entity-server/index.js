@@ -18,6 +18,18 @@ module.exports = class extends EntityServerGenerator {
         this.configOptions = jhContext.configOptions || {};
     }
 
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
+    }
+
     get writing() {
         if (this.applicationType === 'gateway') {
             return {
@@ -28,5 +40,9 @@ module.exports = class extends EntityServerGenerator {
             };
         }
         return writeFiles();
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 };

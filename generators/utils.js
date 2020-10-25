@@ -29,7 +29,7 @@ module.exports = {
     copyI18n,
     copyEnumI18n,
     equivalentCSharpType,
-    configureGlobalDotnetcore,
+    customizeDotnetPaths,
     getEnumInfo,
     asModel,
 };
@@ -79,9 +79,9 @@ function copyEnumI18n(language, enumInfo, prefix = '') {
 }
 
 /**
- * Configure dotnet
+ * Customize dotnet paths
  */
-function configureGlobalDotnetcore() {
+function customizeDotnetPaths() {
     this.camelizedBaseName = _.camelCase(this.baseName);
     this.dasherizedBaseName = _.kebabCase(this.baseName);
     this.pascalizedBaseName = toPascalCase(this.baseName);

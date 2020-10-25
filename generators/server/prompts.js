@@ -90,7 +90,6 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
-        this.namespace = this.jhipsterConfig.namespace = prompt.namespace;
         this.databaseType = this.jhipsterConfig.databaseType = prompt.database;
         this.authenticationType = this.jhipsterConfig.authenticationType = prompt.authenticationType;
         this.serverPort = this.jhipsterConfig.serverPort = prompt.serverPort;

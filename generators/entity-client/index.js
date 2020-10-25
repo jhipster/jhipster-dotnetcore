@@ -2,7 +2,7 @@
 const chalk = require('chalk');
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
 const constants = require('../generator-dotnetcore-constants');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const writeBlazorFiles = require('./files-blazor').writeFiles;
 
 const BLAZOR = constants.BLAZOR;
@@ -22,13 +22,25 @@ module.exports = class extends EntityClientGenerator {
         const phaseFromJHipster = super._configuring();
 
         const customPhaseSteps = {
-            configureGlobalDotnetcore,
+            customizeDotnetPaths,
             dtoWorkaround() {
                 this.dto = 'no';
             },
         };
 
         return Object.assign(customPhaseSteps, phaseFromJHipster);
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
     }
 
     get writing() {
@@ -41,6 +53,10 @@ module.exports = class extends EntityClientGenerator {
             };
         }
         return super._writing();
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     rebuildClient() {

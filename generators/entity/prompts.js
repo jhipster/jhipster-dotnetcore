@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
+
 const getFieldNameUndercored = fields =>
     ['id'].concat(
         fields.map(field => {
@@ -24,7 +26,6 @@ const getFieldNameUndercored = fields =>
         })
     );
 const path = require('path');
-const _ = require('lodash');
 const jhiCore = require('jhipster-core');
 const shelljs = require('shelljs');
 

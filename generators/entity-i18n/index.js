@@ -35,7 +35,23 @@ module.exports = class extends EntityI18nGenerator {
         this.configOptions = jhContext.configOptions || {};
     }
 
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
+    }
+
     get writing() {
         return writeFiles();
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 };

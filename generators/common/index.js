@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
+const _ = require('lodash');
+const toPascalCase = require('to-pascal-case');
 const CommonGenerator = require('generator-jhipster/generators/common');
+const packagejs = require('../../package.json');
 // eslint-disable-next-line import/no-extraneous-dependencies,import/order
 const writeFiles = require('./files').writeFiles;
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
@@ -31,24 +33,43 @@ module.exports = class extends CommonGenerator {
         if (!jhContext) {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
+
+        if (this.configOptions.baseName) {
+            this.baseName = this.configOptions.baseName;
+        }
     }
 
     get initializing() {
-        return super._initializing();
+        return {
+            ...super._initializing(),
+            configureGlobal() {
+                this.kebabCasedBaseName = _.kebabCase(this.baseName);
+                this.pascalizedBaseName = toPascalCase(this.baseName);
+                this.mainProjectDir = this.pascalizedBaseName;
+                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
+                this.jhipsterDotnetVersion = packagejs.version;
+            },
+        };
     }
 
     get configuring() {
         return super._configuring();
     }
 
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
+    }
+
     get default() {
-        const phaseFromJHipster = super._default();
-
-        const customPhaseSteps = {
-            configureGlobalDotnetcore,
-        };
-
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
+        return super._default();
     }
 
     get writing() {
@@ -82,5 +103,9 @@ module.exports = class extends CommonGenerator {
         const phaseFromJHipster = writeCommonFiles();
         const jhipsterNetPhaseSteps = writeFiles();
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 };

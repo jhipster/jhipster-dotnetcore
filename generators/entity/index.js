@@ -186,12 +186,28 @@ module.exports = class extends EntityGenerator {
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
+    }
+
     get default() {
         return super._default();
     }
 
     get writing() {
         return super._writing();
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     get install() {

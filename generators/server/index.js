@@ -21,11 +21,10 @@ const chalk = require('chalk');
 const ServerGenerator = require('generator-jhipster/generators/server');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
@@ -42,11 +41,16 @@ module.exports = class extends ServerGenerator {
                 "The 'dotnet' command is not present in the PATH, use it at your own risk! If you encounter a bug, please install .Net Core first (https://dotnet.microsoft.com/download/dotnet-core)."
             );
         });
+
+        if (this.configOptions.baseName) {
+            this.baseName = this.configOptions.baseName;
+        }
     }
 
     get initializing() {
-        const phaseFromJHipster = super._initializing();
-        const jhipsterNetPhaseSteps = {
+        return {
+            ...super._initializing(),
+            customizeDotnetPaths,
             setupServerConsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
@@ -72,7 +76,6 @@ module.exports = class extends ServerGenerator {
                 }
             },
         };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get prompting() {
@@ -87,23 +90,32 @@ module.exports = class extends ServerGenerator {
     }
 
     get default() {
-        const phaseFromJHipster = super._default();
-
-        const customPhaseSteps = {
-            configureGlobalDotnetcore,
+        return {
+            ...super._default(),
             fixConfig() {
-                this.jhipsterConfig.databaseType,
-                this.jhipsterConfig.authenticationType,
-                this.jhipsterConfig.serverPort,
                 this.jhipsterConfig.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
             },
         };
+    }
 
-        return Object.assign(phaseFromJHipster, customPhaseSteps);
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
     }
 
     get writing() {
         return writeFiles.call(this);
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     get end() {
