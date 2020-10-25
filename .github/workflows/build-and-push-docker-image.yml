@@ -1,0 +1,39 @@
+name: build and push docker image
+
+on:
+  pull_request:
+    types: closed
+
+jobs:
+  build_docker_image:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged
+    steps:
+    - 
+      name: Checkout to main branch
+      uses: actions/checkout@main
+    -
+      name: Get project version
+      id: jhipster_generator
+      run: echo "::set-output name=version::$(cat package.json | grep '"version":' | awk '{print $2}' | tr -d '",')"
+    - 
+      name: Navigate to docker directory and build docker image
+      run: |
+        cd docker
+        docker build -t jhipster-generator-dotnetcore:${{ steps.jhipster_generator.outputs.version }} -t jhipster-generator-dotnetcore:latest .
+    -
+      name: Login to DockerHub
+      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+    -
+      name: Tag local image to desired image repository and push it to docker hub
+      run: |
+        VERSION=${{ steps.jhipster_generator.outputs.version }}
+        USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+        REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
+        docker tag jhipster-generator-dotnetcore:$VERSION $USERNAME/$REPOSITORY:$VERSION
+        docker tag jhipster-generator-dotnetcore:latest $USERNAME/$REPOSITORY:latest
+        docker push $USERNAME/$REPOSITORY:$VERSION
+        docker push $USERNAME/$REPOSITORY:latest
+    -
+      name: Logout of DockerHub
+      run: docker logout
