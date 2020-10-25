@@ -1,39 +1,21 @@
-name: build and push docker image
+name: build docker image
 
-on:
-  pull_request:
-    types: closed
+on: push
 
 jobs:
   build_docker_image:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged
     steps:
+    - uses: actions/checkout@v2
     - 
-      name: Checkout to main branch
-      uses: actions/checkout@main
+      name: Build docker image
+      run: docker build -t jhipster/jhipster-dotnetcore:test-build ./docker/
     -
-      name: Get project version
-      id: jhipster_generator
-      run: echo "::set-output name=version::$(cat package.json | grep '"version":' | awk '{print $2}' | tr -d '",')"
-    - 
-      name: Navigate to docker directory and build docker image
+      name: Check if docker image exists and remove it
       run: |
-        cd docker
-        docker build -t jhipster-generator-dotnetcore:${{ steps.jhipster_generator.outputs.version }} -t jhipster-generator-dotnetcore:latest .
-    -
-      name: Login to DockerHub
-      run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-    -
-      name: Tag local image to desired image repository and push it to docker hub
-      run: |
-        VERSION=${{ steps.jhipster_generator.outputs.version }}
-        USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-        REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-        docker tag jhipster-generator-dotnetcore:$VERSION $USERNAME/$REPOSITORY:v$VERSION
-        docker tag jhipster-generator-dotnetcore:latest $USERNAME/$REPOSITORY:latest
-        docker push $USERNAME/$REPOSITORY:v$VERSION
-        docker push $USERNAME/$REPOSITORY:latest
-    -
-      name: Logout of DockerHub
-      run: docker logout
+        imageId=$(docker images -q jhipster/jhipster-dotnetcore:test-build)
+        if [[ -z "${imageId}" ]]; then
+          echo "Docker image is not getting built or is broken"
+          exit 1
+        fi
+        docker rmi $imageId
