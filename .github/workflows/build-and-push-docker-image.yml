@@ -27,9 +27,9 @@ jobs:
         VERSION=${{ steps.jhipster_generator.outputs.version }}
         USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
         REPOSITORY=${{ secrets.DOCKERHUB_REPOSITORY }}
-        docker tag jhipster-generator-dotnetcore:$VERSION $USERNAME/$REPOSITORY:$VERSION
+        docker tag jhipster-generator-dotnetcore:$VERSION $USERNAME/$REPOSITORY:v$VERSION
         docker tag jhipster-generator-dotnetcore:latest $USERNAME/$REPOSITORY:latest
-        docker push $USERNAME/$REPOSITORY:$VERSION
+        docker push $USERNAME/$REPOSITORY:v$VERSION
         docker push $USERNAME/$REPOSITORY:latest
     -
       name: Logout of DockerHub
