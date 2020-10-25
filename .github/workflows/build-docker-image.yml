@@ -1,0 +1,21 @@
+name: build docker image
+
+on: pull_request
+
+jobs:
+  build_docker_image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - 
+      name: Build docker image
+      run: docker build -t jhipster/jhipster-dotnetcore:test-build ./docker/
+    -
+      name: Check if docker image exists and remove it
+      run: |
+        imageId=$(docker images -q jhipster/jhipster-dotnetcore:test-build)
+        if [[ -z "${imageId}" ]]; then
+          echo "Docker image is not getting built or is broken"
+          exit 1
+        fi
+        docker rmi $imageId
