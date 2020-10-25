@@ -1,13 +1,10 @@
 name: build and push docker image
 
-on:
-  pull_request:
-    types: closed
+on: push
 
 jobs:
   build_docker_image:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged
     steps:
     - 
       name: Checkout to main branch
