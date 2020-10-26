@@ -56,10 +56,7 @@ module.exports = class extends ClientGenerator {
     }
 
     get initializing() {
-        return {
-            ...super._initializing(),
-            customizeDotnetPaths
-        }
+        return super._initializing();
     }
 
     get prompting() {
@@ -74,7 +71,8 @@ module.exports = class extends ClientGenerator {
 
     get configuring() {
         return {
-            ...super._configuring(),
+            customizeDotnetPaths,
+            ...super._configuring()
         };
     }
 

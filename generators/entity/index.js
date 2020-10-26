@@ -5,9 +5,6 @@ const EntityGenerator = require('generator-jhipster/generators/entity');
 const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
-const { prepareEntityForTemplates, loadRequiredConfigIntoEntity } = require('generator-jhipster/utils/entity');
-const { prepareFieldForTemplates } = require('generator-jhipster/utils/field');
-const { prepareRelationshipForTemplates } = require('generator-jhipster/utils/relationship');
 const utilsNet = require('../utils');
 const constants = require('../generator-dotnetcore-constants');
 const prompts = require('./prompts');
@@ -59,29 +56,12 @@ module.exports = class extends EntityGenerator {
     get configuring() {
         const phaseFromJHipster = super._configuring();
         const jhipsterNetPhaseSteps = {
-            loadConfig() {
-                // Update current context with config from file.
-                Object.assign(this.context, this.entityStorage.getAll());
-                loadRequiredConfigIntoEntity(this.context, this.jhipsterConfig);
-            },
-            prepareForTemplates() {
-                const entity = this.context;
-                prepareEntityForTemplates(entity, this);
-
-                this.context.fields.forEach(field => {
-                    prepareFieldForTemplates(entity, field, this);
-                });
-
-                this.context.relationships.forEach(relationship => {
-                    prepareRelationshipForTemplates(entity, relationship, this);
-                });
-            },
             loadInMemoryDataNetBlueprint() {
                 const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
                 context.testProjectDir = `${context.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                context.pascalizedEntityClass = toPascalCase(context.entityClass);
+                context.pascalizedEntityClass = toPascalCase(context.name);
                 context.pascalizedEntityClassPlural = toPascalCase(context.entityClassPlural);
                 context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
                 context.snakeCasedEntityClassPlural = _.snakeCase(context.entityClassPlural);
