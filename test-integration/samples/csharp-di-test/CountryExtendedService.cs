@@ -8,7 +8,7 @@ using JhipsterSampleApplication.Domain.Services;
 namespace JhipsterSampleApplication.Domain.Services {
     public class CountryExtendedService : CountryService, ICountryService 
     {
-        public CountryExtendedService(ApplicationDatabaseContext applicationDatabaseContext) : base(applicationDatabaseContext)
+        public CountryExtendedService(ICountryRepository countryRepository) : base(countryRepository)
         {
         }
 
