@@ -362,6 +362,28 @@ const serverFiles = {
             ],
         },
     ],
+    dataExtensions: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/DbContextExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/DbSetExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
+                },
+            ],
+        },
+    ],
     serverProperties: [
         {
             path: SERVER_SRC_DIR,
