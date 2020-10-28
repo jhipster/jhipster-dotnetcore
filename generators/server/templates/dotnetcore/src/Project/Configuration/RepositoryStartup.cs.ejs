@@ -30,16 +30,15 @@ namespace <%= namespace %>.Configuration {
 
             services.Scan(scan => scan
                 .FromAssembliesOf(typeof(IUnitOfWork), typeof(UnitOfWork))
-                    // Find repository classes at the namespace for generated repositories
-                    // And register interfaces using the I prefix convention for interfaces to match interface/implementation
+                    // Register repository interfaces using the I prefix convention for interfaces to match interface/class
                     .AddClasses(classes => classes.InNamespaces("<%= namespace %>.Infrastructure.Data.Repositories"))
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))
                         .AsMatchingInterface()
                         .WithScopedLifetime()
                     
-                    // Now find repositories that has class name ending with "ExtendedRepository" and register interfaces/implementation
+                    // Now find repositories that has class name ending with "ExtendedRepository" and register interfaces it implements with priority.
                     // For example: if JobExtendedRepository class is present and implements IJobRepository interface, take precedence over
-                    // existing registrations. This is useful for the developer to implement its own custom repositories.
+                    // existing registrations.
                     .AddClasses(classes => classes.Where(type => type.Namespace.Equals("<%= namespace %>.Infrastructure.Data.Repositories") &&
                                                                  type.Name.EndsWith("ExtendedRepository")))
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))
