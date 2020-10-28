@@ -41,69 +41,19 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity> GetAsync(object id)
+        public virtual async Task<TEntity> GetOneAsync(object id)
         {
             return await _dbSet.FindAsync(id);
         }
-
-        public virtual async Task<TEntity> GetAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            IQueryable<TEntity> query = BuildQuery(filter, null, include);
-            return await query.SingleOrDefaultAsync();
+            return await _dbSet.ToListAsync();
         }
         
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
-            bool disableTracking = false)
+        public virtual async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
         {
-            IQueryable<TEntity> query = BuildQuery(filter, orderBy, include, disableTracking);
-            return await query.ToListAsync();
-        }
-        
-        public virtual async Task<IPage<TEntity>> GetPageAsync(
-            IPageable pageable,
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
-            bool disableTracking = false)
-        {
-            IQueryable<TEntity> query = BuildQuery(filter, orderBy, include, disableTracking);
-            return await query.UsePageableAsync(pageable);
-        }
-        
-        protected IQueryable<TEntity> BuildQuery(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
-            bool disableTracking = false)
-        {
-            IQueryable<TEntity> query = _dbSet;
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            if (orderBy != null)
-            {
-                query = orderBy(query);
-            }
-
-            return query;
+            return await _dbSet.UsePageableAsync(pageable);
         }
         
         public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
@@ -122,7 +72,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public virtual async Task DeleteByIdAsync(object id)
         {
-            var entity = await GetAsync(id);
+            var entity = await GetOneAsync(id);
             await DeleteAsync(entity);
         }
         
@@ -145,7 +95,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public virtual IFluentRepository<TEntity> QueryHelper()
         {
-            var fluentRepository = new FluentRepository<TEntity>(this);
+            var fluentRepository = new FluentRepository<TEntity>(this, _dbSet);
             return fluentRepository;
         }
 

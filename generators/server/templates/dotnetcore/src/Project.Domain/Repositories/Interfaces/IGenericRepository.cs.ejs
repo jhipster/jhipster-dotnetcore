@@ -29,18 +29,9 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> GetAsync(object id);
-        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
-        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
-            bool disableTracking = false);        
-        Task<IPage<TEntity>> GetPageAsync(IPageable pageable,
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
-            bool disableTracking = false);
+        Task<TEntity> GetOneAsync(object id);
+        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IPage<TEntity>> GetPageAsync(IPageable pageable);
         Task<bool> Exists(Expression<Func<TEntity, bool>> predicate);
         Task<int> CountAsync();
         Task<TEntity> CreateOrUpdateAsync(TEntity entity);
