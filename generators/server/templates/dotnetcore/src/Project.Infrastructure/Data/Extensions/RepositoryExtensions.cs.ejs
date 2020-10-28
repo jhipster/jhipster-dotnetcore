@@ -1,0 +1,64 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using <%= namespace %>.Infrastructure.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+
+namespace <%= namespace %>.Infrastructure.Data.Extensions {
+    public static class RepositoryExtensions
+    {
+        public static TEntity Add<TEntity>(this GenericRepository<TEntity> repository, TEntity entity) where TEntity : class
+        {
+            repository._dbSet.Add(entity);
+            return entity;
+        }
+
+        public static bool AddRange<TEntity>(this GenericRepository<TEntity> repository, params TEntity[] entities) where TEntity : class
+        {
+            repository._dbSet.AddRange(entities);
+            return true;
+        }
+
+        public static TEntity Attach<TEntity>(this GenericRepository<TEntity> repository, TEntity entity) where TEntity : class
+        {
+            var entry = repository._dbSet.Attach(entity);
+            entry.State = EntityState.Added;
+            return entity; 
+        }
+
+        public static TEntity Update<TEntity>(this GenericRepository<TEntity> repository, TEntity entity) where TEntity : class
+        {
+            repository._dbSet.Update(entity);
+            return entity; 
+        }
+
+        public static bool UpdateRange<TEntity>(this GenericRepository<TEntity> repository, params TEntity[] entities) where TEntity : class
+        {
+            repository._dbSet.UpdateRange(entities);
+            return true;
+        }
+
+        public static TEntity Remove<TEntity>(this GenericRepository<TEntity> repository, TEntity entity) where TEntity : class
+        {
+            repository._dbSet.Remove(entity);
+            return entity; 
+        }
+
+        public static bool RemoveRange<TEntity>(this GenericRepository<TEntity> repository, params TEntity[] entities) where TEntity : class
+        {
+            repository._dbSet.RemoveRange(entities);
+            return true;
+        }
+    }
+}

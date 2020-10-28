@@ -381,6 +381,11 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
                 },
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/RepositoryExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/RepositoryExtensions.cs`,
+                },
             ],
         },
     ],
