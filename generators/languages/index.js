@@ -54,6 +54,10 @@ module.exports = class extends LanguageGenerator {
     }
 
     get writing() {
+        return super._writing();
+    }
+
+    /*get writing() {
         return {
             translateFile() {
                 const from = 'src/main/webapp/';
@@ -95,7 +99,7 @@ module.exports = class extends LanguageGenerator {
                 }
             },
         };
-    }
+    }*/
 
     get postWriting() {
         return super._postWriting();

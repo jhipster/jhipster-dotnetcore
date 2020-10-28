@@ -58,10 +58,30 @@ module.exports = class extends EntityGenerator {
         const jhipsterNetPhaseSteps = {
             loadInMemoryDataNetBlueprint() {
                 const context = this.context;
+
+                
+            },
+        };
+        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return {
+            ...super._preparing(),
+            preparingDotnet () {
+                const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
                 context.testProjectDir = `${context.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-                context.pascalizedEntityClass = toPascalCase(context.name);
+                context.pascalizedEntityClass = toPascalCase(context.entityClass);
                 context.pascalizedEntityClassPlural = toPascalCase(context.entityClassPlural);
                 context.snakeCasedEntityClass = _.snakeCase(context.entityClass);
                 context.snakeCasedEntityClassPlural = _.snakeCase(context.entityClassPlural);
@@ -161,21 +181,8 @@ module.exports = class extends EntityGenerator {
                     relationship.joinEntityGenerated = false;
                 });
                 this.entityConfig.relationships = context.relationships;
-            },
-        };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
-    }
-
-    get composing() {
-        return super._composing();
-    }
-
-    get loading() {
-        return super._loading();
-    }
-
-    get preparing() {
-        return super._preparing();
+            }
+        }
     }
 
     get default() {

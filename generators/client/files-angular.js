@@ -23,7 +23,8 @@ const constants = require('../generator-dotnetcore-constants');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function angularJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", false);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, "dist/", true);
 }
 
 function updateHomeTitle() {

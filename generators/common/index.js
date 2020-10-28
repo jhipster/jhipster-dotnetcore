@@ -48,6 +48,10 @@ module.exports = class extends CommonGenerator {
                 this.mainProjectDir = this.pascalizedBaseName;
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.jhipsterDotnetVersion = packagejs.version;
+                this.options.outputPathCustomizer = [
+                    paths => (paths ? paths.replace(/^(\.prettierignore)$/, `src/${this.mainClientDir}/$1`) : paths),
+                    paths => (paths ? paths.replace(/^(\.prettierrc)$/, `src/${this.mainClientDir}/$1`) : paths),
+                ];
             },
         };
     }

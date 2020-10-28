@@ -113,6 +113,7 @@ function customizeDotnetPaths() {
         paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(config\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(ngsw-config.json)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
 }
 
