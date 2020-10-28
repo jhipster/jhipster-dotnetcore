@@ -21,24 +21,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
+using Microsoft.EntityFrameworkCore.Query;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public sealed class FluentRepository<TEntity> : IFluentRepository<TEntity> where TEntity : class
+    public class FluentRepository<TEntity> : IFluentRepository<TEntity> where TEntity : class
     {
-        private readonly List<Expression<Func<TEntity, object>>> _includeProperties;
-
         private readonly IGenericRepository<TEntity> _repository;
+        private Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> _include;        
         private Expression<Func<TEntity, bool>> _filter;
-        private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderByQuerable;
-        private int? _index;
-        private int? _count;
+        private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderByQueryable;
 
         public FluentRepository(IGenericRepository<TEntity> repository)
         {
             _repository = repository;
-            _includeProperties = new List<Expression<Func<TEntity, object>>>();
         }
 
         public IFluentRepository<TEntity> Filter(Expression<Func<TEntity, bool>> filter)
@@ -49,22 +47,30 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public IFluentRepository<TEntity> OrderBy(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
         {
-            _orderByQuerable = orderBy;
+            _orderByQueryable = orderBy;
             return this;
         }
 
-        public IFluentRepository<TEntity> Include(Expression<Func<TEntity, object>> expression)
+        public IFluentRepository<TEntity> Include(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include)
         {
-            _includeProperties.Add(expression);
+            _include = include;
             return this;
         }
 
-
-        public async Task<IEnumerable<TEntity>> Get(int? index = null, int? count = null)
+        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter)
         {
-            _index = index;
-            _count = count;
-            return await _repository.Get(_filter, _orderByQuerable, _includeProperties, _index, _count);
+            _filter = filter;
+            return await _repository.GetAsync(filter, _include);
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await _repository.GetAllAsync(_filter, _orderByQueryable, _include);
+        }
+
+        public async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
+        {
+            return await _repository.GetPageAsync(pageable, _filter, _orderByQueryable, _include);
         }
     }
 }

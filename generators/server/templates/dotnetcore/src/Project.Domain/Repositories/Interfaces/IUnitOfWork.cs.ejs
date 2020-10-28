@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 using System;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,8 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
         DbSet<T> Set<T>() where T : class;
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
         void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class;
-        void UpdateReferenceProperty<TEntiy>(TEntiy entity, string propertyName) where TEntiy : class;
         void UpdateState<TEntity>(TEntity entity, EntityState state);
+        void SetEntityStateModified<TEntiy, TProperty>(TEntiy entity, Expression<Func<TEntiy, TProperty>> propertyExpression) where TEntiy : class where TProperty : class;
+        void RemoveNavigationProperty<TEntity, TOwnerEntity>(TOwnerEntity ownerEntity, object id) where TEntity : class where TOwnerEntity : class;
     }
 }

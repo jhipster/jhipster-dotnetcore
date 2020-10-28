@@ -23,27 +23,31 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        Task<TEntity> FindAsync(object id);
-        Task<IEnumerable<TEntity>> FindAllAsync();
-        Task<IPage<TEntity>> FindAllAsync(IPageable pageable);
-        Task<IEnumerable<TEntity>> Get(
+        Task<TEntity> GetAsync(object id);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null);
+        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = false);        
+        Task<IPage<TEntity>> GetPageAsync(IPageable pageable,
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            List<Expression<Func<TEntity, object>>> includeProperties = null,
-            int? page = null,
-            int? pageSize = null);
-        Task<TEntity> UpdateAsync(TEntity item);
-        Task InsertGraph(TEntity entity);
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = false);
         Task<bool> Exists(Expression<Func<TEntity, bool>> predicate);
-        Task Clear();
-        Task DeleteAsync(object id);
+        Task<int> CountAsync();
+        Task<TEntity> CreateOrUpdateAsync(TEntity entity);
+        Task DeleteByIdAsync(object id);
         Task DeleteAsync(TEntity entity);
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));        
-        IFluentRepository<TEntity> AsFluentRepository();
+        Task Clear();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        IFluentRepository<TEntity> QueryHelper();
     }
 }
