@@ -1,4 +1,4 @@
-## Big Picture 
+# Big Picture 
 
 JHipster is a well-known platform for generating modern application in java world.
 JHipster provides a blueprints system that allows to override the default behavior of the generator 
