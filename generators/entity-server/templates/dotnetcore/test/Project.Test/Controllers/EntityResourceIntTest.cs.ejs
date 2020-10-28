@@ -340,7 +340,7 @@ namespace <%= namespace %>.Test.Controllers {
             var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             // Update the <%= camelCasedEntityClass %>
-            var updated<%= pascalizedEntityClass %> = await _<%= camelCasedEntityClass %>Repository.GetAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            var updated<%= pascalizedEntityClass %> = await _<%= camelCasedEntityClass %>Repository.QueryHelper().GetOneAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
             // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
 //TODO detach
             <%_ fields.forEach(field => { _%>
