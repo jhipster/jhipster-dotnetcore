@@ -17,8 +17,12 @@
  limitations under the License.
 -%>
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Domain.Repositories.Interfaces;
+using <%= namespace %>.Infrastructure.Data.Extensions;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
@@ -28,20 +32,47 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         {
         }
 
-        public async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+        public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
             bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
 
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
-            {
-                await base.UpdateAsync(<%= camelCasedEntityClass %>);
+            <%_ relationships.forEach( relationship => {
+                if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+            base._context.RemoveNavigationProperty<<%= relationship.joinEntityNamePascalized %>,<%= pascalizedEntityClass %>>(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
+                    <%_ }
+                        if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
+            <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User?.Id;
+            <%= camelCasedEntityClass %>.User = null; 
+                    <%_ }
+            }); _%>
+            if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
+                this.Update(<%= camelCasedEntityClass %>);
+                <%_ let first = true;
+                let suffix = 0;
+                relationships.forEach( relationship => {
+                    if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
+                        if (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-one') {
+                            if (first) { _%>
+                /* Force the reference navigation property to be in "modified" state.
+                This allows to modify it with a null value (the field is nullable).
+                This takes into consideration the case of removing the association between the two instances. */
+                                <%_ first = false;
+                            } _%>
+                this._context.SetEntityStateModified(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>);
+                    <%_ }
+                    }
+                }); _%>
+            } else {
+                <%_ if (relationships.length != 0) { _%>
+                this._context.AddGraph(<%= camelCasedEntityClass %>);
+                <%_ } else { _%>
+                this.Update(<%= camelCasedEntityClass %>);
+                <%_ } _%>
             }
-            else
-            {
-                _dbSet.Attach(<%= camelCasedEntityClass %>);
-            }
-            
+
+            await this.SaveChangesAsync();
+
             return <%= camelCasedEntityClass %>;
-        }        
+        }
     }
 }
