@@ -54,15 +54,7 @@ module.exports = class extends EntityGenerator {
     }
 
     get configuring() {
-        const phaseFromJHipster = super._configuring();
-        const jhipsterNetPhaseSteps = {
-            loadInMemoryDataNetBlueprint() {
-                const context = this.context;
-
-                
-            },
-        };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+        return super._configuring();
     }
 
     get composing() {
@@ -76,7 +68,7 @@ module.exports = class extends EntityGenerator {
     get preparing() {
         return {
             ...super._preparing(),
-            preparingDotnet () {
+            preparingDotnet() {
                 const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
@@ -181,8 +173,8 @@ module.exports = class extends EntityGenerator {
                     relationship.joinEntityGenerated = false;
                 });
                 this.entityConfig.relationships = context.relationships;
-            }
-        }
+            },
+        };
     }
 
     get default() {
