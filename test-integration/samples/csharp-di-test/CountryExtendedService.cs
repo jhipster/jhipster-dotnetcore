@@ -1,9 +1,7 @@
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
-using JhipsterSampleApplication.Domain;
-using JhipsterSampleApplication.Infrastructure.Data;
 using JhipsterSampleApplication.Domain.Services.Interfaces;
-using JhipsterSampleApplication.Domain.Services;
+using JhipsterSampleApplication.Domain.Repositories.Interfaces;
 
 namespace JhipsterSampleApplication.Domain.Services {
     public class CountryExtendedService : CountryService, ICountryService 
