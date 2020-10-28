@@ -22,21 +22,27 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
 using Microsoft.EntityFrameworkCore.Query;
 using <%= namespace %>.Domain.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     public class FluentRepository<TEntity> : IFluentRepository<TEntity> where TEntity : class
     {
         private readonly IGenericRepository<TEntity> _repository;
+        private readonly DbSet<TEntity> _dbSet;
         private Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> _include;        
         private Expression<Func<TEntity, bool>> _filter;
-        private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderByQueryable;
+        private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderBy;
+        private bool _disableTracking;
+        
 
-        public FluentRepository(IGenericRepository<TEntity> repository)
+        public FluentRepository(IGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
         {
             _repository = repository;
+            _dbSet = dbset;
         }
 
         public IFluentRepository<TEntity> Filter(Expression<Func<TEntity, bool>> filter)
@@ -47,7 +53,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public IFluentRepository<TEntity> OrderBy(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
         {
-            _orderByQueryable = orderBy;
+            _orderBy = orderBy;
             return this;
         }
 
@@ -57,20 +63,60 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return this;
         }
 
+        public IFluentRepository<TEntity> AsNoTracking()
+        {
+            _disableTracking = true;
+            return this;
+        }
+
         public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter)
         {
             _filter = filter;
-            return await _repository.GetAsync(filter, _include);
+            IQueryable<TEntity> query = BuildQuery(_filter, null, _include);
+            return await query.SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _repository.GetAllAsync(_filter, _orderByQueryable, _include);
+            IQueryable<TEntity> query = BuildQuery(_filter, _orderBy, _include, _disableTracking);
+            return await query.ToListAsync();
         }
 
         public async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
         {
-            return await _repository.GetPageAsync(pageable, _filter, _orderByQueryable, _include);
+            IQueryable<TEntity> query = BuildQuery(_filter, _orderBy, _include, _disableTracking);
+            return await query.UsePageableAsync(pageable);
+        }
+
+        private IQueryable<TEntity> BuildQuery(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = false)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
         }
     }
 }

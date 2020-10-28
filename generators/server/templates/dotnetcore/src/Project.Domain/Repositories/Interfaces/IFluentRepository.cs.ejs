@@ -31,6 +31,7 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
         IFluentRepository<TEntity> Filter(Expression<Func<TEntity, bool>> filter);
         IFluentRepository<TEntity> Include(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include);
         IFluentRepository<TEntity> OrderBy(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy);
+        IFluentRepository<TEntity> AsNoTracking();
         Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<IPage<TEntity>> GetPageAsync(IPageable pageable);
