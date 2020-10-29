@@ -56,7 +56,7 @@
     "jsdoc": "3.6.6",
     "mocha": "8.2.0",
     "nyc": "15.1.0",
-    "sinon": "9.2.0",
+    "sinon": "9.2.1",
     "yeoman-assert": "3.1.1",
     "yeoman-test": "3.0.0",
     "sonarqube-scanner": "2.7.0"
