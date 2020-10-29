@@ -25,6 +25,7 @@ You can also find lot of information in https://www.jhipster.tech
 
   Features/services
   Features/dto
+  Features/repository
   Features/database-migrations
   Features/code-analysis
   Features/monitoring
