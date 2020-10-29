@@ -50,7 +50,6 @@ module.exports = class extends ServerGenerator {
     get initializing() {
         return {
             ...super._initializing(),
-            customizeDotnetPaths,
             setupServerConsts() {
                 this.packagejs = packagejs;
                 this.jhipsterNetVersion = packagejs.version;
@@ -86,7 +85,9 @@ module.exports = class extends ServerGenerator {
     }
 
     get configuring() {
-        return {};
+        return {
+            customizeDotnetPaths,
+        };
     }
 
     get default() {
