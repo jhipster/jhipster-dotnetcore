@@ -58,7 +58,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         
         public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.AsQueryable().AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate);
         }
 
         public abstract Task<TEntity> CreateOrUpdateAsync(TEntity entity);
@@ -89,8 +89,8 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public virtual async Task<int> CountAsync()
         {
-            using var countTask = _dbSet.CountAsync();
-            return await countTask;
+            var countTask = await _dbSet.CountAsync();
+            return countTask;
         }
 
         public virtual IFluentRepository<TEntity> QueryHelper()
