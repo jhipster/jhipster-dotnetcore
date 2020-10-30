@@ -28,9 +28,9 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        protected readonly ApplicationDatabaseContext _context;
+        protected readonly DbContext _context;
 
-        public UnitOfWork(ApplicationDatabaseContext context)
+        public UnitOfWork(DbContext context)
         {
             _context = context;
         }
