@@ -46,7 +46,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                     <%_ }
             }); _%>
             if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
-                this.Update(<%= camelCasedEntityClass %>);
+                Update(<%= camelCasedEntityClass %>);
                 <%_ let first = true;
                 let suffix = 0;
                 relationships.forEach( relationship => {
@@ -58,19 +58,19 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                 This takes into consideration the case of removing the association between the two instances. */
                                 <%_ first = false;
                             } _%>
-                this._context.SetEntityStateModified(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>);
+                _context.SetEntityStateModified(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>);
                     <%_ }
                     }
                 }); _%>
             } else {
                 <%_ if (relationships.length != 0) { _%>
-                this._context.AddGraph(<%= camelCasedEntityClass %>);
+                _context.AddGraph(<%= camelCasedEntityClass %>);
                 <%_ } else { _%>
-                this.Update(<%= camelCasedEntityClass %>);
+                Update(<%= camelCasedEntityClass %>);
                 <%_ } _%>
             }
 
-            await this.SaveChangesAsync();
+            await SaveChangesAsync();
 
             return <%= camelCasedEntityClass %>;
         }

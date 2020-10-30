@@ -39,6 +39,12 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
         Task DeleteAsync(TEntity entity);
         Task Clear();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        TEntity Add(TEntity entity);
+        bool AddRange(params TEntity[] entities);
+        TEntity Attach(TEntity entity);
+        TEntity Update(TEntity entity);
+        bool UpdateRange(params TEntity[] entities);
+        TEntity Remove(TEntity entity);
         IFluentRepository<TEntity> QueryHelper();
     }
 }

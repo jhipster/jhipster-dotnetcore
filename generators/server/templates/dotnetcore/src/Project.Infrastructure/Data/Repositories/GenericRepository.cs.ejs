@@ -61,6 +61,43 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return await _dbSet.AnyAsync(predicate);
         }
 
+        public virtual TEntity Add(TEntity entity)
+        {
+            _dbSet.Add(entity);
+            return entity;
+        }
+
+        public virtual bool AddRange(params TEntity[] entities)
+        {
+            _dbSet.AddRange(entities);
+            return true;
+        }
+
+        public virtual TEntity Attach(TEntity entity)
+        {
+            var entry = _dbSet.Attach(entity);
+            entry.State = EntityState.Added;
+            return entity; 
+        }
+
+        public virtual TEntity Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            return entity; 
+        }
+
+        public virtual bool UpdateRange(params TEntity[] entities)
+        {
+            _dbSet.UpdateRange(entities);
+            return true;
+        }
+
+        public virtual TEntity Remove(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+            return entity; 
+        }
+
         public abstract Task<TEntity> CreateOrUpdateAsync(TEntity entity);
 
         public virtual async Task Clear()
