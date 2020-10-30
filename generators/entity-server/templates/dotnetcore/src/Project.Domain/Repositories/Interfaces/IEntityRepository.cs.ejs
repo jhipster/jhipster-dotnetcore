@@ -16,15 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-//using System.Threading.Tasks;
-//using JHipsterNet.Core.Pagination;
-
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface I<%= pascalizedEntityClass %>Repository : IGenericRepository<<%= pascalizedEntityClass %>>
     {
-        //Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>);
-        //Task<IPage<<%= pascalizedEntityClass %>>> GetPageableWithRelationshipsAsync(IPageable pageable);
-        //Task<<%= pascalizedEntityClass %>> FindOneWithRelationshipsAsync(long id);
     }
 }
