@@ -72,6 +72,8 @@ namespace <%= namespace %>.Configuration {
                 <%_ break;
             } _%>
 
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+
             return services;
         }
 

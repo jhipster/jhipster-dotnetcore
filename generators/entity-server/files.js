@@ -46,6 +46,20 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`,
                 },
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IEntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/I${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/EntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
+                },
             ],
         },
         {
@@ -93,21 +107,6 @@ const serverFiles = {
                     file: 'Project.Infrastructure/Data/ApplicationDatabaseContext.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
-                },
-                {
-                    file: 'Project.Infrastructure/Data/Extensions/DbContextExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
-                },
-                {
-                    file: 'Project.Infrastructure/Data/Extensions/DbSetExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
-                },
-                {
-                    file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
                 },
             ],
         },
