@@ -43,7 +43,7 @@ namespace MyCompany.Domain.Services {
 
 AuthorExtendedService class will override one specific method of its base class (or more if you wish) adding custom business logic and AuthorExtendedService class will be automatically be registered with the dotnet container. Any code using the IAuthorService dependency will use this class for its implementation.
 
-Currently the automatic registration strategy for class/interface is used only for service classes/interfaces and more details are explained below.
+Currently the automatic registration strategy for class/interface is used only for service and repository classes/interfaces and more details are explained below.
 
 ## Automatic Service Registration In DI Container
 

@@ -22,92 +22,57 @@ const serviceInterface = 'I' + serviceClassName;
 _%>
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
-using JHipsterNet.Core.Pagination.Extensions;
-using <%= namespace %>.Infrastructure.Data.Extensions;
-using Microsoft.EntityFrameworkCore;
-using <%= namespace %>.Domain;
-using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain.Services.Interfaces;
+using <%= namespace %>.Domain.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace <%= namespace %>.Domain.Services {
     public class <%= serviceClassName %> : <%= serviceInterface %> {
-        protected readonly ApplicationDatabaseContext _applicationDatabaseContext;
+        protected readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
 
-        public <%= serviceClassName %>(ApplicationDatabaseContext applicationDatabaseContext)
+        public <%= serviceClassName %>(I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         {
-            _applicationDatabaseContext = applicationDatabaseContext;
+            _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
         }
 
         public virtual async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
-            <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                _applicationDatabaseContext.<%= relationship.joinEntityFieldNamePascalizedPlural %>.RemoveNavigationProperty(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
-                    <%_ }
-                        if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
-            <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User?.Id;
-            <%= camelCasedEntityClass %>.User = null; 
-                    <%_ }
-            }); _%>
-            if (<%= camelCasedEntityClass %>.Id != 0 && _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Exists(x => x.Id == <%= camelCasedEntityClass %>.Id)) {
-                _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Update(<%= camelCasedEntityClass %>);
-                <%_ let first = true;
-                let suffix = 0;
-                relationships.forEach( relationship => {
-                    if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
-                        if (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-one') {
-                            if (first) { _%>
-                /* Force the reference navigation property to be in "modified" state.
-                This allows to modify it with a null value (the field is nullable).
-                This takes into consideration the case of removing the association between the two instances. */
-                                <%_ first = false;
-                            } _%>
-                _applicationDatabaseContext.Entry(<%= camelCasedEntityClass %>).Reference(<%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>).IsModified = true;
-                    <%_ }
-                    }
-                }); _%>
-            } else {
-                <%_ if (relationships.length != 0) { _%>
-                _applicationDatabaseContext.AddGraph(<%= camelCasedEntityClass %>);
-                <%_ } else { _%>
-                _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(<%= camelCasedEntityClass %>);
-                <%_ } _%>
-            }
-            await _applicationDatabaseContext.SaveChangesAsync();
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             return <%= camelCasedEntityClass %>;
         }
 
         public virtual async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
         {
-            var page = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+            var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
                 <%_ }
-            }); _%>
-                .UsePageableAsync(pageable);
+            }); _%>            
+                .GetPageAsync(pageable);
             return page;
         }
 
         public virtual async Task<<%= pascalizedEntityClass %>> FindOne(long id)
         {
-            var result = await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>
+            var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
                 <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
-                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>)
+                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
+                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>))
                 <%_ }
             }); _%>
-                .SingleOrDefaultAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
+                .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
             return result;
         }
 
         public virtual async Task Delete(long id)
         {
-            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.RemoveById(id);
-            await _applicationDatabaseContext.SaveChangesAsync();
+            await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(id);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
         }
     }
 }

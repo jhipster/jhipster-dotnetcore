@@ -74,6 +74,7 @@ namespace <%= namespace %> {
             <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
                 .AddConsul(Configuration)
             <%_ } _%>
+                .AddRepositoryModule()            
                 .AddServiceModule();
 
             <%_ if (applicationType === 'gateway') { _%>
