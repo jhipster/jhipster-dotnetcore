@@ -66,6 +66,10 @@ module.exports = class extends LanguageGenerator {
         return super._writing();
     }
 
+    get postWriting() {
+        return super._postWriting();
+    }
+
     /* get writing() {
         return {
             translateFile() {

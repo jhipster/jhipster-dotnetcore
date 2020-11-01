@@ -118,13 +118,7 @@ module.exports = class extends ServerGenerator {
     }
 
     get postWriting() {
-        return {
-            postWritingDotnet() {
-                if (this.clientFramework !== BLAZOR) {
-                    super._postWriting();
-                }
-            },
-        };
+        return {};
     }
 
     get end() {
