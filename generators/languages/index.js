@@ -1,11 +1,12 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const LanguageGenerator = require('generator-jhipster/generators/languages');
-const jhipsterUtils = require('generator-jhipster/generators/utils');
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
+
+const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends LanguageGenerator {
     constructor(args, opts) {
@@ -50,7 +51,15 @@ module.exports = class extends LanguageGenerator {
     }
 
     get preparing() {
-        return super._preparing();
+        return {
+            ...super._preparing(),
+            preparingDotnet() {
+                this.skipServer = true; // Skip server transalation for the dotnet
+                if (this.clientFramework === BLAZOR) {
+                    this.skipClient = true; // Skip client translation for the blazor framework
+                }
+            },
+        };
     }
 
     get writing() {
@@ -99,7 +108,7 @@ module.exports = class extends LanguageGenerator {
                 }
             },
         };
-    } */
+    } 
 
     get postWriting() {
         return super._postWriting();
@@ -265,5 +274,5 @@ module.exports = class extends LanguageGenerator {
             );
             this.debug('Error:', e);
         }
-    }
+    } */
 };

@@ -73,7 +73,7 @@ module.exports = class extends CommonGenerator {
     }
 
     get default() {
-        return super._default();
+        return {};
     }
 
     get writing() {

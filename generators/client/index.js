@@ -56,7 +56,15 @@ module.exports = class extends ClientGenerator {
     }
 
     get initializing() {
-        return super._initializing();
+        return {
+            ...super._initializing(),
+            initializingDotnet () {
+                this.namespace = this.jhipsterConfig.namespace;
+                this.clientFramework = this.jhipsterConfig.clientFramework;
+                this.serverPort = this.jhipsterConfig.serverPort;
+                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
+            }
+        }
     }
 
     get prompting() {
@@ -124,7 +132,13 @@ module.exports = class extends ClientGenerator {
     }
 
     get postWriting() {
-        return super._postWriting();
+        return {
+            postWritingDotnet(){
+                if (this.clientFramework !== BLAZOR) {
+                    super._postWriting();
+                }
+            }
+        }
     }
 
     get install() {

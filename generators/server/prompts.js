@@ -34,7 +34,8 @@ function askForServerSideOpts() {
             type: 'input',
             name: 'serverPort',
             validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
-            message: 'On which port would like your server to run? It should be unique to avoid port conflicts.',
+            message:
+                'On which port would like your server to run ? It should be unique to avoid port conflicts (choose http -> https=httpPort+1).',
             default: defaultPort,
         },
         {
