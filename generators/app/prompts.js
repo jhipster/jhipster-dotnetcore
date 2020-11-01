@@ -80,7 +80,9 @@ async function askForApplicationType() {
         },
     ]);
     this.applicationType = answers.applicationType;
-    this.serviceDiscoveryType = 'consul';
+    if (this.applicationType !== 'monolith') {
+        this.serviceDiscoveryType = 'consul';
+    }
 }
 
 module.exports = {

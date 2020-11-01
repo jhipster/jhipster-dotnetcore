@@ -17,7 +17,7 @@
     <PropertyGroup>
         <AssemblyName><%= dasherizedBaseName %></AssemblyName>
         <Version>0.0.1</Version>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <RootNamespace><%= namespace %></RootNamespace>
@@ -34,42 +34,42 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JHipsterNet.Core" Version="1.0.5" />
-        <PackageReference Include="JHipsterNet.Web" Version="1.0.5" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.0.1" />
+        <PackageReference Include="JHipsterNet.Core" Version="1.0.6" />
+        <PackageReference Include="JHipsterNet.Web" Version="1.0.6" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.5" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0-rc.2.20475.17" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0-rc.2.20475.17" />
         <%_ switch(databaseType) {
             case 'sqllite': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
             <%_ break;
             case 'mssql': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.195" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
             <%_ break;
             case 'postgres': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
             <%_ break;
             case 'mysql': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
             <%_ break;
             case 'oracle': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.9" />
         <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.0-beta2" />
         <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.80" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
             <%_ break;
          } _%>
         <PackageReference Include="Scrutor" Version="3.2.2" />
@@ -82,11 +82,11 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
         <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
         <%_ if (authenticationType === 'jwt') { _%>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.6.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0-rc.2.20475.17 " />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.0" />
         <%_ } else { _%>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0-rc.2.20475.17" />
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'consul') { _%>
         <PackageReference Include="Winton.Extensions.Configuration.Consul" Version="3.1.1" />
