@@ -115,19 +115,13 @@ module.exports = class extends ClientGenerator {
                         return writeBlazorFiles.call(this);
                     case REACT:
                         baseWriteReactFiles.call(this);
-                        baseWriteCommonFiles.call(this);
-                        writeCommonFiles.call(this);
-                        return writeReactFiles.call(this);
+                        return baseWriteCommonFiles.call(this);
                     case ANGULAR:
                         baseWriteAngularFiles.call(this);
-                        baseWriteCommonFiles.call(this);
-                        writeCommonFiles.call(this);
-                        return writeAngularFiles.call(this);
+                        return baseWriteCommonFiles.call(this);
                     case VUE:
                         baseWriteVueFiles.call(this);
-                        baseWriteCommonFiles.call(this);
-                        writeCommonFiles.call(this);
-                        return writeVueFiles.call(this);
+                        return baseWriteCommonFiles.call(this);
                     default:
                     // do nothing by default
                 }
@@ -143,6 +137,22 @@ module.exports = class extends ClientGenerator {
                 }
             },
             ... super._postWriting(),
+            postWriteFilesDotnetcore() {
+                if (this.skipClient) return;
+                switch (this.clientFramework) {
+                    case REACT:
+                        writeCommonFiles.call(this);
+                        return writeReactFiles.call(this);
+                    case ANGULAR:
+                        writeCommonFiles.call(this);
+                        return writeAngularFiles.call(this);
+                    case VUE:
+                        writeCommonFiles.call(this);
+                        return writeVueFiles.call(this);
+                    default:
+                    // do nothing by default
+                }
+            }
         }
     }
 

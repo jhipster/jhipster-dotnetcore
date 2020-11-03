@@ -31,9 +31,19 @@ function updateHomeTitle() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
 }
 
+function updateWebpackCustomJs() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+        "",
+        true
+    );
+}
+
 function writeFiles() {
     angularJson.call(this);
     updateHomeTitle.call(this);
+    updateWebpackCustomJs.call(this);
 }
 
 module.exports = {
