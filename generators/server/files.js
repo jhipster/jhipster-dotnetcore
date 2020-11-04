@@ -121,8 +121,7 @@ const serverFiles = {
             templates: [
                 {
                     file: 'Project.Domain/Entities/AuditedEntityBase.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/AuditedEntityBase.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/AuditedEntityBase.cs`,
                 },
             ],
         },
