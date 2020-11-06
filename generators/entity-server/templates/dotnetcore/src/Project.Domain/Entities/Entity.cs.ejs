@@ -35,9 +35,7 @@ fields.forEach(field => {
 if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
 <%_ } _%>
-<%_ if (hasManyToMany) { _%>
-using <%= namespace %>.Domain.RelationshipTools;
-<%_ } if (importJsonIgnore === true || hasManyToMany) { _%>
+<%_ if (importJsonIgnore === true || hasManyToMany) { _%>
 using Newtonsoft.Json;
 <%_ } _%>
 
@@ -91,38 +89,16 @@ namespace <%= namespace %>.Domain {
                 <%_ }  _%>
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
             <%_  } else if (relationshipType === 'many-to-many') {
-                const joinEntityNamePascalized = relationships[idx].joinEntityNamePascalized ;
-                const joinEntityFieldNamePascalizedPlural = relationships[idx].joinEntityFieldNamePascalizedPlural ;
                 const ownerSide = relationships[idx].ownerSide; _%>
-        [JsonIgnore]
-        public IList<<%= joinEntityNamePascalized %>> <%= joinEntityFieldNamePascalizedPlural %> { get; } = new List<<%= joinEntityNamePascalized %>>();
-
-        [NotMapped]
                 <%_ if (!ownerSide) { _%>
         [JsonIgnore]
                 <%_ } _%>
-        public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; }
+        public ICollection<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; }
             <%_ } _%>
 
         <%_ } _%>
         // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
-        <%_ if (hasManyToMany) { _%>
-        public <%= entityClassName %>()
-        {
-            <%_ for (idx in relationships) {
-                const relationshipType = relationships[idx].relationshipType;
-                if(relationshipType === 'many-to-many'){
-                    const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
-                    const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
-                    const joinEntityNamePascalized = relationships[idx].joinEntityNamePascalized ;
-                    const joinEntityFieldNamePascalizedPlural = relationships[idx].joinEntityFieldNamePascalizedPlural ; _%>
-            <%= relationshipFieldNamePascalizedPlural %> = new JoinListFacade<<%= otherEntityNamePascalized %>, <%= entityClassName %>, <%= joinEntityNamePascalized %>>(this, <%= joinEntityFieldNamePascalizedPlural %>);
-                <%_ }
-            } _%>
-        }
-
-        <%_ } _%>
         public override bool Equals(object obj)
         {
             if (this == obj) return true;

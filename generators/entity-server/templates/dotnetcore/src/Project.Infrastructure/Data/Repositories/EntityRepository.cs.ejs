@@ -38,7 +38,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-            base._context.RemoveNavigationProperty<<%= relationship.joinEntityNamePascalized %>,<%= pascalizedEntityClass %>>(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
+            //base._context.RemoveNavigationProperty<<%= relationship.joinEntityNamePascalized %>,<%= pascalizedEntityClass %>>(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
                     <%_ }
                         if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
             <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User?.Id;
