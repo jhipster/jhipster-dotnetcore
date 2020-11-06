@@ -14,7 +14,7 @@
 -%>
 # Based on Microsoft's docker samples for dotnet core
 # available at https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 # First install nodejs - required to build generated client app
 WORKDIR /app
 RUN apt-get update -yq && apt-get install -yq curl
@@ -31,12 +31,10 @@ RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
 # Copy everything else and build app
 COPY . ./
 WORKDIR src/<%= mainProjectDir %>
-RUN cd ClientApp && npm install
-RUN rm -rf ClientApp/dist && \
-    dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
+RUN dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 
 # Final stage/image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS runtime
 WORKDIR /app
 EXPOSE 80
 COPY --from=build /app/out .
