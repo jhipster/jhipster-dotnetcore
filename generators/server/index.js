@@ -26,8 +26,6 @@ const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
 
-const BLAZOR = constants.BLAZOR;
-
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
