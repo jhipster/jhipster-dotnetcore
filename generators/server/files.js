@@ -1098,10 +1098,11 @@ const serverFiles = {
             condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
             path: DOCKER_DIR,
             templates: [
+                'consul.yml',
                 {
-                    file: 'central-server-config/application.yml',
+                    file: 'central-server-config/application.json',
                     method: 'copy',
-                    renameTo: () => 'central-server-config/application.yml',
+                    renameTo: () => 'central-server-config/application.json',
                 },
                 {
                     file: 'central-server-config/README.md',
@@ -1152,7 +1153,7 @@ const baseServiceDiscoveryFiles = {
         {
             condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
             path: DOCKER_DIR,
-            templates: ['consul.yml', { file: 'config/git2consul.json', method: 'copy' }],
+            templates: [{ file: 'config/git2consul.json', method: 'copy' }],
         },
     ],
 };
