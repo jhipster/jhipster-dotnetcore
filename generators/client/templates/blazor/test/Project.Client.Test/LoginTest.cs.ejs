@@ -1,0 +1,96 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Blazored.Modal;
+using Xunit;
+using Bunit;
+using FluentAssertions;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Pages;
+using <%= namespace %>.Client.Services;
+using <%= namespace %>.Client.Test.Helpers;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using static Bunit.ComponentParameterFactory;
+
+namespace <%= namespace %>.Client.Test
+{
+    /// <summary>
+    /// These tests are written entirely in C#.
+    /// Learn more at https://bunit.egilhansen.com/docs/
+    /// </summary>
+    public class LoginTest : TestContext
+    {
+        [Fact]
+        public void Should_CallSignInMethod_When_LoginFormIsSubmitted()
+        {
+            // Arrange
+            var loginModel = new LoginModel()
+            {
+                Username = "test",
+                Password = "test"
+            };
+            var authenticationService = new Mock<MockAuthenticationService>();
+            authenticationService.Setup(authenticationService =>
+                authenticationService.SignIn(It.IsAny<LoginModel>()));
+            Services.AddSingleton<AuthenticationStateProvider>(authenticationService.Object);
+
+            var login = RenderComponent<Login>();
+            login.Instance.LoginModel = loginModel;
+
+            // Act
+            login.Find("form").Submit();
+
+            // Assert
+            authenticationService.Verify(mock => mock.SignIn(It.Is<LoginModel>(model =>
+                    model.Username.Equals(loginModel.Username) && model.Password.Equals(loginModel.Password))),
+                Times.Once());
+        }
+
+        [Fact]
+        public void Should_DisplayFailed_When_CredentialIsInvalid()
+        {
+            // Arrange
+            var loginModel = new LoginModel()
+            {
+                Username = "test",
+                Password = "test"
+            };
+            var authenticationService = new Mock<MockAuthenticationService>();
+            authenticationService.Setup(authenticationService =>
+                authenticationService.SignIn(It.IsAny<LoginModel>())).Returns(Task.FromResult(false));
+            Services.AddSingleton<AuthenticationStateProvider>(authenticationService.Object);
+
+            var login = RenderComponent<Login>();
+            login.Instance.LoginModel = loginModel;
+
+            // Act
+            login.Find("form").Submit();
+
+            // Assert
+            login.Instance.IsAuthenticateError.Should().BeTrue();
+            login.Find("div").Children.First().MarkupMatches(
+                @"<div class=""col-md-8"">
+                    <div class=""alert alert-danger"">
+                        <strong>Failed to sign in!</strong> Please check your credentials and try again.
+                    </div>
+                </div>");
+        }
+    }
+}

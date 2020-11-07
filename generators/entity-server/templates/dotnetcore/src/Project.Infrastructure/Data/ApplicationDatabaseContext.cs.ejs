@@ -29,8 +29,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Data {
-    <%_ if (authenticationType === 'jwt') { _%>
+namespace <%= namespace %>.Infrastructure.Data {
+    <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
     public class ApplicationDatabaseContext : IdentityDbContext<
         User, Role, string,
         IdentityUserClaim<string>,
@@ -74,7 +74,7 @@ namespace <%= namespace %>.Data {
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            <%_ if (authenticationType === 'jwt') { _%>
+            <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
             builder.Entity<UserRole>(userRole => {
                 userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
 

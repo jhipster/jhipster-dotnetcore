@@ -1,0 +1,13 @@
+﻿<!-- https://docs.microsoft.com/en-us/aspnet/core/blazor/forms-validation?view=aspnetcore-3.1#inputtext-based-on-the-input-event -->
+<!-- InputText with update model on oninput event-->
+
+@inherits Microsoft.AspNetCore.Components.Forms.InputText
+@namespace <%= namespace %>.Client.Shared.Components
+
+<input @attributes="AdditionalAttributes"
+       class="@CssClass"
+       value="@CurrentValue"
+       @oninput="EventCallback.Factory.CreateBinder<string>(
+        this, __value => CurrentValueAsString = __value, CurrentValueAsString)" />
+
+

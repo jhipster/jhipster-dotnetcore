@@ -13,7 +13,7 @@
  limitations under the License.
 -%>
 using System;
-using <%= namespace %>.Data;
+using <%= namespace %>.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 <%_ switch(databaseType) {
@@ -34,7 +34,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace <%= namespace %>.Configuration {
     public static class DatabaseConfiguration {
-        public static IServiceCollection AddDatabaseModule(this IServiceCollection @this, IConfiguration configuration)
+        public static IServiceCollection AddDatabaseModule(this IServiceCollection services, IConfiguration configuration)
         {
             var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
 
@@ -44,22 +44,22 @@ namespace <%= namespace %>.Configuration {
                 DataSource = entityFrameworkConfiguration["DataSource"]
             }.ToString());
 
-            @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(connection); });
+            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(connection); });
                 <%_ break;
                 case 'mssql': _%>
             var connection = configuration.GetConnectionString("AppDbContext");
 
-            @this.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connection));
                 <%_ break;
                 case 'postgres': _%>
             var connection = configuration.GetConnectionString("AppDbContext");
 
-            @this.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connection); });
+            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connection); });
                 <%_ break;
                 case 'mysql': _%>
             var connection = configuration.GetConnectionString("AppDbContext");
 
-            @this.AddDbContext<ApplicationDatabaseContext>(options =>
+            services.AddDbContext<ApplicationDatabaseContext>(options =>
                 options.UseMySql(connection, mySqlOptions =>
                     mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
             ));
@@ -67,15 +67,17 @@ namespace <%= namespace %>.Configuration {
                 case 'oracle': _%>
             var connection = configuration.GetConnectionString("AppDbContext");
 
-            @this.AddDbContext<ApplicationDatabaseContext>(options =>
+            services.AddDbContext<ApplicationDatabaseContext>(options =>
                 options.UseOracle(connection));
                 <%_ break;
             } _%>
 
-            return @this;
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+
+            return services;
         }
 
-        public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder @this,
+        public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder app,
             IServiceProvider serviceProvider, IHostEnvironment environment)
         {
             if (environment.IsDevelopment() || environment.IsProduction())
@@ -88,7 +90,7 @@ namespace <%= namespace %>.Configuration {
                 }
             }
 
-            return @this;
+            return app;
         }
     }
 }

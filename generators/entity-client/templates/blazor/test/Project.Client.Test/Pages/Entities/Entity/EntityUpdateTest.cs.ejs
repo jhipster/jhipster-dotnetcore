@@ -1,0 +1,137 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass;
+const entityClassNamePluralized = pascalizedEntityClassPlural;
+_%>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoFixture;
+using Blazored.Modal;
+using Blazored.Modal.Services;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
+using Bunit;
+using Bunit.Rendering;
+using FluentAssertions;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Pages.Utils;
+using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
+<%_ relationships.forEach(relation => { 
+    if(relation.relationshipType === 'one-to-one') { _%>
+using <%= namespace %>.Client.Services.EntityServices.<%= relation.otherEntityNamePascalized %>;
+    <%_ }
+}); _%>
+using <%= namespace %>.Client.Shared;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
+using Xunit;
+
+namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
+{
+    public class <%= entityClassName %>UpdateTest : TestContext
+    {
+        private readonly Mock<I<%= entityClassName %>Service> _<%= entityVariableName %>Service;
+        <%_ relationships.forEach(relation => { 
+            if(relation.relationshipType === 'one-to-one') { _%>
+        private readonly Mock<I<%= relation.otherEntityNamePascalized %>Service> _<%= relation.otherEntityNameLowerCased %>Service;
+            <%_ }
+        }); _%>
+        private readonly Mock<IModalService> _modalService;
+        private readonly Mock<INavigationService> _navigationService;
+        private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
+
+        public <%= entityClassName %>UpdateTest()
+        {
+            _<%= entityVariableName %>Service = new Mock<I<%= entityClassName %>Service>();                
+            _modalService = new Mock<IModalService>();
+            _navigationService = new Mock<INavigationService>();
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+            _<%= relation.otherEntityNameLowerCased %>Service = new Mock<I<%= relation.otherEntityNamePascalized %>Service>();
+            Services.AddSingleton<I<%= relation.otherEntityNamePascalized %>Service>(_<%= relation.otherEntityNameLowerCased %>Service.Object);
+                <%_ }
+            }); _%>
+            Services.AddSingleton<INavigationService>(_navigationService.Object);
+            Services.AddSingleton<I<%= entityClassName %>Service>(_<%= entityVariableName %>Service.Object);
+            Services.AddSingleton<IModalService>(_modalService.Object);
+            Services.AddBlazorise(options =>
+                {
+                    options.ChangeTextOnKeyPress = true;
+                })
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
+            Services.AddHttpClientInterceptor();
+        }
+
+
+        [Fact]
+        public void Should_UpdateSelected<%= entityClassName %>_When_FormIsSubmitWithId()
+        {
+            //Arrange
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+            var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
+            _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
+                <%_ }
+            }); _%>
+
+            var <%= entityVariableName %>ToUpdate = _fixture.Create<<%= asModel(entityClassName) %>>();
+            <%= entityVariableName %>ToUpdate.Id = 1; 
+
+            _<%= entityVariableName %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= entityVariableName %>ToUpdate));
+            
+            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 1));
+
+
+            // Act
+            var <%= entityVariableName %>form = update<%= entityClassName %>Page.Find("form");
+            <%= entityVariableName %>form.Submit();
+
+            // Assert
+            _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate),Times.Once);
+        }
+
+        [Fact]
+        public void Should_Add<%= entityClassName %>_When_FormIsSubmitWithoutId()
+        {
+            //Arrange 
+            <%_ relationships.forEach(relation => { 
+                if(relation.relationshipType === 'one-to-one') { _%>
+            var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
+            _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
+                <%_ }
+            }); _%>
+            
+            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 0));
+
+            // Act
+            var <%= entityVariableName %>form = update<%= entityClassName %>Page.Find("form");
+            <%= entityVariableName %>form.Submit();
+
+            // Assert
+            _<%= entityVariableName %>Service.Verify(service => service.Add(It.IsAny<<%= asModel(entityClassName) %>>()), Times.Once);
+        }
+
+    }
+}

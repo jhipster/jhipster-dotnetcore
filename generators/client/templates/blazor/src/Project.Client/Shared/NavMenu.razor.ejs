@@ -1,0 +1,83 @@
+<Bar Breakpoint="Breakpoint.Desktop" Background="Background.Dark" ThemeContrast="ThemeContrast.Dark">
+    <BarBrand Class="navbar-brand logo">
+        <span class="logo-img"></span>
+        <span class="navbar-title"><%= capitalizedBaseName %></span> <!--<span class="navbar-version">{{ version }}</span>-->
+    </BarBrand>
+    <BarToggler>
+    </BarToggler>
+    <BarMenu>
+        <BarStart>
+        </BarStart>
+        <BarEnd>
+            <BarItem>
+                <BarLink To="/">
+                    <Icon Name='"fa-home"' />
+                    Home
+                </BarLink>
+            </BarItem>
+            <AuthorizeView Roles="ROLE_USER">
+                <Authorized>
+                    <BarItem>
+                        <BarDropdown Class="nav-link">
+                            <BarDropdownToggle Class="nav-item dropdown pointer">
+                                <Icon Name='"fa-th-list"' />
+                                Entities
+                            </BarDropdownToggle>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                    </BarItem>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="ROLE_ADMIN">
+            <Authorized>
+                    <BarItem>
+                        <BarDropdown>
+                            <BarDropdownToggle Class="nav-item dropdown pointer">
+                                <Icon Name='"fa-user-plus"' />
+                                Administration
+                            </BarDropdownToggle>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <BarDropdownItem Class="dropdown-item"  @onclick="@UserManagement">
+                                    <Icon Name='"fa-user"' />
+                                    User management
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </BarDropdown>
+                    </BarItem>
+                </Authorized>
+            </AuthorizeView>
+            <BarItem>
+                <BarDropdown>
+                    <BarDropdownToggle Class="nav-item dropdown pointer">
+                        <Icon Name='"fa-user"' />
+                        Account
+                    </BarDropdownToggle>
+                    <AuthorizeView>
+                        <Authorized>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <BarDropdownItem Class="dropdown-item" @onclick="@SignOut">
+                                    <Icon Name='"fa-sign-in-alt"' />
+                                    Sign out
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </Authorized>
+                        <NotAuthorized>
+                            <BarDropdownMenu Class="dropdown-menu">
+                                <BarDropdownItem Class="dropdown-item" @onclick="@SignIn">
+                                    <Icon Name='"fa-sign-in-alt"' />
+                                    Sign in
+                                </BarDropdownItem>
+                                <BarDropdownItem Class="dropdown-item" To="register">
+                                    <Icon Name='"fa-user-plus"' />
+                                    Register
+                                </BarDropdownItem>
+                            </BarDropdownMenu>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </BarDropdown>
+            </BarItem>
+        </BarEnd>
+    </BarMenu>
+</Bar>

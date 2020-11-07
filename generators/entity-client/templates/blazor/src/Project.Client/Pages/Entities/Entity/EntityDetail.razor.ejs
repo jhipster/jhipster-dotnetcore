@@ -1,0 +1,56 @@
+﻿<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass;
+const entityClassNamePluralized = pascalizedEntityClassPlural;
+_%>
+@page "/<%= lowerCasedEntityClass %>/{Id:int}/view"
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = "ROLE_USER")]
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0)
+        {
+            <div>
+                <h2><span><%= entityClassName %></span>@<%= entityClassName %>.Id</h2>
+
+                <hr>
+
+                @*<jhi-alert-error></jhi-alert-error>*@
+
+                <dl class="row-md jh-entity-details">
+                    <%_ fields.forEach(field => { _%>
+                    <dt><span><%= field.fieldNameHumanized %></span></dt>
+                    <dd>
+                        <span>@<%= entityClassName %>.<%= field.fieldNamePascalized %></span>
+                    </dd>
+                    <%_ }); _%>
+                    <%_ relationships.forEach(relation => { 
+                        if(relation.relationshipType === 'one-to-one') { _%>
+                    <dt><span><%= relation.otherEntityNamePascalized %></span></dt>
+                    <dd>
+                        @if (<%= entityClassName %>.<%= relation.otherEntityNamePascalized %> != null)
+                        {
+                            <div>
+                                <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= entityClassName %>.Id/view">@<%= entityClassName %>.<%= relation.otherEntityNamePascalized %>.Id</a>
+                            </div>
+                        }
+                    </dd>
+                        <%_ }
+                    }); _%>
+                </dl>
+
+                <button @onclick="Back" class="btn btn-info">
+                    <Icon Name='"fa-arrow-left"' />&nbsp;<span>Back</span>
+                </button>
+
+                <a href="/<%= lowerCasedEntityClass %>/@<%= entityClassName %>.Id/edit" class="btn btn-primary">
+                    <Icon Name='"fa-pencil-alt"' />&nbsp;<span>Edit</span>
+                </a>
+            </div>
+        }
+    </div>
+</div>

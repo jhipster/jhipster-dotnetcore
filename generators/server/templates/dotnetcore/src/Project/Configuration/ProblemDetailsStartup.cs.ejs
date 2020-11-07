@@ -26,9 +26,9 @@ namespace <%= namespace %>.Configuration {
         //TODO Understand difference between UI and non-ui Exceptions
         //https://github.com/christianacca/ProblemDetailsDemo/blob/master/src/ProblemDetailsDemo.Api/Startup.cs
 
-        public static IServiceCollection AddProblemDetailsModule(this IServiceCollection @this, IHostEnvironment environment)
+        public static IServiceCollection AddProblemDetailsModule(this IServiceCollection services, IHostEnvironment environment)
         {
-            @this.AddProblemDetails(setup =>
+            services.AddProblemDetails(setup =>
             {
                 setup.IncludeExceptionDetails = (_context, _exception) => !environment.IsDevelopment();
 
@@ -59,15 +59,15 @@ namespace <%= namespace %>.Configuration {
 
             });
 
-            @this.ConfigureOptions<ProblemDetailsConfiguration>();
+            services.ConfigureOptions<ProblemDetailsConfiguration>();
 
-            return @this;
+            return services;
         }
 
-        public static IApplicationBuilder UseApplicationProblemDetails(this IApplicationBuilder @this)
+        public static IApplicationBuilder UseApplicationProblemDetails(this IApplicationBuilder app)
         {
-            @this.UseProblemDetails();
-            return @this;
+            app.UseProblemDetails();
+            return app;
         }
     }
 }

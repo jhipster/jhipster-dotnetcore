@@ -1,0 +1,122 @@
+<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
+using Microsoft.EntityFrameworkCore.Query;
+using <%= namespace %>.Domain.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
+namespace <%= namespace %>.Infrastructure.Data.Repositories
+{
+    public class FluentRepository<TEntity> : IFluentRepository<TEntity> where TEntity : class
+    {
+        private readonly IGenericRepository<TEntity> _repository;
+        private readonly DbSet<TEntity> _dbSet;
+        private Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> _include;        
+        private Expression<Func<TEntity, bool>> _filter;
+        private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderBy;
+        private bool _disableTracking;
+        
+
+        public FluentRepository(IGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
+        {
+            _repository = repository;
+            _dbSet = dbset;
+        }
+
+        public IFluentRepository<TEntity> Filter(Expression<Func<TEntity, bool>> filter)
+        {
+            _filter = filter;
+            return this;
+        }
+
+        public IFluentRepository<TEntity> OrderBy(Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy)
+        {
+            _orderBy = orderBy;
+            return this;
+        }
+
+        public IFluentRepository<TEntity> Include(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include)
+        {
+            _include = include;
+            return this;
+        }
+
+        public IFluentRepository<TEntity> AsNoTracking()
+        {
+            _disableTracking = true;
+            return this;
+        }
+
+        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            _filter = filter;
+            IQueryable<TEntity> query = BuildQuery(_filter, null, _include);
+            return await query.SingleOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            IQueryable<TEntity> query = BuildQuery(_filter, _orderBy, _include, _disableTracking);
+            return await query.ToListAsync();
+        }
+
+        public async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
+        {
+            IQueryable<TEntity> query = BuildQuery(_filter, _orderBy, _include, _disableTracking);
+            return await query.UsePageableAsync(pageable);
+        }
+
+        private IQueryable<TEntity> BuildQuery(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = false)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
+        }
+    }
+}

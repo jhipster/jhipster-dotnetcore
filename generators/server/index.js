@@ -18,11 +18,10 @@
  */
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-const _ = require('lodash');
 const ServerGenerator = require('generator-jhipster/generators/server');
-const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
 const dotnet = require('../dotnet');
+const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
@@ -60,6 +59,8 @@ module.exports = class extends ServerGenerator {
                 this.namespace = configuration.get('namespace') || this.configOptions.namespace;
                 this.databaseType = configuration.get('databaseType') || this.configOptions.databaseType;
                 this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
+                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort;
+                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
 
                 const serverConfigFound =
                     this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
@@ -84,30 +85,22 @@ module.exports = class extends ServerGenerator {
             askForServerSideOpts: prompts.askForServerSideOpts,
 
             setSharedConfigOptions() {
-                this.configOptions.namespace = this.namespace;
                 this.configOptions.databaseType = this.databaseType;
                 this.configOptions.authenticationType = this.authenticationType;
+                this.configOptions.serverPort = this.serverPort;
+                this.configOptions.serverPortSecured = parseInt(this.serverPort, 10) + 1;
             },
         };
     }
 
     get configuring() {
         return {
-            configureGlobal() {
-                this.camelizedBaseName = _.camelCase(this.baseName);
-                this.dasherizedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.lowercaseBaseName = this.baseName.toLowerCase();
-                this.humanizedBaseName = _.startCase(this.baseName);
-                this.solutionName = this.pascalizedBaseName;
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
-            },
+            configureGlobalDotnetcore,
             saveConfig() {
                 const config = {
-                    namespace: this.namespace,
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
+                    serverPort: this.serverPort,
                     prodDatabaseType: 'mysql', // set only for jdl-importer compatibility
                 };
                 this.config.set(config);
@@ -126,9 +119,9 @@ module.exports = class extends ServerGenerator {
 
     get end() {
         return {
-            end() {
-                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution.\n`));
-                dotnet
+            async end() {
+                this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                await dotnet
                     .newSln(this.solutionName)
                     .then(() =>
                         dotnet.slnAdd(`${this.solutionName}.sln`, [

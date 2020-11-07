@@ -16,11 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+const baseConstants = require('generator-jhipster/generators/generator-constants');
 const constants = require('../generator-dotnetcore-constants');
 const utils = require('../utils');
 
 /* Constants use throughout */
+
+const INTERPOLATE_REGEX = baseConstants.INTERPOLATE_REGEX;
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
@@ -43,6 +45,20 @@ const serverFiles = {
                     file: 'Project/Controllers/EntityController.cs',
                     renameTo: generator =>
                         `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`,
+                },
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IEntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/I${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/EntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
                 },
             ],
         },
@@ -92,21 +108,6 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
                 },
-                {
-                    file: 'Project.Infrastructure/Data/Extensions/DbContextExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
-                },
-                {
-                    file: 'Project.Infrastructure/Data/Extensions/DbSetExtensions.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
-                },
-                {
-                    file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
-                },
             ],
         },
     ],
@@ -135,6 +136,22 @@ const serverFiles = {
                     file: 'Project.Domain/Services/Interfaces/IService.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Services/Interfaces/I${generator.entityClass}Service.cs`,
+                },
+            ],
+        },
+    ],
+};
+
+const gatlingTestsFiles = {
+    gatlingTests: [
+        {
+            condition: generator => generator.gatlingTests,
+            path: SERVER_TEST_DIR,
+            templates: [
+                {
+                    file: 'gatling/user-files/simulations/EntityGatlingTest.scala',
+                    options: { interpolate: INTERPOLATE_REGEX },
+                    renameTo: generator => `gatling/user-files/simulations/${generator.entityClass}GatlingTest.scala`,
                 },
             ],
         },
@@ -184,45 +201,10 @@ function writeFiles() {
                 }
             });
 
-            if (!this.skipServer) {
-                const services = this.entities
-                    .filter(entity => entity.definition.service === 'serviceImpl')
-                    .map(entity => {
-                        return {
-                            entityName: entity.name,
-                            serviceInterface: `I${entity.name}Service`,
-                            serviceClass: `${entity.name}Service`,
-                        };
-                    });
-
-                // add current entity being created if it has service option selected
-                if (this.service === 'serviceImpl' && !services.some(e => e.entityName === this.entityClass)) {
-                    services.push({
-                        entityName: this.entityClass,
-                        serviceInterface: `I${this.entityClass}Service`,
-                        serviceClass: `${this.entityClass}Service`,
-                    });
-                }
-
-                const files = {
-                    server: [
-                        {
-                            path: SERVER_SRC_DIR,
-                            templates: [
-                                {
-                                    file: 'Project/Configuration/ServiceStartup.cs',
-                                    renameTo: generator => `${generator.mainProjectDir}/Configuration/ServiceStartup.cs`,
-                                },
-                            ],
-                        },
-                    ],
-                };
-
-                this.services = services;
-                this.writeFilesToDisk(files, this, false, 'dotnetcore');
-            }
-
             this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
+        },
+        writeFilesGatling() {
+            this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates/src'));
         },
     };
 }

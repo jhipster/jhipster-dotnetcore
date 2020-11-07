@@ -20,7 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using <%= namespace %>.Data;
+using <%= namespace %>.Infrastructure.Data;
 using System;
 
 namespace <%= namespace %>.Test.Setup
@@ -50,6 +50,7 @@ namespace <%= namespace %>.Test.Setup
             }.ToString());
 
             services.AddDbContext<ApplicationDatabaseContext>(context => context.UseSqlite(connection));
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
         }
     }
 }

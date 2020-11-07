@@ -2,6 +2,7 @@
 const chalk = require('chalk');
 const AppGenerator = require('generator-jhipster/generators/app');
 const packagejs = require('../../package.json');
+const prompts = require('./prompts');
 
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
@@ -83,14 +84,48 @@ module.exports = class extends AppGenerator {
                         ' _______________________________________________________________________________________________________________\n'
                     )
                 );
+            },
+            getConfig() {
+                const configuration = this.getAllJhipsterConfig(this, true);
+                this.namespace = configuration.get('namespace') || this.configOptions.namespace;
+                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
+                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
+                const serverConfigFound = this.namespace !== undefined ;
+
+                if (this.baseName !== undefined && serverConfigFound) {
+                    this.log(
+                        chalk.green(
+                            'This is an existing project, using the configuration from your .yo-rc.json file \n' +
+                                'to re-generate the project...\n'
+                        )
+                    );
+                    this.existingProject = true;
+                }
             }
         };
-
         return Object.assign(initPhaseFromJHipster, dotnetInitAppPhaseSteps);
     }
 
     get prompting() {
-        return super._prompting();
+        return {
+            askForModuleName: prompts.askForModuleName,
+            askForApplicationType: prompts.askForApplicationType,
+
+            setSharedConfigOptions() {                
+                this.configOptions.baseName = this.baseName;
+                this.configOptions.namespace = this.namespace;
+                this.configOptions.applicationType = this.applicationType;
+                this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
+            },
+            saveConfig() {
+                const config = {
+                    namespace: this.namespace,
+                    applicationType: this.applicationType,
+                    serviceDiscoveryType: this.serviceDiscoveryType
+                };
+                this.config.set(config);
+            },
+        };
     }
 
     get configuring() {

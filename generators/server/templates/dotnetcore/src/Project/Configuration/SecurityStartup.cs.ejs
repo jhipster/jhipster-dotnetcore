@@ -17,7 +17,7 @@ using <%= namespace %>.Infrastructure.Configuration;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using <%= namespace %>.Data;
+using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Security;
 using <%= namespace %>.Security.Jwt;
@@ -32,8 +32,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+<%_ if (applicationType !== 'microservice') { _%>
 using AuthenticationService = <%= namespace %>.Domain.Services.AuthenticationService;
 using IAuthenticationService = <%= namespace %>.Domain.Services.Interfaces.IAuthenticationService;
+<%_ } _%>
 <%_ } else { _%>
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -53,14 +55,14 @@ namespace <%= namespace %>.Configuration {
         <%_ } _%>
 
         <%_ if (authenticationType === 'jwt') { _%>
-        public static IServiceCollection AddSecurityModule(this IServiceCollection @this)
+        public static IServiceCollection AddSecurityModule(this IServiceCollection services)
         <%_ } else { _%>
-        public static IServiceCollection AddSecurityModule(this IServiceCollection @this, JHipsterSettings jhipsterSettings)
+        public static IServiceCollection AddSecurityModule(this IServiceCollection services, JHipsterSettings jhipsterSettings)
         <%_ } _%>
         {
             <%_ if (authenticationType === 'jwt') { _%>
             //TODO Retrieve the signing key properly (DRY with TokenProvider)
-            var opt = @this.BuildServiceProvider().GetRequiredService<IOptions<JHipsterSettings>>();
+            var opt = services.BuildServiceProvider().GetRequiredService<IOptions<JHipsterSettings>>();
             var jhipsterSettings = opt.Value;
             byte[] keyBytes;
             var secret = jhipsterSettings.Security.Authentication.Jwt.Secret;
@@ -74,7 +76,8 @@ namespace <%= namespace %>.Configuration {
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
 
-            @this.AddIdentity<User, Role>(options => {
+            <%_ if (applicationType !== 'microservice') { _%>
+            services.AddIdentity<User, Role>(options => {
                     options.SignIn.RequireConfirmedEmail = true;
                     options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
                 })
@@ -84,9 +87,9 @@ namespace <%= namespace %>.Configuration {
                 .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
                 >()
                 .AddDefaultTokenProviders();
+            <%_ } _%>
 
-
-            @this
+            services
                 .AddAuthentication(options => {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -104,16 +107,13 @@ namespace <%= namespace %>.Configuration {
                     };
                 });
 
-            @this.AddScoped<IAuthenticationService, AuthenticationService>();
-            @this.AddScoped<ITokenProvider, TokenProvider>();
-            @this.AddScoped<IUserService, UserService>();
-            @this.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-            @this.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
-            @this.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-            @this.AddSingleton<IMailService, MailService>();
-
+            <%_ if (applicationType !== 'microservice') { _%>
+            services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
+            <%_ } _%>            
+            services.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
+            services.AddScoped<ITokenProvider, TokenProvider>();
             <%_ } else { _%>
-            @this.AddAuthentication(options =>
+            services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -137,23 +137,23 @@ namespace <%= namespace %>.Configuration {
                 options.ClaimActions.MapJsonKey("role", "groups", "role");
             });
 
-            @this.AddAuthorization();
+            services.AddAuthorization();
             <%_ } _%>
-            return @this;
+            return services;
         }
 
-        public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder @this,
+        public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder app,
             JHipsterSettings jhipsterSettings)
         {
-            @this.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));
-            @this.UseAuthentication();
+            app.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));
+            app.UseAuthentication();
             <%_ if (authenticationType === 'oauth2') { _%>
-            @this.UseAuthorization();
+            app.UseAuthorization();
             <%_ } _%>
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            @this.UseHsts();
-            @this.UseHttpsRedirection();
-            return @this;
+            app.UseHsts();
+            app.UseHttpsRedirection();
+            return app;
         }
 
         private static Action<CorsPolicyBuilder> CorsPolicyBuilder(Cors config)

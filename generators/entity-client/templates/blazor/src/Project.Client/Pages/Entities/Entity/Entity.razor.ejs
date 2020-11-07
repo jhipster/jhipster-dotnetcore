@@ -1,0 +1,118 @@
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass;
+const entityClassNamePluralized = pascalizedEntityClassPlural;
+_%>
+@page "/<%= lowerCasedEntityClass %>"
+@using Microsoft.AspNetCore.Authorization
+@using <%= namespace %>.Client.Shared.Components
+
+@attribute [Authorize(Roles = "ROLE_USER")]
+
+<div>
+    <h2 id="page-heading">
+        <span><%= entityClassNamePluralized %></span>
+
+        <a id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= lowerCasedEntityClass %>" href="/<%= lowerCasedEntityClass %>/new">
+            <Icon Name='"fa-plus"' />
+            <span class="hidden-sm-down">
+                Create a new <%= entityClassName %>
+            </span>
+        </a>
+    </h2>
+
+    @*<jhi-alert-error></jhi-alert-error>
+            TODO ADD ALERT
+        <jhi-alert></jhi-alert>*@
+        <AlertError></AlertError>
+
+
+    @* TODO ADD QUERY SEARCH BAR
+            <div class="row">
+            <div class="col-sm-12">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group w-100 mt-3">
+                        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query">
+                        <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
+                            <fa-icon icon="search"></fa-icon>
+                        </button>
+                        <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+                            <fa-icon icon="trash-alt"></fa-icon>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>*@
+
+
+    @if (<%= entityClassNamePluralized %>.Count == 0)
+    {
+        <div class="alert alert-warning" id="no-result">
+            <span>No <%= lowerCasedEntityClassPlural %> found</span>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive" id="entities">
+            <table class="table table-striped" aria-describedby="page-heading">
+                <thead>
+                    <tr>                        
+                        <th scope="col"><span>ID</span></th>
+                        <%_ fields.forEach(field => { _%>
+                        <th scope="col"><span><%= field.fieldNameHumanized %></span></th>
+                        <%_ }); _%>
+                        <%_ relationships.forEach(relation => { 
+                            if(relation.relationshipType === 'one-to-one') { _%>
+                        <th scope="col"><span><%= relation.relationshipNameHumanized %></span></th>
+                            <%_ }
+                        }); _%>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var <%= lowerCasedEntityClass %> in <%= entityClassNamePluralized %>)
+                    {
+                        <tr>
+                            <td><a href="/<%= lowerCasedEntityClass %>/@<%= lowerCasedEntityClass %>.Id/view">@<%= lowerCasedEntityClass %>.Id</a></td>
+                            <%_ fields.forEach(field => { _%>
+                            <td>@<%= lowerCasedEntityClass %>.<%= field.fieldNamePascalized %></td>
+                            <%_ }); _%>
+                            <%_ relationships.forEach(relation => { 
+                                if(relation.relationshipType === 'one-to-one') { _%>
+                            <td>
+                                @if (<%= lowerCasedEntityClass %>.Region != null)
+                                {
+                                    <div>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id/view">@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id</a>
+                                    </div>
+                                }
+                            </td>
+                                <%_ }
+                            }); _%>
+                            <td class="text-right">
+                                <div class="btn-group">
+                                    <a href="/<%= lowerCasedEntityClass %>/@<%= lowerCasedEntityClass %>.Id/view" class="btn btn-info btn-sm">
+                                        <Icon Name='"fa-eye"'/>
+                                        <span class="d-none d-md-inline">View</span>
+                                    </a>
+
+                                    <a href="/<%= lowerCasedEntityClass %>/@<%= lowerCasedEntityClass %>.Id/edit" class="btn btn-primary btn-sm">
+                                        <Icon Name='"fa-pencil-alt"'/>
+                                        <span class="d-none d-md-inline">Edit</span>
+                                    </a>
+
+                                    <button @onclick="() => Delete(<%= lowerCasedEntityClass %>.Id)" class="btn btn-danger btn-sm">
+                                        <Icon Name='"fa-times"'/>
+                                        <span class="d-none d-md-inline">Delete</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

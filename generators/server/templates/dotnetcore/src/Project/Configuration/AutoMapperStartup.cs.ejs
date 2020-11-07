@@ -17,10 +17,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace <%= namespace %>.Configuration {
     public static class AutoMapperStartup {
-        public static IServiceCollection AddAutoMapperModule(this IServiceCollection @this)
+        public static IServiceCollection AddAutoMapperModule(this IServiceCollection services)
         {
-            @this.AddAutoMapper(typeof(Startup));
-            return @this;
+            services.AddAutoMapper(typeof(Startup));
+            return services;
         }
     }
 }

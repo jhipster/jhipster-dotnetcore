@@ -19,10 +19,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace <%= namespace %>.Configuration {
     public static class NhipsterSettingsConfiguration {
-        public static IServiceCollection AddNhipsterModule(this IServiceCollection @this, IConfiguration configuration)
+        public static IServiceCollection AddNhipsterModule(this IServiceCollection services, IConfiguration configuration)
         {
-            @this.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
-            return @this;
+            services.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
+            return services;
         }
     }
 }
