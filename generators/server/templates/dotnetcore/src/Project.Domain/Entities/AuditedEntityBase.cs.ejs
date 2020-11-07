@@ -16,7 +16,7 @@ using System;
 using <%= namespace %>.Domain.Interfaces;
 
 namespace <%= namespace %>.Domain {
-    public class AuditedEntityBase : IAuditedEntityBase {
+    public abstract class AuditedEntityBase : IAuditedEntityBase {
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
