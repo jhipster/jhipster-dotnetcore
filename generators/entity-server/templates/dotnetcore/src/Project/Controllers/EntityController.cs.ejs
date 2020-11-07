@@ -22,6 +22,7 @@ let hasService = service === 'serviceImpl';
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
+using System.Linq;
 <%_ } _%>
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -150,8 +151,8 @@ namespace <%= namespace %>.Controllers {
                 .GetPageAsync(pageable);
             <%_ } _%>
             <%_ if (hasDto) { _%>
-            var page = _mapper.Map<IPage<<%= asDto(pascalizedEntityClass) %>>>(result);
-            return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
+            var page = new Page<<%= asDto(pascalizedEntityClass) %>>(result.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(),pageable,result.TotalElements);
+            return Ok(((IPage<<%= asDto(pascalizedEntityClass) %>>)page).Content).WithHeaders(page.GeneratePaginationHttpHeaders());
             <%_ } else { _%>
             return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());
             <%_ } _%>
