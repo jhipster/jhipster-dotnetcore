@@ -140,18 +140,21 @@ namespace <%= namespace %>.Controllers {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
             <%_ if (hasService) { _%>
             var result = await _<%= camelCasedEntityClass %>Service.FindAll(pageable);
-            var page = _mapper.Map<IPage<<%= pascalizedEntityClass %>>>(result);
             <%_ } else { _%>
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
                 <%_ }
-            }); _%>            
+            }); _%>
                 .GetPageAsync(pageable);
-            var page = _mapper.Map<IPage<<%= pascalizedEntityClass %>>>(result);
             <%_ } _%>
+            <%_ if (hasDto) { _%>
+            var page = _mapper.Map<IPage<<%= asDto(pascalizedEntityClass) %>>>(result);
             return Ok(page.Content).WithHeaders(page.GeneratePaginationHttpHeaders());
+            <%_ } else { _%>
+            return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());
+            <%_ } _%>
         }
 
         [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]
