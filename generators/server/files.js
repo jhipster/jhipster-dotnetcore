@@ -117,6 +117,15 @@ const serverFiles = {
             ],
         },
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/AuditedEntityBase.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/AuditedEntityBase.cs`,
+                },
+            ],
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [

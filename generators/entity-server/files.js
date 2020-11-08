@@ -98,6 +98,16 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            condition: generator => generator.dto === 'mapstruct',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Dto/AuditedEntityBaseDto.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/AuditedEntityBaseDto.cs`,
+                },
+            ],
+        },
     ],
     db: [
         {
