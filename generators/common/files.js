@@ -41,11 +41,6 @@ const files = {
             ],
         },
     ],
-    nugetConfig: [
-        {
-            templates: [{ file: 'nugetconfig', renameTo: () => 'NuGet.config', method: 'copy' }],
-        },
-    ],
 };
 
 function writeFiles() {
