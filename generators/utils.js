@@ -111,6 +111,10 @@ function configureGlobalDotnetcore() {
         paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
+
+    // get the frontend application name.
+    const frontendAppName = _.camelCase(this.baseName) + (this.baseName.endsWith('App') ? '' : 'App');
+    this.frontendAppName = frontendAppName.match(/^\d/) ? 'App' : frontendAppName;
 }
 
 function asModel(name) {
