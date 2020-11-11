@@ -45,7 +45,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
             - uses: actions/setup-dotnet@v1
               with:
-                dotnet-version: '3.1.201' 
+                dotnet-version: '5.0.100'
             - name: git history
               run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
             - name: PREPARE jhipster env

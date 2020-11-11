@@ -117,6 +117,15 @@ const serverFiles = {
             ],
         },
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/AuditedEntityBase.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/AuditedEntityBase.cs`,
+                },
+            ],
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
@@ -301,6 +310,89 @@ const serverFiles = {
             ],
         },
     ],
+    repository: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IFluentRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IFluentRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IUnitOfWork.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IUnitOfWork.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/FluentRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/FluentRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/GenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/GenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/UnitOfWork.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/UnitOfWork.cs`,
+                },
+            ],
+        },
+    ],
+    dataExtensions: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/DbContextExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbContextExtensions.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/DbSetExtensions.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
+                },
+            ],
+        },
+    ],
     serverProperties: [
         {
             path: SERVER_SRC_DIR,
@@ -454,6 +546,15 @@ const serverFiles = {
                 {
                     file: 'Project/Configuration/ServiceStartup.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/ServiceStartup.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/RepositoryStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/RepositoryStartup.cs`,
                 },
             ],
         },
@@ -1006,10 +1107,11 @@ const serverFiles = {
             condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
             path: DOCKER_DIR,
             templates: [
+                'consul.yml',
                 {
-                    file: 'central-server-config/application.yml',
+                    file: 'central-server-config/application.json',
                     method: 'copy',
-                    renameTo: () => 'central-server-config/application.yml',
+                    renameTo: () => 'central-server-config/application.json',
                 },
                 {
                     file: 'central-server-config/README.md',
@@ -1060,7 +1162,7 @@ const baseServiceDiscoveryFiles = {
         {
             condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
             path: DOCKER_DIR,
-            templates: ['consul.yml', { file: 'config/git2consul.json', method: 'copy' }],
+            templates: [{ file: 'config/git2consul.json', method: 'copy' }],
         },
     ],
 };

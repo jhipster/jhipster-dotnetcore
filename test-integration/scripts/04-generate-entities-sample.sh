@@ -26,7 +26,7 @@ if [ "$2" = "import-jdl" ]; then
 
   if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
       if "$SONAR_ANALYSE" ; then
-        dotnet tool install --global dotnet-sonarscanner --version 4.9.0
+        dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console
         dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
       fi

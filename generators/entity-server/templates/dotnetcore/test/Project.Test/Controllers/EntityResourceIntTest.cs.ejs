@@ -131,6 +131,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Repositories.Interfaces;
 <%_
 let hasEnumField = false;
 fields.forEach(field => {
@@ -157,7 +158,7 @@ namespace <%= namespace %>.Test.Controllers {
             _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser();
             _client = _factory.CreateClient();
 
-            _applicationDatabaseContext = _factory.GetRequiredService<ApplicationDatabaseContext>();
+            _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
 
             <%_ if (hasDto) { _%>
             var config = new MapperConfiguration(cfg =>
@@ -187,8 +188,7 @@ namespace <%= namespace %>.Test.Controllers {
         <%_ }); _%>
         private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
-
-        private readonly ApplicationDatabaseContext _applicationDatabaseContext;
+        private readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
 
@@ -218,7 +218,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task Create<%= pascalizedEntityClass %>()
         {
-            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             // Create the <%= pascalizedEntityClass %>
             <%_ if (hasDto) { _%>
@@ -230,9 +230,9 @@ namespace <%= namespace %>.Test.Controllers {
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Validate the <%= pascalizedEntityClass %> in the database
-            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + 1);
-            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List.Last();
             <%_ fields.forEach(field => { _%>
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
             <%_ }); _%>
@@ -241,7 +241,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task Create<%= pascalizedEntityClass %>WithExistingId()
         {
-            var databaseSizeBeforeCreate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
             databaseSizeBeforeCreate.Should().Be(0);
             // Create the <%= pascalizedEntityClass %> with an existing ID
             _<%= camelCasedEntityClass %>.Id = 1L;
@@ -256,7 +256,7 @@ namespace <%= namespace %>.Test.Controllers {
             <%_ } _%>
 
             // Validate the <%= pascalizedEntityClass %> in the database
-            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate);
         }
 
@@ -271,7 +271,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task Check<%= field.fieldNamePascalized %>IsRequired()
         {
-            var databaseSizeBeforeTest = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            var databaseSizeBeforeTest = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             // Set the field to null
             _<%= camelCasedEntityClass %>.<%= field.fieldNamePascalized %> = null;
@@ -285,7 +285,7 @@ namespace <%= namespace %>.Test.Controllers {
             <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeTest);
         }
 
@@ -295,8 +295,7 @@ namespace <%= namespace %>.Test.Controllers {
         public async Task GetAll<%= pascalizedEntityClassPlural %>()
         {
             // Initialize the database
-            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
-            await _applicationDatabaseContext.SaveChangesAsync();
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
 
             // Get all the <%= camelCasedEntityClass %>List
             var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>?sort=id,desc");
@@ -313,8 +312,7 @@ namespace <%= namespace %>.Test.Controllers {
         public async Task Get<%= pascalizedEntityClass %>()
         {
             // Initialize the database
-            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
-            await _applicationDatabaseContext.SaveChangesAsync();
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
 
             // Get the <%= camelCasedEntityClass %>
             var response = await _client.GetAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
@@ -338,14 +336,11 @@ namespace <%= namespace %>.Test.Controllers {
         public async Task Update<%= pascalizedEntityClass %>()
         {
             // Initialize the database
-            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
-            await _applicationDatabaseContext.SaveChangesAsync();
-
-            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             // Update the <%= camelCasedEntityClass %>
-            var updated<%= pascalizedEntityClass %> =
-                await _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.SingleOrDefaultAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            var updated<%= pascalizedEntityClass %> = await _<%= camelCasedEntityClass %>Repository.QueryHelper().GetOneAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
             // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
 //TODO detach
             <%_ fields.forEach(field => { _%>
@@ -361,9 +356,9 @@ namespace <%= namespace %>.Test.Controllers {
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the <%= pascalizedEntityClass %> in the database
-            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
-            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List[<%= camelCasedEntityClass %>List.Count - 1];
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List.Last();
             <%_ fields.forEach(field => { _%>
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
             <%_ }); _%>
@@ -372,7 +367,7 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task UpdateNonExisting<%= pascalizedEntityClass %>()
         {
-            var databaseSizeBeforeUpdate = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             // If the entity doesn't have an ID, it will throw BadRequestAlertException
             <%_ if (hasDto) { _%>
@@ -384,7 +379,7 @@ namespace <%= namespace %>.Test.Controllers {
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the <%= pascalizedEntityClass %> in the database
-            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
         }
 
@@ -392,16 +387,14 @@ namespace <%= namespace %>.Test.Controllers {
         public async Task Delete<%= pascalizedEntityClass %>()
         {
             // Initialize the database
-            _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Add(_<%= camelCasedEntityClass %>);
-            await _applicationDatabaseContext.SaveChangesAsync();
-
-            var databaseSizeBeforeDelete = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.Count();
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            var databaseSizeBeforeDelete = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             var response = await _client.DeleteAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the database is empty
-            var <%= camelCasedEntityClass %>List = _applicationDatabaseContext.<%= pascalizedEntityClassPlural %>.ToList();
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeDelete - 1);
         }
 

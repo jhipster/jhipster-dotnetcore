@@ -50,6 +50,7 @@ namespace <%= namespace %>.Test.Setup
             }.ToString());
 
             services.AddDbContext<ApplicationDatabaseContext>(context => context.UseSqlite(connection));
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
         }
     }
 }
