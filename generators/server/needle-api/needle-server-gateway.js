@@ -70,7 +70,7 @@ module.exports = class extends needleBase {
                                     |    "Type": "LeastConnection"
                                     |  },
                                     |  "ReRoutesCaseSensitive": false,
-                                    |  "UpstreamPathTemplate": "/services/${microserviceName}/api/${entityName}/{everything}",
+                                    |  "UpstreamPathTemplate": "/${microserviceName}/api/${entityName}/{everything}",
                                     |  "UpstreamHttpMethod": [ "Get", "Post", "Delete","Put" ]
                                     |}`);
             const firstRewriteFileModel = this.generateFileModel(ocelotConfigPath, 'jhipster-needle-add-route-to-gateway', firstRouteEntry);
