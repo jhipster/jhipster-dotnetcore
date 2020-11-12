@@ -93,7 +93,7 @@ namespace <%= namespace %>.Domain {
                 <%_ if (!ownerSide) { _%>
         [JsonIgnore]
                 <%_ } _%>
-        public ICollection<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; }
+        public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; }
             <%_ } _%>
 
         <%_ } _%>

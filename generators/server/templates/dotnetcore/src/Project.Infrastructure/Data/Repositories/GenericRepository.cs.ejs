@@ -136,6 +136,21 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return fluentRepository;
         }
 
+        protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)
+        {
+            DbSet<Dictionary<string, object>> dbset = _context.Set<Dictionary<string, object>>(joinEntityName);
+
+            var manyToManyData = await dbset
+                .Where(joinPropertyBag => joinPropertyBag[ownerIdKey].Equals(ownerEntityId))
+                .ToListAsync();            
+
+            var filteredManyToManyData = manyToManyData
+                .Where(joinPropertyBag => !idsToIgnore.Any(idToIgnore => joinPropertyBag[ownedIdKey].Equals(idToIgnore)))
+                .ToList();
+
+            dbset.RemoveRange(filteredManyToManyData);
+        }        
+
         public void Dispose()
         {
             _context?.Dispose();
