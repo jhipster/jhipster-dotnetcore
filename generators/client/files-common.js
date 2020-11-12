@@ -188,6 +188,12 @@ function updateEsLinIgnore(){
         true
     );
     this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}`,
+        "",
+        true
+    );
+    this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.e2e.json`,
         `/${SERVER_SRC_DIR}${this.mainClientDir}`,
         "",
