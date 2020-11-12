@@ -168,6 +168,12 @@ function updateJestConf(){
     );
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
+        `/${SERVER_SRC_DIR}${this.mainClientDir}`,
+        "",
+        true
+    );
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
         '\\.\\./\\.\\./\\.\\.',
         '..',
         true
