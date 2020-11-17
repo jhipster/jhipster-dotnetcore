@@ -117,6 +117,7 @@ module.exports = class extends EntityGenerator {
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
                     relationship.relationshipNamePascalized = toPascalCase(relationship.relationshipName);
+                    relationship.relationshipNamePascalizedPlural = pluralize(relationship.relationshipNamePascalized);
                     relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
