@@ -144,6 +144,9 @@ module.exports = class extends EntityGenerator {
 
                     if (relationship.relationshipType === 'many-to-many') {
                         if (relationship.ownerSide) {
+                            relationship.otherEntityRelationshipNamePascalizedPlural = pluralize(
+                                relationship.otherEntityRelationshipNamePascalized
+                            );
                             relationship.joinEntityName =
                                 relationship.otherEntityRelationshipName + _.upperFirst(relationship.relationshipName);
                             relationship.joinEntityNamePascalized =

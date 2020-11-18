@@ -115,7 +115,7 @@ namespace <%= namespace %>.Infrastructure.Data {
                             // executed when importing entities by jdl (jhipster import-jdl fileName.jdl)
                             if (relationship.ownerSide) {
                                 let relationshipNamePascalized = toPascalCase(relationship.relationshipName);
-                                let relationshipNamePascalizedPlural = pluralize(relationshipNamePascalized);
+                                let relationshipNamePascalizedPlural = pluralize(relationshipNamePascalized); 
                                 let relationshipFieldNamePascalizedPlural = relationship.relationshipFieldNamePascalizedPlural;
                                 let otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
                                 let otherEntityRelationshipNamePascalizedPlural = pluralize(otherEntityRelationshipNamePascalized);
@@ -146,10 +146,8 @@ namespace <%= namespace %>.Infrastructure.Data {
                     if (relationship.ownerSide) {
                         let ownerRelationshipFieldName = pascalizedEntityClass;
                         let nonOwnerRelationshipFieldName = relationship.otherEntityNamePascalized; 
-                        let relationshipNamePascalized = toPascalCase(relationship.relationshipName);
-                        let relationshipNamePascalizedPlural = pluralize(relationshipNamePascalized);
-                        let otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
-                        let otherEntityRelationshipNamePascalizedPlural = pluralize(otherEntityRelationshipNamePascalized);
+                        let relationshipNamePascalizedPlural = relationship.relationshipNamePascalizedPlural;
+                        let otherEntityRelationshipNamePascalizedPlural = relationship.otherEntityRelationshipNamePascalizedPlural;
                         let joinEntityClassNamePascalizedPlural = relationship.joinEntityFieldNamePascalizedPlural;
                         _%>
             builder.Entity<<%= ownerRelationshipFieldName %>>()
