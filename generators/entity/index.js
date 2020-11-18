@@ -123,7 +123,15 @@ module.exports = class extends EntityGenerator {
                         context.i18nToLoad.push(field.enumInstance);
                     }
                 });
-                this.entityConfig.fields = context.fields;
+            },
+        };
+    }
+
+    get preparingRelationships() {
+        return {
+            ...super._preparingRelationships(),
+            preparingDotnetRelationships() {
+                const context = this.context;
 
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
@@ -172,7 +180,6 @@ module.exports = class extends EntityGenerator {
 
                     relationship.joinEntityGenerated = false;
                 });
-                this.entityConfig.relationships = context.relationships;
             },
         };
     }
