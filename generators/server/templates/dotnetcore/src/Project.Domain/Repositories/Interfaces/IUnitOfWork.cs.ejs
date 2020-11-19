@@ -26,7 +26,7 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        DbSet<T> Set<T>() where T : class;
+        DbSet<T> Set<T>(string name = null) where T : class;
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
         void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class;
         void UpdateState<TEntity>(TEntity entity, EntityState state);

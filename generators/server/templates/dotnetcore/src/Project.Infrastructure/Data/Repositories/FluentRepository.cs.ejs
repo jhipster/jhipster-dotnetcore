@@ -33,16 +33,18 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
     {
         private readonly IGenericRepository<TEntity> _repository;
         private readonly DbSet<TEntity> _dbSet;
-        private Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> _include;        
+        private List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> _include;    
+        private List<Expression<Func<TEntity, object>>> _includeProperties;
         private Expression<Func<TEntity, bool>> _filter;
         private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderBy;
         private bool _disableTracking;
         
-
         public FluentRepository(IGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
         {
             _repository = repository;
             _dbSet = dbset;
+            _include = new List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>>();
+            _includeProperties = new List<Expression<Func<TEntity, object>>>();
         }
 
         public IFluentRepository<TEntity> Filter(Expression<Func<TEntity, bool>> filter)
@@ -57,9 +59,15 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return this;
         }
 
+        public IFluentRepository<TEntity> Include(Expression<Func<TEntity, object>> expression)
+        {
+            _includeProperties.Add(expression);
+            return this;
+        }
+
         public IFluentRepository<TEntity> Include(Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include)
         {
-            _include = include;
+            _include.Add(include);
             return this;
         }
 
@@ -72,48 +80,49 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> filter)
         {
             _filter = filter;
-            IQueryable<TEntity> query = BuildQuery(_filter, null, _include);
+            IQueryable<TEntity> query = BuildQuery();
             return await query.SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            IQueryable<TEntity> query = BuildQuery(_filter, _orderBy, _include, _disableTracking);
+            IQueryable<TEntity> query = BuildQuery();
             return await query.ToListAsync();
         }
 
         public async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
         {
-            IQueryable<TEntity> query = BuildQuery(_filter, _orderBy, _include, _disableTracking);
+            IQueryable<TEntity> query = BuildQuery();
             return await query.UsePageableAsync(pageable);
         }
 
-        private IQueryable<TEntity> BuildQuery(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
-            bool disableTracking = false)
+        private IQueryable<TEntity> BuildQuery()
         {
             IQueryable<TEntity> query = _dbSet;
 
-            if (disableTracking)
+            if (_disableTracking)
             {
                 query = query.AsNoTracking();
             }
 
-            if (include != null)
+            if (_includeProperties != null)
             {
-                query = include(query);
+                _includeProperties.ForEach(i => { query = query.Include(i); });
             }
 
-            if (filter != null)
+            if (_include != null)
             {
-                query = query.Where(filter);
+                _include.ForEach(i => { query = i(query); });
             }
 
-            if (orderBy != null)
+            if (_filter != null)
             {
-                query = orderBy(query);
+                query = query.Where(_filter);
+            }
+
+            if (_orderBy != null)
+            {
+                query = _orderBy(query);
             }
 
             return query;
