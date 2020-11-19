@@ -57,9 +57,9 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return await saveChangeTask;
         }
 
-        public DbSet<T> Set<T>() where T : class
+        public DbSet<T> Set<T>(string name = null) where T : class
         {
-            return _context.Set<T>();
+            return _context.Set<T>(name);
         }
 
         public void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class
