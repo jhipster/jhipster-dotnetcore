@@ -44,7 +44,6 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
         TEntity Attach(TEntity entity);
         TEntity Update(TEntity entity);
         bool UpdateRange(params TEntity[] entities);
-        TEntity Remove(TEntity entity);
         IFluentRepository<TEntity> QueryHelper();
     }
 }
