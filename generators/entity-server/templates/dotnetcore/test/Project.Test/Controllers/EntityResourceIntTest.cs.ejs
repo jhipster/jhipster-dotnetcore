@@ -296,6 +296,7 @@ namespace <%= namespace %>.Test.Controllers {
         {
             // Initialize the database
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
 
             // Get all the <%= camelCasedEntityClass %>List
             var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>?sort=id,desc");
@@ -313,6 +314,7 @@ namespace <%= namespace %>.Test.Controllers {
         {
             // Initialize the database
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
 
             // Get the <%= camelCasedEntityClass %>
             var response = await _client.GetAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
@@ -337,6 +339,7 @@ namespace <%= namespace %>.Test.Controllers {
         {
             // Initialize the database
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             // Update the <%= camelCasedEntityClass %>
@@ -388,6 +391,7 @@ namespace <%= namespace %>.Test.Controllers {
         {
             // Initialize the database
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             var databaseSizeBeforeDelete = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             var response = await _client.DeleteAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");

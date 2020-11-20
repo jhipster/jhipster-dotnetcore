@@ -73,8 +73,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                 <%_ } _%>
             }
 
-            await SaveChangesAsync();
-
             return <%= camelCasedEntityClass %>;
         }
     }
