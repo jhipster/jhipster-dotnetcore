@@ -38,7 +38,7 @@ _%>
                 <%_ }); _%>
 
             <%_ relationships.forEach(relation => { 
-                if (relation.relationshipType === 'one-to-one' || (relation.relationshipType === 'many-to-one' && relation.ownerSide === true)) { _%>
+                if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                 <div class="form-group">
                     <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
                     <select class="form-control" id="field_<%= relation.otherEntityNameLowerCased %>" name="<%= relation.otherEntityNameLowerCased %>" @bind="@<%= relation.otherEntityNamePascalized %>Id">
