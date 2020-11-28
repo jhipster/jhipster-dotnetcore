@@ -58,13 +58,13 @@ _%>
         <div class="table-responsive" id="entities">
             <table class="table table-striped" aria-describedby="page-heading">
                 <thead>
-                    <tr>                        
+                    <tr>
                         <th scope="col"><span>ID</span></th>
                         <%_ fields.forEach(field => { _%>
                         <th scope="col"><span><%= field.fieldNameHumanized %></span></th>
                         <%_ }); _%>
                         <%_ relationships.forEach(relation => { 
-                            if(relation.relationshipType === 'one-to-one') { _%>
+                            if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true)) { _%>
                         <th scope="col"><span><%= relation.relationshipNameHumanized %></span></th>
                             <%_ }
                         }); _%>
@@ -80,15 +80,21 @@ _%>
                             <td>@<%= lowerCasedEntityClass %>.<%= field.fieldNamePascalized %></td>
                             <%_ }); _%>
                             <%_ relationships.forEach(relation => { 
-                                if(relation.relationshipType === 'one-to-one') { _%>
+                                if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                             <td>
-                                @if (<%= lowerCasedEntityClass %>.Region != null)
+                                @if (<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %> != null)
                                 {
                                     <div>
                                         <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id/view">@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id</a>
                                     </div>
                                 }
                             </td>
+                                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
+                                @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalizedPlural %>){
+                                    <span>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= relation.otherEntityNameLowerCased %>.Id/view">@<%= relation.otherEntityNameLowerCased %>.Id</a>
+                                    </span>
+                                }
                                 <%_ }
                             }); _%>
                             <td class="text-right">

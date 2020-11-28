@@ -29,7 +29,7 @@ _%>
                     </dd>
                     <%_ }); _%>
                     <%_ relationships.forEach(relation => { 
-                        if(relation.relationshipType === 'one-to-one') { _%>
+                        if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' ) { _%>//|| ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true)) { _%>
                     <dt><span><%= relation.otherEntityNamePascalized %></span></dt>
                     <dd>
                         @if (<%= entityClassName %>.<%= relation.otherEntityNamePascalized %> != null)

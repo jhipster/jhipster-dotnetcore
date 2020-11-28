@@ -43,7 +43,7 @@ _%>
                     <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
                     <select class="form-control" id="field_<%= relation.otherEntityNameLowerCased %>" name="<%= relation.otherEntityNameLowerCased %>" @bind="@<%= relation.otherEntityNamePascalized %>Id">
                         <option value="0"></option>
-                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.relationshipFieldNamePascalizedPlural %>)
+                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.otherEntityNamePascalized %>Ids)
                         {
                             if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.otherEntityNamePascalized %>?.Id)
                             {
