@@ -34,7 +34,6 @@ namespace <%= namespace %>.Configuration {
             //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
             services.AddHealthChecks();
 
-            //TODO use AddMvcCore + config
             services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
             .AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
