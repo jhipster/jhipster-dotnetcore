@@ -28,9 +28,9 @@ _%>
                         <span>@<%= entityClassName %>.<%= field.fieldNamePascalized %></span>
                     </dd>
                     <%_ }); _%>
-                    <%_ relationships.forEach(relation => { _%>
+                    <%_ relationships.forEach(relation => {
+                         if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' ) { _%>
                     <dt><span><%= relation.otherEntityNamePascalized %></span></dt>
-                        <%_ if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' ) { _%>
                     <dd>
                         @if (<%= entityClassName %>.<%= relation.otherEntityNamePascalized %> != null)
                         {
@@ -40,6 +40,7 @@ _%>
                         }
                     </dd>
                     <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
+                    <dt><span><%= relation.otherEntityNamePascalized %></span></dt>
                     <dd>
                         @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= entityClassName %>.<%= relation.relationshipFieldNamePascalizedPlural %>){
                             <span>
