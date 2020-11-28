@@ -90,11 +90,14 @@ _%>
                                 }
                             </td>
                                 <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
+                            <td>
                                 @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalizedPlural %>){
                                     <span>
                                         <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= relation.otherEntityNameLowerCased %>.Id/view">@<%= relation.otherEntityNameLowerCased %>.Id</a>
+                                        @if (<%= relation.otherEntityNameLowerCased %> != <%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Last()) { <span>, </span>}
                                     </span>
                                 }
+                            </td>
                                 <%_ }
                             }); _%>
                             <td class="text-right">
