@@ -12,7 +12,7 @@ Example:
 
 ```csharp
 var page = await _countryRepository.QueryHelper()
-    .Include(x => x.Include(country => country.Region))
+    .Include(country => country.Region)
     .GetPageAsync(pageable);
 ```
 

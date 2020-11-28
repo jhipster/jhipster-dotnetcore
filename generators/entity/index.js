@@ -117,6 +117,7 @@ module.exports = class extends EntityGenerator {
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
                     relationship.relationshipNamePascalized = toPascalCase(relationship.relationshipName);
+                    relationship.relationshipNamePascalizedPlural = pluralize(relationship.relationshipNamePascalized);
                     relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
@@ -143,6 +144,9 @@ module.exports = class extends EntityGenerator {
 
                     if (relationship.relationshipType === 'many-to-many') {
                         if (relationship.ownerSide) {
+                            relationship.otherEntityRelationshipNamePascalizedPlural = pluralize(
+                                relationship.otherEntityRelationshipNamePascalized
+                            );
                             relationship.joinEntityName =
                                 relationship.otherEntityRelationshipName + _.upperFirst(relationship.relationshipName);
                             relationship.joinEntityNamePascalized =

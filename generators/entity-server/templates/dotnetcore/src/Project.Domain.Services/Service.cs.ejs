@@ -47,7 +47,7 @@ namespace <%= namespace %>.Domain.Services {
             var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                 <%_ }
             }); _%>            
                 .GetPageAsync(pageable);
@@ -59,10 +59,9 @@ namespace <%= namespace %>.Domain.Services {
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                 <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
-                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>))
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
                 .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);

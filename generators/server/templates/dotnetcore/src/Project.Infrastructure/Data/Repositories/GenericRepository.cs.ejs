@@ -92,31 +92,23 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return true;
         }
 
-        public virtual TEntity Remove(TEntity entity)
-        {
-            _dbSet.Remove(entity);
-            return entity; 
-        }
-
         public abstract Task<TEntity> CreateOrUpdateAsync(TEntity entity);
 
         public virtual async Task Clear()
         {
             var allEntities = await _dbSet.ToListAsync();
             _dbSet.RemoveRange(allEntities);
-            await SaveChangesAsync();
         }
 
         public virtual async Task DeleteByIdAsync(object id)
         {
             var entity = await GetOneAsync(id);
-            await DeleteAsync(entity);
+            _dbSet.Remove(entity);
         }
         
         public virtual async Task DeleteAsync(TEntity entity)
         {
-            _dbSet.Remove(entity);
-            await SaveChangesAsync();
+            await Task.FromResult(_dbSet.Remove(entity));
         }
 
         public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -135,6 +127,21 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             var fluentRepository = new FluentRepository<TEntity>(this, _dbSet);
             return fluentRepository;
         }
+
+        protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)
+        {
+            DbSet<Dictionary<string, object>> dbset = _context.Set<Dictionary<string, object>>(joinEntityName);
+
+            var manyToManyData = await dbset
+                .Where(joinPropertyBag => joinPropertyBag[ownerIdKey].Equals(ownerEntityId))
+                .ToListAsync();            
+
+            var filteredManyToManyData = manyToManyData
+                .Where(joinPropertyBag => !idsToIgnore.Any(idToIgnore => joinPropertyBag[ownedIdKey].Equals(idToIgnore)))
+                .ToList();
+
+            dbset.RemoveRange(filteredManyToManyData);
+        }        
 
         public void Dispose()
         {

@@ -63,22 +63,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.entityClassHasManyToMany,
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Domain/Entities/Interfaces/IJoinedEntity.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/Interfaces/IJoinedEntity.cs`,
-                },
-                {
-                    file: 'Project.Domain/Entities/RelationshipTools/JoinListFacade.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/RelationshipTools/JoinListFacade.cs`,
-                },
-            ],
-        },
-        {
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -171,29 +155,6 @@ const gatlingTestsFiles = {
 function writeFiles() {
     return {
         writeServerFiles() {
-            this.relationships.forEach(relationship => {
-                // const relationship = relationship;
-                if (relationship.relationshipType === 'many-to-many') {
-                    const files = {
-                        server: [
-                            {
-                                condition: generator => generator.entityClassHasManyToMany,
-                                path: SERVER_SRC_DIR,
-                                templates: [
-                                    {
-                                        file: 'Project.Domain/Entities/JoinEntity.cs',
-                                        renameTo: generator =>
-                                            `${generator.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/Entities/${relationship.joinEntityNamePascalized}.cs`,
-                                    },
-                                ],
-                            },
-                        ],
-                    };
-                    this.currentRelation = relationship.joinEntityNamePascalized;
-                    this.writeFilesToDisk(files, this, false, 'dotnetcore');
-                }
-            });
-
             this.fields.forEach(field => {
                 if (field.fieldIsEnum) {
                     if (!this.skipServer) {

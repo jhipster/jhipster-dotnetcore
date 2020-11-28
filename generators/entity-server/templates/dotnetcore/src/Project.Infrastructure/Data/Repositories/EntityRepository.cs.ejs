@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using JHipsterNet.Core.Pagination;
@@ -37,15 +38,17 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
 
             <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-            base._context.RemoveNavigationProperty<<%= relationship.joinEntityNamePascalized %>,<%= pascalizedEntityClass %>>(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass %>.Id);
-                    <%_ }
-                        if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
+                    if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
             <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User?.Id;
             <%= camelCasedEntityClass %>.User = null; 
                     <%_ }
             }); _%>
             if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
+                <%_ relationships.forEach( relationship => {
+                    if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
+                        <%_ }
+                }); _%>                
                 Update(<%= camelCasedEntityClass %>);
                 <%_ let first = true;
                 let suffix = 0;
@@ -69,8 +72,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                 Add(<%= camelCasedEntityClass %>);
                 <%_ } _%>
             }
-
-            await SaveChangesAsync();
 
             return <%= camelCasedEntityClass %>;
         }
