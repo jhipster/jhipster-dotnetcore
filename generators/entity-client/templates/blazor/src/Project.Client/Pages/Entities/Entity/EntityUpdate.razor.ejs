@@ -45,7 +45,7 @@ _%>
                         <option value="0"></option>
                         @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.otherEntityNamePascalized %>Ids)
                         {
-                            if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.otherEntityNamePascalized %>?.Id)
+                            if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.relationshipFieldNamePascalized %>?.Id)
                             {
                                 <option selected="selected">@<%= relation.otherEntityNameLowerCased %></option>
                             }

@@ -51,6 +51,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         {
             _context.Set<TEntity>().RemoveNavigationProperty(ownerEntity, id);
         }
+
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             using var saveChangeTask = _context.SaveChangesAsync(cancellationToken);
@@ -65,6 +66,11 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         public void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class
         {
             _context.ChangeTracker.TrackGraph(entity, e => {
+                var alreadyTrackedEntity = _context.ChangeTracker.Entries().FirstOrDefault(entry => entry.Entity.Equals(e.Entry.Entity));
+                if (alreadyTrackedEntity != null)
+                {
+                    return;
+                }
                 if (e.Entry.IsKeySet) {
                     e.Entry.State = EntityState.Unchanged;
                 }
