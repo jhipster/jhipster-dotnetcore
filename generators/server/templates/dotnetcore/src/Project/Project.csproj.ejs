@@ -40,38 +40,6 @@
         <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.0" />
-        <%_ switch(databaseType) {
-            case 'sqllite': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0" />
-            <%_ break;
-            case 'mssql': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0" />
-            <%_ break;
-            case 'postgres': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0" />
-            <%_ break;
-            case 'mysql': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0" />
-            <%_ break;
-            case 'oracle': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.0" />
-        <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.80" />
-        <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.91" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0" />
-            <%_ break;
-         } _%>
         <PackageReference Include="Scrutor" Version="3.2.2" />
         <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
