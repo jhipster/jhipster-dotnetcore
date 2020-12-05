@@ -92,7 +92,9 @@ namespace <%= namespace %> {
                 })
                 <%_ } _%>
                 .UseStartup<Startup>()
+                <%_ if(!skipClient && clientFramework != "Blazor") { _%>
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"))
+                <%_ } _%>
                 .UseSerilog();
         }
 

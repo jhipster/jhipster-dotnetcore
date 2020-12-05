@@ -143,6 +143,8 @@ namespace <%= namespace %>.Controllers {
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
                 .GetPageAsync(pageable);

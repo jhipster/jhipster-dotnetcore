@@ -103,7 +103,14 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                 if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
             <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalized %> = <%= relation.otherEntityNamePascalized %>Id != 0 ? <%= relation.relationshipFieldNamePascalizedPlural %>.SingleOrDefault(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id.Equals(<%= relation.otherEntityNamePascalized %>Id)) : null;
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
-            <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList(); 
+            if (Selected<%= relation.relationshipFieldNamePascalizedPlural %> != null)
+            {
+                <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList(); 
+            }
+            else 
+            {
+                <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = null;
+            }
             <%_ }}); _%>
             if (Id != 0)
             {
