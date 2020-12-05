@@ -64,7 +64,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return _context.Set<T>(name);
         }
 
-        public void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class
+        public void AddOrUpdateGraph<TEntiy>(TEntiy entity) where TEntiy : class
         {
             _context.ChangeTracker.TrackGraph(entity, e => {
                 var alreadyTrackedEntity = _context.ChangeTracker.Entries().FirstOrDefault(entry => entry.Entity.Equals(e.Entry.Entity));
