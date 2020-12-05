@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,7 +73,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                     return;
                 }
                 if (e.Entry.IsKeySet) {
-                    e.Entry.State = EntityState.Unchanged;
+                    e.Entry.State = EntityState.Modified;
                 }
                 else {
                     e.Entry.State = EntityState.Added;

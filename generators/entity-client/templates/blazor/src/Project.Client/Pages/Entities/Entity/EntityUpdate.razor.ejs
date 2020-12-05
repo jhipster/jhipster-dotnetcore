@@ -30,12 +30,20 @@ _%>
                 }
 
                 <%_ fields.forEach(field => { _%>
+                    <%_ if (field.fieldIsEnum) { _%>
+                <Select class="form-control" name="<%= field.fieldName %>" formControlName="<%= field.fieldName %>" @bind-SelectedValue="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>">
+                    <%_ field.enumValues.forEach(enumValue => { _%>
+                        <SelectItem TValue="string" value="<%= enumValue %>"><%= enumValue %></SelectItem>
+                    <%_ }); _%>
+                </Select>
+                    <%_ } else { _%>
                 <div class="form-group">
                     <label class="form-control-label" for="field_<%= field.fieldName %>"><%= field.fieldNameHumanized %></label>
                     <input type="text" class="form-control" name="<%= field.fieldName %>" id="field_<%= field.fieldName %>"
-                           @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
+                            @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
                 </div>
-                <%_ }); _%>
+                    <%_ }
+                }); _%>
 
             <%_ relationships.forEach(relation => { 
                 if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>

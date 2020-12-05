@@ -111,6 +111,7 @@ module.exports = class extends EntityGenerator {
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
+                        field.enumValues = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                     }
                 });
 
