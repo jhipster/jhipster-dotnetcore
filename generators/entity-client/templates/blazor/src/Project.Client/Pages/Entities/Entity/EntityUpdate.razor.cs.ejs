@@ -44,15 +44,20 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         private INavigationService NavigationService { get; set; }
 
         <%_ relationships.forEach(relation => { 
-            if (relation.otherEntityNamePascalized !== entityClassName ) { _%>
+            if (relation.otherEntityNamePascalized !== entityClassName ) { 
+                if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || relation.ownerSide === true) { _%>
         [Inject]
         private I<%= relation.otherEntityNamePascalized %>Service <%= relation.otherEntityNamePascalized %>Service { get; set; }
 
-        <%_ }}); _%>
-        <%_ relationships.forEach(relation => { _%>
+                <%_ }
+            }
+        }); _%>
+        <%_ relationships.forEach(relation => {
+            if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true )) { _%>
         private IEnumerable<<%= asModel(relation.otherEntityNamePascalized) %>> <%= relation.relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(relation.otherEntityNamePascalized) %>>();
         
-        <%_ }); _%>
+            <%_ }
+        }); _%>
         
         public <%= asModel(entityClassName) %> <%= asModel(entityClassName) %> { get; set; } = new <%= asModel(entityClassName) %>();
 

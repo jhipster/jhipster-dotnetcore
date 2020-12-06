@@ -60,6 +60,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
             Services.AddHttpClientInterceptor();
+            //This code is needed to support recursion
+            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                .ForEach(b => _fixture.Behaviors.Remove(b));
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
 
 

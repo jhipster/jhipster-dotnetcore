@@ -19,6 +19,7 @@ const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass;
 const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Blazorise;
@@ -55,6 +56,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
+            //This code is needed to support recursion
+            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                .ForEach(b => _fixture.Behaviors.Remove(b));
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
 
 
