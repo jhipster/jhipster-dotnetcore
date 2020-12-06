@@ -28,19 +28,29 @@ _%>
                         <span>@<%= entityClassName %>.<%= field.fieldNamePascalized %></span>
                     </dd>
                     <%_ }); _%>
-                    <%_ relationships.forEach(relation => { 
-                        if(relation.relationshipType === 'one-to-one') { _%>
-                    <dt><span><%= relation.otherEntityNamePascalized %></span></dt>
+                    <%_ relationships.forEach(relation => {
+                         if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' ) { _%>
+                    <dt><span><%= relation.relationshipFieldNamePascalized %></span></dt>
                     <dd>
-                        @if (<%= entityClassName %>.<%= relation.otherEntityNamePascalized %> != null)
+                        @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %> != null)
                         {
                             <div>
-                                <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= entityClassName %>.Id/view">@<%= entityClassName %>.<%= relation.otherEntityNamePascalized %>.Id</a>
+                                <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= entityClassName %>.Id/view">@<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>.Id</a>
                             </div>
                         }
                     </dd>
-                        <%_ }
-                    }); _%>
+                    <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
+                    <dt><span><%= relation.relationshipFieldNamePascalized %></span></dt>
+                    <dd>
+                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= entityClassName %>.<%= relation.relationshipFieldNamePascalizedPlural %>){
+                            <span>
+                                <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= relation.otherEntityNameLowerCased %>.Id/view">@<%= relation.otherEntityNameLowerCased %>.Id</a>
+                                @if (<%= relation.otherEntityNameLowerCased %> != <%= entityClassName %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Last()) { <span>, </span>}
+                            </span>
+                        }
+                    </dd>
+                        <%_
+                    }}); _%>
                 </dl>
 
                 <button @onclick="Back" class="btn btn-info">

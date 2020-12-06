@@ -30,7 +30,7 @@ namespace <%= namespace %>.Configuration {
         {
             services.AddProblemDetails(setup =>
             {
-                setup.IncludeExceptionDetails = (_context, _exception) => !environment.IsDevelopment();
+                setup.IncludeExceptionDetails = (_context, _exception) => environment.IsDevelopment();
 
                 // Map BadRequestAlertException and inheriting exceptions to ProblemDetails
                 setup.Map<BadRequestAlertException>(exception => new ProblemDetails
