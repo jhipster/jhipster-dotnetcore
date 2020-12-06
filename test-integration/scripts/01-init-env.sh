@@ -23,7 +23,7 @@ if [[ "$APP_FOLDER" = "jwt-with-angular-app" && "$GITHUB_REPOSITORY" = "jhipster
 fi
 
 if [[ "$APP_FOLDER" = "jwt-with-blazor-app" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
-    SONAR_ANALYSE_ANGULAR=true
+    SONAR_ANALYSE_BLAZOR=true
 fi
 
 #-------------------------------------------------------------------------------
