@@ -30,6 +30,7 @@ using <%= namespace %>.Crosscutting.Enums;
 <%_ } _%>
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace <%= namespace %>.Client.Models
 {
@@ -51,7 +52,7 @@ namespace <%= namespace %>.Client.Models
         [Required]
             <%_ } _%>
             <%_ if (fields[idx].fieldIsEnum) { _%>
-        public <%= fields[idx].fieldType %>? <%= fieldNamePascalized %> { get; set; }
+        public <%= fields[idx].fieldType %> <%= fieldNamePascalized %> { get; set; }
                 <%_ } else { _%>
         public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
             <%_ } _%>

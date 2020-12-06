@@ -59,7 +59,7 @@ namespace <%= namespace %>.Dto {
         [Required]
             <%_ } _%>
             <%_ if (fields[idx].fieldIsEnum) { _%>
-        public <%= fields[idx].fieldType %>? <%= fieldNamePascalized %> { get; set; }
+        public <%= fields[idx].fieldType %> <%= fieldNamePascalized %> { get; set; }
                 <%_ } else { _%>
         public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
             <%_ } _%>

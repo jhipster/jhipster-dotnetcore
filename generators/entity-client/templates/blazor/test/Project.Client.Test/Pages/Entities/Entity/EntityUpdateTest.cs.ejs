@@ -36,9 +36,11 @@ using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
 <%_ relationships.forEach(relation => { 
-    if(relation.relationshipType === 'one-to-one') { _%>
+    if (relation.otherEntityNamePascalized !== entityClassName ) { 
+        if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || relation.ownerSide === true) { _%>
 using <%= namespace %>.Client.Services.EntityServices.<%= relation.otherEntityNamePascalized %>;
-    <%_ }
+        <%_ }
+    }
 }); _%>
 using <%= namespace %>.Client.Shared;
 using Microsoft.AspNetCore.Components;
@@ -52,10 +54,12 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
     public class <%= entityClassName %>UpdateTest : TestContext
     {
         private readonly Mock<I<%= entityClassName %>Service> _<%= entityVariableName %>Service;
-        <%_ relationships.forEach(relation => { 
-            if(relation.relationshipType === 'one-to-one') { _%>
+        <%_ relationships.forEach(relation => {
+            if (relation.otherEntityNamePascalized !== entityClassName ) {  
+                if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || relation.ownerSide === true) { _%>
         private readonly Mock<I<%= relation.otherEntityNamePascalized %>Service> _<%= relation.otherEntityNameLowerCased %>Service;
-            <%_ }
+                <%_ }
+            }
         }); _%>
         private readonly Mock<IModalService> _modalService;
         private readonly Mock<INavigationService> _navigationService;
@@ -67,10 +71,12 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _modalService = new Mock<IModalService>();
             _navigationService = new Mock<INavigationService>();
             <%_ relationships.forEach(relation => { 
-                if(relation.relationshipType === 'one-to-one') { _%>
+                if (relation.otherEntityNamePascalized !== entityClassName ) { 
+                    if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || relation.ownerSide === true) { _%>
             _<%= relation.otherEntityNameLowerCased %>Service = new Mock<I<%= relation.otherEntityNamePascalized %>Service>();
             Services.AddSingleton<I<%= relation.otherEntityNamePascalized %>Service>(_<%= relation.otherEntityNameLowerCased %>Service.Object);
-                <%_ }
+                    <%_ }
+                }
             }); _%>
             Services.AddSingleton<INavigationService>(_navigationService.Object);
             Services.AddSingleton<I<%= entityClassName %>Service>(_<%= entityVariableName %>Service.Object);
@@ -82,6 +88,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
             Services.AddHttpClientInterceptor();
+             //This code is needed to support recursion
+             _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                .ForEach(b => _fixture.Behaviors.Remove(b));
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
 
 
@@ -90,7 +100,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
         {
             //Arrange
             <%_ relationships.forEach(relation => { 
-                if(relation.relationshipType === 'one-to-one') { _%>
+                if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
+            var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
+            _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
+                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
             var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
             _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
                 <%_ }
@@ -105,8 +118,8 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
 
 
             // Act
-            var <%= entityVariableName %>form = update<%= entityClassName %>Page.Find("form");
-            <%= entityVariableName %>form.Submit();
+            var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
+            <%= entityVariableName %>Form.Submit();
 
             // Assert
             _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate),Times.Once);
@@ -117,7 +130,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
         {
             //Arrange 
             <%_ relationships.forEach(relation => { 
-                if(relation.relationshipType === 'one-to-one') { _%>
+                if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
+            var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
+            _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
+                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
             var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
             _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
                 <%_ }
@@ -126,8 +142,8 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 0));
 
             // Act
-            var <%= entityVariableName %>form = update<%= entityClassName %>Page.Find("form");
-            <%= entityVariableName %>form.Submit();
+            var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
+            <%= entityVariableName %>Form.Submit();
 
             // Assert
             _<%= entityVariableName %>Service.Verify(service => service.Add(It.IsAny<<%= asModel(entityClassName) %>>()), Times.Once);

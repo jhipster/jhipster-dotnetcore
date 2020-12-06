@@ -27,7 +27,7 @@ namespace <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>
     public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>>,I<%= entityClassName %>Service
     {
         public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider) 
-            : base(httpClient, authenticationStateProvider, "/api/<%= lowerCasedEntityClassPlural %>")
+            : base(httpClient, authenticationStateProvider, "/api/<%= kebabCasedEntityClassPlural %>")
         {
         }
     }

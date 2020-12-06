@@ -43,13 +43,13 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             <%= camelCasedEntityClass %>.User = null; 
                     <%_ }
             }); _%>
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
-                <%_ relationships.forEach( relationship => {
+            <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
+            await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
-                }); _%>                
-                Update(<%= camelCasedEntityClass %>);
+            }); _%>
+            _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
+            if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
                 <%_ let first = true;
                 let suffix = 0;
                 relationships.forEach( relationship => {
@@ -65,14 +65,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                     <%_ }
                     }
                 }); _%>
-            } else {
-                <%_ if (relationships.length != 0) { _%>
-                _context.AddGraph(<%= camelCasedEntityClass %>);
-                <%_ } else { _%>
-                Add(<%= camelCasedEntityClass %>);
-                <%_ } _%>
-            }
-
+            } 
             return <%= camelCasedEntityClass %>;
         }
     }
