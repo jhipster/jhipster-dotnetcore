@@ -96,7 +96,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             var span = <%= entityVariableName %>Page.Find("div>span");
 
             // Assert
-            span.MarkupMatches("<span>No <%= camelCasedEntityClassPlural %> found</span>");
+            span.MarkupMatches("<span>No <%= entityClassNamePluralized %> found</span>");
         }
 
         [Fact]

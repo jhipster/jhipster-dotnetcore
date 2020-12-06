@@ -100,7 +100,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
         {
             //Arrange
             <%_ relationships.forEach(relation => { 
-                if(relation.relationshipType === 'one-to-one') { _%>
+                if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
+            var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
+            _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
+                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
             var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
             _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
                 <%_ }
@@ -115,8 +118,8 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
 
 
             // Act
-            var <%= entityVariableName %>form = update<%= entityClassName %>Page.Find("form");
-            <%= entityVariableName %>form.Submit();
+            var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
+            <%= entityVariableName %>Form.Submit();
 
             // Assert
             _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate),Times.Once);
@@ -127,7 +130,10 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
         {
             //Arrange 
             <%_ relationships.forEach(relation => { 
-                if(relation.relationshipType === 'one-to-one') { _%>
+                if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
+            var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
+            _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
+                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
             var <%= relation.otherEntityNameLowerCasedPlural %> = _fixture.CreateMany<<%= asModel(relation.otherEntityNamePascalized) %>>(10);
             _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
                 <%_ }
