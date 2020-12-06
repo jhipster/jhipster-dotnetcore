@@ -29,7 +29,7 @@ if [ "$2" = "import-jdl" ]; then
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console
         dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
-      else if "$SONAR_ANALYSE_BLAZOR" ; then
+      elif "$SONAR_ANALYSE_BLAZOR" ; then
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console
         dotnet sonarscanner begin /k:"jhipster_jhipster_sample-app-blazor" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
