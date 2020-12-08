@@ -48,24 +48,12 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
             }); _%>
-            _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
+            
             if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
-                <%_ let first = true;
-                let suffix = 0;
-                relationships.forEach( relationship => {
-                    if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
-                        if (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-one') {
-                            if (first) { _%>
-                /* Force the reference navigation property to be in "modified" state.
-                This allows to modify it with a null value (the field is nullable).
-                This takes into consideration the case of removing the association between the two instances. */
-                                <%_ first = false;
-                            } _%>
-                _context.SetEntityStateModified(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>);
-                    <%_ }
-                    }
-                }); _%>
-            } 
+                Update(<%= camelCasedEntityClass %>);
+            } else {
+                _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
+            }
             return <%= camelCasedEntityClass %>;
         }
     }

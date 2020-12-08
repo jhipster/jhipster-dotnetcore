@@ -82,10 +82,10 @@ _%>
                             <%_ relationships.forEach(relation => { 
                                 if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                             <td>
-                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %> != null)
+                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != 0)
                                 {
                                     <div>
-                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>.Id/view">@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>.Id</a>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id/view">@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id</a>
                                     </div>
                                 }
                             </td>

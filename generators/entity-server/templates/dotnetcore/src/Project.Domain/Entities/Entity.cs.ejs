@@ -77,6 +77,8 @@ namespace <%= namespace %>.Domain {
         public string UserId { get; set; } 
                 <%_ } _%>
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
+
+        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
             <%_}
             if(relationshipType === 'one-to-many') { _%>
         public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= otherEntityNamePascalized %>>();
@@ -88,6 +90,8 @@ namespace <%= namespace %>.Domain {
         public string UserId { get; set; } 
                 <%_ }  _%>
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
+
+        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
             <%_  } else if (relationshipType === 'many-to-many') {
                 const ownerSide = relationships[idx].ownerSide; _%>
                 <%_ if (!ownerSide) { _%>
