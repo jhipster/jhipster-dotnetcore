@@ -25,7 +25,8 @@ module.exports = class extends EntityClientGenerator {
 
         const customPhaseSteps = {
             configureGlobalDotnetcore,
-            dtoWorkaround() { // only work with relation id rather than complete json
+            dtoWorkaround() {
+                // only work with relation id rather than complete json
                 this.dto = 'yes';
             },
         };
