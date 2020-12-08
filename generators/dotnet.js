@@ -18,6 +18,8 @@
  */
 const shelljs = require('shelljs');
 const fs = require('fs');
+const { Guid } = require('js-guid');
+const _ = require('lodash');
 
 function exec(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -53,6 +55,49 @@ async function slnAdd(solutionFile, projects) {
     return exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
 }
 
+async function newSlnAddProj(solutionName, projects) {
+    const solutionFile = fs.readFileSync(solutionName + ".sln", 'utf8');
+    var regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g');
+    var exc = regex.exec(solutionFile);
+    var first_guid = exc[1];
+    var core_guid = exc[2];
+    var regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`,  'g');
+    var client_dir = regexp.exec(solutionFile)[1];
+    var reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g');
+    var existing_projects = solutionFile.matchAll(reg);
+    var already_exist = false;
+    var project_text = "";
+    var dir_text = "";
+
+    projects.forEach(project => {
+        for (existing_project of existing_projects) {           
+            if (existing_project[1] == project['name']) {
+                already_exist = true;
+                break;
+            };
+        };
+        if (!already_exist) {
+            let random_guid = _.toUpper(Guid.newGuid());
+            project_text += `\nProject("{${first_guid}}") = "${project['name']}", "${project['path']}", "{${random_guid}}"\nEndProject`;
+            dir_text += `\n\t\t{${random_guid}} = {${client_dir}}`;
+        }
+    });
+
+    const project_re = new RegExp("MinimumVisualStudioVersion = .*\\D", 'g');
+    const project_found = solutionFile.match(project_re);  
+    project_text = `${project_found}${project_text}`;
+    var newBody = solutionFile.replace(project_re, project_text);   
+
+    const dir_re = new RegExp("GlobalSection\\(NestedProjects\\) = .*\\D", 'g');
+    const dir_found = solutionFile.match(dir_re);  
+    dir_text = `${dir_found}${dir_text}`;
+    newBody = newBody.replace(dir_re, dir_text);
+
+    if (solutionFile != newBody) {
+        fs.writeFileSync(solutionName + ".sln", newBody);
+    }
+}
+
 async function restore() {
     await hasDotnet();
     return exec('dotnet restore');
@@ -60,6 +105,7 @@ async function restore() {
 
 module.exports = {
     hasDotnet,
+    newSlnAddProj,
     newSln,
     slnAdd,
     restore,

@@ -1,0 +1,83 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using AutoFixture;
+using Blazored.Modal.Services;
+using Bunit;
+using Bunit.Rendering;
+using FluentAssertions;
+using <%= namespace %>.Client.Models;
+using <%= namespace %>.Client.Pages;
+using <%= namespace %>.Client.Pages.Admin.UserManagement;
+using <%= namespace %>.Client.Pages.Utils;
+using <%= namespace %>.Client.Services.EntityServices.User;
+using <%= namespace %>.Client.Test.Helpers;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Xunit;
+
+namespace <%= namespace %>.Client.Test.Pages.Admin.UserManagement
+{
+    public class UserDetailTest : TestContext
+    {
+        private readonly Mock<IUserService> _userService;
+        private readonly Mock<INavigationService> _navidationService;
+        private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
+
+        public UserDetailTest()
+        {
+            _userService = new Mock<IUserService>();
+            _navidationService = new Mock<INavigationService>();
+            Services.AddSingleton<IUserService>(_userService.Object);
+            Services.AddSingleton<INavigationService>(_navidationService.Object);
+        }
+
+
+        [Fact]
+        public void Should_DisplayUserLogin_When_IdIsPresent()
+        {
+            //Arrange
+            var user = _fixture.Create<UserModel>();
+            _userService.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(user));
+            var userDetail = RenderComponent<UserDetail>(ComponentParameter.CreateParameter("Id", "test"));
+            
+
+            // Act
+            var title = userDetail.Find("h2");
+
+            // Assert
+            title.MarkupMatches($"<h2><span>User</span> [<b>{user.Login}</b>]</h2>");
+
+        }
+
+        [Fact]
+        public void Should_NotDisplayUser_When_IdIsNotPresent()
+        {
+            //Arrange
+            _userService.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(new UserModel()));
+            var userDetail = RenderComponent<UserDetail>();
+            
+            // Act
+            var title = userDetail.Find("div.col-8");
+
+            // Assert
+            title.Children.Length.Should().Be(0);
+
+        }
+    }
+}

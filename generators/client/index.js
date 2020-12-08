@@ -32,10 +32,12 @@ const dotnet = require('../dotnet');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeBlazorFiles = require('./files-blazor').writeFiles;
+const writeXamarinFiles = require('./files-xamarin').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
 
 const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -106,6 +108,8 @@ module.exports = class extends ClientGenerator {
                 switch (this.clientFramework) {
                     case BLAZOR:
                         return writeBlazorFiles.call(this);
+                    case XAMARIN:
+                        return writeXamarinFiles.call(this);
                     case REACT:
                         baseWriteReactFiles.call(this);
                         writeCommonFiles.call(this);
@@ -150,6 +154,28 @@ module.exports = class extends ClientGenerator {
                         `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
                         `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Shared.csproj`,
                         `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
+                    ]);
+                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
+                } else if (this.clientFramework == XAMARIN) {
+                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                    try {
+                        await dotnet.newSln(this.solutionName);
+                    } catch (err) {
+                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+                    }
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,                       
+                    ]);
+                    await dotnet.newSlnAddProj(this.solutionName, [
+                        {
+                            'path': `${constants.CLIENT_SRC_DIR}${this.androidClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
+                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.Android`
+                        },
+                        {
+                            'path': `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,  
+                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.iOS`
+                        }                                                
                     ]);
                     this.log(chalk.green.bold('\Client application generated successfully.\n'));
                 } else {

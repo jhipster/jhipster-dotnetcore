@@ -10,6 +10,7 @@ const PROJECT_CROSSCUTTING_SUFFIX = '.Crosscutting';
 const PROJECT_INFRASTRUCTURE_SUFFIX = '.Infrastructure';
 const PROJECT_SERVICE_SUFFIX = '.Domain.Services';
 const BLAZOR = 'Blazor';
+const XAMARIN = 'Xamarin';
 
 const constants = {
     SERVER_SRC_DIR,
@@ -24,6 +25,7 @@ const constants = {
     PROJECT_INFRASTRUCTURE_SUFFIX,
     PROJECT_SERVICE_SUFFIX,
     BLAZOR,
+    XAMARIN,
 };
 
 module.exports = constants;

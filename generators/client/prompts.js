@@ -23,6 +23,7 @@ const constants = require('../generator-dotnetcore-constants');
 const ANGULAR = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = {
     askForClient,
@@ -39,9 +40,13 @@ function askForClient() {
             value: REACT,
             name: 'React',
         },
-         {
+        {
             value: BLAZOR,
             name: '[Alpha] - Blazor (WebAssembly)',
+        },
+        {
+            value: XAMARIN,
+            name: '[Alpha] - Xamarin',
         },
         {
             value: 'no',
