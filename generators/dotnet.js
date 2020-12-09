@@ -67,11 +67,11 @@ async function newSlnAddProj(solutionName, projects) {
     let dirText = '';
 
     projects.forEach(project => {
-        let existingProjects = solutionFile.matchAll(reg);
+        const existingProjects = solutionFile.matchAll(reg);
         let alreadyExist = false;
         let existingProject = existingProjects.next();
-        while (!existingProject.done && !alreadyExist) {            
-            alreadyExist = (existingProject.value[1] === project.name);
+        while (!existingProject.done && !alreadyExist) {
+            alreadyExist = existingProject.value[1] === project.name;
             existingProject = existingProjects.next();
         }
         if (!alreadyExist) {
