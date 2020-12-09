@@ -56,45 +56,43 @@ async function slnAdd(solutionFile, projects) {
 }
 
 async function newSlnAddProj(solutionName, projects) {
-    const solutionFile = fs.readFileSync(solutionName + ".sln", 'utf8');
-    var regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g');
-    var exc = regex.exec(solutionFile);
-    var first_guid = exc[1];
-    var core_guid = exc[2];
-    var regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`,  'g');
-    var client_dir = regexp.exec(solutionFile)[1];
-    var reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g');
-    var existing_projects = solutionFile.matchAll(reg);
-    var already_exist = false;
-    var project_text = "";
-    var dir_text = "";
+    const solutionFile = fs.readFileSync(`${solutionName}.sln`, 'utf8');
+    const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const exc = regex.exec(solutionFile);
+    const firstGuid = exc[1];
+    const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const clientDir = regexp.exec(solutionFile)[1];
+    const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
+    let projectText = '';
+    let dirText = '';
 
     projects.forEach(project => {
-        for (existing_project of existing_projects) {           
-            if (existing_project[1] == project['name']) {
-                already_exist = true;
-                break;
-            };
-        };
-        if (!already_exist) {
-            let random_guid = _.toUpper(Guid.newGuid());
-            project_text += `\nProject("{${first_guid}}") = "${project['name']}", "${project['path']}", "{${random_guid}}"\nEndProject`;
-            dir_text += `\n\t\t{${random_guid}} = {${client_dir}}`;
+        let existingProjects = solutionFile.matchAll(reg);
+        let alreadyExist = false;
+        let existingProject = existingProjects.next();
+        while (!existingProject.done && !alreadyExist) {            
+            alreadyExist = (existingProject.value[1] === project.name);
+            existingProject = existingProjects.next();
+        }
+        if (!alreadyExist) {
+            const randomGuid = _.toUpper(Guid.newGuid());
+            projectText += `\nProject("{${firstGuid}}") = "${project.name}", "${project.path}", "{${randomGuid}}"\nEndProject`;
+            dirText += `\n\t\t{${randomGuid}} = {${clientDir}}`;
         }
     });
 
-    const project_re = new RegExp("MinimumVisualStudioVersion = .*\\D", 'g');
-    const project_found = solutionFile.match(project_re);  
-    project_text = `${project_found}${project_text}`;
-    var newBody = solutionFile.replace(project_re, project_text);   
+    const projectRe = new RegExp('MinimumVisualStudioVersion = .*\\D', 'g');
+    const projectFound = solutionFile.match(projectRe);
+    projectText = `${projectFound}${projectText}`;
+    let newBody = solutionFile.replace(projectRe, projectText);
 
-    const dir_re = new RegExp("GlobalSection\\(NestedProjects\\) = .*\\D", 'g');
-    const dir_found = solutionFile.match(dir_re);  
-    dir_text = `${dir_found}${dir_text}`;
-    newBody = newBody.replace(dir_re, dir_text);
+    const dirRe = new RegExp('GlobalSection\\(NestedProjects\\) = .*\\D', 'g');
+    const dirFound = solutionFile.match(dirRe);
+    dirText = `${dirFound}${dirText}`;
+    newBody = newBody.replace(dirRe, dirText);
 
-    if (solutionFile != newBody) {
-        fs.writeFileSync(solutionName + ".sln", newBody);
+    if (solutionFile !== newBody) {
+        fs.writeFileSync(`${solutionName}.sln`, newBody);
     }
 }
 

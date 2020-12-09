@@ -724,6 +724,67 @@ const files = {
             ],
         }
     ],
+    xamarinAppiOSResources: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/LaunchScreen.storyboard',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/LaunchScreen.storyboard`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/Default.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/Default.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/Default@2x.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/Default@2x.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/Default-568h@2x.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/Default.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/Default-Portrait@2x.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/Default-Portrait@2x.png`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client.Xamarin.iOS/Resources/Default-Portrait.png',
+                    method: 'copy',
+                    renameTo: generator => `${generator.iOSClientDir}/Resources/Default-Portrait.png`,
+                },
+            ],
+        },
+    ],
 };
 
 module.exports = {
