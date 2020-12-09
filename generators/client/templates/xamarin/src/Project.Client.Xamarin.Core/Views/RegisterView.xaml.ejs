@@ -44,7 +44,12 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <StackLayout IsVisible="{Binding NotSuccess}">
+                <StackLayout>
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Success}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
                     <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
                     <Entry Placeholder="Email" x:Name="EmailEntry" Text="{Binding Email}" />
                     <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
