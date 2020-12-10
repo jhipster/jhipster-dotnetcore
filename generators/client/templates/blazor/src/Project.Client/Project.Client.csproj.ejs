@@ -55,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Blazored.Modal" Version="5.1.0" />
     <PackageReference Include="Blazored.SessionStorage" Version="1.0.12" />
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.1.2" />
@@ -83,6 +84,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\<%= namespace %>.Dto\<%= namespace %>.Dto.csproj" />
     <ProjectReference Include="..\<%= namespace %>.Client.Shared\<%= namespace %>.Client.Shared.csproj" />
     <ProjectReference Include="..\..\<%= namespace %>.Crosscutting\<%= namespace %>.Crosscutting.csproj" />
   </ItemGroup>

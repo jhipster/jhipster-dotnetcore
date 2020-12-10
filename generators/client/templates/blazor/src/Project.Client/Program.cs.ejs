@@ -1,6 +1,8 @@
 using System;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using Blazored.Modal;
 using Blazored.SessionStorage;
 using Blazorise;
@@ -36,6 +38,8 @@ namespace <%= namespace %>.Client
 
             builder.Services.AddSingleton<ISessionStorageService, SessionStorageService>().AddSingleton<ISyncSessionStorageService, SessionStorageService>();
             builder.Services.AddBlazoredModal();
+
+            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             builder.Services.AddSingleton<AuthenticationStateProvider, AuthenticationService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
