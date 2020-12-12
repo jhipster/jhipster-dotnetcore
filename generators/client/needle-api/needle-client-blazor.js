@@ -68,4 +68,15 @@ module.exports = class extends needleBase {
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }
+
+    addDtoMapping(entityName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to AutoMapper.\n')}`;
+        const autoMapperProfilePath = `src/${this.mainClientDir}/AutoMapper/AutoMapperProfile.cs`;
+        const mappingEntry =
+            // prettier-ignore
+            this.generator.stripMargin(`|CreateMap<${entityName}Model, ${entityName}Dto>().ReverseMap();`);
+        const rewriteFileModel = this.generateFileModel(autoMapperProfilePath, 'jhipster-needle-add-dto-model-mapping', mappingEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
 };
