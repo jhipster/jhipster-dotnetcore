@@ -86,7 +86,8 @@ namespace <%= namespace %>.Client.Services
             _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {jwtToken.IdToken}");
             try
             {
-                CurrentUser = await _httpClient.GetFromJsonAsync<UserModel>(AccountUrl);
+                var userDto = await _httpClient.GetFromJsonAsync<UserDto>(AccountUrl);
+                CurrentUser = _mapper.Map<UserModel>(userDto);
             }
             catch
             {
