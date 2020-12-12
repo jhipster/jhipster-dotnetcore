@@ -43,6 +43,12 @@ namespace <%= namespace %>.Client.Test.Pages.Admin.UserManagement
         {
             _userService = new Mock<IUserService>();
             _navidationService = new Mock<INavigationService>();
+            Services.AddBlazorise(options =>
+                {
+                    options.ChangeTextOnKeyPress = true;
+                })
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
             Services.AddSingleton<IUserService>(_userService.Object);
             Services.AddSingleton<INavigationService>(_navidationService.Object);
         }
