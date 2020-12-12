@@ -36,15 +36,9 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
             bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
-
-            <%_ relationships.forEach( relationship => {
-                    if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
-            <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User?.Id;
-            <%= camelCasedEntityClass %>.User = null; 
-                    <%_ }
-            }); _%>
             <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                        
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
             }); _%>
