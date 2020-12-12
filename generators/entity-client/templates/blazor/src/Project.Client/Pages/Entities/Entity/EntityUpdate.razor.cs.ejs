@@ -62,11 +62,18 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         public <%= asModel(entityClassName) %> <%= asModel(entityClassName) %> { get; set; } = new <%= asModel(entityClassName) %>();
 
         <%_ relationships.forEach(relation => { _%>
-            <%_ if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
+            <%_ if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { 
+                    if(relation.otherEntityNamePascalized === 'User') { _%>
+        public IEnumerable<string> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<string>();
+
+        public string <%= relation.otherEntityNamePascalized %>Id { get; set; } 
+        
+                    <%_ } else { _%>
         public IEnumerable<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
 
         public long? <%= relation.otherEntityNamePascalized %>Id { get; set; } 
 
+                    <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
         public IReadOnlyList<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
         
