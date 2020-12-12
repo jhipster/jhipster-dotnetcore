@@ -18,7 +18,7 @@
         {
           "file": "./test-integration/samples/**/.yo-rc.json",
           "search": "\"version\": \"\\d+\\.\\d+\\.\\d+\"",
-          "replace": "\"version\": {{version}}"
+          "replace": "\"version\": \"{{version}}\""
         }
       ]
     }
