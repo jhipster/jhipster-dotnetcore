@@ -30,22 +30,30 @@ _%>
                 }
 
                 <%_ fields.forEach(field => { _%>
+                    <%_ if (field.fieldIsEnum) { _%>
+                <Select class="form-control" name="<%= field.fieldName %>" formControlName="<%= field.fieldName %>" @bind-SelectedValue="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>">
+                    <%_ field.enumValues.forEach(enumValue => { _%>
+                        <SelectItem TValue="string" value="<%= enumValue %>"><%= enumValue %></SelectItem>
+                    <%_ }); _%>
+                </Select>
+                    <%_ } else { _%>
                 <div class="form-group">
                     <label class="form-control-label" for="field_<%= field.fieldName %>"><%= field.fieldNameHumanized %></label>
                     <input type="text" class="form-control" name="<%= field.fieldName %>" id="field_<%= field.fieldName %>"
-                           @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
+                            @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
                 </div>
-                <%_ }); _%>
+                    <%_ }
+                }); _%>
 
             <%_ relationships.forEach(relation => { 
-                if(relation.relationshipType === 'one-to-one') { _%>
+                if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                 <div class="form-group">
-                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>">Region</label>
+                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
                     <select class="form-control" id="field_<%= relation.otherEntityNameLowerCased %>" name="<%= relation.otherEntityNameLowerCased %>" @bind="@<%= relation.otherEntityNamePascalized %>Id">
                         <option value="0"></option>
-                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.relationshipFieldNamePascalizedPlural %>)
+                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.otherEntityNamePascalized %>Ids)
                         {
-                            if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.otherEntityNamePascalized %>?.Id)
+                            if (Id != 0 && <%= relation.otherEntityNameLowerCased %> == <%= asModel(entityClassName) %>?.<%= relation.relationshipFieldNamePascalized %>Id)
                             {
                                 <option selected="selected">@<%= relation.otherEntityNameLowerCased %></option>
                             }
@@ -55,6 +63,16 @@ _%>
                             }
                         }
                     </select>
+                </div>
+                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
+                    <Select  class="form-control" name="<%= relation.otherEntityNameLowerCased %>"  TValue="long" @bind-SelectedValues="Selected<%= relation.relationshipFieldNamePascalizedPlural %>" Multiple="true">
+                        @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.otherEntityNamePascalized %>Ids)
+                        {
+                            <SelectItem TValue="long" Value="@<%= relation.otherEntityNameLowerCased %>">@<%= relation.otherEntityNameLowerCased %></SelectItem>
+                        }
+                    </Select>
                 </div>
                 <%_ }
             }); _%>

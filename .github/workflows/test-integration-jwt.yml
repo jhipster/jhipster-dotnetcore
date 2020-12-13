@@ -23,7 +23,7 @@ jobs:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
                     - app-type: jwt-with-blazor-app
-                      arg: 'blazor'
+                      arg: 'import-jdl blazor'
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
@@ -43,6 +43,10 @@ jobs:
             - uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node-version }}
+            - uses: joschi/setup-jdk@v2
+              with:
+                java-version: '11' # The OpenJDK version to make available on the path
+                architecture: 'x64' # defaults to 'x64'
             - uses: actions/setup-dotnet@v1
               with:
                 dotnet-version: '5.0.100'

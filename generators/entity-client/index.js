@@ -24,7 +24,8 @@ module.exports = class extends EntityClientGenerator {
         const customPhaseSteps = {
             customizeDotnetPaths,
             dtoWorkaround() {
-                this.dto = 'no';
+                // only work with relation id rather than complete json
+                this.dto = 'yes';
             },
         };
 

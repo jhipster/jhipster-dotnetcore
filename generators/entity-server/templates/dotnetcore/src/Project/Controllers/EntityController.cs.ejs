@@ -119,9 +119,6 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
-
-            //TODO catch //DbUpdateConcurrencyException into problem
-
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -145,7 +142,9 @@ namespace <%= namespace %>.Controllers {
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
                 .GetPageAsync(pageable);
@@ -168,10 +167,9 @@ namespace <%= namespace %>.Controllers {
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>))
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
                 <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                .Include(source => source.Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.joinEntityFieldNamePascalizedPlural %>)
-                    .ThenInclude(<%= relationship.joinEntityNameCamelCased %> => <%= relationship.joinEntityNameCamelCased %>.<%= relationship.otherEntityNamePascalized %>))
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
                 .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
