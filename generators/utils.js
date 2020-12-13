@@ -99,7 +99,7 @@ function customizeDotnetPaths() {
     this.kebabCasedBaseName = _.kebabCase(this.baseName);
     this.jhipsterDotnetVersion = packagejs.version;
     this.modelSuffix = 'Model';
-    this.backendName = ".Net";
+    this.backendName = '.Net';
 
     if (this.clientFramework === BLAZOR) {
         this.mainClientDir = `client/${this.pascalizedBaseName}.Client`;
