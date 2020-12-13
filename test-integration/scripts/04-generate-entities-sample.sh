@@ -12,7 +12,7 @@ if [ "$2" = "import-jdl" ]; then
   # Run JHipster.NET Generator
   #-------------------------------------------------------------------------------
   echo "*** run generation app with dotnetcore blueprint for : "$APP_FOLDER
-  runOptions="--blueprints dotnetcore --skip-checks --no-insight --skip-install"
+  runOptions="--blueprints dotnetcore --skip-checks --force --no-insight --skip-install"
 
   runOptions="import-jdl ../jdl-default/app.jdl $runOptions"  
   jhipster $runOptions
