@@ -160,24 +160,45 @@ function updatePackageJson() {
 }
 
 function updateJestConf(){
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
-        '/src/test/javascript',
-        `/test`,
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
-        `/${SERVER_SRC_DIR}${this.mainClientDir}`,
-        "",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
-        '\\.\\./\\.\\./\\.\\.',
-        '..',
-        true
-    );
+    if(this.clientFramework === ANGULAR){        
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
+            '/src/test/javascript',
+            `/test`,
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
+            `/${SERVER_SRC_DIR}${this.mainClientDir}`,
+            "",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
+            '\\.\\./\\.\\./\\.\\.',
+            '..',
+            true
+        );
+    } else {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
+            '/src/test/javascript',
+            `/test`,
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
+            `/${SERVER_SRC_DIR}${this.mainClientDir}`,
+            "",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
+            '\\.\\./\\.\\./\\.\\.',
+            '..',
+            true
+        );
+    }
 }
 
 function updateEsLinIgnore(){
