@@ -19,6 +19,8 @@
 
 const constants = require('../generator-dotnetcore-constants');
 
+const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
+
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
