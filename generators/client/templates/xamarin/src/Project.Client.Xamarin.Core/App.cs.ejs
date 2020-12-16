@@ -31,8 +31,8 @@ namespace <%= namespace %>.Client.Xamarin.Core
     {
         public override void Initialize()
         {
-            Akavache.Registrations.Start("JhipsterXamarin");
-            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
+            Akavache.Registrations.Start("<%= namespace %>");
+            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("<%= namespace %>");
 
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = (o, cert, chain, errors) => true;
@@ -41,21 +41,19 @@ namespace <%= namespace %>.Client.Xamarin.Core
             httpClient.BaseAddress = new Uri(Configuration.BaseUri);
 
             var authenticationService = new AuthenticationService(httpClient, log);
-            var registerService = new RegisterService(httpClient, log);
-            var myEntityService = new AbstractEntityService<AbstractEntityModel>(httpClient, "api/myentities");
-
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
+            var registerService = new RegisterService(httpClient, log);
             Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
-            Mvx.IoCProvider.RegisterSingleton<IAbstractEntityService<AbstractEntityModel>>(myEntityService);
+            // jhipster-needle-add-services-in-di - JHipster will add services in DI  
+
             Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
             Mvx.IoCProvider.RegisterSingleton(httpClient);
 
             try
             {
-                BlobCache.Secure.GetObject<JwtToken>("token").Subscribe(async token =>
-                {
-                    await authenticationService.SignIn(token);
-                });
+                // sync trying to connect before loading home view
+                var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
+                Task.Run(async () => await authenticationService.SignIn(token));
             }
             catch (Exception ex)
             {

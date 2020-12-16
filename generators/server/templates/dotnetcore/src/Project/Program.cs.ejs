@@ -92,7 +92,7 @@ namespace <%= namespace %> {
                 })
                 <%_ } _%>
                 .UseStartup<Startup>()
-                <%_ if(!skipClient && clientFramework != "Blazor") { _%>
+                <%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
                 .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"))
                 <%_ } _%>
                 .UseSerilog();

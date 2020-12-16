@@ -43,7 +43,7 @@ namespace <%= namespace %>.Configuration {
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
             });
 
-            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
+            <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -71,7 +71,7 @@ namespace <%= namespace %>.Configuration {
 
             app.UseHealthChecks("/health");
 
-            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
+            <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

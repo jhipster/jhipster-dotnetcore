@@ -143,7 +143,7 @@ module.exports = class extends ClientGenerator {
     get end() {
         return {
             async end() {
-                if (this.clientFramework == BLAZOR) {
+                if (this.clientFramework === BLAZOR) {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
                     try {
                         await dotnet.newSln(this.solutionName);
@@ -156,7 +156,7 @@ module.exports = class extends ClientGenerator {
                         `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
                     ]);
                     this.log(chalk.green.bold('\Client application generated successfully.\n'));
-                } else if (this.clientFramework == XAMARIN) {
+                } else if (this.clientFramework === XAMARIN) {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
                     try {
                         await dotnet.newSln(this.solutionName);

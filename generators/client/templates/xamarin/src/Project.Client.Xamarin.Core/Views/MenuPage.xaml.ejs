@@ -7,92 +7,43 @@
     xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
     xmlns:viewModels="clr-namespace:<%= namespace %>.Client.Xamarin.Core.ViewModels;assembly=<%= namespace %>.Client.Xamarin.Core"
     x:Class="<%= namespace %>.Client.Xamarin.Core.Views.MenuPage"
-    BackgroundColor="Gray"
     Title="Menu"
     Icon = "ic_menu">
     <ContentPage.Content>
-        <Grid
-            HorizontalOptions="FillAndExpand" 
-            VerticalOptions="FillAndExpand"
-            Padding="0"
-            Margin="0">
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Grid 
-                Grid.Row="0" 
-                HorizontalOptions="EndAndExpand" 
-                VerticalOptions="StartAndExpand">
-                <StackLayout Orientation="Horizontal">
-                    <StackLayout.Triggers>
-                        <DataTrigger TargetType="StackLayout" Binding="{Binding IsConnected}" Value="True">
+            <Grid Grid.Row="3" VerticalOptions="EndAndExpand">
+                <Grid ColumnSpacing="0" HeightRequest="50">
+                    <Grid.Triggers>
+                        <DataTrigger TargetType="Grid" Binding="{Binding IsConnected}" Value="True">
                             <Setter Property="IsVisible" Value="False"/>
                         </DataTrigger>
-                    </StackLayout.Triggers>
-                    <Button Text="Sign In" Clicked="ToggleClicked" Command="{Binding SignIn}"/>
-                    <Button Text="Sign Up" Clicked="ToggleClicked" Command="{Binding SignUp}"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding IsConnected}">
-                    <Button Text="Sign Out" Clicked="ToggleClicked" Command="{Binding SignOut}"/>
-                </StackLayout>
+                    </Grid.Triggers>
+                    <Button Grid.Column="0" Grid.Row="0" Text="Sign In" BackgroundColor="LightGreen" Clicked="ToggleClicked" Command="{Binding SignIn}"/>
+                    <Button Grid.Column="1" Grid.Row="0" Text="Sign Up" BackgroundColor="LightBlue" Clicked="ToggleClicked" Command="{Binding SignUp}"/>
+                </Grid>
+                <Grid IsVisible="{Binding IsConnected}" HeightRequest="50">
+                    <Button BackgroundColor="IndianRed" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Sign Out" Clicked="ToggleClicked" Command="{Binding SignOut}"/>
+                </Grid>
             </Grid>
 
-            <Grid
-                Grid.Row="1" 
-                Margin="0"
-                Padding="0"
-                HorizontalOptions="FillAndExpand" 
-                VerticalOptions="StartAndExpand">
-                <StackLayout
-                    Orientation="Horizontal"
-                    VerticalOptions="End"
-                    Padding="8">
-                    <Label
-                        TextColor="White"
-                        Text="Menu"
-                        VerticalOptions="Center"/>
-                </StackLayout>
+            <Grid Grid.Row="1" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" Padding="10">
+                <Image HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFit" HeightRequest="150" 
+                       Source="{x:OnPlatform Android=menu, iOS=menu}" />
             </Grid>
             
-            <StackLayout
-                Grid.Row="2" 
-                HorizontalOptions="FillAndExpand" 
-                VerticalOptions="StartAndExpand"
-                Orientation="Vertical"
-                BackgroundColor="LightGray">
-                <Grid
-                    HorizontalOptions="FillAndExpand" 
-                    VerticalOptions="StartAndExpand" 
-                    Padding="8">
-                    <Label Text="Home"/>
+            <StackLayout Spacing="2" Grid.Row="2" HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand">
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" BackgroundColor="LightBlue" Padding="8">
+                    <Label Text="Home" />
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowWelcomeCommand}"/>
+                        <TapGestureRecognizer Tapped="ToggleClicked" Command="{Binding ShowWelcomeCommand}"/>
                     </Grid.GestureRecognizers>
                 </Grid>
-                <BoxView
-                    HorizontalOptions="FillAndExpand"
-                    HeightRequest="2"
-                    BackgroundColor="LightGray" />
-                <Grid
-                    HorizontalOptions="FillAndExpand" 
-                    VerticalOptions="StartAndExpand" 
-                    Padding="8"
-                    IsVisible="{Binding IsConnected}">
-                    <Label Text="Entities"/>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyEntitiesCommand}"/>
-                    </Grid.GestureRecognizers>
-                </Grid>
-                <BoxView
-                    HorizontalOptions="FillAndExpand"
-                    HeightRequest="2"
-                    BackgroundColor="LightGray" />
-                <Grid
-                    HorizontalOptions="FillAndExpand" 
-                    VerticalOptions="StartAndExpand"
-                    mvx:Bi.nd="Text [AnotherOption]" />
+                <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
             </StackLayout>
         </Grid>
     </ContentPage.Content>

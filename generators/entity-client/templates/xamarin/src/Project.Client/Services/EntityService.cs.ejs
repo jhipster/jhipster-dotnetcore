@@ -12,19 +12,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; 
+_%>
+using System.Net.Http;
+using <%= namespace %>.Client.Xamarin.Core.Models;
 
-using <%= namespace %>.Client.Xamarin.Core.ViewModels;
-using MvvmCross.Forms.Presenters.Attributes;
-using MvvmCross.Forms.Views;
-
-namespace <%= namespace %>.Client.Xamarin.Core.Views
+namespace <%= namespace %>.Client.Xamarin.Core.Services
 {
-    [MvxMasterDetailPagePresentation(MasterDetailPosition.Detail, WrapInNavigationPage = true, NoHistory = true)]
-    public partial class MyEntityView : MvxContentPage<MyEntityViewModel>
+    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>>,I<%= entityClassName %>Service
     {
-        public MyEntityView()
+        public <%= entityClassName %>Service(HttpClient httpClient) 
+            : base(httpClient, "/api/<%= kebabCasedEntityClassPlural %>")
         {
-            InitializeComponent();
         }
     }
 }

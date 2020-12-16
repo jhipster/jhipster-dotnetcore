@@ -4,8 +4,10 @@ const EntityClientGenerator = require('generator-jhipster/generators/entity-clie
 const constants = require('../generator-dotnetcore-constants');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const writeBlazorFiles = require('./files-blazor').writeFiles;
+const writeXamarinFiles = require('./files-xamarin').writeFiles;
 
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
@@ -39,6 +41,14 @@ module.exports = class extends EntityClientGenerator {
                 writeFilesDotnetcore() {
                     if (this.skipClient) return;
                     return writeBlazorFiles.call(this);
+                },
+            };
+        }
+        if (this.clientFramework === XAMARIN) {
+            return {
+                writeFilesDotnetcore() {
+                    if (this.skipClient) return;
+                    return writeXamarinFiles.call(this);
                 },
             };
         }
