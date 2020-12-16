@@ -81,7 +81,6 @@ module.exports = class extends needleBase {
     }
 
     addServiceInDI(entityName) {
-        const lowerCasedEntityName = _.kebabCase(entityName);
         const lowerEntityName = _.toLower(entityName);
         const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
         const programPath = `src/${this.mainClientDir}/App.cs`;
