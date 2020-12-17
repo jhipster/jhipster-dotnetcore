@@ -28,7 +28,8 @@ module.exports = class extends EntityClientGenerator {
         const customPhaseSteps = {
             configureGlobalDotnetcore,
             dtoWorkaround() {
-                this.dto = 'no';
+                // only work with relation id rather than complete json
+                this.dto = 'yes';
             },
         };
 
@@ -56,7 +57,7 @@ module.exports = class extends EntityClientGenerator {
     }
 
     rebuildClient() {
-        if (!this.options['skip-install'] && !this.skipClient) {
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework !== BLAZOR) {
             const done = this.async();
             this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
             this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(
