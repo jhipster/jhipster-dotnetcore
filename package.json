@@ -5,8 +5,7 @@
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
-    "jhipster-6",
-    "dotnet"
+    "jhipster-5"
   ],
   "homepage": "https://github.com/jhipster/jhipster-dotnetcore",
   "author": {
@@ -47,8 +46,6 @@
     "yeoman-generator": "4.12.0"
   },
   "devDependencies": {
-    "@j-ulrich/release-it-regex-bumper": "^1.2.0",
-    "@release-it/bumper": "^2.0.0",
     "chai": "4.2.0",
     "ejs-lint": "1.1.0",
     "eslint": "7.13.0",
@@ -60,11 +57,10 @@
     "jsdoc": "3.6.6",
     "mocha": "8.2.1",
     "nyc": "15.1.0",
-    "release-it": "^14.2.2",
     "sinon": "9.2.1",
-    "sonarqube-scanner": "2.7.0",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "3.0.0"
+    "yeoman-test": "3.0.0",
+    "sonarqube-scanner": "2.7.0"
   },
   "scripts": {
     "lint": "eslint .",

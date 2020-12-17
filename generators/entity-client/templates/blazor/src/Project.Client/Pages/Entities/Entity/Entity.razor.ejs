@@ -82,18 +82,10 @@ _%>
                             <%_ relationships.forEach(relation => { 
                                 if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                             <td>
-                                <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
-                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != string.Empty)
-                                <%_ } else { _%>
-                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != 0)
-                                <%_ } _%>
+                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %> != null)
                                 {
                                     <div>
-                                        <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
-                                        <span>@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id</span>
-                                        <%_ } else { _%>
-                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id/view">@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id</a>
-                                        <%_ } _%>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>.Id/view">@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>.Id</a>
                                     </div>
                                 }
                             </td>
