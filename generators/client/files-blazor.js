@@ -27,6 +27,17 @@ const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const files = {
+    blazorAutoMapperProfiles: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/AutoMapper/AutoMapperProfile.cs',
+                    renameTo: generator => `${generator.mainClientDir}/AutoMapper/AutoMapperProfile.cs`,
+                },
+            ],
+        },        
+    ],
     blazorAppModels: [
         {
             path: CLIENT_SRC_DIR,
