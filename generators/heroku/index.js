@@ -349,7 +349,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     herokuAppName: this.herokuAppName,
                     herokuDeployType: this.herokuDeployType,
                     herokuJavaVersion: this.herokuJavaVersion,
-                    useOkta: this.useOkta,
+                    // useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
                     oktaAdminPassword: this.oktaAdminPassword,
                 });
@@ -572,12 +572,12 @@ module.exports = class extends BaseBlueprintGenerator {
                 //     done();
                 // }
 
-                if (this.useOkta) {
-                    const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
-                    ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
-                        addonCreateCallback('Okta', err, stdout, stderr);
-                    });
-                }
+                // if (this.useOkta) {
+                //     const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
+                //     ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
+                //         addonCreateCallback('Okta', err, stdout, stderr);
+                //     });
+                // }
 
                 let dbAddOn;
                 if (this.databaseType === 'postgresql') {
