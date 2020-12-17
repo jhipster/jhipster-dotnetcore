@@ -38,13 +38,13 @@
                     @foreach (var user in UserModels)
                     {
                         <tr>
-                            <td><a href="/admin/user-management/@user.Login/view">@user.Id</a></td>
+                            <td><a href="/user-management/@user.Login/view">@user.Id</a></td>
                             <td>@user.Login</td>
                             <td>@user.Email</td>
                             <td>
                                 @if (user.Activated)
                                 {
-                                    @if (AuthenticationService?.CurrentUser?.Login == user.Login)
+                                    @if (AuthenticationService.CurrentUser.Login == user.Login)
                                     {
                                         <button class="btn btn-success btn-sm" disabled @onclick=@(() => ActiveUser(user, false))>
                                             Activated
@@ -91,7 +91,7 @@
                                         <span class="d-none d-md-inline">Edit</span>
                                     </a>
 
-                                    @if (AuthenticationService?.CurrentUser?.Login == user.Login)
+                                    @if (AuthenticationService.CurrentUser.Login == user.Login)
                                     {
                                         <button type="button" @onclick=@(() => DeleteUser(user.Login)) disabled
                                                 class="btn btn-danger btn-sm">

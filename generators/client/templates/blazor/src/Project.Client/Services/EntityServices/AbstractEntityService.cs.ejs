@@ -19,26 +19,23 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using AutoMapper;
 using <%= namespace %>.Client.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Services.EntityServices
 {
-    public class AbstractEntityService<TModel, TDto> where TModel : class
-                                                     where TDto : class
+    public class AbstractEntityService<T> where T : class
     {
         private const string AuthorizationHeader = "Authorization";
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly JsonSerializerOptions _options; 
 
         protected readonly HttpClient _httpClient;
-        protected readonly IMapper _mapper;
 
         protected JwtToken JwtToken { get; set; }
         protected string BaseUrl { get; }
 
-        public AbstractEntityService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper, string baseUrl)
+        public AbstractEntityService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, string baseUrl)
         {
             _httpClient = httpClient;
             _authenticationStateProvider = authenticationStateProvider;
@@ -50,7 +47,6 @@ namespace <%= namespace %>.Client.Services.EntityServices
                 _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {JwtToken.IdToken}");
             }
             BaseUrl = baseUrl;
-            _mapper = mapper;
             _options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -62,28 +58,24 @@ namespace <%= namespace %>.Client.Services.EntityServices
             };
         }
 
-        public virtual async Task<IList<TModel>> GetAll()
+        public virtual async Task<IList<T>> GetAll()
         {
-            var resultsDto = await _httpClient.GetFromJsonAsync<IList<TDto>>(BaseUrl, _options);
-            return _mapper.Map<IList<TModel>>(resultsDto);
+            return await _httpClient.GetFromJsonAsync<IList<T>>(BaseUrl, _options);
         }
 
-        public virtual async Task<TModel> Get(string id)
+        public virtual async Task<T> Get(string id)
         {
-            var resultDto = await _httpClient.GetFromJsonAsync<TModel>($"{BaseUrl}/{id}", _options);
-            return _mapper.Map<TModel>(resultDto);
+            return await _httpClient.GetFromJsonAsync<T>($"{BaseUrl}/{id}", _options);
         }
 
-        public virtual async Task Add(TModel model)
+        public virtual async Task Add(T model)
         {
-            var dto = _mapper.Map<TDto>(model);
-            await _httpClient.PostAsJsonAsync(BaseUrl, dto, _options);
+            await _httpClient.PostAsJsonAsync(BaseUrl, model, _options);
         }
         
-        public virtual async Task Update(TModel model)
+        public virtual async Task Update(T model)
         {
-            var dto = _mapper.Map<TDto>(model);
-            await _httpClient.PutAsJsonAsync(BaseUrl, dto, _options);
+            await _httpClient.PutAsJsonAsync(BaseUrl, model, _options);
         }
 
         public virtual async Task Delete(string id)
