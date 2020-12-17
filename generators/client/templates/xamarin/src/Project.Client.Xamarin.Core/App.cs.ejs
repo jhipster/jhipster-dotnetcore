@@ -34,11 +34,18 @@ namespace <%= namespace %>.Client.Xamarin.Core
             Akavache.Registrations.Start("<%= namespace %>");
             var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("<%= namespace %>");
 
-            // TODO: Find a solution to handle certificates
-            var httpHandler = new HttpClientHandler();
-            httpHandler.ServerCertificateCustomValidationCallback = (o, cert, chain, errors) => true;
-
-            var httpClient = new HttpClient(httpHandler);
+            #if DEBUG
+            HttpClientHandler handler = new HttpClientHandler();
+            new HttpClientHandler().ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            {
+                if (cert.Issuer.Equals("CN=localhost"))
+                    return true;
+                return errors == System.Net.Security.SslPolicyErrors.None;
+            };
+            HttpClient httpClient = new HttpClient(handler);
+            #else
+            HttpClient httpClient = new HttpClient();
+            #endif
             httpClient.BaseAddress = new Uri(Configuration.BaseUri);
 
             var authenticationService = new AuthenticationService(httpClient, log);

@@ -21,6 +21,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.Services
 {
     public static class Configuration
     {
-        public const string BaseUri = "https://10.0.2.2:5001/";
+        public static string BaseUri =
+            Device.RuntimePlatform == Device.Android ? "https://10.0.2.2:5001/" : "https://localhost:5001/";
     }
 }
