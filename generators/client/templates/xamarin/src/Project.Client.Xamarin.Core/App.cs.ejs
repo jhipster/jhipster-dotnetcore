@@ -34,6 +34,7 @@ namespace <%= namespace %>.Client.Xamarin.Core
             Akavache.Registrations.Start("<%= namespace %>");
             var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("<%= namespace %>");
 
+            // TODO: Find a solution to handle certificates
             var httpHandler = new HttpClientHandler();
             httpHandler.ServerCertificateCustomValidationCallback = (o, cert, chain, errors) => true;
 

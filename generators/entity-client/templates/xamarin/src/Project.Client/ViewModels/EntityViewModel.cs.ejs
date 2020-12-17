@@ -45,7 +45,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
 {
     public class <%= entityClassName %>ViewModel : MvxViewModel
     {
-        private readonly I<%= entityClassName %>Service _myEntityService;
+        private readonly I<%= entityClassName %>Service _<%= entityVariableName %>Service;
         private readonly IMvxNavigationService _navigationService;
 
         private <%= asModel(entityClassName) %> _currentElement;
@@ -121,11 +121,10 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         <%_ } _%>
         <%_ } _%>
         
-
-        public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, I<%= entityClassName %>Service myEntityService)
+        public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, I<%= entityClassName %>Service <%= entityVariableName %>Service)
         {
             _navigationService = navigationService;
-            _myEntityService = myEntityService;
+            _<%= entityVariableName %>Service = <%= entityVariableName %>Service;
         }
 
         public async Task AddCommandClicked()
@@ -140,7 +139,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
                 Id = null
             };
 
-            await _myEntityService.CreateEntity(entity);
+            await _<%= entityVariableName %>Service.CreateEntity(entity);
             await RefreshList();
         }
 
@@ -148,7 +147,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
         {
             if (CurrentElement.Id.HasValue)
             {
-                await _myEntityService.DeleteEntity(CurrentElement.Id.Value);
+                await _<%= entityVariableName %>Service.DeleteEntity(CurrentElement.Id.Value);
                 await RefreshList();
             }  // TODO: Handle errors
         }
@@ -160,13 +159,13 @@ namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
             _%>
             CurrentElement.<%= fieldNamePascalized %> = <%= fieldNamePascalized %>;                     
             <%_ } _%>
-            await _myEntityService.UpdateEntity(CurrentElement);
+            await _<%= entityVariableName %>Service.UpdateEntity(CurrentElement);
             await RefreshList();
         }
 
         public async Task RefreshList()
         {
-            ListElement = await _myEntityService.GetEntities();
+            ListElement = await _<%= entityVariableName %>Service.GetEntities();
         }
 
         public override async Task Initialize()

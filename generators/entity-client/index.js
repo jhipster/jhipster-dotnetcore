@@ -57,7 +57,7 @@ module.exports = class extends EntityClientGenerator {
     }
 
     rebuildClient() {
-        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework !== BLAZOR) {
+        if (!this.options['skip-install'] && !this.skipClient && this.clientFramework !== BLAZOR && this.clientFramework !== XAMARIN) {
             const done = this.async();
             this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
             this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(
