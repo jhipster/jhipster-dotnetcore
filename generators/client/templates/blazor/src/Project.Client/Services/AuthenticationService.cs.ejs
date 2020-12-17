@@ -19,8 +19,10 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Blazored.SessionStorage;
 using <%= namespace %>.Client.Models;
+using <%= namespace %>.Dto;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Services
@@ -34,15 +36,17 @@ namespace <%= namespace %>.Client.Services
 
         private readonly HttpClient _httpClient;
         private readonly ISyncSessionStorageService _sessionStorage;
+        private readonly IMapper _mapper;
 
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
         public JwtToken JwtToken { get; set; }
         
-        public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage)
+        public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage, IMapper mapper)
         {
             _httpClient = httpClient;
             _sessionStorage = sessionStorage;
+            _mapper = mapper;
             _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
             var token = _sessionStorage.GetItem<string>(JhiAuthenticationtoken);
             if (!string.IsNullOrEmpty(token))
@@ -54,7 +58,8 @@ namespace <%= namespace %>.Client.Services
         
         public async Task<bool> SignIn(LoginModel loginModel)
         {
-            var result = await _httpClient.PostAsJsonAsync(AuthenticatationUrl, loginModel);
+            var loginDto = _mapper.Map<LoginDto>(loginModel);
+            var result = await _httpClient.PostAsJsonAsync(AuthenticatationUrl, loginDto);
             if (result.IsSuccessStatusCode)
             {
                 JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
@@ -81,7 +86,8 @@ namespace <%= namespace %>.Client.Services
             _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {jwtToken.IdToken}");
             try
             {
-                CurrentUser = await _httpClient.GetFromJsonAsync<UserModel>(AccountUrl);
+                var userDto = await _httpClient.GetFromJsonAsync<UserDto>(AccountUrl);
+                CurrentUser = _mapper.Map<UserModel>(userDto);
             }
             catch
             {

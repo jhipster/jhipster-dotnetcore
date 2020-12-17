@@ -70,17 +70,25 @@ namespace <%= namespace %>.Dto {
             const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
             const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
             const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
-            if (relationshipType === 'one-to-one'){_%>
-        public <%= asDto(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
-            <%_}
+            if (relationshipType === 'one-to-one'){ 
+                if(otherEntityNamePascalized === 'User') { _%>
+        public string UserId { get; set; } 
+                <%_ } else { _%>
+        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
+                <%_ }
+            }
             if(relationshipType === 'one-to-many') { _%>
         public IList<<%= asDto(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asDto(otherEntityNamePascalized) %>>();
             <%_  } else if (relationshipType === 'many-to-one') {
                 if (relationshipRequired) { _%>
         [Required]
-                <%_ } _%>
-        public <%= asDto(otherEntityNamePascalized) %> <%= relationshipFieldNamePascalized %> { get; set; }
-            <%_  } else if (relationshipType === 'many-to-many') {
+                <%_ }
+                if(otherEntityNamePascalized === 'User') { _%>
+        public string UserId { get; set; } 
+                <%_ } else { _%>
+        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
+                <%_ }
+                } else if (relationshipType === 'many-to-many') {
                 const ownerSide = relationships[idx].ownerSide; _%>
 
                 <%_ if (!ownerSide) { _%>
