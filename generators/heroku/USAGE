@@ -1,0 +1,9 @@
+Description:
+    Initializes a Heroku app and generates that is ready to push to Heroku.
+
+Example:
+    jhipster heroku
+
+    This will create:
+        Procfile
+        package.json (required by heroku/nodejs buildpack, a pre-requisite to build the client application)
