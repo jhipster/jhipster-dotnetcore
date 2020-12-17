@@ -442,7 +442,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                const child = ChildProcess.exec(`heroku create ${this.herokuAppName}${regionParams}`, (err, stdout, stderr) => {
+                const herokuCreateCmd = `heroku create ${this.herokuAppName}${regionParams}`;
+                const child = ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
                             const prompts = [
@@ -467,7 +468,8 @@ module.exports = class extends BaseBlueprintGenerator {
                             this.log('');
                             this.prompt(prompts).then(props => {
                                 if (props.herokuForceName === 'Yes') {
-                                    ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                    const herokuRemoteAddCmd = `heroku git:remote --app ${this.herokuAppName}`;
+                                    ChildProcess.exec(herokuRemoteAddCmd, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -481,7 +483,8 @@ module.exports = class extends BaseBlueprintGenerator {
                                         done();
                                     });
                                 } else {
-                                    ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
+                                    const herokuCreateCmd = `heroku create ${regionParams}`;
+                                    ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -494,7 +497,8 @@ module.exports = class extends BaseBlueprintGenerator {
                                             this.log(stdout.trim());
 
                                             // ensure that the git remote is the same as the appName
-                                            ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                                            const herokuRemoteAddCmd = `heroku git:remote --app ${this.herokuAppName}`;
+                                            ChildProcess.exec(herokuRemoteAddCmd, (err, stdout, stderr) => {
                                                 if (err) {
                                                     this.abort = true;
                                                     this.log.error(err);
@@ -569,7 +573,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 // }
 
                 if (this.useOkta) {
-                    ChildProcess.exec(`heroku addons:create okta --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                    const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
+                    ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
                         addonCreateCallback('Okta', err, stdout, stderr);
                     });
                 }
@@ -585,7 +590,8 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-                    ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
+                    const herokuAddDbAddonCmd = `heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`;
+                    ChildProcess.exec(herokuAddDbAddonCmd, (err, stdout, stderr) => {
                         addonCreateCallback('Database', err, stdout, stderr);
                     });
                 } else {
