@@ -26,9 +26,9 @@ This blueprint is an official blueprint of JHipster [official-blueprints](https:
 
 # Docs
 
-Documentation and information about  `JHipster.NET ` is available [here](https://jhipsternet.readthedocs.io/en/latest/)
+Documentation and information about  `JHipster.NET` are available [here](https://jhipsternet.readthedocs.io/en/latest/)
 
-Full documentation and information about JHipster is available [here](https://www.jhipster.tech/) 
+Full documentation and information about JHipster are available [here](https://www.jhipster.tech/)
 
 # Analysis of the sample project 
 https://github.com/jhipster/jhipster-sample-app-dotnetcore
