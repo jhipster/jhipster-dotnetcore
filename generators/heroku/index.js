@@ -443,6 +443,13 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
                 const herokuCreateCmd = `heroku create ${this.herokuAppName}${regionParams}`;
+                // const childdddd = ChildProcess.execFile(
+                //     'heroku',
+                //     ['create', this.herokuAppName, regionParams],
+                //     { shell: false },
+                //     (err, stdout, stderr) => {}
+                // );
+                // const child = ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
                 const child = ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
@@ -591,7 +598,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
                     const herokuAddDbAddonCmd = `heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`;
-                    ChildProcess.exec(herokuAddDbAddonCmd, (err, stdout, stderr) => {
+                    ChildProcess.exec(herokuAddDbAddonCmd, { shell: false }, (err, stdout, stderr) => {
                         addonCreateCallback('Database', err, stdout, stderr);
                     });
                 } else {
