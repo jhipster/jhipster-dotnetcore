@@ -38,6 +38,7 @@ namespace <%= namespace %>.Client.Models
     {
         public long Id { get; set; }
         <%_ for (idx in fields){
+            if (fields[idx].id) continue;
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
             const fieldValidateRules = fields[idx].fieldValidateRules;
