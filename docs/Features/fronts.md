@@ -13,7 +13,7 @@ React (also known as React.js or ReactJS) is an open-source, front end, JavaScri
 
 ## Alpha - Blazor
 
-Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML
+Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML.
 
 ## Alpha - Xamarin
 
@@ -27,6 +27,10 @@ With a C#-shared codebase, developers can use Xamarin tools to write native Andr
 - [System.Net.Http.Json](https://www.nuget.org/packages/System.Net.Http.Json/) >= 3.2.1
 - [Xamarin.Forms](https://www.nuget.org/packages/Xamarin.Forms) >= 4.6.0
 - [Xamarin.Essential](https://www.nuget.org/packages/Xamarin.Essentials/) >=1.5.3
+
+### Why Xamarin
+
+Xamarin allows to take advantage of this blueprint. Indeed, it enables to generate a modern cross platform application with both front-end and back-end in C#.
 
 ### Structure
 
