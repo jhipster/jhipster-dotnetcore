@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
+const baseUtils = require('generator-jhipster/generators/utils');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
@@ -121,7 +122,6 @@ module.exports = class extends EntityGenerator {
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
-                        field.enumValues = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                     }
                 });
             },
