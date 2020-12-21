@@ -39,11 +39,13 @@ WORKDIR /app
 EXPOSE 80
 COPY --from=build /app/out .
 
+ENV ASPNETCORE_ENVIRONMENT=Production
+
 # See: https://github.com/dotnet/announcements/issues/20
-# Uncomment to enable globalization APIs (or delete)
-#ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
-#RUN apk add --no-cache icu-libs
-#ENV LC_ALL en_US.UTF-8
-#ENV LANG en_US.UTF-8
+# Comment to Disable globalization APIs (or delete)
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+RUN apk add --no-cache icu-libs
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
 
 ENTRYPOINT ["dotnet", "<%= kebabCasedBaseName %>.dll"]
