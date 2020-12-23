@@ -58,7 +58,7 @@
     "nyc": "15.1.0",
     "sinon": "9.2.2",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "3.0.0",
+    "yeoman-test": "4.0.0",
     "sonarqube-scanner": "2.8.0"
   },
   "scripts": {
