@@ -61,10 +61,6 @@ or with jdl (https://start.jhipster.tech/jdl-studio/)
 jhipster import-jdl my_file.jdl
 ```
 
-### Authorizations
-
-TODO
-
 ### Tools 
 
 As the project used SASS, to install and consume scss third parties libraries like bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
