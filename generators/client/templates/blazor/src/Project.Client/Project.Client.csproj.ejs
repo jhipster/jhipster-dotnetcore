@@ -73,8 +73,8 @@
   </Target>
 
   <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">
-    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -m disable" Condition="'$(Configuration)'=='Debug'" StandardOutputImportance="high" />
-    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -p disable" Condition="'$(Configuration)'=='Release'" StandardOutputImportance="high" />
+    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable" Condition="'$(Configuration)'=='Debug'" StandardOutputImportance="high" />
+    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable" Condition="'$(Configuration)'=='Release'" StandardOutputImportance="high" />
   </Target>
 
   <ItemGroup>
