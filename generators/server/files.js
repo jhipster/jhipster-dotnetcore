@@ -1128,6 +1128,17 @@ const serverFiles = {
             ],
         },
     ],
+   /* serverBuildTargets: [
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Directory.Build.targets',
+                    template: generator => `Directory.Build.targets`,
+                },
+            ],
+        },
+    ],*/
 };
 
 const gatlingTestsFiles = {
