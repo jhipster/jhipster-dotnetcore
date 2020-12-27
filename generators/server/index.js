@@ -25,7 +25,6 @@ const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const writeFiles = require('./files').writeFiles;
 const prompts = require('./prompts');
 const packagejs = require('../../package.json');
-const fs = require('fs');
 
 module.exports = class extends ServerGenerator {
     constructor(args, opts) {
@@ -111,28 +110,11 @@ module.exports = class extends ServerGenerator {
 
     get default() {
         // Here we are not overriding this phase and hence its being handled by JHipster
-        return {
-            ...super._default(),
-            /*renameDirectoryTargetsFile() {
-                this.fs.copyTpl(
-                    this.templatePath(`${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
-                    this.destinationPath(`Directory.Build.targets`)
-                );
-            }*/
-        }
+        return super._default();
     }
 
     get writing() {
-        return {
-            ...writeFiles.call(this), 
-            renameDirectoryTargetsFile() {
-                this.fs.copyTpl(
-                    this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
-                    this.destinationPath(`Directory.Build.targets`),
-                    this
-                );
-            }
-        }
+        return writeFiles.call(this);
     }
 
     get end() {

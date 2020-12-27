@@ -1128,17 +1128,6 @@ const serverFiles = {
             ],
         },
     ],
-   /* serverBuildTargets: [
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Directory.Build.targets',
-                    template: generator => `Directory.Build.targets`,
-                },
-            ],
-        },
-    ],*/
 };
 
 const gatlingTestsFiles = {
@@ -1183,6 +1172,13 @@ function writeFiles() {
         },
         writeFilesBaseServiceDiscovery() {
             this.writeFilesToDisk(baseServiceDiscoveryFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src/main'));
+        },
+        writeDirectoryTargetsFile() {
+            this.fs.copyTpl(
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
+                this.destinationPath('Directory.Build.targets'),
+                this
+            );
         },
     };
 }
