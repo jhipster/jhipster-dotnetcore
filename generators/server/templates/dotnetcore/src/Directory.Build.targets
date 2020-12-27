@@ -89,7 +89,7 @@
 		<%_ break;
 		case 'oracle': _%>
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion) />
+	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Oracle.EntityFrameworkCore" Version="3.19.80" />
 	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="2.19.91" />
