@@ -36,7 +36,7 @@ namespace <%= namespace %>.Client.Xamarin.Core
 
             #if DEBUG
             HttpClientHandler handler = new HttpClientHandler();
-            new HttpClientHandler().ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
             {
                 if (cert.Issuer.Equals("CN=localhost"))
                     return true;

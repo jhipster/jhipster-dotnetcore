@@ -19,6 +19,13 @@ Blazor is a free and open-source web framework that enables developers to create
 
 With a C#-shared codebase, developers can use Xamarin tools to write native Android, iOS, and Windows apps with native user interfaces and share code across multiple platforms, including Windows, macOS, and Linux.
 
+### Available features
+
+- Handle registration and connection.
+- Sidebar menu to navigate through pages.
+- Entities and users management.
+- Auto-generated entity models, services, views and viewmodels.
+
 ### NuGet requirements
 
 - [akavache](https://www.nuget.org/packages/akavache/) >= 7.1.1
