@@ -73,9 +73,9 @@
   </Target>
 
   <Target Name="CompileStaticAssets" AfterTargets="AfterBuild">
-    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable" StandardOutputImportance="high" />
-    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable -m disable" StandardOutputImportance="high" />
-   </Target>
+    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable" Condition="'$(Configuration)'=='Debug'" StandardOutputImportance="high" />
+    <Exec Command="webcompiler -r wwwroot/content/scss -o wwwroot/content/css -z disable -p disable" Condition="'$(Configuration)'=='Release'" StandardOutputImportance="high" />
+  </Target>
 
   <ItemGroup>
     <!--specify file extensions here as needed-->

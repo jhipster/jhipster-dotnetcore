@@ -20,6 +20,7 @@ const shelljs = require('shelljs');
 const fs = require('fs');
 const { Guid } = require('js-guid');
 const _ = require('lodash');
+const chalk = require('chalk');
 
 function exec(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -34,12 +35,13 @@ function exec(cmd, opts = {}) {
 
 function hasDotnet() {
     return new Promise((resolve, reject) => {
-        if (!shelljs.which('dotnet')) {
+        if (!shelljs.exec('dotnet', { silent: true })) {
             return reject(Error("'dotnet' not found in the PATH."));
         }
         return resolve();
     });
 }
+
 async function newSln(solutionName) {
     await hasDotnet();
     try {
@@ -94,6 +96,34 @@ async function newSlnAddProj(solutionName, projects) {
     if (solutionFile !== newBody) {
         fs.writeFileSync(`${solutionName}.sln`, newBody);
     }
+
+function installBlazorDependencies() {
+    if (!libmanIsInstalled()) {
+        if (shelljs.exec('dotnet tool install -g Microsoft.Web.LibraryManager.Cli').code !== 0) {
+            throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
+        }
+        console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
+    }
+    if (!webcompilerIsInstalled()) {
+        if (shelljs.exec('dotnet tool install Excubo.WebCompiler --global').code !== 0) {
+            throw new Error('Could not install Excubo.WebCompiler');
+        }
+        console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
+    }
+}
+
+function libmanIsInstalled() {
+    if (shelljs.exec('libman', { silent: true }).code !== 0) {
+        return false;
+    }
+    return true;
+}
+
+function webcompilerIsInstalled() {
+    if (shelljs.exec('webcompiler', { silent: true }).code !== 0) {
+        return false;
+    }
+    return true;
 }
 
 async function restore() {
@@ -107,4 +137,5 @@ module.exports = {
     newSln,
     slnAdd,
     restore,
+    installBlazorDependencies,
 };
