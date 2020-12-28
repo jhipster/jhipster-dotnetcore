@@ -7,6 +7,7 @@ const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
 @page "/<%= lowerCasedEntityClass %>/{Id:int}/view"
 @using Microsoft.AspNetCore.Authorization
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 

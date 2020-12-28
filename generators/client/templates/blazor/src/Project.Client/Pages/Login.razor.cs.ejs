@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Pages
 {
-    public partial class Login
+    public partial class Login : ComponentBase
     {
         [Inject]
         public AuthenticationStateProvider AuthenticationService { get; set; }
