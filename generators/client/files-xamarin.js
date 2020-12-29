@@ -32,15 +32,6 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Client.Xamarin.Core/Models/AbstractEntityModel.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Models/AbstractEntityModel.cs`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
                     file: 'Project.Client.Xamarin.Core/Models/RegisterResultRequest.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/RegisterResultRequest.cs`,
                 },

@@ -34,7 +34,7 @@
                 "--blueprints",
                 "dotnetcore"
                 ],
-            "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
+            "cwd": "E:/bureau/blue",
             "console": "integratedTerminal"
         },
         {
@@ -47,7 +47,7 @@
                 "BankAccount",
                 "--force"
             ],
-            "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
+            "cwd": "E:/bureau/blue",
             "console": "integratedTerminal"
         },
         {
