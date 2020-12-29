@@ -96,6 +96,7 @@ async function newSlnAddProj(solutionName, projects) {
     if (solutionFile !== newBody) {
         fs.writeFileSync(`${solutionName}.sln`, newBody);
     }
+}
 
 function installBlazorDependencies() {
     if (!libmanIsInstalled()) {
