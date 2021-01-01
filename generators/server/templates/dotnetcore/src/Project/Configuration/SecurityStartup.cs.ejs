@@ -150,9 +150,11 @@ namespace <%= namespace %>.Configuration {
             <%_ if (authenticationType === 'oauth2') { _%>
             app.UseAuthorization();
             <%_ } _%>
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-            app.UseHttpsRedirection();
+            if(jhipsterSettings.Security.EnforceHttps)
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
             return app;
         }
 

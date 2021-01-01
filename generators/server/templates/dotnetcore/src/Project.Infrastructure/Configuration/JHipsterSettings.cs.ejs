@@ -21,6 +21,7 @@ namespace <%= namespace %>.Infrastructure.Configuration {
 
     public class Security {
         public Authentication Authentication { get; set; }
+        public bool EnforceHttps { get; set; }
     }
 
     <%_ if (authenticationType === 'jwt') { _%>

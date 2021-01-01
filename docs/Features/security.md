@@ -16,6 +16,22 @@ You can find the jwt configuration in `appsettings.json`
     },
 ```
 
+## Enforce HTTPS
+
+You can enforce HTTPS  by setting  `"EnforceHttps":  true` in `appsettings.json`.
+
+```json
+"Security": {
+      "Authentication": {
+        ...
+      },
+      "EnforceHttps":  true
+    },
+```
+
+For more details, please see [Enforce HTTPS in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#http-strict-transport-security-protocol-hsts)
+
+
 ## OAuth2 and OpenID Connect
 
 OAuth is a stateful security mechanism, like HTTP Session. Spring Security provides excellent OAuth 2.0 and OIDC support, and this is leveraged by JHipster. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
