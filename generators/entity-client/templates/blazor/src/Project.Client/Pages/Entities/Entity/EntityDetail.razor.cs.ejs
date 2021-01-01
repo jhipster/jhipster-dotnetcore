@@ -44,7 +44,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         {
             if (Id != 0)
             {
-                <%= entityClassName %> = await <%= entityClassName %>Service.Get(Id.ToString()); 
+                <%= entityClassName %> = await <%= entityClassName %>Service.Get(Id.ToString());
             }
         }
 

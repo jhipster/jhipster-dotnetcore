@@ -27,7 +27,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Services
 {
-    public class AuthenticationService : AuthenticationStateProvider,IAuthenticationService
+    public class AuthenticationService : AuthenticationStateProvider, IAuthenticationService
     {
         private const string AuthenticatationUrl = "/api/authenticate";
         private const string AccountUrl = "/api/account";

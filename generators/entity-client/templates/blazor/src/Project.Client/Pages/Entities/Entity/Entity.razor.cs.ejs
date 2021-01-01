@@ -53,7 +53,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             if (!deleteResult.Cancelled)
             {
                 await <%= entityClassName %>Service.Delete(<%= lowerCasedEntityClassPlural %>Id.ToString());
-                <%= entityClassNamePluralized %>.Remove(<%= entityClassNamePluralized %>.First(<%= lowerCasedEntityClassPlural %> => <%= lowerCasedEntityClassPlural %>.Id.Equals(<%= lowerCasedEntityClassPlural %>Id))); 
+                <%= entityClassNamePluralized %>.Remove(<%= entityClassNamePluralized %>.First(<%= lowerCasedEntityClassPlural %> => <%= lowerCasedEntityClassPlural %>.Id.Equals(<%= lowerCasedEntityClassPlural %>Id)));
             }
         }
     }

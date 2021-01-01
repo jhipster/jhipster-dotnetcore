@@ -44,7 +44,7 @@ namespace <%= namespace %>.Client.Pages.Admin.UserManagement
         {
             UserModels = await UserService.GetAll();
         }
-        
+
         private async Task ActiveUser(UserModel user, bool activated)
         {
             user.Activated = activated;

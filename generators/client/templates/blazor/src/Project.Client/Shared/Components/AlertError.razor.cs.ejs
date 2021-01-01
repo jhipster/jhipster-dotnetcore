@@ -61,7 +61,7 @@ namespace <%= namespace %>.Client.Shared.Components
         public IReadOnlyCollection<JhiAlert> GetAlerts()
         {
             return Alerts.AsReadOnly();
-    }
+        }
 
         private void HandleErrors(object s, HttpClientInterceptorEventArgs e)
         {

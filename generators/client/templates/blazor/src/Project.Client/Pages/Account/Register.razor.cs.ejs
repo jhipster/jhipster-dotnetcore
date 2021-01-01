@@ -29,7 +29,7 @@ namespace <%= namespace %>.Client.Pages.Account
     public partial class Register : ComponentBase
     {
         [Inject]
-        private IRegisterService RegisterService{ get; set; }
+        private IRegisterService RegisterService { get; set; }
 
         [CascadingParameter]
         private IModalService ModalService { get; set; }

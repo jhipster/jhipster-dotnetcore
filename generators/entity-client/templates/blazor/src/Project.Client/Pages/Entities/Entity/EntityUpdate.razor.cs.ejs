@@ -117,7 +117,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
             if (Selected<%= relation.relationshipFieldNamePascalizedPlural %> != null)
             {
-                <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList(); 
+                <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList();
             }
             else 
             {
