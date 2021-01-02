@@ -31,6 +31,7 @@ You can also find lot of information in https://www.jhipster.tech
   Features/code-analysis
   Features/monitoring
   Features/security
+  Features/dependencies-management
 
 .. toctree::
   :maxdepth: 3
