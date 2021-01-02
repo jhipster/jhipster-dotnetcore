@@ -36,7 +36,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
     {
         [Parameter]
         public int Id { get; set; }
-        
+
         [Inject]
         private I<%= entityClassName %>Service <%= entityClassName %>Service { get; set; }
 
@@ -97,7 +97,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                 <%= relation.otherEntityNamePascalized %>Id = <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalized %>Id;
                     <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
-                Selected<%= relation.relationshipFieldNamePascalizedPlural %> =  new List<long>(<%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id));
+                Selected<%= relation.relationshipFieldNamePascalizedPlural %> = new List<long>(<%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id));
                     <%_ }
                 }); _%>
             }
@@ -118,7 +118,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             {
                 <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList();
             }
-            else 
+            else
             {
                 <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = null;
             }

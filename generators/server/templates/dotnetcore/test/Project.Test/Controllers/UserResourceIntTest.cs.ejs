@@ -121,7 +121,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = DefaultImageurl,
                 LangKey = DefaultLangkey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -158,7 +159,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = DefaultImageurl,
                 LangKey = DefaultLangkey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -416,8 +418,8 @@ namespace <%= namespace %>.Test.Controllers
             // Validate the User in the database
             var userList = _userManager.Users.ToList();
             userList.Count().Should().Be(databaseSizeBeforeUpdate);
-//            var testUser = userList[userList.Count - 1];
-//            TODO FIX database refresh to prevent the usage of context/Reload
+            //            var testUser = userList[userList.Count - 1];
+            //            TODO FIX database refresh to prevent the usage of context/Reload
             var testUser = Fixme.ReloadUser(_factory, updatedUser);
             testUser.FirstName.Should().Be(UpdatedFirstname);
             testUser.LastName.Should().Be(UpdatedLastname);
@@ -460,7 +462,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = updatedUser.Activated,
                 ImageUrl = updatedUser.ImageUrl,
                 LangKey = updatedUser.LangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -547,8 +550,8 @@ namespace <%= namespace %>.Test.Controllers
             // Validate the User in the database
             var userList = _userManager.Users.ToList();
             userList.Count().Should().Be(databaseSizeBeforeUpdate);
-//            var testUser = userList[userList.Count - 1];
-//            TODO FIX database refresh to prevent the usage of context/Reload
+            //            var testUser = userList[userList.Count - 1];
+            //            TODO FIX database refresh to prevent the usage of context/Reload
             var testUser = Fixme.ReloadUser(_factory, updatedUser);
             testUser.Login.Should().Be(UpdatedLogin);
             testUser.FirstName.Should().Be(UpdatedFirstname);

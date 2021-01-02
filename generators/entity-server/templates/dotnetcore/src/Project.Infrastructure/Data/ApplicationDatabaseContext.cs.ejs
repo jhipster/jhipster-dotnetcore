@@ -83,7 +83,7 @@ namespace <%= namespace %>.Infrastructure.Data
 
             builder.Entity<UserRole>(userRole =>
             {
-                userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 userRole.HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)
@@ -103,7 +103,7 @@ namespace <%= namespace %>.Infrastructure.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
             <%_ } _%>
-            
+
             <%_ entities.forEach(entity => {
                 fields.forEach(field => {
                     if (entity.name == entityClass && field.fieldIsEnum){ _%>
@@ -134,7 +134,7 @@ namespace <%= namespace %>.Infrastructure.Data
                 .HasMany(x => x.<%= relationshipNamePascalizedPlural %>)
                 .WithMany(x => x.<%= otherEntityRelationshipNamePascalizedPlural %>)
                 .UsingEntity<Dictionary<string, object>>(
-                    "<%= joinEntityClassNamePascalizedPlural %>", 
+                    "<%= joinEntityClassNamePascalizedPlural %>",
                     x => x.HasOne<<%= nonOwnerRelationshipFieldName %>>().WithMany(),
                     x => x.HasOne<<%= ownerRelationshipFieldName %>>().WithMany());
 
@@ -157,7 +157,7 @@ namespace <%= namespace %>.Infrastructure.Data
                 .HasMany(x => x.<%= relationshipNamePascalizedPlural %>)
                 .WithMany(x => x.<%= otherEntityRelationshipNamePascalizedPlural %>)
                 .UsingEntity<Dictionary<string, object>>(
-                    "<%= joinEntityClassNamePascalizedPlural %>", 
+                    "<%= joinEntityClassNamePascalizedPlural %>",
                     x => x.HasOne<<%= nonOwnerRelationshipFieldName %>>().WithMany(),
                     x => x.HasOne<<%= ownerRelationshipFieldName %>>().WithMany());
 

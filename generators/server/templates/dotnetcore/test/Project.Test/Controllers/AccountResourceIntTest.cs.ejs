@@ -414,8 +414,8 @@ namespace <%= namespace %>.Test.Controllers
 
             var user = await userManager.FindByNameAsync(validUser.Login);
             user.Should().NotBeNull();
-//            user.Roles.Count.Should().Be(1);
-//            user.Roles.Should().Contain(role => role.Name == RolesConstants.USER);
+            //            user.Roles.Count.Should().Be(1);
+            //            user.Roles.Should().Contain(role => role.Name == RolesConstants.USER);
         }
 
         [Fact]

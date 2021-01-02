@@ -27,7 +27,7 @@ using Winton.Extensions.Configuration.Consul;
 <%_ } _%>
 using static JHipsterNet.Core.Boot.BannerPrinter;
 
-namespace <%= namespace %> 
+namespace <%= namespace %>
 {
     public class Program
     {
@@ -70,20 +70,16 @@ namespace <%= namespace %>
                     .Run();
 
                 return 0;
-
             }
             catch (Exception ex)
             {
                 // Use ForContext to give a context to this static environment (for Serilog LoggerNameEnricher).
                 Log.ForContext<Program>().Fatal(ex, $"Host terminated unexpectedly");
                 return 1;
-
             }
             finally
             {
-
                 Log.CloseAndFlush();
-
             }
         }
 
@@ -117,7 +113,7 @@ namespace <%= namespace %>
             {
                 if (int.TryParse(appConfiguration.GetSection(SerilogSection)[SyslogPort], out var portFromConf))
                 {
-                    port = portFromConf; 
+                    port = portFromConf;
                 }
             }
 

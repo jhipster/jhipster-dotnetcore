@@ -42,7 +42,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
             }); _%>
-            
+
             if (<%= camelCasedEntityClass %>.Id != 0 && exists)
             {
                 Update(<%= camelCasedEntityClass %>);

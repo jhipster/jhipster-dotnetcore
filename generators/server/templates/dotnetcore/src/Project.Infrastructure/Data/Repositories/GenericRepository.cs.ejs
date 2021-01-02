@@ -49,8 +49,8 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
+        }
 
-        
         public virtual async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
         {
             return await _dbSet.UsePageableAsync(pageable);

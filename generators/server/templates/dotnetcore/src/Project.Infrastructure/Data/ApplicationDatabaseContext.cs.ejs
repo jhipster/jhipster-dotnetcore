@@ -59,10 +59,10 @@ namespace <%= namespace %>.Infrastructure.Data
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-    
+
             builder.Entity<UserRole>(userRole =>
             {
-                userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 userRole.HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)

@@ -34,7 +34,7 @@ using Newtonsoft.Json;
 
 [assembly: ApiController]
 
-namespace <%= namespace %> 
+namespace <%= namespace %>
 {
     public class Startup
     {
@@ -101,7 +101,7 @@ namespace <%= namespace %>
                 .UseConsul(Configuration)
                 <%_ } _%>
                 .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2' || applicationType === 'microservice') { _%>;<%_ } _%>
-                
+
                 <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>

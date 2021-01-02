@@ -50,9 +50,7 @@ namespace <%= namespace %>.Configuration.AutoMapper
             else {
                 if(dto === 'mapstruct') { _%>
             CreateMap<<%= entityClassName %>, <%= asDto(entityClassName) %>>().ReverseMap();
-                <%_
-            }} _%>
-            %>
+            <%_ }} _%>
         }
     }
 }

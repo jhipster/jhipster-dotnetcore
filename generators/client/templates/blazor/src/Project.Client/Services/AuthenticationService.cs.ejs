@@ -63,7 +63,7 @@ namespace <%= namespace %>.Client.Services
             if (result.IsSuccessStatusCode)
             {
                 JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
-                _sessionStorage.SetItem(JhiAuthenticationtoken, JwtToken.IdToken); 
+                _sessionStorage.SetItem(JhiAuthenticationtoken, JwtToken.IdToken);
                 await SetUserAndAuthorizationHeader(JwtToken);
             }
             return IsAuthenticated;
