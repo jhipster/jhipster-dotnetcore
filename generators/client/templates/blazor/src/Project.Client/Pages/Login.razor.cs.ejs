@@ -37,7 +37,7 @@ namespace <%= namespace %>.Client.Pages
         private async Task HandleSubmit()
         {
             var result = await (AuthenticationService as IAuthenticationService).SignIn(LoginModel);
-            IsAuthenticateError = !result; 
+            IsAuthenticateError = !result;
             LoginModel = new LoginModel();
             if (result)
             {

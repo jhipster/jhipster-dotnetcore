@@ -79,7 +79,7 @@ namespace <%= namespace %>.Client.Services.EntityServices
             var dto = _mapper.Map<TDto>(model);
             await _httpClient.PostAsJsonAsync(BaseUrl, dto, _options);
         }
-        
+
         public virtual async Task Update(TModel model)
         {
             var dto = _mapper.Map<TDto>(model);

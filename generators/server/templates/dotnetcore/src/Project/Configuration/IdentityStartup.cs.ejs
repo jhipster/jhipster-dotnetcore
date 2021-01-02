@@ -20,8 +20,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace <%= namespace %>.Configuration {
-    public static class IdentityConfiguration {
+namespace <%= namespace %>.Configuration
+{
+    public static class IdentityConfiguration
+    {
         public static IApplicationBuilder UseApplicationIdentity(this IApplicationBuilder builder,
             IServiceProvider serviceProvider)
         {

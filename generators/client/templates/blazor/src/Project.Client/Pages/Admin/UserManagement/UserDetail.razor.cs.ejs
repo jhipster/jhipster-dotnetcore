@@ -38,7 +38,7 @@ namespace <%= namespace %>.Client.Pages.Admin.UserManagement
             CurrentUser = null;
             if (!string.IsNullOrWhiteSpace(Id))
             {
-                CurrentUser = await UserService.Get(Id); 
+                CurrentUser = await UserService.Get(Id);
             }
         }
 

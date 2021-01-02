@@ -16,8 +16,10 @@ using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Test.Setup;
 
-namespace <%= namespace %>.Test {
-    public static class Fixme {
+namespace <%= namespace %>.Test
+{
+    public static class Fixme
+    {
         public static User ReloadUser<TEntryPoint>(NhipsterWebApplicationFactory<TEntryPoint> factory, User user)
             where TEntryPoint : class
         {

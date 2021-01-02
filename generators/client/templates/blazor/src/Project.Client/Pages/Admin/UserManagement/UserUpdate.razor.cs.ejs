@@ -54,7 +54,7 @@ namespace <%= namespace %>.Client.Pages.Admin.UserManagement
             if (!string.IsNullOrWhiteSpace(Id))
             {
                 CurrentUser = await UserService.Get(Id);
-                SelectedAuthorities = CurrentUser.Authorities; 
+                SelectedAuthorities = CurrentUser.Authorities;
                 CurrentAuthorities = new ReadOnlyCollection<string>(CurrentUser.Authorities.ToList());
             }
             else

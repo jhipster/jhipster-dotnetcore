@@ -15,8 +15,10 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace <%= namespace %>.Domain {
-    public class Role : IdentityRole<string> {
+namespace <%= namespace %>.Domain
+{
+    public class Role : IdentityRole<string>
+    {
         public ICollection<UserRole> UserRoles { get; set; }
     }
 }

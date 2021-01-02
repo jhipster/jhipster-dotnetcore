@@ -38,9 +38,11 @@ using <%= namespace %>.Crosscutting.Enums;
 using Newtonsoft.Json;
 <%_ } _%>
 
-namespace <%= namespace %>.Dto {
+namespace <%= namespace %>.Dto
+{
 
-    public class <%= asDto(entityClassName) %> {
+    public class <%= asDto(entityClassName) %>
+    {
 
         public long Id { get; set; }
 

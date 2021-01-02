@@ -94,7 +94,6 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
 
-
         [Fact]
         public void Should_UpdateSelected<%= entityClassName %>_When_FormIsSubmitWithId()
         {
@@ -113,9 +112,8 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             <%= entityVariableName %>ToUpdate.Id = 1; 
 
             _<%= entityVariableName %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= entityVariableName %>ToUpdate));
-            
-            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 1));
 
+            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 1));
 
             // Act
             var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
@@ -138,7 +136,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
                 <%_ }
             }); _%>
-            
+
             var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 0));
 
             // Act

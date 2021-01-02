@@ -43,9 +43,11 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                         <%_ }
             }); _%>
             
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
+            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
+            {
                 Update(<%= camelCasedEntityClass %>);
-            } else {
+            } else
+            {
                 _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
             }
             return <%= camelCasedEntityClass %>;

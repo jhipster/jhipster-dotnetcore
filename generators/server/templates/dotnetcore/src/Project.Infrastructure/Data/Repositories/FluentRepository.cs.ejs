@@ -38,7 +38,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         private Expression<Func<TEntity, bool>> _filter;
         private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderBy;
         private bool _disableTracking;
-        
+
         public FluentRepository(IGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
         {
             _repository = repository;

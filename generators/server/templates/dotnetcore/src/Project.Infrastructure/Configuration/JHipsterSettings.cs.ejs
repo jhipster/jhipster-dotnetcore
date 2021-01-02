@@ -12,23 +12,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Infrastructure.Configuration {
-    public class JHipsterSettings {
+namespace <%= namespace %>.Infrastructure.Configuration
+{
+    public class JHipsterSettings
+    {
         public Security Security { get; set; }
 
         public Cors Cors { get; set; }
     }
 
-    public class Security {
+    public class Security
+    {
         public Authentication Authentication { get; set; }
     }
 
     <%_ if (authenticationType === 'jwt') { _%>
-    public class Authentication {
+    public class Authentication
+    {
         public Jwt Jwt { get; set; }
     }
 
-    public class Jwt {
+    public class Jwt
+    {
         public string Secret { get; set; }
         public string Base64Secret { get; set; }
         public int TokenValidityInSeconds { get; set; }
@@ -36,7 +41,8 @@ namespace <%= namespace %>.Infrastructure.Configuration {
     }
 
     <%_ } else { _%>
-    public class Authentication {
+    public class Authentication
+    {
         public OAuth2 OAuth2 { get; set; }
     }
 
@@ -54,7 +60,8 @@ namespace <%= namespace %>.Infrastructure.Configuration {
     }
     <%_ } _%>
 
-    public class Cors {
+    public class Cors
+    {
         public string AllowedOrigins { get; set; }
         public string AllowedMethods { get; set; }
         public string AllowedHeaders { get; set; }

@@ -41,7 +41,6 @@ namespace <%= namespace %>.Client.Test
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Content = new StringContent(@""),
-                
             };
 
             var alertComponent = await InitAlertErrorTest(response);

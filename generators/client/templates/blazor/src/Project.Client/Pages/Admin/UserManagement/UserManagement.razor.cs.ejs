@@ -48,7 +48,7 @@ namespace <%= namespace %>.Client.Pages.Admin.UserManagement
         private async Task ActiveUser(UserModel user, bool activated)
         {
             user.Activated = activated;
-            await UserService.Update(user); 
+            await UserService.Update(user);
         }
 
         private async Task DeleteUser(string login)

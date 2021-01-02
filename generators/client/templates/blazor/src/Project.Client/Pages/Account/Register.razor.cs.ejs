@@ -76,7 +76,8 @@ namespace <%= namespace %>.Client.Pages.Account
         private async Task HandleSubmit()
         {
             SetAllErrorFalse();
-            var result = await RegisterService.Save(new UserSaveModel{
+            var result = await RegisterService.Save(new UserSaveModel
+            {
                 Email = RegisterModel.Email,
                 Login = RegisterModel.Username,
                 Password = RegisterModel.Password,
