@@ -5,7 +5,7 @@ using JhipsterSampleApplication.Domain.Repositories.Interfaces;
 
 namespace JhipsterSampleApplication.Domain.Services
 {
-    public class CountryExtendedService : CountryService, ICountryService 
+    public class CountryExtendedService : CountryService, ICountryService
     {
         public CountryExtendedService(ICountryRepository countryRepository) : base(countryRepository)
         {
