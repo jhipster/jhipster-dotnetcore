@@ -20,9 +20,12 @@ using <%= namespace %>.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
-namespace <%= namespace %>.Domain {
-    public class User : IdentityUser, IAuditedEntityBase {
-        public string Login {
+namespace <%= namespace %>.Domain
+{
+    public class User : IdentityUser, IAuditedEntityBase
+    {
+        public string Login
+        {
             get => UserName;
             set => UserName = value;
         }

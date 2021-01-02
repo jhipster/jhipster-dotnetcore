@@ -17,14 +17,16 @@ using <%= namespace %>.Domain;
 using <%= namespace %>.Domain.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace <%= namespace %>.Domain.Services {
-    public class MailService : IMailService {
+namespace <%= namespace %>.Domain.Services
+{
+    public class MailService : IMailService
+    {
         public MailService()
         {
         }
 
         // private readonly JHipsterSettings _jhipsterSettings;
-        
+
         // public MailService(IOptions<JHipsterSettings> jhipsterSettings)
         // {
         //     _jhipsterSettings = jhipsterSettings.Value;

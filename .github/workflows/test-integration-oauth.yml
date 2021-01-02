@@ -52,8 +52,10 @@ jobs:
             - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
               run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP 
             - name: 'GENERATE JHipster.NET entities'
-              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG           
+              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN CLIENT UNIT TESTS of generated app'
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+            - name: 'VERIFY FORMAT'
+              run: ./test-integration/scripts/08-verify-format.sh $JHI_APP

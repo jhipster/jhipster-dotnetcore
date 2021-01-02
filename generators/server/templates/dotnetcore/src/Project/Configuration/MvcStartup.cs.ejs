@@ -23,8 +23,10 @@ using Newtonsoft.Json.Serialization;
 using Ocelot.Middleware;
 <%_ } _%>
 
-namespace <%= namespace %>.Configuration {
-    public static class WebConfiguration {
+namespace <%= namespace %>.Configuration
+{
+    public static class WebConfiguration
+    {
         public static IServiceCollection AddWebModule(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
@@ -35,7 +37,8 @@ namespace <%= namespace %>.Configuration {
             services.AddHealthChecks();
 
             services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
-            .AddNewtonsoftJson(options => {
+            .AddNewtonsoftJson(options =>
+            {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;

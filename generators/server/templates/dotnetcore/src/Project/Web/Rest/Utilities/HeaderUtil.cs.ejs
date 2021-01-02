@@ -14,8 +14,10 @@
 -%>
 using Microsoft.AspNetCore.Http;
 
-namespace <%= namespace %>.Web.Rest.Utilities {
-    public static class HeaderUtil {
+namespace <%= namespace %>.Web.Rest.Utilities
+{
+    public static class HeaderUtil
+    {
         private static readonly string APPLICATION_NAME = "<%= frontendAppName %>";
 
         public static IHeaderDictionary CreateAlert(string message, string param)

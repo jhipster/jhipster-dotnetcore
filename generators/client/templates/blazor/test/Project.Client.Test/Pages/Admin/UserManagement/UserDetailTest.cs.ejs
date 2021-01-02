@@ -56,7 +56,6 @@ namespace <%= namespace %>.Client.Test.Pages.Admin.UserManagement
             Services.AddSingleton<INavigationService>(_navidationService.Object);
         }
 
-
         [Fact]
         public void Should_DisplayUserLogin_When_IdIsPresent()
         {
@@ -64,7 +63,6 @@ namespace <%= namespace %>.Client.Test.Pages.Admin.UserManagement
             var user = _fixture.Create<UserModel>();
             _userService.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(user));
             var userDetail = RenderComponent<UserDetail>(ComponentParameter.CreateParameter("Id", "test"));
-            
 
             // Act
             var title = userDetail.Find("h2");
@@ -80,7 +78,7 @@ namespace <%= namespace %>.Client.Test.Pages.Admin.UserManagement
             //Arrange
             _userService.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(new UserModel()));
             var userDetail = RenderComponent<UserDetail>();
-            
+
             // Act
             var title = userDetail.Find("div.col-8");
 

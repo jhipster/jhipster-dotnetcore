@@ -20,8 +20,10 @@ using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
 using <%= namespace %>.Domain;
 
-namespace <%= namespace %>.Domain.Services.Interfaces {
-    public interface IUserService {
+namespace <%= namespace %>.Domain.Services.Interfaces
+{
+    public interface IUserService
+    {
         Task<User> CreateUser(User userToCreate);
         IEnumerable<string> GetAuthorities();
         Task DeleteUser(string login);

@@ -67,7 +67,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
 
         public <%= entityClassName %>UpdateTest()
         {
-            _<%= entityVariableName %>Service = new Mock<I<%= entityClassName %>Service>();                
+            _<%= entityVariableName %>Service = new Mock<I<%= entityClassName %>Service>();
             _modalService = new Mock<IModalService>();
             _navigationService = new Mock<INavigationService>();
             <%_ relationships.forEach(relation => { 
@@ -88,12 +88,11 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
             Services.AddHttpClientInterceptor();
-             //This code is needed to support recursion
-             _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+            //This code is needed to support recursion
+            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
                 .ForEach(b => _fixture.Behaviors.Remove(b));
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
-
 
         [Fact]
         public void Should_UpdateSelected<%= entityClassName %>_When_FormIsSubmitWithId()
@@ -110,19 +109,18 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             }); _%>
 
             var <%= entityVariableName %>ToUpdate = _fixture.Create<<%= asModel(entityClassName) %>>();
-            <%= entityVariableName %>ToUpdate.Id = 1; 
+            <%= entityVariableName %>ToUpdate.Id = 1;
 
             _<%= entityVariableName %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= entityVariableName %>ToUpdate));
-            
-            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 1));
 
+            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 1));
 
             // Act
             var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
             <%= entityVariableName %>Form.Submit();
 
             // Assert
-            _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate),Times.Once);
+            _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate), Times.Once);
         }
 
         [Fact]
@@ -138,7 +136,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _<%= relation.otherEntityNameLowerCased %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= relation.otherEntityNameLowerCasedPlural %>.ToList() as IList<<%= asModel(relation.otherEntityNamePascalized) %>>));
                 <%_ }
             }); _%>
-            
+
             var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 0));
 
             // Act

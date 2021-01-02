@@ -26,9 +26,11 @@ using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Domain.Services {
-    public class <%= serviceClassName %> : <%= serviceInterface %> {
-        protected readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
+namespace <%= namespace %>.Domain.Services
+{
+    public class <%= serviceClassName %> : <%= serviceInterface %>
+    {
+        protected readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
 
         public <%= serviceClassName %>(I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         {

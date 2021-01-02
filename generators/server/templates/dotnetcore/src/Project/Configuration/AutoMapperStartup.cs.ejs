@@ -15,8 +15,10 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace <%= namespace %>.Configuration {
-    public static class AutoMapperStartup {
+namespace <%= namespace %>.Configuration
+{
+    public static class AutoMapperStartup
+    {
         public static IServiceCollection AddAutoMapperModule(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));

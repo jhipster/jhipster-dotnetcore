@@ -33,7 +33,7 @@ namespace <%= namespace %>.Client.Shared.Components
 
         private List<JhiAlert> Alerts { get; } = new List<JhiAlert>();
 
-        [Inject] 
+        [Inject]
         private HttpClientInterceptor Interceptor { get; set; }
 
         protected override Task OnInitializedAsync()
@@ -61,7 +61,7 @@ namespace <%= namespace %>.Client.Shared.Components
         public IReadOnlyCollection<JhiAlert> GetAlerts()
         {
             return Alerts.AsReadOnly();
-    }
+        }
 
         private void HandleErrors(object s, HttpClientInterceptorEventArgs e)
         {

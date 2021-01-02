@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 
-namespace <%= namespace %>.Crosscutting.Enums {
-    public enum <%= enumName %> {
+namespace <%= namespace %>.Crosscutting.Enums
+{
+    public enum <%= enumName %>
+    {
     <%_ for (var i = 0; i < enums.length; i++) { _%>
         <%= enums[i] %><%_ if (i < enums.length - 1) { _%>,<%_ } _%>
 

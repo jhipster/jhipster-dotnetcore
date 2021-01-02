@@ -28,7 +28,7 @@ namespace <%= namespace %>.Configuration.Consul
             var consulConfigOptions = configuration.GetOptions<ConsulOptions>("Consul");
 
             serviceCollection.Configure<ConsulOptions>(configuration.GetSection("Consul"));
-           
+
             return serviceCollection.AddSingleton<IConsulClient>(c => new ConsulClient(cfg =>
             {
                 if (!string.IsNullOrEmpty(consulConfigOptions.Host))
@@ -77,7 +77,7 @@ namespace <%= namespace %>.Configuration.Consul
                                 $"{scheme}{config.Address}{(config.Port > 0 ? $":{config.Port}" : string.Empty)}/health"
                         };
 
-                        consulServiceRistration.Checks = new[] {check};
+                        consulServiceRistration.Checks = new[] { check };
                     }
                     else
                     {

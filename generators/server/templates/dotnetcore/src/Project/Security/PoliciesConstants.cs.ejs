@@ -15,8 +15,10 @@
 using Microsoft.AspNetCore.Authorization;
 using <%= namespace %>.Crosscutting.Constants;
 
-namespace <%= namespace %>.Security {
-    public static class PoliciesConstants {
+namespace <%= namespace %>.Security
+{
+    public static class PoliciesConstants
+    {
         public static readonly AuthorizationPolicy PolicyAdmin = new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser().RequireRole(RolesConstants.ADMIN).Build();
 

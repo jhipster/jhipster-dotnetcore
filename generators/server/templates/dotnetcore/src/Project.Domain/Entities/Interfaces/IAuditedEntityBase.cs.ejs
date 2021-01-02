@@ -14,8 +14,10 @@
 -%>
 using System;
 
-namespace <%= namespace %>.Domain.Interfaces {
-    public interface IAuditedEntityBase {
+namespace <%= namespace %>.Domain.Interfaces
+{
+    public interface IAuditedEntityBase
+    {
         string CreatedBy { get; set; }
 
         DateTime CreatedDate { get; set; }
