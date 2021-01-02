@@ -76,7 +76,7 @@ namespace <%= namespace %>
             <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
                 .AddConsul(Configuration)
             <%_ } _%>
-                .AddRepositoryModule()            
+                .AddRepositoryModule()
                 .AddServiceModule();
 
             <%_ if (applicationType === 'gateway') { _%>
@@ -84,7 +84,7 @@ namespace <%= namespace %>
                 .AddOcelot()
                 .AddConsul();
             <%_ } _%>
-                
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

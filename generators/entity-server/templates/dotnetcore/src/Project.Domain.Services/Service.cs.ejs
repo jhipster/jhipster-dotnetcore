@@ -30,7 +30,7 @@ namespace <%= namespace %>.Domain.Services
 {
     public class <%= serviceClassName %> : <%= serviceInterface %>
     {
-        protected readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
+        protected readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
 
         public <%= serviceClassName %>(I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         {

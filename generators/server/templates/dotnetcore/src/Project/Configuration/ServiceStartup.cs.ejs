@@ -35,7 +35,7 @@ namespace <%= namespace %>.Configuration
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))
                         .AsMatchingInterface()
                         .WithScopedLifetime()
-                    
+
                     // Now find services with class name ending with 'ExtendedService' and register it to interfaces 
                     // it implements. 
                     // For example: if JobExtendedService class is present and implements IJobService, then register 
@@ -44,7 +44,7 @@ namespace <%= namespace %>.Configuration
                                                                 type.Name.EndsWith("ExtendedService")))
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))
                         .AsImplementedInterfaces()
-                        .WithScopedLifetime()                    
+                        .WithScopedLifetime()
             );
             return services;
         }

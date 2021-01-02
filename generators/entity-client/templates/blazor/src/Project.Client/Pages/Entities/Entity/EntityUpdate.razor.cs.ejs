@@ -65,12 +65,12 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     if(relation.otherEntityNamePascalized === 'User') { _%>
         public IEnumerable<string> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<string>();
 
-        public string <%= relation.otherEntityNamePascalized %>Id { get; set; } 
+        public string <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } else { _%>
         public IEnumerable<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
 
-        public long? <%= relation.otherEntityNamePascalized %>Id { get; set; } 
+        public long? <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>

@@ -258,7 +258,7 @@ namespace <%= namespace %>.Test.Controllers
             var token = json.SelectToken("$");
             token.Should().BeOfType<JArray>();
             var array = token.ToObject<IEnumerable<string>>();
-            array.Should().Contain(new[] {RolesConstants.USER, RolesConstants.ADMIN});
+            array.Should().Contain(new[] { RolesConstants.USER, RolesConstants.ADMIN });
         }
 
         [Fact]

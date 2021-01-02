@@ -38,7 +38,7 @@ namespace <%= namespace %>.Client.Pages.Admin.UserManagement
         [Inject]
         private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
-        private IAuthenticationService AuthenticationService => AuthenticationStateProvider as IAuthenticationService; 
+        private IAuthenticationService AuthenticationService => AuthenticationStateProvider as IAuthenticationService;
 
         protected override async Task OnInitializedAsync()
         {

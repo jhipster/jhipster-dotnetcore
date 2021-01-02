@@ -46,7 +46,7 @@ namespace <%= namespace %>.Infrastructure.Data.Extensions
                 p.CustomAttributes.Any(attr => attr.AttributeType == typeof(KeyAttribute)));
 
             if (key != null) return key;
-            
+
             return null;
         }
 

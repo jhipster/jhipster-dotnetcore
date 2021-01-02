@@ -54,7 +54,7 @@ namespace <%= namespace %>.Client.Test
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, "UserTestLogin"));
-            var claimIdentity  = new ClaimsIdentity(claims);
+            var claimIdentity = new ClaimsIdentity(claims);
             Services.AddMockAuthenticatedAuthorization(claimIdentity);
             var authenticationStateProvider = Services.GetService<AuthenticationStateProvider>();
 

@@ -107,7 +107,8 @@ namespace <%= namespace %>.Test.Controllers
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDto
+                {
                     CurrentPassword = currentPassword,
                     NewPassword = "new password"
                 }));
@@ -138,7 +139,8 @@ namespace <%= namespace %>.Test.Controllers
             await userManager.CreateAsync(user);
 
             var response = await client.PostAsync("/api/account/change-password", TestUtil.ToJsonContent(
-                new PasswordChangeDto {
+                new PasswordChangeDto
+                {
                     CurrentPassword = currentPassword,
                     NewPassword = ""
                 })
@@ -349,7 +351,7 @@ namespace <%= namespace %>.Test.Controllers
             };
 
             await userManager.CreateAsync(user);
-            await userManager.AddToRolesAsync(user, new[] {RolesConstants.ADMIN});
+            await userManager.AddToRolesAsync(user, new[] { RolesConstants.ADMIN });
 
             var response = await client.GetAsync("/api/account");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -362,7 +364,7 @@ namespace <%= namespace %>.Test.Controllers
             json.SelectToken("$.imageUrl").Value<string>().Should().Be(user.ImageUrl);
             json.SelectToken("$.langKey").Value<string>().Should().Be(user.LangKey);
             json.SelectToken("$.authorities").ToObject<IEnumerable<string>>()
-                .Should().Contain(new[] {RolesConstants.ADMIN});
+                .Should().Contain(new[] { RolesConstants.ADMIN });
         }
 
         [Fact]
@@ -401,7 +403,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.ADMIN
                 }
             };
@@ -431,7 +434,8 @@ namespace <%= namespace %>.Test.Controllers
                 Email = "test-register-duplicate-email@example.com",
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.ADMIN
                 }
             };
@@ -468,7 +472,8 @@ namespace <%= namespace %>.Test.Controllers
             testUser3.Should().NotBeNull();
 
             // Duplicate email - with uppercase email address
-            var userWithUpperCaseEmail = new ManagedUserDto {
+            var userWithUpperCaseEmail = new ManagedUserDto
+            {
                 Id = firstUser.Id,
                 Login = "test-register-duplicate-email-3",
                 Password = firstUser.Password,
@@ -512,7 +517,8 @@ namespace <%= namespace %>.Test.Controllers
                 Email = "alice@example.com",
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.ADMIN
                 }
             };
@@ -567,7 +573,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -595,7 +602,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -623,7 +631,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -651,7 +660,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = true,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -678,7 +688,8 @@ namespace <%= namespace %>.Test.Controllers
                 Email = "test-register-valid@example.com",
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -813,7 +824,8 @@ namespace <%= namespace %>.Test.Controllers
 
             await userManager.CreateAsync(user);
 
-            var anotherUser = new User {
+            var anotherUser = new User
+            {
                 Login = "save-existing-email2",
                 Email = "save-existing-email2@example.com",
                 PasswordHash = passwordHasher.HashPassword(null, TestUtil.RandomAlphabetic(60)),
@@ -832,7 +844,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = false,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -870,7 +883,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = false,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.USER
                 }
             };
@@ -908,7 +922,8 @@ namespace <%= namespace %>.Test.Controllers
                 Activated = false,
                 ImageUrl = "http://placehold.it/50x50",
                 LangKey = Constants.DefaultLangKey,
-                Roles = new HashSet<string> {
+                Roles = new HashSet<string>
+                {
                     RolesConstants.ADMIN
                 }
             };

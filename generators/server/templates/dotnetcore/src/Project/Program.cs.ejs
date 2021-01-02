@@ -31,7 +31,7 @@ namespace <%= namespace %>
 {
     public class Program
     {
-        
+
         const string SerilogSection = "Serilog";
         const string SyslogPort = "SyslogPort";
         const string SyslogUrl = "SyslogUrl";
@@ -129,7 +129,7 @@ namespace <%= namespace %>
                 : "JhipsterApp";
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.With<LoggerNameEnricher>()
-                .WriteTo.TcpSyslog(url, port,appName, FramingType.OCTET_COUNTING, SyslogFormat.RFC5424, Facility.Local0, SslProtocols.None)
+                .WriteTo.TcpSyslog(url, port, appName, FramingType.OCTET_COUNTING, SyslogFormat.RFC5424, Facility.Local0, SslProtocols.None)
                 .ReadFrom.Configuration(appConfiguration);
 
             return loggerConfiguration.CreateLogger();

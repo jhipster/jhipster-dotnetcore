@@ -348,7 +348,7 @@ namespace <%= namespace %>.Test.Controllers
             // Update the <%= camelCasedEntityClass %>
             var updated<%= pascalizedEntityClass %> = await _<%= camelCasedEntityClass %>Repository.QueryHelper().GetOneAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
             // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
-//TODO detach
+            //TODO detach
             <%_ fields.forEach(field => { _%>
             updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
             <%_ }); _%>

@@ -48,7 +48,7 @@ namespace <%= namespace %>.Configuration
                 {
                     Type = exception.Type,
                     Detail = exception.Detail,
-                    Status =  StatusCodes.Status500InternalServerError
+                    Status = StatusCodes.Status500InternalServerError
                 });
 
                 // This mapping will catch exceptions inheriting from BaseException that has not been mapped previously
@@ -56,7 +56,7 @@ namespace <%= namespace %>.Configuration
                 {
                     Type = exception.Type,
                     Detail = exception.Detail,
-                    Status =  StatusCodes.Status400BadRequest
+                    Status = StatusCodes.Status400BadRequest
                 });
 
             });

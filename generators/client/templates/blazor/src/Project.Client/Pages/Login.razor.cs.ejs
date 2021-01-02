@@ -27,7 +27,7 @@ namespace <%= namespace %>.Client.Pages
         [Inject]
         public AuthenticationStateProvider AuthenticationService { get; set; }
 
-        [CascadingParameter] 
+        [CascadingParameter]
         public BlazoredModalInstance BlazoredModal { get; set; }
 
         public LoginModel LoginModel { get; set; } = new LoginModel();

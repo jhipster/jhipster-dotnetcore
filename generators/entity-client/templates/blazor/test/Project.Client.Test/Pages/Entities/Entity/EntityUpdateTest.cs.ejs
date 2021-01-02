@@ -120,7 +120,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             <%= entityVariableName %>Form.Submit();
 
             // Assert
-            _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate),Times.Once);
+            _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate), Times.Once);
         }
 
         [Fact]

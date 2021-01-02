@@ -41,7 +41,7 @@ namespace <%= namespace %>.Client.Services
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
         public JwtToken JwtToken { get; set; }
-        
+
         public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage, IMapper mapper)
         {
             _httpClient = httpClient;
@@ -55,7 +55,7 @@ namespace <%= namespace %>.Client.Services
                 SetUserAndAuthorizationHeader(JwtToken);
             }
         }
-        
+
         public async Task<bool> SignIn(LoginModel loginModel)
         {
             var loginDto = _mapper.Map<LoginDto>(loginModel);
@@ -115,7 +115,6 @@ namespace <%= namespace %>.Client.Services
 
             return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
         }
-
 
         private void AddClaim(ref List<Claim> claims, string claimType, string value)
         {
