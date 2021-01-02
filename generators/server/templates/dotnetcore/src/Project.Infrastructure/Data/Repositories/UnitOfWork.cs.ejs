@@ -66,16 +66,19 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public void AddOrUpdateGraph<TEntiy>(TEntiy entity) where TEntiy : class
         {
-            _context.ChangeTracker.TrackGraph(entity, e => {
+            _context.ChangeTracker.TrackGraph(entity, e =>
+            {
                 var alreadyTrackedEntity = _context.ChangeTracker.Entries().FirstOrDefault(entry => entry.Entity.Equals(e.Entry.Entity));
                 if (alreadyTrackedEntity != null)
                 {
                     return;
                 }
-                if (e.Entry.IsKeySet) {
+                if (e.Entry.IsKeySet)
+                {
                     e.Entry.State = EntityState.Modified;
                 }
-                else {
+                else
+                {
                     e.Entry.State = EntityState.Added;
                 }
             });

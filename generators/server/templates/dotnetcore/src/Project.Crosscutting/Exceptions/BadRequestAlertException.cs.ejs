@@ -14,8 +14,10 @@
 -%>
 using <%= namespace %>.Crosscutting.Constants;
 
-namespace <%= namespace %>.Crosscutting.Exceptions {
-    public class BadRequestAlertException : BaseException {
+namespace <%= namespace %>.Crosscutting.Exceptions
+{
+    public class BadRequestAlertException : BaseException
+    {
         public BadRequestAlertException(string detail, string entityName, string errorKey) : this(
             ErrorConstants.DefaultType, detail, entityName, errorKey)
         {

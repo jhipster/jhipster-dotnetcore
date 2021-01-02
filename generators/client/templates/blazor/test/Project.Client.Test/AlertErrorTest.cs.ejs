@@ -41,7 +41,6 @@ namespace <%= namespace %>.Client.Test
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Content = new StringContent(@""),
-                
             };
 
             var alertComponent = await InitAlertErrorTest(response);
@@ -109,7 +108,7 @@ namespace <%= namespace %>.Client.Test
         public void Should_Add_And_Remove_When_AlertTimout()
         {
             Services.AddHttpClientInterceptor();
-            var alertComponent = RenderComponent<TestAlertError>(); 
+            var alertComponent = RenderComponent<TestAlertError>();
 
             var alert = new JhiAlert
             {

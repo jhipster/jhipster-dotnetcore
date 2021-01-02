@@ -40,7 +40,6 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
         private IList<<%= asModel(entityClassName) %>> <%= entityClassNamePluralized %> { get; set; } = new List<<%= asModel(entityClassName) %>>();
 
-        
         protected override async Task OnInitializedAsync()
         {
             <%= entityClassNamePluralized %> = await <%= entityClassName %>Service.GetAll();
@@ -53,7 +52,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             if (!deleteResult.Cancelled)
             {
                 await <%= entityClassName %>Service.Delete(<%= lowerCasedEntityClassPlural %>Id.ToString());
-                <%= entityClassNamePluralized %>.Remove(<%= entityClassNamePluralized %>.First(<%= lowerCasedEntityClassPlural %> => <%= lowerCasedEntityClassPlural %>.Id.Equals(<%= lowerCasedEntityClassPlural %>Id))); 
+                <%= entityClassNamePluralized %>.Remove(<%= entityClassNamePluralized %>.First(<%= lowerCasedEntityClassPlural %> => <%= lowerCasedEntityClassPlural %>.Id.Equals(<%= lowerCasedEntityClassPlural %>Id)));
             }
         }
     }

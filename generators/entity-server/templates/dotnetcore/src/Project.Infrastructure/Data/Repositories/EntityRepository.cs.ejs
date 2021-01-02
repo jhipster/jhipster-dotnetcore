@@ -29,7 +29,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
     {
-        public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context) 
+        public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context)
         {
         }
 
@@ -38,14 +38,17 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
             <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                        
+
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
             }); _%>
-            
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
+
+            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
+            {
                 Update(<%= camelCasedEntityClass %>);
-            } else {
+            }
+            else
+            {
                 _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
             }
             return <%= camelCasedEntityClass %>;

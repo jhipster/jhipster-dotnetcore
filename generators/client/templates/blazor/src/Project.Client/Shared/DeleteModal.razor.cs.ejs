@@ -22,12 +22,12 @@ namespace <%= namespace %>.Client.Shared
     {
         [CascadingParameter]
         BlazoredModalInstance BlazoredModal { get; set; }
-        
+
         private async Task Delete()
         {
             await BlazoredModal.Close();
         }
-        
+
         private async Task Close()
         {
             await BlazoredModal.Cancel();

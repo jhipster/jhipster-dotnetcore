@@ -32,8 +32,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace <%= namespace %>.Configuration {
-    public static class DatabaseConfiguration {
+namespace <%= namespace %>.Configuration
+{
+    public static class DatabaseConfiguration
+    {
         public static IServiceCollection AddDatabaseModule(this IServiceCollection services, IConfiguration configuration)
         {
             string connectionString = null;
@@ -70,8 +72,8 @@ namespace <%= namespace %>.Configuration {
 
             <%_ switch(databaseType) {
                 case 'sqllite': _%>
-            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
-            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder {
+            var connection = new SqliteConnection(new SqliteConnectionStringBuilder
+            {
                 DataSource = entityFrameworkConfiguration["DataSource"]
             }.ToString());
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });

@@ -66,7 +66,6 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
 
-
         [Fact]
         public void Should_DisplayAll<%= pascalizedEntityClassPlural %>_When_<%= pascalizedEntityClassPlural %>ArePresent()
         {
@@ -74,7 +73,6 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
             _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
             var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>();
-
 
             // Act
             var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
@@ -91,7 +89,6 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
             var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>();
 
-
             // Act
             var span = <%= entityVariableName %>Page.Find("div>span");
 
@@ -105,14 +102,14 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             //Arrange
             var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
             _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
-           
+
             var modalRef = new Mock<IModalReference>();
             modalRef.Setup(mock => mock.Result).Returns(Task.FromResult(ModalResult.Ok(new { })));
             _modalService.Setup(service => service.Show<DeleteModal>(It.IsAny<string>())).Returns(modalRef.Object);
             var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>(ComponentParameterFactory.CascadingValue(_modalService.Object));
+
             // Act
             var <%= entityVariableName %>ToDelete = <%= camelCasedEntityClassPlural %>.First();
-
 
             // Assert
             <%= entityVariableName %>Page.Find("td>div>button").Click();

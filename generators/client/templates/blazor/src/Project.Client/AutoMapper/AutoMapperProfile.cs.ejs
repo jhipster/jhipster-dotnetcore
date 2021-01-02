@@ -22,7 +22,8 @@ using <%= namespace %>.Client.Models;
 using <%= namespace %>.Dto;
 
 
-namespace <%= namespace %>.Client.AutoMapper {
+namespace <%= namespace %>.Client.AutoMapper
+{
 
     public class AutoMapperProfile : Profile
     {
@@ -34,7 +35,7 @@ namespace <%= namespace %>.Client.AutoMapper {
                 .ReverseMap()
                 .ForPath(userDto => userDto.Roles,
                     opt => opt.MapFrom(userModel => userModel.Authorities));
-            
+
             CreateMap<ManagedUserDto, UserSaveModel>().ReverseMap();
             CreateMap<LoginDto, LoginModel>().ReverseMap();
 

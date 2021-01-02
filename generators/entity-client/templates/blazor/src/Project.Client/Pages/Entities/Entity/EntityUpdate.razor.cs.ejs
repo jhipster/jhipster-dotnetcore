@@ -36,7 +36,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
     {
         [Parameter]
         public int Id { get; set; }
-        
+
         [Inject]
         private I<%= entityClassName %>Service <%= entityClassName %>Service { get; set; }
 
@@ -55,10 +55,9 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         <%_ relationships.forEach(relation => {
             if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true )) { _%>
         private IEnumerable<<%= asModel(relation.otherEntityNamePascalized) %>> <%= relation.relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(relation.otherEntityNamePascalized) %>>();
-        
+
             <%_ }
         }); _%>
-        
         public <%= asModel(entityClassName) %> <%= asModel(entityClassName) %> { get; set; } = new <%= asModel(entityClassName) %>();
 
         <%_ relationships.forEach(relation => { _%>
@@ -66,17 +65,17 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     if(relation.otherEntityNamePascalized === 'User') { _%>
         public IEnumerable<string> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<string>();
 
-        public string <%= relation.otherEntityNamePascalized %>Id { get; set; } 
-        
+        public string <%= relation.otherEntityNamePascalized %>Id { get; set; }
+
                     <%_ } else { _%>
         public IEnumerable<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
 
-        public long? <%= relation.otherEntityNamePascalized %>Id { get; set; } 
+        public long? <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
         public IReadOnlyList<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
-        
+
         public IReadOnlyList<long> Selected<%= relation.relationshipFieldNamePascalizedPlural %> { get; set; }
 
             <%_ }
@@ -98,7 +97,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                 <%= relation.otherEntityNamePascalized %>Id = <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalized %>Id;
                     <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
-                Selected<%= relation.relationshipFieldNamePascalizedPlural %> =  new List<long>(<%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id));
+                Selected<%= relation.relationshipFieldNamePascalizedPlural %> = new List<long>(<%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id));
                     <%_ }
                 }); _%>
             }
@@ -117,9 +116,9 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
             if (Selected<%= relation.relationshipFieldNamePascalizedPlural %> != null)
             {
-                <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList(); 
+                <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = <%= relation.relationshipFieldNamePascalizedPlural %>?.Where(<%= relation.otherEntityNameLowerCased %> => Selected<%= relation.relationshipFieldNamePascalizedPlural %>.Contains(<%= relation.otherEntityNameLowerCased %>.Id)).ToList();
             }
-            else 
+            else
             {
                 <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = null;
             }
