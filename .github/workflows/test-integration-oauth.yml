@@ -58,4 +58,4 @@ jobs:
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
             - name: 'VERIFY FORMAT'
-              run: ./test-integration/scripts/07-verify-format.sh $JHI_APP
+              run: ./test-integration/scripts/08-verify-format.sh $JHI_APP
