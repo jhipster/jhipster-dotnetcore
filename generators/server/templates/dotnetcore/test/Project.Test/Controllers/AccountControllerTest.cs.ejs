@@ -73,8 +73,7 @@ namespace <%= namespace %>.Test.Controllers
                     new Claim(ClaimTypes.GivenName,"user"),
                     new Claim(ClaimTypes.Email,"user@test"),
                     new Claim("role",RolesConstants.USER)
-                }),
-              new string[] {});
+                }), new string[] {});
             _accountController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext
