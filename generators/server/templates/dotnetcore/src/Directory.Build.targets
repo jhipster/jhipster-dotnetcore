@@ -14,7 +14,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.76" />
+	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
 	<PackageReference Update="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
 	
