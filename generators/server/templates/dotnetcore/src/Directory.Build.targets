@@ -53,7 +53,7 @@
 	<PackageReference Update="Consul" Version="1.6.1.1" />
 	<%_ } _%>
 	<%_ if (applicationType === 'gateway') { _%>
-	<PackageReference Update="Ocelot" Version="16.0.1" />
+	<PackageReference Update="Ocelot" Version="17.0.0" />
 	<PackageReference Update="Ocelot.Provider.Consul" Version="16.0.1" />
 	<%_ } _%>
 	
