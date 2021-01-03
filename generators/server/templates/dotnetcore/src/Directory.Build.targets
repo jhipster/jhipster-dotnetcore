@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
 		<AspNetCorePackageVersion>5.0.0</AspNetCorePackageVersion>
-		<JHipsterNetPackageVersion>1.0.6</JHipsterNetPackageVersion>
+		<JHipsterNetPackageVersion>1.0.7</JHipsterNetPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>	
@@ -9,40 +9,40 @@
 	<PackageReference Update="AutoMapper" Version="10.1.1" />
 	<PackageReference Update="Blazored.Modal" Version="5.1.0" />
 	<PackageReference Update="Blazored.SessionStorage" Version="1.0.12" />
-	<PackageReference Update="Blazorise.Bootstrap" Version="0.9.1.2" />
-	<PackageReference Update="Blazorise.Icons.FontAwesome" Version="0.9.1.2" />
+	<PackageReference Update="Blazorise.Bootstrap" Version="0.9.2.4" />
+	<PackageReference Update="Blazorise.Icons.FontAwesome" Version="0.9.2.4" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.76" />
+	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
 	<PackageReference Update="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
 	
-	<PackageReference Update="AutoFixture" Version="4.14.0" />
-	<PackageReference Update="bunit" Version="1.0.0-beta-11" />
+	<PackageReference Update="AutoFixture" Version="4.15.0" />
+	<PackageReference Update="bunit" Version="1.0.0-preview-01" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.8.3" />
 	<%_ } _%>
 	
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
-	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="5.1.0" />
+	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="5.1.1" />
 	<PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Scrutor" Version="3.2.2" />
+	<PackageReference Update="Scrutor" Version="3.3.0" />
 	<PackageReference Update="Serilog.AspNetCore" Version="3.4.0" />
 	<PackageReference Update="Serilog.Settings.Configuration" Version="3.1.0" />
 	<PackageReference Update="Serilog.Sinks.Console" Version="3.1.1" />
 	<PackageReference Update="Serilog.Enrichers.Process" Version="2.0.1" />
 	<PackageReference Update="Serilog.Enrichers.Thread" Version="3.1.0" />
-	<PackageReference Update="Serilog.Sinks.SyslogMessages" Version="1.0.5" />
+	<PackageReference Update="Serilog.Sinks.SyslogMessages" Version="2.0.1" />
 	<PackageReference Update="Swashbuckle.AspNetCore" Version="5.6.3" />
 	<PackageReference Update="LanguageExt.Core" Version="3.4.15" />
 	<%_ if (authenticationType === 'jwt') { _%>
 	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="BCrypt.Net-Next" Version="4.0.0" />
+	<PackageReference Update="BCrypt.Net-Next" Version="4.0.2" />
 	<%_ } else { _%>
 	<PackageReference Update="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(AspNetCorePackageVersion)" />
 	<%_ } _%>
@@ -53,14 +53,14 @@
 	<PackageReference Update="Consul" Version="1.6.1.1" />
 	<%_ } _%>
 	<%_ if (applicationType === 'gateway') { _%>
-	<PackageReference Update="Ocelot" Version="16.0.1" />
-	<PackageReference Update="Ocelot.Provider.Consul" Version="16.0.1" />
+	<PackageReference Update="Ocelot" Version="17.0.0" />
+	<PackageReference Update="Ocelot.Provider.Consul" Version="17.0.0" />
 	<%_ } _%>
 	
 	<PackageReference Update="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Newtonsoft.Json" Version="12.0.3" />
-	<PackageReference Update="System.ComponentModel.Annotations" Version="4.7.0" />
+	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
 	<PackageReference Update="System.Text.Json" Version="$(AspNetCorePackageVersion)" />	
 	<PackageReference Update="Serilog" Version="2.10.0" />
 
@@ -92,7 +92,7 @@
 	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Oracle.EntityFrameworkCore" Version="3.19.80" />
-	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="2.19.91" />
+	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="2.19.100" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
 		<%_ break;
 	} _%>
@@ -102,13 +102,13 @@
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-	<PackageReference Update="Moq" Version="4.14.6" />
+	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+	<PackageReference Update="Moq" Version="4.15.2" />
 	<PackageReference Update="xunit" Version="2.4.1" />
 	<PackageReference Update="xunit.runner.visualstudio" Version="2.4.3"/>
 	<PackageReference Update="xunit.runner.console" Version="2.4.1"/>
 	<PackageReference Update="FluentAssertions" Version="5.10.3" />
-	<PackageReference Update="FluentAssertions.AspNetCore.Mvc" Version="2.4.0" />
+	<PackageReference Update="FluentAssertions.AspNetCore.Mvc" Version="3.2.0" />
 	<PackageReference Update="FluentAssertions.Json" Version="5.5.0" />	
   </ItemGroup>
 </Project>
