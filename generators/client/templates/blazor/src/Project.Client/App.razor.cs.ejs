@@ -12,12 +12,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Client.Pages.Utils;
 using Microsoft.AspNetCore.Components;
+using <%= namespace %>.Client.Pages.Utils;
 
 namespace <%= namespace %>.Client
 {
-    public partial class App
+    public partial class App : ComponentBase
     {
         [Inject]
         public INavigationService NavigationService { get; set; } // Permit to initialize navigation service

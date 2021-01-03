@@ -14,8 +14,10 @@
 -%>
 using System.ComponentModel.DataAnnotations;
 
-namespace <%= namespace %>.Dto {
-    public class LoginDto {
+namespace <%= namespace %>.Dto
+{
+    public class LoginDto
+    {
         [Required]
         [StringLength(50, MinimumLength = 1)]
         public string Username { get; set; }

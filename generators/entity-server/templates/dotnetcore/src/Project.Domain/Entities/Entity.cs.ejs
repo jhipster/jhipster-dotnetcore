@@ -39,9 +39,11 @@ using <%= namespace %>.Crosscutting.Enums;
 using Newtonsoft.Json;
 <%_ } _%>
 
-namespace <%= namespace %>.Domain {
+namespace <%= namespace %>.Domain
+{
     [Table("<%= entityTableName %>")]
-    public class <%= entityClassName %> {
+    public class <%= entityClassName %>
+    {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
@@ -75,28 +77,34 @@ namespace <%= namespace %>.Domain {
             if (relationshipType === 'one-to-one') {
                 if(otherEntityNamePascalized === 'User') { _%>
         public string UserId { get; set; } 
+                <%_ } else { _%>
+        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ } _%>
+
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
-            <%_}
+<%_ } 
             if(relationshipType === 'one-to-many') { _%>
         public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= otherEntityNamePascalized %>>();
             <%_  } else if (relationshipType === 'many-to-one') {
                 if (relationshipRequired) { _%>
         [Required]
                 <%_ } 
-                if(otherEntityNamePascalized === 'User'){ _%>
-        public string UserId { get; set; } 
-                <%_ }  _%>
+                if(otherEntityNamePascalized === 'User') { _%>
+        public string UserId { get; set; }
+                <%_ } else { _%>
+
+        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
+                <%_ } _%>
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
-            <%_  } else if (relationshipType === 'many-to-many') {
+<% } else if (relationshipType === 'many-to-many') {
                 const ownerSide = relationships[idx].ownerSide; _%>
                 <%_ if (!ownerSide) { _%>
         [JsonIgnore]
                 <%_ } _%>
         public IList<<%= otherEntityNamePascalized %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= otherEntityNamePascalized %>>();
-            <%_ } _%>
-
+<%_ } _%>
         <%_ } _%>
+
         // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
 
         public override bool Equals(object obj)

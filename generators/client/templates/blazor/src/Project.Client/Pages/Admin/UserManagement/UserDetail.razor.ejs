@@ -1,5 +1,6 @@
 ﻿@page "/admin/user-management/{Id}/view"
 @using Microsoft.AspNetCore.Authorization
+@namespace <%= namespace %>.Client.Pages.Admin.UserManagement
 
 @attribute [Authorize(Roles = "ROLE_ADMIN")]
 
@@ -60,7 +61,7 @@
                 </dl>
 
                 <button type="submit" @onclick="@Back" class="btn btn-info">
-                    <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+                    <Icon Name='"fa-arrow-left"' />&nbsp;<span>Back</span>
                 </button>
             </div>
         }

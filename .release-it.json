@@ -1,0 +1,26 @@
+{
+  "github": {
+    "release": true
+  },
+  "plugins": {
+    "@j-ulrich/release-it-regex-bumper": {
+      "out": [
+        {
+          "file": "./.sonarcloud.properties",
+          "search": "sonar.projectVersion=\\d+\\.\\d+\\.\\d+",
+          "replace": "sonar.projectVersion={{version}}"
+        },
+        {
+          "file": "./docs/conf.py",
+          "search": "release = '\\d+\\.\\d+\\.\\d+'",
+          "replace": "release = '{{version}}'"
+        },
+        {
+          "file": "./test-integration/samples/**/.yo-rc.json",
+          "search": "\"version\": \"\\d+\\.\\d+\\.\\d+\"",
+          "replace": "\"version\": \"{{version}}\""
+        }
+      ]
+    }
+  }
+}

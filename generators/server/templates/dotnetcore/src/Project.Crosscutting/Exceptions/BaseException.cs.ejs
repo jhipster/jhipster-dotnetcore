@@ -14,7 +14,8 @@
 -%>
 using System;
 
-namespace <%= namespace %>.Crosscutting.Exceptions {
+namespace <%= namespace %>.Crosscutting.Exceptions
+{
     public abstract class BaseException : Exception
     {
         public BaseException(string type, string detail) : this(type, detail, null, null)

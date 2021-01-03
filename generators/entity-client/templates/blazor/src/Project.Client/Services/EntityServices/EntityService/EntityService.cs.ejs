@@ -19,15 +19,17 @@ const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass; 
 _%>
 using System.Net.Http;
+using AutoMapper;
 using <%= namespace %>.Client.Models;
+using <%= namespace %>.Dto;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>
 {
-    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>>,I<%= entityClassName %>Service
+    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>, <%= asDto(entityClassName) %>>, I<%= entityClassName %>Service
     {
-        public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider) 
-            : base(httpClient, authenticationStateProvider, "/api/<%= kebabCasedEntityClassPlural %>")
+        public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper)
+            : base(httpClient, authenticationStateProvider, mapper, "/api/<%= kebabCasedEntityClassPlural %>")
         {
         }
     }

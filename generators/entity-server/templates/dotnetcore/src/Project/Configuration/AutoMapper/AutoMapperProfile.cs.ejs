@@ -25,7 +25,8 @@ using <%= namespace %>.Domain;
 using <%= namespace %>.Dto;
 
 
-namespace <%= namespace %>.Configuration.AutoMapper {
+namespace <%= namespace %>.Configuration.AutoMapper
+{
 
     public class AutoMapperProfile : Profile
     {
@@ -49,9 +50,7 @@ namespace <%= namespace %>.Configuration.AutoMapper {
             else {
                 if(dto === 'mapstruct') { _%>
             CreateMap<<%= entityClassName %>, <%= asDto(entityClassName) %>>().ReverseMap();
-                <%_
-            }} _%>
-            %>
+            <%_ }} _%>
         }
     }
 }

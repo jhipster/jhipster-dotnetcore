@@ -24,7 +24,7 @@ const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const basePrompts = require('generator-jhipster/generators/client/prompts');
 const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
-const baseWriteReactFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
+const baseWriteReactFiles = require('generator-jhipster/generators/client/files-react').writeFiles;
 const prompts = require('./prompts');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const dotnet = require('../dotnet');
@@ -123,7 +123,7 @@ module.exports = class extends ClientGenerator {
         // Override default yeoman installDependencies
         const customPhase = {
             installDependencies() {
-                if (!this.options['skip-install']) {
+                if (this.clientFramework !== BLAZOR && !this.options['skip-install']) {
                     this.log(
                         `\n\nI'm all done. Running ${chalk.green.bold(
                             `npm install `
@@ -139,7 +139,7 @@ module.exports = class extends ClientGenerator {
     get end() {
         return {
             async end() {
-                if (this.clientFramework == BLAZOR) {
+                if (this.clientFramework === BLAZOR) {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
                     try {
                         await dotnet.newSln(this.solutionName);
@@ -152,6 +152,14 @@ module.exports = class extends ClientGenerator {
                         `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
                     ]);
                     this.log(chalk.green.bold('\Client application generated successfully.\n'));
+                    this.log(
+                        chalk.green(
+                            `Run your blazor application:\n${chalk.yellow.bold(
+                                `dotnet run --verbosity normal --project ./${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`
+                            )}`
+                        )
+                    );
+                    dotnet.installBlazorDependencies();
                 } else {
                     if (this.skipClient) return;
                     this.log(chalk.green.bold('\nClient application generated successfully.\n'));

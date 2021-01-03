@@ -6,7 +6,8 @@ using Xunit;
 
 namespace JhipsterSampleApplication.Test.DependencyInjection
 {
-    public class ExtendedServiceRegistrationTest {
+    public class ExtendedServiceRegistrationTest
+    {
         public ExtendedServiceRegistrationTest()
         {
             _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser();
@@ -18,7 +19,6 @@ namespace JhipsterSampleApplication.Test.DependencyInjection
         private readonly ICountryService _countryService;
         private readonly IDepartmentService _departmentService;
 
-          
         [Fact]
         public void TestAutomaticRegistration()
         {
@@ -29,7 +29,6 @@ namespace JhipsterSampleApplication.Test.DependencyInjection
         public void TestExtendedServiceClassAutomaticRegistration()
         {
             _countryService.Should().BeOfType<CountryExtendedService>();
-        }     
+        }
     }
 }
-
