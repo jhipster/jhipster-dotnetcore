@@ -54,7 +54,7 @@
 	<%_ } _%>
 	<%_ if (applicationType === 'gateway') { _%>
 	<PackageReference Update="Ocelot" Version="17.0.0" />
-	<PackageReference Update="Ocelot.Provider.Consul" Version="16.0.1" />
+	<PackageReference Update="Ocelot.Provider.Consul" Version="17.0.0" />
 	<%_ } _%>
 	
 	<PackageReference Update="Microsoft.AspNetCore.Identity" Version="2.2.0" />
