@@ -42,7 +42,7 @@
 	<%_ if (authenticationType === 'jwt') { _%>
 	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="BCrypt.Net-Next" Version="4.0.0" />
+	<PackageReference Update="BCrypt.Net-Next" Version="4.0.2" />
 	<%_ } else { _%>
 	<PackageReference Update="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(AspNetCorePackageVersion)" />
 	<%_ } _%>
