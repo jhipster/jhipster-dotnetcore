@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ 
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
@@ -43,8 +43,8 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         [Inject]
         private INavigationService NavigationService { get; set; }
 
-        <%_ relationships.forEach(relation => { 
-            if (relation.otherEntityNamePascalized !== entityClassName ) { 
+        <%_ relationships.forEach(relation => {
+            if (relation.otherEntityNamePascalized !== entityClassName ) {
                 if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || relation.ownerSide === true) { _%>
         [Inject]
         private I<%= relation.otherEntityNamePascalized %>Service <%= relation.otherEntityNamePascalized %>Service { get; set; }
@@ -61,7 +61,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         public <%= asModel(entityClassName) %> <%= asModel(entityClassName) %> { get; set; } = new <%= asModel(entityClassName) %>();
 
         <%_ relationships.forEach(relation => { _%>
-            <%_ if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { 
+            <%_ if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') {
                     if(relation.otherEntityNamePascalized === 'User') { _%>
         public IEnumerable<string> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<string>();
 
@@ -82,7 +82,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         }); _%>
         protected override async Task OnInitializedAsync()
         {
-            <%_ relationships.forEach(relation => { 
+            <%_ relationships.forEach(relation => {
                 if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
             <%= relation.relationshipFieldNamePascalizedPlural %> = await <%= relation.otherEntityNamePascalized %>Service.GetAll();
             <%= relation.otherEntityNamePascalized %>Ids = <%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id).ToList();
@@ -93,7 +93,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             if (Id != 0)
             {
                 <%= asModel(entityClassName) %> = await <%= entityClassName %>Service.Get(Id.ToString());
-                <%_ relationships.forEach(relation => { 
+                <%_ relationships.forEach(relation => {
                     if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                 <%= relation.otherEntityNamePascalized %>Id = <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalized %>Id;
                     <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
@@ -110,7 +110,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
         private async Task Save()
         {
-            <%_ relationships.forEach(relation => { 
+            <%_ relationships.forEach(relation => {
                 if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
             <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalized %>Id = <%= relation.relationshipFieldNamePascalizedPlural %>?.SingleOrDefault(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id.Equals(<%= relation.otherEntityNamePascalized %>Id))?.Id;
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
