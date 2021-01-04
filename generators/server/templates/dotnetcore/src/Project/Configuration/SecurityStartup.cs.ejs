@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -117,7 +117,7 @@ namespace <%= namespace %>.Configuration
 
             <%_ if (applicationType !== 'microservice') { _%>
             services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-            <%_ } _%>            
+            <%_ } _%>
             services.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
             services.AddScoped<ITokenProvider, TokenProvider>();
             <%_ } else { _%>
