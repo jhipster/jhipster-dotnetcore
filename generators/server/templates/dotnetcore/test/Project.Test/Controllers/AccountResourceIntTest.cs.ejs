@@ -37,10 +37,10 @@ namespace <%= namespace %>.Test.Controllers
     {
         public AccountResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>();
+            _factory = new AppWebApplicationFactory<TestStartup>();
         }
 
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
 
         [Fact]
         public async Task TestActivateAccount()

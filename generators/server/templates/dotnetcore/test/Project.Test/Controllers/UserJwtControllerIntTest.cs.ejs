@@ -31,14 +31,14 @@ namespace <%= namespace %>.Test.Controllers
     {
         public UserJwtControllerIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>();
+            _factory = new AppWebApplicationFactory<TestStartup>();
             _client = _factory.CreateClient();
 
             _userManager = _factory.GetRequiredService<UserManager<User>>();
             _passwordHasher = _factory.GetRequiredService<IPasswordHasher<User>>();
         }
 
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
 
         private readonly UserManager<User> _userManager;

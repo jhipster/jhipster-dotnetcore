@@ -51,14 +51,14 @@ namespace <%= namespace %>
         public virtual void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddNhipsterModule(Configuration);
+                .AddAppSettingsModule(Configuration);
 
             AddDatabase(services);
 
             <%_ if (authenticationType === 'oauth2') { _%>
             // Build an intermediate service provider
             var sp = services.BuildServiceProvider();
-            var jhipsterSettings = sp.GetService<IOptions<JHipsterSettings>>().Value;
+            var securitySettings = sp.GetService<IOptions<SecuritySettings>>().Value;
             <%_ } _%>
 
             services
@@ -66,7 +66,7 @@ namespace <%= namespace %>
                 .AddSecurityModule()
             <%_ } else {
                 if (applicationType !== 'microservice') { _%>
-                .AddSecurityModule(jhipsterSettings)
+                .AddSecurityModule(securitySettings)
                 <%_ }
             } _%>
                 .AddProblemDetailsModule(Environment)
@@ -89,11 +89,11 @@ namespace <%= namespace %>
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
-            ApplicationDatabaseContext context, IOptions<JHipsterSettings> jhipsterSettingsOptions)
+            ApplicationDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
         {
-            var jhipsterSettings = jhipsterSettingsOptions.Value;
+            var securitySettings = securitySettingsOptions.Value;
             app
-                .UseApplicationSecurity(jhipsterSettings)
+                .UseApplicationSecurity(securitySettings)
                 .UseApplicationProblemDetails()
                 .UseApplicationSwagger()
                 .UseApplicationWeb(env)

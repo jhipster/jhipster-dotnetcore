@@ -146,11 +146,7 @@ module.exports = class extends ServerGenerator {
                                 )}`
                             )
                         );
-                        this.log(
-                            chalk.green(
-                                `Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --list-tests --verbosity normal')}`
-                            )
-                        );
+                        this.log(chalk.green(`Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --verbosity normal')}`));
                     });
             },
         };
