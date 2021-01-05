@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -38,9 +38,11 @@ using <%= namespace %>.Crosscutting.Enums;
 using Newtonsoft.Json;
 <%_ } _%>
 
-namespace <%= namespace %>.Dto {
+namespace <%= namespace %>.Dto
+{
 
-    public class <%= asDto(entityClassName) %> {
+    public class <%= asDto(entityClassName) %>
+    {
 
         public long Id { get; set; }
 
@@ -70,9 +72,9 @@ namespace <%= namespace %>.Dto {
             const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
             const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
             const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
-            if (relationshipType === 'one-to-one'){ 
+            if (relationshipType === 'one-to-one'){
                 if(otherEntityNamePascalized === 'User') { _%>
-        public string UserId { get; set; } 
+        public string UserId { get; set; }
                 <%_ } else { _%>
         public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ }
@@ -84,7 +86,7 @@ namespace <%= namespace %>.Dto {
         [Required]
                 <%_ }
                 if(otherEntityNamePascalized === 'User') { _%>
-        public string UserId { get; set; } 
+        public string UserId { get; set; }
                 <%_ } else { _%>
         public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ }

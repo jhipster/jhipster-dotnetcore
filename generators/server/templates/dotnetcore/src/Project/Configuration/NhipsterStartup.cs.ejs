@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,10 @@ using <%= namespace %>.Infrastructure.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace <%= namespace %>.Configuration {
-    public static class NhipsterSettingsConfiguration {
+namespace <%= namespace %>.Configuration
+{
+    public static class NhipsterSettingsConfiguration
+    {
         public static IServiceCollection AddNhipsterModule(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));

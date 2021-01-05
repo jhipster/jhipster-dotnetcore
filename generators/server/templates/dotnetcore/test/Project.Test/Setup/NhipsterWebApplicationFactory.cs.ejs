@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,9 +29,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace <%= namespace %>.Test.Setup {
+namespace <%= namespace %>.Test.Setup
+{
     public class NhipsterWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint>
-        where TEntryPoint : class {
+        where TEntryPoint : class
+    {
         private IServiceProvider _serviceProvider;
         private ClaimsPrincipal _user { get; set; }
 
@@ -45,7 +47,8 @@ namespace <%= namespace %>.Test.Setup {
         {
             builder
                 .UseSolutionRelativeContentRoot("<%= SERVER_SRC_DIR %><%= solutionName %>")
-                .ConfigureServices(services => {
+                .ConfigureServices(services =>
+                {
                     services
                         .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
                     services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
@@ -71,12 +74,12 @@ namespace <%= namespace %>.Test.Setup {
         private static ClaimsPrincipal BuildClaimsPrincipal(string name, IEnumerable<string> roles,
             string authenticationType)
         {
-            if (roles == null || !roles.Any()) roles = new HashSet<string> {RolesConstants.USER};
+            if (roles == null || !roles.Any()) roles = new HashSet<string> { RolesConstants.USER };
 
             <%_ if (authenticationType === 'jwt') { _%>
-            var claims = new List<Claim> {new Claim(SecurityStartup.UserNameClaimType, name)};
+            var claims = new List<Claim> { new Claim(SecurityStartup.UserNameClaimType, name) };
             <%_ } else { _%>
-            var claims = new List<Claim> {new Claim(ClaimTypes.Name, name)};
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, name) };
             <%_ } _%>
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
             return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));

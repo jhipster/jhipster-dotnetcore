@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +34,10 @@ using Newtonsoft.Json;
 
 [assembly: ApiController]
 
-namespace <%= namespace %> {
-    public class Startup {
+namespace <%= namespace %>
+{
+    public class Startup
+    {
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
@@ -62,7 +64,7 @@ namespace <%= namespace %> {
             services
             <%_ if (authenticationType === 'jwt') { _%>
                 .AddSecurityModule()
-            <%_ } else { 
+            <%_ } else {
                 if (applicationType !== 'microservice') { _%>
                 .AddSecurityModule(jhipsterSettings)
                 <%_ }
@@ -74,7 +76,7 @@ namespace <%= namespace %> {
             <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
                 .AddConsul(Configuration)
             <%_ } _%>
-                .AddRepositoryModule()            
+                .AddRepositoryModule()
                 .AddServiceModule();
 
             <%_ if (applicationType === 'gateway') { _%>
@@ -82,7 +84,7 @@ namespace <%= namespace %> {
                 .AddOcelot()
                 .AddConsul();
             <%_ } _%>
-                
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,7 +101,7 @@ namespace <%= namespace %> {
                 .UseConsul(Configuration)
                 <%_ } _%>
                 .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2' || applicationType === 'microservice') { _%>;<%_ } _%>
-                
+
                 <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
                 .UseApplicationIdentity(serviceProvider);
                 <%_ } _%>

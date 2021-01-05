@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -33,12 +33,12 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
     {
         private readonly IGenericRepository<TEntity> _repository;
         private readonly DbSet<TEntity> _dbSet;
-        private List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> _include;    
+        private List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> _include;
         private List<Expression<Func<TEntity, object>>> _includeProperties;
         private Expression<Func<TEntity, bool>> _filter;
         private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderBy;
         private bool _disableTracking;
-        
+
         public FluentRepository(IGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
         {
             _repository = repository;

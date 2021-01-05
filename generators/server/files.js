@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -1172,6 +1172,13 @@ function writeFiles() {
         },
         writeFilesBaseServiceDiscovery() {
             this.writeFilesToDisk(baseServiceDiscoveryFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src/main'));
+        },
+        writeDirectoryTargetsFile() {
+            this.fs.copyTpl(
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
+                this.destinationPath('Directory.Build.targets'),
+                this
+            );
         },
     };
 }

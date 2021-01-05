@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,10 @@ using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 
-namespace <%= namespace %>.Domain.Services {
-    public class AuthenticationService : IAuthenticationService {
+namespace <%= namespace %>.Domain.Services
+{
+    public class AuthenticationService : IAuthenticationService
+    {
         private readonly ILogger<AuthenticationService> _log;
 
         private readonly UserManager<User> _userManager;
@@ -59,7 +61,8 @@ namespace <%= namespace %>.Domain.Services {
         {
             _log.LogDebug($"Authenticating {username}");
 
-            if (new EmailAddressAttribute().IsValid(username)) {
+            if (new EmailAddressAttribute().IsValid(username))
+            {
                 var userByEmail = await _userManager.FindByEmailAsync(username);
                 if (userByEmail == null)
                     throw new UsernameNotFoundException(

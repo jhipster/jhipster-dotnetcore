@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,10 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace <%= namespace %>.Infrastructure.Data.Extensions {
-    public static class PropertyAccessorCache<T> where T : class {
+namespace <%= namespace %>.Infrastructure.Data.Extensions
+{
+    public static class PropertyAccessorCache<T> where T : class
+    {
         private static readonly IDictionary<string, LambdaExpression> _cache;
 
         static PropertyAccessorCache()
@@ -26,7 +28,8 @@ namespace <%= namespace %>.Infrastructure.Data.Extensions {
 
             var t = typeof(T);
             var parameter = Expression.Parameter(t, "p");
-            foreach (var property in t.GetProperties(BindingFlags.Public | BindingFlags.Instance)) {
+            foreach (var property in t.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
                 var propertyAccess = Expression.MakeMemberAccess(parameter, property);
                 var lambdaExpression = Expression.Lambda(propertyAccess, parameter);
                 storage[property.Name] = lambdaExpression;
