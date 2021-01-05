@@ -14,16 +14,11 @@
 -%>
 namespace <%= namespace %>.Infrastructure.Configuration
 {
-    public class JHipsterSettings
-    {
-        public Security Security { get; set; }
-
-        public Cors Cors { get; set; }
-    }
-
-    public class Security
+    public class SecuritySettings
     {
         public Authentication Authentication { get; set; }
+        public Cors Cors { get; set; }
+        public bool EnforceHttps { get; set; }
     }
 
     <%_ if (authenticationType === 'jwt') { _%>
