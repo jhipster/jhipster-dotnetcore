@@ -105,7 +105,7 @@ namespace <%= namespace %>.Security.Jwt
             if (!string.IsNullOrWhiteSpace(secret))
             {
                 _log.LogWarning("Warning: the JWT key used is not Base64-encoded. " +
-                                "We recommend using the `jhipster.security.authentication.jwt.base64-secret` key for optimum security.");
+                                "We recommend using the `security.authentication.jwt.base64-secret` key for optimum security.");
                 keyBytes = Encoding.ASCII.GetBytes(secret);
             }
             else
