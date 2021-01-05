@@ -19,11 +19,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace <%= namespace %>.Configuration
 {
-    public static class NhipsterSettingsConfiguration
+    public static class AppSettingsConfiguration
     {
-        public static IServiceCollection AddNhipsterModule(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAppSettingsModule(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
+            // Use this to load settings from appSettings file
+            services.Configure<SecuritySettings>(options => configuration.GetSection("security").Bind(options));
+
             return services;
         }
     }

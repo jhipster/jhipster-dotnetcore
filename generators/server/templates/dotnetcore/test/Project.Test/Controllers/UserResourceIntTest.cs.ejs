@@ -35,7 +35,7 @@ namespace <%= namespace %>.Test.Controllers
     {
         public UserResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
+            _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
             _client = _factory.CreateClient();
             _userManager = _factory.GetRequiredService<UserManager<User>>();
             _passwordHasher = _userManager.PasswordHasher;
@@ -73,7 +73,7 @@ namespace <%= namespace %>.Test.Controllers
         private const string DefaultLangkey = "en";
         private const string UpdatedLangkey = "fr";
 
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
 
 

@@ -12,9 +12,9 @@ namespace <%= namespace %>.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly JHipsterSettings _settings;
+        private readonly SecuritySettings _settings;
 
-        public AuthController(IOptions<JHipsterSettings> settings)
+        public AuthController(IOptions<SecuritySettings> settings)
         {
             _settings = settings.Value;
         }
