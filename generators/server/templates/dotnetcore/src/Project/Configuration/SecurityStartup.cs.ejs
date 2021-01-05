@@ -158,7 +158,7 @@ namespace <%= namespace %>.Configuration
             <%_ if (authenticationType === 'oauth2') { _%>
             app.UseAuthorization();
             <%_ } _%>
-            if(securitySettings.EnforceHttps)
+            if (securitySettings.EnforceHttps)
             {
                 app.UseHsts();
                 app.UseHttpsRedirection();
