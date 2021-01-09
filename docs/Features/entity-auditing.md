@@ -22,16 +22,16 @@ public abstract class AuditedEntityBase
 ```
 ## Audit of generated Entities 
 
-For example, if we have a Task entity and we want to add audit functionality we would inherit from our ```AuditedEntityBase``` like that:
+For example, if we have a ```Task``` entity and we want to add audit functionality we would inherit from our ```AuditedEntityBase``` like that:
 ```csharp
 public class Task : AuditedEntityBase
 {
-    public string Tiltle { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
 }
 ```
 
-Our Task class will have all the audit properties.
+Our ```Task``` class will have all the audit properties.
 
 ## Automatically set properties audit
 
