@@ -32,6 +32,7 @@ You can also find lot of information in https://www.jhipster.tech
   Features/monitoring
   Features/security
   Features/dependencies-management
+  Features/entity-auditing
 
 .. toctree::
   :maxdepth: 3
