@@ -450,7 +450,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 //     (err, stdout, stderr) => {}
                 // );
                 // const child = ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
-                const child = ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
+                const child = ChildProcess.exec(herokuCreateCmd, { shell: false }, (err, stdout, stderr) => {
                     if (err) {
                         if (stderr.includes('is already taken')) {
                             const prompts = [
@@ -476,7 +476,7 @@ module.exports = class extends BaseBlueprintGenerator {
                             this.prompt(prompts).then(props => {
                                 if (props.herokuForceName === 'Yes') {
                                     const herokuRemoteAddCmd = `heroku git:remote --app ${this.herokuAppName}`;
-                                    ChildProcess.exec(herokuRemoteAddCmd, (err, stdout, stderr) => {
+                                    ChildProcess.exec(herokuRemoteAddCmd, { shell: false }, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -491,7 +491,7 @@ module.exports = class extends BaseBlueprintGenerator {
                                     });
                                 } else {
                                     const herokuCreateCmd = `heroku create ${regionParams}`;
-                                    ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
+                                    ChildProcess.exec(herokuCreateCmd, { shell: false }, (err, stdout, stderr) => {
                                         if (err) {
                                             this.abort = true;
                                             this.log.error(err);
@@ -505,7 +505,7 @@ module.exports = class extends BaseBlueprintGenerator {
 
                                             // ensure that the git remote is the same as the appName
                                             const herokuRemoteAddCmd = `heroku git:remote --app ${this.herokuAppName}`;
-                                            ChildProcess.exec(herokuRemoteAddCmd, (err, stdout, stderr) => {
+                                            ChildProcess.exec(herokuRemoteAddCmd, { shell: false }, (err, stdout, stderr) => {
                                                 if (err) {
                                                     this.abort = true;
                                                     this.log.error(err);
