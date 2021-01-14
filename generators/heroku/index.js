@@ -54,8 +54,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
         this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
         this.registerPrettierTransform();
-
-        // useBlueprints = !this.fromBlueprint && this.instantiateBlueprints('heroku');
     }
 
     _initializing() {
@@ -332,11 +330,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.abort || this.herokuAppExists) return;
                 const done = this.async();
 
-                // const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
-
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-                // const herokuCreateCmd = `heroku create ${this.herokuAppName}${regionParams}`;
-                // const child = ChildProcess.exec(herokuCreateCmd, (err, stdout, stderr) => {
                 const child = ChildProcess.execFile(
                     this.herokuExecutablePath,
                     ['create', this.herokuAppName, '--region', this.herokuRegion],
@@ -368,20 +362,6 @@ module.exports = class extends BaseBlueprintGenerator {
                                 this.log('');
                                 this.prompt(prompts).then(props => {
                                     if (props.herokuForceName === 'Yes') {
-                                        // const herokuRemoteAddCmd = `heroku git:remote --app ${this.herokuAppName}`;
-                                        // ChildProcess.exec(herokuRemoteAddCmd, { shell: false }, (err, stdout, stderr) => {
-                                        //     if (err) {
-                                        //         this.abort = true;
-                                        //         this.log.error(err);
-                                        //     } else {
-                                        //         this.log(stdout.trim());
-                                        //         this.config.set({
-                                        //             herokuAppName: this.herokuAppName,
-                                        //             herokuDeployType: this.herokuDeployType,
-                                        //         });
-                                        //     }
-                                        //     done();
-                                        // });
                                         ChildProcess.execFile(
                                             this.herokuExecutablePath,
                                             ['git:remote', '--app', this.herokuAppName],
@@ -401,8 +381,6 @@ module.exports = class extends BaseBlueprintGenerator {
                                             }
                                         );
                                     } else {
-                                        // const herokuCreateCmd = `heroku create ${regionParams}`;
-                                        // ChildProcess.exec(herokuCreateCmd, { shell: false }, (err, stdout, stderr) => {
                                         ChildProcess.execFile(
                                             this.herokuExecutablePath,
                                             ['create', '--region', this.herokuRegion],
@@ -420,21 +398,6 @@ module.exports = class extends BaseBlueprintGenerator {
                                                     this.log(stdout.trim());
 
                                                     // ensure that the git remote is the same as the appName
-
-                                                    // const herokuRemoteAddCmd = `heroku git:remote --app ${this.herokuAppName}`;
-                                                    // ChildProcess.exec(herokuRemoteAddCmd, { shell: false }, (err, stdout, stderr) => {
-                                                    //     if (err) {
-                                                    //         this.abort = true;
-                                                    //         this.log.error(err);
-                                                    //     } else {
-                                                    //         this.config.set({
-                                                    //             herokuAppName: this.herokuAppName,
-                                                    //             herokuDeployType: this.herokuDeployType,
-                                                    //         });
-                                                    //     }
-                                                    //     done();
-                                                    // });
-
                                                     ChildProcess.execFile(
                                                         this.herokuExecutablePath,
                                                         ['git:remote', '--app', this.herokuAppName],
@@ -514,16 +477,9 @@ module.exports = class extends BaseBlueprintGenerator {
                 } else if (this.databaseType === 'mysql') {
                     dbAddOn = 'jawsdb:kitefin';
                 }
-                // } else if (this.databaseType === 'mssql') {
-                //     dbAddOn = 'mssql:micro';
-                // }
 
                 if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
-                    // const herokuAddDbAddonCmd = `heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`;
-                    // ChildProcess.exec(herokuAddDbAddonCmd, { shell: false }, (err, stdout, stderr) => {
-                    //     addonCreateCallback('Database', err, stdout, stderr);
-                    // });
                     ChildProcess.execFile(
                         this.herokuExecutablePath,
                         ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
@@ -538,58 +494,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 done();
             },
-
-            /*
-            configureJHipsterRegistry() {
-                if (this.abort || this.herokuAppExists) return;
-                const done = this.async();
-
-                if (this.serviceDiscoveryType === 'eureka') {
-                    const prompts = [
-                        {
-                            type: 'input',
-                            name: 'herokuJHipsterRegistryApp',
-                            message: 'What is the name of your JHipster Registry Heroku application?',
-                        },
-                        {
-                            type: 'input',
-                            name: 'herokuJHipsterRegistryUsername',
-                            message: 'What is your JHipster Registry username?',
-                            default: 'admin',
-                        },
-                        {
-                            type: 'input',
-                            name: 'herokuJHipsterRegistryPassword',
-                            message: 'What is your JHipster Registry password?',
-                        },
-                    ];
-
-                    this.log('');
-                    this.prompt(prompts).then(props => {
-                        // Encode username/password to avoid errors caused by spaces
-                        props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
-                        props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
-                        const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
-                        const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-                        const child = ChildProcess.exec(configSetCmd, (err, stdout, stderr) => {
-                            if (err) {
-                                this.abort = true;
-                                this.log.error(err);
-                            }
-                            done();
-                        });
-
-                        child.stdout.on('data', data => {
-                            this.log(data.toString());
-                        });
-                    });
-                } else {
-                    this.conflicter.resolve(err => {
-                        done();
-                    });
-                }
-            },
-            */
 
             copyHerokuFiles() {
                 if (this.abort) return;
@@ -636,31 +540,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
-            productionBuild() {
-                if (this.abort) return;
-
-                if (this.herokuSkipBuild || this.herokuDeployType === 'git') {
-                    this.log(chalk.bold('\nSkipping build'));
-                    return;
-                }
-
-                const done = this.async();
-                this.log(chalk.bold('\nBuilding application'));
-
-                const child = this.buildApplication(this.buildTool, 'prod', false, err => {
-                    if (err) {
-                        this.abort = true;
-                        this.log.error(err);
-                    }
-                    done();
-                });
-
-                this.buildCmd = child.buildCmd;
-
-                child.stdout.on('data', data => {
-                    process.stdout.write(data.toString());
-                });
-            },
             */
 
             async productionDeploy() {
@@ -702,10 +581,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
                         const buildpack = 'https://github.com/jincod/dotnetcore-buildpack#v5.0.100';
                         const configVars = 'ASPNETCORE_ENVIRONMENT=Production ';
-                        // if (this.buildTool === 'gradle') {
-                        //     buildpack = 'heroku/gradle';
-                        //     configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
-                        // }
 
                         this.log(chalk.bold('\nConfiguring Heroku'));
                         await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
@@ -733,9 +608,13 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
                         this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-                        this.log(chalk.yellow('Heroku MS SQL Server addon charges 15$/month.'));
-                        this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to install it.'));
-                        this.log(chalk.yellow('If you want to stay at the free tier re-generate the application choosing other database.'));
+                        if (this.databaseType === 'mssql') {
+                            this.log(chalk.yellow('Heroku MS SQL Server addon charges 15$/month.'));
+                            this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to install it.'));
+                            this.log(
+                                chalk.yellow('If you want to stay at the free tier re-generate the application choosing other database.')
+                            );
+                        }
 
                         // if (this.useOkta) {
                         //     let curlAvailable = false;
@@ -788,7 +667,6 @@ module.exports = class extends BaseBlueprintGenerator {
     }
 
     get end() {
-        // if (useBlueprints) return;
         return this._end();
     }
 };
