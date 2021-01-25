@@ -306,23 +306,15 @@ module.exports = class extends BaseBlueprintGenerator {
 
             nodePackageInit() {
                 if (this.abort) return;
-                const done = this.async();
-
                 // A package.json file at the root folder is required by the node.js buildpack.
                 // Node.js is required to complie the client application.
                 try {
                     fs.lstatSync('package.json');
                     this.log(chalk.bold('\nUsing existing package.json at root directory. It is required by heroku/nodejs buidpack.'));
-                    done();
                 } catch (e) {
                     // An exception is thrown if the folder doesn't exist
                     this.log(chalk.bold('\nCreating package.json at root directory. It is required by heroku/nodejs buidpack.'));
-                    const child = ChildProcess.exec('npm init -y', (err, stdout, stderr) => {
-                        done();
-                    });
-                    child.stdout.on('data', data => {
-                        this.log(data.toString());
-                    });
+                    ChildProcess.execSync('npm init -y');
                 }
             },
 
