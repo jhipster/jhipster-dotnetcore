@@ -41,7 +41,7 @@ namespace <%= namespace %>.Configuration
             string connectionString = null;
             string databaseUrl = configuration.GetValue<string>("DATABASE_URL");
 
-            if (!String.IsNullOrEmpty(databaseUrl) && Uri.IsWellFormedUriString(databaseUrl, UriKind.RelativeOrAbsolute)) 
+            if (!String.IsNullOrEmpty(databaseUrl) && Uri.IsWellFormedUriString(databaseUrl, UriKind.RelativeOrAbsolute))
             {
                 Console.WriteLine("DATABASE_URL will be used to create the connection string.");
                 //  Parse the connection string
@@ -59,21 +59,22 @@ namespace <%= namespace %>.Configuration
                         break;
                     case "mssql":
                         connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Trusted_Connection=False;Pooling=true;";
-                    break;                        
+                        break;
                     default:
                         Console.WriteLine("It was not possible to determine the database type provided by DATABASE_URL");
-                    break;
+                        break;
                 }
-            } 
-            else 
+            }
+            else
             {
                 connectionString = configuration.GetConnectionString("AppDbContext");
-            }            
+            }
 
             <%_ switch(databaseType) {
                 case 'sqllite': _%>
             var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
-            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder {
+            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder
+            {
                 DataSource = entityFrameworkConfiguration["DataSource"]
             }.ToString());
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
