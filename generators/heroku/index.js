@@ -335,9 +335,9 @@ module.exports = class extends BaseBlueprintGenerator {
                     this.herokuExecutablePath,
                     ['create', this.herokuAppName, '--region', this.herokuRegion],
                     { shell: false },
-                    (err, stdout, stderr) => {
-                        if (err) {
-                            if (stderr.includes('is already taken')) {
+                    (error, stdoutput, stderror) => {
+                        if (error) {
+                            if (stderror.includes('is already taken')) {
                                 const prompts = [
                                     {
                                         type: 'list',
@@ -422,7 +422,7 @@ module.exports = class extends BaseBlueprintGenerator {
                                 });
                             } else {
                                 this.abort = true;
-                                this.log.error(err);
+                                this.log.error(error);
                                 done();
                             }
                         } else {
