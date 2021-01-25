@@ -36,39 +36,61 @@ namespace <%= namespace %>.Configuration {
     public static class DatabaseConfiguration {
         public static IServiceCollection AddDatabaseModule(this IServiceCollection services, IConfiguration configuration)
         {
-            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
+            string connectionString = null;
+            string databaseUrl = configuration.GetValue<string>("DATABASE_URL");
+
+            if (!String.IsNullOrEmpty(databaseUrl) && Uri.IsWellFormedUriString(databaseUrl, UriKind.RelativeOrAbsolute)) 
+            {
+                Console.WriteLine("DATABASE_URL will be used to create the connection string.");
+                //  Parse the connection string
+                var databaseUri = new Uri(databaseUrl);
+                string db = databaseUri.LocalPath.TrimStart('/');
+                string[] userInfo = databaseUri.UserInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
+
+                switch (databaseUri.Scheme)
+                {
+                    case "postgres":
+                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User Id={userInfo[0]};Password={userInfo[1]};Integrated Security=true;Pooling=true;MinPoolSize=0;MaxPoolSize=20;";
+                        break;
+                    case "mysql":
+                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Pooling=true;MinimumPoolSize=0;MaximumPoolsize=10;";
+                        break;
+                    case "mssql":
+                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Trusted_Connection=False;Pooling=true;";
+                    break;                        
+                    default:
+                        Console.WriteLine("It was not possible to determine the database type provided by DATABASE_URL");
+                    break;
+                }
+            } 
+            else 
+            {
+                connectionString = configuration.GetConnectionString("AppDbContext");
+            }            
 
             <%_ switch(databaseType) {
                 case 'sqllite': _%>
-            var connection = new SqliteConnection(new SqliteConnectionStringBuilder {
+            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
+            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder {
                 DataSource = entityFrameworkConfiguration["DataSource"]
             }.ToString());
-
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(connection); });
+            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
                 <%_ break;
                 case 'mssql': _%>
-            var connection = configuration.GetConnectionString("AppDbContext");
-
-            services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
                 <%_ break;
                 case 'postgres': _%>
-            var connection = configuration.GetConnectionString("AppDbContext");
-
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connection); });
+            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
                 <%_ break;
                 case 'mysql': _%>
-            var connection = configuration.GetConnectionString("AppDbContext");
-
             services.AddDbContext<ApplicationDatabaseContext>(options =>
-                options.UseMySql(connection, mySqlOptions =>
+                options.UseMySql(connectionString, mySqlOptions =>
                     mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
             ));
                 <%_ break;
                 case 'oracle': _%>
-            var connection = configuration.GetConnectionString("AppDbContext");
-
             services.AddDbContext<ApplicationDatabaseContext>(options =>
-                options.UseOracle(connection));
+                options.UseOracle(connectionString));
                 <%_ break;
             } _%>
 
