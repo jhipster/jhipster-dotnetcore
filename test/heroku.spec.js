@@ -17,6 +17,7 @@ describe('JHipster Heroku Sub Generator', () => {
     const herokuAppName = 'jhipster-test';
     let stub;
     let stubExecFile;
+    let stubExecSync;
     let stubWhich;
     let sandbox;
 
@@ -32,13 +33,8 @@ describe('JHipster Heroku Sub Generator', () => {
                     on: () => {},
                 },
             });
-        stub.withArgs('npm init -y')
-            .yields([false, '', ''])
-            .returns({
-                stdout: {
-                    on: () => {},
-                },
-            });
+        stubExecSync = sandbox.stub(ChildProcess, 'execSync');
+        stubExecSync.withArgs('npm init -y').returns(true);
         stubWhich = sandbox.stub(Which, 'sync');
         stubWhich.withArgs('heroku').returns(pathToHerokuExecutable);
         stubExecFile = sandbox.stub(ChildProcess, 'execFile');
