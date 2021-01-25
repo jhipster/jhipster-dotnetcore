@@ -23,6 +23,7 @@ You can also find lot of information in https://www.jhipster.tech
   :hidden:
   :caption: Features
 
+  Features/fronts
   Features/services
   Features/dto
   Features/repository
@@ -30,6 +31,15 @@ You can also find lot of information in https://www.jhipster.tech
   Features/code-analysis
   Features/monitoring
   Features/security
+  Features/dependencies-management
+  Features/entity-auditing
+
+.. toctree::
+  :maxdepth: 3
+  :hidden:
+  :caption: Development
+
+  Development/RunLocal
 
 .. toctree::
   :maxdepth: 3

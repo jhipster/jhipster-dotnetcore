@@ -5,3 +5,7 @@ update_configs:
     directory: "/"
     update_schedule: "live"
     target_branch: "dependencies"
+  - package_manager: "dotnet:nuget"
+    directory: "/generators/server/templates/dotnetcore/src"
+    update_schedule: "live"
+    target_branch: "dependencies"

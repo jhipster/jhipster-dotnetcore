@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,32 +65,30 @@
         <%_ } _%>
     },
     <%_ } _%>
-    "jhipster": {
-        "Security": {
-            "Authentication": {
-                <%_ if (authenticationType === 'jwt') { _%>
-                "Jwt": {
-                    "Base64Secret": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
-                    "TokenValidityInSeconds": 86400,
-                    "TokenValidityInSecondsForRememberMe": 2592000
-                }
-                <%_ } else { _%>
-                "OAuth2": {
-                    "Provider": {
-                        "IssuerUri": "http://localhost:9080/auth/realms/jhipster",
-                        "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
-                        "ClientId": "web_app",
-                        "ClientSecret": "web_app"
-                      }
-                      //"Provider": {
-                      //  "IssuerUri": "https://{yourOktaDomain}/oauth2/default",
-                      //  "LogOutUri": "https://{yourOktaDomain}/oauth2/default/v1/logout",
-                      //  "ClientId": "client_id",
-                      //  "ClientSecret": "client_secret"
-                      //}
-                }    
-                <%_ } _%>
+    "Security": {
+        "Authentication": {
+            <%_ if (authenticationType === 'jwt') { _%>
+            "Jwt": {
+                "Base64Secret": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
+                "TokenValidityInSeconds": 86400,
+                "TokenValidityInSecondsForRememberMe": 2592000
             }
+            <%_ } else { _%>
+            "OAuth2": {
+                "Provider": {
+                    "IssuerUri": "http://localhost:9080/auth/realms/jhipster",
+                    "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
+                    "ClientId": "web_app",
+                    "ClientSecret": "web_app"
+                    }
+                    //"Provider": {
+                    //  "IssuerUri": "https://{yourOktaDomain}/oauth2/default",
+                    //  "LogOutUri": "https://{yourOktaDomain}/oauth2/default/v1/logout",
+                    //  "ClientId": "client_id",
+                    //  "ClientSecret": "client_secret"
+                    //}
+            }
+            <%_ } _%>
         },
         "Cors": {
             "AllowedOrigins": "*",

@@ -3,8 +3,9 @@ using JHipsterNet.Core.Pagination;
 using JhipsterSampleApplication.Domain.Services.Interfaces;
 using JhipsterSampleApplication.Domain.Repositories.Interfaces;
 
-namespace JhipsterSampleApplication.Domain.Services {
-    public class CountryExtendedService : CountryService, ICountryService 
+namespace JhipsterSampleApplication.Domain.Services
+{
+    public class CountryExtendedService : CountryService, ICountryService
     {
         public CountryExtendedService(ICountryRepository countryRepository) : base(countryRepository)
         {

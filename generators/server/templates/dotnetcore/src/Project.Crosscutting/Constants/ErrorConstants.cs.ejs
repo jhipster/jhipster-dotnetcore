@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Crosscutting.Constants {
-    public static class ErrorConstants {
+namespace <%= namespace %>.Crosscutting.Constants
+{
+    public static class ErrorConstants
+    {
         public const string ErrValidation = "error.validation";
         private const string ProblemBaseUrl = "https://www.jhipster.tech/problem";
         public static readonly string DefaultType = $"{ProblemBaseUrl}/problem-with-message";

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,11 +39,13 @@ WORKDIR /app
 EXPOSE 80
 COPY --from=build /app/out .
 
+ENV ASPNETCORE_ENVIRONMENT=Production
+
 # See: https://github.com/dotnet/announcements/issues/20
-# Uncomment to enable globalization APIs (or delete)
-#ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
-#RUN apk add --no-cache icu-libs
-#ENV LC_ALL en_US.UTF-8
-#ENV LANG en_US.UTF-8
+# Comment to Disable globalization APIs (or delete)
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+RUN apk add --no-cache icu-libs
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
 
 ENTRYPOINT ["dotnet", "<%= kebabCasedBaseName %>.dll"]

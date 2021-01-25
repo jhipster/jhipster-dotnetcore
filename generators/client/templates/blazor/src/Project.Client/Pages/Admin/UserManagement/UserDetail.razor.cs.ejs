@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace <%= namespace %>.Client.Pages.Admin.UserManagement
 {
-    public partial class UserDetail
+    public partial class UserDetail : ComponentBase
     {
         [Parameter]
         public string Id { get; set; }
@@ -32,13 +32,13 @@ namespace <%= namespace %>.Client.Pages.Admin.UserManagement
         private INavigationService NavigationService { get; set; }
 
         private UserModel CurrentUser { get; set; }
-        
+
         protected override async Task OnInitializedAsync()
         {
             CurrentUser = null;
             if (!string.IsNullOrWhiteSpace(Id))
             {
-                CurrentUser = await UserService.Get(Id); 
+                CurrentUser = await UserService.Get(Id);
             }
         }
 

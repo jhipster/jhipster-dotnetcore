@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -66,16 +66,19 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public void AddOrUpdateGraph<TEntiy>(TEntiy entity) where TEntiy : class
         {
-            _context.ChangeTracker.TrackGraph(entity, e => {
+            _context.ChangeTracker.TrackGraph(entity, e =>
+            {
                 var alreadyTrackedEntity = _context.ChangeTracker.Entries().FirstOrDefault(entry => entry.Entity.Equals(e.Entry.Entity));
                 if (alreadyTrackedEntity != null)
                 {
                     return;
                 }
-                if (e.Entry.IsKeySet) {
+                if (e.Entry.IsKeySet)
+                {
                     e.Entry.State = EntityState.Modified;
                 }
-                else {
+                else
+                {
                     e.Entry.State = EntityState.Added;
                 }
             });

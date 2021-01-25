@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 
-namespace <%= namespace %>.Test.Setup {
-    public class MockHttpContextFactory : IHttpContextFactory {
+namespace <%= namespace %>.Test.Setup
+{
+    public class MockHttpContextFactory : IHttpContextFactory
+    {
         private readonly DefaultHttpContextFactory _delegate;
         private readonly MockClaimsPrincipalProvider _mockClaimsPrincipalProvider;
 

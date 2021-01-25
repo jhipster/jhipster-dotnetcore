@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,7 +22,8 @@ using <%= namespace %>.Client.Models;
 using <%= namespace %>.Dto;
 
 
-namespace <%= namespace %>.Client.AutoMapper {
+namespace <%= namespace %>.Client.AutoMapper
+{
 
     public class AutoMapperProfile : Profile
     {
@@ -34,11 +35,11 @@ namespace <%= namespace %>.Client.AutoMapper {
                 .ReverseMap()
                 .ForPath(userDto => userDto.Roles,
                     opt => opt.MapFrom(userModel => userModel.Authorities));
-            
+
             CreateMap<ManagedUserDto, UserSaveModel>().ReverseMap();
             CreateMap<LoginDto, LoginModel>().ReverseMap();
 
-            // jhipster-needle-add-dto-model-mapping - JHipster will add dto to model and model to dto mapping 
+            // jhipster-needle-add-dto-model-mapping - JHipster will add dto to model and model to dto mapping
         }
     }
 }

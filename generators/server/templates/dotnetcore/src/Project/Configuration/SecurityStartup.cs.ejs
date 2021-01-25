@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,8 +47,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 <%_ } _%>
 
-namespace <%= namespace %>.Configuration {
-    public static class SecurityStartup {
+namespace <%= namespace %>.Configuration
+{
+    public static class SecurityStartup
+    {
 
         <%_ if (authenticationType === 'jwt') { _%>
         public const string UserNameClaimType = JwtRegisteredClaimNames.Sub;
@@ -57,27 +59,30 @@ namespace <%= namespace %>.Configuration {
         <%_ if (authenticationType === 'jwt') { _%>
         public static IServiceCollection AddSecurityModule(this IServiceCollection services)
         <%_ } else { _%>
-        public static IServiceCollection AddSecurityModule(this IServiceCollection services, JHipsterSettings jhipsterSettings)
+        public static IServiceCollection AddSecurityModule(this IServiceCollection services, SecuritySettings securitySettings)
         <%_ } _%>
         {
             <%_ if (authenticationType === 'jwt') { _%>
             //TODO Retrieve the signing key properly (DRY with TokenProvider)
-            var opt = services.BuildServiceProvider().GetRequiredService<IOptions<JHipsterSettings>>();
-            var jhipsterSettings = opt.Value;
+            var opt = services.BuildServiceProvider().GetRequiredService<IOptions<SecuritySettings>>();
+            var securitySettings = opt.Value;
             byte[] keyBytes;
-            var secret = jhipsterSettings.Security.Authentication.Jwt.Secret;
+            var secret = securitySettings.Authentication.Jwt.Secret;
 
-            if (!string.IsNullOrWhiteSpace(secret)) {
+            if (!string.IsNullOrWhiteSpace(secret))
+            {
                 keyBytes = Encoding.ASCII.GetBytes(secret);
             }
-            else {
-                keyBytes = Convert.FromBase64String(jhipsterSettings.Security.Authentication.Jwt.Base64Secret);
+            else
+            {
+                keyBytes = Convert.FromBase64String(securitySettings.Authentication.Jwt.Base64Secret);
             }
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
 
             <%_ if (applicationType !== 'microservice') { _%>
-            services.AddIdentity<User, Role>(options => {
+            services.AddIdentity<User, Role>(options =>
+                {
                     options.SignIn.RequireConfirmedEmail = true;
                     options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
                 })
@@ -90,15 +95,18 @@ namespace <%= namespace %>.Configuration {
             <%_ } _%>
 
             services
-                .AddAuthentication(options => {
+                .AddAuthentication(options =>
+                {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(cfg => {
+                .AddJwtBearer(cfg =>
+                {
                     cfg.RequireHttpsMetadata = false;
                     cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters {
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
@@ -109,7 +117,7 @@ namespace <%= namespace %>.Configuration {
 
             <%_ if (applicationType !== 'microservice') { _%>
             services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-            <%_ } _%>            
+            <%_ } _%>
             services.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
             services.AddScoped<ITokenProvider, TokenProvider>();
             <%_ } else { _%>
@@ -122,9 +130,9 @@ namespace <%= namespace %>.Configuration {
             .AddCookie()
             .AddOpenIdConnect(options =>
             {
-                options.Authority = jhipsterSettings.Security.Authentication.OAuth2.Provider.IssuerUri;
-                options.ClientId = jhipsterSettings.Security.Authentication.OAuth2.Provider.ClientId;
-                options.ClientSecret = jhipsterSettings.Security.Authentication.OAuth2.Provider.ClientSecret;
+                options.Authority = securitySettings.Authentication.OAuth2.Provider.IssuerUri;
+                options.ClientId = securitySettings.Authentication.OAuth2.Provider.ClientId;
+                options.ClientSecret = securitySettings.Authentication.OAuth2.Provider.ClientSecret;
                 options.SaveTokens = true;
                 options.ResponseType = OpenIdConnectResponseType.Code;
                 options.RequireHttpsMetadata = false; // dev only
@@ -143,23 +151,26 @@ namespace <%= namespace %>.Configuration {
         }
 
         public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder app,
-            JHipsterSettings jhipsterSettings)
+            SecuritySettings securitySettings)
         {
-            app.UseCors(CorsPolicyBuilder(jhipsterSettings.Cors));
+            app.UseCors(CorsPolicyBuilder(securitySettings.Cors));
             app.UseAuthentication();
             <%_ if (authenticationType === 'oauth2') { _%>
             app.UseAuthorization();
             <%_ } _%>
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-            app.UseHttpsRedirection();
+            if (securitySettings.EnforceHttps)
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
             return app;
         }
 
         private static Action<CorsPolicyBuilder> CorsPolicyBuilder(Cors config)
         {
             //TODO implement an url based cors policy rather than global or per controller
-            return builder => {
+            return builder =>
+            {
                 if (!config.AllowedOrigins.Equals("*"))
                 {
                     if (config.AllowCredentials)
