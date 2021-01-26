@@ -394,10 +394,10 @@ module.exports = class extends BaseBlueprintGenerator {
                                                         this.herokuExecutablePath,
                                                         ['git:remote', '--app', this.herokuAppName],
                                                         { shell: false },
-                                                        (err, stdout, stderr) => {
-                                                            if (err) {
+                                                        (e, stout, sterr) => {
+                                                            if (e) {
                                                                 this.abort = true;
-                                                                this.log.error(err);
+                                                                this.log.error(e);
                                                             } else {
                                                                 this.config.set({
                                                                     herokuAppName: this.herokuAppName,
