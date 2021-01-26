@@ -445,10 +445,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.bold('\nProvisioning addons'));
 
                 if (this.useOkta) {
-                    const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
-                    ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
-                        addonCreateCallback('Okta', err, stdout, stderr);
-                    });
+                    ChildProcess.execFile(
+                        this.herokuExecutablePath,
+                        ['addons:create', 'okta', '--app', this.herokuAppName],
+                        { shell: false },
+                        (err, stdout, stderr) => {
+                            addonCreateCallback('Okta', err, stdout, stderr);
+                        }
+                    );
                 }
 
                 let dbAddOn;
@@ -587,8 +591,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                         if (this.databaseType === 'mssql') {
-                            this.log(chalk.yellow('Heroku MS SQL Server addon charges 15$/month.'));
-                            this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to install it.'));
+                            this.log(chalk.yellow('Heroku MS SQL Server addon charges start at 15$/month.'));
+                            this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to manually install it.'));
                             this.log(
                                 chalk.yellow('If you want to stay at the free tier re-generate the application choosing other database.')
                             );
