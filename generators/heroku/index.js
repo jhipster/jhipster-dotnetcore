@@ -22,7 +22,6 @@ const fs = require('fs');
 const ChildProcess = require('child_process');
 const util = require('util');
 const chalk = require('chalk');
-// const glob = require('glob');
 
 const BaseBlueprintGenerator = require('generator-jhipster/generators/generator-base-blueprint');
 const statistics = require('generator-jhipster/generators/statistics');
@@ -67,34 +66,23 @@ module.exports = class extends BaseBlueprintGenerator {
                 const configuration = this.getAllJhipsterConfig(this, true);
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = configuration.get('baseName');
-                // this.packageName = configuration.get('packageName');
-                // this.packageFolder = configuration.get('packageFolder');
-                // this.cacheProvider = configuration.get('cacheProvider') || configuration.get('hibernateCache') || 'no';
-                // this.enableHibernateCache = configuration.get('enableHibernateCache') && !['no', 'memcached'].includes(this.cacheProvider);
                 this.databaseType = configuration.get('databaseType');
-                // this.prodDatabaseType = configuration.get('prodDatabaseType');
-                // this.searchEngine = configuration.get('searchEngine');
                 this.angularAppName = this.getAngularAppName();
-                // this.buildTool = configuration.get('buildTool');
                 this.applicationType = configuration.get('applicationType');
-                // this.reactive = configuration.get('reactive') || false;
-                // this.serviceDiscoveryType = configuration.get('serviceDiscoveryType');
+                this.reactive = configuration.get('reactive') || false;
                 this.authenticationType = configuration.get('authenticationType');
                 this.herokuAppName = configuration.get('herokuAppName');
                 this.dynoSize = 'Free';
                 this.herokuDeployType = configuration.get('herokuDeployType');
-                // this.herokuJavaVersion = configuration.get('herokuJavaVersion');
-                // this.useOkta = configuration.get('useOkta');
-                // this.oktaAdminLogin = configuration.get('oktaAdminLogin');
-                // this.oktaAdminPassword = configuration.get('oktaAdminPassword');
-                // utilsNet.configureGlobalDotnetcore();
+                this.useOkta = configuration.get('useOkta');
+                this.oktaAdminLogin = configuration.get('oktaAdminLogin');
+                this.oktaAdminPassword = configuration.get('oktaAdminPassword');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
             },
         };
     }
 
     get initializing() {
-        // if (useBlueprints) return;
         return this._initializing();
     }
 
@@ -177,67 +165,67 @@ module.exports = class extends BaseBlueprintGenerator {
                 });
             },
 
-            // askForOkta() {
-            //     if (this.abort) return null;
-            //     if (this.authenticationType !== 'oauth2') return null;
-            //     if (this.useOkta) return null;
-            //     const prompts = [
-            //         {
-            //             type: 'list',
-            //             name: 'useOkta',
-            //             message:
-            //                 'You are using OAuth 2.0. Do you want to use Okta as your identity provider it yourself? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
-            //             choices: [
-            //                 {
-            //                     value: true,
-            //                     name: 'Yes, provision the Okta add-on',
-            //                 },
-            //                 {
-            //                     value: false,
-            //                     name: 'No, I want to configure my identity provider manually',
-            //                 },
-            //             ],
-            //             default: 1,
-            //         },
-            //         {
-            //             type: 'input',
-            //             name: 'oktaAdminLogin',
-            //             message: 'Login (valid email) for the JHipster Admin user:',
-            //             validate: input => {
-            //                 if (!input) {
-            //                     return 'You must enter a login for the JHipster admin';
-            //                 }
-            //                 return true;
-            //             },
-            //         },
-            //         {
-            //             type: 'password',
-            //             name: 'oktaAdminPassword',
-            //             message:
-            //                 'Initial password for the JHipster Admin user. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.',
-            //             mask: true,
-            //             validate: input => {
-            //                 if (!input) {
-            //                     return 'You must enter an initial password for the JHipster admin';
-            //                 }
-            //                 // try to mimic the password requirements by the okta addon
-            //                 const passwordRegex = new RegExp('^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}$');
+            askForOkta() {
+                if (this.abort) return null;
+                if (this.authenticationType !== 'oauth2') return null;
+                if (this.useOkta) return null;
+                const prompts = [
+                    {
+                        type: 'list',
+                        name: 'useOkta',
+                        message:
+                            'You are using OAuth 2.0. Do you want to use Okta as your identity provider it yourself? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
+                        choices: [
+                            {
+                                value: true,
+                                name: 'Yes, provision the Okta add-on',
+                            },
+                            {
+                                value: false,
+                                name: 'No, I want to configure my identity provider manually',
+                            },
+                        ],
+                        default: 1,
+                    },
+                    {
+                        type: 'input',
+                        name: 'oktaAdminLogin',
+                        message: 'Login (valid email) for the JHipster Admin user:',
+                        validate: input => {
+                            if (!input) {
+                                return 'You must enter a login for the JHipster admin';
+                            }
+                            return true;
+                        },
+                    },
+                    {
+                        type: 'password',
+                        name: 'oktaAdminPassword',
+                        message:
+                            'Initial password for the JHipster Admin user. Password requirements: at least 8 characters, a lowercase letter, an uppercase letter, a number, no parts of your username.',
+                        mask: true,
+                        validate: input => {
+                            if (!input) {
+                                return 'You must enter an initial password for the JHipster admin';
+                            }
+                            // try to mimic the password requirements by the okta addon
+                            const passwordRegex = new RegExp('^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,}$');
 
-            //                 if (passwordRegex.test(input)) {
-            //                     return true;
-            //                 }
+                            if (passwordRegex.test(input)) {
+                                return true;
+                            }
 
-            //                 return 'Your password must be at least 8 characters long and contain a lowercase letter, an uppercase letter, a number, and no parts of your username!';
-            //             },
-            //         },
-            //     ];
+                            return 'Your password must be at least 8 characters long and contain a lowercase letter, an uppercase letter, a number, and no parts of your username!';
+                        },
+                    },
+                ];
 
-            //     return this.prompt(prompts).then(props => {
-            //         this.useOkta = props.useOkta;
-            //         this.oktaAdminLogin = props.oktaAdminLogin;
-            //         this.oktaAdminPassword = props.oktaAdminPassword;
-            //     });
-            // },
+                return this.prompt(prompts).then(props => {
+                    this.useOkta = props.useOkta;
+                    this.oktaAdminLogin = props.oktaAdminLogin;
+                    this.oktaAdminPassword = props.oktaAdminPassword;
+                });
+            },
         };
     }
 
@@ -266,7 +254,7 @@ module.exports = class extends BaseBlueprintGenerator {
                     herokuAppName: this.herokuAppName,
                     herokuDeployType: this.herokuDeployType,
                     herokuJavaVersion: this.herokuJavaVersion,
-                    // useOkta: this.useOkta,
+                    useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
                     oktaAdminPassword: this.oktaAdminPassword,
                 });
@@ -456,12 +444,12 @@ module.exports = class extends BaseBlueprintGenerator {
 
                 this.log(chalk.bold('\nProvisioning addons'));
 
-                // if (this.useOkta) {
-                //     const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
-                //     ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
-                //         addonCreateCallback('Okta', err, stdout, stderr);
-                //     });
-                // }
+                if (this.useOkta) {
+                    const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
+                    ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
+                        addonCreateCallback('Okta', err, stdout, stderr);
+                    });
+                }
 
                 let dbAddOn;
                 if (this.databaseType === 'postgresql') {
@@ -493,17 +481,17 @@ module.exports = class extends BaseBlueprintGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-                // this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
-                // this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
                 this.template('Procfile.ejs', 'Procfile');
-                // this.template('system.properties.ejs', 'system.properties');
 
-                // if (this.useOkta) {
-                //     this.template('provision-okta-addon.sh.ejs', 'provision-okta-addon.sh');
-                //     fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
-                //         this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
-                //     });
-                // }
+                if (this.useOkta) {
+                    this.template(
+                        '../../node_modules/generator-jhipster/generators/heroku/templates/provision-okta-addon.sh.ejs',
+                        'provision-okta-addon.sh'
+                    );
+                    fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
+                        this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
+                    });
+                }
 
                 this.conflicter.resolve(err => {
                     done();
@@ -518,7 +506,6 @@ module.exports = class extends BaseBlueprintGenerator {
 
     _end() {
         return {
-            /*
             makeScriptExecutable() {
                 if (this.useOkta) {
                     try {
@@ -532,7 +519,6 @@ module.exports = class extends BaseBlueprintGenerator {
                     }
                 }
             },
-            */
 
             async productionDeploy() {
                 if (this.abort) return;
@@ -608,48 +594,48 @@ module.exports = class extends BaseBlueprintGenerator {
                             );
                         }
 
-                        // if (this.useOkta) {
-                        //     let curlAvailable = false;
-                        //     let jqAvailable = false;
-                        //     try {
-                        //         await execCmd('curl --help');
-                        //         curlAvailable = true;
-                        //     } catch (err) {
-                        //         this.log(
-                        //             chalk.red(
-                        //                 'cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'
-                        //             )
-                        //         );
-                        //         this.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
-                        //     }
-                        //     try {
-                        //         await execCmd('jq --help');
-                        //         jqAvailable = true;
-                        //     } catch (err) {
-                        //         this.log(
-                        //             chalk.red(
-                        //                 'jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'
-                        //             )
-                        //         );
-                        //         this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
-                        //     }
-                        //     if (curlAvailable && jqAvailable) {
-                        //         this.log(
-                        //             chalk.green(
-                        //                 'Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.'
-                        //             )
-                        //         );
-                        //         try {
-                        //             await execCmd('./provision-okta-addon.sh');
-                        //         } catch (err) {
-                        //             this.log(
-                        //                 chalk.red(
-                        //                     'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.'
-                        //                 )
-                        //             );
-                        //         }
-                        //     }
-                        // }
+                        if (this.useOkta) {
+                            let curlAvailable = false;
+                            let jqAvailable = false;
+                            try {
+                                await execCmd('curl --help');
+                                curlAvailable = true;
+                            } catch (err) {
+                                this.log(
+                                    chalk.red(
+                                        'cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'
+                                    )
+                                );
+                                this.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
+                            }
+                            try {
+                                await execCmd('jq --help');
+                                jqAvailable = true;
+                            } catch (err) {
+                                this.log(
+                                    chalk.red(
+                                        'jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'
+                                    )
+                                );
+                                this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
+                            }
+                            if (curlAvailable && jqAvailable) {
+                                this.log(
+                                    chalk.green(
+                                        'Running ./provision-okta-addon.sh to create all required roles and users to use with jhipster.'
+                                    )
+                                );
+                                try {
+                                    await execCmd('./provision-okta-addon.sh');
+                                } catch (err) {
+                                    this.log(
+                                        chalk.red(
+                                            'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.'
+                                        )
+                                    );
+                                }
+                            }
+                        }
                     } catch (err) {
                         this.log.error(err);
                     }
