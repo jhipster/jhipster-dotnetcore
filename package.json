@@ -50,7 +50,7 @@
     "@release-it/bumper": "^2.0.0",
     "chai": "4.2.0",
     "ejs-lint": "1.1.0",
-    "eslint": "7.18.0",
+    "eslint": "7.19.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "7.2.0",
     "eslint-plugin-import": "2.22.1",
