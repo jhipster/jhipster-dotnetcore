@@ -485,8 +485,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-                this.template('Procfile.ejs', 'Procfile');
-
                 if (this.useOkta) {
                     this.template(
                         '../../node_modules/generator-jhipster/generators/heroku/templates/provision-okta-addon.sh.ejs',

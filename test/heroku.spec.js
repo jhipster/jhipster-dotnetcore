@@ -9,7 +9,7 @@ const Which = require('which');
 const pathToHerokuExecutable = '/path/to/heroku';
 
 const expectedFiles = {
-    monolith: ['Procfile'],
+    monolith: [],
 };
 
 describe('JHipster Heroku Sub Generator', () => {
