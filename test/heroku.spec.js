@@ -122,6 +122,9 @@ describe('JHipster Heroku Sub Generator', () => {
                 stub.withArgs('git commit -m "Deploy to Heroku" --allow-empty').yields(false, '', '');
                 stub.withArgs(`heroku config:set ASPNETCORE_ENVIRONMENT=Production --app ${herokuAppName}`).yields(false, '', '');
                 stub.withArgs(
+                    `heroku config:set PROJECT_FILE=src/JhipsterSampleApplication/JhipsterSampleApplication.csproj --app ${herokuAppName}`
+                ).yields(false, '', '');
+                stub.withArgs(
                     `heroku buildpacks:add https://github.com/jincod/dotnetcore-buildpack#v5.0.100 --app ${herokuAppName}`
                 ).yields(false, '', '');
                 stub.withArgs(`heroku buildpacks:add --index 1 heroku/nodejs --app ${herokuAppName}`).yields(false, '', '');

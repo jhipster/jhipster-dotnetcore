@@ -26,9 +26,11 @@ const chalk = require('chalk');
 const BaseBlueprintGenerator = require('generator-jhipster/generators/generator-base-blueprint');
 const statistics = require('generator-jhipster/generators/statistics');
 const constants = require('generator-jhipster/generators/generator-constants');
+const Which = require('which');
+const toPascalCase = require('to-pascal-case');
+const netConstants = require('../generator-dotnetcore-constants');
 
 const execCmd = util.promisify(ChildProcess.exec);
-const Which = require('which');
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -78,6 +80,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.oktaAdminLogin = configuration.get('oktaAdminLogin');
                 this.oktaAdminPassword = configuration.get('oktaAdminPassword');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.pascalizedBaseName = toPascalCase(this.baseName);
             },
         };
     }
@@ -562,8 +565,15 @@ module.exports = class extends BaseBlueprintGenerator {
                         const buildpack = 'https://github.com/jincod/dotnetcore-buildpack#v5.0.100';
                         const configVars = 'ASPNETCORE_ENVIRONMENT=Production ';
 
+                        // if (this.clientFramework === BLAZOR) {
+                        // const fileConfig = `PROJECT_FILE=${netConstants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`;
+                        // }
+
                         this.log(chalk.bold('\nConfiguring Heroku'));
                         await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
+                        await execCmd(
+                            `heroku config:set PROJECT_FILE=${netConstants.SERVER_SRC_DIR}${this.pascalizedBaseName}/${this.pascalizedBaseName}.csproj --app ${this.herokuAppName}`
+                        );
 
                         this.log(chalk.bold('\nAdding .Net 5 buidpack (https://github.com/jincod/dotnetcore-buildpack#v5.0.100)'));
                         await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
