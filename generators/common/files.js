@@ -38,6 +38,7 @@ const files = {
             templates: [
                 { file: 'gitignore', renameTo: () => '.gitignore', method: 'copy' },
                 { file: 'editorconfig', renameTo: () => '.editorconfig', method: 'copy' },
+                { file: '.config/dotnet-tools.json', renameTo: () => '.config/dotnet-tools.json', method: 'copy' },
             ],
         },
     ],
