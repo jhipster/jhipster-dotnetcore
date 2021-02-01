@@ -48,4 +48,4 @@ RUN apk add --no-cache icu-libs
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-ENTRYPOINT ["dotnet", "<%= kebabCasedBaseName %>.dll"]
+ENTRYPOINT ["dotnet", "<%= pascalizedBaseName %>.dll"]
