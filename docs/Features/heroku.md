@@ -20,6 +20,8 @@ git push heroku main
 This will initialize a new Heroku app and git push your application to Heroku.
 Free tier dynos and database addons are used by the generator. A verified Heroku account might be needed to add some of the resources.
 
+If using OAuth 2.0/Okta please read the instructions at the [main JHipster Heroku sub-generator](https://www.jhipster.tech/heroku/).
+
 ## Databases
 
 Currently MySql and PostgreSQL are supported and automatically added by the sub-generator when deploying to Heroku. [JawsDB MySQL addon](https://elements.heroku.com/addons/jawsdb) and [Heroku Postgres addon](https://elements.heroku.com/addons/heroku-postgresql) are added to the Heroku app using the free tier.
