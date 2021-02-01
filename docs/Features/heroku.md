@@ -20,7 +20,7 @@ git push heroku main
 This will initialize a new Heroku app and git push your application to Heroku.
 Free tier dynos and database addons are used by the generator. A verified Heroku account might be needed to add some of the resources.
 
-If using OAuth 2.0/Okta please read the instructions at the [main JHipster Heroku sub-generator](https://www.jhipster.tech/heroku/).
+If using OAuth 2.0/Okta please read the pre-requisites and instructions at the [main JHipster Heroku sub-generator](https://www.jhipster.tech/heroku/).
 
 ## Databases
 
@@ -28,7 +28,11 @@ Currently MySql and PostgreSQL are supported and automatically added by the sub-
 
 Since the [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free it requires manual provisioning to avoid unwanted chages. If the JHipster.NET application was generated using Microsoft SQL Server as the database a message will be shown providing instructions on how to manually install the MSSQL addon.
 
-Heroku creates an environment variable named `DATABASE_URL` when using database addons. It contains the following structure: `dbType://user:password@server-url:db-port/db-name`. If `DATABASE_URL` is present the database credentials are parsed at `DatabaseConfiguration.cs` to create a properly formed connection string. And it takes precedence over existing connection strings.
+Heroku creates an environment variable named `DATABASE_URL` when using database addons. It contains the following structure: `dbType://user:password@server-url:db-port/db-name`. 
+If `DATABASE_URL` is present the database credentials are parsed at `DatabaseConfiguration.cs` to create a properly formed connection string. And it takes precedence over existing connection strings. 
+Also, maximum connections limit for database pooling are added to the connection string to respect the addon's limits.
+
+Please refer to Jincod's dotnetcore buildpack documentation on [Enabling Automatic Migrations](https://github.com/jincod/dotnetcore-buildpack#enabling-automatic-migrations) if your application uses them.
 
 ## Limitations
 

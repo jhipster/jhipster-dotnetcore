@@ -5,5 +5,5 @@ Example:
     jhipster heroku
 
     This will create:
-        Procfile
         package.json (required by heroku/nodejs buildpack, a pre-requisite to build the client application)
+        Heroku application with dotnetcore and nodejs
