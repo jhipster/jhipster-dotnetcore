@@ -48,7 +48,7 @@
   "devDependencies": {
     "@j-ulrich/release-it-regex-bumper": "^1.2.0",
     "@release-it/bumper": "^2.0.0",
-    "chai": "4.2.0",
+    "chai": "4.3.0",
     "ejs-lint": "1.1.0",
     "eslint": "7.19.0",
     "eslint-config-airbnb-base": "14.2.1",
