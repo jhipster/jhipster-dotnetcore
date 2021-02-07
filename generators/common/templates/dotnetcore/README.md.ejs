@@ -192,11 +192,11 @@ Manually :
 
 You can also fully dockerize your application and all the services that it depends on. To achieve this, first build a docker image of your app by running:
 
-    docker build -f ./src/<%= pascalizedBaseName %>/Dockerfile -t <%= baseName %> .
+    docker build -f ./src/<%= pascalizedBaseName %>/Dockerfile -t <%= baseName.toLowerCase() %> .
 
 Then run:
 
-    docker run -p 80:80 <%= baseName %>
+    docker run -p 80:80 <%= baseName.toLowerCase() %>
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if (!skipClient) {_%>
