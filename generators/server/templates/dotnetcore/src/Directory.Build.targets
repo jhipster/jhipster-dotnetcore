@@ -92,7 +92,7 @@
 	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Oracle.EntityFrameworkCore" Version="3.19.80" />
-	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="2.19.101" />
+	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
 		<%_ break;
 	} _%>
