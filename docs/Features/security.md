@@ -16,6 +16,19 @@ You can find the jwt configuration in `appsettings.json`
     },
 ```
 
+## Enforce HTTPS
+
+You can enforce HTTPS  by setting  `"EnforceHttps":  true` in `appsettings.Development.json` or `appsettings.Production.json`.
+
+```json
+"Security": {
+    "EnforceHttps":  true
+},
+```
+
+For more details, please see [Enforce HTTPS in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#http-strict-transport-security-protocol-hsts)
+
+
 ## OAuth2 and OpenID Connect
 
 OAuth is a stateful security mechanism, like HTTP Session. Spring Security provides excellent OAuth 2.0 and OIDC support, and this is leveraged by JHipster. If you're not sure what OAuth and OpenID Connect (OIDC) are, please see [What the Heck is OAuth?](https://developer.okta.com/blog/2017/06/21/what-the-heck-is-oauth)
@@ -35,16 +48,15 @@ The security settings in `appsettings.json` are configured for this image.
 ```
 appsettings.json:
   ...
-"jhipster": {
-    "Security": {
-      "Authentication": {
-        "OAuth2": {
-          "Provider": {
-            "IssuerUri": "http://localhost:9080/auth/realms/jhipster",
-            "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
-            "ClientId": "web_app",
-            "ClientSecret": "web_app"
-          }  
+  "Security": {
+    "Authentication": {
+      "OAuth2": {
+        "Provider": {
+          "IssuerUri": "http://localhost:9080/auth/realms/jhipster",
+          "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
+          "ClientId": "web_app",
+          "ClientSecret": "web_app"
+        }  
 ```
 
 Keycloak uses an embedded H2 database by default, so you will lose the created users if you restart your Docker container. To keep your data, please read the [Keycloak Docker documentation](https://hub.docker.com/r/jboss/keycloak/). One solution, with keeping the H2 database, is to do the following:
@@ -63,16 +75,15 @@ Modify `appsettings.json` to use your Okta settings. Hint: replace `{yourOktaDom
 ```
 appsettings.json:
   ...
-"jhipster": {
-    "Security": {
-      "Authentication": {
-        "OAuth2": {
-          "Provider": {
-            "IssuerUri": "https://{yourOktaDomain}/oauth2/default",
-            "LogOutUri": "https://{yourOktaDomain}/oauth2/default/v1/logout",
-            "ClientId": "client_id",
-            "ClientSecret": "client_secret"
-          }
+  "Security": {
+    "Authentication": {
+      "OAuth2": {
+        "Provider": {
+          "IssuerUri": "https://{yourOktaDomain}/oauth2/default",
+          "LogOutUri": "https://{yourOktaDomain}/oauth2/default/v1/logout",
+          "ClientId": "client_id",
+          "ClientSecret": "client_secret"
+        }
 ```
 
 Create an OIDC App in Okta to get a `{client-id}` and `{client-secret}`. To do this, log in to your Okta Developer account and navigate to **Applications** > **Add Application**. Click **Web** and click the **Next** button. Give the app a name you’ll remember, and specify `http://localhost:[port]/login/oauth2/code/oidc` as a Login redirect URI. Click **Done**, then edit your app to add `http://localhost:[port]` as a Logout redirect URI. Copy the client ID and secret into your `application.yml` file.

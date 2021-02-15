@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +17,19 @@ using <%= namespace %>.Domain;
 using <%= namespace %>.Domain.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace <%= namespace %>.Domain.Services {
-    public class MailService : IMailService {
+namespace <%= namespace %>.Domain.Services
+{
+    public class MailService : IMailService
+    {
         public MailService()
         {
         }
 
-        // private readonly JHipsterSettings _jhipsterSettings;
-        
-        // public MailService(IOptions<JHipsterSettings> jhipsterSettings)
+        // private readonly SecuritySettings _securitySettings;
+
+        // public MailService(IOptions<SecuritySettings> securitySettings)
         // {
-        //     _jhipsterSettings = jhipsterSettings.Value;
+        //     _securitySettings = securitySettings.Value;
         // }
 
         public virtual Task SendPasswordResetMail(User user)

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ 
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
@@ -40,7 +40,6 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
         private IList<<%= asModel(entityClassName) %>> <%= entityClassNamePluralized %> { get; set; } = new List<<%= asModel(entityClassName) %>>();
 
-        
         protected override async Task OnInitializedAsync()
         {
             <%= entityClassNamePluralized %> = await <%= entityClassName %>Service.GetAll();
@@ -53,7 +52,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             if (!deleteResult.Cancelled)
             {
                 await <%= entityClassName %>Service.Delete(<%= lowerCasedEntityClassPlural %>Id.ToString());
-                <%= entityClassNamePluralized %>.Remove(<%= entityClassNamePluralized %>.First(<%= lowerCasedEntityClassPlural %> => <%= lowerCasedEntityClassPlural %>.Id.Equals(<%= lowerCasedEntityClassPlural %>Id))); 
+                <%= entityClassNamePluralized %>.Remove(<%= entityClassNamePluralized %>.First(<%= lowerCasedEntityClassPlural %> => <%= lowerCasedEntityClassPlural %>.Id.Equals(<%= lowerCasedEntityClassPlural %>Id)));
             }
         }
     }

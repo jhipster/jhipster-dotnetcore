@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -151,11 +151,13 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace <%= namespace %>.Test.Controllers {
-    public class <%= pascalizedEntityClass %>ResourceIntTest {
+namespace <%= namespace %>.Test.Controllers
+{
+    public class <%= pascalizedEntityClass %>ResourceIntTest
+    {
         public <%= pascalizedEntityClass %>ResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser();
+            _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser();
             _client = _factory.CreateClient();
 
             _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
@@ -186,9 +188,9 @@ namespace <%= namespace %>.Test.Controllers {
             <%_ } _%>
 
         <%_ }); _%>
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
-        private readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
+        private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
 
@@ -198,7 +200,8 @@ namespace <%= namespace %>.Test.Controllers {
 
         private <%= pascalizedEntityClass %> CreateEntity()
         {
-            return new <%= pascalizedEntityClass %> {
+            return new <%= pascalizedEntityClass %>
+            {
                 <%_ let i = 0;
                 if (fields.length != 0) {
                     while (i < fields.length - 1) { _%>
@@ -345,7 +348,7 @@ namespace <%= namespace %>.Test.Controllers {
             // Update the <%= camelCasedEntityClass %>
             var updated<%= pascalizedEntityClass %> = await _<%= camelCasedEntityClass %>Repository.QueryHelper().GetOneAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
             // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
-//TODO detach
+            //TODO detach
             <%_ fields.forEach(field => { _%>
             updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
             <%_ }); _%>
@@ -406,10 +409,12 @@ namespace <%= namespace %>.Test.Controllers {
         public void EqualsVerifier()
         {
             TestUtil.EqualsVerifier(typeof(<%= pascalizedEntityClass %>));
-            var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %> {
+            var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %>
+            {
                 Id = 1L
             };
-            var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %> {
+            var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %>
+            {
                 Id = <%= camelCasedEntityClass %>1.Id
             };
             <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);

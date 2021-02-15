@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -419,9 +419,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Infrastructure/Configuration/JHipsterSettings.cs',
+                    file: 'Project.Infrastructure/Configuration/SecuritySettings.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/JHipsterSettings.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/SecuritySettings.cs`,
                 },
             ],
         },
@@ -503,8 +503,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Configuration/NhipsterStartup.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Configuration/NhipsterStartup.cs`,
+                    file: 'Project/Configuration/AppSettingsStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/AppSettingsStartup.cs`,
                 },
             ],
         },
@@ -984,8 +984,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Setup/NhipsterWebApplicationFactory.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Setup/NhipsterWebApplicationFactory.cs`,
+                    file: 'Project.Test/Setup/AppWebApplicationFactory.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Setup/AppWebApplicationFactory.cs`,
                 },
             ],
         },
@@ -1172,6 +1172,13 @@ function writeFiles() {
         },
         writeFilesBaseServiceDiscovery() {
             this.writeFilesToDisk(baseServiceDiscoveryFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src/main'));
+        },
+        writeDirectoryTargetsFile() {
+            this.fs.copyTpl(
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
+                this.destinationPath('Directory.Build.targets'),
+                this
+            );
         },
     };
 }

@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ using Toolbelt.Blazor;
 
 namespace <%= namespace %>.Client.Shared.Components
 {
-    public partial class AlertError
+    public partial class AlertError : ComponentBase
     {
         public const string NotFoundError = "Not found";
         public const string NotReachableError = "Server not reachable";
@@ -33,7 +33,7 @@ namespace <%= namespace %>.Client.Shared.Components
 
         private List<JhiAlert> Alerts { get; } = new List<JhiAlert>();
 
-        [Inject] 
+        [Inject]
         private HttpClientInterceptor Interceptor { get; set; }
 
         protected override Task OnInitializedAsync()
@@ -61,7 +61,7 @@ namespace <%= namespace %>.Client.Shared.Components
         public IReadOnlyCollection<JhiAlert> GetAlerts()
         {
             return Alerts.AsReadOnly();
-    }
+        }
 
         private void HandleErrors(object s, HttpClientInterceptorEventArgs e)
         {
