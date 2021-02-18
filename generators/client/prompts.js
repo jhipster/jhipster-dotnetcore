@@ -31,7 +31,8 @@ module.exports = {
 
 function askForClient() {
     if (this.existingProject) return;
-    const choices = [
+
+    var choices = [
         {
             value: ANGULAR,
             name: 'Angular',
@@ -45,14 +46,19 @@ function askForClient() {
             name: '[Alpha] - Blazor (WebAssembly)',
         },
         {
-            value: XAMARIN,
-            name: '[Alpha] - Xamarin',
-        },
-        {
             value: 'no',
             name: 'No client',
         },
     ];
+    
+    if (this.configOptions.isDebugEnabled) {
+        choices.push(
+            {
+                value: XAMARIN,
+                name: '[Alpha] - Xamarin',
+            },
+        )
+    }
 
     const PROMPT = {
         type: 'list',
