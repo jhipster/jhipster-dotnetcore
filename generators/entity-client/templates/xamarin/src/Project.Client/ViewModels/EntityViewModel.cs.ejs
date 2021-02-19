@@ -1,0 +1,177 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Akavache;
+using <%= namespace %>.Client.Xamarin.Core.Models;
+using <%= namespace %>.Client.Xamarin.Core.Services;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+<%_
+let hasEnumField = false;
+fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+if (hasEnumField) { _%>
+using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
+
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; 
+_%>
+
+namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
+{
+    public class <%= entityClassName %>ViewModel : MvxViewModel
+    {
+        private readonly I<%= entityClassName %>Service _<%= entityVariableName %>Service;
+        private readonly IMvxNavigationService _navigationService;
+
+        private <%= asModel(entityClassName) %> _currentElement;
+        private List<<%= asModel(entityClassName) %>> _listElement;
+
+        <%_ for (idx in fields){
+            const fieldType = equivalentCSharpType(fields[idx].fieldType);
+            const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
+        if (fields[idx].fieldIsEnum) { _%>
+        public <%= fields[idx].fieldType %> _<%= fieldNameCamelCased %>;
+                <%_ } else { _%>
+        public <%= fieldType %> _<%= fieldNameCamelCased %>;
+            <%_ } _%>
+        <%_ } _%>
+
+        // Workaround to fix MvvmCross issue where buttons remain disabled with MvxAsyncCommand
+        public IMvxCommand AddCommand => new MvxCommand(async () => await AddCommandClicked());
+        public IMvxCommand RemoveCommand => new MvxCommand(async () => await RemoveCommandClicked());
+        public IMvxCommand EditCommand => new MvxCommand(async () => await EditCommandClicked());
+
+        public List<<%= asModel(entityClassName) %>> ListElement
+        {
+            get => _listElement;
+            set
+            {
+                _listElement = value;
+                RaisePropertyChanged(() => ListElement);
+            }
+        }
+
+        public <%= asModel(entityClassName) %> CurrentElement
+        {
+            get => _currentElement;
+            set
+            {
+                _currentElement = value;
+                if (_currentElement != null)
+                {
+                    <%_ for (idx in fields){
+                        const fieldNamePascalized = fields[idx].fieldNamePascalized;
+                    _%>
+                    <%= fieldNamePascalized %> = _currentElement.<%= fieldNamePascalized %>;             
+                    <%_ } _%>
+                }
+                RaisePropertyChanged(() => CurrentElement);
+            }
+        }
+
+        <%_ for (idx in fields) {
+            const fieldType = equivalentCSharpType(fields[idx].fieldType);
+            const fieldNamePascalized = fields[idx].fieldNamePascalized;
+            const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
+        if (fields[idx].fieldIsEnum) { _%>
+        public <%= fields[idx].fieldType %> <%= fieldNamePascalized %> 
+        { 
+            get => _<%= fieldNameCamelCased %>;
+            set 
+            {
+                _<%= fieldNameCamelCased %> = value;
+                RaisePropertyChanged(() => <%= fieldNamePascalized %>);
+            }
+        }
+        <%_ } else { _%>
+        public <%= fieldType %> <%= fieldNamePascalized %> 
+        { 
+            get => _<%= fieldNameCamelCased %>;
+            set 
+            {
+                _<%= fieldNameCamelCased %> = value;
+                RaisePropertyChanged(() => <%= fieldNamePascalized %>);
+            }
+        }
+        <%_ } _%>
+        <%_ } _%>
+        
+        public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, I<%= entityClassName %>Service <%= entityVariableName %>Service)
+        {
+            _navigationService = navigationService;
+            _<%= entityVariableName %>Service = <%= entityVariableName %>Service;
+        }
+
+        public async Task AddCommandClicked()
+        {
+            var entity = new <%= asModel(entityClassName) %>
+            {               
+                <%_ for (idx in fields){
+                    const fieldNamePascalized = fields[idx].fieldNamePascalized;
+                _%>
+                <%= fieldNamePascalized %> = <%= fieldNamePascalized %>,                  
+                <%_ } _%>
+                Id = null
+            };
+
+            await _<%= entityVariableName %>Service.CreateEntity(entity);
+            await RefreshList();
+        }
+
+        public async Task RemoveCommandClicked()
+        {
+            if (CurrentElement.Id.HasValue)
+            {
+                await _<%= entityVariableName %>Service.DeleteEntity(CurrentElement.Id.Value);
+                await RefreshList();
+            }  // TODO: Handle errors
+        }
+
+        public async Task EditCommandClicked()
+        {
+            <%_ for (idx in fields){
+                const fieldNamePascalized = fields[idx].fieldNamePascalized;
+            _%>
+            CurrentElement.<%= fieldNamePascalized %> = <%= fieldNamePascalized %>;                     
+            <%_ } _%>
+            await _<%= entityVariableName %>Service.UpdateEntity(CurrentElement);
+            await RefreshList();
+        }
+
+        public async Task RefreshList()
+        {
+            ListElement = await _<%= entityVariableName %>Service.GetEntities();
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            await RefreshList();
+        }
+    }
+}

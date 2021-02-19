@@ -24,7 +24,7 @@
         <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
         <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
         <IsPackable>false</IsPackable>
-<%_ if(!skipClient && clientFramework != "Blazor") { _%>
+<%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { %>
         <SpaRoot>ClientApp\</SpaRoot>
 <%_ } _%>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
@@ -75,7 +75,7 @@
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
     </ItemGroup>
-<%_ if(!skipClient && clientFramework != "Blazor") { _%>
+<%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
     <!-- https://stackoverflow.com/questions/46720148/exclude-wwwroot-dist-from-build-asp-net-dotnet-core-2-0 -->
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
