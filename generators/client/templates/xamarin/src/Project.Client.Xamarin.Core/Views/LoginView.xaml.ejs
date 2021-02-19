@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      x:TypeArguments="viewModels:LoginViewModel"
+                      xmlns:viewModels="clr-namespace:<%= namespace %>.Client.Xamarin.Core.ViewModels;assembly=<%= namespace %>.Client.Xamarin.Core"
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="<%= namespace %>.Client.Xamarin.Core.Views.LoginView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
+                <Label Text="Connection" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+            </Frame>
+            <StackLayout Padding="10">
+                <StackLayout Padding="10" BackgroundColor="IndianRed">
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Success}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                    <Label LineBreakMode="WordWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Failed to sign in! " FontSize="15" FontAttributes="Bold"/>
+                                <Span Text="Please check your credentials and try again." />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
+                <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
+
+                <StackLayout Orientation="Horizontal">
+                    <CheckBox x:Name="checkBox" IsChecked="{Binding RememberMe}" />
+                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeStateCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+                <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}" />
+                <StackLayout>
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Success}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                    <StackLayout BackgroundColor="LightYellow" Padding="15">
+                        <Label Text="Did you forget your password?" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SignUp}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout BackgroundColor="LightYellow" Padding="15">
+                        <Label Text="You don't have an account yet?"/>
+                        <Label Text="Register a new account" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SignUp}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</views:MvxContentPage>
