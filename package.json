@@ -61,7 +61,7 @@
     "nyc": "15.1.0",
     "sinon": "9.2.4",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "4.0.2",
+    "yeoman-test": "5.0.0",
     "sonarqube-scanner": "2.8.0",
     "release-it": "^14.2.2"
   },
