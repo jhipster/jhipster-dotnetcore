@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,6 +18,9 @@
  */
 const shelljs = require('shelljs');
 const fs = require('fs');
+const { Guid } = require('js-guid');
+const _ = require('lodash');
+const chalk = require('chalk');
 
 function exec(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
@@ -32,12 +35,13 @@ function exec(cmd, opts = {}) {
 
 function hasDotnet() {
     return new Promise((resolve, reject) => {
-        if (!shelljs.which('dotnet')) {
+        if (!shelljs.exec('dotnet', { silent: true })) {
             return reject(Error("'dotnet' not found in the PATH."));
         }
         return resolve();
     });
 }
+
 async function newSln(solutionName) {
     await hasDotnet();
     try {
@@ -53,6 +57,76 @@ async function slnAdd(solutionFile, projects) {
     return exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
 }
 
+async function newSlnAddProj(solutionName, projects) {
+    const solutionFile = fs.readFileSync(`${solutionName}.sln`, 'utf8');
+    const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const exc = regex.exec(solutionFile);
+    const firstGuid = exc[1];
+    const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const clientDir = regexp.exec(solutionFile)[1];
+    const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
+    let projectText = '';
+    let dirText = '';
+
+    projects.forEach(project => {
+        const existingProjects = solutionFile.matchAll(reg);
+        let alreadyExist = false;
+        let existingProject = existingProjects.next();
+        while (!existingProject.done && !alreadyExist) {
+            alreadyExist = existingProject.value[1] === project.name;
+            existingProject = existingProjects.next();
+        }
+        if (!alreadyExist) {
+            const randomGuid = _.toUpper(Guid.newGuid());
+            projectText += `\nProject("{${firstGuid}}") = "${project.name}", "${project.path}", "{${randomGuid}}"\nEndProject`;
+            dirText += `\n\t\t{${randomGuid}} = {${clientDir}}`;
+        }
+    });
+
+    const projectRe = new RegExp('MinimumVisualStudioVersion = .*\\D', 'g');
+    const projectFound = solutionFile.match(projectRe);
+    projectText = `${projectFound}${projectText}`;
+    let newBody = solutionFile.replace(projectRe, projectText);
+
+    const dirRe = new RegExp('GlobalSection\\(NestedProjects\\) = .*\\D', 'g');
+    const dirFound = solutionFile.match(dirRe);
+    dirText = `${dirFound}${dirText}`;
+    newBody = newBody.replace(dirRe, dirText);
+
+    if (solutionFile !== newBody) {
+        fs.writeFileSync(`${solutionName}.sln`, newBody);
+    }
+}
+
+function installBlazorDependencies() {
+    if (!libmanIsInstalled()) {
+        if (shelljs.exec('dotnet tool install -g Microsoft.Web.LibraryManager.Cli').code !== 0) {
+            throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
+        }
+        console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
+    }
+    if (!webcompilerIsInstalled()) {
+        if (shelljs.exec('dotnet tool install Excubo.WebCompiler --global').code !== 0) {
+            throw new Error('Could not install Excubo.WebCompiler');
+        }
+        console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
+    }
+}
+
+function libmanIsInstalled() {
+    if (shelljs.exec('libman', { silent: true }).code !== 0) {
+        return false;
+    }
+    return true;
+}
+
+function webcompilerIsInstalled() {
+    if (shelljs.exec('webcompiler', { silent: true }).code !== 0) {
+        return false;
+    }
+    return true;
+}
+
 async function restore() {
     await hasDotnet();
     return exec('dotnet restore');
@@ -60,7 +134,9 @@ async function restore() {
 
 module.exports = {
     hasDotnet,
+    newSlnAddProj,
     newSln,
     slnAdd,
     restore,
+    installBlazorDependencies,
 };

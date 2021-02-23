@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,13 +36,13 @@ namespace <%= namespace %>.Client.Test
             Services.AddMockUnAuthenticateAuthorization();
             var authenticationStateProvider = Services.GetService<AuthenticationStateProvider>();
 
-            var index = RenderComponent<Index>(ComponentParameterFactory.CascadingValue(authenticationStateProvider.GetAuthenticationStateAsync()),ComponentParameterFactory.CascadingValue(modalService.Object));
-           
+            var index = RenderComponent<Index>(ComponentParameterFactory.CascadingValue(authenticationStateProvider.GetAuthenticationStateAsync()), ComponentParameterFactory.CascadingValue(modalService.Object));
+
             // Act
             index.Find(".alert-link").Click();
 
             // Assert
-            modalService.Verify(mock => mock.Show<Login>(It.IsAny<string>()),Times.Once());
+            modalService.Verify(mock => mock.Show<Login>(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace <%= namespace %>.Client.Test
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, "UserTestLogin"));
-            var claimIdentity  = new ClaimsIdentity(claims);
+            var claimIdentity = new ClaimsIdentity(claims);
             Services.AddMockAuthenticatedAuthorization(claimIdentity);
             var authenticationStateProvider = Services.GetService<AuthenticationStateProvider>();
 

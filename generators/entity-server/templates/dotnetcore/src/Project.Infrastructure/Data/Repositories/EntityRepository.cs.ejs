@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -29,50 +29,28 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
     {
-        public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context) 
+        public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context)
         {
         }
 
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
             bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
-
             <%_ relationships.forEach( relationship => {
-                    if (relationship.otherEntityNamePascalized === 'User' && relationship.relationshipType !== 'many-to-many') { _%>
-            <%= camelCasedEntityClass %>.UserId = <%= camelCasedEntityClass %>.User?.Id;
-            <%= camelCasedEntityClass %>.User = null; 
-                    <%_ }
-            }); _%>
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists) {
-                <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
-                        <%_ }
-                }); _%>                
-                Update(<%= camelCasedEntityClass %>);
-                <%_ let first = true;
-                let suffix = 0;
-                relationships.forEach( relationship => {
-                    if (!relationship.relationshipValidateRules || !relationship.relationshipValidateRules.includes('required')) {
-                        if (relationship.relationshipType === 'one-to-one' || relationship.relationshipType === 'many-to-one') {
-                            if (first) { _%>
-                /* Force the reference navigation property to be in "modified" state.
-                This allows to modify it with a null value (the field is nullable).
-                This takes into consideration the case of removing the association between the two instances. */
-                                <%_ first = false;
-                            } _%>
-                _context.SetEntityStateModified(<%= camelCasedEntityClass %>, <%= camelCasedEntityClass + suffix %> => <%= camelCasedEntityClass + suffix %>.<%= relationship.relationshipFieldNamePascalized %>);
-                    <%_ }
-                    }
-                }); _%>
-            } else {
-                <%_ if (relationships.length != 0) { _%>
-                _context.AddGraph(<%= camelCasedEntityClass %>);
-                <%_ } else { _%>
-                Add(<%= camelCasedEntityClass %>);
-                <%_ } _%>
-            }
 
+            await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
+                        <%_ }
+            }); _%>
+
+            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
+            {
+                Update(<%= camelCasedEntityClass %>);
+            }
+            else
+            {
+                _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
+            }
             return <%= camelCasedEntityClass %>;
         }
     }

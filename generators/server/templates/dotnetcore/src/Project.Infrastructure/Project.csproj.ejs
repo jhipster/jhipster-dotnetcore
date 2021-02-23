@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,9 +21,40 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
-        <PackageReference Include="Serilog" Version="2.10.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"  />
+        <PackageReference Include="Serilog"  />
+        <%_ switch(databaseType) {
+            case 'sqllite': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+            <%_ break;
+            case 'mssql': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+            <%_ break;
+            case 'postgres': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+            <%_ break;
+            case 'mysql': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+            <%_ break;
+            case 'oracle': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"  />
+        <PackageReference Include="Oracle.EntityFrameworkCore"  />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+            <%_ break;
+         } _%>
     </ItemGroup>
 
     <ItemGroup>

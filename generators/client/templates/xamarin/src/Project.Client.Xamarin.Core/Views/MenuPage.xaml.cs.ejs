@@ -1,4 +1,4 @@
-<%#
+﻿<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,17 +12,30 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Configuration;
-using <%= namespace %>.Infrastructure.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace <%= namespace %>.Configuration {
-    public static class NhipsterSettingsConfiguration {
-        public static IServiceCollection AddNhipsterModule(this IServiceCollection services, IConfiguration configuration)
+using MvvmCross.Forms.Presenters.Attributes;
+using MvvmCross.Forms.Views;
+using <%= namespace %>.Client.Xamarin.Core.ViewModels;
+using System;
+using Xamarin.Forms;
+
+namespace <%= namespace %>.Client.Xamarin.Core.Views
+{
+    [MvxMasterDetailPagePresentation(MasterDetailPosition.Master)]
+    public partial class MenuPage : MvxContentPage<MenuViewModel>
+    {
+        public MenuPage()
         {
-            services.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
-            return services;
+            InitializeComponent();
+        }
+
+        public void ToggleClicked(object sender, EventArgs e)
+        {
+            if (Parent is MvxMasterDetailPage md && Device.RuntimePlatform != Device.UWP)
+            {
+                md.MasterBehavior = MasterBehavior.Popover;
+                md.IsPresented = !md.IsPresented;
+            }
         }
     }
 }

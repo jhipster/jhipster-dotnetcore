@@ -111,6 +111,7 @@ module.exports = class extends EntityGenerator {
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
+                        field.enumValues = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                     }
                 });
 
@@ -119,6 +120,7 @@ module.exports = class extends EntityGenerator {
                     relationship.relationshipNamePascalized = toPascalCase(relationship.relationshipName);
                     relationship.relationshipNamePascalizedPlural = pluralize(relationship.relationshipNamePascalized);
                     relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
+                    relationship.relationshipFieldNameLowerCased = _.toLower(relationship.relationshipFieldName);
                     relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
                     relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
                     relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);

@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -55,11 +55,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Controllers {
+namespace <%= namespace %>.Controllers
+{
     [Authorize]
     [Route("api")]
     [ApiController]
-    public class <%= pascalizedEntityClass %>Controller : ControllerBase {
+    public class <%= pascalizedEntityClass %>Controller : ControllerBase
+    {
         private const string EntityName = "<%= camelCasedEntityClass %>";
         <%_ if (hasDto) { _%>
         private readonly IMapper _mapper;
@@ -67,7 +69,7 @@ namespace <%= namespace %>.Controllers {
         <%_ if (hasService) { _%>
         private readonly I<%= pascalizedEntityClass %>Service _<%= camelCasedEntityClass %>Service;
         <%_ } else { _%>
-        private readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
+        private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
         <%_ } _%>
         private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
 
@@ -78,7 +80,7 @@ namespace <%= namespace %>.Controllers {
             <%_ if (hasService) { _%>
             I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service)
             <%_ } else { _%>
-            I<%= pascalizedEntityClass %>Repository  <%= camelCasedEntityClass %>Repository)
+            I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         <%_ } _%>
         {
             _log = log;
@@ -119,9 +121,6 @@ namespace <%= namespace %>.Controllers {
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
-
-            //TODO catch //DbUpdateConcurrencyException into problem
-
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -146,12 +145,14 @@ namespace <%= namespace %>.Controllers {
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
                 .GetPageAsync(pageable);
             <%_ } _%>
             <%_ if (hasDto) { _%>
-            var page = new Page<<%= asDto(pascalizedEntityClass) %>>(result.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(),pageable,result.TotalElements);
+            var page = new Page<<%= asDto(pascalizedEntityClass) %>>(result.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(), pageable, result.TotalElements);
             return Ok(((IPage<<%= asDto(pascalizedEntityClass) %>>)page).Content).WithHeaders(page.GeneratePaginationHttpHeaders());
             <%_ } else { _%>
             return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());

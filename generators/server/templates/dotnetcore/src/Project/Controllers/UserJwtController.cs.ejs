@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,12 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Controllers {
+namespace <%= namespace %>.Controllers
+{
     [Route("api")]
     [ApiController]
-    public class UserJwtController : ControllerBase {
+    public class UserJwtController : ControllerBase
+    {
         private readonly IAuthenticationService _authenticationService;
         private readonly ITokenProvider _tokenProvider;
 
@@ -44,14 +46,16 @@ namespace <%= namespace %>.Controllers {
             var user = await _authenticationService.Authenticate(LoginDto.Username, LoginDto.Password);
             var rememberMe = LoginDto.RememberMe;
             var jwt = _tokenProvider.CreateToken(user, rememberMe);
-            var httpHeaders = new HeaderDictionary {
+            var httpHeaders = new HeaderDictionary
+            {
                 [JwtConstants.AuthorizationHeader] = $"{JwtConstants.BearerPrefix} {jwt}"
             };
             return Ok(new JwtToken(jwt)).WithHeaders(httpHeaders);
         }
     }
 
-    public class JwtToken {
+    public class JwtToken
+    {
         public JwtToken(string idToken)
         {
             IdToken = idToken;

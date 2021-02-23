@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,8 +17,10 @@
  limitations under the License.
 -%>
 
-namespace <%= namespace %>.Crosscutting.Enums {
-    public enum <%= enumName %> {
+namespace <%= namespace %>.Crosscutting.Enums
+{
+    public enum <%= enumName %>
+    {
     <%_ for (var i = 0; i < enums.length; i++) { _%>
         <%= enums[i] %><%_ if (i < enums.length - 1) { _%>,<%_ } _%>
 
