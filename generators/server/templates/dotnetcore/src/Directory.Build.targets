@@ -80,7 +80,7 @@
 		<%_ break;
 		case 'postgres': _%>
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'mysql': _%>
