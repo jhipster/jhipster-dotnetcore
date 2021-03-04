@@ -10,12 +10,12 @@ namespace JhipsterSampleApplication.Test.DependencyInjection
     {
         public ExtendedServiceRegistrationTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser();
+            _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser();
             _countryService = _factory.GetRequiredService<ICountryService>();
             _departmentService = _factory.GetRequiredService<IDepartmentService>();
         }
 
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly ICountryService _countryService;
         private readonly IDepartmentService _departmentService;
 

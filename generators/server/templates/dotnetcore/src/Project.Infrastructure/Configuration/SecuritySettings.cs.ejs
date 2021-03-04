@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,11 @@
 -%>
 namespace <%= namespace %>.Infrastructure.Configuration
 {
-    public class JHipsterSettings
-    {
-        public Security Security { get; set; }
-
-        public Cors Cors { get; set; }
-    }
-
-    public class Security
+    public class SecuritySettings
     {
         public Authentication Authentication { get; set; }
+        public Cors Cors { get; set; }
+        public bool EnforceHttps { get; set; }
     }
 
     <%_ if (authenticationType === 'jwt') { _%>

@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
 		<AspNetCorePackageVersion>5.0.0</AspNetCorePackageVersion>
+		<EntityFrameworkPackageVersion>5.0.3</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.7</JHipsterNetPackageVersion>
   </PropertyGroup>
 
@@ -58,7 +59,7 @@
 	<%_ } _%>
 	
 	<PackageReference Update="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Newtonsoft.Json" Version="12.0.3" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
 	<PackageReference Update="System.Text.Json" Version="$(AspNetCorePackageVersion)" />	
@@ -66,42 +67,42 @@
 
 	<%_ switch(databaseType) {
 		case 'sqllite': _%>
-	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'mssql': _%>
-	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.SqlServer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.SqlServer" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'postgres': _%>
-	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'mysql': _%>
-	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.1" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'oracle': _%>
-	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Oracle.EntityFrameworkCore" Version="3.19.80" />
-	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="2.19.101" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Oracle.EntityFrameworkCore" Version="5.21.1" />
+	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 	} _%>
 	 
 	<PackageReference Update="coverlet.msbuild" Version="3.0.3"/>
 	<PackageReference Update="FakeItEasy" Version="6.2.1" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.9.1" />
 	<PackageReference Update="Moq" Version="4.16.1" />
 	<PackageReference Update="xunit" Version="2.4.1" />

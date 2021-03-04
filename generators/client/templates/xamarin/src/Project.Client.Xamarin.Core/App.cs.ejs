@@ -1,0 +1,74 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+using System;
+using Akavache;
+using <%= namespace %>.Client.Xamarin.Core.Models;
+using <%= namespace %>.Client.Xamarin.Core.Services;
+using <%= namespace %>.Client.Xamarin.Core.ViewModels;
+using MvvmCross;
+using MvvmCross.ViewModels;
+using System.Net.Http;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using MvvmCross.Logging;
+
+namespace <%= namespace %>.Client.Xamarin.Core
+{
+    public class App : MvxApplication
+    {
+        public override void Initialize()
+        {
+            Akavache.Registrations.Start("<%= namespace %>");
+            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("<%= namespace %>");
+
+            #if DEBUG
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            {
+                if (cert.Issuer.Equals("CN=localhost"))
+                    return true;
+                return errors == System.Net.Security.SslPolicyErrors.None;
+            };
+            HttpClient httpClient = new HttpClient(handler);
+            #else
+            HttpClient httpClient = new HttpClient();
+            #endif
+            httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+
+            var authenticationService = new AuthenticationService(httpClient, log);
+            Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
+            var registerService = new RegisterService(httpClient, log);
+            Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
+            // jhipster-needle-add-services-in-di - JHipster will add services in DI  
+
+            Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
+            Mvx.IoCProvider.RegisterSingleton(httpClient);
+
+            try
+            {
+                // sync trying to connect before loading home view
+                var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
+                Task.Run(async () => await authenticationService.SignIn(token));
+            }
+            catch (Exception ex)
+            {
+                log.ErrorException("Failed to fetch token and auto-login.", ex);
+            }
+
+            RegisterAppStart<HomeViewModel>();
+        }
+    }
+}

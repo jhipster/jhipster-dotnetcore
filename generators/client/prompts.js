@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -23,6 +23,7 @@ const constants = require('../generator-dotnetcore-constants');
 const ANGULAR = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
 const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = {
     askForClient,
@@ -30,7 +31,8 @@ module.exports = {
 
 function askForClient() {
     if (this.existingProject) return;
-    const choices = [
+
+    var choices = [
         {
             value: ANGULAR,
             name: 'Angular',
@@ -39,7 +41,7 @@ function askForClient() {
             value: REACT,
             name: 'React',
         },
-         {
+        {
             value: BLAZOR,
             name: '[Alpha] - Blazor (WebAssembly)',
         },
@@ -48,6 +50,15 @@ function askForClient() {
             name: 'No client',
         },
     ];
+    
+    if (this.configOptions.isDebugEnabled) {
+        choices.push(
+            {
+                value: XAMARIN,
+                name: '[Alpha] - Xamarin',
+            },
+        )
+    }
 
     const PROMPT = {
         type: 'list',

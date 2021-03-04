@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,6 +18,8 @@
  */
 const shelljs = require('shelljs');
 const fs = require('fs');
+const { Guid } = require('js-guid');
+const _ = require('lodash');
 const chalk = require('chalk');
 
 function exec(cmd, opts = {}) {
@@ -53,6 +55,47 @@ async function newSln(solutionName) {
 async function slnAdd(solutionFile, projects) {
     await hasDotnet();
     return exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
+}
+
+async function newSlnAddProj(solutionName, projects) {
+    const solutionFile = fs.readFileSync(`${solutionName}.sln`, 'utf8');
+    const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const exc = regex.exec(solutionFile);
+    const firstGuid = exc[1];
+    const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const clientDir = regexp.exec(solutionFile)[1];
+    const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
+    let projectText = '';
+    let dirText = '';
+
+    projects.forEach(project => {
+        const existingProjects = solutionFile.matchAll(reg);
+        let alreadyExist = false;
+        let existingProject = existingProjects.next();
+        while (!existingProject.done && !alreadyExist) {
+            alreadyExist = existingProject.value[1] === project.name;
+            existingProject = existingProjects.next();
+        }
+        if (!alreadyExist) {
+            const randomGuid = _.toUpper(Guid.newGuid());
+            projectText += `\nProject("{${firstGuid}}") = "${project.name}", "${project.path}", "{${randomGuid}}"\nEndProject`;
+            dirText += `\n\t\t{${randomGuid}} = {${clientDir}}`;
+        }
+    });
+
+    const projectRe = new RegExp('MinimumVisualStudioVersion = .*\\D', 'g');
+    const projectFound = solutionFile.match(projectRe);
+    projectText = `${projectFound}${projectText}`;
+    let newBody = solutionFile.replace(projectRe, projectText);
+
+    const dirRe = new RegExp('GlobalSection\\(NestedProjects\\) = .*\\D', 'g');
+    const dirFound = solutionFile.match(dirRe);
+    dirText = `${dirFound}${dirText}`;
+    newBody = newBody.replace(dirRe, dirText);
+
+    if (solutionFile !== newBody) {
+        fs.writeFileSync(`${solutionName}.sln`, newBody);
+    }
 }
 
 function installBlazorDependencies() {
@@ -91,6 +134,7 @@ async function restore() {
 
 module.exports = {
     hasDotnet,
+    newSlnAddProj,
     newSln,
     slnAdd,
     restore,

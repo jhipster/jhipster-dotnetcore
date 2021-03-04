@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ namespace <%= namespace %>.Test.Controllers
     {
         public UserResourceIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
+            _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
             _client = _factory.CreateClient();
             _userManager = _factory.GetRequiredService<UserManager<User>>();
             _passwordHasher = _userManager.PasswordHasher;
@@ -73,7 +73,7 @@ namespace <%= namespace %>.Test.Controllers
         private const string DefaultLangkey = "en";
         private const string UpdatedLangkey = "fr";
 
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
 
 
