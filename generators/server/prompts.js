@@ -30,6 +30,7 @@ function askForServerSideOpts() {
     const applicationType = this.applicationType;
     const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
+        // TODO: CQRS
         {
             type: 'input',
             name: 'serverPort',
@@ -37,10 +38,12 @@ function askForServerSideOpts() {
             message: 'On which port would like your server to run? It should be unique to avoid port conflicts.',
             default: defaultPort,
         },
+        // TODO: If CQRS == "Yes" : Separate Read/Write DB ? 
+        // TODO: If Separate == "Yes" : > 2 questions DB
         {
             type: 'list',
             name: 'database',
-            message: 'Wchich database do you want to use',
+            message: 'Which database do you want to use',
             choices: [
                 {
                     value: 'sqllite',
@@ -90,6 +93,7 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
+        // TODO: CQRS
         this.databaseType = prompt.database;
         this.authenticationType = prompt.authenticationType;
         this.serverPort = prompt.serverPort;

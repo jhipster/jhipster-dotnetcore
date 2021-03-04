@@ -335,6 +335,16 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Domain/Repositories/Interfaces/IReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IReadOnlyGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Domain/Repositories/Interfaces/IUnitOfWork.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IUnitOfWork.cs`,
                 },
@@ -357,6 +367,16 @@ const serverFiles = {
                     file: 'Project.Infrastructure/Data/Repositories/GenericRepository.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/GenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/ReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/ReadOnlyGenericRepository.cs`,
                 },
             ],
         },
