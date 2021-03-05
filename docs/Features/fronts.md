@@ -6,7 +6,7 @@ When generating an application, you are able to choose between multiple fronts.
 
 Angular (commonly referred to as "Angular 2+" or "Angular v2 and above") is a TypeScript-based open-source web application framework.
 
-### Generate your application 
+### Generate your application
 
 Call the generator
 
@@ -18,11 +18,13 @@ and choose Angular
 
 ![front-choice](../assets/angular-choice.png)
 
+For further information: [Using Angular with JHipster](https://www.jhipster.tech/using-angular/)
+
 ## React
 
 React (also known as React.js or ReactJS) is an open-source, front end, JavaScript library for building user interfaces or UI components.
 
-### Generate your application 
+### Generate your application
 
 Call the generator
 
@@ -33,6 +35,8 @@ jhipster --blueprints dotnetcore
 and choose React
 
 ![front-choice](../assets/react-choice.png)
+
+For further information: [Using React with JHipster](https://www.jhipster.tech/using-react/)
 
 ## Alpha - Xamarin
 
