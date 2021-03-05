@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +15,24 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace <%= namespace %>.Web.Rest.Utilities {
-    public static class ActionResultUtil {
+namespace <%= namespace %>.Web.Rest.Utilities
+{
+    public static class ActionResultUtil
+    {
         public static ActionResult WrapOrNotFoundAsDto<TDtoType>(object value, IMapper mapper)
+        {
+            if (value != null)
             {
-                if (value != null) {
-                    var resultAsDto = mapper.Map<TDtoType>(value);
-                    return (ActionResult) new OkObjectResult(resultAsDto);
-                }
-                return new NotFoundResult();
+                var resultAsDto = mapper.Map<TDtoType>(value);
+                return (ActionResult)new OkObjectResult(resultAsDto);
             }
+            return new NotFoundResult();
+        }
 
 
         public static ActionResult WrapOrNotFound(object value)
         {
-            return value != null ? (ActionResult) new OkObjectResult(value) : new NotFoundResult();
+            return value != null ? (ActionResult)new OkObjectResult(value) : new NotFoundResult();
         }
     }
 }

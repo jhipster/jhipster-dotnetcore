@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,7 +24,7 @@ const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const basePrompts = require('generator-jhipster/generators/client/prompts');
 const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
-const baseWriteReactFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
+const baseWriteReactFiles = require('generator-jhipster/generators/client/files-react').writeFiles;
 const prompts = require('./prompts');
 const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
 const dotnet = require('../dotnet');
@@ -32,10 +32,12 @@ const dotnet = require('../dotnet');
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
 const writeBlazorFiles = require('./files-blazor').writeFiles;
+const writeXamarinFiles = require('./files-xamarin').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
 
 const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
@@ -106,6 +108,8 @@ module.exports = class extends ClientGenerator {
                 switch (this.clientFramework) {
                     case BLAZOR:
                         return writeBlazorFiles.call(this);
+                    case XAMARIN:
+                        return writeXamarinFiles.call(this);
                     case REACT:
                         baseWriteReactFiles.call(this);
                         writeCommonFiles.call(this);
@@ -123,7 +127,7 @@ module.exports = class extends ClientGenerator {
         // Override default yeoman installDependencies
         const customPhase = {
             installDependencies() {
-                if (!this.options['skip-install']) {
+                if (this.clientFramework !== BLAZOR && !this.options['skip-install']) {
                     this.log(
                         `\n\nI'm all done. Running ${chalk.green.bold(
                             `npm install `
@@ -139,7 +143,7 @@ module.exports = class extends ClientGenerator {
     get end() {
         return {
             async end() {
-                if (this.clientFramework == BLAZOR) {
+                if (this.clientFramework === BLAZOR) {
                     this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
                     try {
                         await dotnet.newSln(this.solutionName);
@@ -152,6 +156,37 @@ module.exports = class extends ClientGenerator {
                         `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
                     ]);
                     this.log(chalk.green.bold('\Client application generated successfully.\n'));
+                    this.log(
+                        chalk.green(
+                            `Run your blazor application:\n${chalk.yellow.bold(
+                                `dotnet run --verbosity normal --project ./${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`
+                            )}`
+                        )
+                    );
+                    dotnet.installBlazorDependencies();
+                } else if (this.clientFramework === XAMARIN) {
+                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                    try {
+                        await dotnet.newSln(this.solutionName);
+                    } catch (err) {
+                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+                    }
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,                       
+                    ]);
+                    await dotnet.newSlnAddProj(this.solutionName, [
+                        {
+                            'path': `${constants.CLIENT_SRC_DIR}${this.androidClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
+                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.Android`
+                        },
+                        {
+                            'path': `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,  
+                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.iOS`
+                        }                                                
+                    ]);
+                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
+
                 } else {
                     if (this.skipClient) return;
                     this.log(chalk.green.bold('\nClient application generated successfully.\n'));

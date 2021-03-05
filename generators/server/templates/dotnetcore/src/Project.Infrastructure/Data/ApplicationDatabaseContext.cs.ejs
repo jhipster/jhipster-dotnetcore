@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Infrastructure.Data {
+namespace <%= namespace %>.Infrastructure.Data
+{
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
     public class ApplicationDatabaseContext : IdentityDbContext<
         User, Role, string,
@@ -32,13 +33,14 @@ namespace <%= namespace %>.Infrastructure.Data {
         IdentityUserLogin<string>,
         IdentityRoleClaim<string>,
         IdentityUserToken<string>
-    > {
+    >
+    {
     <%_ } else { _%>
     public class ApplicationDatabaseContext : DbContext
     {
     <%_ } _%>
         private readonly IHttpContextAccessor _httpContextAccessor;
-        
+
         public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
@@ -57,9 +59,10 @@ namespace <%= namespace %>.Infrastructure.Data {
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-    
-            builder.Entity<UserRole>(userRole => {
-                userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
+
+            builder.Entity<UserRole>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 userRole.HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)

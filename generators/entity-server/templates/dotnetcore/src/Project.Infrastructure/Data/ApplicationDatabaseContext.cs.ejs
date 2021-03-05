@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Infrastructure.Data {
+namespace <%= namespace %>.Infrastructure.Data
+{
     <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
     public class ApplicationDatabaseContext : IdentityDbContext<
         User, Role, string,
@@ -45,7 +46,8 @@ namespace <%= namespace %>.Infrastructure.Data {
         IdentityUserLogin<string>,
         IdentityRoleClaim<string>,
         IdentityUserToken<string>
-    > {
+    >
+    {
     <%_ } else { _%>
     public class ApplicationDatabaseContext : DbContext
     {
@@ -60,7 +62,7 @@ namespace <%= namespace %>.Infrastructure.Data {
         <%_ entities.forEach(entity => {
             if(entity.name.toUpperCase() !== entityClass.toUpperCase()) { _%>
         public DbSet<<%= entity.name %>> <%= pluralize(entity.name) %> { get; set; }
-        <%_ 
+        <%_
             }
         }); _%>
         public DbSet<<%= pascalizedEntityClass %>> <%= pascalizedEntityClassPlural %> { get; set; }
@@ -79,8 +81,9 @@ namespace <%= namespace %>.Infrastructure.Data {
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
 
-            builder.Entity<UserRole>(userRole => {
-                userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
+            builder.Entity<UserRole>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
 
                 userRole.HasOne(ur => ur.Role)
                     .WithMany(r => r.UserRoles)
@@ -100,7 +103,7 @@ namespace <%= namespace %>.Infrastructure.Data {
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
             <%_ } _%>
-            
+
             <%_ entities.forEach(entity => {
                 fields.forEach(field => {
                     if (entity.name == entityClass && field.fieldIsEnum){ _%>
@@ -115,7 +118,7 @@ namespace <%= namespace %>.Infrastructure.Data {
                             // executed when importing entities by jdl (jhipster import-jdl fileName.jdl)
                             if (relationship.ownerSide) {
                                 let relationshipNamePascalized = toPascalCase(relationship.relationshipName);
-                                let relationshipNamePascalizedPlural = pluralize(relationshipNamePascalized); 
+                                let relationshipNamePascalizedPlural = pluralize(relationshipNamePascalized);
                                 let relationshipFieldNamePascalizedPlural = relationship.relationshipFieldNamePascalizedPlural;
                                 let otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
                                 let otherEntityRelationshipNamePascalizedPlural = pluralize(otherEntityRelationshipNamePascalized);
@@ -131,9 +134,9 @@ namespace <%= namespace %>.Infrastructure.Data {
                 .HasMany(x => x.<%= relationshipNamePascalizedPlural %>)
                 .WithMany(x => x.<%= otherEntityRelationshipNamePascalizedPlural %>)
                 .UsingEntity<Dictionary<string, object>>(
-                    "<%= joinEntityClassNamePascalizedPlural %>", 
+                    "<%= joinEntityClassNamePascalizedPlural %>",
                     x => x.HasOne<<%= nonOwnerRelationshipFieldName %>>().WithMany(),
-                    x => x.HasOne<<%= ownerRelationshipFieldName %>>().WithMany());            
+                    x => x.HasOne<<%= ownerRelationshipFieldName %>>().WithMany());
 
                             <%_ }
                         }
@@ -145,7 +148,7 @@ namespace <%= namespace %>.Infrastructure.Data {
                     // executed when using the entity generator to add relationships (jhipster entity entityName)
                     if (relationship.ownerSide) {
                         let ownerRelationshipFieldName = pascalizedEntityClass;
-                        let nonOwnerRelationshipFieldName = relationship.otherEntityNamePascalized; 
+                        let nonOwnerRelationshipFieldName = relationship.otherEntityNamePascalized;
                         let relationshipNamePascalizedPlural = relationship.relationshipNamePascalizedPlural;
                         let otherEntityRelationshipNamePascalizedPlural = relationship.otherEntityRelationshipNamePascalizedPlural;
                         let joinEntityClassNamePascalizedPlural = relationship.joinEntityFieldNamePascalizedPlural;
@@ -154,7 +157,7 @@ namespace <%= namespace %>.Infrastructure.Data {
                 .HasMany(x => x.<%= relationshipNamePascalizedPlural %>)
                 .WithMany(x => x.<%= otherEntityRelationshipNamePascalizedPlural %>)
                 .UsingEntity<Dictionary<string, object>>(
-                    "<%= joinEntityClassNamePascalizedPlural %>", 
+                    "<%= joinEntityClassNamePascalizedPlural %>",
                     x => x.HasOne<<%= nonOwnerRelationshipFieldName %>>().WithMany(),
                     x => x.HasOne<<%= ownerRelationshipFieldName %>>().WithMany());
 

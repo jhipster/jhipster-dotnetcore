@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -65,6 +65,17 @@ module.exports = class extends needleBase {
             // prettier-ignore
             this.generator.stripMargin(`|using ${namespace}.Client.Services.EntityServices.${entityName};`);
         const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-using-for-services', usingEntry);
+
+        this.addBlockContentToFile(rewriteFileModel, errorMessage);
+    }
+
+    addDtoMapping(entityName) {
+        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to AutoMapper.\n')}`;
+        const autoMapperProfilePath = `src/${this.mainClientDir}/AutoMapper/AutoMapperProfile.cs`;
+        const mappingEntry =
+            // prettier-ignore
+            this.generator.stripMargin(`|CreateMap<${entityName}Model, ${entityName}Dto>().ReverseMap();`);
+        const rewriteFileModel = this.generateFileModel(autoMapperProfilePath, 'jhipster-needle-add-dto-model-mapping', mappingEntry);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);
     }

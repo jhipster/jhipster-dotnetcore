@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      x:TypeArguments="viewModels:RegisterViewModel"
+                      xmlns:viewModels="clr-namespace:<%= namespace %>.Client.Xamarin.Core.ViewModels;assembly=<%= namespace %>.Client.Xamarin.Core"
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="<%= namespace %>.Client.Xamarin.Core.Views.RegisterView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
+                <Label Text="Registration" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+            </Frame>
+            <StackLayout Padding="10">
+                <Label IsVisible="{Binding Success}" LineBreakMode="WordWrap" BackgroundColor="LightGreen" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Registration saved! " FontAttributes="Bold" />
+                            <Span Text="Please check your email for confirmation." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label IsVisible="{Binding Error}" LineBreakMode="WordWrap" BackgroundColor="IndianRed" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Registration failed! " FontAttributes="Bold" />
+                            <Span Text="Please try again later." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label IsVisible="{Binding ErrorLogin}" LineBreakMode="WordWrap" BackgroundColor="IndianRed" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Login name already registered! " FontAttributes="Bold" />
+                            <Span Text="Please choose another one." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label IsVisible="{Binding ErrorMail}" LineBreakMode="WordWrap" BackgroundColor="IndianRed" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Email is already in use! " FontAttributes="Bold" />
+                            <Span Text="Please choose another one." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <StackLayout>
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Success}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                    <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
+                    <Entry Placeholder="Email" x:Name="EmailEntry" Text="{Binding Email}" />
+                    <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
+                    <Entry IsPassword="True" Placeholder="Confirm your password" x:Name="ConfirmPasswordEntry" Text="{Binding ConfirmPassword}" />
+                    <StackLayout Orientation="Horizontal">
+                        <CheckBox x:Name="checkBox" IsChecked="{Binding RememberMe}" />
+                        <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangeStateCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    <Button Text="Sign Up" Command="{Binding SignUp}" IsEnabled="{Binding Active}" />
+                </StackLayout>
+                <StackLayout BackgroundColor="Orange" Padding="15">
+                    <Label LineBreakMode="WordWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="If you want to "/>
+                                <Span Text="sign in" FontAttributes="Bold">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GoBack}"/>
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text=", you can try the default accounts:"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)"></Label>
+                    <Label Text="- User (login=&quot;user&quot; and password=&quot;user&quot;)."></Label>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</views:MvxContentPage>

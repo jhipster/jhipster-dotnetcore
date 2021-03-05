@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -25,7 +25,8 @@ using <%= namespace %>.Domain;
 using <%= namespace %>.Dto;
 
 
-namespace <%= namespace %>.Configuration.AutoMapper {
+namespace <%= namespace %>.Configuration.AutoMapper
+{
 
     public class AutoMapperProfile : Profile
     {
@@ -49,9 +50,7 @@ namespace <%= namespace %>.Configuration.AutoMapper {
             else {
                 if(dto === 'mapstruct') { _%>
             CreateMap<<%= entityClassName %>, <%= asDto(entityClassName) %>>().ReverseMap();
-                <%_
-            }} _%>
-            %>
+            <%_ }} _%>
         }
     }
 }

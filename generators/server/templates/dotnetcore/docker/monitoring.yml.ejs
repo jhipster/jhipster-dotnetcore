@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,7 +50,7 @@ services:
 
   <%= baseName.toLowerCase() %>-grafana:
     image: grafana/grafana:latest
-    ports: 
+    ports:
         - 3000:3000
     links:
         - <%= baseName.toLowerCase() %>-influxdb:influxdb
@@ -74,7 +74,7 @@ services:
     depends_on:
       - <%= baseName.toLowerCase() %>-influxdb
       - <%= baseName.toLowerCase() %>-telegraf
-      
+
 #  <%= baseName.toLowerCase() %>-kapacitor:
 #    # Full tag list: https://hub.docker.com/r/library/kapacitor/tags/
 #    image: docker.io/kapacitor:latest
@@ -109,5 +109,4 @@ services:
 #      - <%= baseName.toLowerCase() %>-kapacitor
 #      - <%= baseName.toLowerCase() %>-influxdb
 #      - <%= baseName.toLowerCase() %>-telegraf
-  
-  
+

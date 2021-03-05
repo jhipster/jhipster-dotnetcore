@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using <%= namespace %>.Client.Models;
+using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Client.Services.EntityServices.User
 {
@@ -32,6 +33,6 @@ namespace <%= namespace %>.Client.Services.EntityServices.User
 
         Task Delete(string id);
 
-        Task<IEnumerable<string>> GetAllAuthorities(); 
+        Task<IEnumerable<string>> GetAllAuthorities();
     }
 }

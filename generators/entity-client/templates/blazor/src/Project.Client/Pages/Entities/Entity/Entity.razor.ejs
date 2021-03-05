@@ -8,6 +8,7 @@ _%>
 @page "/<%= lowerCasedEntityClass %>"
 @using Microsoft.AspNetCore.Authorization
 @using <%= namespace %>.Client.Shared.Components
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
@@ -50,7 +51,7 @@ _%>
     @if (<%= entityClassNamePluralized %>.Count == 0)
     {
         <div class="alert alert-warning" id="no-result">
-            <span>No <%= lowerCasedEntityClassPlural %> found</span>
+            <span>No <%= entityClassNamePluralized %> found</span>
         </div>
     }
     else
@@ -58,13 +59,13 @@ _%>
         <div class="table-responsive" id="entities">
             <table class="table table-striped" aria-describedby="page-heading">
                 <thead>
-                    <tr>                        
+                    <tr>
                         <th scope="col"><span>ID</span></th>
                         <%_ fields.forEach(field => { _%>
                         <th scope="col"><span><%= field.fieldNameHumanized %></span></th>
                         <%_ }); _%>
                         <%_ relationships.forEach(relation => { 
-                            if(relation.relationshipType === 'one-to-one') { _%>
+                            if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one' || ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true)) { _%>
                         <th scope="col"><span><%= relation.relationshipNameHumanized %></span></th>
                             <%_ }
                         }); _%>
@@ -80,13 +81,30 @@ _%>
                             <td>@<%= lowerCasedEntityClass %>.<%= field.fieldNamePascalized %></td>
                             <%_ }); _%>
                             <%_ relationships.forEach(relation => { 
-                                if(relation.relationshipType === 'one-to-one') { _%>
+                                if(relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                             <td>
-                                @if (<%= lowerCasedEntityClass %>.Region != null)
+                                <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
+                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != string.Empty)
+                                <%_ } else { _%>
+                                @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != 0)
+                                <%_ } _%>
                                 {
                                     <div>
-                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id/view">@<%= lowerCasedEntityClass %>.<%= relation.otherEntityNamePascalized %>.Id</a>
+                                        <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
+                                        <span>@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id</span>
+                                        <%_ } else { _%>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id/view">@<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id</a>
+                                        <%_ } _%>
                                     </div>
+                                }
+                            </td>
+                                <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
+                            <td>
+                                @foreach (var <%= relation.relationshipFieldNameLowerCased %> in <%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalizedPlural %>){
+                                    <span>
+                                        <a href="/<%= relation.otherEntityNameLowerCased %>/@<%= relation.relationshipFieldNameLowerCased %>.Id/view">@<%= relation.relationshipFieldNameLowerCased %>.Id</a>
+                                        @if (<%= relation.relationshipFieldNameLowerCased %> != <%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Last()) { <span>, </span>}
+                                    </span>
                                 }
                             </td>
                                 <%_ }

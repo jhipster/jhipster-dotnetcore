@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -28,7 +28,7 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
     {
         DbSet<T> Set<T>(string name = null) where T : class;
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
-        void AddGraph<TEntiy>(TEntiy entity) where TEntiy : class;
+        void AddOrUpdateGraph<TEntiy>(TEntiy entity) where TEntiy : class;
         void UpdateState<TEntity>(TEntity entity, EntityState state);
         void SetEntityStateModified<TEntiy, TProperty>(TEntiy entity, Expression<Func<TEntiy, TProperty>> propertyExpression) where TEntiy : class where TProperty : class;
         void RemoveNavigationProperty<TEntity, TOwnerEntity>(TOwnerEntity ownerEntity, object id) where TEntity : class where TOwnerEntity : class;

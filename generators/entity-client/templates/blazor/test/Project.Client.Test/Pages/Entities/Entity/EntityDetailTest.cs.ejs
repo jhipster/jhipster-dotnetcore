@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,13 +12,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ 
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass;
 const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Blazorise;
@@ -55,8 +56,11 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
+            //This code is needed to support recursion
+            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                .ForEach(b => _fixture.Behaviors.Remove(b));
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
-
 
         [Fact]
         public void Should_Display<%= entityClassName %>_When_IdIsPresent()
@@ -65,7 +69,6 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             var <%= lowerCasedEntityClass %> = _fixture.Create<<%= asModel(entityClassName) %>>();
             _<%= lowerCasedEntityClass %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= lowerCasedEntityClass %>));
             var <%= lowerCasedEntityClass %>Detail = RenderComponent<<%= entityClassName %>Detail>(ComponentParameter.CreateParameter("Id", 1));
-            
 
             // Act
             var title = <%= lowerCasedEntityClass %>Detail.Find("h2");
@@ -81,7 +84,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             //Arrange
             _<%= lowerCasedEntityClass %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(new <%= asModel(entityClassName) %>()));
             var <%= lowerCasedEntityClass %>Detail = RenderComponent<<%= entityClassName %>Detail>();
-            
+
             // Act
             var title = <%= lowerCasedEntityClass %>Detail.Find("div.col-8");
 

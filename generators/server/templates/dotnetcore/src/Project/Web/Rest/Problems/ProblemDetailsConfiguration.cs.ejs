@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +20,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace <%= namespace %>.Web.Rest.Problems {
-    public class ProblemDetailsConfiguration : IConfigureOptions<ProblemDetailsOptions> {
+namespace <%= namespace %>.Web.Rest.Problems
+{
+    public class ProblemDetailsConfiguration : IConfigureOptions<ProblemDetailsOptions>
+    {
         public ProblemDetailsConfiguration(IHostEnvironment environment, IHttpContextAccessor httpContextAccessor)
         {
             _environment = environment;
@@ -33,9 +35,10 @@ namespace <%= namespace %>.Web.Rest.Problems {
 
         public void Configure(ProblemDetailsOptions options)
         {
-            options.IncludeExceptionDetails = (ctx , details) => _environment.IsDevelopment();
+            options.IncludeExceptionDetails = (ctx, details) => _environment.IsDevelopment();
 
-            options.OnBeforeWriteDetails = (ctx, details) => {
+            options.OnBeforeWriteDetails = (ctx, details) =>
+            {
                 // keep consistent with asp.net core 2.2 conventions that adds a tracing value
                 var traceId = Activity.Current?.Id ?? _HttpContextAccessor.HttpContext.TraceIdentifier;
                 details.Extensions["traceId"] = traceId;

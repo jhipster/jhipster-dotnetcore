@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -26,9 +26,11 @@ using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Domain.Services {
-    public class <%= serviceClassName %> : <%= serviceInterface %> {
-        protected readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
+namespace <%= namespace %>.Domain.Services
+{
+    public class <%= serviceClassName %> : <%= serviceInterface %>
+    {
+        protected readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
 
         public <%= serviceClassName %>(I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         {
@@ -48,8 +50,10 @@ namespace <%= namespace %>.Domain.Services {
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
-            }); _%>            
+            }); _%>
                 .GetPageAsync(pageable);
             return page;
         }

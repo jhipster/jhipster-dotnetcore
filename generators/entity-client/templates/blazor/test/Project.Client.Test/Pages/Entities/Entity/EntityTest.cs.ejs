@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ 
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
@@ -60,8 +60,11 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
             Services.AddHttpClientInterceptor();
+            //This code is needed to support recursion
+            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+                .ForEach(b => _fixture.Behaviors.Remove(b));
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
         }
-
 
         [Fact]
         public void Should_DisplayAll<%= pascalizedEntityClassPlural %>_When_<%= pascalizedEntityClassPlural %>ArePresent()
@@ -70,7 +73,6 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
             _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
             var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>();
-
 
             // Act
             var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
@@ -87,12 +89,11 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
             var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>();
 
-
             // Act
             var span = <%= entityVariableName %>Page.Find("div>span");
 
             // Assert
-            span.MarkupMatches("<span>No <%= camelCasedEntityClassPlural %> found</span>");
+            span.MarkupMatches("<span>No <%= entityClassNamePluralized %> found</span>");
         }
 
         [Fact]
@@ -101,14 +102,14 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             //Arrange
             var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
             _<%= entityVariableName %>Service.Setup(service => service.GetAll()).Returns(Task.FromResult(<%= camelCasedEntityClassPlural %>.ToList() as IList<<%= asModel(entityClassName) %>>));
-           
+
             var modalRef = new Mock<IModalReference>();
             modalRef.Setup(mock => mock.Result).Returns(Task.FromResult(ModalResult.Ok(new { })));
             _modalService.Setup(service => service.Show<DeleteModal>(It.IsAny<string>())).Returns(modalRef.Object);
             var <%= entityVariableName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>>(ComponentParameterFactory.CascadingValue(_modalService.Object));
+
             // Act
             var <%= entityVariableName %>ToDelete = <%= camelCasedEntityClassPlural %>.First();
-
 
             // Assert
             <%= entityVariableName %>Page.Find("td>div>button").Click();

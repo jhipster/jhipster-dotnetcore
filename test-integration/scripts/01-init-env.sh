@@ -6,10 +6,10 @@ else
     APP_FOLDER=$1
 fi
 
-if [[ $3 == "" ]]; then
+if [[ $4 == "" ]]; then
     DEST_FOLDER=$HOME
 else
-    DEST_FOLDER=$3
+    DEST_FOLDER=$4
 fi
 
 if [[ $GITHUB_WORKSPACE == "" ]]; then
@@ -19,7 +19,11 @@ else
 fi
 
 if [[ "$APP_FOLDER" = "jwt-with-angular-app" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
-    SONAR_ANALYSE=true    
+    SONAR_ANALYSE_ANGULAR=true
+fi
+
+if [[ "$APP_FOLDER" = "jwt-with-blazor-app" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
+    SONAR_ANALYSE_BLAZOR=true
 fi
 
 #-------------------------------------------------------------------------------

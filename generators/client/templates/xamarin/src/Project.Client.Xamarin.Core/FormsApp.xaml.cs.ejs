@@ -1,4 +1,4 @@
-<%#
+﻿<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,20 +12,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Microsoft.EntityFrameworkCore;
+using Xamarin.Forms;
 
-namespace <%= namespace %>.Infrastructure.Data.Extensions {
-    public static class DbContextExtensions {
-        public static void AddGraph(this DbContext dbContext, object rootObject)
+namespace <%= namespace %>.Client.Xamarin.Core
+{
+    public partial class FormsApp : Application
+    {
+        public FormsApp()
         {
-            dbContext.ChangeTracker.TrackGraph(rootObject, e => {
-                if (e.Entry.IsKeySet) {
-                    e.Entry.State = EntityState.Unchanged;
-                }
-                else {
-                    e.Entry.State = EntityState.Added;
-                }
-            });
+            InitializeComponent();
         }
     }
 }

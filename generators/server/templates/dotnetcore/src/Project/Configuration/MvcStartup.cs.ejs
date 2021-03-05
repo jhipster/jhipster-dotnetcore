@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,10 @@ using Newtonsoft.Json.Serialization;
 using Ocelot.Middleware;
 <%_ } _%>
 
-namespace <%= namespace %>.Configuration {
-    public static class WebConfiguration {
+namespace <%= namespace %>.Configuration
+{
+    public static class WebConfiguration
+    {
         public static IServiceCollection AddWebModule(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
@@ -34,9 +36,9 @@ namespace <%= namespace %>.Configuration {
             //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
             services.AddHealthChecks();
 
-            //TODO use AddMvcCore + config
             services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
-            .AddNewtonsoftJson(options => {
+            .AddNewtonsoftJson(options =>
+            {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -44,7 +46,7 @@ namespace <%= namespace %>.Configuration {
                 options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
             });
 
-            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
+            <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -72,7 +74,7 @@ namespace <%= namespace %>.Configuration {
 
             app.UseHealthChecks("/health");
 
-            <%_ if (!skipClient && clientFramework != "Blazor") { _%>
+            <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

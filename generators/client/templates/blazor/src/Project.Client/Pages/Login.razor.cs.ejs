@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +22,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Pages
 {
-    public partial class Login
+    public partial class Login : ComponentBase
     {
         [Inject]
         public AuthenticationStateProvider AuthenticationService { get; set; }
-        
-        [CascadingParameter] 
+
+        [CascadingParameter]
         public BlazoredModalInstance BlazoredModal { get; set; }
 
         public LoginModel LoginModel { get; set; } = new LoginModel();
@@ -37,7 +37,7 @@ namespace <%= namespace %>.Client.Pages
         private async Task HandleSubmit()
         {
             var result = await (AuthenticationService as IAuthenticationService).SignIn(LoginModel);
-            IsAuthenticateError = !result; 
+            IsAuthenticateError = !result;
             LoginModel = new LoginModel();
             if (result)
             {
