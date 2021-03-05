@@ -1,3 +1,4 @@
+
 # Fronts
 
 When generating an application, you are able to choose between multiple fronts. 
@@ -14,7 +15,7 @@ Call the generator
 jhipster --blueprints dotnetcore
 ```
 
-and choose Angular
+and choose Angularr
 
 ![front-choice](../assets/angular-choice.png)
 
@@ -26,7 +27,7 @@ React (also known as React.js or ReactJS) is an open-source, front end, JavaScri
 
 ### Generate your application
 
-Call the generator
+Call the G
 
 ```bash
 jhipster --blueprints dotnetcore
