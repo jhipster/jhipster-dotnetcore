@@ -1,3 +1,4 @@
+
 # Fronts
 
 When generating an application, you are able to choose between multiple fronts. 
@@ -10,10 +11,6 @@ Angular (commonly referred to as "Angular 2+" or "Angular v2 and above") is a Ty
 ## React
 
 React (also known as React.js or ReactJS) is an open-source, front end, JavaScript library for building user interfaces or UI components.
-
-## Alpha - Blazor
-
-Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML.
 
 ## Alpha - Xamarin
 
@@ -65,9 +62,20 @@ client
 │   ├── Constants                     - Contains shared constants
 ```
 
-# Fronts 
+### Limitations 
 
-## Using Blazor
+For the moment, the Xamarin generation has certain limitations : 
+
+- No Offline mode
+- No User managment
+- No validation on entity fields
+- No translation 
+- No Tests
+- Only JWT security is implemented 
+
+## Alpha - Blazor
+
+Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML.
 
 ### Why Blazor ? 
 
@@ -75,7 +83,7 @@ Blazor can run your client-side C# code directly in the browser, using WebAssemb
 
 ### Prerequisites
 
-https://dotnet.microsoft.com/download/dotnet/5.0
+- [dotnet5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 ### Generate your application 
 
@@ -118,24 +126,24 @@ For the backend
 
 Like the others front technologies you can generate entities for blazor
 
-With cli 
+With CLI
 ```bash
 jhipster entity <entity-name>
 ```
 
-or with jdl (https://start.jhipster.tech/jdl-studio/)
+or with JDL (https://start.jhipster.tech/jdl-studio/)
 ```bash
 jhipster import-jdl my_file.jdl
 ```
 
 ### Tools 
 
-As the project used SASS, to install and consume scss third parties libraries like bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
-You can find libman configuration in same directory than client solution (./src/client/YourAppName.Client)
+As the project used SASS, to install and consume SCSS third parties libraries like Bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
+You can find libman configuration in the same directory than the client solution (./src/client/YourAppName.Client)
 
-To minify css we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
+To minify CSS  we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
 
-These two tools are installed during jhipster client generation, and you can find the execution in client csproj (./src/client/YourAppName.Client/YourAppName.Client.csproj)
+These two tools are installed during JHipster client generation, and you can find the execution in Client.csproj (./src/client/YourAppName.Client/YourAppName.Client.csproj)
 
 ### UI components 
 
