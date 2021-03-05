@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- [Python and pip](https://www.python.org/downloads/)
+- [Python and pip](https://www.python.org/downloads/)<br>
 or
 - [Chocolatey](https://chocolatey.org/install)
 
@@ -14,7 +14,7 @@ or
 choco install python3 --pre
 ```
 
-## Install
+## Prerequisites
 
 Install Sphinx
 ```bash
@@ -31,30 +31,34 @@ Install Recommark
 py -m pip install Recommonmark
 ```
 
-## Generate the documentation
+## Generate the documentation HTML files 
 
 ```bash
-cd docs
+cd ./docs/
 ```
 
 ```bash
 .\make.bat html
 ```
 
+Your documentation is now generated in `./_build/html`
+
 ## Generate the documentation with Hot Reload
 
-### Install
+### Requirements
 
 ```bash
 py -m pip install sphinx-autobuild
 ```
 
-### Start
+### Start autobuild
 
 ```bash
-cd docs
+cd ./docs/
 ```
 
 ```bash
 .\autobuild.bat
 ```
+
+Your documentation is now auto-generated on `http://127.0.0.1:8000`
