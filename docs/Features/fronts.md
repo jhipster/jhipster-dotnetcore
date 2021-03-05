@@ -182,7 +182,7 @@ jhipster import-jdl my_file.jdl
 As the project used SASS, to install and consume SCSS third parties libraries like Bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
 You can find libman configuration in the same directory than the client solution (./src/client/YourAppName.Client)
 
-To minify CSS  we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
+To minify CSS we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
 
 These two tools are installed during JHipster client generation, and you can find the execution in Client.csproj (./src/client/YourAppName.Client/YourAppName.Client.csproj)
 
