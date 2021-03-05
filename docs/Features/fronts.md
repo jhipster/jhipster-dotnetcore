@@ -99,39 +99,41 @@ and choose Blazor (WebAssembly)
 
 After that, your application is ready, and you can now use it with default user (admin admin or user user)
 
-You can run the Backend with 
+#### Start your application
+
+##### Run the Backend
 
 ```bash
 dotnet run --verbosity normal --project ./src/YourAppName/YourAppName.csproj
 ```
 
-And you can run the Frontend with 
+##### Run the Frontend
 
 ```bash
 dotnet run --verbosity normal --project ./src/client/YourAppName.Client/YourAppName.Client.csproj
 ```
 
-You can also use the **hotreload**
+#### Start your application with Hot Reload
 
-For the backend 
+##### Run the Backend
 ```bash
  dotnet watch --project ./src/YourAppName/YourAppName.csproj run --verbosity normal
  ```
- For the frontend 
+##### Run the Frontend
 ```bash
  dotnet watch --project ./src/client/YourAppName.Client/YourAppName.Client.csproj run --verbosity normal
  ```
 
 ### Generate entities 
 
-Like the others front technologies you can generate entities for blazor
+Like the others front technologies you can generate entities for Blazor.
 
-With CLI
+#### With CLI
 ```bash
 jhipster entity <entity-name>
 ```
 
-or with JDL (https://start.jhipster.tech/jdl-studio/)
+#### With [JDL](https://start.jhipster.tech/jdl-studio/)
 ```bash
 jhipster import-jdl my_file.jdl
 ```
