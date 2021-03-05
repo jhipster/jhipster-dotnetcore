@@ -15,7 +15,7 @@ Call the generator
 jhipster --blueprints dotnetcore
 ```
 
-and choose Angularr
+and choose Angular
 
 ![front-choice](../assets/angular-choice.png)
 
@@ -27,7 +27,7 @@ React (also known as React.js or ReactJS) is an open-source, front end, JavaScri
 
 ### Generate your application
 
-Call the G
+Call the generator
 
 ```bash
 jhipster --blueprints dotnetcore
