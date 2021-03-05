@@ -1,16 +1,38 @@
-
 # Fronts
 
 When generating an application, you are able to choose between multiple fronts. 
-![front-choice](../assets/Front-choice.png)
 
 ## Angular
 
 Angular (commonly referred to as "Angular 2+" or "Angular v2 and above") is a TypeScript-based open-source web application framework.
 
+### Generate your application 
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose Angular
+
+![front-choice](../assets/angular-choice.png)
+
 ## React
 
 React (also known as React.js or ReactJS) is an open-source, front end, JavaScript library for building user interfaces or UI components.
+
+### Generate your application 
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose React
+
+![front-choice](../assets/react-choice.png)
 
 ## Alpha - Xamarin
 
@@ -35,6 +57,18 @@ With a C#-shared codebase, developers can use Xamarin tools to write native Andr
 ### Why Xamarin
 
 Xamarin allows to take advantage of this blueprint. Indeed, it enables to generate a modern cross platform application with both front-end and back-end in C#.
+
+### Generate your application 
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose Xamarin
+
+![front-choice](../assets/xamarin-choice.png)
 
 ### Structure
 
