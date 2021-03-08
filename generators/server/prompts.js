@@ -38,6 +38,25 @@ function askForServerSideOpts() {
             message: 'On which port would like your server to run? It should be unique to avoid port conflicts.',
             default: defaultPort,
         },
+        {
+            type: 'list',
+            name: 'cqrsEnabled',
+            message: `Do you want to use the CQRS design pattern?`,
+            choices: response => {
+                const opts = [
+                    {
+                        value: false,
+                        name: 'No',
+                    },
+                    {
+                        value: true,
+                        name: 'Yes',
+                    },
+                ];
+                return opts;
+            },
+            default: 0,
+        },
         // TODO: If CQRS == "Yes" : Separate Read/Write DB ? 
         // TODO: If Separate == "Yes" : > 2 questions DB
         {
@@ -93,7 +112,7 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
-        // TODO: CQRS
+        this.cqrsEnabled = prompt.cqrsEnabled;
         this.databaseType = prompt.database;
         this.authenticationType = prompt.authenticationType;
         this.serverPort = prompt.serverPort;

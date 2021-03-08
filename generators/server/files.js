@@ -24,6 +24,7 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const DOCKER_DIR = constants.DOCKER_DIR;
 const PROJECT_DOMAIN_SUFFIX = constants.PROJECT_DOMAIN_SUFFIX;
+const PROJECT_APPLICATION_SUFFIX = constants.PROJECT_APPLICATION_SUFFIX;
 const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
@@ -61,6 +62,17 @@ const serverFiles = {
                     file: 'Project.Domain/Project.csproj',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}.csproj`,
                 },
             ],
         },
@@ -701,6 +713,72 @@ const serverFiles = {
                 {
                     file: 'Project/Controllers/UserController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/UserController.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice' && generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Commands/User/UserCreateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserCreateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserCreateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserCreateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserDeleteCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserDeleteCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserDeleteCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserDeleteCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserUpdateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserUpdateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserUpdateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserUpdateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAuthoritiesQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAuthoritiesQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
                 },
             ],
         },

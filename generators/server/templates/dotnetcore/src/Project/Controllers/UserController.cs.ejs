@@ -12,6 +12,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (cqrsEnabled) { _%>
+using MediatR;
+<%_ } _%>
 using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +31,10 @@ using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Web.Rest.Utilities;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
+<%_ if (cqrsEnabled) { _%>
+using <%= namespace %>.Application.Queries;
+using <%= namespace %>.Application.Commands;
+<%_ } _%>
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,19 +53,36 @@ namespace <%= namespace %>.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        <%_ if (cqrsEnabled) { _%>
+        private readonly IMediator _mediator;
+        <%_ } _%>
 
         public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
-            IMapper mapper, IMailService mailService)
+            IMapper mapper, IMailService mailService, <%_ if (cqrsEnabled) { _%>IMediator mediator<%_ } _%>)
         {
             _log = log;
             _userManager = userManager;
             _userService = userService;
             _mailService = mailService;
+            <%_ if (cqrsEnabled) { _%>
+            _mediator = mediator;
+            <%_ } _%>
             _mapper = mapper;
         }
 
         [HttpPost("users")]
         [ValidateModel]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<ActionResult<User>> CreateUser([FromBody] UserCreateCommand command)
+        {
+            _log.LogDebug($"REST request to save User : {command}");
+
+            var newUser = await this._mediator.Send(command);
+
+            return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
+                .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
+        }
+        <%_ } else { _%>
         public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to save User : {userDto}");
@@ -75,10 +99,21 @@ namespace <%= namespace %>.Controllers
             await _mailService.SendCreationEmail(newUser);
             return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
+        <%_ } _%>
         }
 
         [HttpPut("users")]
         [ValidateModel]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateCommand command)
+        {
+            _log.LogDebug($"REST request to update User : {command}");
+
+            var updatedUser = await this._mediator.Send(command);        
+            return ActionResultUtil.WrapOrNotFound(updatedUser)
+                .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", command.Login));
+        }
+        <%_ } else { _%>
         public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to update User : {userDto}");
@@ -92,10 +127,21 @@ namespace <%= namespace %>.Controllers
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
         }
+        <%_ } _%>
 
         [HttpGet("users")]
+        <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
-        {
+        {           
+            _log.LogDebug("REST request to get a page of Users");
+            var page = await this._mediator.Send(new UserGetAllQuery { page = pageable });
+            var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
+            var headers = page.GeneratePaginationHttpHeaders();
+            return Ok(userDtos).WithHeaders(headers);
+        }
+        <%_ } else { _%>
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
+        {  
             _log.LogDebug("REST request to get a page of Users");
             var page = await _userManager.Users
                 .Include(it => it.UserRoles)
@@ -105,15 +151,31 @@ namespace <%= namespace %>.Controllers
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }
+        <%_ } _%>
 
         [HttpGet("users/authorities")]
         [Authorize(Roles = RolesConstants.ADMIN)]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<ActionResult<IEnumerable<string>>> GetAuthorities()
+        {
+            return Ok(await this._mediator.Send(new UserGetAuthoritiesQuery()));
+        }
+        <%_ } else { _%>
         public ActionResult<IEnumerable<string>> GetAuthorities()
         {
             return Ok(_userService.GetAuthorities());
         }
+        <%_ } _%>
 
         [HttpGet("users/{login}")]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<IActionResult> GetUser([FromRoute] UserGetQuery query)
+        {
+            _log.LogDebug($"REST request to get User : {query.Login}");
+            var userDto = await this._mediator.Send(query);
+            return ActionResultUtil.WrapOrNotFound(userDto);
+        }
+        <%_ } else { _%>
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
@@ -125,14 +187,24 @@ namespace <%= namespace %>.Controllers
             var userDto = _mapper.Map<UserDto>(result);
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
+        <%_ } _%>
 
         [HttpDelete("users/{login}")]
         [Authorize(Roles = RolesConstants.ADMIN)]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<IActionResult> DeleteUser([FromRoute] UserDeleteCommand command)
+        {
+            _log.LogDebug($"REST request to delete User : {command.Login}");
+            await this._mediator.Send(command);
+            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", command.Login));
+        }
+        <%_ } else { _%>        
         public async Task<IActionResult> DeleteUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to delete User : {login}");
             await _userService.DeleteUser(login);
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
         }
+        <%_ } _%>
     }
 }
