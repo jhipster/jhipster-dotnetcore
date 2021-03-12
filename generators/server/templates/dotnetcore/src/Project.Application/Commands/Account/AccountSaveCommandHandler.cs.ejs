@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
 using AutoMapper;
 using System.Linq;
 using <%= namespace %>.Domain;
@@ -29,33 +30,34 @@ using <%= namespace %>.Crosscutting.Exceptions;
 
 namespace <%= namespace %>.Application.Commands
 {
-    public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, User>
+    public class AccountSaveCommandHandler : IRequestHandler<AccountSaveCommand, Unit>
     {
-        private readonly IMailService _mailService;
-        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public UserCreateCommandHandler(UserManager<User> userManager, IUserService userService,
-            IMapper mapper, IMailService mailService)
+        public AccountSaveCommandHandler(IUserService userService,
+            IMapper mapper, UserManager<User> userManager)
         {
-            _userManager = userManager;
             _userService = userService;
-            _mailService = mailService;
-            _mapper = mapper;
+            _userManager = userManager;
         }
 
-        public async Task<User> Handle(UserCreateCommand userDto, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AccountSaveCommand userDto, CancellationToken cancellationToken)
         {
-            // Lowercase the user login before comparing with database
-            if (await _userManager.FindByNameAsync(userDto.Login.ToLowerInvariant()) != null)
-                throw new LoginAlreadyUsedException();
-            if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
+            var userName = _userManager.GetUserName(userDto.User);
+            if (userName == null) throw new InternalServerErrorException("Current user login not found");
+
+            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            if (existingUser != null &&
+                !string.Equals(existingUser.Login, userName, StringComparison.InvariantCultureIgnoreCase))
                 throw new EmailAlreadyUsedException();
 
-            var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
-            await _mailService.SendCreationEmail(newUser);
-            return newUser;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) throw new InternalServerErrorException("User could not be found");
+
+            await _userService.UpdateUser(userDto.FirstName, userDto.LastName, userDto.Email, userDto.LangKey,
+                userDto.ImageUrl);
+            return Unit.Value;
         }
     }
 }

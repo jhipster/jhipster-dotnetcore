@@ -25,22 +25,21 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using <%= namespace %>.Crosscutting.Exceptions;
 
 namespace <%= namespace %>.Application.Commands
 {
     public class UserUpdateCommandHandler : IRequestHandler<UserUpdateCommand, User>
     {
-        private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public UserUpdateCommandHandler(UserManager<User> userManager, IUserService userService,
-            IMapper mapper, IMailService mailService)
+            IMapper mapper)
         {
             _userManager = userManager;
             _userService = userService;
-            _mailService = mailService;
             _mapper = mapper;
         }
 

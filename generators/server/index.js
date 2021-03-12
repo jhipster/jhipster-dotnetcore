@@ -60,6 +60,7 @@ module.exports = class extends ServerGenerator {
                 this.databaseType = configuration.get('databaseType') || this.configOptions.databaseType;
                 this.authenticationType = configuration.get('authenticationType') || this.configOptions.authenticationType;
                 this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort;
+                this.cqrsEnabled = configuration.get('cqrsEnabled') || this.configOptions.cqrsEnabled;
                 this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
 
                 const serverConfigFound =
@@ -98,6 +99,7 @@ module.exports = class extends ServerGenerator {
             configureGlobalDotnetcore,
             saveConfig() {
                 const config = {
+                    cqrsEnabled: this.cqrsEnabled,
                     databaseType: this.databaseType,
                     authenticationType: this.authenticationType,
                     serverPort: this.serverPort,
@@ -121,20 +123,22 @@ module.exports = class extends ServerGenerator {
         return {
             async end() {
                 this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                let slns = [
+                    `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
+                    `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
+                ];
+                if (this.cqrsEnabled) {
+                    slns.push(`${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}.csproj`);
+                }
                 await dotnet
                     .newSln(this.solutionName)
-                    .then(() =>
-                        dotnet.slnAdd(`${this.solutionName}.sln`, [
-                            `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
-                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
-                        ])
-                    )
+                    .then(() => 
+                        dotnet.slnAdd(`${this.solutionName}.sln`, slns))
                     .catch(err => {
                         this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
                     })

@@ -32,18 +32,11 @@ namespace <%= namespace %>.Application.Queries
 {
     public class UserGetAuthoritiesQueryHandler : IRequestHandler<UserGetAuthoritiesQuery, IEnumerable<string>>
     {
-        private readonly IMailService _mailService;
-        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public UserGetAuthoritiesQueryHandler(UserManager<User> userManager, IUserService userService,
-            IMapper mapper, IMailService mailService)
+        public UserGetAuthoritiesQueryHandler(IUserService userService)
         {
-            _userManager = userManager;
             _userService = userService;
-            _mailService = mailService;
-            _mapper = mapper;
         }
 
         public Task<IEnumerable<string>> Handle(UserGetAuthoritiesQuery request, CancellationToken cancellationToken)

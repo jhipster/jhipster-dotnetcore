@@ -27,23 +27,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using JHipsterNet.Core.Pagination.Extensions;
 
 namespace <%= namespace %>.Application.Queries
 {
     public class UserGetAllQueryHandler : IRequestHandler<UserGetAllQuery, IPage<User>>
     {
-        private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
-        private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
         public UserGetAllQueryHandler(UserManager<User> userManager, IUserService userService,
             IMapper mapper, IMailService mailService)
         {
             _userManager = userManager;
-            _userService = userService;
-            _mailService = mailService;
-            _mapper = mapper;
         }
         
         public Task<IPage<User>> Handle(UserGetAllQuery request, CancellationToken cancellationToken)

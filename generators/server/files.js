@@ -688,6 +688,92 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice' && generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Commands/Account/AccountActivateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountActivateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountActivateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountActivateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountChangePasswordCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountChangePasswordCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountChangePasswordCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountChangePasswordCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountCreateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountCreateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountCreateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountCreateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordFinishCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordFinishCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordFinishCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordFinishCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountSaveCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountSaveCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountSaveCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountSaveCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetAuthenticatedQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetAuthenticatedQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetAuthenticatedQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetAuthenticatedQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetQueryHandler.cs`,
+                },
+            ],
+        },
+        {
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -779,6 +865,16 @@ const serverFiles = {
                     file: 'Project.Application/Queries/User/UserGetAuthoritiesQueryHandler.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/UserJwt/UserJwtAuthorizeCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/UserJwt/UserJwtAuthorizeCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/UserJwt/UserJwtAuthorizeCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/UserJwt/UserJwtAuthorizeCommand.cs`,
                 },
             ],
         },

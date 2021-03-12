@@ -19,36 +19,35 @@
 using AutoMapper;
 using System.Linq;
 using <%= namespace %>.Domain;
-using <%= namespace %>.Dto;
-using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Domain.Repositories.Interfaces;
+using <%= namespace %>.Domain.Services.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using <%= namespace %>.Crosscutting.Exceptions;
 
-namespace <%= namespace %>.Application.Queries
+namespace <%= namespace %>.Application.Commands
 {
-    public class UserGetQueryHandler : IRequestHandler<UserGetQuery, UserDto>
+    public class AccountCreateCommandHandler : IRequestHandler<AccountCreateCommand, User>
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
+        private readonly IMailService _mailService;
+        private readonly IUserService _userService;
+        private readonly IMapper _userMapper;
 
-        public UserGetQueryHandler(UserManager<User> userManager, IMapper mapper)
+        public AccountCreateCommandHandler(IUserService userService,
+            IMapper mapper, IMailService mailService)
         {
-            _userManager = userManager;
-            _mapper = mapper;
+            _userService = userService;
+            _mailService = mailService;
+            _userMapper = mapper;
         }
 
-        public async Task<UserDto> Handle(UserGetQuery request, CancellationToken cancellationToken)
+        public async Task<User> Handle(AccountCreateCommand managedUserDto, CancellationToken cancellationToken)
         {
-            var result = await _userManager.Users
-                .Where(user => user.Login == request.Login)
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .SingleOrDefaultAsync();
-            return _mapper.Map<UserDto>(result);
+            var user = await _userService.RegisterUser(_userMapper.Map<User>(managedUserDto), managedUserDto.Password);
+            await _mailService.SendActivationEmail(user);
+            return user;
         }
     }
 }
