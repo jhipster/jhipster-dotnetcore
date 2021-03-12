@@ -210,7 +210,7 @@ const serverFiles = {
     ],
     service: [
         {
-            condition: generator => generator.service === 'serviceImpl' && generator.cqrsEnabled === false,
+            condition: generator => generator.service === 'serviceImpl' && generator.cqrsEnabled !== false,
             path: SERVER_SRC_DIR,
             templates: [
                 {
