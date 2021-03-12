@@ -18,10 +18,8 @@
 -%>
 <%
 let hasDto = dto === 'mapstruct';
-let hasService = service === 'serviceImpl';
 %>
 using <%= namespace %>.Domain;
-using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using MediatR;
 using System.Threading;
@@ -31,34 +29,18 @@ namespace <%= namespace %>.Application.Commands
 {
     public class <%= pascalizedEntityClass %>DeleteCommandHandler : IRequestHandler<<%= pascalizedEntityClass %>DeleteCommand, Unit>
     {
-        <%_ if (hasService) { _%>
-        private I<%= pascalizedEntityClass %>Service _<%= camelCasedEntityClass %>Service;
-        <%_ } else { _%>
         private I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
-        <%_ } _%> 
 
         public <%= pascalizedEntityClass %>DeleteCommandHandler(
-            <%_ if (hasService) { _%>
-            I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service)
-            <%_ } else { _%>
             I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
-            <%_ } _%> 
         {
-            <%_ if (hasService) { _%>
-            _<%= camelCasedEntityClass %>Service = <%= camelCasedEntityClass %>Service;
-            <%_ } else { _%>
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
-            <%_ } _%>
         }
 
         public async Task<Unit> Handle(<%= pascalizedEntityClass %>DeleteCommand request, CancellationToken cancellationToken)
         {
-        <%_ if (hasService) { _%>
-            await _<%= camelCasedEntityClass %>Service.Delete(request.Id);
-            <%_ } else {_%>
             await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(request.Id);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
-            <%_ }_%>
             return Unit.Value;
         }
     }

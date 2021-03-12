@@ -18,7 +18,6 @@
 -%>
 <%
 let hasDto = dto === 'mapstruct';
-let hasService = service === 'serviceImpl';
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
@@ -26,7 +25,6 @@ using System.Linq;
 <%_ } _%>
 using <%= namespace %>.Domain;
 using <%= namespace %>.Dto;
-using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using MediatR;
 using System.Threading;
@@ -37,11 +35,7 @@ namespace <%= namespace %>.Application.Queries
 {
     public class <%= pascalizedEntityClass %>GetAllQueryHandler : IRequestHandler<<%= pascalizedEntityClass %>GetAllQuery, <%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>
     {
-        <%_ if (hasService) { _%>
-        private I<%= pascalizedEntityClass %>Service _<%= camelCasedEntityClass %>Service;
-        <%_ } else { _%>
         private IReadOnly<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
-        <%_ } _%> 
         <%_ if (hasDto) { _%>
         private readonly IMapper _mapper;
         <%_ } _%>
@@ -50,27 +44,16 @@ namespace <%= namespace %>.Application.Queries
             <%_ if (hasDto) { _%>
             IMapper mapper,
             <%_ } _%>
-            <%_ if (hasService) { _%>
-            I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service)
-            <%_ } else { _%>
             IReadOnly<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
-            <%_ } _%> 
         {
             <%_ if (hasDto) { _%>
             _mapper = mapper;
             <%_ } _%> 
-            <%_ if (hasService) { _%>
-            _<%= camelCasedEntityClass %>Service = <%= camelCasedEntityClass %>Service;
-            <%_ } else { _%>
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
-            <%_ } _%>
         }
         
         public async Task<<%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Handle(<%= pascalizedEntityClass %>GetAllQuery request, CancellationToken cancellationToken)
         {
-            <%_ if (hasService) { _%>
-            var page = await _<%= camelCasedEntityClass %>Service.FindAll(request.page);
-            <%_ } else { _%>
             var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
@@ -80,7 +63,6 @@ namespace <%= namespace %>.Application.Queries
                 <%_ }
                 }); _%>
                 .GetPageAsync(request.page);
-            <%_ } _%>
             <%_ if (hasDto) { _%>
             return new Page<<%= asDto(pascalizedEntityClass) %>>(page.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(), request.page, page.TotalElements);
             <%_ } else { _%>
