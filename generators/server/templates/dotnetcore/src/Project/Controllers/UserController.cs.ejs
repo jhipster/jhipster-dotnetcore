@@ -69,8 +69,7 @@ namespace <%= namespace %>.Controllers
         public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
             IMapper mapper, IMailService mailService)
         {
-            _log = log;       
-            _mediator = mediator;        
+            _log = log;              
             _userManager = userManager;
             _userService = userService;
             _mailService = mailService;
