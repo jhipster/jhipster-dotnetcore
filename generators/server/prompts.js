@@ -41,7 +41,7 @@ function askForServerSideOpts() {
         {
             type: 'list',
             name: 'cqrsEnabled',
-            message: `Do you want to use the CQRS design pattern?`,
+            message: 'Do you want to use the CQRS design pattern?',
             choices: response => {
                 const opts = [
                     {
@@ -57,7 +57,7 @@ function askForServerSideOpts() {
             },
             default: 0,
         },
-        // TODO: If CQRS == "Yes" : Separate Read/Write DB ? 
+        // TODO: If CQRS == "Yes" : Separate Read/Write DB ?
         // TODO: If Separate == "Yes" : > 2 questions DB
         {
             type: 'list',

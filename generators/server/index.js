@@ -123,7 +123,7 @@ module.exports = class extends ServerGenerator {
         return {
             async end() {
                 this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-                let slns = [
+                const slns = [
                     `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
                     `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
                     `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
@@ -133,12 +133,13 @@ module.exports = class extends ServerGenerator {
                     `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
                 ];
                 if (this.cqrsEnabled) {
-                    slns.push(`${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}.csproj`);
+                    slns.push(
+                        `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}.csproj`
+                    );
                 }
                 await dotnet
                     .newSln(this.solutionName)
-                    .then(() => 
-                        dotnet.slnAdd(`${this.solutionName}.sln`, slns))
+                    .then(() => dotnet.slnAdd(`${this.solutionName}.sln`, slns))
                     .catch(err => {
                         this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
                     })
