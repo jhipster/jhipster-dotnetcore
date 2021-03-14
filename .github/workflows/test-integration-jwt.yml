@@ -9,7 +9,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
+                node_version: [14.16.0]
                 os: [ubuntu-latest]
                 app-type:
                     - jwt-with-angular-app
@@ -59,7 +59,7 @@ jobs:
               run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             - name: 'RUN CLIENT UNIT TESTS of generated app'
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN SERVER UNIT TESTS of generated app'
@@ -71,4 +71,4 @@ jobs:
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             - name: 'VERIFY FORMAT'
               run: ./test-integration/scripts/08-verify-format.sh $JHI_APP
-            
+
