@@ -28,9 +28,30 @@ function askForModuleName() {
 function askForServerSideOpts() {
     if (this.existingProject) return;
     const applicationType = this.applicationType;
+    const availableDb = [
+        {
+            value: 'sqllite',
+            name: 'SQLite in-memory',
+        },
+        {
+            value: 'mssql',
+            name: 'Microsoft SQL Server',
+        },
+        {
+            value: 'postgres',
+            name: 'PostgreSQL',
+        },
+        {
+            value: 'mysql',
+            name: 'MySQL',
+        },
+        {
+            value: 'oracle',
+            name: 'Oracle',
+        },
+    ];
     const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
-        // TODO: CQRS
         {
             type: 'input',
             name: 'serverPort',
@@ -39,52 +60,40 @@ function askForServerSideOpts() {
             default: defaultPort,
         },
         {
-            type: 'list',
+            type: 'confirm',
             name: 'cqrsEnabled',
             message: 'Do you want to use the CQRS design pattern?',
-            choices: response => {
-                const opts = [
-                    {
-                        value: false,
-                        name: 'No',
-                    },
-                    {
-                        value: true,
-                        name: 'Yes',
-                    },
-                ];
-                return opts;
-            },
+            default: false,
+        },
+        {
+            when: response => response.cqrsEnabled === true,
+            type: 'confirm',
+            name: 'separateDataBase',
+            message: 'Do you want to use two separate databases for reading and writing?',
+            default: false,
+        },
+        {
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
+            type: 'list',
+            name: 'database',
+            message: 'Which database do you want to use for reading',
+            choices: availableDb,
             default: 0,
         },
-        // TODO: If CQRS == "Yes" : Separate Read/Write DB ?
-        // TODO: If Separate == "Yes" : > 2 questions DB
         {
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
+            type: 'list',
+            name: 'databaseTwo',
+            message: 'Which database do you want to use for writing',
+            choices: availableDb,
+            default: 0,
+        },        
+        {
+            when: response => response.separateDataBase === false,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use',
-            choices: [
-                {
-                    value: 'sqllite',
-                    name: 'SQLite in-memory',
-                },
-                {
-                    value: 'mssql',
-                    name: 'Microsoft SQL Server',
-                },
-                {
-                    value: 'postgres',
-                    name: 'PostgreSQL',
-                },
-                {
-                    value: 'mysql',
-                    name: 'MySQL',
-                },
-                {
-                    value: 'oracle',
-                    name: 'Oracle',
-                },
-            ],
+            choices: availableDb,
             default: 0,
         },
         {
@@ -112,6 +121,8 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
+        this.separateDataBase = prompt.separateDataBase;
+        this.databaseWriteType = prompt.databaseTwo;
         this.cqrsEnabled = prompt.cqrsEnabled;
         this.databaseType = prompt.database;
         this.authenticationType = prompt.authenticationType;
