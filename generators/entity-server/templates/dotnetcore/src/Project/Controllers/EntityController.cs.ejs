@@ -49,8 +49,10 @@ using <%= namespace %>.Web.Rest.Utilities;
 using <%= namespace %>.Application.Queries;
 using <%= namespace %>.Application.Commands;
 <%_ } else { _%>
+<%_ if (hasDto) { _%>
 using AutoMapper;
 using System.Linq;
+<%_ } _%>
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using <%= namespace %>.Domain.Services.Interfaces;
 <%_ } _%>
