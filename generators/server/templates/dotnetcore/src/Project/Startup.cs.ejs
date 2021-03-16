@@ -33,6 +33,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 <%_ if (cqrsEnabled) { _%>
 using MediatR;
+using <%= namespace %>.Application.Commands;
 <%_ } _%>
 
 [assembly: ApiController]
@@ -54,7 +55,7 @@ namespace <%= namespace %>
         public virtual void ConfigureServices(IServiceCollection services)
         {
             <%_ if (cqrsEnabled) { _%>
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(AccountGetQuery));
             <%_ } _%>
             services
                 .AddAppSettingsModule(Configuration);
