@@ -28,7 +28,7 @@
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
-	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="5.1.1" />
+	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="5.2.3" />
 	<PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Scrutor" Version="3.3.0" />
