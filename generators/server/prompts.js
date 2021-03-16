@@ -87,7 +87,7 @@ function askForServerSideOpts() {
             message: 'Which database do you want to use for writing',
             choices: availableDb,
             default: 0,
-        },        
+        },
         {
             when: response => response.separateDataBase === false,
             type: 'list',
