@@ -46,7 +46,7 @@ namespace <%= namespace %>.Application.Commands
         {
             <%_ if (hasDto) { _%>
             _mapper = mapper;
-            <%_ } _%>            
+            <%_ } _%>
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
         }
 

@@ -121,7 +121,7 @@ namespace <%= namespace %>.Controllers
             if (command.Id != 0)
                 throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
 
-            var <%= camelCasedEntityClass %> = await this._mediator.Send(command);       
+            var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
             return CreatedAtAction(nameof(Get<%= pascalizedEntityClass %>), new { id = <%= camelCasedEntityClass %>.Id }, <%= camelCasedEntityClass %>)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
@@ -152,7 +152,7 @@ namespace <%= namespace %>.Controllers
         public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %>UpdateCommand command)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {command}");
-            if (command.Id == 0) 
+            if (command.Id == 0)
                 throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
 
             var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
@@ -213,8 +213,8 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());
             <%_ } _%>
-        }    
-        <%_ } _%>        
+        }
+        <%_ } _%>
 
         [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]
         <%_ if (cqrsEnabled) { _%>
@@ -247,8 +247,8 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             return ActionResultUtil.WrapOrNotFound(result);
             <%_ }_%>
-        }            
-        <%_ } _%> 
+        }
+        <%_ } _%>
 
         [HttpDelete("<%= kebabCasedEntityClassPlural %>/{id}")]
         <%_ if (cqrsEnabled) { _%>
@@ -269,7 +269,7 @@ namespace <%= namespace %>.Controllers
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             <%_ }_%>
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
-        }       
-        <%_ } _%>     
+        }
+        <%_ } _%>
     }
 }

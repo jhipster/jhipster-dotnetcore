@@ -41,7 +41,7 @@ namespace <%= namespace %>.Application.Queries
         {
             _userManager = userManager;
         }
-        
+
         public Task<IPage<User>> Handle(UserGetAllQuery request, CancellationToken cancellationToken)
         {
             return _userManager.Users

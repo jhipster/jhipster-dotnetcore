@@ -50,14 +50,14 @@ namespace <%= namespace %>.Controllers
         {
             _mediator = mediator;
             _tokenProvider = tokenProvider;
-        }  
+        }
         <%_ } else { _%>
         public UserJwtController(IAuthenticationService authenticationService, ITokenProvider tokenProvider)
         {
             _authenticationService = authenticationService;
             _tokenProvider = tokenProvider;
         }
-        <%_ } _%>      
+        <%_ } _%>
 
         [HttpPost("authenticate")]
         [ValidateModel]

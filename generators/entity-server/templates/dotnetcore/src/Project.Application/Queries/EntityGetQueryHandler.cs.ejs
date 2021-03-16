@@ -42,12 +42,12 @@ namespace <%= namespace %>.Application.Queries
         public <%= pascalizedEntityClass %>GetQueryHandler(
             <%_ if (hasDto) { _%>
             IMapper mapper,
-            <%_ } _%>            
+            <%_ } _%>
             IReadOnly<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         {
             <%_ if (hasDto) { _%>
             _mapper = mapper;
-            <%_ } _%> 
+            <%_ } _%>
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
         }
 

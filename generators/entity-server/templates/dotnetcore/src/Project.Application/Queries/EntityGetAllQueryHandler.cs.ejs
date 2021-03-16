@@ -48,10 +48,10 @@ namespace <%= namespace %>.Application.Queries
         {
             <%_ if (hasDto) { _%>
             _mapper = mapper;
-            <%_ } _%> 
+            <%_ } _%>
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
         }
-        
+
         public async Task<<%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Handle(<%= pascalizedEntityClass %>GetAllQuery request, CancellationToken cancellationToken)
         {
             var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
@@ -67,7 +67,7 @@ namespace <%= namespace %>.Application.Queries
             return new Page<<%= asDto(pascalizedEntityClass) %>>(page.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(), request.page, page.TotalElements);
             <%_ } else { _%>
             return page;
-            <%_ } _%> 
+            <%_ } _%>
         }
     }
 }

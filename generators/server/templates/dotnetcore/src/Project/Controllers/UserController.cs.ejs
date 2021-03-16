@@ -52,7 +52,7 @@ namespace <%= namespace %>.Controllers
         private readonly IMapper _mapper;
         <%_ if (cqrsEnabled) { _%>
         private readonly IMediator _mediator;
-        <%_ } else { _%>       
+        <%_ } else { _%>
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
@@ -62,20 +62,20 @@ namespace <%= namespace %>.Controllers
         public UserController(ILogger<UserController> log, IMapper mapper, IMediator mediator)
         {
             _log = log;
-            _mediator = mediator;        
+            _mediator = mediator;
             _mapper = mapper;
         }
         <%_ } else { _%>
         public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
             IMapper mapper, IMailService mailService)
         {
-            _log = log;              
+            _log = log;
             _userManager = userManager;
             _userService = userService;
             _mailService = mailService;
             _mapper = mapper;
-        }     
-        <%_ } _%>        
+        }
+        <%_ } _%>
 
         [HttpPost("users")]
         [ValidateModel]
@@ -110,7 +110,7 @@ namespace <%= namespace %>.Controllers
             return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
         }
-        <%_ } _%>        
+        <%_ } _%>
 
         [HttpPut("users")]
         [ValidateModel]
@@ -119,7 +119,7 @@ namespace <%= namespace %>.Controllers
         {
             _log.LogDebug($"REST request to update User : {command}");
 
-            var updatedUser = await this._mediator.Send(command);        
+            var updatedUser = await this._mediator.Send(command);
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", command.Login));
         }
@@ -142,7 +142,7 @@ namespace <%= namespace %>.Controllers
         [HttpGet("users")]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
-        {           
+        {
             _log.LogDebug("REST request to get a page of Users");
             var page = await this._mediator.Send(new UserGetAllQuery { page = pageable });
             var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
@@ -151,7 +151,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } else { _%>
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
-        {  
+        {
             _log.LogDebug("REST request to get a page of Users");
             var page = await _userManager.Users
                 .Include(it => it.UserRoles)
@@ -208,7 +208,7 @@ namespace <%= namespace %>.Controllers
             await this._mediator.Send(command);
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", command.Login));
         }
-        <%_ } else { _%>        
+        <%_ } else { _%>
         public async Task<IActionResult> DeleteUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to delete User : {login}");
