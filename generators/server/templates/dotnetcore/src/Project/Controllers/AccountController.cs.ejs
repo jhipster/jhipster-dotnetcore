@@ -49,20 +49,19 @@ namespace <%= namespace %>.Controllers
 
         <%_ if (authenticationType === 'jwt') { _%>
         private readonly ILogger<AccountController> _log;
-        private readonly IMapper _userMapper;
         <%_ if (cqrsEnabled) { _%>
         private readonly IMediator _mediator;
         <%_ } else { _%>
+        private readonly IMapper _userMapper;
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         <%_ } _%>
 
         <%_ if (cqrsEnabled) { _%>
-        public AccountController(ILogger<AccountController> log, IMapper userMapper, IMediator mediator)
+        public AccountController(ILogger<AccountController> log, IMediator mediator)
         {
             _log = log;
-            _userMapper = userMapper;
             _mediator = mediator;
         }
         <%_ } else { _%>

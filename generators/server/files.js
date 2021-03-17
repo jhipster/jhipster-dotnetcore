@@ -692,6 +692,11 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Application/ApplicationClassesAssemblyHelper.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/ApplicationClassesAssemblyHelper.cs`,
+                },
+                {
                     file: 'Project.Application/Commands/Account/AccountActivateCommand.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountActivateCommand.cs`,

@@ -16,16 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using AutoMapper;
-using System.Linq;
 using <%= namespace %>.Domain;
-using <%= namespace %>.Domain.Repositories.Interfaces;
-using <%= namespace %>.Domain.Services.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using <%= namespace %>.Crosscutting.Exceptions;
 
 namespace <%= namespace %>.Application.Commands
 {
