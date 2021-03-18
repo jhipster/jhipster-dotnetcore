@@ -64,7 +64,7 @@ namespace <%= namespace %>.Application.Queries
                 .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == request.Id);
             <%_ if (hasDto) { _%>
             return _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity);
-            <% } else { _%>
+            <%_ } else { _%>
             return entity;
             <%_ } _%>
         }

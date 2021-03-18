@@ -102,7 +102,7 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/${generator.asEntity(
                             generator.entityClass
-                        )}/${generator.asEntity(generator.entityClass)}EntityGetQueryHandler.cs`,
+                        )}/${generator.asEntity(generator.entityClass)}GetQueryHandler.cs`,
                 },
                 {
                     file: 'Project.Application/Queries/EntityGetAllQuery.cs',

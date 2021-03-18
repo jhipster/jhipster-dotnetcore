@@ -89,7 +89,7 @@ function askForServerSideOpts() {
             default: 0,
         },
         {
-            when: response => response.separateDataBase === false,
+            when: response => true || response.separateDataBase === false,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use',

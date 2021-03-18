@@ -332,7 +332,7 @@ function askForTableName() {
 function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
-    if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
+    if (!context.cqrsEnabled && (context.useConfigurationFile || context.skipServer || context.service === 'no')) {
         context.dto = context.dto || 'no';
         return;
     }
@@ -364,9 +364,10 @@ function askForDTO() {
 function askForService() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped
-    if (context.useConfigurationFile || context.skipServer) {
+    if (context.useConfigurationFile || context.skipServer || context.cqrsEnabled) {
         return;
     }
+
     const done = this.async();
     const prompts = [
         {
