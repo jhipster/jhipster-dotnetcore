@@ -21,15 +21,15 @@ const constants = require('../generator-dotnetcore-constants');
 const files = {
     docker: [
         {
-            templates: [{ file: 'Dockerfile-Back', renameTo: () => `Dockerfile-Back` }],
+            templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
         },
         {
             condition: generator => generator.clientFramework === constants.BLAZOR,
-            templates: [{ file: 'Dockerfile-Front', renameTo: () => `Dockerfile-Front` }],
+            templates: [{ file: 'Dockerfile-Front', renameTo: () => 'Dockerfile-Front' }],
         },
         {
             condition: generator => generator.clientFramework === constants.BLAZOR,
-            templates: [{ file: 'nginx.conf', renameTo: () => `nginx.conf` }],
+            templates: [{ file: 'nginx.conf', renameTo: () => 'nginx.conf' }],
         },
         {
             templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }],
