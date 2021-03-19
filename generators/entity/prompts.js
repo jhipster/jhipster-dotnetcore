@@ -332,7 +332,7 @@ function askForTableName() {
 function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
-    if ((context.useConfigurationFile || context.skipServer || context.service === 'no')) {
+    if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
         context.dto = context.dto || 'no';
         return;
     }
