@@ -14,6 +14,8 @@ jobs:
                 app-type:
                     - jwt-with-angular-app
                     - jwt-with-blazor-app
+                    - jwt-with-angular-cqrs-app
+                    - jwt-with-blazor-cqrs-app
                     - jwt-with-mssql-app
                     - jwt-with-mysql-app
                     - jwt-with-postgres-app
@@ -21,7 +23,11 @@ jobs:
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
+                    - app-type: jwt-with-angular-cqrs-app
+                      arg: 'import-jdl'
                     - app-type: jwt-with-blazor-app
+                      arg: 'import-jdl blazor'
+                    - app-type: jwt-with-blazor-cqrs-app
                       arg: 'import-jdl blazor'
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
