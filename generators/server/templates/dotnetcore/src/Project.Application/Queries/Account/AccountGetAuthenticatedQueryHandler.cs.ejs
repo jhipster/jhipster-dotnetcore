@@ -35,7 +35,7 @@ namespace <%= namespace %>.Application.Commands
 
         public Task<string> Handle(AccountGetAuthenticatedQuery command, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_userManager.GetUserName(command));
+            return Task.FromResult(_userManager.GetUserName(command.User));
         }
     }
 }

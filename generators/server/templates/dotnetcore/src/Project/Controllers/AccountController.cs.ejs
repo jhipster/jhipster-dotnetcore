@@ -99,9 +99,9 @@ namespace <%= namespace %>.Controllers
         [HttpGet("activate")]
         [ValidateModel]
         <%_ if (cqrsEnabled) { _%>
-        public async Task ActivateAccount([FromQuery(Name = "key")] AccountActivateCommand command)
+        public async Task ActivateAccount([FromQuery(Name = "key")] string key)
         {
-            var user = await this._mediator.Send(command);
+            var user = await this._mediator.Send(new AccountActivateCommand { Key = key });
             if (user == null) throw new InternalServerErrorException("Not user was found for this activation key");
         }
         <%_ } else { _%>
@@ -117,7 +117,7 @@ namespace <%= namespace %>.Controllers
         public async Task<string> IsAuthenticated()
         {
             _log.LogDebug("REST request to check if the current user is authenticated");
-            return await this._mediator.Send(new AccountGetAuthenticatedQuery());
+            return await this._mediator.Send(new AccountGetAuthenticatedQuery { User = User });
         }
         <%_ } else { _%>
         public string IsAuthenticated()
