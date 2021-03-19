@@ -219,11 +219,43 @@ Manually :
 
 You can also fully dockerize your application and all the services that it depends on. To achieve this, first build a docker image of your app by running:
 
-    docker build -f ./src/<%= pascalizedBaseName %>/Dockerfile -t <%= baseName.toLowerCase() %> .
+```bash
+docker build -f ./Dockerfile-Back -t <%= baseName.toLowerCase() %> .
+```
+
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
+
+```bash
+docker build -f ./Dockerfile-Front -t <%= baseName.toLowerCase() %>-front .
+```
+
+<%_ } _%>
 
 Then run:
 
-    docker run -p 80:80 <%= baseName.toLowerCase() %>
+```bash
+docker run -p 8080:80 <%= baseName.toLowerCase() %>
+```
+
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
+
+```bash
+docker run -p 8081:80 <%= baseName.toLowerCase() %>-front --build-arg ServerUrl=https://localhost:8080
+```
+
+<%_ } _%>
+
+Or you can simply run : 
+
+```bash
+docker-compose -f .\docker\app.yml build
+```
+
+And
+
+```bash
+docker-compose -f .\docker\app.yml up
+```
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
 <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") {_%>
