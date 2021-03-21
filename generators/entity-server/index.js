@@ -8,14 +8,6 @@ const GatewayNeedle = require('../server/needle-api/needle-server-gateway');
 module.exports = class extends EntityServerGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
-        }
-
-        this.configOptions = jhContext.configOptions || {};
     }
 
     get composing() {
@@ -28,6 +20,14 @@ module.exports = class extends EntityServerGenerator {
 
     get preparing() {
         return super._preparing();
+    }
+
+    get preparingFields() {
+        return super._preparingFields();
+    }
+
+    get default() {
+        return super._default();
     }
 
     get writing() {

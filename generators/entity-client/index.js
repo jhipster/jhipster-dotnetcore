@@ -13,10 +13,8 @@ module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
+        if (this.jhipsterConfig.baseName) {
+            this.baseName = this.jhipsterConfig.baseName;
         }
     }
 
@@ -44,6 +42,10 @@ module.exports = class extends EntityClientGenerator {
 
     get preparing() {
         return super._preparing();
+    }
+
+    get default() {
+        return super._default();
     }
 
     get writing() {

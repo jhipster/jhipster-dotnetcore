@@ -13,12 +13,6 @@ const asModel = require('../utils').asModel;
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
-        }
     }
 
     get initializing() {
@@ -125,6 +119,10 @@ module.exports = class extends EntityGenerator {
                 });
             },
         };
+    }
+
+    get preparingFields() {
+        return super._preparingFields();
     }
 
     get preparingRelationships() {

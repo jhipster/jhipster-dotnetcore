@@ -127,6 +127,7 @@ namespace <%= namespace %>.Domain
             return "<%= entityClassName %>{" +
                     $"ID='{Id}'" +
             <%_ for (idx in fields) {
+                if (fields[idx].id) continue;
                 const fieldNamePascalized = fields[idx].fieldNamePascalized; _%>
                     $", <%= fieldNamePascalized %>='{<%= fieldNamePascalized %>}'" +
             <%_ } _%>

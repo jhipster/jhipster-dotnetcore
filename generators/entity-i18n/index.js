@@ -17,22 +17,16 @@
  * limitations under the License.
  */
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const EntityI18nGenerator = require('generator-jhipster/generators/entity-i18n');
-
-const writeFiles = require('./files').writeFiles;
+const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 
 module.exports = class extends EntityI18nGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
+        if (this.jhipsterConfig.baseName) {
+            this.baseName = this.jhipsterConfig.baseName;
         }
-
-        this.configOptions = jhContext.configOptions || {};
     }
 
     get composing() {
@@ -47,8 +41,15 @@ module.exports = class extends EntityI18nGenerator {
         return super._preparing();
     }
 
+    get default() {
+        return {
+            customizeDotnetPaths,
+            ...super._default()
+        };
+    }
+
     get writing() {
-        return writeFiles();
+        return super._writing();
     }
 
     get postWriting() {
