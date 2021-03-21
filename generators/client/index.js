@@ -193,7 +193,7 @@ module.exports = class extends ClientGenerator {
                     if (this.skipClient) return;
                     this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-                    if (!this.options['skip-install']) {
+                    if (!this.options.skipInstall) {
                         this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
                     }
                 }
