@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -231,7 +231,7 @@ function updateEsLinIgnore(){
 }
 
 function updateTestFramework(){
-    if(this.protractorTests){    
+    if(this.protractorTests){
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/protractor.conf.js`,
             'http://localhost:8080',
@@ -260,7 +260,7 @@ function writeFiles() {
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
     updateTestFramework.call(this);
-    updateVendor.call(this); 
+    updateVendor.call(this);
 }
 
 module.exports = {

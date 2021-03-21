@@ -44,7 +44,7 @@ namespace <%= namespace %>.Client
 
             builder.Services.AddSingleton<AuthenticationStateProvider, AuthenticationService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
-            
+
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IRegisterService, RegisterService>();
 

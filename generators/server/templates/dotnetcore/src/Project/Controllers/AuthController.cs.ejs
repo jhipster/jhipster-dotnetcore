@@ -12,9 +12,9 @@ namespace <%= namespace %>.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly JHipsterSettings _settings;
+        private readonly SecuritySettings _settings;
 
-        public AuthController(IOptions<JHipsterSettings> settings)
+        public AuthController(IOptions<SecuritySettings> settings)
         {
             _settings = settings.Value;
         }
@@ -37,7 +37,7 @@ namespace <%= namespace %>.Controllers
             await HttpContext.SignOutAsync();
             return Ok(new
             {
-                logoutUrl = _settings.Security.Authentication.OAuth2.Provider.LogOutUri,
+                logoutUrl = _settings.Authentication.OAuth2.Provider.LogOutUri,
                 idToken = await HttpContext.GetTokenAsync("id_token")
             });
         }

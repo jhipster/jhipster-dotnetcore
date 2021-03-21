@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,11 +34,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Controllers {
+namespace <%= namespace %>.Controllers
+{
     [Authorize]
     [Route("api/admin")]
     [ApiController]
-    public class UserController : ControllerBase {
+    public class UserController : ControllerBase
+    {
         private readonly ILogger<UserController> _log;
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
@@ -71,7 +73,7 @@ namespace <%= namespace %>.Controllers {
 
             var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
             await _mailService.SendCreationEmail(newUser);
-            return CreatedAtAction(nameof(GetUser), new {login = newUser.Login}, newUser)
+            return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
         }
 
@@ -99,7 +101,7 @@ namespace <%= namespace %>.Controllers {
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .UsePageableAsync(pageable);
-            var userDtos = page.Content.Select(user =>  _mapper.Map<UserDto>(user));
+            var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return Ok(userDtos).WithHeaders(headers);
         }

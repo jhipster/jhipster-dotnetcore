@@ -8,6 +8,7 @@ _%>
 @page "/<%= lowerCasedEntityClass %>"
 @using Microsoft.AspNetCore.Authorization
 @using <%= namespace %>.Client.Shared.Components
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 

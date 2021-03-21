@@ -9,7 +9,7 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
-              node_version: [12.16.1]
+              node_version: [14.16.0]
               os: [ubuntu-latest]
               app-type:
                   - oauth-with-angular-app
@@ -51,12 +51,14 @@ jobs:
             - name: PREPARE jhipster env
               run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
             - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG 
+              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG
             - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP 
+              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
             - name: 'GENERATE JHipster.NET entities'
-              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG           
+              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN CLIENT UNIT TESTS of generated app'
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+            - name: 'VERIFY FORMAT'
+              run: ./test-integration/scripts/08-verify-format.sh $JHI_APP

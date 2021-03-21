@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -21,7 +21,8 @@ using Microsoft.Extensions.DependencyInjection;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using <%= namespace %>.Infrastructure.Data.Repositories;
 
-namespace <%= namespace %>.Configuration {
+namespace <%= namespace %>.Configuration
+{
     public static class RepositoryStartup
     {
         public static IServiceCollection AddRepositoryModule(this IServiceCollection services)
@@ -35,7 +36,7 @@ namespace <%= namespace %>.Configuration {
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))
                         .AsMatchingInterface()
                         .WithScopedLifetime()
-                    
+
                     // Now find repositories that has class name ending with "ExtendedRepository" and register interfaces it implements with priority.
                     // For example: if JobExtendedRepository class is present and implements IJobRepository interface, take precedence over
                     // existing registrations.
@@ -43,7 +44,7 @@ namespace <%= namespace %>.Configuration {
                                                                  type.Name.EndsWith("ExtendedRepository")))
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))
                         .AsImplementedInterfaces()
-                        .WithScopedLifetime()                    
+                        .WithScopedLifetime()
             );
 
             return services;

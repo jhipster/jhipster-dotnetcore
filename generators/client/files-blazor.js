@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -36,7 +36,7 @@ const files = {
                     renameTo: generator => `${generator.mainClientDir}/AutoMapper/AutoMapperProfile.cs`,
                 },
             ],
-        },        
+        },
     ],
     blazorAppModels: [
         {
@@ -617,7 +617,6 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/wwwroot/content/scss/global.scss',
-                    method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/global.scss`,
                 },
             ],
@@ -649,6 +648,24 @@ const files = {
                     file: 'Project.Client/wwwroot/index.html',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/index.html`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/robots.txt',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/robots.txt`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/manifest.webapp',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/manifest.webapp`,
                 },
             ],
         },
@@ -812,7 +829,7 @@ const files = {
                     renameTo: generator => `${generator.clientTestProject}/LoginTest.cs`,
                 },
             ],
-        },        
+        },
         {
             path: CLIENT_TEST_DIR,
             templates: [

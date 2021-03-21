@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace <%= namespace %>.Web.Extensions {
-    public static class HttpRequestExtensions {
+namespace <%= namespace %>.Web.Extensions
+{
+    public static class HttpRequestExtensions
+    {
         public static async Task<string> BodyAsStringAsync(this HttpRequest request, Encoding encoding = null)
         {
             if (encoding == null) encoding = Encoding.UTF8;
 
-            using (var reader = new StreamReader(request.Body, encoding)) {
+            using (var reader = new StreamReader(request.Body, encoding))
+            {
                 return await reader.ReadToEndAsync();
             }
         }

@@ -1,4 +1,6 @@
-﻿<div class="alerts" role="alert">
+﻿@namespace <%= namespace %>.Client.Shared.Components
+
+<div class="alerts" role="alert">
     @foreach(var alert in Alerts)
     {
         @if (alert != null && !string.IsNullOrEmpty(alert.Msg))

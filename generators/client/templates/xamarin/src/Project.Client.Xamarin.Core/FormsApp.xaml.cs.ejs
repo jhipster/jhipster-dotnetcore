@@ -1,4 +1,4 @@
-<%#
+﻿<%#
  Copyright 2013-2020 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -12,17 +12,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Configuration;
-using <%= namespace %>.Infrastructure.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Xamarin.Forms;
 
-namespace <%= namespace %>.Configuration {
-    public static class NhipsterSettingsConfiguration {
-        public static IServiceCollection AddNhipsterModule(this IServiceCollection services, IConfiguration configuration)
+namespace <%= namespace %>.Client.Xamarin.Core
+{
+    public partial class FormsApp : Application
+    {
+        public FormsApp()
         {
-            services.Configure<JHipsterSettings>(configuration.GetSection("jhipster"));
-            return services;
+            InitializeComponent();
         }
     }
 }

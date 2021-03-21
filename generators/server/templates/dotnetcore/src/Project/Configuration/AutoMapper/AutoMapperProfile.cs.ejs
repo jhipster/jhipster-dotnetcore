@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -22,13 +22,13 @@ using <%= namespace %>.Domain;
 using <%= namespace %>.Dto;
 
 
-namespace <%= namespace %>.Configuration.AutoMapper {
-
+namespace <%= namespace %>.Configuration.AutoMapper
+{
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()
         {
-            <%_ if (authenticationType === 'jwt') { 
+            <%_ if (authenticationType === 'jwt') {
                  if (applicationType !== 'microservice') { _%>
             CreateMap<User, UserDto>()
                 .ForMember(userDto => userDto.Roles, opt => opt.MapFrom(user => user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()))

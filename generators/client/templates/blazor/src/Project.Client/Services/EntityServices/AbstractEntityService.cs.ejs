@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ namespace <%= namespace %>.Client.Services.EntityServices
     {
         private const string AuthorizationHeader = "Authorization";
         private readonly AuthenticationStateProvider _authenticationStateProvider;
-        private readonly JsonSerializerOptions _options; 
+        private readonly JsonSerializerOptions _options;
 
         protected readonly HttpClient _httpClient;
         protected readonly IMapper _mapper;
@@ -79,7 +79,7 @@ namespace <%= namespace %>.Client.Services.EntityServices
             var dto = _mapper.Map<TDto>(model);
             await _httpClient.PostAsJsonAsync(BaseUrl, dto, _options);
         }
-        
+
         public virtual async Task Update(TModel model)
         {
             var dto = _mapper.Map<TDto>(model);

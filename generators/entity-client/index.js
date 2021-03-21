@@ -4,8 +4,10 @@ const EntityClientGenerator = require('generator-jhipster/generators/entity-clie
 const constants = require('../generator-dotnetcore-constants');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const writeBlazorFiles = require('./files-blazor').writeFiles;
+const writeXamarinFiles = require('./files-xamarin').writeFiles;
 
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends EntityClientGenerator {
     constructor(args, opts) {
@@ -53,6 +55,14 @@ module.exports = class extends EntityClientGenerator {
                 },
             };
         }
+        if (this.clientFramework === XAMARIN) {
+            return {
+                writeFilesDotnetcore() {
+                    if (this.skipClient) return;
+                    return writeXamarinFiles.call(this);
+                },
+            };
+        }
         return super._writing();
     }
 
@@ -61,7 +71,7 @@ module.exports = class extends EntityClientGenerator {
     }
 
     rebuildClient() {
-        if (!this.options.skipInstall && !this.skipClient && this.clientFramework !== BLAZOR) {
+        if (!this.options.skipInstall && !this.skipClient && this.clientFramework !== BLAZOR && this.clientFramework !== XAMARIN) {
             const done = this.async();
             this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
             this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(

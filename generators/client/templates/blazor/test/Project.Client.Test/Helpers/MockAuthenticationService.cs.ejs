@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,13 +25,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Test.Helpers
 {
-    public class MockAuthenticationService : AuthenticationStateProvider,IAuthenticationService
+    public class MockAuthenticationService : AuthenticationStateProvider, IAuthenticationService
     {
         public ClaimsIdentity Identity { get; set; }
 
         public MockAuthenticationService()
         {
-            
         }
 
         public MockAuthenticationService(ClaimsIdentity identity)
@@ -52,7 +51,7 @@ namespace <%= namespace %>.Client.Test.Helpers
 
         public UserModel CurrentUser
         {
-            get => new UserModel(){Login = Identity?.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier)).Value};
+            get => new UserModel() { Login = Identity?.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.NameIdentifier)).Value };
             set => throw new NotImplementedException();
         }
 

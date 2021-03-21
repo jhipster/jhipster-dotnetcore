@@ -8,6 +8,7 @@ _%>
 @page "/<%= lowerCasedEntityClass %>/new"
 @page "/<%= lowerCasedEntityClass %>/{Id:int}/edit"
 @using Microsoft.AspNetCore.Authorization
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
