@@ -107,8 +107,8 @@
     </Target>
 
     <Target Name="RunWebPack" BeforeTargets="Build" DependsOnTargets="NpmInstall">
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webpack:build" Condition="'$(Configuration)'=='Debug'" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webpack:prod" Condition="'$(Configuration)'=='Release'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" Condition="'$(Configuration)'=='Debug'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" Condition="'$(Configuration)'=='Release'" />
     </Target>
 
     <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
