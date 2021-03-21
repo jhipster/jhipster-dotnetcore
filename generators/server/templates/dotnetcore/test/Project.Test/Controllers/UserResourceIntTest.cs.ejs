@@ -127,7 +127,7 @@ namespace <%= namespace %>.Test.Controllers
                 }
             };
 
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PostAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.Created);
 
             // Validate the User in the database
@@ -166,7 +166,7 @@ namespace <%= namespace %>.Test.Controllers
             };
 
             // Create the User
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PostAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the User in the database
@@ -196,7 +196,7 @@ namespace <%= namespace %>.Test.Controllers
             };
 
             // An entity with an existing ID cannot be created, so this API call must fail
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PostAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the User in the database
@@ -227,7 +227,7 @@ namespace <%= namespace %>.Test.Controllers
             };
 
             // Create the User
-            var response = await _client.PostAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PostAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // Validate the User in the database
@@ -242,7 +242,7 @@ namespace <%= namespace %>.Test.Controllers
             await _userManager.CreateAsync(_user);
             var databaseSizeBeforeDelete = _userManager.Users.Count();
 
-            var response = await _client.DeleteAsync($"/api/users/{_user.Login}");
+            var response = await _client.DeleteAsync($"/api/admin/users/{_user.Login}");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the database is empty
@@ -253,7 +253,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetAllAuthorities()
         {
-            var response = await _client.GetAsync("/api/users/authorities");
+            var response = await _client.GetAsync("/api/admin/users/authorities");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
@@ -270,7 +270,7 @@ namespace <%= namespace %>.Test.Controllers
             await _userManager.CreateAsync(_user);
 
             // Get all the users
-            var response = await _client.GetAsync("/api/users?sort=id,desc");
+            var response = await _client.GetAsync("/api/admin/users?sort=id,desc");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
@@ -285,7 +285,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetNonExistingUser()
         {
-            var response = await _client.GetAsync("/api/users/unknown");
+            var response = await _client.GetAsync("/api/admin/users/unknown");
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
@@ -296,7 +296,7 @@ namespace <%= namespace %>.Test.Controllers
             await _userManager.CreateAsync(_user);
 
             // Get the users
-            var response = await _client.GetAsync($"/api/users/{_user.Login}");
+            var response = await _client.GetAsync($"/api/admin/users/{_user.Login}");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
@@ -412,7 +412,7 @@ namespace <%= namespace %>.Test.Controllers
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PutAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the User in the database
@@ -468,7 +468,7 @@ namespace <%= namespace %>.Test.Controllers
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PutAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -512,7 +512,7 @@ namespace <%= namespace %>.Test.Controllers
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PutAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -544,7 +544,7 @@ namespace <%= namespace %>.Test.Controllers
                 }
             };
 
-            var response = await _client.PutAsync("/api/users", TestUtil.ToJsonContent(managedUserDto));
+            var response = await _client.PutAsync("/api/admin/users", TestUtil.ToJsonContent(managedUserDto));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Validate the User in the database
