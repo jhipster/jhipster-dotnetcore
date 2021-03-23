@@ -679,8 +679,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Controllers/UserController.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Controllers/UserController.cs`,
+                    file: 'Project/Controllers/UsersController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/UsersController.cs`,
                 },
             ],
         },
@@ -709,8 +709,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Controllers/UserResourceIntTest.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Controllers/UserResourceIntTest.cs`,
+                    file: 'Project.Test/Controllers/UsersResourceIntTest.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Controllers/UsersResourceIntTest.cs`,
                 },
             ],
         },

@@ -37,17 +37,17 @@ using Microsoft.EntityFrameworkCore;
 namespace <%= namespace %>.Controllers
 {
     [Authorize]
-    [Route("api/admin")]
+    [Route("api/admin/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly ILogger<UserController> _log;
+        private readonly ILogger<UsersController> _log;
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
+        public UsersController(ILogger<UsersController> log, UserManager<User> userManager, IUserService userService,
             IMapper mapper, IMailService mailService)
         {
             _log = log;
@@ -57,7 +57,7 @@ namespace <%= namespace %>.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("users")]
+        [HttpPost]
         [ValidateModel]
         public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
         {
@@ -77,7 +77,7 @@ namespace <%= namespace %>.Controllers
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
         }
 
-        [HttpPut("users")]
+        [HttpPut]
         [ValidateModel]
         public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
         {
@@ -93,7 +93,7 @@ namespace <%= namespace %>.Controllers
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
         }
 
-        [HttpGet("users")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
@@ -106,14 +106,14 @@ namespace <%= namespace %>.Controllers
             return Ok(userDtos).WithHeaders(headers);
         }
 
-        [HttpGet("users/authorities")]
+        [HttpGet("authorities")]
         [Authorize(Roles = RolesConstants.ADMIN)]
         public ActionResult<IEnumerable<string>> GetAuthorities()
         {
             return Ok(_userService.GetAuthorities());
         }
 
-        [HttpGet("users/{login}")]
+        [HttpGet("{login}")]
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
@@ -126,7 +126,7 @@ namespace <%= namespace %>.Controllers
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
 
-        [HttpDelete("users/{login}")]
+        [HttpDelete("{login}")]
         [Authorize(Roles = RolesConstants.ADMIN)]
         public async Task<IActionResult> DeleteUser([FromRoute] string login)
         {

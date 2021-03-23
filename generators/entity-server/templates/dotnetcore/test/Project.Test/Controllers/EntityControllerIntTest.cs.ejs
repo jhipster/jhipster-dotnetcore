@@ -153,9 +153,9 @@ using Xunit;
 
 namespace <%= namespace %>.Test.Controllers
 {
-    public class <%= pascalizedEntityClass %>ResourceIntTest
+    public class <%= pascalizedEntityClassPlural %>ControllerIntTest
     {
-        public <%= pascalizedEntityClass %>ResourceIntTest()
+        public <%= pascalizedEntityClassPlural %>ControllerIntTest()
         {
             _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser();
             _client = _factory.CreateClient();
@@ -365,9 +365,9 @@ namespace <%= namespace %>.Test.Controllers
 
             <%_ if (hasDto) { _%>
             <%= asDto(pascalizedEntityClass) %> updated<%= asDto(pascalizedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
-            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= asDto(pascalizedEntityClass) %>));
+            var response = await _client.PutAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}", TestUtil.ToJsonContent(updated<%= asDto(pascalizedEntityClass) %>));
             <%_ } else { _%>
-            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            var response = await _client.PutAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
             <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -389,9 +389,9 @@ namespace <%= namespace %>.Test.Controllers
             // If the entity doesn't have an ID, it will throw BadRequestAlertException
             <%_ if (hasDto) { _%>
             <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
-            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>/1", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
             <%_ } else { _%>
-            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>/1", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
             <%_ } _%>
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 

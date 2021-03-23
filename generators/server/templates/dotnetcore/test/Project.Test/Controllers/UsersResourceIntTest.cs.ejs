@@ -31,9 +31,9 @@ using Xunit;
 
 namespace <%= namespace %>.Test.Controllers
 {
-    public class UserResourceIntTest
+    public class UsersResourceIntTest
     {
-        public UserResourceIntTest()
+        public UsersResourceIntTest()
         {
             _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser("test", new HashSet<string> { RolesConstants.ADMIN });
             _client = _factory.CreateClient();
