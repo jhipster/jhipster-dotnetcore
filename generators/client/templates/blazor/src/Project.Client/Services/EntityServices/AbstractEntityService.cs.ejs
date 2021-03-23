@@ -83,7 +83,7 @@ namespace <%= namespace %>.Client.Services.EntityServices
         public virtual async Task Update(TModel model)
         {
             var dto = _mapper.Map<TDto>(model);
-            await _httpClient.PutAsJsonAsync(BaseUrl, dto, _options);
+            await _httpClient.PutAsJsonAsync($"{BaseUrl}/{id}", dto, _options);
         }
 
         public virtual async Task Delete(string id)

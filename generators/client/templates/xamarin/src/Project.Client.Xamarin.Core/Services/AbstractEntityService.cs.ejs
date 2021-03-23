@@ -54,7 +54,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.Services
 
         public async Task UpdateEntity(T entity)
         {
-            await _httpClient.PutAsJsonAsync(_baseUrl, entity);
+            await _httpClient.PutAsJsonAsync($"{_baseUrl}/{id}", entity);
         }
     }
 }
