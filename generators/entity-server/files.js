@@ -43,8 +43,7 @@ const serverFiles = {
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
-                    renameTo: generator =>
-                        `${generator.mainProjectDir}/Controllers/${generator.pascalizedEntityClassPlural}Controller.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/${generator.pascalizedEntityClassPlural}Controller.cs`,
                 },
                 {
                     file: 'Project.Domain/Repositories/Interfaces/IEntityRepository.cs',

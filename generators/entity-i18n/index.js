@@ -44,7 +44,7 @@ module.exports = class extends EntityI18nGenerator {
     get default() {
         return {
             customizeDotnetPaths,
-            ...super._default()
+            ...super._default(),
         };
     }
 

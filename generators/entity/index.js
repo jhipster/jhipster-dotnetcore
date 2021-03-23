@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');

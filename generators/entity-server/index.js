@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const _ = require('lodash');
 const EntityServerGenerator = require('generator-jhipster/generators/entity-server');
 const writeFiles = require('./files').writeFiles;
