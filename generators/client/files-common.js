@@ -20,6 +20,7 @@
 const constants = require('../generator-dotnetcore-constants');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
+const BLAZOR = constants.BLAZOR; 
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -162,7 +163,7 @@ function updatePackageJson() {
 }
 
 function updateJestConf(){
-    if(this.clientFramework === ANGULAR){        
+    if(this.clientFramework !== BLAZOR) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
             '/src/test/javascript',
@@ -177,25 +178,6 @@ function updateJestConf(){
         );
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
-            '\\.\\./\\.\\./\\.\\.',
-            '..',
-            true
-        );
-    } else {
-        this.replaceContent(
-            `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
-            '/src/test/javascript',
-            `/test`,
-            true
-        );
-        this.replaceContent(
-            `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
-            `/${SERVER_SRC_DIR}${this.mainClientDir}`,
-            "",
-            true
-        );
-        this.replaceContent(
-            `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
             '\\.\\./\\.\\./\\.\\.',
             '..',
             true
