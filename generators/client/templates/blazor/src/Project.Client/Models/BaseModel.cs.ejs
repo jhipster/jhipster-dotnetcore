@@ -1,4 +1,4 @@
-﻿<%#
+<%#
  Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -17,19 +17,8 @@ using System.Collections.Generic;
 
 namespace <%= namespace %>.Client.Models
 {
-    public class UserModel : BaseModel<string>
+    public class BaseModel<TKey>
     {
-        public string Login { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string ImageUrl { get; set; }
-        public bool Activated { get; set; }
-        public string LangKey { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string LastModifiedBy { get; set; }
-        public DateTime? LastModifiedDate { get; set; }
-        public IEnumerable<string> Authorities { get; set; }
+        public TKey Id { get; set; }
     }
 }

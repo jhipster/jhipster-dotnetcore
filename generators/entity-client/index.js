@@ -19,17 +19,13 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get configuring() {
-        const phaseFromJHipster = super._configuring();
-
-        const customPhaseSteps = {
-            customizeDotnetPaths,
+        return {
+            ...super._configuring(),
             dtoWorkaround() {
                 // only work with relation id rather than complete json
                 this.dto = 'yes';
             },
         };
-
-        return Object.assign(customPhaseSteps, phaseFromJHipster);
     }
 
     get composing() {
@@ -45,27 +41,26 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get default() {
-        return super._default();
+        return {
+            ...super._default(),
+            customizeDotnetPaths
+        }
     }
 
     get writing() {
-        if (this.clientFramework === BLAZOR) {
-            return {
-                writeFilesDotnetcore() {
+        return {
+            writeFilesDotnetcore() {
+                if (this.clientFramework === BLAZOR) {
                     if (this.skipClient) return;
                     return writeBlazorFiles.call(this);
-                },
-            };
-        }
-        if (this.clientFramework === XAMARIN) {
-            return {
-                writeFilesDotnetcore() {
+                } else if (this.clientFramework === XAMARIN) {
                     if (this.skipClient) return;
                     return writeXamarinFiles.call(this);
-                },
-            };
-        }
-        return super._writing();
+                } else {
+                    return super._writing();
+                }
+            },
+        };
     }
 
     get postWriting() {

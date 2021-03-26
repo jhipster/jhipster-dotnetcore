@@ -34,9 +34,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace <%= namespace %>.Client.Models
 {
-    public class <%= asModel(entityClassName) %>
+    public class <%= asModel(entityClassName) %> : BaseModel<long>
     {
-        public long Id { get; set; }
         <%_ for (idx in fields){
             if (fields[idx].id) continue;
             let required = false;

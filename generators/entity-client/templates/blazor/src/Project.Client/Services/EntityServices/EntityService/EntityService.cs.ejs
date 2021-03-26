@@ -26,7 +26,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>
 {
-    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>, <%= asDto(entityClassName) %>>, I<%= entityClassName %>Service
+    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>, <%= asDto(entityClassName) %>, long>, I<%= entityClassName %>Service
     {
         public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper)
             : base(httpClient, authenticationStateProvider, mapper, "/api/<%= kebabCasedEntityClassPlural %>")

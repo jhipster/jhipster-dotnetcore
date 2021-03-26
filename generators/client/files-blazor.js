@@ -43,6 +43,15 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Client/Models/BaseModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/BaseModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Client/Models/Register/RegisterModel.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/Register/RegisterModel.cs`,
                 },

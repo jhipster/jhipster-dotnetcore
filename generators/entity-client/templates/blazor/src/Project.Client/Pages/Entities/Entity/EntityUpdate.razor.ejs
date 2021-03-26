@@ -30,7 +30,8 @@ _%>
                     </div>
                 }
 
-                <%_ fields.forEach(field => { _%>
+                <%_ fields.forEach(field => {
+                    if (field.id) return; _%>
                     <%_ if (field.fieldIsEnum) { _%>
                 <Select class="form-control" name="<%= field.fieldName %>" formControlName="<%= field.fieldName %>" @bind-SelectedValue="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>">
                     <%_ field.enumValues.forEach(enumValue => { _%>
