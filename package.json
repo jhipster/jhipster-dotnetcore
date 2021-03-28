@@ -39,7 +39,7 @@
     "pluralize": "8.0.0",
     "prettier": "2.2.1",
     "randexp": "0.5.3",
-    "semver": "7.3.4",
+    "semver": "7.3.5",
     "shelljs": "0.8.4",
     "through2": "4.0.2",
     "to-pascal-case": "1.0.0",
