@@ -48,6 +48,7 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get writing() {
+        var baseWriting = super._writing();
         return {
             writeFilesDotnetcore() {
                 if (this.clientFramework === BLAZOR) {
@@ -58,7 +59,7 @@ module.exports = class extends EntityClientGenerator {
                     if (this.skipClient) return;
                     return writeXamarinFiles.call(this);
                 }
-                return super._writing();
+                return baseWriting; 
             },
         };
     }
