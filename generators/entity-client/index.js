@@ -43,8 +43,8 @@ module.exports = class extends EntityClientGenerator {
     get default() {
         return {
             ...super._default(),
-            customizeDotnetPaths
-        }
+            customizeDotnetPaths,
+        };
     }
 
     get writing() {
@@ -53,12 +53,12 @@ module.exports = class extends EntityClientGenerator {
                 if (this.clientFramework === BLAZOR) {
                     if (this.skipClient) return;
                     return writeBlazorFiles.call(this);
-                } else if (this.clientFramework === XAMARIN) {
+                }
+                if (this.clientFramework === XAMARIN) {
                     if (this.skipClient) return;
                     return writeXamarinFiles.call(this);
-                } else {
-                    return super._writing();
                 }
+                return super._writing();
             },
         };
     }
