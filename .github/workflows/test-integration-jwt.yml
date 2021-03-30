@@ -67,6 +67,8 @@ jobs:
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+            - name: 'RUN E2E TESTS of generated app'
+              run: ./test-integration/scripts/07-tests-e2e.sh $JHI_APP $JHI_ARG
             - name: 'RUN SONAR ANALYZE on generated app'
               run: ./test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
               env:
