@@ -243,7 +243,6 @@ function writeFiles() {
     updateWebpackCommonJs.call(this);
     updateWebpackDevJs.call(this);
     updateWebpackProdJs.call(this);
-    updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
     updatePackageJson.call(this);
     updateJestConf.call(this);
