@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -25,113 +25,102 @@ const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function updateWebpackCommonJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        "",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
-        `src\\/`,
-        "",
-        false
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
-        "utils.root('src/main/webapp/index.html')",
-        "utils.root('src/index.html')",
-        false
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
-        `main/webapp/`,
-        "",
-        true
-    );
+    if(this.clientFramework === VUE || this.clientFramework === REACT ) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+            `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+            "",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+            `src\\/`,
+            "",
+            false
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+            "utils.root('src/main/webapp/index.html')",
+            "utils.root('src/index.html')",
+            false
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+            `main/webapp/`,
+            "",
+            true
+        );
+    }
 }
 
 function updateWebpackDevJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        "",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        'path: utils.root(.*),',
-        "path: utils.root('dist'),",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        "target/classes/static/",
-        "dist",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        "contentBase: '.*'",
-        "contentBase: './dist'",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        'cacheDirectory: path.resolve(.*)',
-        "cacheDirectory: path.resolve('bin/cache-loader')",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        "target: `http${options.tls ? 's' : ''}://localhost:8080`",
-        `target: \`http\${options.tls ? 's' : ''}://localhost:${this.serverPort}\``,
-        false
-    );
+    if(this.clientFramework === VUE || this.clientFramework === REACT ) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+            "",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            'path: utils.root(.*),',
+            "path: utils.root('dist'),",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            "target/classes/static/",
+            "dist",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            "contentBase: '.*'",
+            "contentBase: './dist'",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            'cacheDirectory: path.resolve(.*)',
+            "cacheDirectory: path.resolve('bin/cache-loader')",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            "target: `http${options.tls ? 's' : ''}://localhost:8080`",
+            `target: \`http\${options.tls ? 's' : ''}://localhost:${this.serverPort}\``,
+            false
+        );
+    }
 }
 
 function updateWebpackProdJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        "",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
-        'path: utils.root(.*),',
-        "path: utils.root('dist'),",
-        true
-    );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
-        "target/classes/static/",
-        "dist",
-        true
-    );
-}
-
-function updateProxyConfJson() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/proxy.conf.json`,
-        '"target": "http://localhost:8080"',
-        `"target": "http://localhost:${this.serverPort}"`,
-        false
-    );
+    if(this.clientFramework === VUE || this.clientFramework === REACT ) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
+            `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+            "",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
+            'path: utils.root(.*),',
+            "path: utils.root('dist'),",
+            true
+        );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
+            "target/classes/static/",
+            "dist",
+            true
+        );
+    }
 }
 
 function updateTsConfigJson() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.base.json`,
-        `/${SERVER_SRC_DIR}${this.mainClientDir}`,
-        "",
-        true
-    );
 }
 
 function updatePackageJson() {
@@ -162,7 +151,7 @@ function updatePackageJson() {
 }
 
 function updateJestConf(){
-    if(this.clientFramework === ANGULAR){        
+    if(this.clientFramework === ANGULAR || this.clientFramework === REACT ) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
             '/src/test/javascript',
@@ -181,7 +170,7 @@ function updateJestConf(){
             '..',
             true
         );
-    } else {
+    } else if(this.clientFramework === VUE) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
             '/src/test/javascript',
@@ -231,7 +220,7 @@ function updateEsLinIgnore(){
 }
 
 function updateTestFramework(){
-    if(this.protractorTests){    
+    if(this.protractorTests){
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/protractor.conf.js`,
             'http://localhost:8080',
@@ -254,13 +243,12 @@ function writeFiles() {
     updateWebpackCommonJs.call(this);
     updateWebpackDevJs.call(this);
     updateWebpackProdJs.call(this);
-    updateProxyConfJson.call(this);
     updateTsConfigJson.call(this);
     updatePackageJson.call(this);
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
     updateTestFramework.call(this);
-    updateVendor.call(this); 
+    updateVendor.call(this);
 }
 
 module.exports = {

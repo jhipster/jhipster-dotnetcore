@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,13 +46,23 @@ services:
     <%_ break;
 } _%>
     <%= baseName.toLowerCase() %>-app:
-        image: <%= baseName.toLowerCase() %>
+        build:
+            context: ../
+            dockerfile: Dockerfile-Back
     <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle') { _%>
         depends_on:
             - db
-        build:
-            context: ../
-            dockerfile: src/<%= solutionName %>/Dockerfile
     <%_ } _%>
         ports:
-            - 80:80
+            - 8080:80
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
+    <%= baseName.toLowerCase() %>-front:
+        build:
+                context: ../
+                dockerfile: Dockerfile-Front
+                args:
+                    - ServerUrl=http://localhost:8080
+        ports:
+            - 8081:80
+<%_ } _%>
+

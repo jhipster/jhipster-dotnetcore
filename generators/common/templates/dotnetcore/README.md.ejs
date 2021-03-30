@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -20,17 +20,50 @@
 <%_
 let DOCUMENTATION_ARCHIVE_URL = `${DOCUMENTATION_URL + DOCUMENTATION_ARCHIVE_PATH}v${jhipsterVersion}`;
 _%>
-This application was generated using JHipster <%= jhipsterVersion %> and JHipster .Net Core <%= jhipsterDotnetVersion %>, you can find documentation and help at [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
+This application was generated using JHipster <%= jhipsterVersion %> and JHipster .Net Core <%= jhipsterDotnetVersion %>, you can find documentation and help at https://jhipsternet.readthedocs.io/en/latest/index.html and  [<%= DOCUMENTATION_ARCHIVE_URL %>](<%= DOCUMENTATION_ARCHIVE_URL %>).
 
 ## Development
 
-<%_ if (skipClient) { _%>
-To start your application in the Debug configuration, simply run:
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
 
-    dotnet run --verbosity normal --project ./src/<%= pascalizedBaseName %>/<%= pascalizedBaseName %>.csproj
+Before you can build this project, you need to verify if [libman](https://github.com/aspnet/LibraryManager) and [webcompiler](https://github.com/excubo-ag/WebCompiler) are installed. (If the application is generated, the generator installed this tools for you)
+
+If not, run 
+
+```bash
+dotnet tool install -g Microsoft.Web.LibraryManager.Cli
+dotnet tool install -g Excubo.WebCompiler 
+```
 
 <%_ } _%>
-<%_ if (!skipClient) { _%>
+
+<%_ if (skipClient || clientFramework === "Blazor") { _%>
+To start your application in the Debug configuration, simply run:
+
+```bash
+dotnet run --verbosity normal --project ./src/<%= pascalizedBaseName %>/<%= pascalizedBaseName %>.csproj
+```
+<%_ } _%>
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
+
+and
+
+```bash
+dotnet run --verbosity normal --project ./src/client/<%= pascalizedBaseName %>.Client/<%= pascalizedBaseName %>.Client.csproj
+```
+
+You can also use the **hotreload**
+
+For the backend 
+```bash
+dotnet watch --project ./src/<%= pascalizedBaseName %>/<%= pascalizedBaseName %>.csproj run --verbosity normal
+```
+For the frontend 
+```bash
+dotnet watch --project ./src/client/<%= pascalizedBaseName %>.Client/<%= pascalizedBaseName %>.Client.csproj run --verbosity normal
+```
+<%_ } _%>
+<%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
@@ -57,24 +90,6 @@ Add the `help` flag on any command to see how you can use it. For example, `npm 
 
 The `npm --prefix ./src/<%= pascalizedBaseName %>/ClientApp run` command will list all of the scripts available to run for this project.
 
-### Service workers
-
-Service workers are commented by default, to enable them please uncomment the following code.
-
-* The service worker registering script in index.html
-
-```html
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-        .register('./service-worker.js')
-        .then(function() { console.log('Service Worker Registered'); });
-    }
-</script>
-```
-
-Note: workbox creates the respective service worker and dynamically generate the `service-worker.js`
-
 ### Managing dependencies
 
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
@@ -100,8 +115,6 @@ Edit [<%= mainClientDir %>/content/css/vendor.css](<%= mainClientDir %>/content/
 Note: there are still few other things remaining to do for Leaflet that we won't detail here.
 <%_ } _%>
 
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
-
 <%_ if (clientFramework === 'angularX' && applicationType !== 'microservice') { _%>
 ### Using angular-cli
 
@@ -118,15 +131,17 @@ will generate few files:
     update <%= mainClientDir %>/src/app/app.module.ts
 <%_ } _%>
 
+<%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
 ## Building for production
 
-To build the arifacts and optimize the <%= baseName %> application for production, run:
+To build the artifacts and optimize the <%= baseName %> application for production, run:
 
     cd ./src/<%= pascalizedBaseName %>
     rm -rf ./src/<%= pascalizedBaseName %>/wwwroot
     dotnet publish --verbosity normal -c Release -o ./app/out ./<%= pascalizedBaseName %>.csproj
 
 The `./src/<%= pascalizedBaseName %>/app/out` directory will contain your application dll and its depedencies.
+<%_ } _%>
 
 <%_ if (!skipClient) { _%>
 This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
@@ -142,8 +157,8 @@ To format the dotnet code, run
 
 To launch your application's tests, run:
 
-    dotnet test --list-tests --verbosity normal
-<% if (!skipClient) { %>
+    dotnet test --verbosity normal
+<%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
 ### Client tests
 
 In ClientApp folder run :
@@ -151,6 +166,18 @@ In ClientApp folder run :
     npm test
 
 <%_ } _%>
+
+### Generate entities 
+
+With cli 
+```bash
+jhipster entity <entity-name>
+```
+
+or with jdl (https://start.jhipster.tech/jdl-studio/)
+```bash
+jhipster import-jdl my_file.jdl
+```
 
 ### Code quality
 
@@ -192,14 +219,46 @@ Manually :
 
 You can also fully dockerize your application and all the services that it depends on. To achieve this, first build a docker image of your app by running:
 
-    docker build -f ./src/<%= pascalizedBaseName %>/Dockerfile -t <%= baseName %> .
+```bash
+docker build -f ./Dockerfile-Back -t <%= baseName.toLowerCase() %> .
+```
+
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
+
+```bash
+docker build -f ./Dockerfile-Front -t <%= baseName.toLowerCase() %>-front . --build-arg ServerUrl=https://localhost:8080
+```
+
+<%_ } _%>
 
 Then run:
 
-    docker run -p 80:80 <%= baseName %>
+```bash
+docker run -p 8080:80 <%= baseName.toLowerCase() %>
+```
+
+<%_ if (!skipClient && clientFramework === "Blazor") { _%>
+
+```bash
+docker run -p 8081:80 <%= baseName.toLowerCase() %>-front 
+```
+
+<%_ } _%>
+
+Or you can simply run : 
+
+```bash
+docker-compose -f .\docker\app.yml build
+```
+
+And
+
+```bash
+docker-compose -f .\docker\app.yml up
+```
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>
-<%_ if (!skipClient) {_%>
+<%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") {_%>
 [Node.js]: https://nodejs.org/
 [Yarn]: https://yarnpkg.org/
 [Webpack]: https://webpack.github.io/

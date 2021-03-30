@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +22,13 @@ using AutoMapper;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Dto;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace <%= namespace %>.Client.Services.EntityServices.User
 {
-    public class UserService : AbstractEntityService<UserModel, UserDto>,IUserService
+    public class UserService : AbstractEntityService<UserModel, UserDto, string>, IUserService
     {
-        public UserService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper) : base(httpClient, authenticationStateProvider, mapper, "/api/users")
+        public UserService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper, IConfiguration configuration) : base(httpClient, authenticationStateProvider, mapper, configuration, "/api/users")
         {
         }
 

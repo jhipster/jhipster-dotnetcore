@@ -1,0 +1,52 @@
+<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+# Based on Microsoft's docker samples for dotnet core
+# available at https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
+# First install nodejs - required to build generated client app
+WORKDIR /app
+RUN apt-get update -yq && apt-get install -yq curl
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get update && \
+    apt-get install -yq nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Restore dependencies of .net core projects taking advantage of docker layer caching
+COPY src/*/*.csproj ./src/
+COPY Directory.Build.targets Directory.Build.targets
+RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
+RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
+
+# Copy everything else and build app
+COPY . ./
+WORKDIR src/<%= mainProjectDir %>
+RUN dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
+
+# Final stage/image
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS runtime
+WORKDIR /app
+EXPOSE 80
+COPY --from=build /app/out .
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+# See: https://github.com/dotnet/announcements/issues/20
+# Uncomment to enable globalization APIs (or delete)
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+RUN apk add --no-cache icu-libs
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+
+ENTRYPOINT ["dotnet", "<%= kebabCasedBaseName %>.dll"]

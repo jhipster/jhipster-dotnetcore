@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,11 @@ using Blazored.SessionStorage;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Dto;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace <%= namespace %>.Client.Services
 {
-    public class AuthenticationService : AuthenticationStateProvider,IAuthenticationService
+    public class AuthenticationService : AuthenticationStateProvider, IAuthenticationService
     {
         private const string AuthenticatationUrl = "/api/authenticate";
         private const string AccountUrl = "/api/account";
@@ -37,17 +38,19 @@ namespace <%= namespace %>.Client.Services
         private readonly HttpClient _httpClient;
         private readonly ISyncSessionStorageService _sessionStorage;
         private readonly IMapper _mapper;
+        private readonly ConfigurationModel _configurationModel = new ConfigurationModel();
 
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
         public JwtToken JwtToken { get; set; }
-        
-        public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage, IMapper mapper)
+
+        public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage, IMapper mapper, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _sessionStorage = sessionStorage;
             _mapper = mapper;
-            _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+            configuration.Bind(_configurationModel);
+            _httpClient.BaseAddress = new Uri(_configurationModel.ServerUrl);
             var token = _sessionStorage.GetItem<string>(JhiAuthenticationtoken);
             if (!string.IsNullOrEmpty(token))
             {
@@ -55,7 +58,7 @@ namespace <%= namespace %>.Client.Services
                 SetUserAndAuthorizationHeader(JwtToken);
             }
         }
-        
+
         public async Task<bool> SignIn(LoginModel loginModel)
         {
             var loginDto = _mapper.Map<LoginDto>(loginModel);
@@ -63,7 +66,7 @@ namespace <%= namespace %>.Client.Services
             if (result.IsSuccessStatusCode)
             {
                 JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
-                _sessionStorage.SetItem(JhiAuthenticationtoken, JwtToken.IdToken); 
+                _sessionStorage.SetItem(JhiAuthenticationtoken, JwtToken.IdToken);
                 await SetUserAndAuthorizationHeader(JwtToken);
             }
             return IsAuthenticated;
@@ -109,19 +112,18 @@ namespace <%= namespace %>.Client.Services
                 AddClaim(ref claims, ClaimTypes.Surname, CurrentUser.LastName);
                 AddClaim(ref claims, "langKey", CurrentUser.LangKey);
                 AddClaim(ref claims, "picture", CurrentUser.ImageUrl);
-                claims.AddRange(CurrentUser.Authorities?.Select(role => new Claim(ClaimTypes.Role,role)) ?? Array.Empty<Claim>());
-                identity = new ClaimsIdentity(claims,"JWT Auth", ClaimTypes.Name, ClaimTypes.Role);
+                claims.AddRange(CurrentUser.Authorities?.Select(role => new Claim(ClaimTypes.Role, role)) ?? Array.Empty<Claim>());
+                identity = new ClaimsIdentity(claims, "JWT Auth", ClaimTypes.Name, ClaimTypes.Role);
             }
 
             return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
         }
 
-
-        private void AddClaim(ref List<Claim> claims,string claimType, string value)
+        private void AddClaim(ref List<Claim> claims, string claimType, string value)
         {
             if (!string.IsNullOrEmpty(value))
             {
-                claims.Add(new Claim(claimType,value));
+                claims.Add(new Claim(claimType, value));
             }
         }
     }

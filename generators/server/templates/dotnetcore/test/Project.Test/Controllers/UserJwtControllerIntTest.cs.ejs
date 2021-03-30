@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,18 +25,20 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace <%= namespace %>.Test.Controllers {
-    public class UserJwtControllerIntTest {
+namespace <%= namespace %>.Test.Controllers
+{
+    public class UserJwtControllerIntTest
+    {
         public UserJwtControllerIntTest()
         {
-            _factory = new NhipsterWebApplicationFactory<TestStartup>();
+            _factory = new AppWebApplicationFactory<TestStartup>();
             _client = _factory.CreateClient();
 
             _userManager = _factory.GetRequiredService<UserManager<User>>();
             _passwordHasher = _factory.GetRequiredService<IPasswordHasher<User>>();
         }
 
-        private readonly NhipsterWebApplicationFactory<TestStartup> _factory;
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
 
         private readonly UserManager<User> _userManager;
@@ -45,7 +47,8 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task TestAuthorize()
         {
-            var user = new User {
+            var user = new User
+            {
                 UserName = "user-jwt-controller",
                 Email = "user-jwt-controller@example.com",
                 PasswordHash = _passwordHasher.HashPassword(null, "test"),
@@ -53,7 +56,8 @@ namespace <%= namespace %>.Test.Controllers {
             };
             await _userManager.CreateAsync(user);
 
-            var login = new LoginDto {
+            var login = new LoginDto
+            {
                 Username = "user-jwt-controller",
                 Password = "test"
             };
@@ -74,7 +78,8 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task TestAuthorizeFails()
         {
-            var login = new LoginDto {
+            var login = new LoginDto
+            {
                 Username = "wrong-user",
                 Password = "wrong-password"
             };
@@ -92,7 +97,8 @@ namespace <%= namespace %>.Test.Controllers {
         [Fact]
         public async Task TestAuthorizeWithRememberMe()
         {
-            var user = new User {
+            var user = new User
+            {
                 UserName = "user-jwt-controller",
                 Email = "user-jwt-controller@example.com",
                 PasswordHash = _passwordHasher.HashPassword(null, "test"),
@@ -101,7 +107,8 @@ namespace <%= namespace %>.Test.Controllers {
 
             await _userManager.CreateAsync(user);
 
-            var login = new LoginDto {
+            var login = new LoginDto
+            {
                 Username = "user-jwt-controller",
                 Password = "test",
                 RememberMe = true

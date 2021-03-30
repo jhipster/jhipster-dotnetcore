@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,6 @@ namespace <%= namespace %>.Client.Test
             {
                 StatusCode = HttpStatusCode.NotFound,
                 Content = new StringContent(@""),
-                
             };
 
             var alertComponent = await InitAlertErrorTest(response);
@@ -109,7 +108,7 @@ namespace <%= namespace %>.Client.Test
         public void Should_Add_And_Remove_When_AlertTimout()
         {
             Services.AddHttpClientInterceptor();
-            var alertComponent = RenderComponent<TestAlertError>(); 
+            var alertComponent = RenderComponent<TestAlertError>();
 
             var alert = new JhiAlert
             {
@@ -151,7 +150,7 @@ namespace <%= namespace %>.Client.Test
             httpClient.Timeout = TimeSpan.FromMilliseconds(60);
             try
             {
-                await httpClient.GetAsync(Configuration.BaseUri);
+                await httpClient.GetAsync("https://localhost:5000");
             }
             catch (Exception)
             {

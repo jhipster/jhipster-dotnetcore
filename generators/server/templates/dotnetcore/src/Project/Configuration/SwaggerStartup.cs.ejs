@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +17,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
-namespace <%= namespace %>.Configuration {
-    public static class SwaggerConfiguration {
+namespace <%= namespace %>.Configuration
+{
+    public static class SwaggerConfiguration
+    {
         public static IServiceCollection AddSwaggerModule(this IServiceCollection services)
         {
-            services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v2", new OpenApiInfo {Title = "<%=pascalizedBaseName%> API", Version = "0.0.1"});
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "<%=pascalizedBaseName%> API", Version = "0.0.1" });
             });
 
             return services;
@@ -30,10 +33,12 @@ namespace <%= namespace %>.Configuration {
 
         public static IApplicationBuilder UseApplicationSwagger(this IApplicationBuilder app)
         {
-            app.UseSwagger(c => {
+            app.UseSwagger(c =>
+            {
                 c.RouteTemplate = "{documentName}/api-docs";
             });
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/v2/api-docs", "<%=pascalizedBaseName%> API");
             });
             return app;

@@ -1,5 +1,5 @@
 ﻿<%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ 
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
-const entityVariableName = camelCasedEntityClass; 
+const entityVariableName = camelCasedEntityClass;
 _%>
 using System.Net.Http;
 using AutoMapper;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Dto;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>
 {
-    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>, <%= asDto(entityClassName) %>>,I<%= entityClassName %>Service
+    public class <%= entityClassName %>Service : AbstractEntityService<<%= asModel(entityClassName) %>, <%= asDto(entityClassName) %>, long>, I<%= entityClassName %>Service
     {
-        public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper)
-            : base(httpClient, authenticationStateProvider, mapper, "/api/<%= kebabCasedEntityClassPlural %>")
+        public <%= entityClassName %>Service(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper, IConfiguration configuration)
+            : base(httpClient, authenticationStateProvider, mapper, configuration, "/api/<%= kebabCasedEntityClassPlural %>")
         {
         }
     }

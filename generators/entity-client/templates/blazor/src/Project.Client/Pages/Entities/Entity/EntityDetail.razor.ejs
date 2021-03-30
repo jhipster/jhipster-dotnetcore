@@ -7,6 +7,7 @@ const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
 @page "/<%= lowerCasedEntityClass %>/{Id:int}/view"
 @using Microsoft.AspNetCore.Authorization
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
@@ -22,7 +23,8 @@ _%>
                 @*<jhi-alert-error></jhi-alert-error>*@
 
                 <dl class="row-md jh-entity-details">
-                    <%_ fields.forEach(field => { _%>
+                    <%_ fields.forEach(field => {
+                        if (field.id) return; _%>
                     <dt><span><%= field.fieldNameHumanized %></span></dt>
                     <dd>
                         <span>@<%= entityClassName %>.<%= field.fieldNamePascalized %></span>

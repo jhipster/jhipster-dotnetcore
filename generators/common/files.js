@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -18,13 +18,18 @@
  */
 const constants = require('../generator-dotnetcore-constants');
 
-const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
-
 const files = {
     docker: [
         {
-            path: SERVER_SRC_DIR,
-            templates: [{ file: 'Project/Dockerfile', renameTo: generator => `${generator.mainProjectDir}/Dockerfile` }],
+            templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
+        },
+        {
+            condition: generator => generator.clientFramework === constants.BLAZOR,
+            templates: [{ file: 'Dockerfile-Front', renameTo: () => 'Dockerfile-Front' }],
+        },
+        {
+            condition: generator => generator.clientFramework === constants.BLAZOR,
+            templates: [{ file: 'nginx.conf', renameTo: () => 'nginx.conf' }],
         },
         {
             templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }],

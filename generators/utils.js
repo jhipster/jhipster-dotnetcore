@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -24,6 +24,7 @@ const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = {
     copyI18n,
@@ -105,6 +106,13 @@ function customizeDotnetPaths() {
         this.mainClientDir = `client/${this.pascalizedBaseName}.Client`;
         this.sharedClientDir = `client/${this.pascalizedBaseName}.Client.Shared`;
         this.clientTestProject = `${this.pascalizedBaseName}.Client${constants.PROJECT_TEST_SUFFIX}`;
+    }
+    if (this.clientFramework === XAMARIN) {
+        this.mainClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.Core`;
+        this.sharedClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.Shared`;
+        this.androidClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.Android`;
+        this.iOSClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.iOS`;
+        this.clientTestProject = `${this.pascalizedBaseName}.Client.Xamarin${constants.PROJECT_TEST_SUFFIX}`;
     }
 
     this.options.outputPathCustomizer = [

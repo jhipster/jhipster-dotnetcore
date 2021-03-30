@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -55,11 +55,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Controllers {
+namespace <%= namespace %>.Controllers
+{
     [Authorize]
-    [Route("api")]
+    [Route("api/<%= kebabCasedEntityClassPlural %>")]
     [ApiController]
-    public class <%= pascalizedEntityClass %>Controller : ControllerBase {
+    public class <%= pascalizedEntityClassPlural %>Controller : ControllerBase
+    {
         private const string EntityName = "<%= camelCasedEntityClass %>";
         <%_ if (hasDto) { _%>
         private readonly IMapper _mapper;
@@ -67,18 +69,18 @@ namespace <%= namespace %>.Controllers {
         <%_ if (hasService) { _%>
         private readonly I<%= pascalizedEntityClass %>Service _<%= camelCasedEntityClass %>Service;
         <%_ } else { _%>
-        private readonly I<%= pascalizedEntityClass %>Repository  _<%= camelCasedEntityClass %>Repository;
+        private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
         <%_ } _%>
-        private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
+        private readonly ILogger<<%= pascalizedEntityClassPlural %>Controller> _log;
 
-        public <%= pascalizedEntityClass %>Controller(ILogger<<%= pascalizedEntityClass %>Controller> log,
+        public <%= pascalizedEntityClassPlural %>Controller(ILogger<<%= pascalizedEntityClassPlural %>Controller> log,
             <%_ if (hasDto) { _%>
             IMapper mapper,
             <%_ } _%>
             <%_ if (hasService) { _%>
             I<%= pascalizedEntityClass %>Service <%= camelCasedEntityClass %>Service)
             <%_ } else { _%>
-            I<%= pascalizedEntityClass %>Repository  <%= camelCasedEntityClass %>Repository)
+            I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
         <%_ } _%>
         {
             _log = log;
@@ -92,7 +94,7 @@ namespace <%= namespace %>.Controllers {
             <%_ } _%>
         }
 
-        [HttpPost("<%= kebabCasedEntityClassPlural %>")]
+        [HttpPost]
         [ValidateModel]
         public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
@@ -113,12 +115,13 @@ namespace <%= namespace %>.Controllers {
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
 
-        [HttpPut("<%= kebabCasedEntityClassPlural %>")]
+        [HttpPut("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
+        public async Task<IActionResult> Update<%= pascalizedEntityClass %>(long id, [FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
+            if (id != <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id) throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -132,7 +135,7 @@ namespace <%= namespace %>.Controllers {
                 .WithHeaders(HeaderUtil.CreateEntityUpdateAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
 
-        [HttpGet("<%= kebabCasedEntityClassPlural %>")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
@@ -150,14 +153,14 @@ namespace <%= namespace %>.Controllers {
                 .GetPageAsync(pageable);
             <%_ } _%>
             <%_ if (hasDto) { _%>
-            var page = new Page<<%= asDto(pascalizedEntityClass) %>>(result.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(),pageable,result.TotalElements);
+            var page = new Page<<%= asDto(pascalizedEntityClass) %>>(result.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(), pageable, result.TotalElements);
             return Ok(((IPage<<%= asDto(pascalizedEntityClass) %>>)page).Content).WithHeaders(page.GeneratePaginationHttpHeaders());
             <%_ } else { _%>
             return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());
             <%_ } _%>
         }
 
-        [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] long id)
         {
             _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
@@ -182,7 +185,7 @@ namespace <%= namespace %>.Controllers {
             <%_ }_%>
         }
 
-        [HttpDelete("<%= kebabCasedEntityClassPlural %>/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] long id)
         {
             _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");

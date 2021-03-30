@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,11 @@ using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain;
 using <%= namespace %>.Test.Setup;
 
-namespace <%= namespace %>.Test {
-    public static class Fixme {
-        public static User ReloadUser<TEntryPoint>(NhipsterWebApplicationFactory<TEntryPoint> factory, User user)
+namespace <%= namespace %>.Test
+{
+    public static class Fixme
+    {
+        public static User ReloadUser<TEntryPoint>(AppWebApplicationFactory<TEntryPoint> factory, User user)
             where TEntryPoint : class
         {
             var applicationDatabaseContext = factory.GetRequiredService<ApplicationDatabaseContext>();

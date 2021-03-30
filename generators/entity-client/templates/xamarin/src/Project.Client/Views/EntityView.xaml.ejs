@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<%_ 
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; 
+_%>
+<views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      x:TypeArguments="viewModels:<%= entityClassName %>ViewModel"
+                      xmlns:viewModels="clr-namespace:<%= namespace %>.Client.Xamarin.Core.ViewModels;assembly=<%= namespace %>.Client.Xamarin.Core"
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="<%= namespace %>.Client.Xamarin.Core.Views.<%= entityClassName %>View">
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
+                <Label Text="<%= entityClassName %> Management" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+            </Frame>
+            <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+                <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
+                    <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16" />
+                    <Button Text="Supprimer" Command="{Binding RemoveCommand}" FontSize="16" />
+                    <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16" />
+                </StackLayout>
+                <%_ for (idx in fields){
+                    const fieldType = equivalentCSharpType(fields[idx].fieldType);
+                    const fieldNamePascalized = fields[idx].fieldNamePascalized;
+                    const fieldNameCamelCased = fields[idx].fieldNameCamelCased;_%>
+                <Label Text="<%= fieldNamePascalized %>" />
+                <%_    
+                if (fields[idx].fieldIsEnum) { _%>
+                <Entry Placeholder="<%= fieldNamePascalized %>" Text="{Binding <%= fieldNamePascalized %>}" />
+                <%_ } else if (fieldType === 'bool?') { _%>
+                <CheckBox IsChecked="{Binding <%= fieldNamePascalized %>}" />
+                <%_ } else if (fieldType === 'DateTime?') { _%>
+                <DatePicker Date="{Binding <%= fieldNamePascalized %>}" />
+                <%_ } else { _%>
+                <Entry Placeholder="<%= fieldNamePascalized %>" Text="{Binding <%= fieldNamePascalized %>}" Keyboard=<%_ if (
+                    fieldType === 'int?' || fieldType === 'double?' || fieldType === 'float?' || fieldType === 'long?' || fieldType === 'decimal?') { 
+                        _%> "Numeric" <%_ } else { _%> "Text" <%_ } _%> />
+                <%_ } _%>
+                <%_ } _%>
+
+                <Label Text="Entities" HorizontalOptions="StartAndExpand" FontSize="Title" />
+                <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
+                          ItemsSource="{Binding ListElement}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Id}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</views:MvxContentPage>

@@ -68,13 +68,12 @@ namespace <%= namespace %>.Test.Controllers
         {
             // Arrange
             var mockUser = new GenericPrincipal(new ClaimsIdentity(new List<Claim>()
-                {
-                    new Claim("preferred_username","user@test"),
-                    new Claim(ClaimTypes.GivenName,"user"),
-                    new Claim(ClaimTypes.Email,"user@test"),
-                    new Claim("role",RolesConstants.USER)
-                }),
-              new string[] {});
+            {
+                new Claim("preferred_username","user@test"),
+                new Claim(ClaimTypes.GivenName,"user"),
+                new Claim(ClaimTypes.Email,"user@test"),
+                new Claim("role",RolesConstants.USER)
+            }), new string[] { });
             _accountController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext

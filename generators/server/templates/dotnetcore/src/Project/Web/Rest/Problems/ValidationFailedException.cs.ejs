@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2020 the original author or authors from the JHipster project.
+ Copyright 2019-2021 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,11 @@ using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace <%= namespace %>.Web.Rest.Problems {
+namespace <%= namespace %>.Web.Rest.Problems
+{
     //https://www.jerriepelser.com/blog/validation-response-aspnet-core-webapi/
-    public class ValidationFailedProblem : ProblemDetailsException {
+    public class ValidationFailedProblem : ProblemDetailsException
+    {
         public ValidationFailedProblem(ModelStateDictionary modelState) : base(new ValidationProblemDetails(modelState))
         {
         }

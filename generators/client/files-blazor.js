@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -36,9 +36,18 @@ const files = {
                     renameTo: generator => `${generator.mainClientDir}/AutoMapper/AutoMapperProfile.cs`,
                 },
             ],
-        },        
+        },
     ],
     blazorAppModels: [
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Models/BaseModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/BaseModel.cs`,
+                },
+            ],
+        },
         {
             path: CLIENT_SRC_DIR,
             templates: [
@@ -63,6 +72,15 @@ const files = {
                 {
                     file: 'Project.Client/Models/Register/UserSaveModel.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/Register/UserSaveModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/Models/ConfigurationModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/ConfigurationModel.cs`,
                 },
             ],
         },
@@ -294,15 +312,6 @@ const files = {
                 {
                     file: 'Project.Client/Services/AuthenticationService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Services/AuthenticationService.cs`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Services/Configuration.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Services/Configuration.cs`,
                 },
             ],
         },
@@ -617,7 +626,6 @@ const files = {
             templates: [
                 {
                     file: 'Project.Client/wwwroot/content/scss/global.scss',
-                    method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/content/scss/global.scss`,
                 },
             ],
@@ -649,6 +657,51 @@ const files = {
                     file: 'Project.Client/wwwroot/index.html',
                     method: 'copy',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/index.html`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/robots.txt',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/robots.txt`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/manifest.webapp',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/manifest.webapp`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/appsettings.json',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/appsettings.json`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/appsettings.Development.json',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/appsettings.Development.json`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/appsettings.Production.json',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/appsettings.Production.json`,
                 },
             ],
         },
@@ -812,7 +865,7 @@ const files = {
                     renameTo: generator => `${generator.clientTestProject}/LoginTest.cs`,
                 },
             ],
-        },        
+        },
         {
             path: CLIENT_TEST_DIR,
             templates: [

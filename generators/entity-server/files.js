@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2019-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -43,8 +43,7 @@ const serverFiles = {
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
-                    renameTo: generator =>
-                        `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/${generator.pascalizedEntityClassPlural}Controller.cs`,
                 },
                 {
                     file: 'Project.Domain/Repositories/Interfaces/IEntityRepository.cs',
@@ -110,9 +109,9 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
+                    file: 'Project.Test/Controllers/EntityControllerIntTest.cs',
                     renameTo: generator =>
-                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`,
+                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ControllerIntTest.cs`,
                 },
             ],
         },

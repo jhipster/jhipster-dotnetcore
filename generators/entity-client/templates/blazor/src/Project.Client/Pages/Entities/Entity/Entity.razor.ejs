@@ -8,6 +8,7 @@ _%>
 @page "/<%= lowerCasedEntityClass %>"
 @using Microsoft.AspNetCore.Authorization
 @using <%= namespace %>.Client.Shared.Components
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
@@ -60,7 +61,8 @@ _%>
                 <thead>
                     <tr>
                         <th scope="col"><span>ID</span></th>
-                        <%_ fields.forEach(field => { _%>
+                        <%_ fields.forEach(field => { 
+                            if (field.id) return; _%>
                         <th scope="col"><span><%= field.fieldNameHumanized %></span></th>
                         <%_ }); _%>
                         <%_ relationships.forEach(relation => { 
@@ -76,7 +78,8 @@ _%>
                     {
                         <tr>
                             <td><a href="/<%= lowerCasedEntityClass %>/@<%= lowerCasedEntityClass %>.Id/view">@<%= lowerCasedEntityClass %>.Id</a></td>
-                            <%_ fields.forEach(field => { _%>
+                            <%_ fields.forEach(field => { 
+                                if (field.id) return; _%>
                             <td>@<%= lowerCasedEntityClass %>.<%= field.fieldNamePascalized %></td>
                             <%_ }); _%>
                             <%_ relationships.forEach(relation => { 
