@@ -15,6 +15,7 @@ module.exports = class extends EntityClientGenerator {
 
         if (this.jhipsterConfig.baseName) {
             this.baseName = this.jhipsterConfig.baseName;
+            this.clientFramework = this.jhipsterConfig.clientFramework;
         }
     }
 
@@ -48,20 +49,23 @@ module.exports = class extends EntityClientGenerator {
     }
 
     get writing() {
-        const baseWriting = super._writing();
-        return {
-            writeFilesDotnetcore() {
-                if (this.clientFramework === BLAZOR) {
+        if (this.clientFramework === BLAZOR) {
+            return {
+                writeFilesDotnetcore() {
                     if (this.skipClient) return;
                     return writeBlazorFiles.call(this);
-                }
-                if (this.clientFramework === XAMARIN) {
+                },
+            };
+        }
+        if (this.clientFramework === XAMARIN) {
+            return {
+                writeFilesDotnetcore() {
                     if (this.skipClient) return;
                     return writeXamarinFiles.call(this);
-                }
-                return baseWriting;
-            },
-        };
+                },
+            };
+        }
+        return super._writing();
     }
 
     get postWriting() {
