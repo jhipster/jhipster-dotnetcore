@@ -6,7 +6,7 @@ set -e
 # Install JHipster Generator
 #-------------------------------------------------------------------------------
 echo "*** generator-jhipster: use last version"
-npm install -g generator-jhipster
+npm install -g generator-jhipster@7.0.0
 
 #-------------------------------------------------------------------------------
 # Install yeoman
