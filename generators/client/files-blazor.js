@@ -79,6 +79,15 @@ const files = {
             path: CLIENT_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Client/Models/ConfigurationModel.cs',
+                    renameTo: generator => `${generator.mainClientDir}/Models/ConfigurationModel.cs`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Client/Models/JwtToken.cs',
                     renameTo: generator => `${generator.mainClientDir}/Models/JwtToken.cs`,
                 },
@@ -303,15 +312,6 @@ const files = {
                 {
                     file: 'Project.Client/Services/AuthenticationService.cs',
                     renameTo: generator => `${generator.mainClientDir}/Services/AuthenticationService.cs`,
-                },
-            ],
-        },
-        {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Services/Configuration.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Services/Configuration.cs`,
                 },
             ],
         },
@@ -675,6 +675,33 @@ const files = {
                 {
                     file: 'Project.Client/wwwroot/manifest.webapp',
                     renameTo: generator => `${generator.mainClientDir}/wwwroot/manifest.webapp`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/appsettings.json',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/appsettings.json`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/appsettings.Development.json',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/appsettings.Development.json`,
+                },
+            ],
+        },
+        {
+            path: CLIENT_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Client/wwwroot/appsettings.Production.json',
+                    renameTo: generator => `${generator.mainClientDir}/wwwroot/appsettings.Production.json`,
                 },
             ],
         },
