@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const CypressGenerator = require('generator-jhipster/generators/cypress');
 const writeCypressFiles = require('./files-cypress').writeFiles;
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
@@ -24,7 +25,7 @@ module.exports = class extends CypressGenerator {
     get configuring() {
         return {
             customizeDotnetPaths,
-            ...super._configuring()
+            ...super._configuring(),
         };
     }
 
@@ -35,11 +36,11 @@ module.exports = class extends CypressGenerator {
     get loading() {
         return {
             ...super._loading(),
-            loadingDotnet () {
+            loadingDotnet() {
                 this.serverPort = this.jhipsterConfig.serverPort;
                 this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
-            }
-        }
+            },
+        };
     }
 
     get preparing() {
@@ -56,10 +57,10 @@ module.exports = class extends CypressGenerator {
 
     get postWriting() {
         return {
-            ... super._postWriting(),
+            ...super._postWriting(),
             postWriteFilesDotnetcore() {
                 return writeCypressFiles.call(this);
-            }
-        }
+            },
+        };
     }
 };
