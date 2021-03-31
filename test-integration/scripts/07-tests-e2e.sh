@@ -14,7 +14,7 @@ if [ "$3" != "blazor" ]; then
   docker-compose -f docker/app.yml up -d
   sleep 60
 
-  if [ "$3" = "blazor" ]; then
+  if [ "$3" = "blazor" && -f cypress.json ]; then
     cd test/JhipsterSampleApplication.Client.Test
   else
     cd src/JhipsterSampleApplication/ClientApp
