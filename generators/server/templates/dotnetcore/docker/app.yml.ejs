@@ -54,7 +54,7 @@ services:
         build:
             context: ../
             dockerfile: Dockerfile-Back
-    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle' && && databaseType !== 'mysql') { _%>
+    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle' && databaseType !== 'mysql') { _%>
         depends_on:
             - db
     <%_ } _%>
