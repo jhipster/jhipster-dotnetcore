@@ -10,7 +10,7 @@ source $(dirname $0)/01-init-env.sh
 # Run Docker 
 #-------------------------------------------------------------------------------
 
-if [ "$APP_FOLDER" = "jwt-with-angular-app" ]; then
+if [ "$3" != "blazor" ]; then
   docker-compose -f docker/app.yml up -d
   sleep 60
 
