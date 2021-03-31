@@ -24,6 +24,10 @@ services:
             MYSQL_DATABASE: jhipster
         ports:
             - "3308:3306"
+            healthcheck:
+        test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+        timeout: 20s
+        retries: 10
     <%_ break;
     case 'mssql': _%>
     db:
@@ -41,6 +45,7 @@ services:
         environment:
             POSTGRES_DB: jhipster
             POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
         ports:
             - "5432"
     <%_ break;
@@ -49,9 +54,14 @@ services:
         build:
             context: ../
             dockerfile: Dockerfile-Back
-    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle') { _%>
+    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle' && && databaseType !== 'mysql') { _%>
         depends_on:
             - db
+    <%_ } _%>
+    <%_ if (databaseType === 'mysql') { _%>
+        depends_on:
+            db:
+               condition: service_healthy
     <%_ } _%>
         ports:
             - 8080:80
