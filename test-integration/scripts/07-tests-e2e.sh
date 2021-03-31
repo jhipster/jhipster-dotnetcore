@@ -12,7 +12,8 @@ source $(dirname $0)/01-init-env.sh
 
 if [ "$3" != "blazor" ]; then
   docker-compose -f docker/app.yml up -d
-  sleep 180
+
+  timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/health)" != "200" ]]; do sleep 5; done' || false
 
   if [ "$3" = "blazor" && -f "cypress.json" ]; then
     cd test/JhipsterSampleApplication.Client.Test
