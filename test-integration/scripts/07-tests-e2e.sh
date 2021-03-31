@@ -23,7 +23,7 @@ if [ "$APP_FOLDER" = "jwt-with-angular-app" ]; then
 
   sed -i 's/5001/8080/g' cypress.json
 
-  npm run e2e
+  npm run e2e:headless
 
   cd ../../../
 
