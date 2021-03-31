@@ -21,6 +21,8 @@ if [ "$APP_FOLDER" = "jwt-with-angular-app" ]; then
   fi
   echo "*** changed directory in : `pwd`" 
 
+  sed -i 's/5001/8080/g' cypress.json
+
   npm run e2e
 
   cd ../../../
