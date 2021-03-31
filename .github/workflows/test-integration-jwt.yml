@@ -31,9 +31,9 @@ jobs:
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
                     - app-type: jwt-with-react-app
-                      arg: 'no'
+                      arg: 'import-jdl'
                     - app-type: jwt-with-vue-app
-                      arg: 'no'
+                      arg: 'import-jdl'
         env:
             JHI_APP: ${{ matrix.app-type }}
             JHI_ARG: ${{ matrix.arg }}

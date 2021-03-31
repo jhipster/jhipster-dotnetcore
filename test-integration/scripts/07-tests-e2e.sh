@@ -12,9 +12,9 @@ source $(dirname $0)/01-init-env.sh
 
 if [ "$3" != "blazor" ]; then
   docker-compose -f docker/app.yml up -d
-  sleep 60
+  sleep 180
 
-  if [ "$3" = "blazor" && -f cypress.json ]; then
+  if [ "$3" = "blazor" && -f "cypress.json" ]; then
     cd test/JhipsterSampleApplication.Client.Test
   else
     cd src/JhipsterSampleApplication/ClientApp
