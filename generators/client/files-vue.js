@@ -1,5 +1,5 @@
 /**
- * Copyright 2019-2021 the original author or authors from the JHipster project.
+ * Copyright 2013-2020 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -22,28 +22,13 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
-function angularJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, "dist/", true);
-}
 
 function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
-}
-
-function updateWebpackCustomJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        "",
-        true
-    );
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/core/home/home.vue`, 'Java', '.Net Core', false);
 }
 
 function writeFiles() {
-    angularJson.call(this);
     updateHomeTitle.call(this);
-    updateWebpackCustomJs.call(this);
 }
 
 module.exports = {

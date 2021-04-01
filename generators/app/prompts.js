@@ -46,8 +46,8 @@ function askForModuleName() {
         },
     ];
     this.prompt(prompts).then(prompt => {
-        this.baseName = prompt.baseName;
-        this.namespace = prompt.namespace;
+        this.baseName = this.jhipsterConfig.baseName = prompt.baseName;
+        this.namespace = this.jhipsterConfig.namespace = prompt.namespace;
         done();
     });
 }
@@ -79,9 +79,10 @@ async function askForApplicationType() {
             default: 'monolith',
         },
     ]);
-    this.applicationType = answers.applicationType;
+    this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
+
     if (this.applicationType !== 'monolith') {
-        this.serviceDiscoveryType = 'consul';
+        this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = 'consul';
     }
 }
 

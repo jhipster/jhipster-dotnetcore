@@ -5,25 +5,20 @@ const helpers = require('yeoman-test');
 
 describe('Subgenerator entity of dotnetcore JHipster blueprint', () => {
     describe('Sample test', () => {
-        before(done => {
-            helpers
-                .run('generator-jhipster/generators/entity')
+        before(function () {
+            this.timeout(15000);
+            return helpers
+                .create('jhipster:entity')
+                .withLookups([{ npmPaths: path.join(__dirname, '..', 'node_modules') }, { packagePaths: path.join(__dirname, '..') }])
                 .inTmpDir(dir => {
                     fse.copySync(path.join(__dirname, '../test/templates/ngx-blueprint'), dir);
                 })
                 .withOptions({
                     'from-cli': true,
                     skipInstall: true,
-                    blueprint: 'dotnetcore',
+                    blueprints: 'dotnetcore',
                     skipChecks: true,
                 })
-                .withGenerators([
-                    [
-                        require('../generators/entity/index.js'), // eslint-disable-line global-require
-                        'jhipster-dotnetcore:entity',
-                        path.join(__dirname, '../generators/entity/index.js'),
-                    ],
-                ])
                 .withArguments(['foo'])
                 .withPrompts({
                     fieldAdd: false,
@@ -32,7 +27,7 @@ describe('Subgenerator entity of dotnetcore JHipster blueprint', () => {
                     service: 'no',
                     pagination: 'infinite-scroll',
                 })
-                .on('end', done);
+                .run();
         });
 
         it('it works', () => {

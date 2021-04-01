@@ -26,7 +26,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace <%= namespace %>.Client.Services.EntityServices.User
 {
-    public class UserService : AbstractEntityService<UserModel, UserDto>, IUserService
+    public class UserService : AbstractEntityService<UserModel, UserDto, string>, IUserService
     {
         public UserService(HttpClient httpClient, AuthenticationStateProvider authenticationStateProvider, IMapper mapper, IConfiguration configuration) : base(httpClient, authenticationStateProvider, mapper, configuration, "/api/users")
         {

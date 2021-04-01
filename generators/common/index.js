@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const CommonGenerator = require('generator-jhipster/generators/common');
-// eslint-disable-next-line import/no-extraneous-dependencies,import/order
-const toPascalCase = require('to-pascal-case');
 const _ = require('lodash');
-const writeFiles = require('./files').writeFiles;
+const toPascalCase = require('to-pascal-case');
+const CommonGenerator = require('generator-jhipster/generators/common');
 const packagejs = require('../../package.json');
+// eslint-disable-next-line import/no-extraneous-dependencies,import/order
+const writeFiles = require('./files').writeFiles;
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
@@ -34,31 +34,46 @@ module.exports = class extends CommonGenerator {
             this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
         }
 
-        this.configOptions = jhContext.configOptions || {};
+        if (this.configOptions.baseName) {
+            this.baseName = this.configOptions.baseName;
+        }
     }
 
     get initializing() {
-        return super._initializing();
-    }
-
-    _configuring() {
         return {
+            ...super._initializing(),
             configureGlobal() {
                 this.kebabCasedBaseName = _.kebabCase(this.baseName);
                 this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.mainProjectDir = this.pascalizedBaseName;
                 this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
                 this.jhipsterDotnetVersion = packagejs.version;
+                this.options.outputPathCustomizer = [
+                    paths => (paths ? paths.replace(/^(\.prettierignore)$/, `src/${this.mainClientDir}/$1`) : paths),
+                    paths => (paths ? paths.replace(/^(\.prettierrc)$/, `src/${this.mainClientDir}/$1`) : paths),
+                ];
             },
         };
     }
 
     get configuring() {
-        return this._configuring();
+        return super._configuring();
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
     }
 
     get default() {
-        return super._default();
+        return {};
     }
 
     get writing() {
@@ -92,5 +107,9 @@ module.exports = class extends CommonGenerator {
         const phaseFromJHipster = writeCommonFiles();
         const jhipsterNetPhaseSteps = writeFiles();
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 };

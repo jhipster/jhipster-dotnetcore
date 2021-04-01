@@ -1,16 +1,16 @@
 {
   "generator-jhipster": {
     "namespace": "JhipsterSampleApplication",
-    "databaseType": "oracle",
+    "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
-    "authenticationType": "oauth2",
+    "authenticationType": "jwt",
     "serverPort": "5000",
     "jhipsterVersion": "6.10.4",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "useSass": true,
     "clientPackageManager": "npm",
-    "clientFramework": "angularX",
+    "clientFramework": "vue",
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1587112984699,
@@ -21,14 +21,14 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "2.2.0"
+        "version": "1.1.2"
       }
     ],
     "enableTranslation": false,
     "blueprints": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "2.0.0"
+        "version": "1.1.2"
       }
     ]
   }
