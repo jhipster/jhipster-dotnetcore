@@ -7,14 +7,6 @@ const prompts = require('./prompts');
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints dotnetcore')}`);
-        }
-
-        this.configOptions = jhContext.configOptions || {};
     }
 
     get initializing() {
@@ -86,10 +78,10 @@ module.exports = class extends AppGenerator {
                 );
             },
             getConfig() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-                this.applicationType = configuration.get('applicationType') || this.configOptions.applicationType;
-                this.serviceDiscoveryType = configuration.get('serviceDiscoveryType') || this.configOptions.serviceDiscoveryType;
+                this.baseName = this.jhipsterConfig.baseName;
+                this.namespace = this.jhipsterConfig.namespace;
+                this.applicationType = this.jhipsterConfig.applicationType;
+                this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType;
                 const serverConfigFound = this.namespace !== undefined ;
 
                 if (this.baseName !== undefined && serverConfigFound) {
@@ -111,19 +103,11 @@ module.exports = class extends AppGenerator {
             askForModuleName: prompts.askForModuleName,
             askForApplicationType: prompts.askForApplicationType,
 
-            setSharedConfigOptions() {                
+            setSharedConfigOptions() {
                 this.configOptions.baseName = this.baseName;
                 this.configOptions.namespace = this.namespace;
                 this.configOptions.applicationType = this.applicationType;
                 this.configOptions.serviceDiscoveryType = this.serviceDiscoveryType;
-            },
-            saveConfig() {
-                const config = {
-                    namespace: this.namespace,
-                    applicationType: this.applicationType,
-                    serviceDiscoveryType: this.serviceDiscoveryType
-                };
-                this.config.set(config);
             },
         };
     }
@@ -132,12 +116,28 @@ module.exports = class extends AppGenerator {
         return super._configuring();
     }
 
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return super._preparing();
+    }
+
     get default() {
         return super._default();
-    }
+    }   
 
     get writing() {
         return super._writing();
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     get end() {

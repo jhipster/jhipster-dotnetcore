@@ -18,6 +18,7 @@ jobs:
                   - oauth-with-oracle-app
                   - oauth-with-postgres-app
                   - oauth-with-react-app
+                  - oauth-with-vue-app
               include:
                   - app-type: oauth-with-angular-app
                     arg: 'import-jdl'
@@ -30,6 +31,8 @@ jobs:
                   - app-type: oauth-with-postgres-app
                     arg: 'no'
                   - app-type: oauth-with-react-app
+                    arg: 'no'
+                  - app-type: oauth-with-vue-app
                     arg: 'no'
         env:
             JHI_APP: ${{ matrix.app-type }}

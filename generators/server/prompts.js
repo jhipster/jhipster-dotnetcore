@@ -20,21 +20,22 @@
 const chalk = require('chalk');
 
 function askForModuleName() {
-    if (this.baseName) return;
+    if (this.jhipsterConfig.baseName) return;
 
     this.askModuleName(this);
 }
 
 function askForServerSideOpts() {
     if (this.existingProject) return;
-    const applicationType = this.applicationType;
+    const applicationType = this.jhipsterConfig.applicationType;
     const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
         {
             type: 'input',
             name: 'serverPort',
             validate: input => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
-            message: 'On which port would like your server to run? It should be unique to avoid port conflicts.',
+            message:
+                'On which port would like your server to run ? It should be unique to avoid port conflicts (choose http -> https=httpPort+1).',
             default: defaultPort,
         },
         {
@@ -90,9 +91,9 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
-        this.databaseType = prompt.database;
-        this.authenticationType = prompt.authenticationType;
-        this.serverPort = prompt.serverPort;
+        this.databaseType = this.jhipsterConfig.databaseType = prompt.database;
+        this.authenticationType = this.jhipsterConfig.authenticationType = prompt.authenticationType;
+        this.serverPort = this.jhipsterConfig.serverPort = prompt.serverPort;
         this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
         done();
     });

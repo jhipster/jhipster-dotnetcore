@@ -18,6 +18,7 @@ jobs:
                     - jwt-with-mysql-app
                     - jwt-with-postgres-app
                     - jwt-with-react-app
+                    - jwt-with-vue-app
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
@@ -30,6 +31,8 @@ jobs:
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
                     - app-type: jwt-with-react-app
+                      arg: 'no'
+                    - app-type: jwt-with-vue-app
                       arg: 'no'
         env:
             JHI_APP: ${{ matrix.app-type }}

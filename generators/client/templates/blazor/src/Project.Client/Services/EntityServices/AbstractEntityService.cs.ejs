@@ -26,7 +26,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace <%= namespace %>.Client.Services.EntityServices
 {
-    public class AbstractEntityService<TModel, TDto> where TModel : class
+    public class AbstractEntityService<TModel, TDto, TKey> where TModel : BaseModel<TKey>
                                                      where TDto : class
     {
         private const string AuthorizationHeader = "Authorization";
@@ -86,7 +86,7 @@ namespace <%= namespace %>.Client.Services.EntityServices
         public virtual async Task Update(TModel model)
         {
             var dto = _mapper.Map<TDto>(model);
-            await _httpClient.PutAsJsonAsync(BaseUrl, dto, _options);
+            await _httpClient.PutAsJsonAsync($"{BaseUrl}/{model.Id}", dto, _options);
         }
 
         public virtual async Task Delete(string id)
