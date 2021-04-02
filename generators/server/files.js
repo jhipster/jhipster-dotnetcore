@@ -28,6 +28,7 @@ const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+const TERRAFORM_DIR = constants.TERRAFORM_DIR;
 
 const serverFiles = {
     serverCsProj: [
@@ -1126,6 +1127,13 @@ const serverFiles = {
                     renameTo: generator => `${generator.mainProjectDir}/ocelot.json`,
                 },
             ],
+        },
+    ],
+    terraform: [
+        {
+            condition: generator => generator.withTerraformAzureScripts,
+            path: TERRAFORM_DIR,
+            templates: ['main.tf', 'variables.tf', 'outputs.tf'],
         },
     ],
 };
