@@ -24,6 +24,10 @@ services:
             MYSQL_DATABASE: jhipster
         ports:
             - "3308:3306"
+        healthcheck:
+            test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+            timeout: 20s
+            retries: 10
     <%_ break;
     case 'mssql': _%>
     db:
@@ -32,6 +36,12 @@ services:
         environment:
             SA_PASSWORD: "Password!12"
             ACCEPT_EULA: "Y"
+        healthcheck:
+            test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$${SA_PASSWORD}" -Q "SELECT 1" -b -o /dev/null
+            interval: 10s
+            timeout: 3s
+            retries: 10
+            start_period: 10s
     <%_ break;
     case 'postgres': _%>
     db:
@@ -41,8 +51,14 @@ services:
         environment:
             POSTGRES_DB: jhipster
             POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
         ports:
             - "5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
     <%_ break;
 } _%>
     <%= baseName.toLowerCase() %>-app:
@@ -51,7 +67,8 @@ services:
             dockerfile: Dockerfile-Back
     <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle') { _%>
         depends_on:
-            - db
+            db:
+               condition: service_healthy
     <%_ } _%>
         ports:
             - 8080:80

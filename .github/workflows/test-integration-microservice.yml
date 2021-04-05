@@ -47,10 +47,10 @@ jobs:
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
             - name: 'RUN SONAR ANALYZE on generated app'
-              run: ./test-integration/scripts/07-run-sonar-analyze.sh $JHI_APP
+              run: ./test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             - name: 'VERIFY FORMAT'
-              run: ./test-integration/scripts/08-verify-format.sh $JHI_APP
+              run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
 
