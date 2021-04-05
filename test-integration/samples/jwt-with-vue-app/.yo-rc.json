@@ -14,10 +14,10 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "creationTimestamp": 1587112984699,
-    "testFrameworks": [],
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
+    "testFrameworks": ["cypress"],
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",

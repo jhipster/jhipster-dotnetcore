@@ -18,6 +18,7 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
+    "testFrameworks": ["cypress"],
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
