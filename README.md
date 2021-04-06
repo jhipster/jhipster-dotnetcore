@@ -167,12 +167,11 @@ docker_image            = "a5ingh/jhipster-dotnetcore-sampleapp"
 docker_image_tag        = "0.1"
 ```
 
-8. Execute below terraform commands to create resources (Azure app service, azure sql) and deploy as a docker image to app service:
-    ```bash
-    terraform init # to initialize terraform.
-    terraform plan -out "MyAppPlan" # can choose any name instead of MyAppPlan.
-    terraform apply "MyAppPlan" # it will create the resources and then provide you the link to your deployed app as output variable.
-    ```
+8. Execute below terraform commands (one by one) to create resources (Azure app service, azure sql) and deploy as a docker image to app service:
+    1. `terraform init` # to initialize terraform.
+    1. `terraform plan -out "MyAppPlan"` # can choose any name instead of MyAppPlan.
+    1. `terraform apply "MyAppPlan"` # it will create the resources and then provide you the link to your deployed app as output variable.
+
 9. You can use terraform destroy to delete/remove all the created resources once you are done using it.
 
 ## 🚦 What we have now
