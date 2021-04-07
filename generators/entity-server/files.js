@@ -43,8 +43,7 @@ const serverFiles = {
                 },
                 {
                     file: 'Project/Controllers/EntityController.cs',
-                    renameTo: generator =>
-                        `${generator.mainProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}Controller.cs`,
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/${generator.pascalizedEntityClassPlural}Controller.cs`,
                 },
                 {
                     file: 'Project.Domain/Repositories/Interfaces/IEntityRepository.cs',
@@ -110,9 +109,9 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Controllers/EntityResourceIntTest.cs',
+                    file: 'Project.Test/Controllers/EntityControllerIntTest.cs',
                     renameTo: generator =>
-                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ResourceIntTest.cs`,
+                        `${generator.testProjectDir}/Controllers/${generator.asEntity(generator.entityClass)}ControllerIntTest.cs`,
                 },
             ],
         },

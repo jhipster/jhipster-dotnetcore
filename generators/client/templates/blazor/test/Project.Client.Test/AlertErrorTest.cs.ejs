@@ -150,7 +150,7 @@ namespace <%= namespace %>.Client.Test
             httpClient.Timeout = TimeSpan.FromMilliseconds(60);
             try
             {
-                await httpClient.GetAsync(Configuration.BaseUri);
+                await httpClient.GetAsync("https://localhost:5000");
             }
             catch (Exception)
             {

@@ -17,8 +17,15 @@
  * limitations under the License.
  */
 const chalk = require('chalk');
-const path = require('path');
 const _ = require('lodash');
+
+const getFieldNameUndercored = fields =>
+    ['id'].concat(
+        fields.map(field => {
+            return _.snakeCase(field.fieldName);
+        })
+    );
+const path = require('path');
 const jhiCore = require('jhipster-core');
 const shelljs = require('shelljs');
 
@@ -99,7 +106,7 @@ function askForMicroserviceJson() {
 function askForUpdate() {
     const context = this.context;
     // ask only if running an existing entity without arg option --force or --regenerate
-    const isForce = context.options.force || context.regenerate;
+    const isForce = this.options.force || context.regenerate;
     context.updateEntity = 'regenerate'; // default if skipping questions by --force
     if (isForce || !context.useConfigurationFile) {
         return;
@@ -436,12 +443,11 @@ function askForPagination() {
  */
 function askForField(done) {
     const context = this.context;
-    this.log(chalk.green(`\nGenerating field #${context.fields.length + 1}\n`));
+    this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
     // const skipServer = context.skipServer;
     const prodDatabaseType = context.prodDatabaseType;
     // const databaseType = context.databaseType;
     const clientFramework = context.clientFramework;
-    const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     const prompts = [
         {
@@ -464,7 +470,7 @@ function askForField(done) {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your field name cannot start with an upper case letter';
                 }
-                if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your field name cannot use an already existing field name';
                 }
                 if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
@@ -865,8 +871,7 @@ function askForField(done) {
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes */,
             };
 
-            fieldNamesUnderscored.push(_.snakeCase(props.fieldName));
-            context.fields.push(field);
+            this.entityConfig.fields = this.entityConfig.fields.concat(field);
         }
         logFieldsAndRelationships.call(this);
         if (props.fieldAdd) {
@@ -884,7 +889,6 @@ function askForRelationship(done) {
     const context = this.context;
     const name = context.name;
     this.log(chalk.green('\nGenerating relationships to other entities\n'));
-    const fieldNamesUnderscored = context.fieldNamesUnderscored;
     const prompts = [
         {
             type: 'confirm',
@@ -927,7 +931,7 @@ function askForRelationship(done) {
                 if (input.charAt(0) === input.charAt(0).toUpperCase()) {
                     return 'Your relationship cannot start with an upper case letter';
                 }
-                if (input === 'id' || fieldNamesUnderscored.includes(_.snakeCase(input))) {
+                if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
                     return 'Your relationship cannot use an already existing field name';
                 }
                 if (jhiCore.isReservedKeyword(input, 'JAVA')) {
@@ -1058,9 +1062,7 @@ function askForRelationship(done) {
                 relationship.otherEntityField = 'login';
                 relationship.otherEntityRelationshipName = _.lowerFirst(name);
             }
-
-            fieldNamesUnderscored.push(_.snakeCase(props.relationshipName));
-            context.relationships.push(relationship);
+            this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
         }
         logFieldsAndRelationships.call(this);
         if (props.relationshipAdd) {
@@ -1077,12 +1079,12 @@ function askForRelationship(done) {
  */
 function logFieldsAndRelationships() {
     const context = this.context;
-    if (context.fields.length > 0 || context.relationships.length > 0) {
-        this.log(chalk.red(chalk.white('\n================= ') + context.entityNameCapitalized + chalk.white(' =================')));
+    if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
+        this.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
     }
-    if (context.fields.length > 0) {
+    if (this.entityConfig.fields.length > 0) {
         this.log(chalk.white('Fields'));
-        context.fields.forEach(field => {
+        this.entityConfig.fields.forEach(field => {
             const validationDetails = [];
             const fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
             if (fieldValidate === true) {
@@ -1122,9 +1124,9 @@ function logFieldsAndRelationships() {
         });
         this.log();
     }
-    if (context.relationships.length > 0) {
+    if (this.entityConfig.relationships.length > 0) {
         this.log(chalk.white('Relationships'));
-        context.relationships.forEach(relationship => {
+        this.entityConfig.relationships.forEach(relationship => {
             // const validationDetails = [];
             /* if (relationship.relationshipValidateRules && relationship.relationshipValidateRules.includes('required')) {
                 validationDetails.push('required');
