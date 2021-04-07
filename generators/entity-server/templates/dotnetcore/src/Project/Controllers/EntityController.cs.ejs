@@ -69,7 +69,7 @@ namespace <%= namespace %>.Controllers
     public class <%= pascalizedEntityClassPlural %>Controller : ControllerBase
     {
         private const string EntityName = "<%= camelCasedEntityClass %>";
-        private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
+        private readonly ILogger<<%= pascalizedEntityClassPlural %>Controller> _log;
         <%_ if (cqrsEnabled) { _%>
         private readonly IMediator _mediator;
         <%_ } else { _%>
