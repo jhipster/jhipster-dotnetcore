@@ -53,6 +53,7 @@ module.exports = class extends ServerGenerator {
                 this.authenticationType = this.jhipsterConfig.authenticationType;
                 this.serverPort = this.jhipsterConfig.serverPort;
                 this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
+                this.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
 
                 const serverConfigFound =
                     this.namespace !== undefined && this.databaseType !== undefined && this.authenticationType !== undefined;
