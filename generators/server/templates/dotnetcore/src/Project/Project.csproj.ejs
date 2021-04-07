@@ -38,6 +38,10 @@
         <PackageReference Include="JHipsterNet.Web"  />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"  />
         <PackageReference Include="Hellang.Middleware.ProblemDetails"  />
+        <%_ if (cqrsEnabled) { _%>
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
+        <%_ } _%>
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions"  />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson"  />
         <PackageReference Include="Scrutor"  />
@@ -72,6 +76,9 @@
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Infrastructure\<%= pascalizedBaseName %>.Infrastructure.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain.Services\<%= pascalizedBaseName %>.Domain.Services.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
+        <%_ if (cqrsEnabled) { _%>
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Application\<%= pascalizedBaseName %>.Application.csproj" />
+        <%_ } _%>
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
     </ItemGroup>
