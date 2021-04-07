@@ -96,7 +96,7 @@
         </SonarQubeSetting>
     </ItemGroup>
 
-    <Target Name="NpmInstall" BeforeTargets="Build" Condition=" !Exists('node_modules') ">
+    <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('$(SpaRoot)node_modules')">
         <!-- Ensure Node.js is installed -->
         <Exec WorkingDirectory="$(SpaRoot)" Command="node --version" ContinueOnError="true">
             <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
@@ -107,8 +107,8 @@
     </Target>
 
     <Target Name="RunWebPack" BeforeTargets="Build" DependsOnTargets="NpmInstall">
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webpack:build" Condition="'$(Configuration)'=='Debug'" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webpack:prod" Condition="'$(Configuration)'=='Release'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" Condition="'$(Configuration)'=='Debug'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" Condition="'$(Configuration)'=='Release'" />
     </Target>
 
     <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

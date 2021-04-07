@@ -20,8 +20,7 @@ const chalk = require('chalk');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const constants = require('../generator-dotnetcore-constants');
 
-const ANGULAR = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.ANGULAR;
-const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 const BLAZOR = constants.BLAZOR;
 const XAMARIN = constants.XAMARIN;
 
@@ -40,6 +39,10 @@ function askForClient() {
         {
             value: REACT,
             name: 'React',
+        },
+        {
+            value: VUE,
+            name: 'Vue',
         },
         {
             value: BLAZOR,
@@ -70,7 +73,7 @@ function askForClient() {
     const done = this.async();
 
     this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = prompt.clientFramework;
+        this.clientFramework = this.jhipsterConfig.clientFramework = prompt.clientFramework;
         if (this.clientFramework === 'no') {
             this.skipClient = true;
         }

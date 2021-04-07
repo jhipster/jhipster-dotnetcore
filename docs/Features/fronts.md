@@ -1,19 +1,61 @@
+
 # Fronts
 
 When generating an application, you are able to choose between multiple fronts. 
-![front-choice](../assets/Front-choice.png)
 
 ## Angular
 
 Angular (commonly referred to as "Angular 2+" or "Angular v2 and above") is a TypeScript-based open-source web application framework.
 
+### Generate your application
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose Angular
+
+![front-choice](../assets/angular-choice.png)
+
+For further information: [Using Angular with JHipster](https://www.jhipster.tech/using-angular/)
+
 ## React
 
 React (also known as React.js or ReactJS) is an open-source, front end, JavaScript library for building user interfaces or UI components.
 
-## Alpha - Blazor
+### Generate your application
 
-Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML.
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose React
+
+![front-choice](../assets/react-choice.png)
+
+For further information: [Using React with JHipster](https://www.jhipster.tech/using-react/)
+
+## Vue.js
+
+Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.
+
+### Generate your application
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose Vue
+
+![front-choice](../assets/vue-choice.png)
+
+For further information: [Using Vue with JHipster](https://www.jhipster.tech/using-vue/)
 
 ## Alpha - Xamarin
 
@@ -38,6 +80,18 @@ With a C#-shared codebase, developers can use Xamarin tools to write native Andr
 ### Why Xamarin
 
 Xamarin allows to take advantage of this blueprint. Indeed, it enables to generate a modern cross platform application with both front-end and back-end in C#.
+
+### Generate your application 
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose Xamarin
+
+![front-choice](../assets/xamarin-choice.png)
 
 ### Structure
 
@@ -65,9 +119,20 @@ client
 │   ├── Constants                     - Contains shared constants
 ```
 
-# Fronts 
+### Limitations 
 
-## Using Blazor
+For the moment, the Xamarin generation has certain limitations : 
+
+- No Offline mode
+- No User managment
+- No validation on entity fields
+- No translation 
+- No Tests
+- Only JWT security is implemented 
+
+## Alpha - Blazor
+
+Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML.
 
 ### Why Blazor ? 
 
@@ -75,7 +140,7 @@ Blazor can run your client-side C# code directly in the browser, using WebAssemb
 
 ### Prerequisites
 
-https://dotnet.microsoft.com/download/dotnet/5.0
+- [dotnet5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 ### Generate your application 
 
@@ -91,51 +156,53 @@ and choose Blazor (WebAssembly)
 
 After that, your application is ready, and you can now use it with default user (admin admin or user user)
 
-You can run the Backend with 
+#### Start your application
+
+##### Run the Backend
 
 ```bash
 dotnet run --verbosity normal --project ./src/YourAppName/YourAppName.csproj
 ```
 
-And you can run the Frontend with 
+##### Run the Frontend
 
 ```bash
 dotnet run --verbosity normal --project ./src/client/YourAppName.Client/YourAppName.Client.csproj
 ```
 
-You can also use the **hotreload**
+#### Start your application with Hot Reload
 
-For the backend 
+##### Run the Backend
 ```bash
  dotnet watch --project ./src/YourAppName/YourAppName.csproj run --verbosity normal
  ```
- For the frontend 
+##### Run the Frontend
 ```bash
  dotnet watch --project ./src/client/YourAppName.Client/YourAppName.Client.csproj run --verbosity normal
  ```
 
 ### Generate entities 
 
-Like the others front technologies you can generate entities for blazor
+Like the others front technologies you can generate entities for Blazor.
 
-With cli 
+#### With CLI
 ```bash
 jhipster entity <entity-name>
 ```
 
-or with jdl (https://start.jhipster.tech/jdl-studio/)
+#### With [JDL](https://start.jhipster.tech/jdl-studio/)
 ```bash
 jhipster import-jdl my_file.jdl
 ```
 
 ### Tools 
 
-As the project used SASS, to install and consume scss third parties libraries like bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
-You can find libman configuration in same directory than client solution (./src/client/YourAppName.Client)
+As the project used SASS, to install and consume SCSS third parties libraries like Bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
+You can find libman configuration in the same directory than the client solution (./src/client/YourAppName.Client)
 
-To minify css we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
+To minify CSS we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
 
-These two tools are installed during jhipster client generation, and you can find the execution in client csproj (./src/client/YourAppName.Client/YourAppName.Client.csproj)
+These two tools are installed during JHipster client generation, and you can find the execution in Client.csproj (./src/client/YourAppName.Client/YourAppName.Client.csproj)
 
 ### UI components 
 

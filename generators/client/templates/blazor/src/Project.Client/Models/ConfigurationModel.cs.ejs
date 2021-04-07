@@ -12,10 +12,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Client.Services
+namespace <%= namespace %>.Client.Models
 {
-    public static class Configuration
+    public class ConfigurationModel
     {
-        public const string BaseUri = "https://localhost:<%= serverPortSecured %>/";
+        public string ServerUrl { get; set; }
     }
 }
+
