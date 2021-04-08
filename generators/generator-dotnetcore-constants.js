@@ -12,6 +12,7 @@ const PROJECT_INFRASTRUCTURE_SUFFIX = '.Infrastructure';
 const PROJECT_SERVICE_SUFFIX = '.Domain.Services';
 const BLAZOR = 'Blazor';
 const XAMARIN = 'Xamarin';
+const TERRAFORM_DIR = 'terraform/';
 
 const constants = {
     SERVER_SRC_DIR,
@@ -28,6 +29,7 @@ const constants = {
     PROJECT_SERVICE_SUFFIX,
     BLAZOR,
     XAMARIN,
+    TERRAFORM_DIR,
 };
 
 module.exports = constants;

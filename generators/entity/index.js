@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const EntityGenerator = require('generator-jhipster/generators/entity');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const toPascalCase = require('to-pascal-case');
@@ -13,26 +12,18 @@ const asModel = require('../utils').asModel;
 module.exports = class extends EntityGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
-
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
-        }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupEntityOptions(this, jhContext);
     }
 
     get initializing() {
         const phaseFromJHipster = super._initializing();
         const jhipsterNetPhaseSteps = {
             getConfigNetBlueprint() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.context.namespace = configuration.get('namespace') || this.configOptions.namespace;
-                this.context.cqrsEnabled = configuration.get('cqrsEnabled') || this.configOptions.cqrsEnabled;
+                this.context.namespace = this.jhipsterConfig.namespace;
+                this.context.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
                 this.context.dtoSuffix = 'Dto';
+            },
+            fixConfig() {
+                this.context.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
             },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
@@ -57,9 +48,21 @@ module.exports = class extends EntityGenerator {
     }
 
     get configuring() {
-        const phaseFromJHipster = super._configuring();
-        const jhipsterNetPhaseSteps = {
-            loadInMemoryDataNetBlueprint() {
+        return super._configuring();
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return super._loading();
+    }
+
+    get preparing() {
+        return {
+            ...super._preparing(),
+            preparingDotnet() {
                 const context = this.context;
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
@@ -112,9 +115,21 @@ module.exports = class extends EntityGenerator {
 
                     if (field.fieldIsEnum === true) {
                         context.i18nToLoad.push(field.enumInstance);
-                        field.enumValues = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                     }
                 });
+            },
+        };
+    }
+
+    get preparingFields() {
+        return super._preparingFields();
+    }
+
+    get preparingRelationships() {
+        return {
+            ...super._preparingRelationships(),
+            preparingDotnetRelationships() {
+                const context = this.context;
 
                 // Load in-memory data for .Net Blueprint relationships
                 context.relationships.forEach(relationship => {
@@ -170,11 +185,18 @@ module.exports = class extends EntityGenerator {
                 });
             },
         };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+    }
+
+    get default() {
+        return super._default();
     }
 
     get writing() {
         return super._writing();
+    }
+
+    get postWriting() {
+        return super._postWriting();
     }
 
     get install() {

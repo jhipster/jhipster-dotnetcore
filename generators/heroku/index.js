@@ -51,8 +51,7 @@ module.exports = class extends BaseBlueprintGenerator {
             return;
         }
 
-        this.herokuSkipDeploy = this.options['skip-deploy'] || this.options['skip-build'];
-        this.registerPrettierTransform();
+        this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
     }
 
     _initializing() {
@@ -63,11 +62,11 @@ module.exports = class extends BaseBlueprintGenerator {
 
             initializing() {
                 this.log(chalk.bold('Heroku configuration is starting'));
-                const configuration = this.getAllJhipsterConfig(this, true);
+                const configuration = this.config;
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
                 this.baseName = configuration.get('baseName');
                 this.databaseType = configuration.get('databaseType');
-                this.angularAppName = this.getAngularAppName();
+                this.frontendAppName = this.getFrontendAppName();
                 this.applicationType = configuration.get('applicationType');
                 this.reactive = configuration.get('reactive') || false;
                 this.authenticationType = configuration.get('authenticationType');
@@ -478,7 +477,6 @@ module.exports = class extends BaseBlueprintGenerator {
             copyHerokuFiles() {
                 if (this.abort) return;
 
-                const done = this.async();
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
 
                 this.template('Procfile.ejs', 'Procfile');
@@ -492,10 +490,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(`${chalk.yellow.bold('WARNING!')}Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
                     });
                 }
-
-                this.conflicter.resolve(err => {
-                    done();
-                });
             },
         };
     }

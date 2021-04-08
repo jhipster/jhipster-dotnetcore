@@ -9,7 +9,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [12.16.1]
+                node_version: [14.16.0]
                 os: [ubuntu-latest]
                 app-type:
                     - jwt-with-angular-app
@@ -20,6 +20,7 @@ jobs:
                     - jwt-with-mysql-app
                     - jwt-with-postgres-app
                     - jwt-with-react-app
+                    - jwt-with-vue-app
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
@@ -36,7 +37,9 @@ jobs:
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
                     - app-type: jwt-with-react-app
-                      arg: 'no'
+                      arg: 'import-jdl'
+                    - app-type: jwt-with-vue-app
+                      arg: 'import-jdl'
         env:
             JHI_APP: ${{ matrix.app-type }}
             JHI_ARG: ${{ matrix.arg }}
@@ -65,16 +68,18 @@ jobs:
               run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             - name: 'RUN CLIENT UNIT TESTS of generated app'
               run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
             - name: 'RUN SERVER UNIT TESTS of generated app'
               run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+            - name: 'RUN E2E TESTS of generated app'
+              run: ./test-integration/scripts/07-tests-e2e.sh $JHI_APP $JHI_ARG
             - name: 'RUN SONAR ANALYZE on generated app'
-              run: ./test-integration/scripts/07-run-sonar-analyze.sh $JHI_APP
+              run: ./test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             - name: 'VERIFY FORMAT'
-              run: ./test-integration/scripts/08-verify-format.sh $JHI_APP
-            
+              run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
+

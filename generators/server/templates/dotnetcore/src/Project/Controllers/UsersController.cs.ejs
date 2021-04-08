@@ -44,11 +44,11 @@ using Microsoft.EntityFrameworkCore;
 namespace <%= namespace %>.Controllers
 {
     [Authorize]
-    [Route("api")]
+    [Route("api/admin/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        private readonly ILogger<UserController> _log;
+        private readonly ILogger<UsersController> _log;
         <%_ if (cqrsEnabled) { _%>
         private readonly IMediator _mediator;
         <%_ } else { _%>
@@ -59,13 +59,13 @@ namespace <%= namespace %>.Controllers
         <%_ } _%>
 
         <%_ if (cqrsEnabled) { _%>
-        public UserController(ILogger<UserController> log, IMediator mediator)
+        public UsersController(ILogger<UsersController> log, IMediator mediator)
         {
             _log = log;
             _mediator = mediator;
         }
         <%_ } else { _%>
-        public UserController(ILogger<UserController> log, UserManager<User> userManager, IUserService userService,
+        public UsersController(ILogger<UsersController> log, UserManager<User> userManager, IUserService userService,
             IMapper mapper, IMailService mailService)
         {
             _log = log;
@@ -76,7 +76,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpPost("users")]
+        [HttpPost]
         [ValidateModel]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<User>> CreateUser([FromBody] UserCreateCommand command)
@@ -111,7 +111,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpPut("users")]
+        [HttpPut]
         [ValidateModel]
         <%_ if (cqrsEnabled) { _%>
         public async Task<IActionResult> UpdateUser([FromBody] UserUpdateCommand command)
@@ -138,7 +138,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpGet("users")]
+        [HttpGet]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
         {
@@ -160,7 +160,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpGet("users/authorities")]
+        [HttpGet("authorities")]
         [Authorize(Roles = RolesConstants.ADMIN)]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<string>>> GetAuthorities()
@@ -174,7 +174,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpGet("users/{login}")]
+        [HttpGet("{login}")]
         <%_ if (cqrsEnabled) { _%>
         public async Task<IActionResult> GetUser([FromRoute] UserGetQuery query)
         {
@@ -196,7 +196,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpDelete("users/{login}")]
+        [HttpDelete("{login}")]
         [Authorize(Roles = RolesConstants.ADMIN)]
         <%_ if (cqrsEnabled) { _%>
         public async Task<IActionResult> DeleteUser([FromRoute] UserDeleteCommand command)

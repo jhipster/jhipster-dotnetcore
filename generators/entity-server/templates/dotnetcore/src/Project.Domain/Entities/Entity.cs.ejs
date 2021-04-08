@@ -49,6 +49,7 @@ namespace <%= namespace %>.Domain
         public long Id { get; set; }
 
         <%_ for (idx in fields){
+            if (fields[idx].id) continue;
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
             const fieldValidateRules = fields[idx].fieldValidateRules;
@@ -126,6 +127,7 @@ namespace <%= namespace %>.Domain
             return "<%= entityClassName %>{" +
                     $"ID='{Id}'" +
             <%_ for (idx in fields) {
+                if (fields[idx].id) continue;
                 const fieldNamePascalized = fields[idx].fieldNamePascalized; _%>
                     $", <%= fieldNamePascalized %>='{<%= fieldNamePascalized %>}'" +
             <%_ } _%>

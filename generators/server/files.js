@@ -29,6 +29,7 @@ const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
+const TERRAFORM_DIR = constants.TERRAFORM_DIR;
 
 const serverFiles = {
     serverCsProj: [
@@ -802,8 +803,8 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project/Controllers/UserController.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Controllers/UserController.cs`,
+                    file: 'Project/Controllers/UsersController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/UsersController.cs`,
                 },
             ],
         },
@@ -907,8 +908,8 @@ const serverFiles = {
             path: SERVER_TEST_DIR,
             templates: [
                 {
-                    file: 'Project.Test/Controllers/UserResourceIntTest.cs',
-                    renameTo: generator => `${generator.testProjectDir}/Controllers/UserResourceIntTest.cs`,
+                    file: 'Project.Test/Controllers/UsersResourceIntTest.cs',
+                    renameTo: generator => `${generator.testProjectDir}/Controllers/UsersResourceIntTest.cs`,
                 },
             ],
         },
@@ -1324,6 +1325,13 @@ const serverFiles = {
                     renameTo: generator => `${generator.mainProjectDir}/ocelot.json`,
                 },
             ],
+        },
+    ],
+    terraform: [
+        {
+            condition: generator => generator.withTerraformAzureScripts,
+            path: TERRAFORM_DIR,
+            templates: ['main.tf', 'variables.tf', 'outputs.tf'],
         },
     ],
 };
