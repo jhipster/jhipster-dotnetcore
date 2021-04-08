@@ -27,11 +27,21 @@ using <%= namespace %>.Infrastructure.Data.Extensions;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
+    <%_ if (databaseType == 'mongodb') { _%>
+    public class <%= pascalizedEntityClass %>Repository : MongoGenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
+    <%_ } else { _%>
     public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
+    <%_ } _%>
     {
+        <%_ if (databaseType == 'mongodb') { _%>
+        public <%= pascalizedEntityClass %>Repository(IMongoDatabaseContext context) : base(context)
+        {
+        }
+        <%_ } else { _%>
         public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context)
         {
         }
+        <%_ } _%>
 
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
@@ -49,7 +59,14 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             }
             else
             {
+                <%_ if (databaseType == 'mongodb') { _%>
+                if (bankAccountTestA.Id == 0)
+                    bankAccountTestA.Id = _mongoContext.GetNextSequenceValue(nameof(bankAccountTestA));
+
+                Add(<%= camelCasedEntityClass %>);
+                <%_ } else { _%>
                 _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
+                <%_ } _%>
             }
             return <%= camelCasedEntityClass %>;
         }

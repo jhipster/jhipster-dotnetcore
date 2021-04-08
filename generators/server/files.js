@@ -386,6 +386,16 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Infrastructure/Data/Repositories/MongoGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/MongoGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Infrastructure/Data/Repositories/ReadOnlyGenericRepository.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/ReadOnlyGenericRepository.cs`,
@@ -513,6 +523,26 @@ const serverFiles = {
             ],
         },
         {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/IMongoDatabaseConfig.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.mainProjectDir}/Configuration/IMongoDatabaseConfig.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/MongoDatabaseConfig.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.mainProjectDir}/Configuration/MongoDatabaseConfig.cs`,
+                },
+            ],
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
@@ -594,6 +624,21 @@ const serverFiles = {
                     file: 'Project.Infrastructure/Data/ApplicationDatabaseContext.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/MongoDatabaseContext.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/MongoDatabaseContext.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/IMongoDatabaseContext.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/IMongoDatabaseContext.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/MongoSequence.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/MongoSequence.cs`,
                 },
             ],
         },
