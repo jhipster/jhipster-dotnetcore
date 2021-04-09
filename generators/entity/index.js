@@ -19,6 +19,7 @@ module.exports = class extends EntityGenerator {
         const jhipsterNetPhaseSteps = {
             getConfigNetBlueprint() {
                 this.context.namespace = this.jhipsterConfig.namespace;
+                this.context.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
                 this.context.dtoSuffix = 'Dto';
             },
             fixConfig() {

@@ -31,7 +31,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     public class FluentRepository<TEntity> : IFluentRepository<TEntity> where TEntity : class
     {
-        private readonly IGenericRepository<TEntity> _repository;
+        private readonly IReadOnlyGenericRepository<TEntity> _repository;
         private readonly DbSet<TEntity> _dbSet;
         private List<Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>> _include;
         private List<Expression<Func<TEntity, object>>> _includeProperties;
@@ -39,7 +39,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         private Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> _orderBy;
         private bool _disableTracking;
 
-        public FluentRepository(IGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
+        public FluentRepository(IReadOnlyGenericRepository<TEntity> repository, DbSet<TEntity> dbset)
         {
             _repository = repository;
             _dbSet = dbset;
