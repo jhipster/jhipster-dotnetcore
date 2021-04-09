@@ -1,0 +1,65 @@
+﻿<%#
+ Copyright 2013-2020 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+
+using <%= namespace %>.Client.Xamarin.Core.Services;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using System.Threading.Tasks;
+
+namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
+{
+    public class MenuViewModel : BaseViewModel
+    {
+        private readonly IMvxNavigationService _navigationService;
+        private readonly IAuthenticationService _authenticationService;
+
+        public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
+        public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
+        public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
+        // jhipster-needle-declare-entity-command - JHipster will declare commands
+        public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
+        public bool IsConnected  => _authenticationService.IsAuthenticated;
+
+        public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
+        {
+            _navigationService = navigationService;
+            _authenticationService = authenticationService;          
+        }
+
+        // jhipster-needle-add-entity-command - JHipster will add commands
+
+        private async Task ShowWelcomeCommandClicked()
+        {
+            await _navigationService.Navigate<WelcomeViewModel>();
+        }
+
+        private async Task SignInClicked()
+        {
+            await _navigationService.Navigate<LoginViewModel>();
+        }
+
+        private async Task SignUpClicked()
+        {
+            await _navigationService.Navigate<RegisterViewModel>();
+        }
+
+        private void SignOutClicked()
+        {
+            _authenticationService.SignOut();
+            RaisePropertyChanged(() => IsConnected);
+            _navigationService.Navigate<WelcomeViewModel>();
+        }
+    }
+}

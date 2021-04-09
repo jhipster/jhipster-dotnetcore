@@ -19,17 +19,18 @@
 const _ = require('lodash');
 const toPascalCase = require('to-pascal-case');
 const getEnumInfo = require('generator-jhipster/generators/utils').getEnumInfo;
-
+const packagejs = require('../package.json');
 const constants = require('./generator-dotnetcore-constants');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = {
     copyI18n,
     copyEnumI18n,
     equivalentCSharpType,
-    configureGlobalDotnetcore,
+    customizeDotnetPaths,
     getEnumInfo,
     asModel,
 };
@@ -79,9 +80,9 @@ function copyEnumI18n(language, enumInfo, prefix = '') {
 }
 
 /**
- * Configure dotnet
+ * Customize dotnet paths
  */
-function configureGlobalDotnetcore() {
+function customizeDotnetPaths() {
     this.camelizedBaseName = _.camelCase(this.baseName);
     this.dasherizedBaseName = _.kebabCase(this.baseName);
     this.pascalizedBaseName = toPascalCase(this.baseName);
@@ -96,12 +97,22 @@ function configureGlobalDotnetcore() {
     this.relativeMainTestDir = `${this.relativeMainClientDir}/test`;
     this.testProjectDir = `${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
     this.clientTestProject = `${this.mainClientDir}/test/`;
+    this.kebabCasedBaseName = _.kebabCase(this.baseName);
+    this.jhipsterDotnetVersion = packagejs.version;
     this.modelSuffix = 'Model';
+    this.backendName = '.Net';
 
     if (this.clientFramework === BLAZOR) {
         this.mainClientDir = `client/${this.pascalizedBaseName}.Client`;
         this.sharedClientDir = `client/${this.pascalizedBaseName}.Client.Shared`;
         this.clientTestProject = `${this.pascalizedBaseName}.Client${constants.PROJECT_TEST_SUFFIX}`;
+    }
+    if (this.clientFramework === XAMARIN) {
+        this.mainClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.Core`;
+        this.sharedClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.Shared`;
+        this.androidClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.Android`;
+        this.iOSClientDir = `client/${this.pascalizedBaseName}.Client.Xamarin.iOS`;
+        this.clientTestProject = `${this.pascalizedBaseName}.Client.Xamarin${constants.PROJECT_TEST_SUFFIX}`;
     }
 
     this.options.outputPathCustomizer = [
@@ -110,6 +121,8 @@ function configureGlobalDotnetcore() {
         paths => (paths ? paths.replace(/^((?!.huskyrc).[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(config\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(ngsw-config.json)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
 
     // get the frontend application name.

@@ -1,0 +1,438 @@
+<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ function defaultValue(cSharpType) {
+    let defaultValue;
+    const defaultNumValue = 1;
+
+    switch (cSharpType) {
+        case 'string' :
+            defaultValue = "\"AAAAAAAAAA\"";
+            break;
+        case 'int?' :
+            defaultValue = `${defaultNumValue}`;
+            break;
+        case 'long?' :
+            defaultValue = `${defaultNumValue}L`;
+            break;
+        case 'float?' :
+            defaultValue = `${defaultNumValue}F`;
+            break;
+        case 'double?' :
+            defaultValue = `${defaultNumValue}D`;
+            break;
+        case 'decimal?' :
+            defaultValue = `${defaultNumValue}M`;
+            break;
+        case 'DateTime?' :
+            defaultValue = "DateTime.UnixEpoch";
+            break;
+        case 'DateTime' :
+            defaultValue = "DateTime.UnixEpoch";
+            break;
+        case 'bool?' :
+            defaultValue = "false";
+            break;
+    }
+
+    return defaultValue;
+}
+function updatedValue(cSharpType) {
+    let updatedValue;
+    const updatedNumValue = 2;
+
+    switch (cSharpType) {
+        case 'string' :
+            updatedValue = "\"BBBBBBBBBB\"";
+            break;
+        case 'int?' :
+            updatedValue = `${updatedNumValue}`;
+            break;
+        case 'long?' :
+            updatedValue = `${updatedNumValue}L`;
+            break;
+        case 'float?' :
+            updatedValue = `${updatedNumValue}F`;
+            break;
+        case 'double?' :
+            updatedValue = `${updatedNumValue}D`;
+            break;
+        case 'decimal?' :
+            updatedValue = `${updatedNumValue}M`;
+            break;
+        case 'DateTime?' :
+            updatedValue = "DateTime.Now";
+            break;
+        case 'DateTime' :
+            updatedValue = "DateTime.Now";
+            break;
+        case 'bool?' :
+            updatedValue = "true";
+            break;
+    }
+
+    return updatedValue;
+}
+function enumDefaultValue(field) {
+    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+    if (enums.length > 0) {
+        return field.fieldType + '.' + enums[0];
+    } else {
+        return 'null';
+    }
+}
+function enumUpdatedValue(field) {
+    const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+    if (enums.length > 1) {
+        return field.fieldType + '.' + enums[1];
+    } else {
+        return 'null';
+    }
+}
+function hasDateTimeTypeField() {
+    let dateTimeTypeField = false;
+    let idx = 0;
+    while (idx < fields.length && !dateTimeTypeField) {
+        if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'Instant' || fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Duration') {
+            dateTimeTypeField = true;
+        }
+        idx ++;
+    }
+    return dateTimeTypeField;
+}
+if (hasDateTimeTypeField()) { _%>
+using System;
+<%_ } _%>
+<%
+let hasDto = dto === 'mapstruct';
+%>
+<%_ if (hasDto) { _%>
+using AutoMapper;
+<%_ } _%>
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using FluentAssertions;
+using <%= namespace %>.Infrastructure.Data;
+using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Repositories.Interfaces;
+<%_
+let hasEnumField = false;
+fields.forEach(field => {
+        if (field.fieldIsEnum) {
+            hasEnumField = true;
+        }
+    });
+if (hasEnumField) { _%>
+using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
+<%_ if (hasDto) { _%>
+using <%= namespace %>.Dto;
+using <%= namespace %>.Configuration.AutoMapper;
+<%_ } _%>
+using <%= namespace %>.Test.Setup;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Xunit;
+
+namespace <%= namespace %>.Test.Controllers
+{
+    public class <%= pascalizedEntityClassPlural %>ControllerIntTest
+    {
+        public <%= pascalizedEntityClassPlural %>ControllerIntTest()
+        {
+            _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser();
+            _client = _factory.CreateClient();
+
+            _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
+
+            <%_ if (hasDto) { _%>
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfile());
+            });
+
+            _mapper = config.CreateMapper();
+            <%_ } _%>
+
+            InitTest();
+        }
+
+        <%_ fields.forEach(field => {
+            if (field.id) return;
+            const fieldType = equivalentCSharpType(field.fieldType, field);
+            if (field.fieldIsEnum) { _%>
+        private const <%= field.fieldType %> Default<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
+        private const <%= field.fieldType %> Updated<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
+        <%_ } else if (field.fieldType === 'String') { _%>
+        private const <%= fieldType %> Default<%= field.fieldNamePascalized %> = <%- defaultValue(fieldType) %>;
+        private const <%= fieldType %> Updated<%= field.fieldNamePascalized %> = <%- updatedValue(fieldType) %>;
+            <%_ } else { _%>
+        private static readonly <%= fieldType %> Default<%= field.fieldNamePascalized %> = <%- defaultValue(fieldType) %>;
+        private static readonly <%= fieldType %> Updated<%= field.fieldNamePascalized %> = <%- updatedValue(fieldType) %>;
+            <%_ } _%>
+
+        <%_ }); _%>
+        private readonly AppWebApplicationFactory<TestStartup> _factory;
+        private readonly HttpClient _client;
+        private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+
+        private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
+
+        <%_ if (hasDto) { _%>
+        private readonly IMapper _mapper;
+        <%_ } _%>
+
+        private <%= pascalizedEntityClass %> CreateEntity()
+        {
+            return new <%= pascalizedEntityClass %>
+            {
+                <%_ let i = 0;
+                if (fields.length != 0) {
+                    while (i < fields.length - 1) { 
+                        if (fields[i].id) {
+                            i ++;
+                            continue; 
+                        } _%>
+                <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
+                        <%_ i ++;
+                    } _%>
+                <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>
+                <%_ }_%>
+            };
+        }
+
+        private void InitTest()
+        {
+            _<%= camelCasedEntityClass %> = CreateEntity();
+        }
+
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass %>()
+        {
+            var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+
+            // Create the <%= pascalizedEntityClass %>
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            <%_ } _%>
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List.Last();
+            <%_ fields.forEach(field => { 
+                if (field.id) return; _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass %>WithExistingId()
+        {
+            var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+            databaseSizeBeforeCreate.Should().Be(0);
+            // Create the <%= pascalizedEntityClass %> with an existing ID
+            _<%= camelCasedEntityClass %>.Id = 1L;
+
+            // An entity with an existing ID cannot be created, so this API call must fail
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            <%_ } _%>
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate);
+        }
+
+        <%_ fields.forEach(field => {
+            if (field.id) return;
+            let required = false;
+            if (field.fieldValidate === true) {
+                if (field.fieldValidateRules.includes('required')) {
+                    required = true;
+                }
+            }
+            if (required) { _%>
+        [Fact]
+        public async Task Check<%= field.fieldNamePascalized %>IsRequired()
+        {
+            var databaseSizeBeforeTest = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+
+            // Set the field to null
+            _<%= camelCasedEntityClass %>.<%= field.fieldNamePascalized %> = null;
+
+            // Create the <%= pascalizedEntityClass %>, which fails.
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
+            var response = await _client.PostAsync("/api/<%= kebabCasedEntityClassPlural %>", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            <%_ } _%>
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeTest);
+        }
+
+        <%_ }
+        }); _%>
+        [Fact]
+        public async Task GetAll<%= pascalizedEntityClassPlural %>()
+        {
+            // Initialize the database
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+
+            // Get all the <%= camelCasedEntityClass %>List
+            var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>?sort=id,desc");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            <%_ fields.forEach(field => { 
+                if (field.id) return; _%>
+            json.SelectTokens("$.[*].<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task Get<%= pascalizedEntityClass %>()
+        {
+            // Initialize the database
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+
+            // Get the <%= camelCasedEntityClass %>
+            var response = await _client.GetAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+            json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            <%_ fields.forEach(field => { 
+                if (field.id) return; _%>
+            json.SelectTokens("$.<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task GetNonExisting<%= pascalizedEntityClass %>()
+        {
+            var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + long.MaxValue);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Update<%= pascalizedEntityClass %>()
+        {
+            // Initialize the database
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+            var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+
+            // Update the <%= camelCasedEntityClass %>
+            var updated<%= pascalizedEntityClass %> = await _<%= camelCasedEntityClass %>Repository.QueryHelper().GetOneAsync(it => it.Id == _<%= camelCasedEntityClass %>.Id);
+            // Disconnect from session so that the updates on updated<%= pascalizedEntityClass %> are not directly saved in db
+            //TODO detach
+            <%_ fields.forEach(field => { 
+                if (field.id) return; _%>
+            updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> updated<%= asDto(pascalizedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PutAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}", TestUtil.ToJsonContent(updated<%= asDto(pascalizedEntityClass) %>));
+            <%_ } else { _%>
+            var response = await _client.PutAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}", TestUtil.ToJsonContent(updated<%= pascalizedEntityClass %>));
+            <%_ } _%>
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+            var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List.Last();
+            <%_ fields.forEach(field => { 
+                if (field.id) return; _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+        }
+
+        [Fact]
+        public async Task UpdateNonExisting<%= pascalizedEntityClass %>()
+        {
+            var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+
+            // If the entity doesn't have an ID, it will throw BadRequestAlertException
+            <%_ if (hasDto) { _%>
+            <%= asDto(pascalizedEntityClass) %> _<%= asDto(camelCasedEntityClass) %> = _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(_<%= camelCasedEntityClass %>);
+            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>/1", TestUtil.ToJsonContent(_<%= asDto(camelCasedEntityClass) %>));
+            <%_ } else { _%>
+            var response = await _client.PutAsync("/api/<%= kebabCasedEntityClassPlural %>/1", TestUtil.ToJsonContent(_<%= camelCasedEntityClass %>));
+            <%_ } _%>
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+
+            // Validate the <%= pascalizedEntityClass %> in the database
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
+        }
+
+        [Fact]
+        public async Task Delete<%= pascalizedEntityClass %>()
+        {
+            // Initialize the database
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+            var databaseSizeBeforeDelete = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+
+            var response = await _client.DeleteAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            // Validate the database is empty
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeDelete - 1);
+        }
+
+        [Fact]
+        public void EqualsVerifier()
+        {
+            TestUtil.EqualsVerifier(typeof(<%= pascalizedEntityClass %>));
+            var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %>
+            {
+                Id = 1L
+            };
+            var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %>
+            {
+                Id = <%= camelCasedEntityClass %>1.Id
+            };
+            <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);
+            <%= camelCasedEntityClass %>2.Id = 2L;
+            <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
+            <%= camelCasedEntityClass %>1.Id = 0;
+            <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
+        }
+    }
+}

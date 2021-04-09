@@ -25,45 +25,40 @@ const baseConstants = require('generator-jhipster/generators/generator-constants
 const basePrompts = require('generator-jhipster/generators/client/prompts');
 const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
 const baseWriteReactFiles = require('generator-jhipster/generators/client/files-react').writeFiles;
-const prompts = require('./prompts');
-const configureGlobalDotnetcore = require('../utils').configureGlobalDotnetcore;
+const baseWriteVueFiles = require('generator-jhipster/generators/client/files-vue').writeFiles;
+const baseWriteCommonFiles = require('generator-jhipster/generators/client/files-common').writeFiles;
+const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const dotnet = require('../dotnet');
+const prompts = require('./prompts');
 
 const writeAngularFiles = require('./files-angular').writeFiles;
 const writeReactFiles = require('./files-react').writeFiles;
-const writeBlazorFiles = require('./files-blazor').writeFiles;
+const writeVueFiles = require('./files-vue').writeFiles;
 const writeCommonFiles = require('./files-common').writeFiles;
+const writeBlazorFiles = require('./files-blazor').writeFiles;
+const writeXamarinFiles = require('./files-xamarin').writeFiles;
 
-const REACT = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS.REACT;
+const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 const BLAZOR = constants.BLAZOR;
+const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends ClientGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
-
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints dotnetcore')}`);
+        if (this.configOptions.baseName) {
+            this.baseName = this.configOptions.baseName;
         }
-
-        this.configOptions = jhContext.configOptions || {};
-        // This sets up options for this sub generator and is being reused from JHipster
-        jhContext.setupClientOptions(this, jhContext);
-
     }
 
     get initializing() {
-        const phaseFromJHipster = super._initializing();
-        const jhipsterNetPhaseSteps = {
-            setupClientConsts() {
-                const configuration = this.getAllJhipsterConfig(this, true);
-                this.namespace = configuration.get('namespace') || this.configOptions.namespace;
-                this.serverPort = configuration.get('serverPort') || this.configOptions.serverPort;
-                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
-            },
-        };
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+        return {
+            ...super._initializing(),
+            initializingDotnet () {
+                this.namespace = this.jhipsterConfig.namespace;
+                this.clientFramework = this.jhipsterConfig.clientFramework;
+            }
+        }
     }
 
     get prompting() {
@@ -72,29 +67,37 @@ module.exports = class extends ClientGenerator {
             askForClient: prompts.askForClient,
             askFori18n: basePrompts.askForI18n,
             askForClientTheme: basePrompts.askForClientTheme,
-            askForClientThemeVariant: basePrompts.askForClientThemeVariant,
-
-            setSharedConfigOptions() {
-                this.configOptions.skipClient = this.skipClient;
-                this.configOptions.clientFramework = this.clientFramework;
-                this.configOptions.clientTheme = this.clientTheme;
-                this.configOptions.clientThemeVariant = this.clientThemeVariant;
-            },
+            askForClientThemeVariant: basePrompts.askForClientThemeVariant
         };
     }
 
     get configuring() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
-        const phaseFromJHipster = super._configuring();
-        const customPhaseSteps = {
-            configureGlobalDotnetcore
+        return {
+            customizeDotnetPaths,
+            ...super._configuring()
         };
-        return Object.assign(customPhaseSteps, phaseFromJHipster);
     }
 
     get default() {
-        // Here we are not overriding this phase and hence its being handled by JHipster
         return super._default();
+    }
+
+    get composing() {
+        return super._composing();
+    }
+
+    get loading() {
+        return {
+            ...super._loading(),
+            loadingDotnet () {
+                this.serverPort = this.jhipsterConfig.serverPort;
+                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
+            }
+        }
+    }
+
+    get preparing() {
+        return super._preparing();
     }
 
     get writing() {
@@ -106,24 +109,56 @@ module.exports = class extends ClientGenerator {
                 switch (this.clientFramework) {
                     case BLAZOR:
                         return writeBlazorFiles.call(this);
+                    case XAMARIN:
+                        return writeXamarinFiles.call(this);
                     case REACT:
                         baseWriteReactFiles.call(this);
-                        writeCommonFiles.call(this);
-                        return writeReactFiles.call(this);
-                    default:
+                        return baseWriteCommonFiles.call(this);
+                    case ANGULAR:
                         baseWriteAngularFiles.call(this);
-                        writeCommonFiles.call(this);
-                        return writeAngularFiles.call(this);
+                        return baseWriteCommonFiles.call(this);
+                    case VUE:
+                        baseWriteVueFiles.call(this);
+                        return baseWriteCommonFiles.call(this);
+                    default:
+                    // do nothing by default
                 }
             }
         };
+    }
+
+    get postWriting() {
+        return {
+            postWritingDotnet(){
+                if (this.clientFramework === BLAZOR) {
+                   this.skipClient = true;
+                }
+            },
+            ... super._postWriting(),
+            postWriteFilesDotnetcore() {
+                if (this.skipClient) return;
+                switch (this.clientFramework) {
+                    case REACT:
+                        writeCommonFiles.call(this);
+                        return writeReactFiles.call(this);
+                    case ANGULAR:
+                        writeCommonFiles.call(this);
+                        return writeAngularFiles.call(this);
+                    case VUE:
+                        writeCommonFiles.call(this);
+                        return writeVueFiles.call(this);
+                    default:
+                    // do nothing by default
+                }
+            }
+        }
     }
 
     get install() {
         // Override default yeoman installDependencies
         const customPhase = {
             installDependencies() {
-                if (this.clientFramework !== BLAZOR && !this.options['skip-install']) {
+                if (this.clientFramework !== BLAZOR && !this.options.skipInstall) {
                     this.log(
                         `\n\nI'm all done. Running ${chalk.green.bold(
                             `npm install `
@@ -160,11 +195,34 @@ module.exports = class extends ClientGenerator {
                         )
                     );
                     dotnet.installBlazorDependencies();
+                } else if (this.clientFramework === XAMARIN) {
+                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                    try {
+                        await dotnet.newSln(this.solutionName);
+                    } catch (err) {
+                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+                    }
+                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
+                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,                       
+                    ]);
+                    await dotnet.newSlnAddProj(this.solutionName, [
+                        {
+                            'path': `${constants.CLIENT_SRC_DIR}${this.androidClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
+                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.Android`
+                        },
+                        {
+                            'path': `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,  
+                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.iOS`
+                        }                                                
+                    ]);
+                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
+
                 } else {
                     if (this.skipClient) return;
                     this.log(chalk.green.bold('\nClient application generated successfully.\n'));
 
-                    if (!this.options['skip-install']) {
+                    if (!this.options.skipInstall) {
                         this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
                     }
                 }

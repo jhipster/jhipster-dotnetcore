@@ -18,17 +18,17 @@
 JHipster is a well-known platform for generating modern application in java world.
 JHipster provides a blueprints system that allows to override the default behavior of the generator 
 
-JHipster.NET is a blueprint that overrides the back-end part, originally generated in spring boot, by back-end in asp.net core. For the front-end all the common language can be used (angular, react). 
+JHipster.NET is a blueprint that overrides the back-end part, originally generated in spring boot, by back-end in asp.net core. For the front-end all the common language can be used (angular, react, vue.js). 
 
-In alpha version we have also the possibility to choose Blazor for the front. [Blazor as front issue](https://github.com/jhipster/jhipster-dotnetcore/issues/165)
+In alpha version we also have the possibility to choose either [Blazor](https://github.com/jhipster/jhipster-dotnetcore/issues/165) or [Xamarin](https://github.com/jhipster/jhipster-dotnetcore/issues/488) for the front.
 
-This blueprint it's an official blueprint of jhipster [official-blueprints](https://www.jhipster.tech/modules/official-blueprints/)
+This blueprint is an official blueprint of JHipster [official-blueprints](https://www.jhipster.tech/modules/official-blueprints/)
 
 # Docs
 
-Documentation and information about  `JHipster.NET ` is available [here](https://jhipsternet.readthedocs.io/en/latest/)
+Documentation and information about  `JHipster.NET` are available [here](https://jhipsternet.readthedocs.io/en/latest/)
 
-Full documentation and information about JHipster is available [here](https://www.jhipster.tech/) 
+Full documentation and information about JHipster are available [here](https://www.jhipster.tech/)
 
 # Analysis of the sample project 
 https://github.com/jhipster/jhipster-sample-app-dotnetcore
@@ -120,6 +120,59 @@ Run the generator from image to generate service:
 ```bash
 docker run -it --rm -v $PWD:/home/jhipster/app jhipster-generator-dotnetcore
 ```
+
+## Deploy in Azure App using Terraform
+
+Currently supports only monolithic app with sql server as database (will add support for other databases, soon). Terraform scripts will create Azure app service, azure sql server
+
+### Pre-requisites
+1. [Docker](https://www.docker.com/products/docker-desktop) is installed with docker-compose and have push access to any of the docker repository like docker hub or azure container registry.
+2. Azure CLI is installed on your system. Terraform will require it to authenticate in azure subscription. 
+3. [Terraform CLI](https://www.terraform.io/downloads.html) is installed on your system.
+
+### Steps to follow:
+1. Execute generate app command and select app as Monolithic with Microsoft SQL server as database. Select **yes** to generate terraform scripts. (_default:_ is _No_)
+<img width="927" alt="Screen Shot 2021-04-06 at 10 34 10 PM" src="https://user-images.githubusercontent.com/32884734/113750309-48c09a00-9728-11eb-98bc-0c47f9e317aa.png">
+
+2. Use docker-compose command to first build the docker image.
+```bash
+docker-compose -f docker/app.yml build
+```
+3. Tag the image built in step 2 to push to docker repository using:
+```bash
+docker tag <source-image> <destination-image>:version/tag
+```
+4. Push the image to docker hub or any docker service provider using:
+```bash
+docker push <destination-image>:version/tag
+```
+_Note:_ The docker image link and its tag will use as input to terraform variables.
+5. In the generated app folder, change directory to terraform folder.
+```bash
+cd terraform
+```
+6. Login into your azure cli by using 
+```bash
+az login
+```
+_Note:_ Terraform plan command will work only if the user is authenticated using azure cli.
+
+7. Create a file (_**terraform.tfvars**_) in terraform folder to provide input to the terraform main script using below content:
+```
+location                = "Central US"
+subscription_id         = "<your-azure-subscription>"
+mssql_admin_user        = "dbUser"
+mssql_admin_password    = "Password!12"
+docker_image            = "a5ingh/jhipster-dotnetcore-sampleapp"
+docker_image_tag        = "0.1"
+```
+
+8. Execute below terraform commands (one by one) to create resources (Azure app service, azure sql) and deploy as a docker image to app service:
+    1. `terraform init` # to initialize terraform.
+    1. `terraform plan -out "MyAppPlan"` # can choose any name instead of MyAppPlan.
+    1. `terraform apply "MyAppPlan"` # it will create the resources and then provide you the link to your deployed app as output variable.
+
+9. You can use terraform destroy to delete/remove all the created resources once you are done using it.
 
 ## 🚦 What we have now
 
