@@ -20,7 +20,7 @@
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
 	
 	<PackageReference Update="AutoFixture" Version="4.16.0" />
-	<PackageReference Update="bunit" Version="1.0.0-preview-01" />
+	<PackageReference Update="bunit" Version="1.0.16" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.9.4" />
 	<%_ } _%>
