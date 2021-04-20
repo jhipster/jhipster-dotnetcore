@@ -1,13 +1,14 @@
-# Deploy in Azure App using Terraform
+# Azure
 
+## Deploy using Terraform
 Currently supports only monolithic app with SQL Server as database (support for other databases are WIP). Terraform scripts will create Azure App Service, Azure SQL Server
 
-## Prerequisites
+### Prerequisites
 1. [Docker](https://www.docker.com/products/docker-desktop) installed with docker-compose and have push access to any of the docker repository like docker hub or Azure container registry.
 2. [Azure CLI](https://docs.microsoft.com/fr-fr/cli/azure/install-azure-cli) installed on your system. Terraform will require it to authenticate in Azure subscription. 
 3. [Terraform CLI](https://www.terraform.io/downloads.html) installed on your system.
 
-## Steps to follow:
+### Steps to follow
 1. Execute generate app command and select app as Monolithic with Microsoft SQL server as database. Select **yes** to generate Terraform scripts. (_default:_ is _No_)
 ![use-azure](../assets/use-azure.png)
 
