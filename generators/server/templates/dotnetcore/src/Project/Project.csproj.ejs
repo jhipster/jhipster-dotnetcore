@@ -86,13 +86,13 @@
 
     <ItemGroup>
         <SonarQubeSetting Include="sonar.exclusions">
-            <Value>$(SpaRoot)dist/**,$(SpaRoot)build/**,$(SpaRoot)dist,$(SpaRoot)src/content/**,$(SpaRoot)src/i18n/**,$(SpaRoot)webpack/**,$(SpaRoot)test/**</Value>
+            <Value>$(SpaRoot)dist/**,$(SpaRoot)target/**,$(SpaRoot)dist,$(SpaRoot)src/content/**,$(SpaRoot)src/i18n/**,$(SpaRoot)webpack/**,$(SpaRoot)test/**</Value>
         </SonarQubeSetting>
         <SonarQubeSetting Include="sonar.testExecutionReportPaths">
-            <Value>$(SpaRoot)build/test-results/jest/TESTS-results-sonar.xml</Value>
+            <Value>$(SpaRoot)target/test-results/jest/TESTS-results-sonar.xml</Value>
         </SonarQubeSetting>
         <SonarQubeSetting Include="sonar.javascript.lcov.reportPaths">
-            <Value>$(SpaRoot)build/test-results/lcov.info</Value>
+            <Value>$(SpaRoot)target/test-results/lcov.info</Value>
         </SonarQubeSetting>
     </ItemGroup>
 
