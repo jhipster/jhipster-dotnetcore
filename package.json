@@ -48,7 +48,7 @@
     "yeoman-generator": "5.2.0"
   },
   "devDependencies": {
-    "@j-ulrich/release-it-regex-bumper": "^1.2.0",
+    "@j-ulrich/release-it-regex-bumper": "^2.0.0",
     "@release-it/bumper": "^2.0.0",
     "chai": "4.3.4",
     "ejs-lint": "1.2.0",
