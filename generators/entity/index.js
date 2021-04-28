@@ -64,7 +64,7 @@ module.exports = class extends EntityGenerator {
             ...super._preparing(),
             preparingDotnet() {
                 const context = this.context;
-                context.primaryKeyType = (context.databaseType == 'mongodb') ? 'string' : 'long'
+                context.primaryKeyType = context.databaseType === 'mongodb' ? 'string' : 'long';
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
                 context.testProjectDir = `${context.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;

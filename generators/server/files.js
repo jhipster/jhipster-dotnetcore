@@ -569,7 +569,7 @@ const serverFiles = {
                 {
                     file: 'Project.Infrastructure/Configuration/MongoDatabaseConfig.cs',
                     renameTo: generator =>
-                    `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/MongoDatabaseConfig.cs`,
+                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/MongoDatabaseConfig.cs`,
                 },
             ],
         },
@@ -713,13 +713,11 @@ const serverFiles = {
                 },
                 {
                     file: 'Project.Infrastructure/Data/MongoDatabaseContext.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/MongoDatabaseContext.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/MongoDatabaseContext.cs`,
                 },
                 {
                     file: 'Project.Infrastructure/Data/IMongoDatabaseContext.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/IMongoDatabaseContext.cs`,
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/IMongoDatabaseContext.cs`,
                 },
             ],
         },
