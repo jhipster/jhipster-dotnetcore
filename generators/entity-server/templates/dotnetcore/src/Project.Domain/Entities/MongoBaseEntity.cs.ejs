@@ -16,15 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Domain.Repositories.Interfaces
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace <%= namespace %>.Domain
 {
-    <%_ if (databaseType == 'mongodb') { %>
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : INoSqlReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
+    public class MongoBaseEntity<TKey>
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public TKey Id { get; set; }
     }
-    <%_ } else { %>
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : IReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
-    {
-    }
-    <%_ } %>
 }

@@ -16,15 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Domain.Repositories.Interfaces
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace <%= namespace %>.Domain
 {
-    <%_ if (databaseType == 'mongodb') { %>
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : INoSqlReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
+    public class BaseEntity<TKey>
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public TKey Id { get; set; }
     }
-    <%_ } else { %>
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : IReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
-    {
-    }
-    <%_ } %>
 }

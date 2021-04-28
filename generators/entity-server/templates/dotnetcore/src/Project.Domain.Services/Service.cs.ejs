@@ -58,7 +58,7 @@ namespace <%= namespace %>.Domain.Services
             return page;
         }
 
-        public virtual async Task<<%= pascalizedEntityClass %>> FindOne(long id)
+        public virtual async Task<<%= pascalizedEntityClass %>> FindOne(<%= primaryKeyType %> id)
         {
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
             <%_ relationships.forEach( relationship => {
@@ -72,7 +72,7 @@ namespace <%= namespace %>.Domain.Services
             return result;
         }
 
-        public virtual async Task Delete(long id)
+        public virtual async Task Delete(<%= primaryKeyType %> id)
         {
             await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(id);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();

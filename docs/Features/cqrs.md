@@ -26,7 +26,7 @@ When generating your application, you can choose to use CQRS. Enabling it will g
 
 ## Create your own Queries or Commands
 
-In order to create your own commands and/or queries you have to create two classes : 
+In order to create your own commands and/or queries you have to create two classes :
 - A command/query
 - An handler for it
 
@@ -40,7 +40,7 @@ namespace MyCompany.Application.Queries {
     }
 }
 ```
-This Query should have an Id and returns a MyEntity object. 
+This Query should have an Id and returns a MyEntity object.
 Here's the handler `MyEntityGetQueryHandler.cs` :
 ```csharp
 namespace MyCompany.Application.Queries {
@@ -53,7 +53,7 @@ namespace MyCompany.Application.Queries {
             _myEntityRepository = myEntityRepository;
         }
 
-        public Task<MyEntity> Handle(MyEntityGetQuery request, 
+        public Task<MyEntity> Handle(MyEntityGetQuery request,
 	        CancellationToken cancellationToken)
         {
             return _myEntityRepository.QueryHelper()

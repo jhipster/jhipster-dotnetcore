@@ -27,10 +27,19 @@ using <%= namespace %>.Infrastructure.Data.Extensions;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public class ReadOnly<%= pascalizedEntityClass %>Repository : ReadOnlyGenericRepository<<%= pascalizedEntityClass %>>, IReadOnly<%= pascalizedEntityClass %>Repository
+    <%_ if (databaseType == 'mongodb') { _%>
+    public class ReadOnly<%= pascalizedEntityClass %>Repository : NoSqlReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, IReadOnly<%= pascalizedEntityClass %>Repository
+    {
+        public ReadOnly<%= pascalizedEntityClass %>Repository(IMongoDatabaseContext context) : base(context)
+        {
+        }
+    }
+    <%_ } else { _%>
+    public class ReadOnly<%= pascalizedEntityClass %>Repository : ReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, IReadOnly<%= pascalizedEntityClass %>Repository
     {
         public ReadOnly<%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context)
         {
         }
     }
+    <%_ } _%>
 }

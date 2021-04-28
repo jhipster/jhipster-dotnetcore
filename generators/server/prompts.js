@@ -49,6 +49,10 @@ function askForServerSideOpts() {
             value: 'oracle',
             name: 'Oracle',
         },
+        {
+            value: 'mongodb',
+            name: 'MongoDB',
+        },
     ];
     const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
