@@ -28,49 +28,54 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using <%= namespace %>.Domain;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class ReadOnlyGenericRepository<TEntity, TKey> : IReadOnlyGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
+    public abstract class NoSqlReadOnlyGenericRepository<TEntity, TKey> : INoSqlReadOnlyGenericRepository<TEntity, TKey>, IDisposable where TEntity : MongoBaseEntity<TKey>
     {
-        protected internal readonly IUnitOfWork _context;
-        protected internal readonly DbSet<TEntity> _dbSet;
+        protected readonly IMongoDatabaseContext _context;
+        protected IMongoCollection<TEntity> _dbSet;
 
-        public ReadOnlyGenericRepository(IUnitOfWork context)
+        protected NoSqlReadOnlyGenericRepository(IMongoDatabaseContext context)
         {
             _context = context;
-            _dbSet = context.Set<TEntity>();
+            _dbSet = _context.Set<TEntity>(typeof(TEntity).Name);
         }
 
         public virtual async Task<TEntity> GetOneAsync(TKey id)
         {
-            return await _dbSet.FindAsync(id);
+            var objectId = new ObjectId(id.ToString());
+            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq("_id", objectId);
+            return await _dbSet.FindAsync(filter).Result.FirstOrDefaultAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            var all = await _dbSet.FindAsync(Builders<TEntity>.Filter.Empty);
+            return await all.ToListAsync();
         }
 
-        public virtual async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
+        public async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
         {
-            return await _dbSet.UsePageableAsync(pageable);
+            return await _dbSet.AsQueryable().UsePageableAsync(pageable);
         }
 
         public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.AnyAsync(predicate);
+            var result = await _dbSet.FindAsync(predicate);
+            return result.Any();
         }
 
-        public virtual async Task<int> CountAsync()
+        public virtual Task<int> CountAsync()
         {
-            var countTask = await _dbSet.CountAsync();
-            return countTask;
+            return Task.FromResult(Convert.ToInt32(_dbSet.CountDocuments(Builders<TEntity>.Filter.Empty)));
         }
 
-        public virtual IFluentRepository<TEntity> QueryHelper()
+        public virtual INoSqlFluentRepository<TEntity> QueryHelper()
         {
-            var fluentRepository = new FluentRepository<TEntity>(_dbSet);
+            var fluentRepository = new MongoFluentRepository<TEntity>(_dbSet.AsQueryable());
             return fluentRepository;
         }
 

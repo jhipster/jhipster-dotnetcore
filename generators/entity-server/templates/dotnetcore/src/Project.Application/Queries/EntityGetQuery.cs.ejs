@@ -28,6 +28,6 @@ namespace <%= namespace %>.Application.Queries
 {
     public class <%= pascalizedEntityClass %>GetQuery : IRequest<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>
     {
-        public long Id { get; set; }
+        public <%= primaryKeyType %> Id { get; set; }
     }
 }

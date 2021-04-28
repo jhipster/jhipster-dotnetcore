@@ -42,12 +42,8 @@ using Newtonsoft.Json;
 namespace <%= namespace %>.Domain
 {
     [Table("<%= entityTableName %>")]
-    public class <%= entityClassName %>
+    public class <%= entityClassName %> <%_ if (databaseType == 'mongodb') { %> : MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { _%> BaseEntity<<%= primaryKeyType %>> <%_ } %>
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
-
         <%_ for (idx in fields){
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
@@ -112,8 +108,13 @@ namespace <%= namespace %>.Domain
             if (this == obj) return true;
             if (obj == null || GetType() != obj.GetType()) return false;
             var <%= entityVariableName %> = obj as <%= entityClassName %>;
+            <%_ if (primaryKeyType != 'string') { _%>
             if (<%= entityVariableName %>?.Id == null || <%= entityVariableName %>?.Id == 0 || Id == 0) return false;
             return EqualityComparer<long>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            <%_ } else { _%>
+            if (<%= entityVariableName %>?.Id == null ||  Id == null) return false;
+            return EqualityComparer<string>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            <%_ } _%>
         }
 
         public override int GetHashCode()

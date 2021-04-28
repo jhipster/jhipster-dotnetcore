@@ -16,15 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
-    <%_ if (databaseType == 'mongodb') { %>
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : INoSqlReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
+    public interface INoSqlGenericRepository<TEntity, TKey> : INoSqlReadOnlyGenericRepository<TEntity, TKey> where TEntity : MongoBaseEntity<TKey>
     {
+        Task<TEntity> CreateOrUpdateAsync(TEntity entity);
+        Task DeleteByIdAsync(TKey id);
+        Task DeleteAsync(TEntity entity);
+        Task Clear();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
+        TEntity Add(TEntity entity);
+        bool AddRange(params TEntity[] entities);
+        TEntity Update(TEntity entity);
+        bool UpdateRange(params TEntity[] entities);
     }
-    <%_ } else { %>
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : IReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
-    {
-    }
-    <%_ } %>
 }

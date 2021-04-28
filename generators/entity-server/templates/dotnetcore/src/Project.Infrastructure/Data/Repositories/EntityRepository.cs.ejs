@@ -28,9 +28,9 @@ using <%= namespace %>.Infrastructure.Data.Extensions;
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     <%_ if (databaseType == 'mongodb') { _%>
-    public class <%= pascalizedEntityClass %>Repository : MongoGenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
+    public class <%= pascalizedEntityClass %>Repository : MongoGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, I<%= pascalizedEntityClass %>Repository
     <%_ } else { _%>
-    public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
+    public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, I<%= pascalizedEntityClass %>Repository
     <%_ } _%>
     {
         <%_ if (databaseType == 'mongodb') { _%>
@@ -43,32 +43,17 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         }
         <%_ } _%>
 
+        <%_ if (databaseType != 'mongodb') { _%>
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
-            bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
             <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
 
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
             }); _%>
-
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
-            {
-                Update(<%= camelCasedEntityClass %>);
-            }
-            else
-            {
-                <%_ if (databaseType == 'mongodb') { _%>
-                if (bankAccountTestA.Id == 0)
-                    bankAccountTestA.Id = _mongoContext.GetNextSequenceValue(nameof(bankAccountTestA));
-
-                Add(<%= camelCasedEntityClass %>);
-                <%_ } else { _%>
-                _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
-                <%_ } _%>
-            }
-            return <%= camelCasedEntityClass %>;
+            return base.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
         }
+        <%_ } _%>
     }
 }

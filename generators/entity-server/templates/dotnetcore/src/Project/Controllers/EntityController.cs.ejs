@@ -118,7 +118,11 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %>CreateCommand command)
         {
             _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {command}");
+            <%_ if (primaryKeyType == 'string') { _%>
+            if (command.Id != null)
+            <%_ } else { _%>
             if (command.Id != 0)
+            <%_ } _%>
                 throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
 
             var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
@@ -129,7 +133,11 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
+            <%_ if (primaryKeyType == 'string') { _%>
+            if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id != null)
+            <%_ } else { _%>
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id != 0)
+            <%_ } _%>
                 throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
 
             <%_ if (hasDto) { _%>
@@ -152,7 +160,11 @@ namespace <%= namespace %>.Controllers
         public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %>UpdateCommand command)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {command}");
+            <%_ if (primaryKeyType == 'string') { _%>
+            if (command.Id == null)
+            <%_ } else { _%>
             if (command.Id == 0)
+            <%_ } _%>
                 throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
 
             var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
@@ -163,7 +175,11 @@ namespace <%= namespace %>.Controllers
         public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
+            <%_ if (primaryKeyType == 'string') { _%>
+            if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == null) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
+            <%_ } else { _%>
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
+            <%_ } _%>
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -217,15 +233,14 @@ namespace <%= namespace %>.Controllers
         <%_ } _%>
 
         [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]
+        public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] <%= primaryKeyType %> id)
         <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] <%= pascalizedEntityClass %>GetQuery query)
         {
-            _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {query.Id}");
-            var result = await this._mediator.Send(query);
+            _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
+            var result = await this._mediator.Send(new <%= pascalizedEntityClass %>GetQuery { Id = id });
             return ActionResultUtil.WrapOrNotFound(result);
         }
         <%_ } else { _%>
-        public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] long id)
         {
             _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
             <%_ if (hasService) { _%>
@@ -251,15 +266,14 @@ namespace <%= namespace %>.Controllers
         <%_ } _%>
 
         [HttpDelete("<%= kebabCasedEntityClassPlural %>/{id}")]
+        public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] <%= primaryKeyType %> id)
         <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] <%= pascalizedEntityClass %>DeleteCommand command)
         {
-            _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {command.Id}");
-            await this._mediator.Send(command);
-            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, command.Id.ToString()));
+            _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
+            await this._mediator.Send(new <%= pascalizedEntityClass %>DeleteCommand { Id = id });
+            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
         }
-        <%_ } else {_%>
-        public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] long id)
+        <%_ } else { _%>
         {
             _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
             <%_ if (hasService) { _%>

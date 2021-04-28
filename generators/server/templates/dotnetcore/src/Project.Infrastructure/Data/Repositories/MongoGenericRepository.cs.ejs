@@ -24,115 +24,84 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using <%= namespace %>.Domain.Repositories.Interfaces;
-using <%= namespace %>.Infrastructure.Data.Extensions;
-using <%= namespace %>.Infrastructure.Data;
 using System.Linq.Expressions;
 using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
+using MongoDB.Driver.Linq;
+using <%= namespace %>.Domain;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class MongoGenericRepository<TEntity> : IGenericRepository<TEntity>, IDisposable where TEntity : class
+    public abstract class MongoGenericRepository<TEntity, TKey> : NoSqlReadOnlyGenericRepository<TEntity, TKey>, INoSqlGenericRepository<TEntity, TKey>, IDisposable where TEntity : MongoBaseEntity<TKey>
     {
-        protected readonly IMongoDatabaseContext _mongoContext;
-        protected IMongoCollection<TEntity> _dbCollection;
+        protected MongoGenericRepository(IMongoDatabaseContext context) : base(context)
+        {
+        }
 
-            protected MongoGenericRepository(IMongoDatabaseContext context)
-            {
-                _mongoContext = context;
-                _dbCollection = _mongoContext.GetCollection<TEntity>(typeof(TEntity).Name);
-            }
+        public async Task<TEntity> CreateOrUpdateAsync(TEntity bankAccountTestA)
+        {
+            bool exists = await Exists(x => x.Id.Equals(bankAccountTestA.Id));
 
-            public virtual async Task<TEntity> GetOneAsync(object id)
+            if (bankAccountTestA.Id != null && exists)
             {
-                var objectId = new ObjectId(id.ToString());
-                FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq("_id", objectId);
-                return await _dbCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
+                Update(bankAccountTestA);
             }
+            else
+            {
+                Add(bankAccountTestA);
+            }
+            return bankAccountTestA;
+        }
 
-            public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
-            {
-                var all = await _dbCollection.FindAsync(Builders<TEntity>.Filter.Empty);
-                return await all.ToListAsync();
-            }
+        public virtual TEntity Update(TEntity entity)
+        {
+            // _context.AddCommand(async () => await _dbSet.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.Id), obj));
+            _dbSet.FindOneAndReplace(m => m.Id.Equals(entity.Id), entity);
+            return entity;
+        }
 
-            public virtual async Task<TEntity> CreateOrUpdateAsync(TEntity obj)
-            {
-                if (obj == null) throw new ArgumentNullException(typeof(TEntity).Name + " object is null");
-                await _dbCollection.InsertOneAsync(obj);
-                return obj;
-            }
+        public virtual async Task DeleteByIdAsync(TKey id)
+        {
+            var objectId = new ObjectId(id.ToString());
+            // _context.AddCommand(async () => await _dbSet.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", objectId)));
+            await _dbSet.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", objectId));
+        }
 
-            public virtual async Task UpdateAsync(string id, TEntity obj)
-            {
-                await _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", id), obj);
-            }
-            public virtual TEntity Update(TEntity obj)
-            {
-                // Use TKey... _dbCollection.ReplaceOne(Builders<TEntity>.Filter.Eq("_id", id), obj);
-                return obj;
-            }
+        public async Task DeleteAsync(TEntity entity)
+        {
+            // _context.AddCommand(async () => await _dbSet.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", entity.Id)));
+            await _dbSet.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", entity.Id));
+        }
 
-            public virtual async Task DeleteByIdAsync(object id)
-            {
-                var objectId = new ObjectId(id.ToString());
-                await _dbCollection.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", objectId));
-            }
+        public virtual TEntity Add(TEntity entity)
+        {
+            // _context.AddCommand(async () => await _dbSet.InsertOneAsync(entity));
+            _dbSet.InsertOne(entity);
+            return entity;
+        }
 
-            public virtual async Task DeleteAsync(TEntity obj)
-            {
-                if (obj == null) throw new ArgumentNullException(typeof(TEntity).Name + " object is null");
-                // Use TKey... await _dbCollection.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.Id));
-            }
+        public virtual bool AddRange(params TEntity[] entities)
+        {
+            // _context.AddCommand(async () => await _dbSet.InsertManyAsync(entities));
+            _dbSet.InsertMany(entities);
+            return true;
+        }
 
-            public virtual TEntity Add(TEntity entity)
-            {
-                _dbCollection.InsertOne(entity);
-                return entity;
-            }
+        public virtual bool UpdateRange(params TEntity[] entities)
+        {
+            foreach (TEntity entity in entities)
+                this.Update(entity);
+            return true;
+        }
 
-            public virtual bool AddRange(params TEntity[] entities)
-            {
-                _dbCollection.InsertMany(entities);
-                return true;
-            }
+        public virtual async Task Clear()
+        {
+            await _dbSet.DeleteManyAsync(Builders<TEntity>.Filter.Empty);
+        }
 
-            public virtual bool UpdateRange(params TEntity[] entities)
-            {
-                foreach (TEntity entity in entities)
-                {
-                    this.Update(entity);
-                }
-                return true;
-            }
-
-            public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
-            {
-                var result = await _dbCollection.FindAsync(predicate);
-                return result.Any();
-            }
-
-            public virtual Task<int> CountAsync()
-            {
-                return Task.FromResult(Convert.ToInt32(_dbCollection.CountDocuments(Builders<TEntity>.Filter.Empty)));
-            }
-
-            public virtual async Task Clear()
-            {
-                await _dbCollection.DeleteManyAsync(Builders<TEntity>.Filter.Empty);
-            }
-
-            public virtual Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-            {
-                return Task.FromResult(0);
-            }
-
-            public void Dispose()
-            {
-                this._mongoContext.Dispose();
-            }
-
-            public TEntity Attach(TEntity entity) => throw new NotImplementedException();
-            public Task<IPage<TEntity>> GetPageAsync(IPageable pageable) => throw new NotImplementedException();
-            public IFluentRepository<TEntity> QueryHelper() => throw new NotImplementedException();
+        public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.SaveChangesAsync();
+        }
     }
 }

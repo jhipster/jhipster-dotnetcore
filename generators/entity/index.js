@@ -61,6 +61,7 @@ module.exports = class extends EntityGenerator {
         const jhipsterNetPhaseSteps = {
             loadInMemoryDataNetBlueprint() {
                 const context = this.context;
+                context.primaryKeyType = (context.databaseType == 'mongodb') ? 'string' : 'long'
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
                 context.testProjectDir = `${context.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;
