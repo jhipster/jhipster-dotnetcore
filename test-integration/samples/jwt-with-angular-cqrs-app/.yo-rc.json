@@ -10,7 +10,7 @@
 	  "cqrsEnabled": true,
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
-    "jhipsterVersion": "6.9.1",
+    "jhipsterVersion": "6.10.4",
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
@@ -19,6 +19,7 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
+	"testFrameworks": ["cypress"],
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",

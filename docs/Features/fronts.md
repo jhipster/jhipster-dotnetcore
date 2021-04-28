@@ -39,6 +39,24 @@ and choose React
 
 For further information: [Using React with JHipster](https://www.jhipster.tech/using-react/)
 
+## Vue.js
+
+Vue.js is a progressive, incrementally-adoptable JavaScript framework for building UI on the web.
+
+### Generate your application
+
+Call the generator
+
+```bash
+jhipster --blueprints dotnetcore
+```
+
+and choose Vue
+
+![front-choice](../assets/vue-choice.png)
+
+For further information: [Using Vue with JHipster](https://www.jhipster.tech/using-vue/)
+
 ## Alpha - Xamarin
 
 With a C#-shared codebase, developers can use Xamarin tools to write native Android, iOS, and Windows apps with native user interfaces and share code across multiple platforms, including Windows, macOS, and Linux.

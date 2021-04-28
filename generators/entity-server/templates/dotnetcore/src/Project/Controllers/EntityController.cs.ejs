@@ -64,12 +64,12 @@ using Microsoft.EntityFrameworkCore;
 namespace <%= namespace %>.Controllers
 {
     [Authorize]
-    [Route("api")]
+    [Route("api/<%= kebabCasedEntityClassPlural %>")]
     [ApiController]
-    public class <%= pascalizedEntityClass %>Controller : ControllerBase
+    public class <%= pascalizedEntityClassPlural %>Controller : ControllerBase
     {
         private const string EntityName = "<%= camelCasedEntityClass %>";
-        private readonly ILogger<<%= pascalizedEntityClass %>Controller> _log;
+        private readonly ILogger<<%= pascalizedEntityClassPlural %>Controller> _log;
         <%_ if (cqrsEnabled) { _%>
         private readonly IMediator _mediator;
         <%_ } else { _%>
@@ -84,13 +84,13 @@ namespace <%= namespace %>.Controllers
         <%_ } _%>
 
         <%_ if (cqrsEnabled) { _%>
-        public <%= pascalizedEntityClass %>Controller(ILogger<<%= pascalizedEntityClass %>Controller> log, IMediator mediator)
+        public <%= pascalizedEntityClassPlural %>Controller(ILogger<<%= pascalizedEntityClassPlural %>Controller> log, IMediator mediator)
         {
             _log = log;
             _mediator = mediator;
         }
         <%_ } else { _%>
-        public <%= pascalizedEntityClass %>Controller(ILogger<<%= pascalizedEntityClass %>Controller> log,
+        public <%= pascalizedEntityClassPlural %>Controller(ILogger<<%= pascalizedEntityClassPlural %>Controller> log,
         <%_ if (hasDto) { _%>
         IMapper mapper,
         <%_ } _%>
@@ -112,7 +112,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpPost("<%= kebabCasedEntityClassPlural %>")]
+        [HttpPost]
         [ValidateModel]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %>CreateCommand command)
@@ -154,10 +154,10 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpPut("<%= kebabCasedEntityClassPlural %>")]
+        [HttpPut("{id}")]
         [ValidateModel]
         <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %>UpdateCommand command)
+        public async Task<IActionResult> Update<%= pascalizedEntityClass %>(long id, [FromBody] <%= pascalizedEntityClass %>UpdateCommand command)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {command}");
             <%_ if (primaryKeyType == 'string') { _%>
@@ -167,12 +167,16 @@ namespace <%= namespace %>.Controllers
             <%_ } _%>
                 throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
 
+            if (id != command.Id)
+                throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
+
             var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
+            if (id != <%= camelCasedEntityClass %>.Id) throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
             return Ok(<%= camelCasedEntityClass %>)
                 .WithHeaders(HeaderUtil.CreateEntityUpdateAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
         <%_ } else { _%>
-        public async Task<IActionResult> Update<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
+        public async Task<IActionResult> Update<%= pascalizedEntityClass %>(long id, [FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
             <%_ if (primaryKeyType == 'string') { _%>
@@ -180,6 +184,7 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
             <%_ } _%>
+            if (id != <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id) throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -194,7 +199,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpGet("<%= kebabCasedEntityClassPlural %>")]
+        [HttpGet]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable page)
         {
@@ -232,7 +237,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpGet("<%= kebabCasedEntityClassPlural %>/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] <%= primaryKeyType %> id)
         <%_ if (cqrsEnabled) { _%>
         {
@@ -265,7 +270,7 @@ namespace <%= namespace %>.Controllers
         }
         <%_ } _%>
 
-        [HttpDelete("<%= kebabCasedEntityClassPlural %>/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] <%= primaryKeyType %> id)
         <%_ if (cqrsEnabled) { _%>
         {

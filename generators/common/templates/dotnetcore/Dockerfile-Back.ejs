@@ -14,7 +14,7 @@
 -%>
 # Based on Microsoft's docker samples for dotnet core
 # available at https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
 # First install nodejs - required to build generated client app
 WORKDIR /app
 RUN apt-get update -yq && apt-get install -yq curl
@@ -25,6 +25,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
 
 # Restore dependencies of .net core projects taking advantage of docker layer caching
 COPY src/*/*.csproj ./src/
+COPY Directory.Build.targets Directory.Build.targets
 RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
 
@@ -42,8 +43,8 @@ COPY --from=build /app/out .
 ENV ASPNETCORE_ENVIRONMENT=Production
 
 # See: https://github.com/dotnet/announcements/issues/20
-# Comment to Disable globalization APIs (or delete)
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+# Uncomment to enable globalization APIs (or delete)
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 RUN apk add --no-cache icu-libs
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
