@@ -1,4 +1,3 @@
-
 # Fronts
 
 When generating an application, you are able to choose between multiple fronts. 

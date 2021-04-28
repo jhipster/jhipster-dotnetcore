@@ -23,6 +23,7 @@ You can also find lot of information in https://www.jhipster.tech
   :hidden:
   :caption: Features
 
+  Features/azure
   Features/fronts
   Features/services
   Features/dto
