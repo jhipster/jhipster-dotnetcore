@@ -148,7 +148,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -394,7 +394,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -405,7 +405,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -416,7 +416,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -446,7 +446,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -467,7 +467,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -488,7 +488,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -528,7 +528,7 @@ const serverFiles = {
     ],
     mongoExtension: [
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -536,8 +536,8 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/NoSqlPagination.cs`,
                 },
-            ]
-        }
+            ],
+        },
     ],
     serverProperties: [
         {
@@ -727,7 +727,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType == 'mongodb',
+            condition: generator => generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
