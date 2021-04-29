@@ -492,9 +492,9 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
-                    file: 'Project.Infrastructure/Data/Repositories/NoSqlReadOnlyGenericRepository.cs',
+                    file: 'Project.Infrastructure/Data/Repositories/MongoReadOnlyGenericRepository.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/NoSqlReadOnlyGenericRepository.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/MongoReadOnlyGenericRepository.cs`,
                 },
             ],
         },

@@ -33,12 +33,12 @@ using MongoDB.Driver;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class NoSqlReadOnlyGenericRepository<TEntity, TKey> : INoSqlReadOnlyGenericRepository<TEntity, TKey>, IDisposable where TEntity : MongoBaseEntity<TKey>
+    public abstract class MongoReadOnlyGenericRepository<TEntity, TKey> : INoSqlReadOnlyGenericRepository<TEntity, TKey>, IDisposable where TEntity : MongoBaseEntity<TKey>
     {
         protected readonly IMongoDatabaseContext _context;
         protected IMongoCollection<TEntity> _dbSet;
 
-        protected NoSqlReadOnlyGenericRepository(IMongoDatabaseContext context)
+        protected MongoReadOnlyGenericRepository(IMongoDatabaseContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>(typeof(TEntity).Name);

@@ -32,7 +32,7 @@ using <%= namespace %>.Domain;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class MongoGenericRepository<TEntity, TKey> : NoSqlReadOnlyGenericRepository<TEntity, TKey>, INoSqlGenericRepository<TEntity, TKey>, IDisposable where TEntity : MongoBaseEntity<TKey>
+    public abstract class MongoGenericRepository<TEntity, TKey> : MongoReadOnlyGenericRepository<TEntity, TKey>, INoSqlGenericRepository<TEntity, TKey>, IDisposable where TEntity : MongoBaseEntity<TKey>
     {
         protected MongoGenericRepository(IMongoDatabaseContext context) : base(context)
         {

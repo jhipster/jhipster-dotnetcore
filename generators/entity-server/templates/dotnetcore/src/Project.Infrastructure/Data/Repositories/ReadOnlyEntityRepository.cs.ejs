@@ -28,7 +28,7 @@ using <%= namespace %>.Infrastructure.Data.Extensions;
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
     <%_ if (databaseType == 'mongodb') { _%>
-    public class ReadOnly<%= pascalizedEntityClass %>Repository : NoSqlReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, IReadOnly<%= pascalizedEntityClass %>Repository
+    public class ReadOnly<%= pascalizedEntityClass %>Repository : MongoReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, IReadOnly<%= pascalizedEntityClass %>Repository
     {
         public ReadOnly<%= pascalizedEntityClass %>Repository(IMongoDatabaseContext context) : base(context)
         {
