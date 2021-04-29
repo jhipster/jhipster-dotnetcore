@@ -139,17 +139,6 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Domain/Entities/User.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/User.cs`,
-                },
-            ],
-        },
-        {
-            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -159,12 +148,22 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
                     file: 'Project.Domain/Entities/MongoBaseEntity.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/MongoBaseEntity.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/User.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/User.cs`,
                 },
             ],
         },
@@ -395,6 +394,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -405,6 +405,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -415,6 +416,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -444,6 +446,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -464,6 +467,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -484,6 +488,7 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType == 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -514,17 +519,25 @@ const serverFiles = {
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/DbSetExtensions.cs`,
                 },
                 {
-                    file: 'Project.Infrastructure/Data/Extensions/NoSqlPagination.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/NoSqlPagination.cs`,
-                },
-                {
                     file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
                 },
             ],
         },
+    ],
+    mongoExtension: [
+        {
+            condition: generator => generator.databaseType == 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/NoSqlPagination.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/NoSqlPagination.cs`,
+                },
+            ]
+        }
     ],
     serverProperties: [
         {
@@ -711,6 +724,12 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/ApplicationDatabaseContext.cs`,
                 },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType == 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
                 {
                     file: 'Project.Infrastructure/Data/MongoDatabaseContext.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/MongoDatabaseContext.cs`,
