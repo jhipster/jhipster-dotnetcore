@@ -43,7 +43,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         }
         <%_ } _%>
 
-        <%_ if (databaseType != 'mongodb') { _%>
+        <%_ if (databaseType != 'mongodb' && relationships.length != 0) { _%>
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
             <%_ relationships.forEach( relationship => {
@@ -52,7 +52,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
                         <%_ }
             }); _%>
-            return base.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+            return await base.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
         }
         <%_ } _%>
     }
