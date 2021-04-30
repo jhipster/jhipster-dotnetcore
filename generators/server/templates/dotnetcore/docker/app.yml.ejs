@@ -43,7 +43,7 @@ services:
             retries: 10
             start_period: 10s
     <%_ break
-    case 'mongo': _%>;
+    case 'mongodb': _%>;
     db:
         container_name: db
         image: mongo:latest
@@ -52,7 +52,8 @@ services:
         healthcheck:
             test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u $MONGO_INITDB_ROOT_USERNAME --quiet | grep 1interval: 10s
             timeout: 10s
-            retries: 3start_period: 20s
+            retries: 3
+            start_period: 20s
     <%_ break;
     case 'postgres': _%>
     db:
