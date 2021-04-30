@@ -50,7 +50,8 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
         healthcheck:
-            test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u $MONGO_INITDB_ROOT_USERNAME --quiet | grep 1interval: 10s
+            test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u $MONGO_INITDB_ROOT_USERNAME --quiet | grep 1
+            interval: 10s
             timeout: 10s
             retries: 3
             start_period: 20s
