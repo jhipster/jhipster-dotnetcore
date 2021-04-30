@@ -42,8 +42,8 @@ services:
             timeout: 3s
             retries: 10
             start_period: 10s
-    <%_ break
-    case 'mongodb': _%>;
+    <%_ break;
+    case 'mongodb': _%>
     db:
         container_name: db
         image: mongo:latest
