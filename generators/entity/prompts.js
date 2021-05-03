@@ -363,7 +363,7 @@ function askForDTO() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.dto = props.dto;
+        this.entityConfig.dto = props.dto;
         done();
     });
 }
