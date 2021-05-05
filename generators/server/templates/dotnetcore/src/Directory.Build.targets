@@ -99,7 +99,7 @@
 	} _%>
 	 
 	<PackageReference Update="coverlet.msbuild" Version="3.0.3"/>
-	<PackageReference Update="FakeItEasy" Version="7.0.1" />
+	<PackageReference Update="FakeItEasy" Version="7.0.2" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
