@@ -36,7 +36,7 @@ jobs:
                     - app-type: jwt-with-mysql-app
                       arg: 'no'
                     - app-type: jwt-with-mongo-app
-                      arg: 'no'
+                      arg: 'import-jdl'
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
                     - app-type: jwt-with-react-app
