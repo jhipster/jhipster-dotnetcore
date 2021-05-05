@@ -47,6 +47,7 @@ namespace <%= namespace %>.Domain.Services
         public virtual async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
         {
             var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+            <%_ if (databaseType != 'mongodb') { _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
@@ -54,6 +55,7 @@ namespace <%= namespace %>.Domain.Services
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
+            <%_ } _%>
                 .GetPageAsync(pageable);
             return page;
         }
@@ -61,6 +63,7 @@ namespace <%= namespace %>.Domain.Services
         public virtual async Task<<%= pascalizedEntityClass %>> FindOne(<%= primaryKeyType %> id)
         {
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+            <%_ if (databaseType != 'mongodb') { _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
@@ -68,6 +71,7 @@ namespace <%= namespace %>.Domain.Services
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
+            <%_ } _%>
                 .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
             return result;
         }

@@ -54,6 +54,7 @@ namespace <%= namespace %>.Application.Queries
         public async Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>GetQuery request, CancellationToken cancellationToken)
         {
             var entity = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+            <%_ if (databaseType != 'mongodb') { _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
@@ -61,6 +62,7 @@ namespace <%= namespace %>.Application.Queries
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
+            <%_ } _%>
                 .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == request.Id);
             <%_ if (hasDto) { _%>
             return _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity);

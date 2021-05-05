@@ -219,6 +219,7 @@ namespace <%= namespace %>.Controllers
             var result = await _<%= camelCasedEntityClass %>Service.FindAll(pageable);
             <%_ } else { _%>
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+            <%_ if (databaseType != 'mongodb') { _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
@@ -226,6 +227,7 @@ namespace <%= namespace %>.Controllers
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
+            <%_ } _%>
                 .GetPageAsync(pageable);
             <%_ } _%>
             <%_ if (hasDto) { _%>
@@ -252,6 +254,7 @@ namespace <%= namespace %>.Controllers
             var result = await _<%= camelCasedEntityClass %>Service.FindOne(id);
             <%_ } else { _%>
             var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+            <%_ if (databaseType != 'mongodb') { _%>
             <%_ relationships.forEach( relationship => {
                 if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
@@ -259,6 +262,7 @@ namespace <%= namespace %>.Controllers
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
             }); _%>
+            <%_ } _%>
                 .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
             <%_ } _%>
             <%_ if (hasDto) { _%>
