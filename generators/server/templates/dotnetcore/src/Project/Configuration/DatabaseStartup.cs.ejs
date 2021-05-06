@@ -95,9 +95,8 @@ namespace <%= namespace %>.Configuration
                 <%_ break;
                 case 'mysql': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options =>
-                options.UseMySql(connectionString, mySqlOptions =>
-                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
-            ));
+                options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 19)))
+            );
                 <%_ break;
             case 'mongodb': _%>
             var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
