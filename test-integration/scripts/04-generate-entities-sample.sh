@@ -24,7 +24,7 @@ if [ "$2" = "import-jdl" ]; then
       cp ../csharp-di-test/ExtendedServiceRegistrationTest.cs test/JhipsterSampleApplication.Test/AutomaticServiceDI/
   fi
 
-  if [[ -n $(find src/JhipsterSampleApplication.Domain.Services -type f -name "*Employee.cs") ]]; then
+  if [[ -n $(find src/JhipsterSampleApplication.Domain -type f -name "*Employee.cs") ]]; then
       if "$SONAR_ANALYSE_ANGULAR" ; then
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console
