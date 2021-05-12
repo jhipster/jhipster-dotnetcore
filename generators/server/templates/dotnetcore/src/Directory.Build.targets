@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
 		<AspNetCorePackageVersion>5.0.0</AspNetCorePackageVersion>
-		<EntityFrameworkPackageVersion>5.0.5</EntityFrameworkPackageVersion>
+		<EntityFrameworkPackageVersion>5.0.6</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.7</JHipsterNetPackageVersion>
   </PropertyGroup>
 
