@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-dotnetcore",
-  "version": "2.2.0",
+  "version": "3.0.1",
   "description": "",
   "keywords": [
     "yeoman-generator",
@@ -24,7 +24,7 @@
     "url": "git+https://github.com/jhipster/jhipster-dotnetcore.git"
   },
   "dependencies": {
-    "chalk": "4.1.0",
+    "chalk": "4.1.1",
     "ejs": "3.1.6",
     "generator-jhipster": "7.0.1",
     "glob": "7.1.6",
@@ -32,7 +32,7 @@
     "insight": "0.10.3",
     "jhipster-core": "7.3.4",
     "js-guid": "1.0.0",
-    "js-yaml": "4.0.0",
+    "js-yaml": "4.1.0",
     "lodash": "4.17.21",
     "meow": "9.0.0",
     "mkdirp": "1.0.4",
@@ -48,15 +48,15 @@
     "yeoman-generator": "5.2.0"
   },
   "devDependencies": {
-    "@j-ulrich/release-it-regex-bumper": "^1.2.0",
+    "@j-ulrich/release-it-regex-bumper": "^2.0.0",
     "@release-it/bumper": "^2.0.0",
     "chai": "4.3.4",
     "ejs-lint": "1.2.0",
-    "eslint": "7.23.0",
+    "eslint": "7.24.0",
     "eslint-config-airbnb-base": "14.2.1",
-    "eslint-config-prettier": "8.1.0",
+    "eslint-config-prettier": "8.2.0",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-prettier": "3.4.0",
     "fs-extra": "9.1.0",
     "jsdoc": "3.6.6",
     "mocha": "8.3.2",
