@@ -30,35 +30,10 @@ using <%= namespace %>.Domain.Repositories.Interfaces;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class GenericRepository<TEntity> : IGenericRepository<TEntity>, IDisposable where TEntity : class
+    public abstract class GenericRepository<TEntity> : ReadOnlyGenericRepository<TEntity>, IGenericRepository<TEntity>, IDisposable where TEntity : class
     {
-        protected internal readonly IUnitOfWork _context;
-        protected internal readonly DbSet<TEntity> _dbSet;
-
-        public GenericRepository(IUnitOfWork context)
+        public GenericRepository(IUnitOfWork context) : base(context)
         {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
-        }
-
-        public virtual async Task<TEntity> GetOneAsync(object id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
-
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
-
-        public virtual async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
-        {
-            return await _dbSet.UsePageableAsync(pageable);
-        }
-
-        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
-        {
-            return await _dbSet.AnyAsync(predicate);
         }
 
         public virtual TEntity Add(TEntity entity)
@@ -116,18 +91,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public virtual async Task<int> CountAsync()
-        {
-            var countTask = await _dbSet.CountAsync();
-            return countTask;
-        }
-
-        public virtual IFluentRepository<TEntity> QueryHelper()
-        {
-            var fluentRepository = new FluentRepository<TEntity>(this, _dbSet);
-            return fluentRepository;
-        }
-
         protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)
         {
             DbSet<Dictionary<string, object>> dbset = _context.Set<Dictionary<string, object>>(joinEntityName);
@@ -141,11 +104,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                 .ToList();
 
             dbset.RemoveRange(filteredManyToManyData);
-        }
-
-        public void Dispose()
-        {
-            _context?.Dispose();
         }
     }
 }
