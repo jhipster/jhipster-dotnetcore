@@ -150,6 +150,9 @@ using <%= namespace %>.Test.Setup;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Xunit;
+<%_ if (databaseType == 'mongodb') { _%>
+using MongoDB.Bson;
+<%_ } _%>
 
 namespace <%= namespace %>.Test.Controllers
 {
@@ -342,7 +345,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetNonExisting<%= pascalizedEntityClass %>()
         {
-            var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + long.MaxValue);
+            var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + <%_ if (databaseType != 'mongodb') { _%> long.MaxValue <%_ } else { _%> ObjectId.GenerateNewId().ToString() <%_ } _%>);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 

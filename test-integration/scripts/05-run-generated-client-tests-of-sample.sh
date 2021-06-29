@@ -14,11 +14,11 @@ if [ "$3" = "blazor" ]; then
 else
   cd src/JhipsterSampleApplication/ClientApp
 fi
-echo "*** changed directory in : `pwd`" 
+echo "*** changed directory in : `pwd`"
 
 
 #-------------------------------------------------------------------------------
-# Run unit test 
+# Run unit test
 #-------------------------------------------------------------------------------
 echo "*** run unit test in client for :  `pwd`"
 if [ "$3" = "blazor" ]; then
