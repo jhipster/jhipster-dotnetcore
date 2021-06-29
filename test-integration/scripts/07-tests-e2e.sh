@@ -7,7 +7,7 @@ RED='\033[0;31m'
 source $(dirname $0)/01-init-env.sh
 
 #-------------------------------------------------------------------------------
-# Run Docker 
+# Run Docker
 #-------------------------------------------------------------------------------
 
 if [ "$3" != "blazor" ]; then
@@ -20,7 +20,7 @@ if [ "$3" != "blazor" ]; then
   else
     cd src/JhipsterSampleApplication/ClientApp
   fi
-  echo "*** changed directory in : `pwd`" 
+  echo "*** changed directory in : `pwd`"
 
   sed -i 's/https:\/\/localhost:5001/http:\/\/localhost:8080/g' cypress.json
 
