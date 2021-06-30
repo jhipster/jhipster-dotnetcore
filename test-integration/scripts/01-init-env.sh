@@ -26,6 +26,10 @@ if [[ ("$APP_FOLDER" = "jwt-with-blazor-app" || "$APP_FOLDER" = "jwt-with-blazor
     SONAR_ANALYSE_BLAZOR=true
 fi
 
+if [[ ("$APP_FOLDER" = "jwt-with-mongo-app" || "$APP_FOLDER" = "jwt-with-mongo-cqrs-app") && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
+    SONAR_ANALYSE_MONGO=true
+fi
+
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
