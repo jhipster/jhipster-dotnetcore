@@ -27,7 +27,7 @@
     "chalk": "4.1.1",
     "ejs": "3.1.6",
     "generator-jhipster": "7.0.1",
-    "glob": "7.1.6",
+    "glob": "7.1.7",
     "gulp-filter": "6.0.0",
     "insight": "0.10.3",
     "jhipster-core": "7.3.4",
