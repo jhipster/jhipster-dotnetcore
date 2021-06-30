@@ -13,9 +13,8 @@ ASPNETCORE_ENVIRONMENT="Production"
 #-------------------------------------------------------------------------------
 echo "*** run test in server for : `pwd`"
 if "$SONAR_ANALYSE_MONGO" ; then
-  docker run --name some-mongo -d mongo:latest
+  docker run --name some-mongo -p 27017:27017 -d mongo:latest
 fi
-timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/health)" != "200" ]]; do echo "Waiting for http://localhost:8080/health" && sleep 5; done' || false
 
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
