@@ -8,13 +8,13 @@ You must also create a Heroku account and run:
 heroku login
 ```
 [Git](https://git-scm.com/) is also required to deploy to Heroku.
+Also make sure you have a working Docker installation (eg. `docker ps`).
 
 ## Deploying to Heroku
 To deploy your .Net 5 application to Heroku, run this command:
 
 ```bash
 jhipster heroku
-git push heroku main
 ```
 
 This will initialize a new Heroku app and git push your application to Heroku.

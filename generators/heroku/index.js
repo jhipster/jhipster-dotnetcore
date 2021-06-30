@@ -157,6 +157,10 @@ module.exports = class extends BaseBlueprintGenerator {
                                 value: 'git',
                                 name: 'Git (compile on Heroku)',
                             },
+                            {
+                                value: 'container',
+                                name: 'Git (compile on Heroku)',
+                            },
                         ],
                         default: 0,
                     },
@@ -274,39 +278,39 @@ module.exports = class extends BaseBlueprintGenerator {
                 statistics.sendSubGenEvent('generator', 'heroku');
             },
 
-            gitInit() {
-                if (this.abort) return;
-                const done = this.async();
+            // gitInit() {
+            //     if (this.abort) return;
+            //     const done = this.async();
 
-                try {
-                    fs.lstatSync('.git');
-                    this.log(chalk.bold('\nUsing existing Git repository'));
-                    done();
-                } catch (e) {
-                    // An exception is thrown if the folder doesn't exist
-                    this.log(chalk.bold('\nInitializing Git repository'));
-                    const child = ChildProcess.exec('git init', (err, stdout, stderr) => {
-                        done();
-                    });
-                    child.stdout.on('data', data => {
-                        this.log(data.toString());
-                    });
-                }
-            },
+            //     try {
+            //         fs.lstatSync('.git');
+            //         this.log(chalk.bold('\nUsing existing Git repository'));
+            //         done();
+            //     } catch (e) {
+            //         // An exception is thrown if the folder doesn't exist
+            //         this.log(chalk.bold('\nInitializing Git repository'));
+            //         const child = ChildProcess.exec('git init', (err, stdout, stderr) => {
+            //             done();
+            //         });
+            //         child.stdout.on('data', data => {
+            //             this.log(data.toString());
+            //         });
+            //     }
+            // },
 
-            nodePackageInit() {
-                if (this.abort) return;
-                // A package.json file at the root folder is required by the node.js buildpack.
-                // Node.js is required to complie the client application.
-                try {
-                    fs.lstatSync('package.json');
-                    this.log(chalk.bold('\nUsing existing package.json at root directory. It is required by heroku/nodejs buidpack.'));
-                } catch (e) {
-                    // An exception is thrown if the folder doesn't exist
-                    this.log(chalk.bold('\nCreating package.json at root directory. It is required by heroku/nodejs buidpack.'));
-                    ChildProcess.execSync('npm init -y');
-                }
-            },
+            // nodePackageInit() {
+            //     if (this.abort) return;
+            //     // A package.json file at the root folder is required by the node.js buildpack.
+            //     // Node.js is required to complie the client application.
+            //     try {
+            //         fs.lstatSync('package.json');
+            //         this.log(chalk.bold('\nUsing existing package.json at root directory. It is required by heroku/nodejs buidpack.'));
+            //     } catch (e) {
+            //         // An exception is thrown if the folder doesn't exist
+            //         this.log(chalk.bold('\nCreating package.json at root directory. It is required by heroku/nodejs buidpack.'));
+            //         ChildProcess.execSync('npm init -y');
+            //     }
+            // },
 
             herokuCreate() {
                 if (this.abort || this.herokuAppExists) return;
