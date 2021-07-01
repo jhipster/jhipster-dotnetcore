@@ -137,7 +137,7 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
         {
             <%_ if (cqrsEnabled) { _%>
-                await _mediator.Send(new AccountSaveCommand { User = User, UserDto = userDto});
+            await _mediator.Send(new AccountSaveCommand { User = User, UserDto = userDto });
             <%_ } else { _%>
             var userName = _userManager.GetUserName(User);
             if (userName == null) throw new InternalServerErrorException("Current user login not found");
