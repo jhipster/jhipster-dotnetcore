@@ -30,5 +30,6 @@ namespace <%= namespace %>.Application.Commands
 {
     public class <%= pascalizedEntityClass %>UpdateCommand : <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>, IRequest<<%= pascalizedEntityClass %>>
     {
+        public <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> { get; set; }
     }
 }

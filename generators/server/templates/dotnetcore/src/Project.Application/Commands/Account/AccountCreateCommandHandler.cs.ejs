@@ -39,9 +39,9 @@ namespace <%= namespace %>.Application.Commands
             _userMapper = mapper;
         }
 
-        public async Task<User> Handle(AccountCreateCommand managedUserDto, CancellationToken cancellationToken)
+        public async Task<User> Handle(AccountCreateCommand command, CancellationToken cancellationToken)
         {
-            var user = await _userService.RegisterUser(_userMapper.Map<User>(managedUserDto), managedUserDto.Password);
+            var user = await _userService.RegisterUser(_userMapper.Map<User>(command.ManagedUserDto), command.ManagedUserDto.Password);
             await _mailService.SendActivationEmail(user);
             return user;
         }

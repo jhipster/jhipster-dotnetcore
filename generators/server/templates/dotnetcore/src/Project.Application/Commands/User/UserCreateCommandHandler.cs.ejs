@@ -43,15 +43,15 @@ namespace <%= namespace %>.Application.Commands
             _mapper = mapper;
         }
 
-        public async Task<User> Handle(UserCreateCommand userDto, CancellationToken cancellationToken)
+        public async Task<User> Handle(UserCreateCommand command, CancellationToken cancellationToken)
         {
             // Lowercase the user login before comparing with database
-            if (await _userManager.FindByNameAsync(userDto.Login.ToLowerInvariant()) != null)
+            if (await _userManager.FindByNameAsync(command.UserDto.Login.ToLowerInvariant()) != null)
                 throw new LoginAlreadyUsedException();
-            if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
+            if (await _userManager.FindByEmailAsync(command.UserDto.Email.ToLowerInvariant()) != null)
                 throw new EmailAlreadyUsedException();
 
-            var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
+            var newUser = await _userService.CreateUser(_mapper.Map<User>(command.UserDto));
             await _mailService.SendCreationEmail(newUser);
             return newUser;
         }

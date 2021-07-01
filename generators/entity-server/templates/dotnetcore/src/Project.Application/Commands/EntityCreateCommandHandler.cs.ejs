@@ -50,12 +50,14 @@ namespace <%= namespace %>.Application.Commands
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
         }
 
-        public async Task<<%= pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>CreateCommand <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>, CancellationToken cancellationToken)
+        public async Task<<%= pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>CreateCommand command, CancellationToken cancellationToken)
         {
             <%_ if (hasDto) { _%>
-            <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
-            <%_ } _%>
+            <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(command.<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>);
             var entity = await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+            <%_ } else { _%>
+            var entity = await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(command.<%= pascalizedEntityClass %>);
+            <%_ } _%>
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             return entity;
         }

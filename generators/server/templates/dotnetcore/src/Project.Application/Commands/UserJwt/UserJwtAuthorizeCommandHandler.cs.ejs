@@ -33,9 +33,9 @@ namespace <%= namespace %>.Application.Commands
             _authenticationService = authenticationService;
         }
 
-        public Task<IPrincipal> Handle(UserJwtAuthorizeCommand LoginDto, CancellationToken cancellationToken)
+        public Task<IPrincipal> Handle(UserJwtAuthorizeCommand command, CancellationToken cancellationToken)
         {
-            return _authenticationService.Authenticate(LoginDto.Username, LoginDto.Password);
+            return _authenticationService.Authenticate(command.LoginDto.Username, command.LoginDto.Password);
         }
     }
 }

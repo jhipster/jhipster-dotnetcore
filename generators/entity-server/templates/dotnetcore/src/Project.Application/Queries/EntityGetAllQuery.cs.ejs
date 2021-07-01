@@ -29,6 +29,6 @@ namespace <%= namespace %>.Application.Queries
 {
     public class <%= pascalizedEntityClass %>GetAllQuery : IRequest<<%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>
     {
-        public IPageable page { get; set; }
+        public IPageable Page { get; set; }
     }
 }
