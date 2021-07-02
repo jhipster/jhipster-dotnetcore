@@ -13,7 +13,7 @@ ASPNETCORE_ENVIRONMENT="Production"
 #-------------------------------------------------------------------------------
 echo "*** run test in server for : `pwd`"
 if "$SONAR_ANALYSE_MONGO" ; then
-  docker run --name some-mongo -p 27017:27017 -d mongo:latest
+  docker run --name some-mongo -p 27017:27017 --host mongo -d mongo:latest
 fi
 
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
