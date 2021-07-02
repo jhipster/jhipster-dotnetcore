@@ -63,6 +63,7 @@ namespace <%= namespace %>.Application.Queries
                 .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
                 <%_ }
                 }); _%>
+                <%_ } _%>
                 .GetPageAsync(request.Page);
             <%_ if (hasDto) { _%>
             return new Page<<%= asDto(pascalizedEntityClass) %>>(page.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(), request.Page, page.TotalElements);

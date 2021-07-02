@@ -30,33 +30,9 @@ using <%= namespace %>.Domain.Repositories.Interfaces;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
+    public abstract class GenericRepository<TEntity, TKey> : ReadOnlyGenericRepository<TEntity, TKey>, IGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
     {
-        protected internal readonly IUnitOfWork _context;
-        protected internal readonly DbSet<TEntity> _dbSet;
-
-        public GenericRepository(IUnitOfWork context)
-        {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
-        }
-
-        public virtual async Task<TEntity> GetOneAsync(TKey id)
-        {
-            return await _dbSet.FindAsync(id);
-        }
-
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
-
-        public virtual async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
-        {
-            return await _dbSet.UsePageableAsync(pageable);
-        }
-
-        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
+        public GenericRepository(IUnitOfWork context) : base(context)
         {
         }
 
@@ -131,18 +107,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        public virtual async Task<int> CountAsync()
-        {
-            var countTask = await _dbSet.CountAsync();
-            return countTask;
-        }
-
-        public virtual IFluentRepository<TEntity> QueryHelper()
-        {
-            var fluentRepository = new FluentRepository<TEntity>(_dbSet);
-            return fluentRepository;
         }
 
         protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)

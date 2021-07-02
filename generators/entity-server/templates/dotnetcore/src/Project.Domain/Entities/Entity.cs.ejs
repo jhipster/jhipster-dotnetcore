@@ -42,7 +42,7 @@ using Newtonsoft.Json;
 namespace <%= namespace %>.Domain
 {
     [Table("<%= entityTableName %>")]
-    public class <%= entityClassName %> : <% if (databaseType == 'mongodb') { %> MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { _%> BaseEntity<<%= primaryKeyType %>> <%_ } %>
+    public class <%= entityClassName %> : <%_ if (databaseType == 'mongodb') { %> MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { _%> BaseEntity<<%= primaryKeyType %>> <%_ } %>
     {
         <%_ for (idx in fields){
             if (fields[idx].id) continue;
@@ -77,7 +77,6 @@ namespace <%= namespace %>.Domain
                 <%_ } else { _%>
         public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ } _%>
-
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
 <%_ }
             if(relationshipType === 'one-to-many') { _%>
@@ -113,7 +112,7 @@ namespace <%= namespace %>.Domain
             if (<%= entityVariableName %>?.Id == null || <%= entityVariableName %>?.Id == 0 || Id == 0) return false;
             return EqualityComparer<long>.Default.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } else { _%>
-            if (<%= entityVariableName %>?.Id == null ||  Id == null) return false;
+            if (<%= entityVariableName %>?.Id == null || Id == null) return false;
             return EqualityComparer<string>.Default.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } _%>
         }
