@@ -70,15 +70,17 @@ function askForServerSideOpts() {
             message: 'Do you want to use the CQRS design pattern?',
             default: false,
         },
+        /*
+        Questions for separate DB
         {
-            when: response => false && response.cqrsEnabled === true,
+            when: response => response.cqrsEnabled === true,
             type: 'confirm',
             name: 'separateDataBase',
             message: 'Do you want to use two separate databases for reading and writing?',
             default: false,
         },
         {
-            when: response => false && response.cqrsEnabled === true && response.separateDataBase === true,
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use for reading',
@@ -86,15 +88,16 @@ function askForServerSideOpts() {
             default: 0,
         },
         {
-            when: response => false && response.cqrsEnabled === true && response.separateDataBase === true,
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
             type: 'list',
             name: 'databaseTwo',
             message: 'Which database do you want to use for writing',
             choices: availableDb,
             default: 0,
         },
+        */
         {
-            when: response => true || response.separateDataBase === false,
+            // when: response => response.separateDataBase === false,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use',
