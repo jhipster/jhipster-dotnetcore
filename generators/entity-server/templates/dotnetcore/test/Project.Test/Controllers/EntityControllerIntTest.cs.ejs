@@ -378,7 +378,7 @@ namespace <%= namespace %>.Test.Controllers
             var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List.Last();
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
-            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be<%_ if (field.fieldType === 'Instant') { _%>CloseTo<%_ } _%>(Updated<%= field.fieldNamePascalized %>);
             <%_ }); _%>
         }
 
