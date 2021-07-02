@@ -26,8 +26,8 @@ if [[ ("$APP_FOLDER" = "jwt-with-blazor-app" || "$APP_FOLDER" = "jwt-with-blazor
     SONAR_ANALYSE_BLAZOR=true
 fi
 
-if [[ ("$APP_FOLDER" = "jwt-with-mongo-app" || "$APP_FOLDER" = "jwt-with-mongo-cqrs-app") && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" ]]; then
-    SONAR_ANALYSE_MONGO=true
+if [[ ("$APP_FOLDER" = "jwt-with-mongo-app" || "$APP_FOLDER" = "jwt-with-mongo-cqrs-app") ]]; then
+    IS_MONGO=true
 fi
 
 #-------------------------------------------------------------------------------
