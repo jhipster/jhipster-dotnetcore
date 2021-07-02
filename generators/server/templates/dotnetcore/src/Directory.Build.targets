@@ -96,7 +96,7 @@
 		<%_ break;
 		case 'mysql': _%>
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
+	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="5.0.1" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'oracle': _%>

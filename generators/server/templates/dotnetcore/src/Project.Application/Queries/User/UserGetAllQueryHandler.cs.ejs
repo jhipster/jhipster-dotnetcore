@@ -50,7 +50,7 @@ namespace <%= namespace %>.Application.Queries
             var page = await _userManager.Users
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
-                .UsePageableAsync(request.page);
+                .UsePageableAsync(request.Page);
             var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return (headers, userDtos);

@@ -78,26 +78,15 @@ namespace <%= namespace %>.Controllers
 
         [HttpPost]
         [ValidateModel]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<ActionResult<User>> CreateUser([FromBody] UserCreateCommand command)
-        {
-            _log.LogDebug($"REST request to save User : {command}");
-            if (command.Id != null)
-                throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement",
-                    "idexists");
-
-            var newUser = await this._mediator.Send(command);
-
-            return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
-                .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
-        }
-        <%_ } else { _%>
         public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to save User : {userDto}");
             if (userDto.Id != null)
                 throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement",
                     "idexists");
+            <%_ if (cqrsEnabled) { _%>
+            var newUser = await _mediator.Send(new UserCreateCommand { UserDto = userDto });
+            <%_ } else { _%>
             // Lowercase the user login before comparing with database
             if (await _userManager.FindByNameAsync(userDto.Login.ToLowerInvariant()) != null)
                 throw new LoginAlreadyUsedException();
@@ -106,66 +95,54 @@ namespace <%= namespace %>.Controllers
 
             var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
             await _mailService.SendCreationEmail(newUser);
+            <%_ } _%>
             return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));
         }
-        <%_ } _%>
 
         [HttpPut]
         [ValidateModel]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateCommand command)
-        {
-            _log.LogDebug($"REST request to update User : {command}");
-
-            var updatedUser = await this._mediator.Send(command);
-            return ActionResultUtil.WrapOrNotFound(updatedUser)
-                .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", command.Login));
-        }
-        <%_ } else { _%>
         public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to update User : {userDto}");
+            <%_ if (cqrsEnabled) { _%>
+            var updatedUser = await _mediator.Send(new UserUpdateCommand { UserDto = userDto });
+            <%_ } else { _%>
             var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
             if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new EmailAlreadyUsedException();
             existingUser = await _userManager.FindByNameAsync(userDto.Login);
             if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
 
             var updatedUser = await _userService.UpdateUser(_mapper.Map<User>(userDto));
+            <%_ } _%>
 
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
         }
-        <%_ } _%>
 
         [HttpGet]
-        <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of Users");
-            (var headers, var userDtos) = await this._mediator.Send(new UserGetAllQuery { page = pageable });
-            return Ok(userDtos).WithHeaders(headers);
-        }
-        <%_ } else { _%>
-        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
-        {
-            _log.LogDebug("REST request to get a page of Users");
+            <%_ if (cqrsEnabled) { _%>
+            (var headers, var userDtos) = await _mediator.Send(new UserGetAllQuery { Page = pageable });
+            <%_ } else { _%>
             var page = await _userManager.Users
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .UsePageableAsync(pageable);
             var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
+            <%_ } _%>
             return Ok(userDtos).WithHeaders(headers);
         }
-        <%_ } _%>
 
         [HttpGet("authorities")]
         [Authorize(Roles = RolesConstants.ADMIN)]
         <%_ if (cqrsEnabled) { _%>
         public async Task<ActionResult<IEnumerable<string>>> GetAuthorities()
         {
-            return Ok(await this._mediator.Send(new UserGetAuthoritiesQuery()));
+            return Ok(await _mediator.Send(new UserGetAuthoritiesQuery()));
         }
         <%_ } else { _%>
         public ActionResult<IEnumerable<string>> GetAuthorities()
@@ -175,43 +152,33 @@ namespace <%= namespace %>.Controllers
         <%_ } _%>
 
         [HttpGet("{login}")]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> GetUser([FromRoute] UserGetQuery query)
-        {
-            _log.LogDebug($"REST request to get User : {query.Login}");
-            var userDto = await this._mediator.Send(query);
-            return ActionResultUtil.WrapOrNotFound(userDto);
-        }
-        <%_ } else { _%>
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
+            <%_ if (cqrsEnabled) { _%>
+            var userDto = await _mediator.Send(new UserGetQuery { Login = login });
+            <%_ } else { _%>
             var result = await _userManager.Users
                 .Where(user => user.Login == login)
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .SingleOrDefaultAsync();
             var userDto = _mapper.Map<UserDto>(result);
+            <%_ } _%>
             return ActionResultUtil.WrapOrNotFound(userDto);
         }
-        <%_ } _%>
 
         [HttpDelete("{login}")]
         [Authorize(Roles = RolesConstants.ADMIN)]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> DeleteUser([FromRoute] UserDeleteCommand command)
-        {
-            _log.LogDebug($"REST request to delete User : {command.Login}");
-            await this._mediator.Send(command);
-            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", command.Login));
-        }
-        <%_ } else { _%>
         public async Task<IActionResult> DeleteUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to delete User : {login}");
+            <%_ if (cqrsEnabled) { _%>
+            await _mediator.Send(new UserDeleteCommand { Login = login });
+            <%_ } else { _%>
             await _userService.DeleteUser(login);
+            <%_ } _%>
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
         }
-        <%_ } _%>
     }
 }

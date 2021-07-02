@@ -3,7 +3,7 @@
 
 ## Introduction
 
-CQRS stands for **Command Query Responsibility Segregation**.  You have the possibility to use this pattern thanks to [MediatR](https://github.com/jbogard/MediatR).
+CQRS stands for **Command Query Responsibility Segregation**. You have the possibility to use this pattern thanks to [MediatR](https://github.com/jbogard/MediatR).
 
 When generating your application, you can choose to use CQRS. Enabling it will generate a new layer for your commands and queries called Application.
 
@@ -62,13 +62,12 @@ namespace MyCompany.Application.Queries {
     }
 }
 ```
-Please note that we are using a ReadOnlyRepository rather than a service in order to do the segregation between Commands and Queries. Lastly, create your controller's method :
+Please note that we are using a **ReadOnlyRepository** rather than a service in order to do the segregation between Commands and Queries. Lastly, create your routing method within your controller :
 ```csharp
 [HttpGet("my-entity/{id}")]
-public async Task<IActionResult> GetMyEntity([FromRoute] MyEntityGetQuery query)
+public async Task<IActionResult> GetMyEntity([FromRoute] long id)
 {
-	var result = await this._mediator.Send(query);
+	var result = await _mediator.Send(new MyEntityGetQuery { Id = id });
 	return ActionResultUtil.WrapOrNotFound(result);
 }
 ```
-Note that the Id parameter is automatically wrapped inside your Query.

@@ -26,6 +26,6 @@ namespace <%= namespace %>.Application.Queries
 {
     public class UserGetAllQuery : IRequest<(IHeaderDictionary, IEnumerable<UserDto>)>
     {
-        public IPageable page { get; set; }
+        public IPageable Page { get; set; }
     }
 }

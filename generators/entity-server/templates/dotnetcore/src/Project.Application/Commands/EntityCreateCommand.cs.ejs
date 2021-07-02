@@ -27,7 +27,8 @@ using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Application.Commands
 {
-    public class <%= pascalizedEntityClass %>CreateCommand : <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>, IRequest<<%= pascalizedEntityClass %>>
+    public class <%= pascalizedEntityClass %>CreateCommand : IRequest<<%= pascalizedEntityClass %>>
     {
+        public <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> { get; set; }
     }
 }

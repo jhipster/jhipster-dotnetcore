@@ -114,22 +114,6 @@ namespace <%= namespace %>.Controllers
 
         [HttpPost]
         [ValidateModel]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= pascalizedEntityClass %>CreateCommand command)
-        {
-            _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {command}");
-            <%_ if (primaryKeyType == 'string') { _%>
-            if (command.Id != null)
-            <%_ } else { _%>
-            if (command.Id != 0)
-            <%_ } _%>
-                throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
-
-            var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
-            return CreatedAtAction(nameof(Get<%= pascalizedEntityClass %>), new { id = <%= camelCasedEntityClass %>.Id }, <%= camelCasedEntityClass %>)
-                .WithHeaders(HeaderUtil.CreateEntityCreationAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
-        }
-        <%_ } else { %>
         public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
@@ -139,7 +123,9 @@ namespace <%= namespace %>.Controllers
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id != 0)
             <%_ } _%>
                 throw new BadRequestAlertException("A new <%= camelCasedEntityClass %> cannot already have an ID", EntityName, "idexists");
-
+            <%_ if (cqrsEnabled) { _%>
+            <% if (hasDto) { _%> var <% } %><%= camelCasedEntityClass %> = await _mediator.Send(new <%= pascalizedEntityClass %>CreateCommand { <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> = <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %> });
+            <%_ } else { %>
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -149,33 +135,13 @@ namespace <%= namespace %>.Controllers
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             <%_ } _%>
+            <%_ } _%>
             return CreatedAtAction(nameof(Get<%= pascalizedEntityClass %>), new { id = <%= camelCasedEntityClass %>.Id }, <%= camelCasedEntityClass %>)
                 .WithHeaders(HeaderUtil.CreateEntityCreationAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
-        <%_ } _%>
 
         [HttpPut("{id}")]
         [ValidateModel]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<IActionResult> Update<%= pascalizedEntityClass %>(<%= primaryKeyType %> id, [FromBody] <%= pascalizedEntityClass %>UpdateCommand command)
-        {
-            _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {command}");
-            <%_ if (primaryKeyType == 'string') { _%>
-            if (command.Id == null)
-            <%_ } else { _%>
-            if (command.Id == 0)
-            <%_ } _%>
-                throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
-
-            if (id != command.Id)
-                throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
-
-            var <%= camelCasedEntityClass %> = await this._mediator.Send(command);
-            if (id != <%= camelCasedEntityClass %>.Id) throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
-            return Ok(<%= camelCasedEntityClass %>)
-                .WithHeaders(HeaderUtil.CreateEntityUpdateAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
-        }
-        <%_ } else { _%>
         public async Task<IActionResult> Update<%= pascalizedEntityClass %>(<%= primaryKeyType %> id, [FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
@@ -185,6 +151,9 @@ namespace <%= namespace %>.Controllers
             if (<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id == 0) throw new BadRequestAlertException("Invalid Id", EntityName, "idnull");
             <%_ } _%>
             if (id != <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>.Id) throw new BadRequestAlertException("Invalid Id", EntityName, "idinvalid");
+            <%_ if (cqrsEnabled) { _%>
+            <% if (hasDto) { _%> var <% } %><%= camelCasedEntityClass %> = await _mediator.Send(new <%= pascalizedEntityClass %>UpdateCommand { <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> = <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %> });
+            <%_ } else { _%>
             <%_ if (hasDto) { _%>
             <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(<%= asDto(camelCasedEntityClass) %>);
             <%_ } _%>
@@ -194,27 +163,23 @@ namespace <%= namespace %>.Controllers
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             <%_ }_%>
+            <%_ } _%>
             return Ok(<%= camelCasedEntityClass %>)
                 .WithHeaders(HeaderUtil.CreateEntityUpdateAlert(EntityName, <%= camelCasedEntityClass %>.Id.ToString()));
         }
-        <%_ } _%>
 
         [HttpGet]
-        <%_ if (cqrsEnabled) { _%>
-        public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable page)
+        public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
         {
             _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
-            var result = await this._mediator.Send(new <%= pascalizedEntityClass %>GetAllQuery { page = page });
+            <%_ if (cqrsEnabled) { _%>
+            var result = await _mediator.Send(new <%= pascalizedEntityClass %>GetAllQuery { Page = pageable });
             <%_ if (hasDto) { _%>
             return Ok(((IPage<<%= asDto(pascalizedEntityClass) %>>)result).Content).WithHeaders(result.GeneratePaginationHttpHeaders());
             <%_ } else { _%>
             return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());
             <%_ } _%>
-        }
-        <%_ } else { _%>
-        public async Task<ActionResult<IEnumerable<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>> GetAll<%= pascalizedEntityClassPlural %>(IPageable pageable)
-        {
-            _log.LogDebug("REST request to get a page of <%= pascalizedEntityClassPlural %>");
+            <%_ } else { _%>
             <%_ if (hasService) { _%>
             var result = await _<%= camelCasedEntityClass %>Service.FindAll(pageable);
             <%_ } else { _%>
@@ -236,20 +201,17 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             return Ok(result.Content).WithHeaders(result.GeneratePaginationHttpHeaders());
             <%_ } _%>
+            <%_ } _%>
         }
-        <%_ } _%>
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get<%= pascalizedEntityClass %>([FromRoute] <%= primaryKeyType %> id)
-        <%_ if (cqrsEnabled) { _%>
         {
             _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
-            var result = await this._mediator.Send(new <%= pascalizedEntityClass %>GetQuery { Id = id });
+            <%_ if (cqrsEnabled) { _%>
+            var result = await _mediator.Send(new <%= pascalizedEntityClass %>GetQuery { Id = id });
             return ActionResultUtil.WrapOrNotFound(result);
-        }
-        <%_ } else { _%>
-        {
-            _log.LogDebug($"REST request to get <%= pascalizedEntityClass %> : {id}");
+            <%_ } else { _%>
             <%_ if (hasService) { _%>
             var result = await _<%= camelCasedEntityClass %>Service.FindOne(id);
             <%_ } else { _%>
@@ -271,28 +233,24 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             return ActionResultUtil.WrapOrNotFound(result);
             <%_ }_%>
+            <%_ } _%>
         }
-        <%_ } _%>
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete<%= pascalizedEntityClass %>([FromRoute] <%= primaryKeyType %> id)
-        <%_ if (cqrsEnabled) { _%>
         {
             _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
-            await this._mediator.Send(new <%= pascalizedEntityClass %>DeleteCommand { Id = id });
-            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
-        }
-        <%_ } else { _%>
-        {
-            _log.LogDebug($"REST request to delete <%= pascalizedEntityClass %> : {id}");
+            <%_ if (cqrsEnabled) { _%>
+            await _mediator.Send(new <%= pascalizedEntityClass %>DeleteCommand { Id = id });
+            <%_ } else {_%>
             <%_ if (hasService) { _%>
             await _<%= camelCasedEntityClass %>Service.Delete(id);
             <%_ } else {_%>
             await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(id);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             <%_ }_%>
+            <%_ } _%>
             return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
         }
-        <%_ } _%>
     }
 }

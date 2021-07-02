@@ -37,9 +37,9 @@ namespace <%= namespace %>.Application.Commands
             _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
         }
 
-        public async Task<Unit> Handle(<%= pascalizedEntityClass %>DeleteCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(<%= pascalizedEntityClass %>DeleteCommand command, CancellationToken cancellationToken)
         {
-            await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(request.Id);
+            await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(command.Id);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             return Unit.Value;
         }

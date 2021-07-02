@@ -22,7 +22,8 @@ using System.Security.Principal;
 
 namespace <%= namespace %>.Application.Commands
 {
-    public class UserJwtAuthorizeCommand : LoginDto, IRequest<IPrincipal>
+    public class UserJwtAuthorizeCommand : IRequest<IPrincipal>
     {
+        public LoginDto LoginDto { get; set; }
     }
 }

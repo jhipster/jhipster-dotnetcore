@@ -22,7 +22,8 @@ using <%= namespace %>.Dto;
 
 namespace <%= namespace %>.Application.Commands
 {
-    public class AccountCreateCommand : ManagedUserDto, IRequest<User>
+    public class AccountCreateCommand : IRequest<User>
     {
+        public ManagedUserDto ManagedUserDto { get; set; }
     }
 }

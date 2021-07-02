@@ -58,7 +58,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.AnyAsync(predicate);
         }
 
         public virtual TEntity Add(TEntity entity)
@@ -159,11 +158,6 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                 .ToList();
 
             dbset.RemoveRange(filteredManyToManyData);
-        }
-
-        public void Dispose()
-        {
-            _context?.Dispose();
         }
     }
 }
