@@ -13,7 +13,7 @@ ASPNETCORE_ENVIRONMENT="Production"
 #-------------------------------------------------------------------------------
 echo "*** run test in server for : `pwd`"
 if [[ "$IS_MONGO" ]]; then
-  docker-compose -f docker/app.yml up -d db
+  docker run --name some-mongo -p 27017:27017 -d mongo:latest
   sleep 30
 fi
 
