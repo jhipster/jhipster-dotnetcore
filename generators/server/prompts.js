@@ -66,6 +66,7 @@ function askForServerSideOpts() {
             message: 'Do you want to use the CQRS design pattern?',
             default: false,
         },
+        /*
         {
             when: response => false && response.cqrsEnabled === true,
             type: 'confirm',
@@ -89,8 +90,9 @@ function askForServerSideOpts() {
             choices: availableDb,
             default: 0,
         },
+        */
         {
-            when: response => true || response.separateDataBase === false,
+            // when: response.separateDataBase === false,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use',
