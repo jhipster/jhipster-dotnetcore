@@ -12,14 +12,14 @@ ASPNETCORE_ENVIRONMENT="Production"
 # Run test
 #-------------------------------------------------------------------------------
 echo "*** run test in server for : `pwd`"
-if [ "$SONAR_ANALYSE_MONGO" = true ] ; then
+if [ "$IS_MONGO" = true ] ; then
   docker-compose -f docker/app.yml up -d db
   sleep 30
 fi
 
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
-if [ "$SONAR_ANALYSE_MONGO" = true ] ; then
+if [ "$IS_MONGO" = true ] ; then
   docker container stop some-mongo
 fi
 if [ $? -ne 0 ]; then

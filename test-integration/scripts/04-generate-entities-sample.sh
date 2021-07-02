@@ -25,11 +25,11 @@ if [ "$2" = "import-jdl" ]; then
   fi
 
   if [[ -n $(find src/JhipsterSampleApplication.Domain -type f -name "*Employee.cs") ]]; then
-      if "$SONAR_ANALYSE_ANGULAR" ; then
+      if [ "$SONAR_ANALYSE_ANGULAR" = true ] ; then
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console
         dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-dotnetcore" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
-      elif "$SONAR_ANALYSE_BLAZOR" ; then
+      elif [ "$SONAR_ANALYSE_BLAZOR" = true ] ; then
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console
         dotnet sonarscanner begin /k:"jhipster_jhipster-sample-app-blazor" /o:"jhipster" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=$SONAR_TOKEN /s:"`pwd`/SonarQube.Analysis.xml"
