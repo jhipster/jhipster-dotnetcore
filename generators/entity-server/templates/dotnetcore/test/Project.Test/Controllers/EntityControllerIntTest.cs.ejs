@@ -343,7 +343,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetNonExisting<%= pascalizedEntityClass %>()
         {
-            var maxValue = <% if (databaseType != 'mongodb') { %> long.MaxValue <%_ } else { _%> ObjectId.GenerateNewId().ToString() <%_ } _%>;
+            var maxValue = <% if (databaseType != 'mongodb') { _%> long.MaxValue <%_ } else { _%> ObjectId.GenerateNewId().ToString() <%_ } _%>;
             var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + maxValue);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }

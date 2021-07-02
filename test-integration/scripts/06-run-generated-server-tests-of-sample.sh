@@ -13,7 +13,7 @@ ASPNETCORE_ENVIRONMENT="Production"
 #-------------------------------------------------------------------------------
 echo "*** run test in server for : `pwd`"
 if "$SONAR_ANALYSE_MONGO" ; then
-  docker run --name some-mongo -p 27017:27017 -d mongo:latest
+  docker run --rm mongo mongo --add-host mongo:`cat /etc/hosts | grep mongo | awk '{print $1}'` --net host --username $MONGO_INITDB_ROOT_USERNAME --password $MONGO_INITDB_ROOT_PASSWORD
   sleep 300
 fi
 

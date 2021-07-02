@@ -42,7 +42,7 @@ using Newtonsoft.Json;
 namespace <%= namespace %>.Domain
 {
     [Table("<%= entityTableName %>")]
-    public class <%= entityClassName %> : <%_ if (databaseType == 'mongodb') { %> MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { _%> BaseEntity<<%= primaryKeyType %>> <%_ } %>
+    public class <%= entityClassName %> : <%_ if (databaseType == 'mongodb') { %> MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { %> BaseEntity<<%= primaryKeyType %>> <%_ } %>
     {
         <%_ for (idx in fields){
             if (fields[idx].id) continue;
