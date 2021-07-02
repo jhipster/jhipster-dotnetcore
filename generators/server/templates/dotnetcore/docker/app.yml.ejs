@@ -46,6 +46,8 @@ services:
     case 'mongodb': _%>
     db:
         container_name: db
+        ports:
+            - "27017:27017"
         image: mongo:latest
         restart: always
         healthcheck:
