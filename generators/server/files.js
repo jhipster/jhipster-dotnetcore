@@ -697,6 +697,12 @@ const serverFiles = {
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/ApplicationClassesAssemblyHelper.cs`,
                 },
+            ]
+        },
+        {
+            condition: generator => generator.applicationType !== 'microservice' && generator.cqrsEnabled === true && generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
                 {
                     file: 'Project.Application/Commands/Account/AccountActivateCommand.cs',
                     renameTo: generator =>
