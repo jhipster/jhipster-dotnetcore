@@ -7,7 +7,7 @@ RED='\033[0;31m'
 source $(dirname $0)/01-init-env.sh
 
 #-------------------------------------------------------------------------------
-# Run Sonar  
+# Run Sonar
 #-------------------------------------------------------------------------------
 if [[ "$SONAR_ANALYSE_ANGULAR" = true || "$SONAR_ANALYSE_BLAZOR" = true ]] ; then
   echo "*** run sonar analyze in server for : `pwd`"
