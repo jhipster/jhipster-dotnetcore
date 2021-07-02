@@ -700,8 +700,8 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.applicationType !== 'microservice' && generator.cqrsEnabled === true
-                && generator.authenticationType === 'jwt',
+            condition: generator =>
+                generator.applicationType !== 'microservice' && generator.cqrsEnabled === true && generator.authenticationType === 'jwt',
             path: SERVER_SRC_DIR,
             templates: [
                 {
