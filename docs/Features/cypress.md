@@ -1,6 +1,6 @@
 # Cypress
 
-When generating an application, you are able to auto-generate Cypress tests.
+When generating an application, you are able to automatically generate Cypress tests.
 
 ## Introduction
 
@@ -14,9 +14,16 @@ When generating your application, make sure to check "Cypress" in your optional 
 
 ## How to use it
 
-Once your application is generated, you can optionally add some entities, it will auto-generate the corresponding tests for your entities. Make sure to run it at least once then execute cypress using this command :
+Once your application is generated, you can optionally add some entities, it will automatically generate the corresponding tests for your entities. To begin, go to your ClientApp folder:
 ```bash
 cd src/YourApplication/ClientApp
+```
+Then execute one of the following commands:
+```bash
+npx cypress open
+```
+or
+```bash
 ./node_modules/.bin/cypress open
 ```
-You can click on "run tests" to get started
+For futher information you can visit [Cypress wiki](https://docs.cypress.io/guides/guides/command-line#How-to-run-commands).
