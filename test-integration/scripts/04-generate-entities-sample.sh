@@ -14,7 +14,11 @@ if [[ "$2" = "import-jdl" ]]; then
   echo "*** run generation app with dotnetcore blueprint for : "$APP_FOLDER
   runOptions="--blueprints dotnetcore --skip-checks --force --no-insight --skip-install"
 
+  if [[ "$IS_MONGO" ]] ; then
+  runOptions="import-jdl ../jdl-default/app_mongo.jdl $runOptions"
+  else
   runOptions="import-jdl ../jdl-default/app.jdl $runOptions"
+  fi
   jhipster $runOptions
 
   # copy files required for testing automatic service class/interface registration on dependency injection container

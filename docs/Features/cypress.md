@@ -14,7 +14,9 @@ When generating your application, make sure to check "Cypress" in your optional 
 
 ## How to use it
 
-Once your application is generated, you can optionally add some entities, it will auto-generate the corresponding tests for your entities. Execute cypress using this command :
+Once your application is generated, you can optionally add some entities, it will auto-generate the corresponding tests for your entities. Make sure to run it at least once then execute cypress using this command :
 ```bash
-src/YourApplication/ClientApp/node_modules/.bin/cypress open
+cd src/YourApplication/ClientApp
+./node_modules/.bin/cypress open
 ```
+You can click on "run tests" to get started
