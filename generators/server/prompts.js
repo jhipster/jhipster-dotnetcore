@@ -49,6 +49,10 @@ function askForServerSideOpts() {
             value: 'oracle',
             name: 'Oracle',
         },
+        {
+            value: 'mongodb',
+            name: 'MongoDB',
+        },
     ];
     const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
@@ -67,15 +71,16 @@ function askForServerSideOpts() {
             default: false,
         },
         /*
+        Questions for separate DB
         {
-            when: response => false && response.cqrsEnabled === true,
+            when: response => response.cqrsEnabled === true,
             type: 'confirm',
             name: 'separateDataBase',
             message: 'Do you want to use two separate databases for reading and writing?',
             default: false,
         },
         {
-            when: response => false && response.cqrsEnabled === true && response.separateDataBase === true,
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use for reading',
@@ -83,7 +88,7 @@ function askForServerSideOpts() {
             default: 0,
         },
         {
-            when: response => false && response.cqrsEnabled === true && response.separateDataBase === true,
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
             type: 'list',
             name: 'databaseTwo',
             message: 'Which database do you want to use for writing',
@@ -92,7 +97,7 @@ function askForServerSideOpts() {
         },
         */
         {
-            // when: response.separateDataBase === false,
+            // when: response => response.separateDataBase === false,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use',

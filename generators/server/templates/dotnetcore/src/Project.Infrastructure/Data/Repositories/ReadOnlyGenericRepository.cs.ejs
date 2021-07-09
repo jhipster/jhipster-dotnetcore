@@ -27,10 +27,11 @@ using JHipsterNet.Core.Pagination.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using <%= namespace %>.Domain.Repositories.Interfaces;
+using <%= namespace %>.Domain;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class ReadOnlyGenericRepository<TEntity> : IReadOnlyGenericRepository<TEntity>, IDisposable where TEntity : class
+    public abstract class ReadOnlyGenericRepository<TEntity, TKey> : IReadOnlyGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
     {
         protected internal readonly IUnitOfWork _context;
         protected internal readonly DbSet<TEntity> _dbSet;
@@ -41,7 +42,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity> GetOneAsync(object id)
+        public virtual async Task<TEntity> GetOneAsync(TKey id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -69,7 +70,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
 
         public virtual IFluentRepository<TEntity> QueryHelper()
         {
-            var fluentRepository = new FluentRepository<TEntity>(this, _dbSet);
+            var fluentRepository = new FluentRepository<TEntity>(_dbSet);
             return fluentRepository;
         }
 

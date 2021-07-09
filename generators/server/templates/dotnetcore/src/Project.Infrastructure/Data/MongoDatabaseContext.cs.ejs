@@ -1,0 +1,61 @@
+﻿<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using MongoDB.Driver;
+using Microsoft.Extensions.Options;
+using <%= namespace %>.Infrastructure.Configuration;
+
+namespace <%= namespace %>.Infrastructure.Data
+{
+    public class MongoDatabaseContext : IMongoDatabaseContext, IDisposable
+    {
+        private IMongoDatabase _db { get; set; }
+        private MongoClient _mongoClient { get; set; }
+        public IClientSessionHandle Session { get; set; }
+
+        protected List<Func<Task>> _commands;
+        public MongoDatabaseContext(IOptions<MongoDatabaseConfig> configuration)
+        {
+            _mongoClient = new MongoClient(configuration.Value.ConnectionString);
+            _db = _mongoClient.GetDatabase(configuration.Value.DatabaseName);
+            _commands = new List<Func<Task>>();
+        }
+
+        public IMongoCollection<T> Set<T>(string name)
+        {
+            return _db.GetCollection<T>(name);
+        }
+
+        public void AddCommand(Func<Task> func)
+        {
+            _commands.Add(func);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            var commandTasks = _commands.Select(c => c());
+            await Task.WhenAll(commandTasks);
+            return _commands.Count;
+        }
+
+        public void Dispose()
+        {
+            Session?.Dispose();
+        }
+    }
+}

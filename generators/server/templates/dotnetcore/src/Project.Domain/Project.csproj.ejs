@@ -25,6 +25,9 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
         <PackageReference Include="Newtonsoft.Json"  />
         <PackageReference Include="JHipsterNet.Core"  />
+        <%_ if (databaseType == 'mongodb') { _%>
+        <PackageReference Include="MongoDB.Driver" />
+        <%_ } _%>
     </ItemGroup>
 
     <ItemGroup>

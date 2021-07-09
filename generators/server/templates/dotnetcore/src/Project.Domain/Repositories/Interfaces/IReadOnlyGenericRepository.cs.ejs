@@ -24,12 +24,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
 using Microsoft.EntityFrameworkCore.Query;
+using <%= namespace %>.Domain;
 
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
-    public interface IReadOnlyGenericRepository<TEntity> where TEntity : class
+    public interface IReadOnlyGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
-        Task<TEntity> GetOneAsync(object id);
+        Task<TEntity> GetOneAsync(TKey id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<IPage<TEntity>> GetPageAsync(IPageable pageable);
         Task<bool> Exists(Expression<Func<TEntity, bool>> predicate);

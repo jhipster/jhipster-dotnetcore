@@ -1,0 +1,35 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "JhipsterSampleApplication",
+    "packageName": "JhipsterSampleApplication",
+    "authenticationType": "oauth2",
+    "serverPort": "5000",
+    "databaseType": "mongodb",
+    "prodDatabaseType": "mongodb",
+	  "cqrsEnabled": true,
+    "enableTranslation": false,
+    "namespace": "JhipsterSampleApplication",
+    "jhipsterVersion": "6.10.4",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "creationTimestamp": 1585496278113,
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "2.2.0"
+      }
+    ],
+    "blueprints": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "2.0.0"
+      }
+    ]
+  }
+}

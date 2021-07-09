@@ -22,17 +22,5 @@ namespace JhipsterSampleApplication.Domain.Services
             // add custom business logic
             return await base.FindAll(pageable);
         }
-
-        public override async Task<Country> FindOne(long id)
-        {
-            // add custom business logic
-            return await base.FindOne(id);
-        }
-
-        public override async Task Delete(long id)
-        {
-            // add custom business logic
-            await base.Delete(id);
-        }
     }
 }

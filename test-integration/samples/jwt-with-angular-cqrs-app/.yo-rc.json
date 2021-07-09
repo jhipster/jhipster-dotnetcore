@@ -7,7 +7,7 @@
     "serverPort": "5000",
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
-	"cqrsEnabled": true,
+	  "cqrsEnabled": true,
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
     "jhipsterVersion": "6.10.4",

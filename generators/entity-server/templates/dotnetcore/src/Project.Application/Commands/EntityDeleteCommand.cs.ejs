@@ -23,6 +23,6 @@ namespace <%= namespace %>.Application.Commands
 {
     public class <%= pascalizedEntityClass %>DeleteCommand : IRequest<Unit>
     {
-        public long Id { get; set; }
+        public <%= primaryKeyType %> Id { get; set; }
     }
 }

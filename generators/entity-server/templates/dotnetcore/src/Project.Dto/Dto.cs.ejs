@@ -44,7 +44,7 @@ namespace <%= namespace %>.Dto
     public class <%= asDto(entityClassName) %>
     {
 
-        public long Id { get; set; }
+        public <%= primaryKeyType %> Id { get; set; }
 
         <%_ for (idx in fields){
             if (fields[idx].id) continue;
