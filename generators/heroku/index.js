@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2020 the original author or authors from the JHipster project.
+ * Copyright 2013-2021 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -26,9 +26,11 @@ const chalk = require('chalk');
 const BaseBlueprintGenerator = require('generator-jhipster/generators/generator-base-blueprint');
 const statistics = require('generator-jhipster/generators/statistics');
 const constants = require('generator-jhipster/generators/generator-constants');
+const Which = require('which');
+const toPascalCase = require('to-pascal-case');
+const netConstants = require('../generator-dotnetcore-constants');
 
 const execCmd = util.promisify(ChildProcess.exec);
-const Which = require('which');
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -77,6 +79,7 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.oktaAdminLogin = configuration.get('oktaAdminLogin');
                 this.oktaAdminPassword = configuration.get('oktaAdminPassword');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
+                this.pascalizedBaseName = toPascalCase(this.baseName);
             },
         };
     }
@@ -444,10 +447,14 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.log(chalk.bold('\nProvisioning addons'));
 
                 if (this.useOkta) {
-                    const herokuAddOktaCmd = `heroku addons:create okta --app ${this.herokuAppName}`;
-                    ChildProcess.exec(herokuAddOktaCmd, (err, stdout, stderr) => {
-                        addonCreateCallback('Okta', err, stdout, stderr);
-                    });
+                    ChildProcess.execFile(
+                        this.herokuExecutablePath,
+                        ['addons:create', 'okta', '--app', this.herokuAppName],
+                        { shell: false },
+                        (err, stdout, stderr) => {
+                            addonCreateCallback('Okta', err, stdout, stderr);
+                        }
+                    );
                 }
 
                 let dbAddOn;
@@ -478,8 +485,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.abort) return;
 
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
-
-                this.template('Procfile.ejs', 'Procfile');
 
                 if (this.useOkta) {
                     this.template(
@@ -554,8 +559,15 @@ module.exports = class extends BaseBlueprintGenerator {
                         const buildpack = 'https://github.com/jincod/dotnetcore-buildpack#v5.0.100';
                         const configVars = 'ASPNETCORE_ENVIRONMENT=Production ';
 
+                        // if (this.clientFramework === BLAZOR) {
+                        // const fileConfig = `PROJECT_FILE=${netConstants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`;
+                        // }
+
                         this.log(chalk.bold('\nConfiguring Heroku'));
                         await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
+                        await execCmd(
+                            `heroku config:set PROJECT_FILE=${netConstants.SERVER_SRC_DIR}${this.pascalizedBaseName}/${this.pascalizedBaseName}.csproj --app ${this.herokuAppName}`
+                        );
 
                         this.log(chalk.bold('\nAdding .Net 5 buidpack (https://github.com/jincod/dotnetcore-buildpack#v5.0.100)'));
                         await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
@@ -581,8 +593,8 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                         if (this.databaseType === 'mssql') {
-                            this.log(chalk.yellow('Heroku MS SQL Server addon charges 15$/month.'));
-                            this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to install it.'));
+                            this.log(chalk.yellow('Heroku MS SQL Server addon charges start at 15$/month.'));
+                            this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to manually install it.'));
                             this.log(
                                 chalk.yellow('If you want to stay at the free tier re-generate the application choosing other database.')
                             );
