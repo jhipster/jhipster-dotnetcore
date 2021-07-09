@@ -13,6 +13,7 @@ jobs:
               os: [ubuntu-latest]
               app-type:
                   - oauth-with-angular-app
+                  - oauth-with-angular-cqrs-app
                   - oauth-with-mssql-app
                   - oauth-with-mysql-app
                   - oauth-with-oracle-app
@@ -21,6 +22,8 @@ jobs:
                   - oauth-with-vue-app
               include:
                   - app-type: oauth-with-angular-app
+                    arg: 'import-jdl'
+                  - app-type: oauth-with-angular-cqrs-app
                     arg: 'import-jdl'
                   - app-type: oauth-with-mssql-app
                     arg: 'no'

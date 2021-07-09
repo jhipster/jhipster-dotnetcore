@@ -205,16 +205,15 @@ namespace <%= namespace %>.Test.Controllers
             {
                 <%_ let i = 0;
                 if (fields.length != 0) {
-                    while (i < fields.length - 1) { 
+                    while (i < fields.length) {
                         if (fields[i].id) {
                             i ++;
-                            continue; 
+                            continue;
                         } _%>
                 <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
                         <%_ i ++;
                     } _%>
-                <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>
-                <%_ }_%>
+                <%_ } _%>
             };
         }
 

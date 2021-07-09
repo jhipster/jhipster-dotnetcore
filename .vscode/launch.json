@@ -7,20 +7,6 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "JHipster Mocha Tests",            
-            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-            "args": [
-                "--timeout",
-                "999999",
-                "--reporter",
-                "spec",
-                "${workspaceFolder}/test"
-            ],
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "jhipster generate dotnetcore blueprint",
             "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "timeout": 100000,
@@ -40,7 +26,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster entity",            
+            "name": "jhipster entity",
             "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
                 "entity",
@@ -53,7 +39,34 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster info",            
+            "name": "jhipster jdl",
+            "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
+            "args": [
+                "jdl",
+                "${workspaceFolder}/test-integration/samples/jdl-default/app.jdl",
+                "--force"
+            ],
+            "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster mocha tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--timeout",
+                "999999",
+                "--reporter",
+                "spec",
+                "${workspaceFolder}/test"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster info",
             "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
                 "info"
