@@ -15,9 +15,9 @@ if [[ "$2" = "import-jdl" ]]; then
   runOptions="--blueprints dotnetcore --skip-checks --force --no-insight --skip-install"
 
   if [[ "$IS_MONGO" ]] ; then
-  runOptions="import-jdl ../jdl-default/app_mongo.jdl $runOptions"
+      runOptions="import-jdl ../jdl-default/app_mongo.jdl $runOptions"
   else
-  runOptions="import-jdl ../jdl-default/app.jdl $runOptions"
+      runOptions="import-jdl ../jdl-default/app.jdl $runOptions"
   fi
   jhipster $runOptions
 
