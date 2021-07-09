@@ -14,6 +14,9 @@ if [[ "$3" != "blazor" ]]; then
   docker-compose -f docker/app.yml up -d
 
   timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/health)" != "200" ]]; do echo "Waiting for http://localhost:8080/health" && sleep 5; done' || false
+  if [[ "$IS_MONGO" ]]; then
+    sleep 60
+  fi
 
   if [[ "$3" = "blazor" && -f "cypress.json" ]]; then
     cd test/JhipsterSampleApplication.Client.Test
