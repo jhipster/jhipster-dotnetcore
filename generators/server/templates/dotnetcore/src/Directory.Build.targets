@@ -28,6 +28,10 @@
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+	<%_ if (cqrsEnabled) { _%>
+	<PackageReference Update="MediatR" Version="9.0.0" />
+	<PackageReference Update="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+	<%_ } _%>
 	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="5.4.0" />
 	<PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />

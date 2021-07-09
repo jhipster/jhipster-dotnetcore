@@ -18,11 +18,11 @@ else
     WORKSPACE=$GITHUB_WORKSPACE
 fi
 
-if [[ "$APP_FOLDER" = "jwt-with-angular-app" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
+if [[ ("$APP_FOLDER" = "jwt-with-angular-app" || "$APP_FOLDER" = "jwt-with-angular-cqrs-app") && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
     SONAR_ANALYSE_ANGULAR=true
 fi
 
-if [[ "$APP_FOLDER" = "jwt-with-blazor-app" && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
+if [[ ("$APP_FOLDER" = "jwt-with-blazor-app" || "$APP_FOLDER" = "jwt-with-blazor-cqrs-app") && "$GITHUB_REPOSITORY" = "jhipster/jhipster-dotnetcore" && "$GITHUB_REF" = "refs/heads/main" ]]; then
     SONAR_ANALYSE_BLAZOR=true
 fi
 

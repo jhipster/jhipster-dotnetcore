@@ -14,17 +14,17 @@ if [ "$2" = "import-jdl" ]; then
   echo "*** run generation app with dotnetcore blueprint for : "$APP_FOLDER
   runOptions="--blueprints dotnetcore --skip-checks --force --no-insight --skip-install"
 
-  runOptions="import-jdl ../jdl-default/app.jdl $runOptions"  
+  runOptions="import-jdl ../jdl-default/app.jdl $runOptions"
   jhipster $runOptions
 
   # copy files required for testing automatic service class/interface registration on dependency injection container
-  if [[ -n $(find src -type f -name "*CountryService.cs") ]]; then 
+  if [[ -n $(find src/JhipsterSampleApplication.Domain.Services -type f -name "*CountryService.cs") ]]; then
       cp ../csharp-di-test/CountryExtendedService.cs src/JhipsterSampleApplication.Domain.Services/
       mkdir test/JhipsterSampleApplication.Test/AutomaticServiceDI/
       cp ../csharp-di-test/ExtendedServiceRegistrationTest.cs test/JhipsterSampleApplication.Test/AutomaticServiceDI/
   fi
 
-  if [[ -n $(find src -type f -name "*Employee.cs") ]]; then
+  if [[ -n $(find src/JhipsterSampleApplication.Domain -type f -name "*Employee.cs") ]]; then
       if "$SONAR_ANALYSE_ANGULAR" ; then
         dotnet tool install --global dotnet-sonarscanner
         dotnet tool install --global coverlet.console

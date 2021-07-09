@@ -31,6 +31,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+<%_ if (cqrsEnabled) { _%>
+using MediatR;
+using <%= namespace %>.Application;
+<%_ } _%>
 
 [assembly: ApiController]
 
@@ -50,6 +54,9 @@ namespace <%= namespace %>
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            <%_ if (cqrsEnabled) { _%>
+            services.AddMediatR(typeof(ApplicationClassesAssemblyHelper));
+            <%_ } _%>
             services
                 .AddAppSettingsModule(Configuration);
 

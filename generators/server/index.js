@@ -52,6 +52,7 @@ module.exports = class extends ServerGenerator {
                 this.databaseType = this.jhipsterConfig.databaseType;
                 this.authenticationType = this.jhipsterConfig.authenticationType;
                 this.serverPort = this.jhipsterConfig.serverPort;
+                this.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
                 this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
                 this.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
 
@@ -117,19 +118,23 @@ module.exports = class extends ServerGenerator {
         return {
             async end() {
                 this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+                const slns = [
+                    `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
+                    `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}.csproj`,
+                    `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
+                ];
+                if (this.cqrsEnabled) {
+                    slns.push(
+                        `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}.csproj`
+                    );
+                }
                 await dotnet
                     .newSln(this.solutionName)
-                    .then(() =>
-                        dotnet.slnAdd(`${this.solutionName}.sln`, [
-                            `${constants.SERVER_SRC_DIR}${this.mainProjectDir}/${this.pascalizedBaseName}.csproj`,
-                            `${constants.SERVER_TEST_DIR}${this.testProjectDir}/${this.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}.csproj`,
-                            `${constants.SERVER_SRC_DIR}${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${this.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
-                        ])
-                    )
+                    .then(() => dotnet.slnAdd(`${this.solutionName}.sln`, slns))
                     .catch(err => {
                         this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
                     })
