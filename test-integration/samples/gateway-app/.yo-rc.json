@@ -10,7 +10,7 @@
     "prodDatabaseType": "mysql",
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
-    "jhipsterVersion": "6.10.4",
+    "jhipsterVersion": "7.1.0",
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
