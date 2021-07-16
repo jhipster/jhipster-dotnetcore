@@ -24,17 +24,20 @@ You can also find lot of information in https://www.jhipster.tech
   :caption: Features
 
   Features/azure
-  Features/fronts
-  Features/services
-  Features/dto
-  Features/repository
-  Features/database-migrations
   Features/code-analysis
-  Features/monitoring
-  Features/security
+  Features/cqrs
+  Features/cypress
+  Features/database-migrations
   Features/dependencies-management
+  Features/dto
   Features/entity-auditing
+  Features/fronts
   Features/heroku
+  Features/mongodb
+  Features/monitoring
+  Features/repository
+  Features/security
+  Features/services
 
 .. toctree::
   :maxdepth: 3
@@ -48,5 +51,5 @@ You can also find lot of information in https://www.jhipster.tech
   :hidden:
   :caption: Architecture
 
-  Architecture/monolith
   Architecture/microservices
+  Architecture/monolith
