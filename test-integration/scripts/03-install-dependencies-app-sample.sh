@@ -8,6 +8,10 @@ GREEN='\033[0;32m'
 
 source $(dirname $0)/01-init-env.sh
 
+export NODE_ENV="development"
+
+export APP_VERSION="1.0"
+
 #-------------------------------------------------------------------------------
 # Install app dependencies and build 
 #-------------------------------------------------------------------------------
