@@ -42,12 +42,8 @@ using Newtonsoft.Json;
 namespace <%= namespace %>.Domain
 {
     [Table("<%= entityTableName %>")]
-    public class <%= entityClassName %>
+    public class <%= entityClassName %> : <%_ if (databaseType == 'mongodb') { %> MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { %> BaseEntity<<%= primaryKeyType %>> <%_ } %>
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
-
         <%_ for (idx in fields){
             if (fields[idx].id) continue;
             let required = false;
@@ -81,7 +77,6 @@ namespace <%= namespace %>.Domain
                 <%_ } else { _%>
         public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ } _%>
-
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
 <%_ }
             if(relationshipType === 'one-to-many') { _%>
@@ -113,8 +108,13 @@ namespace <%= namespace %>.Domain
             if (this == obj) return true;
             if (obj == null || GetType() != obj.GetType()) return false;
             var <%= entityVariableName %> = obj as <%= entityClassName %>;
+            <%_ if (primaryKeyType != 'string') { _%>
             if (<%= entityVariableName %>?.Id == null || <%= entityVariableName %>?.Id == 0 || Id == 0) return false;
             return EqualityComparer<long>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            <%_ } else { _%>
+            if (<%= entityVariableName %>?.Id == null || Id == null) return false;
+            return EqualityComparer<string>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            <%_ } _%>
         }
 
         public override int GetHashCode()

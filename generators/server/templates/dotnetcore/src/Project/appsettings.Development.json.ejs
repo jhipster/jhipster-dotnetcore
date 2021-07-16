@@ -49,6 +49,15 @@
         "AppDbContext": "Server=db;Port=3306;Database=jhipster;User=root;Password=root;"
     },
         <%_ break;
+        case 'mongodb': _%>
+    "EntityFramework": {
+        "DataSource": ":memory:"
+    },
+    "MongoDatabaseConfig": {
+        "ConnectionString": "mongodb://db:27017",
+        "DatabaseName": "jhipster"
+    },
+        <%_ break;
         case 'oracle': _%>
     "ConnectionStrings": {
         "AppDbContext": "User Id=system;Password=oracle;Data Source=db:1521/xe"

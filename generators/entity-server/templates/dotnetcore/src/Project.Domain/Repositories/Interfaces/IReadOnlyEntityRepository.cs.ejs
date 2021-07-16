@@ -18,7 +18,13 @@
 -%>
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
-    public interface IReadOnly<%= pascalizedEntityClass %>Repository : IReadOnlyGenericRepository<<%= pascalizedEntityClass %>>
+    <%_ if (databaseType == 'mongodb') { %>
+    public interface IReadOnly<%= pascalizedEntityClass %>Repository : INoSqlReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
     {
     }
+    <%_ } else { %>
+    public interface IReadOnly<%= pascalizedEntityClass %>Repository : IReadOnlyGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
+    {
+    }
+    <%_ } %>
 }

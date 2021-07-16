@@ -24,13 +24,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
 using Microsoft.EntityFrameworkCore.Query;
+using <%= namespace %>.Domain;
 
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
-    public interface IGenericRepository<TEntity> : IReadOnlyGenericRepository<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity, TKey> : IReadOnlyGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         Task<TEntity> CreateOrUpdateAsync(TEntity entity);
-        Task DeleteByIdAsync(object id);
+        Task DeleteByIdAsync(TKey id);
         Task DeleteAsync(TEntity entity);
         Task Clear();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
