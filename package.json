@@ -65,7 +65,7 @@
     "sinon": "11.1.1",
     "sonarqube-scanner": "2.8.1",
     "yeoman-assert": "3.1.1",
-    "yeoman-test": "5.1.0"
+    "yeoman-test": "6.2.0"
   },
   "scripts": {
     "lint": "eslint .",
