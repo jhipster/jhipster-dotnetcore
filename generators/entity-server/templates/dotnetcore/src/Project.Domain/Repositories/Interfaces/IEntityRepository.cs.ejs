@@ -18,7 +18,13 @@
 -%>
 namespace <%= namespace %>.Domain.Repositories.Interfaces
 {
-    public interface I<%= pascalizedEntityClass %>Repository : IGenericRepository<<%= pascalizedEntityClass %>>
+    <%_ if (databaseType != 'mongodb') { _%>
+    public interface I<%= pascalizedEntityClass %>Repository : IGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType%>>
     {
     }
+    <%_ } else { _%>
+    public interface I<%= pascalizedEntityClass %>Repository : INoSqlGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>
+    {
+    }
+    <%_ } _%>
 }

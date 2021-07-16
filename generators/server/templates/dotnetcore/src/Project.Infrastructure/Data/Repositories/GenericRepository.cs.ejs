@@ -25,12 +25,12 @@ using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
 using JHipsterNet.Core.Pagination.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
+using <%= namespace %>.Domain;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public abstract class GenericRepository<TEntity> : ReadOnlyGenericRepository<TEntity>, IGenericRepository<TEntity>, IDisposable where TEntity : class
+    public abstract class GenericRepository<TEntity, TKey> : ReadOnlyGenericRepository<TEntity, TKey>, IGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
     {
         public GenericRepository(IUnitOfWork context) : base(context)
         {
@@ -61,13 +61,31 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return entity;
         }
 
+        public virtual TEntity Update(string id, TEntity entity)
+        {
+            _dbSet.Update(entity);
+            return entity;
+        }
+
         public virtual bool UpdateRange(params TEntity[] entities)
         {
             _dbSet.UpdateRange(entities);
             return true;
         }
 
-        public abstract Task<TEntity> CreateOrUpdateAsync(TEntity entity);
+        public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity)
+        {
+            bool exists = await Exists(x => x.Id.Equals(entity.Id));
+            if (entity.Id.Equals(0) && exists)
+            {
+                Update(entity);
+            }
+            else
+            {
+                _context.AddOrUpdateGraph(entity);
+            }
+            return entity;
+        }
 
         public virtual async Task Clear()
         {
@@ -75,7 +93,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             _dbSet.RemoveRange(allEntities);
         }
 
-        public virtual async Task DeleteByIdAsync(object id)
+        public virtual async Task DeleteByIdAsync(TKey id)
         {
             var entity = await GetOneAsync(id);
             _dbSet.Remove(entity);

@@ -16,6 +16,8 @@ jobs:
                   - oauth-with-angular-cqrs-app
                   - oauth-with-mssql-app
                   - oauth-with-mysql-app
+                  - oauth-with-mongo-app
+                  - oauth-with-mongo-cqrs-app
                   - oauth-with-oracle-app
                   - oauth-with-postgres-app
                   - oauth-with-react-app
@@ -28,6 +30,10 @@ jobs:
                   - app-type: oauth-with-mssql-app
                     arg: 'no'
                   - app-type: oauth-with-mysql-app
+                    arg: 'no'
+                  - app-type: oauth-with-mongo-app
+                    arg: 'no'
+                  - app-type: oauth-with-mongo-cqrs-app
                     arg: 'no'
                   - app-type: oauth-with-oracle-app
                     arg: 'no'

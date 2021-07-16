@@ -18,6 +18,8 @@ jobs:
                     - jwt-with-blazor-cqrs-app
                     - jwt-with-mssql-app
                     - jwt-with-mysql-app
+                    - jwt-with-mongo-app
+                    - jwt-with-mongo-cqrs-app
                     - jwt-with-postgres-app
                     - jwt-with-react-app
                     - jwt-with-vue-app
@@ -34,6 +36,10 @@ jobs:
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
                       arg: 'no'
+                    - app-type: jwt-with-mongo-app
+                      arg: 'import-jdl'
+                    - app-type: jwt-with-mongo-cqrs-app
+                      arg: 'import-jdl'
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
                     - app-type: jwt-with-react-app

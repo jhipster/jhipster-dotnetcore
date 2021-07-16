@@ -5,7 +5,7 @@
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",
     "serverPort": "5000",
-	"cqrsEnabled": true,
+	  "cqrsEnabled": true,
     "jhipsterVersion": "6.9.1",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
