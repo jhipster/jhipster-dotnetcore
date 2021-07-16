@@ -13,7 +13,7 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 echo "*** install dependencies and build : `pwd`"
 
-dotnet build
+dotnet build -v diag
 
 if [ $? -ne 0 ]; then
   echo "${RED}FAILED INSTALL DEPENDENCIES OR BUILD"
