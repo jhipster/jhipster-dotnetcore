@@ -56,7 +56,7 @@ namespace <%= namespace %>.Test.Setup
             services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
             <%_ if (databaseType == 'mongodb') { _%>
             services.Configure<MongoDatabaseConfig>(
-                Configuration.GetSection(nameof(MongoDatabaseConfig)));
+                Configuration.GetSection(nameof(MongoDatabaseConfig) + "UnitTests"));
             services.AddSingleton<IMongoDatabaseConfig>(sp =>
                 sp.GetRequiredService<IOptions<MongoDatabaseConfig>>().Value);
             services.AddSingleton<IMongoDatabaseContext, MongoDatabaseContext>();
