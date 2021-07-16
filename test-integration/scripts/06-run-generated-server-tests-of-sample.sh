@@ -6,7 +6,7 @@ RED='\033[0;31m'
 
 source $(dirname $0)/01-init-env.sh
 
-ASPNETCORE_ENVIRONMENT="Development"
+ASPNETCORE_ENVIRONMENT="Production"
 
 #-------------------------------------------------------------------------------
 # Run test
