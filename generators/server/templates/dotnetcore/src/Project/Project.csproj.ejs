@@ -107,7 +107,7 @@
     </Target>
 
     <Target Name="RunWebPack" BeforeTargets="Build" DependsOnTargets="NpmInstall">
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" Condition="'$(Configuration)'=='Debug'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Debug'" />
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" Condition="'$(Configuration)'=='Release'" />
     </Target>
 
