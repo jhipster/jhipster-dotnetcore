@@ -9,7 +9,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [14.16.0]
+                node_version: [14.17.0]
                 os: [ubuntu-latest]
                 app-type:
                     - microservice-app
