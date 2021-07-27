@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-const chalk = require('chalk');
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
 const constants = require('../generator-dotnetcore-constants');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
@@ -70,22 +69,5 @@ module.exports = class extends EntityClientGenerator {
 
     get postWriting() {
         return super._postWriting();
-    }
-
-    rebuildClient() {
-        if (!this.options.skipInstall && !this.skipClient && this.clientFramework !== BLAZOR && this.clientFramework !== XAMARIN) {
-            const done = this.async();
-            this.log(`\n${chalk.bold.green('Running `webpack:build` to update client app\n')}`);
-            this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webpack:build']).on(
-                'close',
-                () => {
-                    done();
-                }
-            );
-        }
-    }
-
-    get end() {
-        return super._end();
     }
 };

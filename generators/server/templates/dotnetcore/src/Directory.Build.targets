@@ -5,7 +5,7 @@
 		<JHipsterNetPackageVersion>1.0.7</JHipsterNetPackageVersion>
   </PropertyGroup>
 
-  <ItemGroup>	
+  <ItemGroup>
 	<%_ if(!skipClient && clientFramework === "Blazor") { _%>
 	<PackageReference Update="AutoMapper" Version="10.1.1" />
 	<PackageReference Update="Blazored.Modal" Version="5.1.0" />
@@ -18,16 +18,20 @@
 	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
 	<PackageReference Update="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
-	
+
 	<PackageReference Update="AutoFixture" Version="4.17.0" />
 	<PackageReference Update="bunit" Version="1.0.0-preview-01" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.10.0" />
 	<%_ } _%>
-	
+
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+	<%_ if (cqrsEnabled) { _%>
+	<PackageReference Update="MediatR" Version="9.0.0" />
+	<PackageReference Update="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+	<%_ } _%>
 	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="5.4.0" />
 	<PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
@@ -57,12 +61,12 @@
 	<PackageReference Update="Ocelot" Version="17.0.0" />
 	<PackageReference Update="Ocelot.Provider.Consul" Version="17.0.0" />
 	<%_ } _%>
-	
+
 	<PackageReference Update="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
-	<PackageReference Update="System.Text.Json" Version="$(AspNetCorePackageVersion)" />	
+	<PackageReference Update="System.Text.Json" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Serilog" Version="2.10.0" />
 
 	<%_ switch(databaseType) {
@@ -83,9 +87,16 @@
 	<PackageReference Update="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
+		case 'mongodb': _%>
+	<PackageReference Update="MongoDB.Driver" Version="2.12.0" />
+	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
+		<%_ break;
 		case 'mysql': _%>
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0-alpha.1" />
+	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="5.0.1" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'oracle': _%>

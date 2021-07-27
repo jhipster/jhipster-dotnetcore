@@ -1,0 +1,89 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "11:00"
+  open-pull-requests-limit: 10
+  target-branch: dependencies
+  ignore:
+  - dependency-name: "@j-ulrich/release-it-regex-bumper"
+    versions:
+    - 1.2.2
+    - 1.2.5
+    - 1.2.6
+  - dependency-name: release-it
+    versions:
+    - 14.6.0
+  - dependency-name: generator-jhipster
+    versions:
+    - 7.0.0
+  - dependency-name: yeoman-environment
+    versions:
+    - 3.0.0
+    - 3.1.0
+  - dependency-name: chai
+    versions:
+    - 4.3.2
+  - dependency-name: yeoman-test
+    versions:
+    - 4.0.1
+    - 5.0.0
+  - dependency-name: eslint-config-prettier
+    versions:
+    - 8.0.0
+- package-ecosystem: nuget
+  directory: "/generators/server/templates/dotnetcore/src"
+  schedule:
+    interval: daily
+    time: "11:00"
+  open-pull-requests-limit: 10
+  target-branch: dependencies
+  ignore:
+  - dependency-name: Blazorise.Bootstrap
+    versions:
+    - 0.9.3
+    - 0.9.3.1
+    - 0.9.3.2
+    - 0.9.3.3
+    - 0.9.3.4
+    - 0.9.3.5
+  - dependency-name: Blazorise.Icons.FontAwesome
+    versions:
+    - 0.9.3
+    - 0.9.3.1
+    - 0.9.3.2
+    - 0.9.3.3
+    - 0.9.3.4
+    - 0.9.3.5
+  - dependency-name: Npgsql.EntityFrameworkCore.PostgreSQL
+    versions:
+    - 5.0.5
+  - dependency-name: System.IdentityModel.Tokens.Jwt
+    versions:
+    - 6.10.1
+  - dependency-name: bunit
+    versions:
+    - 1.0.0-preview-02
+    - 1.0.16
+  - dependency-name: Hellang.Middleware.ProblemDetails
+    versions:
+    - 5.2.0
+    - 5.2.1
+    - 5.2.2
+    - 5.2.3
+    - 5.2.4
+  - dependency-name: Swashbuckle.AspNetCore
+    versions:
+    - 6.0.0
+    - 6.0.2
+    - 6.0.3
+    - 6.0.5
+    - 6.0.6
+  - dependency-name: Oracle.EntityFrameworkCore
+    versions:
+    - 5.21.1
+  - dependency-name: Oracle.ManagedDataAccess.Core
+    versions:
+    - 3.21.1

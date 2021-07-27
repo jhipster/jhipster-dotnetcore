@@ -9,25 +9,37 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [14.16.0]
+                node_version: [14.17.0]
                 os: [ubuntu-latest]
                 app-type:
                     - jwt-with-angular-app
                     - jwt-with-blazor-app
+                    - jwt-with-angular-cqrs-app
+                    - jwt-with-blazor-cqrs-app
                     - jwt-with-mssql-app
                     - jwt-with-mysql-app
+                    - jwt-with-mongo-app
+                    - jwt-with-mongo-cqrs-app
                     - jwt-with-postgres-app
                     - jwt-with-react-app
                     - jwt-with-vue-app
                 include:
                     - app-type: jwt-with-angular-app
                       arg: 'import-jdl'
+                    - app-type: jwt-with-angular-cqrs-app
+                      arg: 'import-jdl'
                     - app-type: jwt-with-blazor-app
+                      arg: 'import-jdl blazor'
+                    - app-type: jwt-with-blazor-cqrs-app
                       arg: 'import-jdl blazor'
                     - app-type: jwt-with-mssql-app
                       arg: 'no'
                     - app-type: jwt-with-mysql-app
                       arg: 'no'
+                    - app-type: jwt-with-mongo-app
+                      arg: 'import-jdl'
+                    - app-type: jwt-with-mongo-cqrs-app
+                      arg: 'import-jdl'
                     - app-type: jwt-with-postgres-app
                       arg: 'no'
                     - app-type: jwt-with-react-app

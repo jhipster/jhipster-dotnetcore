@@ -43,6 +43,18 @@ services:
             retries: 10
             start_period: 10s
     <%_ break;
+    case 'mongodb': _%>
+    db:
+        container_name: db
+        image: mongo:latest
+        restart: always
+        healthcheck:
+            test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin --quiet | grep 1
+            interval: 10s
+            timeout: 10s
+            retries: 3
+            start_period: 20s
+    <%_ break;
     case 'postgres': _%>
     db:
         container_name: db
@@ -65,7 +77,7 @@ services:
         build:
             context: ../
             dockerfile: Dockerfile-Back
-    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle') { _%>
+    <%_ if (databaseType !== 'sqllite' && databaseType !== 'oracle' && databaseType !== 'mongodb') { _%>
         depends_on:
             db:
                condition: service_healthy

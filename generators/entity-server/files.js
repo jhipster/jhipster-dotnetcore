@@ -25,6 +25,7 @@ const utils = require('../utils');
 const INTERPOLATE_REGEX = baseConstants.INTERPOLATE_REGEX;
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
+const PROJECT_APPLICATION_SUFFIX = constants.PROJECT_APPLICATION_SUFFIX;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
@@ -59,6 +60,20 @@ const serverFiles = {
                             generator.entityClass
                         )}Repository.cs`,
                 },
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IReadOnlyEntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${
+                            constants.PROJECT_DOMAIN_SUFFIX
+                        }/Repositories/Interfaces/IReadOnly${generator.asEntity(generator.entityClass)}Repository.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/ReadOnlyEntityRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/ReadOnly${generator.asEntity(
+                            generator.entityClass
+                        )}Repository.cs`,
+                },
             ],
         },
         {
@@ -67,6 +82,82 @@ const serverFiles = {
                 {
                     file: 'Project/Configuration/AutoMapper/AutoMapperProfile.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/AutoMapper/AutoMapperProfile.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Queries/EntityGetQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}GetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/EntityGetQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}GetQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/EntityGetAllQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}GetAllQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/EntityGetAllQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}GetAllQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/EntityDeleteCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}DeleteCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/EntityDeleteCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}DeleteCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/EntityCreateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}CreateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/EntityCreateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}CreateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/EntityUpdateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}UpdateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/EntityUpdateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/${generator.asEntity(
+                            generator.entityClass
+                        )}/${generator.asEntity(generator.entityClass)}UpdateCommandHandler.cs`,
                 },
             ],
         },
@@ -118,7 +209,7 @@ const serverFiles = {
     ],
     service: [
         {
-            condition: generator => generator.service === 'serviceImpl',
+            condition: generator => generator.service === 'serviceImpl' && generator.cqrsEnabled !== true,
             path: SERVER_SRC_DIR,
             templates: [
                 {

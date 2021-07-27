@@ -1,0 +1,75 @@
+<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%
+let hasDto = dto === 'mapstruct';
+%>
+<%_ if (hasDto) { _%>
+using AutoMapper;
+using System.Linq;
+<%_ } _%>
+using <%= namespace %>.Domain;
+using <%= namespace %>.Dto;
+using <%= namespace %>.Domain.Repositories.Interfaces;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
+
+namespace <%= namespace %>.Application.Queries
+{
+    public class <%= pascalizedEntityClass %>GetAllQueryHandler : IRequestHandler<<%= pascalizedEntityClass %>GetAllQuery, <%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>
+    {
+        private IReadOnly<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        <%_ if (hasDto) { _%>
+        private readonly IMapper _mapper;
+        <%_ } _%>
+
+        public <%= pascalizedEntityClass %>GetAllQueryHandler(
+            <%_ if (hasDto) { _%>
+            IMapper mapper,
+            <%_ } _%>
+            IReadOnly<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
+        {
+            <%_ if (hasDto) { _%>
+            _mapper = mapper;
+            <%_ } _%>
+            _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
+        }
+
+        public async Task<<%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Handle(<%= pascalizedEntityClass %>GetAllQuery request, CancellationToken cancellationToken)
+        {
+            var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+            <%_ if (databaseType != 'mongodb') { _%>
+            <%_ relationships.forEach( relationship => {
+                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
+                <%_ }
+                }); _%>
+                <%_ } _%>
+                .GetPageAsync(request.Page);
+            <%_ if (hasDto) { _%>
+            return new Page<<%= asDto(pascalizedEntityClass) %>>(page.Content.Select(entity => _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity)).ToList(), request.Page, page.TotalElements);
+            <%_ } else { _%>
+            return page;
+            <%_ } _%>
+        }
+    }
+}

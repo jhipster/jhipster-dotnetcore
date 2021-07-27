@@ -29,7 +29,10 @@ namespace <%= namespace %>.Test.Setup
     {
         public TestStartup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
         {
+            Configuration = configuration;
         }
+
+        private IConfiguration Configuration { get; }
 
         public override void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
             ApplicationDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
@@ -51,6 +54,13 @@ namespace <%= namespace %>.Test.Setup
 
             services.AddDbContext<ApplicationDatabaseContext>(context => context.UseSqlite(connection));
             services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ if (databaseType == 'mongodb') { _%>
+            services.Configure<MongoDatabaseConfig>(
+                Configuration.GetSection(nameof(MongoDatabaseConfig) + "UnitTests"));
+            services.AddSingleton<IMongoDatabaseConfig>(sp =>
+                sp.GetRequiredService<IOptions<MongoDatabaseConfig>>().Value);
+            services.AddSingleton<IMongoDatabaseContext, MongoDatabaseContext>();
+            <%_ } _%>
         }
     }
 }

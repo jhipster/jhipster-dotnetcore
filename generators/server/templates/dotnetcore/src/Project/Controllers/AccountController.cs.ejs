@@ -27,7 +27,13 @@ using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 <%_ if (authenticationType === 'jwt') { _%>
+<%_ if (cqrsEnabled) { _%>
+using <%= namespace %>.Application.Queries;
+using <%= namespace %>.Application.Commands;
+using MediatR;
+<%_ } else { _%>
 using <%= namespace %>.Domain.Services.Interfaces;
+<%_ } _%>
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 <%_ } _%>
@@ -43,29 +49,44 @@ namespace <%= namespace %>.Controllers
 
         <%_ if (authenticationType === 'jwt') { _%>
         private readonly ILogger<AccountController> _log;
+        <%_ if (cqrsEnabled) { _%>
+        private readonly IMediator _mediator;
+        <%_ } else { _%>
+        private readonly IMapper _userMapper;
         private readonly IMailService _mailService;
         private readonly UserManager<User> _userManager;
-        private readonly IMapper _userMapper;
         private readonly IUserService _userService;
+        <%_ } _%>
 
+        <%_ if (cqrsEnabled) { _%>
+        public AccountController(ILogger<AccountController> log, IMediator mediator)
+        {
+            _log = log;
+            _mediator = mediator;
+        }
+        <%_ } else { _%>
         public AccountController(ILogger<AccountController> log, UserManager<User> userManager, IUserService userService,
             IMapper userMapper, IMailService mailService)
         {
             _log = log;
+            _userMapper = userMapper;
             _userManager = userManager;
             _userService = userService;
-            _userMapper = userMapper;
             _mailService = mailService;
         }
+        <%_ } _%>
 
         [HttpPost("register")]
         [ValidateModel]
         public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserDto managedUserDto)
         {
             if (!CheckPasswordLength(managedUserDto.Password)) throw new InvalidPasswordException();
-
+            <%_ if (cqrsEnabled) { _%>
+            var user = await _mediator.Send(new AccountCreateCommand { ManagedUserDto = managedUserDto });
+            <%_ } else { _%>
             var user = await _userService.RegisterUser(_userMapper.Map<User>(managedUserDto), managedUserDto.Password);
             await _mailService.SendActivationEmail(user);
+            <%_ } _%>
             return CreatedAtAction(nameof(GetAccount), user);
         }
 
@@ -73,24 +94,40 @@ namespace <%= namespace %>.Controllers
         [ValidateModel]
         public async Task ActivateAccount([FromQuery(Name = "key")] string key)
         {
+            <%_ if (cqrsEnabled) { _%>
+            var user = await _mediator.Send(new AccountActivateCommand { Key = key });
+            <%_ } else { _%>
             var user = await _userService.ActivateRegistration(key);
+            <%_ } _%>
             if (user == null) throw new InternalServerErrorException("Not user was found for this activation key");
         }
 
         [HttpGet("authenticate")]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<string> IsAuthenticated()
+        {
+            _log.LogDebug("REST request to check if the current user is authenticated");
+            return await _mediator.Send(new AccountGetAuthenticatedQuery { User = User });
+        }
+        <%_ } else { _%>
         public string IsAuthenticated()
         {
             _log.LogDebug("REST request to check if the current user is authenticated");
             return _userManager.GetUserName(User);
         }
+        <%_ } _%>
 
         [Authorize]
         [HttpGet("account")]
         public async Task<ActionResult<UserDto>> GetAccount()
         {
+            <%_ if (cqrsEnabled) { _%>
+            var userDto = await _mediator.Send(new AccountGetQuery());
+            <%_ } else { _%>
             var user = await _userService.GetUserWithUserRoles();
             if (user == null) throw new InternalServerErrorException("User could not be found");
             var userDto = _userMapper.Map<UserDto>(user);
+            <%_ } _%>
             return Ok(userDto);
         }
 
@@ -99,6 +136,9 @@ namespace <%= namespace %>.Controllers
         [ValidateModel]
         public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
         {
+            <%_ if (cqrsEnabled) { _%>
+            await _mediator.Send(new AccountSaveCommand { User = User, UserDto = userDto });
+            <%_ } else { _%>
             var userName = _userManager.GetUserName(User);
             if (userName == null) throw new InternalServerErrorException("Current user login not found");
 
@@ -112,6 +152,7 @@ namespace <%= namespace %>.Controllers
 
             await _userService.UpdateUser(userDto.FirstName, userDto.LastName, userDto.Email, userDto.LangKey,
                 userDto.ImageUrl);
+            <%_ } _%>
             return Ok();
         }
 
@@ -121,8 +162,11 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDto passwordChangeDto)
         {
             if (!CheckPasswordLength(passwordChangeDto.NewPassword)) throw new InvalidPasswordException();
-
+            <%_ if (cqrsEnabled) { _%>
+            await _mediator.Send(new AccountChangePasswordCommand { PasswordChangeDto = passwordChangeDto });
+            <%_ } else { _%>
             await _userService.ChangePassword(passwordChangeDto.CurrentPassword, passwordChangeDto.NewPassword);
+            <%_ } _%>
             return Ok();
         }
 
@@ -130,10 +174,13 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult> RequestPasswordReset()
         {
             var mail = await Request.BodyAsStringAsync();
+            <%_ if (cqrsEnabled) { _%>
+            await _mediator.Send(new AccountResetPasswordCommand { Mail = mail });
+            <%_ } else { _%>
             var user = await _userService.RequestPasswordReset(mail);
             if (user == null) throw new EmailNotFoundException();
-
             await _mailService.SendPasswordResetMail(user);
+            <%_ } _%>
             return Ok();
         }
 
@@ -142,9 +189,11 @@ namespace <%= namespace %>.Controllers
         public async Task RequestPasswordReset([FromBody] KeyAndPasswordDto keyAndPasswordDto)
         {
             if (!CheckPasswordLength(keyAndPasswordDto.NewPassword)) throw new InvalidPasswordException();
-
+            <%_ if (cqrsEnabled) { _%>
+            var user = await _mediator.Send(new AccountResetPasswordFinishCommand { KeyAndPasswordDto = keyAndPasswordDto });
+            <%_ } else { _%>
             var user = await _userService.CompletePasswordReset(keyAndPasswordDto.NewPassword, keyAndPasswordDto.Key);
-
+            <%_ } _%>
             if (user == null) throw new InternalServerErrorException("No user was found for this reset key");
         }
 

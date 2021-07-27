@@ -24,6 +24,7 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
 const DOCKER_DIR = constants.DOCKER_DIR;
 const PROJECT_DOMAIN_SUFFIX = constants.PROJECT_DOMAIN_SUFFIX;
+const PROJECT_APPLICATION_SUFFIX = constants.PROJECT_APPLICATION_SUFFIX;
 const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
 const PROJECT_CROSSCUTTING_SUFFIX = constants.PROJECT_CROSSCUTTING_SUFFIX;
 const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
@@ -62,6 +63,17 @@ const serverFiles = {
                     file: 'Project.Domain/Project.csproj',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}.csproj`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Project.csproj',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}.csproj`,
                 },
             ],
         },
@@ -123,6 +135,25 @@ const serverFiles = {
                 {
                     file: 'Project.Domain/Entities/AuditedEntityBase.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/AuditedEntityBase.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/BaseEntity.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/BaseEntity.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Entities/MongoBaseEntity.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Entities/MongoBaseEntity.cs`,
                 },
             ],
         },
@@ -326,9 +357,72 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project.Domain/Repositories/Interfaces/INoSqlFluentRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/INoSqlFluentRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project.Domain/Repositories/Interfaces/IGenericRepository.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IReadOnlyGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/IReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/IReadOnlyGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/INoSqlGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/INoSqlGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/INoSqlReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/INoSqlReadOnlyGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Domain/Repositories/Interfaces/INoSqlReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/Repositories/Interfaces/INoSqlReadOnlyGenericRepository.cs`,
                 },
             ],
         },
@@ -352,12 +446,65 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/MongoFluentRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/MongoFluentRepository.cs`,
+                },
+            ],
+        },
+        {
             path: SERVER_SRC_DIR,
             templates: [
                 {
                     file: 'Project.Infrastructure/Data/Repositories/GenericRepository.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/GenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/MongoGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/MongoGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/ReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/ReadOnlyGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/MongoReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/MongoReadOnlyGenericRepository.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/ReadOnlyGenericRepository.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/ReadOnlyGenericRepository.cs`,
                 },
             ],
         },
@@ -385,6 +532,19 @@ const serverFiles = {
                     file: 'Project.Infrastructure/Data/Extensions/PropertyAccessorCache.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/PropertyAccessorCache.cs`,
+                },
+            ],
+        },
+    ],
+    mongoExtension: [
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Extensions/NoSqlPagination.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Extensions/NoSqlPagination.cs`,
                 },
             ],
         },
@@ -423,6 +583,16 @@ const serverFiles = {
                     file: 'Project.Infrastructure/Configuration/SecuritySettings.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/SecuritySettings.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Configuration/IMongoDatabaseConfig.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/IMongoDatabaseConfig.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Configuration/MongoDatabaseConfig.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/MongoDatabaseConfig.cs`,
                 },
             ],
         },
@@ -567,6 +737,20 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/MongoDatabaseContext.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/MongoDatabaseContext.cs`,
+                },
+                {
+                    file: 'Project.Infrastructure/Data/IMongoDatabaseContext.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/IMongoDatabaseContext.cs`,
+                },
+            ],
+        },
+        {
             condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
             path: SERVER_SRC_DIR,
             templates: [
@@ -657,6 +841,104 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.applicationType !== 'microservice' && generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/ApplicationClassesAssemblyHelper.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/ApplicationClassesAssemblyHelper.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator =>
+                generator.applicationType !== 'microservice' && generator.cqrsEnabled === true && generator.authenticationType === 'jwt',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Commands/Account/AccountActivateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountActivateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountActivateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountActivateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountChangePasswordCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountChangePasswordCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountChangePasswordCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountChangePasswordCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountCreateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountCreateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountCreateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountCreateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordFinishCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordFinishCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountResetPasswordFinishCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountResetPasswordFinishCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountSaveCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountSaveCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/Account/AccountSaveCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/Account/AccountSaveCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetAuthenticatedQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetAuthenticatedQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetAuthenticatedQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetAuthenticatedQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/Account/AccountGetQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/Account/AccountGetQueryHandler.cs`,
+                },
+            ],
+        },
+        {
             path: SERVER_SRC_DIR,
             templates: [
                 {
@@ -682,6 +964,81 @@ const serverFiles = {
                 {
                     file: 'Project/Controllers/UsersController.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Controllers/UsersController.cs`,
+                },
+            ],
+        },
+        {
+            condition: generator =>
+                generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice' && generator.cqrsEnabled === true,
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Application/Commands/User/UserCreateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserCreateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserCreateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserCreateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserDeleteCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserDeleteCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserDeleteCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserDeleteCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserUpdateCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserUpdateCommand.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/User/UserUpdateCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/User/UserUpdateCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllQuery.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetQuery.cs',
+                    renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAuthoritiesQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAuthoritiesQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/UserJwt/UserJwtAuthorizeCommandHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/UserJwt/UserJwtAuthorizeCommandHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Commands/UserJwt/UserJwtAuthorizeCommand.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Commands/UserJwt/UserJwtAuthorizeCommand.cs`,
                 },
             ],
         },

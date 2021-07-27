@@ -14,25 +14,25 @@ Or by using JDL:
 
 Notice that only the service with interface option (serviceImpl) is enabled on this generator.
 
-## Extending and Customizing Services 
+## Extending and Customizing Services
 
 One common use case is to customize service classes to suit different business needs. When using the jhipster generator to edit an existing entity or upgrading the generator's version, changes to the generated service classes might be overwritten. Altough it is possible to make changes directly to generated service classes, It might get tricky keeping track of changes.
 
 Optionally, you can extend and customize service classes to avoid service class code overwriting.
 
 Example:
-Add an Author entity with service generation enabled by using the generator's cli. 
+Add an Author entity with service generation enabled by using the generator's cli.
 Then create the following class named `AuthorExtendedService.cs`:
 
 ```csharp
 namespace MyCompany.Domain.Services {
-    public class AuthorExtendedService : AuthorService, IAuthorService 
+    public class AuthorExtendedService : AuthorService, IAuthorService
     {
         public CountryExtendedService(ApplicationDatabaseContext applicationDatabaseContext) : base(applicationDatabaseContext)
-        {   
+        {
         }
-        
-        public override async Task Delete(long id) 
+
+        public override async Task Delete(long id)
         {
             // add custom business logic before delete
             await base.Delete(id);

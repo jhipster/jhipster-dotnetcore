@@ -1,0 +1,82 @@
+<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
+using JHipsterNet.Core.Pagination.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using <%= namespace %>.Domain.Repositories.Interfaces;
+using <%= namespace %>.Domain;
+
+namespace <%= namespace %>.Infrastructure.Data.Repositories
+{
+    public abstract class ReadOnlyGenericRepository<TEntity, TKey> : IReadOnlyGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
+    {
+        protected internal readonly IUnitOfWork _context;
+        protected internal readonly DbSet<TEntity> _dbSet;
+
+        public ReadOnlyGenericRepository(IUnitOfWork context)
+        {
+            _context = context;
+            _dbSet = context.Set<TEntity>();
+        }
+
+        public virtual async Task<TEntity> GetOneAsync(TKey id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
+
+        public virtual async Task<IPage<TEntity>> GetPageAsync(IPageable pageable)
+        {
+            return await _dbSet.UsePageableAsync(pageable);
+        }
+
+        public virtual async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
+
+        public virtual async Task<int> CountAsync()
+        {
+            var countTask = await _dbSet.CountAsync();
+            return countTask;
+        }
+
+        public virtual IFluentRepository<TEntity> QueryHelper()
+        {
+            var fluentRepository = new FluentRepository<TEntity>(_dbSet);
+            return fluentRepository;
+        }
+
+        public void Dispose()
+        {
+            _context?.Dispose();
+        }
+    }
+}
