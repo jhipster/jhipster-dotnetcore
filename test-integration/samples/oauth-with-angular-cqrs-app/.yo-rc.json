@@ -1,0 +1,36 @@
+{
+  "generator-jhipster": {
+    "namespace": "JhipsterSampleApplication",
+    "databaseType": "sqllite",
+    "prodDatabaseType": "mysql",
+    "authenticationType": "oauth2",
+    "serverPort": "5000",
+	  "cqrsEnabled": true,
+    "jhipsterVersion": "6.9.1",
+    "applicationType": "monolith",
+    "baseName": "JhipsterSampleApplication",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "angularX",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1587112984699,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "2.2.0"
+      }
+    ],
+    "enableTranslation": false,
+    "blueprints": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "2.0.0"
+      }
+    ]
+  }
+}

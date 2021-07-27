@@ -190,10 +190,10 @@ function askForFieldsToRemove() {
     this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
-            for (let i = context.fields.length - 1; i >= 0; i -= 1) {
-                const field = context.fields[i];
+            for (let i = this.entityConfig.fields.length - 1; i >= 0; i -= 1) {
+                const field = this.entityConfig.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
-                    context.fields.splice(i, 1);
+                    this.entityConfig.fields.splice(i, 1);
                 }
             }
         }
@@ -246,10 +246,10 @@ function askForRelationsToRemove() {
     this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
-            for (let i = context.relationships.length - 1; i >= 0; i -= 1) {
-                const rel = context.relationships[i];
+            for (let i = this.entityConfig.relationships.length - 1; i >= 0; i -= 1) {
+                const rel = this.entityConfig.relationships[i];
                 if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
-                    context.relationships.splice(i, 1);
+                    this.entityConfig.relationships.splice(i, 1);
                 }
             }
         }
@@ -265,8 +265,8 @@ function askForTableName() {
     const skipCheckLengthOfIdentifier = context.skipCheckLengthOfIdentifier;
     if (
         skipCheckLengthOfIdentifier ||
-        !context.relationships ||
-        context.relationships.length === 0 ||
+        !this.entityConfig.relationships ||
+        this.entityConfig.relationships.length === 0 ||
         entityTableName.length <= 30
         /* (prodDatabaseType === 'oracle' && entityTableName.length > 14) || */
     ) {
@@ -308,7 +308,7 @@ function askForTableName() {
 /* function askForFiltering() {
     const context = this.context;
     // don't prompt if server is skipped, or the backend is not sql, or no service requested
-    if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || context.service === 'no') {
+    if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
         return;
     }
     const done = this.async();
@@ -339,7 +339,7 @@ function askForTableName() {
 function askForDTO() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped or if no service layer
-    if (context.useConfigurationFile || context.skipServer || context.service === 'no') {
+    if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
         context.dto = context.dto || 'no';
         return;
     }
@@ -363,7 +363,7 @@ function askForDTO() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.dto = props.dto;
+        this.entityConfig.dto = props.dto;
         done();
     });
 }
@@ -371,9 +371,14 @@ function askForDTO() {
 function askForService() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped
+    if (context.cqrsEnabled) {
+        context.service = 'serviceImpl';
+        return;
+    }
     if (context.useConfigurationFile || context.skipServer) {
         return;
     }
+
     const done = this.async();
     const prompts = [
         {
@@ -394,7 +399,7 @@ function askForService() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.service = props.service;
+        this.entityConfig.service = props.service;
         done();
     });
 }
@@ -432,7 +437,7 @@ function askForPagination() {
         },
     ];
     this.prompt(prompts).then(props => {
-        context.pagination = props.pagination;
+        this.entityConfig.pagination = props.pagination;
         this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
         done();
     });

@@ -20,6 +20,9 @@ using Microsoft.Extensions.Hosting;
     case 'sqllite': _%>
 using Microsoft.Data.Sqlite;
     <%_ break;
+    case 'mongodb': _%>
+using Microsoft.Data.Sqlite;
+    <%_ break;
     case 'mssql': _%>
 using Microsoft.Data.SqlClient;
     <%_ break;
@@ -31,6 +34,8 @@ using Pomelo.EntityFrameworkCore.MySql.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using <%= namespace %>.Infrastructure.Configuration;
 
 namespace <%= namespace %>.Configuration
 {
@@ -60,6 +65,9 @@ namespace <%= namespace %>.Configuration
                     case "mssql":
                         connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Trusted_Connection=False;Pooling=true;";
                         break;
+                    case "mongodb":
+                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Pooling=true;MinimumPoolSize=0;MaximumPoolsize=10;";
+                        break;
                     default:
                         Console.WriteLine("It was not possible to determine the database type provided by DATABASE_URL");
                         break;
@@ -87,9 +95,27 @@ namespace <%= namespace %>.Configuration
                 <%_ break;
                 case 'mysql': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options =>
-                options.UseMySql(connectionString, mySqlOptions =>
-                    mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
-            ));
+                options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 19)))
+            );
+                <%_ break;
+            case 'mongodb': _%>
+            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
+            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder
+            {
+                DataSource = entityFrameworkConfiguration["DataSource"]
+            }.ToString());
+            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
+            services.Configure<MongoDatabaseConfig>(
+                configuration.GetSection(nameof(MongoDatabaseConfig)));
+            services.AddSingleton<IMongoDatabaseConfig>(sp =>
+                sp.GetRequiredService<IOptions<MongoDatabaseConfig>>().Value);
+            services.AddSingleton<IMongoDatabaseContext, MongoDatabaseContext>();
+                <%_ break;
+                case 'mssql': _%>
+            services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
+                <%_ break;
+                case 'postgres': _%>
+            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
                 <%_ break;
                 case 'oracle': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options =>

@@ -5,7 +5,7 @@
     "prodDatabaseType": "mysql",
     "authenticationType": "jwt",
     "serverPort": "5000",
-    "jhipsterVersion": "6.10.4",
+    "jhipsterVersion": "7.1.0",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "useSass": true,
@@ -21,7 +21,7 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "1.1.2"
+        "version": "3.0.1"
       }
     ],
     "enableTranslation": false,
