@@ -21,7 +21,7 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "3.0.1"
+        "version": "3.1.0"
       }
     ],
     "blueprints": [
