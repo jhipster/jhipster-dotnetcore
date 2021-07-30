@@ -109,7 +109,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             }); _%>
 
             var <%= entityVariableName %>ToUpdate = _fixture.Create<<%= asModel(entityClassName) %>>();
-            <%= entityVariableName %>ToUpdate.Id = 1;
+            <%= entityVariableName %>ToUpdate.Id = <% if(primaryKeyType !== 'string') { %> 1 <%_ } else { _%> "1" <%_ } _%>;
 
             _<%= entityVariableName %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= entityVariableName %>ToUpdate));
 
