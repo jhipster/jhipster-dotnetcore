@@ -118,7 +118,7 @@
 	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Oracle.EntityFrameworkCore" Version="5.21.1" />
-	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
+	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="3.21.3" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 	} _%>	 
