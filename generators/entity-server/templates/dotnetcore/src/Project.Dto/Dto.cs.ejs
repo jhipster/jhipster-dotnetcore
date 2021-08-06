@@ -77,7 +77,7 @@ namespace <%= namespace %>.Dto
                 if(otherEntityNamePascalized === 'User') { _%>
         public string UserId { get; set; }
                 <%_ } else { _%>
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>? <% } _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ }
             }
             if(relationshipType === 'one-to-many') { _%>
@@ -89,7 +89,7 @@ namespace <%= namespace %>.Dto
                 if(otherEntityNamePascalized === 'User') { _%>
         public string UserId { get; set; }
                 <%_ } else { _%>
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>? <% } _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ }
                 } else if (relationshipType === 'many-to-many') {
                 const ownerSide = relationships[idx].ownerSide; _%>
