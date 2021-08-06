@@ -70,7 +70,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     <%_ } else { _%>
         public IEnumerable<<%= primaryKeyType %>> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<<%= primaryKeyType %>>();
 
-        public <%= primaryKeyType %> <% if(primaryKeyType !== 'string') { _%>?<%_ } _%> <%= relation.otherEntityNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>? <% } _%> <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
