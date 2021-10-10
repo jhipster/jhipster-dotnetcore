@@ -5,7 +5,11 @@ const LanguageGenerator = require('generator-jhipster/generators/languages');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
+const baseConstants = require('generator-jhipster/generators/generator-constants');
 
+const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+
+const { ANGULAR } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends LanguageGenerator {
@@ -67,6 +71,18 @@ module.exports = class extends LanguageGenerator {
     }
 
     get postWriting() {
-        return super._postWriting();
+        return {
+            ...super._postWriting(),
+            postWritingAngular(){
+                if (this.clientFramework === ANGULAR) {
+                    this.replaceContent(
+                        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
+                        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+                        "",
+                        true
+                    );
+                }
+            }
+        }
     }
 };

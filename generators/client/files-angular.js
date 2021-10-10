@@ -24,7 +24,8 @@ const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function angularJson() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, "dist/", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, "dist/", true);    
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, "main/webapp/", "", true);
 }
 
 function updateHomeTitle() {
@@ -38,6 +39,8 @@ function updateWebpackCustomJs() {
         "",
         true
     );
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`, "target", "dist", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`, "main/webapp/", "", true);
 }
 
 function writeFiles() {

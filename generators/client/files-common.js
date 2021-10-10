@@ -118,9 +118,12 @@ function updateWebpackProdJs() {
 }
 
 function updateTsConfigJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, "main/webapp/", "", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, "target/classes/static/", "dist/", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, "main/webapp/", "", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, "target/classes/static/", "dist/", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.spec.json`, "main/webapp/", "", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.spec.json`, "target/classes/static/", "dist/", true);
 }
 
 function updatePackageJson() {
@@ -170,6 +173,8 @@ function updateJestConf() {
             '..',
             true
         );
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`, "main/webapp/", "", true);
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`, "target/", "dist/", true);
     } else if (this.clientFramework === VUE) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
@@ -189,6 +194,8 @@ function updateJestConf() {
             '..',
             true
         );
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`, "main/webapp/", "", true);
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`, "target/", "dist/", true);
     }
 }
 
