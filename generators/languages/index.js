@@ -73,16 +73,16 @@ module.exports = class extends LanguageGenerator {
     get postWriting() {
         return {
             ...super._postWriting(),
-            postWritingAngular(){
+            postWritingAngular() {
                 if (this.clientFramework === ANGULAR) {
                     this.replaceContent(
                         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
                         `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-                        "",
+                        '',
                         true
                     );
                 }
-            }
-        }
+            },
+        };
     }
 };
