@@ -42,7 +42,7 @@
 	<PackageReference Update="Serilog.Enrichers.Process" Version="2.0.1" />
 	<PackageReference Update="Serilog.Enrichers.Thread" Version="3.1.0" />
 	<PackageReference Update="Serilog.Sinks.SyslogMessages" Version="2.0.5" />
-	<PackageReference Update="Swashbuckle.AspNetCore" Version="6.1.4" />
+	<PackageReference Update="Swashbuckle.AspNetCore" Version="6.2.3" />
 	<PackageReference Update="LanguageExt.Core" Version="3.4.15" />
 	<%_ if (authenticationType === 'jwt') { _%>
 	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.12.0" />
