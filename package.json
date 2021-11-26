@@ -24,7 +24,7 @@
     "url": "git+https://github.com/jhipster/jhipster-dotnetcore.git"
   },
   "dependencies": {
-    "chalk": "4.1.1",
+    "chalk": "5.0.0",
     "ejs": "3.1.6",
     "generator-jhipster": "7.1.0",
     "glob": "7.1.7",
