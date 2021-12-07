@@ -117,7 +117,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Oracle.EntityFrameworkCore" Version="5.21.1" />
+	<PackageReference Update="Oracle.EntityFrameworkCore" Version="6.21.4" />
 	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
