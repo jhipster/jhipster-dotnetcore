@@ -52,7 +52,7 @@
     "@release-it/bumper": "^3.0.1",
     "chai": "4.3.4",
     "ejs-lint": "1.2.1",
-    "eslint": "7.31.0",
+    "eslint": "8.8.0",
     "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.22.1",
