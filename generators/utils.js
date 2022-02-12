@@ -133,6 +133,12 @@ function customizeDotnetPaths() {
         paths => (paths ? paths.replace(/^(.browserslistrc)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(.eslintignore)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(cypress.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        // React File
+        paths => (paths ? paths.replace(/^(postcss.config.js)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(tsconfig.test.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        // VUE File
+        paths => (paths ? paths.replace(/^(.postcssrc.js)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(.eslintrc.js)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
 
     // get the frontend application name.

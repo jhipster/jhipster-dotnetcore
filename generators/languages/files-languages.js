@@ -22,7 +22,7 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
-function updateWebpackCustomJs() {
+function updateAngularWebpackCustomJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
         `${SERVER_SRC_DIR}${this.mainClientDir}/`,
@@ -31,10 +31,27 @@ function updateWebpackCustomJs() {
     );
 }
 
-function writeFiles() {
-    updateWebpackCustomJs.call(this);
+function updateReactWebpackCommonJs() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+        '',
+        true
+    );
+}
+
+function writeFilesAngular() {
+    updateAngularWebpackCustomJs.call(this);
+}
+function writeFilesReact() {
+    updateReactWebpackCommonJs.call(this);
+}
+function writeFilesVue() {
+    updateReactWebpackCommonJs.call(this);
 }
 
 module.exports = {
-    writeFiles,
+    writeFilesAngular,
+    writeFilesReact,
+    writeFilesVue,
 };
