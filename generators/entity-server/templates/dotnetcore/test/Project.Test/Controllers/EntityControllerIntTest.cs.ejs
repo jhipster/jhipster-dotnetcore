@@ -410,7 +410,7 @@ namespace <%= namespace %>.Test.Controllers
             var databaseSizeBeforeDelete = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
             var response = await _client.DeleteAsync($"/api/<%= kebabCasedEntityClassPlural %>/{_<%= camelCasedEntityClass %>.Id}");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
             // Validate the database is empty
             var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
