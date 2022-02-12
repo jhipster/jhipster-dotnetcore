@@ -40,10 +40,22 @@ function updateWebpackCustomJs() {
     );
 }
 
+function updateBrowserslistrc() {
+    this.replaceContent(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.browserslistrc`,
+        `Firefox ESR`,
+        `Firefox ESR
+not ios_saf 15.2-15.3
+not safari 15.2-15.3`,
+        true
+    );
+}
+
 function writeFiles() {
     angularJson.call(this);
     updateHomeTitle.call(this);
     updateWebpackCustomJs.call(this);
+    updateBrowserslistrc.call(this);
 }
 
 module.exports = {

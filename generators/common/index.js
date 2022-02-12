@@ -51,6 +51,7 @@ module.exports = class extends CommonGenerator {
                 this.options.outputPathCustomizer = [
                     paths => (paths ? paths.replace(/^(\.prettierignore)$/, `src/${this.mainClientDir}/$1`) : paths),
                     paths => (paths ? paths.replace(/^(\.prettierrc)$/, `src/${this.mainClientDir}/$1`) : paths),
+                    paths => (paths ? paths.replace(/^(package.json)$/, `src/${this.mainClientDir}/$1`) : paths),
                 ];
             },
         };
