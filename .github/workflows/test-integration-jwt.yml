@@ -9,7 +9,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                node_version: [14.17.0]
+                node_version: [16.13.1]
                 os: [ubuntu-latest]
                 app-type:
                     - jwt-with-angular-app
@@ -51,10 +51,12 @@ jobs:
             JHI_ARG: ${{ matrix.arg }}
 
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
+            - uses: actions/checkout@v2.4.0
+            - uses: actions/setup-node@v2.5.1
               with:
-                  node-version: ${{ matrix.node-version }}
+                node-version: ${{ matrix.node_version }}
+            - name: 'install required npm version'
+              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants').NPM_VERSION);")
             - uses: joschi/setup-jdk@v2
               with:
                 java-version: '11' # The OpenJDK version to make available on the path

@@ -6,7 +6,7 @@
     "authenticationType": "oauth2",
     "serverPort": "5000",
 	  "cqrsEnabled": true,
-    "jhipsterVersion": "6.9.1",
+    "jhipsterVersion": "7.6.0",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "useSass": true,

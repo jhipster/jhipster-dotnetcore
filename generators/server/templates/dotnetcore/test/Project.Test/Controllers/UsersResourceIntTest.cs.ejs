@@ -243,7 +243,7 @@ namespace <%= namespace %>.Test.Controllers
             var databaseSizeBeforeDelete = _userManager.Users.Count();
 
             var response = await _client.DeleteAsync($"/api/admin/users/{_user.Login}");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
             // Validate the database is empty
             var userList = _userManager.Users.ToList();

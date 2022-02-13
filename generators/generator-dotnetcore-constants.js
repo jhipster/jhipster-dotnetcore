@@ -14,6 +14,10 @@ const BLAZOR = 'Blazor';
 const XAMARIN = 'Xamarin';
 const TERRAFORM_DIR = 'terraform/';
 
+// Version of Node, NPM
+const NODE_VERSION = '16.13.1';
+const NPM_VERSION = '8.3.2';
+
 const constants = {
     SERVER_SRC_DIR,
     CLIENT_SRC_DIR,
@@ -30,6 +34,8 @@ const constants = {
     BLAZOR,
     XAMARIN,
     TERRAFORM_DIR,
+    NODE_VERSION,
+    NPM_VERSION,
 };
 
 module.exports = constants;

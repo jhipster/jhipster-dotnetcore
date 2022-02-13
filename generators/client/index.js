@@ -53,6 +53,7 @@ module.exports = class extends ClientGenerator {
 
     get initializing() {
         return {
+            customizeDotnetPaths,
             ...super._initializing(),
             initializingDotnet () {
                 this.namespace = this.jhipsterConfig.namespace;

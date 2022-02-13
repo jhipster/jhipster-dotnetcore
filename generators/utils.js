@@ -118,11 +118,27 @@ function customizeDotnetPaths() {
     this.options.outputPathCustomizer = [
         paths => (paths ? paths.replace(/^src\/main\/webapp(\/|$)/, `src/${this.mainClientAppDir}$1/`) : paths),
         paths => (paths ? paths.replace(/^src\/test\/javascript(\/|$)/, `src/${this.clientTestProject}$1`) : paths),
-        paths => (paths ? paths.replace(/^((?!.huskyrc).[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainClientDir}/$1`) : paths),
+        // paths => (paths ? paths.replace(/^((?!.huskyrc).[a-z]*\.?[a-z]*\.?[a-z]*$)/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(webpack\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(tsconfig.e2e.json)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(config\/.*)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(package.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(tsconfig.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(tsconfig.app.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(tsconfig.spec.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(jest.conf.js)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(.eslintrc.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(angular.json)$/, `src/${this.mainClientDir}/$1`) : paths),
         paths => (paths ? paths.replace(/^(ngsw-config.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(.browserslistrc)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(.eslintignore)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(cypress.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        // React File
+        paths => (paths ? paths.replace(/^(postcss.config.js)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(tsconfig.test.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        // VUE File
+        paths => (paths ? paths.replace(/^(.postcssrc.js)$/, `src/${this.mainClientDir}/$1`) : paths),
+        paths => (paths ? paths.replace(/^(.eslintrc.js)$/, `src/${this.mainClientDir}/$1`) : paths),
     ];
 
     // get the frontend application name.

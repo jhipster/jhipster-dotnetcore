@@ -250,7 +250,7 @@ namespace <%= namespace %>.Controllers
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             <%_ }_%>
             <%_ } _%>
-            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
+            return NoContent().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
         }
     }
 }
