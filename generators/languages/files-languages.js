@@ -22,42 +22,36 @@ const constants = require('../generator-dotnetcore-constants');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
-function angularJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, "dist/", true);
-}
-
-function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
-}
-
-function updateWebpackCustomJs() {
+function updateAngularWebpackCustomJs() {
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
         `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        "",
+        '',
         true
     );
 }
 
-function updateBrowserslistrc() {
+function updateReactWebpackCommonJs() {
     this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/.browserslistrc`,
-        `Firefox ESR`,
-        `Firefox ESR
-not ios_saf 15.2-15.3
-not safari 15.2-15.3`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+        '',
         true
     );
 }
 
-function writeFiles() {
-    angularJson.call(this);
-    updateHomeTitle.call(this);
-    updateWebpackCustomJs.call(this);
-    updateBrowserslistrc.call(this);
+function writeFilesAngular() {
+    updateAngularWebpackCustomJs.call(this);
+}
+function writeFilesReact() {
+    updateReactWebpackCommonJs.call(this);
+}
+function writeFilesVue() {
+    updateReactWebpackCommonJs.call(this);
 }
 
 module.exports = {
-    writeFiles,
+    writeFilesAngular,
+    writeFilesReact,
+    writeFilesVue,
 };

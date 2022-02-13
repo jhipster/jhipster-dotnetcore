@@ -10,7 +10,7 @@
 	  "cqrsEnabled": true,
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
-    "jhipsterVersion": "6.10.4",
+    "jhipsterVersion": "7.6.0",
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",

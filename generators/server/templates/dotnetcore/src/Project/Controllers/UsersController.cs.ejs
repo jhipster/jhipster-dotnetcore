@@ -178,7 +178,7 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             await _userService.DeleteUser(login);
             <%_ } _%>
-            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
+            return NoContent().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
         }
     }
 }
