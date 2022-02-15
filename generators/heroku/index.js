@@ -28,9 +28,10 @@ const statistics = require('generator-jhipster/generators/statistics');
 const constants = require('generator-jhipster/generators/generator-constants');
 const Which = require('which');
 const toPascalCase = require('to-pascal-case');
-const netConstants = require('../generator-dotnetcore-constants');
+// const netConstants = require('../generator-dotnetcore-constants');
 
 const execCmd = util.promisify(ChildProcess.exec);
+const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends BaseBlueprintGenerator {
     constructor(args, opts) {
@@ -73,6 +74,8 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.reactive = configuration.get('reactive') || false;
                 this.authenticationType = configuration.get('authenticationType');
                 this.herokuAppName = configuration.get('herokuAppName');
+                this.clientFramework = configuration.get('clientFramework');
+                this.herokuBlazorAppName = configuration.get('herokuBlazorAppName');
                 this.dynoSize = 'Free';
                 this.herokuDeployType = configuration.get('herokuDeployType');
                 this.useOkta = configuration.get('useOkta');
@@ -153,13 +156,13 @@ module.exports = class extends BaseBlueprintGenerator {
                         name: 'herokuDeployType',
                         message: 'Which type of deployment do you want ?',
                         choices: [
+                            // {
+                            //     value: 'git',
+                            //     name: 'Git (compile on Heroku)',
+                            // },
                             {
-                                value: 'git',
-                                name: 'Git (compile on Heroku)',
-                            },
-                            {
-                                value: 'container',
-                                name: 'Git (compile on Heroku)',
+                                value: 'containerRegistry',
+                                name: 'Heroku Container Registry',
                             },
                         ],
                         default: 0,
@@ -259,7 +262,6 @@ module.exports = class extends BaseBlueprintGenerator {
                 this.config.set({
                     herokuAppName: this.herokuAppName,
                     herokuDeployType: this.herokuDeployType,
-                    herokuJavaVersion: this.herokuJavaVersion,
                     useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
                     oktaAdminPassword: this.oktaAdminPassword,
@@ -429,6 +431,136 @@ module.exports = class extends BaseBlueprintGenerator {
                 });
             },
 
+            herokuCreateBlazorApp() {
+                if (this.abort || this.herokuAppExists) return;
+                const done = this.async();
+
+                if (this.clientFramework === BLAZOR) {
+                    this.herokuBlazorAppName = `${this.herokuAppName}Blazor`;
+
+                    this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
+                    const child = ChildProcess.execFile(
+                        this.herokuExecutablePath,
+                        ['create', this.herokuBlazorAppName, '--region', this.herokuRegion],
+                        { shell: false },
+                        (error, stdoutput, stderror) => {
+                            if (error) {
+                                if (stderror.includes('is already taken')) {
+                                    const prompts = [
+                                        {
+                                            type: 'list',
+                                            name: 'herokuForceName',
+                                            message: `The Heroku application "${chalk.cyan(
+                                                this.herokuBlazorAppName
+                                            )}" already exists! Use it anyways?`,
+                                            choices: [
+                                                {
+                                                    value: 'Yes',
+                                                    name: 'Yes, I have access to it',
+                                                },
+                                                {
+                                                    value: 'No',
+                                                    name: 'No, generate a random name',
+                                                },
+                                            ],
+                                            default: 0,
+                                        },
+                                    ];
+
+                                    this.log('');
+                                    this.prompt(prompts).then(props => {
+                                        if (props.herokuForceName === 'Yes') {
+                                            this.config.set({
+                                                herokuBlazorAppName: this.herokuBlazorAppName,
+                                            });
+                                            done();
+                                            // ChildProcess.execFile(
+                                            //     this.herokuExecutablePath,
+                                            //     ['git:remote', '--app', this.herokuAppName],
+                                            //     { shell: false },
+                                            //     (err, stdout, stderr) => {
+                                            //         if (err) {
+                                            //             this.abort = true;
+                                            //             this.log.error(err);
+                                            //         } else {
+                                            //             this.log(stdout.trim());
+                                            //             this.config.set({
+                                            //                 herokuAppName: this.herokuAppName,
+                                            //                 herokuDeployType: this.herokuDeployType,
+                                            //             });
+                                            //         }
+                                            //         done();
+                                            //     }
+                                            // );
+                                        } else {
+                                            ChildProcess.execFile(
+                                                this.herokuExecutablePath,
+                                                ['create', '--region', this.herokuRegion],
+                                                { shell: false },
+                                                (err, stdout, stderr) => {
+                                                    if (err) {
+                                                        this.abort = true;
+                                                        this.log.error(err);
+                                                    } else {
+                                                        // Extract from "Created random-app-name-1234... done"
+                                                        this.herokuBlazorAppName = stdout.substring(
+                                                            stdout.indexOf('https://') + 8,
+                                                            stdout.indexOf('.herokuapp')
+                                                        );
+                                                        this.log(stdout.trim());
+
+                                                        this.config.set({
+                                                            herokuBlazorAppName: this.herokuBlazorAppName,
+                                                        });
+                                                        done();
+
+                                                        // ensure that the git remote is the same as the appName
+                                                        // ChildProcess.execFile(
+                                                        //     this.herokuExecutablePath,
+                                                        //     ['git:remote', '--app', this.herokuAppName],
+                                                        //     { shell: false },
+                                                        //     (e, stout, sterr) => {
+                                                        //         if (e) {
+                                                        //             this.abort = true;
+                                                        //             this.log.error(e);
+                                                        //         } else {
+                                                        //             this.config.set({
+                                                        //                 herokuAppName: this.herokuAppName,
+                                                        //                 herokuDeployType: this.herokuDeployType,
+                                                        //             });
+                                                        //         }
+                                                        //         done();
+                                                        //     }
+                                                        // );
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    });
+                                } else {
+                                    this.abort = true;
+                                    this.log.error(error);
+                                    done();
+                                }
+                            } else {
+                                done();
+                            }
+                        }
+                    );
+
+                    child.stdout.on('data', data => {
+                        const output = data.toString();
+                        if (data.search('Heroku credentials') >= 0) {
+                            this.abort = true;
+                            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+                            done();
+                        } else {
+                            this.log(output.trim());
+                        }
+                    });
+                }
+            },
+
             herokuAddonsCreate() {
                 if (this.abort) return;
                 const done = this.async();
@@ -468,7 +600,11 @@ module.exports = class extends BaseBlueprintGenerator {
                     dbAddOn = 'jawsdb:kitefin';
                 }
 
-                if (dbAddOn) {
+                if (this.databaseType === 'mssql') {
+                    this.log(chalk.yellow('MS SQL Server addon is NOT free and shoud be added manually.'));
+                    this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to add it to your application.'));
+                    this.log(chalk.yellow('Or re-create your jhipster application choosing either PostgreSql or MySql'));
+                } else if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
                     ChildProcess.execFile(
                         this.herokuExecutablePath,
@@ -489,6 +625,15 @@ module.exports = class extends BaseBlueprintGenerator {
                 if (this.abort) return;
 
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
+
+                try {
+                    fs.lstatSync('heroku.yml');
+                    this.log(chalk.bold('\nheroku.yml already exists.'));
+                } catch (e) {
+                    // An exception is thrown if the folder doesn't exist
+                    this.log(chalk.bold('\nCreating heroku.yml file.'));
+                    // TODO add heroku.yml file
+                }
 
                 if (this.useOkta) {
                     this.template(
@@ -519,6 +664,48 @@ module.exports = class extends BaseBlueprintGenerator {
                                 'WARNING!'
                             )}Failed to make 'provision-okta-addon.sh' executable, you may need to run 'chmod +x provison-okta-addon.sh'`
                         );
+                    }
+                }
+            },
+
+            productionDockerDeploy() {
+                function dockerDeploy(appName) {
+                    const processType = 'web';
+                    this.log(chalk.bold(`\nDeploying ${appName} to Heroku's Container Registry`));
+
+                    const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+
+                    const dockerBuildCommand = `docker build -f ./Dockerfile-Back -t ${appName}:latest .`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(dockerBuildCommand));
+
+                    const dockerTagCommand = `docker tag ${appName} registry.heroku.com/${appName}/${processType}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(dockerTagCommand));
+
+                    const dockerPushCommand = `docker push registry.heroku.com/${appName}/${processType}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+
+                    const herokuReleaseCommand = `heroku container:release ${processType} --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                }
+
+                if (this.abort) return;
+
+                if (this.herokuSkipDeploy) {
+                    this.log(chalk.bold('\nSkipping deployment'));
+                    return;
+                }
+
+                const done = this.async();
+
+                if (this.herokuDeployType === 'containerRegistry') {
+                    dockerDeploy(this.herokuAppName);
+
+                    if (this.clientFramework === BLAZOR) {
+                        dockerDeploy(this.herokuBlazorAppName);
+                        done();
+                    } else {
+                        done();
                     }
                 }
             },
@@ -560,24 +747,24 @@ module.exports = class extends BaseBlueprintGenerator {
                         });
                         await gitCommit;
 
-                        const buildpack = 'https://github.com/jincod/dotnetcore-buildpack#v5.0.100';
-                        const configVars = 'ASPNETCORE_ENVIRONMENT=Production ';
+                        // const buildpack = 'https://github.com/jincod/dotnetcore-buildpack#v5.0.100';
+                        // const configVars = 'ASPNETCORE_ENVIRONMENT=Production ';
 
                         // if (this.clientFramework === BLAZOR) {
                         // const fileConfig = `PROJECT_FILE=${netConstants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`;
                         // }
 
-                        this.log(chalk.bold('\nConfiguring Heroku'));
-                        await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
-                        await execCmd(
-                            `heroku config:set PROJECT_FILE=${netConstants.SERVER_SRC_DIR}${this.pascalizedBaseName}/${this.pascalizedBaseName}.csproj --app ${this.herokuAppName}`
-                        );
+                        // this.log(chalk.bold('\nConfiguring Heroku'));
+                        // await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
+                        // await execCmd(
+                        //     `heroku config:set PROJECT_FILE=${netConstants.SERVER_SRC_DIR}${this.pascalizedBaseName}/${this.pascalizedBaseName}.csproj --app ${this.herokuAppName}`
+                        // );
 
-                        this.log(chalk.bold('\nAdding .Net 5 buidpack (https://github.com/jincod/dotnetcore-buildpack#v5.0.100)'));
-                        await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+                        // this.log(chalk.bold('\nAdding .Net 5 buidpack (https://github.com/jincod/dotnetcore-buildpack#v5.0.100)'));
+                        // await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
 
-                        this.log(chalk.bold('\nAdding heroku/nodejs buidpack'));
-                        await execCmd(`heroku buildpacks:add --index 1 heroku/nodejs --app ${this.herokuAppName}`);
+                        // this.log(chalk.bold('\nAdding heroku/nodejs buidpack'));
+                        // await execCmd(`heroku buildpacks:add --index 1 heroku/nodejs --app ${this.herokuAppName}`);
 
                         this.log(chalk.bold('\nDeploying application'));
 
@@ -596,13 +783,6 @@ module.exports = class extends BaseBlueprintGenerator {
                         this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
                         this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-                        if (this.databaseType === 'mssql') {
-                            this.log(chalk.yellow('Heroku MS SQL Server addon charges start at 15$/month.'));
-                            this.log(chalk.yellow('Open https://elements.heroku.com/addons/mssql to manually install it.'));
-                            this.log(
-                                chalk.yellow('If you want to stay at the free tier re-generate the application choosing other database.')
-                            );
-                        }
 
                         if (this.useOkta) {
                             let curlAvailable = false;
