@@ -132,7 +132,9 @@ function updateTsConfigJson() {
 }
 
 function updateTsConfigSpecJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.spec.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    if (this.clientFramework === ANGULAR || this.clientFramework === VUE) {
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.spec.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    }
 }
 
 function updatePackageJson() {
@@ -223,6 +225,11 @@ function updateEsLinIgnore() {
         "",
         true
     );
+    this.rewriteFile(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
+        'dist/',
+        'test/cypress/'
+    );
     if (this.protractorTests) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.e2e.json`,
@@ -234,12 +241,14 @@ function updateEsLinIgnore() {
 }
 
 function updateEsLintrcJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintrc.js`,
-        'target/',
-        `dist/`,
-        true
-    );
+    if (this.clientFramework === VUE) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintrc.js`,
+            'target/',
+            `dist/`,
+            true
+        );
+    }
 }
 
 function updateTestFramework() {
