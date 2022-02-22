@@ -9,8 +9,9 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 # Run FORMATTING
 #-------------------------------------------------------------------------------
-dotnet tool install -g dotnet-format
-dotnet format --verify-no-changes
+# Commented lines below due to error in dotnet format tool - see https://github.com/dotnet/format/issues/1519
+#dotnet tool install -g dotnet-format
+#dotnet format --verify-no-changes
 
 if [[ $? -ne 0 ]]; then
   echo "${RED}FAILED FORMATTING"
