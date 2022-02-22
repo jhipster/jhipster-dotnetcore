@@ -9,7 +9,7 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 # Run FORMATTING
 #-------------------------------------------------------------------------------
-# dotnet tool install -g dotnet-format
+dotnet tool install -g dotnet-format
 dotnet format --check
 
 # if [[ $? -ne 0 ]]; then
