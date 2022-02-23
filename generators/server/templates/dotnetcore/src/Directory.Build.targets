@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-		<AspNetCorePackageVersion>5.0.0</AspNetCorePackageVersion>
+		<AspNetCorePackageVersion>6.0.2</AspNetCorePackageVersion>
 		<EntityFrameworkPackageVersion>5.0.8</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.7</JHipsterNetPackageVersion>
   </PropertyGroup>
@@ -16,7 +16,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
-	<PackageReference Update="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
+	<PackageReference Update="System.Net.Http.Json" Version="6.0.0" />
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
 
 	<PackageReference Update="AutoFixture" Version="4.17.0" />
@@ -121,7 +121,7 @@
 	<PackageReference Update="Oracle.ManagedDataAccess.Core" Version="3.21.1" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
-	} _%>	 
+	} _%>
 	<PackageReference Update="coverlet.msbuild" Version="3.1.0"/>
 	<PackageReference Update="FakeItEasy" Version="7.1.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
@@ -134,6 +134,6 @@
 	<PackageReference Update="xunit.runner.console" Version="2.4.1"/>
 	<PackageReference Update="FluentAssertions" Version="5.10.3" />
 	<PackageReference Update="FluentAssertions.AspNetCore.Mvc" Version="3.2.0" />
-	<PackageReference Update="FluentAssertions.Json" Version="5.5.0" />	
+	<PackageReference Update="FluentAssertions.Json" Version="5.5.0" />
   </ItemGroup>
 </Project>
