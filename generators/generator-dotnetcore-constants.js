@@ -15,8 +15,8 @@ const XAMARIN = 'Xamarin';
 const TERRAFORM_DIR = 'terraform/';
 
 // Version of Node, NPM
-const NODE_VERSION = '16.13.1';
-const NPM_VERSION = '8.3.2';
+const NODE_VERSION = '16.14.0';
+const NPM_VERSION = '8.4.1';
 
 const constants = {
     SERVER_SRC_DIR,
