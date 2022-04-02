@@ -91,6 +91,8 @@ namespace <%= namespace %>.Configuration
             services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
                 <%_ break;
                 case 'postgres': _%>
+            // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
                 <%_ break;
                 case 'mysql': _%>
@@ -115,6 +117,8 @@ namespace <%= namespace %>.Configuration
             services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
                 <%_ break;
                 case 'postgres': _%>
+            // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
                 <%_ break;
                 case 'oracle': _%>
