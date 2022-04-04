@@ -17,7 +17,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.113" />
 	<PackageReference Update="System.Net.Http.Json" Version="6.0.0" />
-	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="9.1.0" />
+	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="10.1.0" />
 
 	<PackageReference Update="AutoFixture" Version="4.17.0" />
 	<PackageReference Update="bunit" Version="1.0.0-preview-01" />
