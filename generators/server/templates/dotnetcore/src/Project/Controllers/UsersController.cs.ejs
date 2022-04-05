@@ -81,7 +81,7 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to save User : {userDto}");
-            if (userDto.Id != null)
+            if (!string.IsNullOrEmpty(userDto.Id))
                 throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement",
                     "idexists");
             <%_ if (cqrsEnabled) { _%>
