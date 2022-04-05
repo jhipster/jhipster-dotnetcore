@@ -26,7 +26,7 @@
   "dependencies": {
     "chalk": "4.1.2",
     "ejs": "3.1.6",
-    "generator-jhipster": "7.7.0",
+    "generator-jhipster": "7.8.0",
     "glob": "7.2.0",
     "gulp-filter": "6.0.0",
     "insight": "0.10.3",

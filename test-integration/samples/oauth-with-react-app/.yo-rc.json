@@ -5,7 +5,7 @@
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",
     "serverPort": "5000",
-    "jhipsterVersion": "7.7.0",
+    "jhipsterVersion": "7.8.0",
     "applicationType": "monolith",
     "baseName": "JhipsterSampleApplication",
     "useSass": true,
