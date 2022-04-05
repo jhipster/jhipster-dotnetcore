@@ -44,7 +44,14 @@ namespace <%= namespace %>.Dto
 
         public bool Activated { get; set; }
 
-        [MinLength(2)] [MaxLength(6)] public string LangKey { get; set; }
+        private string _langKey;
+        
+        [MinLength(2)] 
+        [MaxLength(6)] 
+        public string LangKey {
+            get { return _langKey; }
+            set { _langKey = value; if (string.IsNullOrEmpty(_langKey)) _langKey = Constants.DefaultLangKey; }
+        }
 
         public string CreatedBy { get; set; }
 

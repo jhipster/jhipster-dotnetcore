@@ -16,7 +16,7 @@ const TERRAFORM_DIR = 'terraform/';
 
 // Version of Node, NPM
 const NODE_VERSION = '16.14.0';
-const NPM_VERSION = '8.4.1';
+const NPM_VERSION = '8.6.0';
 
 const constants = {
     SERVER_SRC_DIR,
