@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using JHipsterNet.Core.Pagination;
@@ -46,13 +47,15 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
         <%_ if (databaseType != 'mongodb' && relationships.length != 0) { _%>
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
+            List<string> entitiesToBeUpdated = new List<string>();
             <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
 
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
+            entitiesToBeUpdated.Add("<%= relationship.otherEntityNamePascalized %>");
                         <%_ }
             }); _%>
-            return await base.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+            return await base.CreateOrUpdateAsync(<%= camelCasedEntityClass %>, entitiesToBeUpdated);
         }
         <%_ } _%>
     }

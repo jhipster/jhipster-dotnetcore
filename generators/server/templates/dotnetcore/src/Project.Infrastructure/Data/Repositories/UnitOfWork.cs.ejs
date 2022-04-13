@@ -19,6 +19,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -64,16 +65,26 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return _context.Set<T>(name);
         }
 
-        public void AddOrUpdateGraph<TEntiy>(TEntiy entity) where TEntiy : class
+        public void AddOrUpdateGraph<TEntiy>(TEntiy entity, ICollection<string> entitiesToBeUpdated = null) where TEntiy : class
         {
+            var rootTypeEntity = entity.GetType().Name;
+
             _context.ChangeTracker.TrackGraph(entity, e =>
             {
+                string navigationPropertyName = e.Entry.Entity.GetType().Name;
+
                 var alreadyTrackedEntity = _context.ChangeTracker.Entries().FirstOrDefault(entry => entry.Entity.Equals(e.Entry.Entity));
+
                 if (alreadyTrackedEntity != null)
                 {
-                    return;
+                    alreadyTrackedEntity.State = EntityState.Detached;
                 }
-                if (e.Entry.IsKeySet)
+
+                if (navigationPropertyName != rootTypeEntity && !(entitiesToBeUpdated != null && entitiesToBeUpdated.Contains(navigationPropertyName)))
+                {
+                    e.Entry.State = EntityState.Unchanged;
+                }
+                else if (e.Entry.IsKeySet)
                 {
                     e.Entry.State = EntityState.Modified;
                 }
@@ -81,6 +92,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                 {
                     e.Entry.State = EntityState.Added;
                 }
+                System.Diagnostics.Debug.WriteLine($"Tracking {e.Entry.Metadata.DisplayName()} as {e.Entry.State}");
             });
         }
 

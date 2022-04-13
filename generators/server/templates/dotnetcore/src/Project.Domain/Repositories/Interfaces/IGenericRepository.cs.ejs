@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
@@ -31,6 +32,7 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
     public interface IGenericRepository<TEntity, TKey> : IReadOnlyGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         Task<TEntity> CreateOrUpdateAsync(TEntity entity);
+        Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<string> entitiesToBeUpdated);
         Task DeleteByIdAsync(TKey id);
         Task DeleteAsync(TEntity entity);
         Task Clear();

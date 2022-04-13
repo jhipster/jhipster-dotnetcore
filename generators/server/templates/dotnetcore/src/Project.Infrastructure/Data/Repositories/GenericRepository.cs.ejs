@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
@@ -83,6 +84,20 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             else
             {
                 _context.AddOrUpdateGraph(entity);
+            }
+            return entity;
+        }
+
+        public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<string> entitiesToBeUpdated)
+        {
+            bool exists = await Exists(x => x.Id.Equals(entity.Id));
+            if (entity.Id.Equals(0) && exists)
+            {
+                Update(entity);
+            }
+            else
+            {
+                _context.AddOrUpdateGraph(entity, entitiesToBeUpdated);
             }
             return entity;
         }
