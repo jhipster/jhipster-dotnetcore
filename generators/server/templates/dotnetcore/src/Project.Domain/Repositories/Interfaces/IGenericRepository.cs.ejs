@@ -31,7 +31,7 @@ namespace <%= namespace %>.Domain.Repositories.Interfaces
     public interface IGenericRepository<TEntity, TKey> : IReadOnlyGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         Task<TEntity> CreateOrUpdateAsync(TEntity entity);
-        Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<string> entitiesToBeUpdated);
+        Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<Type> entitiesToBeUpdated);
         Task DeleteByIdAsync(TKey id);
         Task DeleteAsync(TEntity entity);
         Task Clear();

@@ -65,13 +65,13 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return _context.Set<T>(name);
         }
 
-        public void AddOrUpdateGraph<TEntiy>(TEntiy entity, ICollection<string> entitiesToBeUpdated = null) where TEntiy : class
+        public void AddOrUpdateGraph<TEntiy>(TEntiy entity, ICollection<Type> entitiesToBeUpdated = null) where TEntiy : class
         {
-            var rootTypeEntity = entity.GetType().Name;
+            var rootTypeEntity = entity.GetType();
 
             _context.ChangeTracker.TrackGraph(entity, e =>
             {
-                string navigationPropertyName = e.Entry.Entity.GetType().Name;
+                Type navigationPropertyName = e.Entry.Entity.GetType();
 
                 var alreadyTrackedEntity = _context.ChangeTracker.Entries().FirstOrDefault(entry => entry.Entity.Equals(e.Entry.Entity));
 
@@ -80,7 +80,7 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
                     alreadyTrackedEntity.State = EntityState.Detached;
                 }
 
-                if (navigationPropertyName != rootTypeEntity && !(entitiesToBeUpdated != null && entitiesToBeUpdated.Contains(navigationPropertyName)))
+                if (!navigationPropertyName.Equals(rootTypeEntity) && !(entitiesToBeUpdated != null && entitiesToBeUpdated.Contains(navigationPropertyName)))
                 {
                     e.Entry.State = EntityState.Unchanged;
                 }
