@@ -131,7 +131,7 @@ namespace <%= namespace %>.Controllers
             return Ok(_userService.GetAuthorities());
         }
         <%_ } _%>
-        
+
         [Authorize]
         [HttpGet("account")]
         public async Task<ActionResult<UserDto>> GetAccount()
