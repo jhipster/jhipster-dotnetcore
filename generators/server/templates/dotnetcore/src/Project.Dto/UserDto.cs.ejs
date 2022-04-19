@@ -45,10 +45,11 @@ namespace <%= namespace %>.Dto
         public bool Activated { get; set; }
 
         private string _langKey;
-        
-        [MinLength(2)] 
-        [MaxLength(6)] 
-        public string LangKey {
+
+        [MinLength(2)]
+        [MaxLength(6)]
+        public string LangKey
+        {
             get { return _langKey; }
             set { _langKey = value; if (string.IsNullOrEmpty(_langKey)) _langKey = Constants.DefaultLangKey; }
         }
