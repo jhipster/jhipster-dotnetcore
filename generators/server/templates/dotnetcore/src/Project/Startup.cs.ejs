@@ -96,7 +96,11 @@ namespace <%= namespace %>
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
+            <%_ if (databaseType === 'mongodb') { _%>
+            IMongoDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
+            <%_ } else { _%>
             ApplicationDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
+            <%_ } _%>
         {
             var securitySettings = securitySettingsOptions.Value;
             app

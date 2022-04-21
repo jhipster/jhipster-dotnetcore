@@ -518,6 +518,17 @@ const serverFiles = {
                 },
             ],
         },
+        {
+            condition: generator => generator.databaseType === 'mongodb',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project.Infrastructure/Data/Repositories/ApplicationUserStore.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Data/Repositories/ApplicationUserStore.cs`,
+                },
+            ],
+        },
     ],
     dataExtensions: [
         {

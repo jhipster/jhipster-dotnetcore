@@ -13,11 +13,19 @@
  limitations under the License.
 -%>
 using System.Collections.Generic;
+<%_ if (databaseType === 'mongodb') { _%>
+using AspNetCore.Identity.MongoDbCore.Models;
+<%_ } else { _%>
 using Microsoft.AspNetCore.Identity;
+<%_ } _%>
 
 namespace <%= namespace %>.Domain
 {
+    <%_ if (databaseType === 'mongodb') { _%>
+    public class Role : MongoIdentityRole<string>
+    <%_ } else { _%>
     public class Role : IdentityRole<string>
+    <%_ } _%>
     {
         public ICollection<UserRole> UserRoles { get; set; }
     }

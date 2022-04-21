@@ -790,10 +790,7 @@ namespace <%= namespace %>.Test.Controllers
             var response = await client.PostAsync("/api/account", TestUtil.ToJsonContent(userDto));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var updatedUser = await userManager.Users
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .SingleOrDefaultAsync(it => it.UserName == user.Login);
+            var updatedUser = await userService.GetByLogin(user.Login);
 
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
