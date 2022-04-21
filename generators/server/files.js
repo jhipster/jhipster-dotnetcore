@@ -1382,7 +1382,9 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice' &&
+            condition: generator =>
+                generator.authenticationType === 'jwt' &&
+                generator.applicationType !== 'microservice' &&
                 generator.databaseType !== 'mongodb',
             path: SERVER_TEST_DIR,
             templates: [{ file: 'Project.Test/Fixme.cs', renameTo: generator => `${generator.testProjectDir}/Fixme.cs` }],
