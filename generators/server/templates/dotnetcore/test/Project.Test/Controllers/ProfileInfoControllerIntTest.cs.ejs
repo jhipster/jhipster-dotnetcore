@@ -22,6 +22,9 @@ using Xunit;
 
 namespace <%= namespace %>.Test.Controllers
 {
+    <%_ if (databaseType === 'mongodb') { _%>
+    [Collection("MongoDB")]
+    <%_ } _%>
     public class ProfileInfoControllerIntTest
     {
 

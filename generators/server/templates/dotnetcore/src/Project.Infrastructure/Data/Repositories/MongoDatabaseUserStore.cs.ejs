@@ -27,11 +27,11 @@ using MongoDbGenericRepository;
 
 namespace LineController.Infrastructure.Data.Repositories;
 
-public class ApplicationUserStore : MongoUserStore<User, Role, IMongoDbContext>
+public class MongoDatabaseUserStore : MongoUserStore<User, Role, IMongoDbContext>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ApplicationUserStore(IMongoDbContext context, IHttpContextAccessor httpContextAccessor) : base(context)
+    public MongoDatabaseUserStore(IMongoDbContext context, IHttpContextAccessor httpContextAccessor) : base(context)
     {
         _httpContextAccessor = httpContextAccessor;
     }
@@ -47,13 +47,12 @@ public class ApplicationUserStore : MongoUserStore<User, Role, IMongoDbContext>
         return base.CreateAsync(user, cancellationToken);
     }
 
-    public override async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+    public override Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken())
     {
         string modifiedOrCreatedBy = _httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "System";
         user.LastModifiedDate = DateTime.Now;
         user.LastModifiedBy = modifiedOrCreatedBy;
 
-        var result = await base.UpdateAsync(user, cancellationToken);
-        return result;
+        return base.UpdateAsync(user, cancellationToken);
     }
 }

@@ -90,8 +90,6 @@
 		case 'mongodb': _%>
 	<PackageReference Update="MongoDB.Driver" Version="2.15.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
     <PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
@@ -113,8 +111,6 @@
 	<PackageReference Update="coverlet.msbuild" Version="3.1.0"/>
 	<PackageReference Update="FakeItEasy" Version="7.1.0" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="16.10.0" />
 	<PackageReference Update="Moq" Version="4.16.1" />
 	<PackageReference Update="xunit" Version="2.4.1" />

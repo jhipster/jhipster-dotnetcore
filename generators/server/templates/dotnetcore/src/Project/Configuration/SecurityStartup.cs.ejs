@@ -92,7 +92,7 @@ namespace <%= namespace %>.Configuration
                 })
                 .AddRoles<Role>()
                 .AddMongoDbStores<User, Role, string>(databaseSettings.ConnectionString, databaseSettings.DatabaseName)
-                .AddUserStore<ApplicationUserStore>()
+                .AddUserStore<MongoDatabaseUserStore>()
                 .AddSignInManager()
                 <%_ } else { _%>
             services.AddIdentity<User, Role>(options =>

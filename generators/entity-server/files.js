@@ -185,6 +185,7 @@ const serverFiles = {
     ],
     db: [
         {
+            condition: generator => generator.databaseType !== 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {

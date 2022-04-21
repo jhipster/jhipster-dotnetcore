@@ -24,21 +24,22 @@ namespace <%= namespace %>.Infrastructure.Data
 {
     public class MongoDatabaseContext : IMongoDatabaseContext, IDisposable
     {
-        private IMongoDatabase _db { get; set; }
         private MongoClient _mongoClient { get; set; }
         public IClientSessionHandle Session { get; set; }
+        public IMongoDatabase Database { get; }
 
         protected List<Func<Task>> _commands;
         public MongoDatabaseContext(IOptions<MongoDatabaseConfig> configuration)
         {
             _mongoClient = new MongoClient(configuration.Value.ConnectionString);
-            _db = _mongoClient.GetDatabase(configuration.Value.DatabaseName);
             _commands = new List<Func<Task>>();
+            Session = _mongoClient.StartSession();
+            Database = Session.Client.GetDatabase(configuration.Value.DatabaseName);
         }
 
         public IMongoCollection<T> Set<T>(string name)
         {
-            return _db.GetCollection<T>(name);
+            return Database.GetCollection<T>(name);
         }
 
         public void AddCommand(Func<Task> func)

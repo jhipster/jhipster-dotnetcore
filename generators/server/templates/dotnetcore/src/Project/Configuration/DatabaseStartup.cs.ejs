@@ -20,9 +20,6 @@ using Microsoft.Extensions.Hosting;
     case 'sqllite': _%>
 using Microsoft.Data.Sqlite;
     <%_ break;
-    case 'mongodb': _%>
-using Microsoft.Data.Sqlite;
-    <%_ break;
     case 'mssql': _%>
 using Microsoft.Data.SqlClient;
     <%_ break;
@@ -43,6 +40,7 @@ namespace <%= namespace %>.Configuration
     {
         public static IServiceCollection AddDatabaseModule(this IServiceCollection services, IConfiguration configuration)
         {
+            <%_ if (databaseType !== 'mongodb') { _%>
             string connectionString = null;
             string databaseUrl = configuration.GetValue<string>("DATABASE_URL");
 
@@ -78,6 +76,7 @@ namespace <%= namespace %>.Configuration
                 connectionString = configuration.GetConnectionString("AppDbContext");
             }
 
+            <%_ } _%>
             <%_ switch(databaseType) {
                 case 'sqllite': _%>
             var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
@@ -86,27 +85,29 @@ namespace <%= namespace %>.Configuration
                 DataSource = entityFrameworkConfiguration["DataSource"]
             }.ToString());
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
+
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
                 <%_ break;
                 case 'mssql': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
                 <%_ break;
                 case 'postgres': _%>
             // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
+
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
                 <%_ break;
                 case 'mysql': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options =>
                 options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 19)))
             );
+
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
                 <%_ break;
-            case 'mongodb': _%>
-            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
-            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder
-            {
-                DataSource = entityFrameworkConfiguration["DataSource"]
-            }.ToString());
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
+                case 'mongodb': _%>
             services.Configure<MongoDatabaseConfig>(
                 configuration.GetSection(nameof(MongoDatabaseConfig)));
             services.AddSingleton<IMongoDatabaseConfig>(sp =>
@@ -115,19 +116,23 @@ namespace <%= namespace %>.Configuration
                 <%_ break;
                 case 'mssql': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
                 <%_ break;
                 case 'postgres': _%>
             // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
+
+            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
                 <%_ break;
                 case 'oracle': _%>
             services.AddDbContext<ApplicationDatabaseContext>(options =>
                 options.UseOracle(connectionString));
-                <%_ break;
-            } _%>
 
             services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+                <%_ break;
+            } _%>
 
             return services;
         }
@@ -135,6 +140,7 @@ namespace <%= namespace %>.Configuration
         public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder app,
             IServiceProvider serviceProvider, IHostEnvironment environment)
         {
+            <%_ if (databaseType !== 'mongodb') { _%>
             if (environment.IsDevelopment() || environment.IsProduction())
             {
                 using (var scope = serviceProvider.CreateScope())
@@ -145,6 +151,7 @@ namespace <%= namespace %>.Configuration
                 }
             }
 
+            <%_ } _%>
             return app;
         }
     }
