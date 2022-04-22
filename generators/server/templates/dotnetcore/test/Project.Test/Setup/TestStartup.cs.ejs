@@ -23,7 +23,7 @@ using System;
 <%_ if (databaseType !== 'mongodb') { _%>
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-<%_ } else { %>
+<%_ } else { _%>
 using MongoDB.Driver;
 <%_ } _%>
 
