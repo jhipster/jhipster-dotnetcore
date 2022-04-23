@@ -87,6 +87,20 @@ namespace <%= namespace %>.Infrastructure.Data.Repositories
             return entity;
         }
 
+        public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<Type> entitiesToBeUpdated)
+        {
+            bool exists = await Exists(x => x.Id.Equals(entity.Id));
+            if (entity.Id.Equals(0) && exists)
+            {
+                Update(entity);
+            }
+            else
+            {
+                _context.AddOrUpdateGraph(entity, entitiesToBeUpdated);
+            }
+            return entity;
+        }
+
         public virtual async Task Clear()
         {
             var allEntities = await _dbSet.ToListAsync();
