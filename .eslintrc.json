@@ -28,7 +28,8 @@
         "no-console": "off",
         "no-multi-assign": "off",
         "no-param-reassign": "off",
-        "no-shadow": "off"
+        "no-shadow": "off",
+        "import/extensions": [0, { "pattern": { "{c,m,}js": "always" } }]
     },
     "overrides": [
         {
