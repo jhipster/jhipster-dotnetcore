@@ -5,7 +5,9 @@
     },
     "extends": ["airbnb-base", "plugin:prettier/recommended"],
     "rules": {
+        "default-param-last": "off",
         "prettier/prettier": "error",
+        "prefer-regex-literals": "off",
         "linebreak-style": 0,
         "eol-last": 2,
         "quotes": [2, "single", { "avoidEscape": true }],
@@ -17,6 +19,7 @@
         "no-unused-vars": [2, { "vars": "local", "args": "none" }],
         "no-multi-str": 2,
         "no-irregular-whitespace": 2,
+        "no-restricted-exports": "off",
         "comma-dangle": "off",
         "max-len": "off",
         "func-names": "off",
@@ -29,6 +32,7 @@
         "no-multi-assign": "off",
         "no-param-reassign": "off",
         "no-shadow": "off",
+        "no-promise-executor-return": "off",
         "import/extensions": [0, { "pattern": { "{c,m,}js": "always" } }]
     },
     "overrides": [
