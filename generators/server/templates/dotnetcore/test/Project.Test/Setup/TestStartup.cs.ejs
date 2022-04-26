@@ -39,9 +39,10 @@ namespace <%= namespace %>.Test.Setup
         private IConfiguration Configuration { get; }
 
         public override void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
+    {
     <%_ if (databaseType === 'mongodb') { _%>
             IMongoDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
-        {
+        
             context.Database.ListCollectionNames()
                 .ForEachAsync(collection => context.Database.DropCollection(collection))
                 .Wait();
