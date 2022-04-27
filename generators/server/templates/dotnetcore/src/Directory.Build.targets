@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
 		<AspNetCorePackageVersion>6.0.4</AspNetCorePackageVersion>
-		<EntityFrameworkPackageVersion>6.0.3</EntityFrameworkPackageVersion>
+		<EntityFrameworkPackageVersion>6.0.4</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.7</JHipsterNetPackageVersion>
   </PropertyGroup>
 
@@ -27,7 +27,7 @@
 
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
-	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	<%_ if (cqrsEnabled) { _%>
 	<PackageReference Update="MediatR" Version="9.0.0" />
 	<PackageReference Update="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
