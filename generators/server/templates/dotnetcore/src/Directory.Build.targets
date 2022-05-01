@@ -8,10 +8,10 @@
   <ItemGroup>
 	<%_ if(!skipClient && clientFramework === "Blazor") { _%>
 	<PackageReference Update="AutoMapper" Version="11.0.1" />
-	<PackageReference Update="Blazored.Modal" Version="5.1.0" />
+	<PackageReference Update="Blazored.Modal" Version="6.0.1" />
 	<PackageReference Update="Blazored.SessionStorage" Version="2.2.0" />
-	<PackageReference Update="Blazorise.Bootstrap" Version="0.9.2.5" />
-	<PackageReference Update="Blazorise.Icons.FontAwesome" Version="0.9.2.5" />
+	<PackageReference Update="Blazorise.Bootstrap" Version="1.0.4" />
+	<PackageReference Update="Blazorise.Icons.FontAwesome" Version="1.0.4" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
@@ -20,7 +20,7 @@
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="10.1.0" />
 
 	<PackageReference Update="AutoFixture" Version="4.17.0" />
-	<PackageReference Update="bunit" Version="1.7.7" />
+	<PackageReference Update="bunit" Version="1.0.0-preview-01" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 	<%_ } _%>
@@ -58,8 +58,8 @@
 	<PackageReference Update="Consul" Version="1.6.10.5" />
 	<%_ } _%>
 	<%_ if (applicationType === 'gateway') { _%>
-	<PackageReference Update="Ocelot" Version="17.0.0" />
-	<PackageReference Update="Ocelot.Provider.Consul" Version="17.0.0" />
+	<PackageReference Update="Ocelot" Version="18.0.0" />
+	<PackageReference Update="Ocelot.Provider.Consul" Version="18.0.0" />
 	<%_ } _%>
 
 	<PackageReference Update="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -67,7 +67,7 @@
 	<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
 	<PackageReference Update="System.Text.Json" Version="6.0.2" />
-	<PackageReference Update="Serilog" Version="2.10.0" />
+	<PackageReference Update="Serilog" Version="2.11.0" />
 
 	<%_ switch(databaseType) {
 		case 'sqllite': _%>

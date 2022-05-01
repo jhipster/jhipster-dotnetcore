@@ -30,7 +30,7 @@ namespace <%= namespace %>.Client
             builder.Services
                 .AddBlazorise(options =>
                 {
-                    options.ChangeTextOnKeyPress = true;
+                    options.Immediate = true;
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
@@ -70,10 +70,6 @@ namespace <%= namespace %>.Client
             builder.Services.AddAuthorizationCore();
 
             var host = builder.Build();
-
-            host.Services
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
 
             await host.RunAsync();
         }
