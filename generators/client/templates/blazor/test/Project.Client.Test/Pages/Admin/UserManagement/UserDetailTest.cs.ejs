@@ -48,7 +48,7 @@ namespace <%= namespace %>.Client.Test.Pages.Admin.UserManagement
             _navidationService = new Mock<INavigationService>();
             Services.AddBlazorise(options =>
                 {
-                    options.Immediate = true;
+                    options.ChangeTextOnKeyPress = true;
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();

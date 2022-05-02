@@ -52,7 +52,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             Services.AddSingleton<INavigationService>(_navigationService.Object);
             Services.AddBlazorise(options =>
                 {
-                    options.Immediate = true;
+                    options.ChangeTextOnKeyPress = true;
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();

@@ -30,7 +30,7 @@ namespace <%= namespace %>.Client
             builder.Services
                 .AddBlazorise(options =>
                 {
-                    options.Immediate = true;
+                    options.ChangeTextOnKeyPress = true;
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();

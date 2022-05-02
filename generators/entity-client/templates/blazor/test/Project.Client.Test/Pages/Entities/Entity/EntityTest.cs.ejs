@@ -55,7 +55,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             Services.AddSingleton<IModalService>(_modalService.Object);
             Services.AddBlazorise(options =>
                 {
-                    options.Immediate = true;
+                    options.ChangeTextOnKeyPress = true;
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
