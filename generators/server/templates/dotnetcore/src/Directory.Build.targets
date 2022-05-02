@@ -29,7 +29,7 @@
 	<PackageReference Update="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
 	<PackageReference Update="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	<%_ if (cqrsEnabled) { _%>
-	<PackageReference Update="MediatR" Version="9.0.0" />
+	<PackageReference Update="MediatR" Version="10.0.1" />
 	<PackageReference Update="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
 	<%_ } _%>
 	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="6.4.1" />
