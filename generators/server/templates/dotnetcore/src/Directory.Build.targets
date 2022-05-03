@@ -35,7 +35,7 @@
 	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="6.4.1" />
 	<PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Scrutor" Version="3.3.0" />
+	<PackageReference Update="Scrutor" Version="4.1.0" />
 	<PackageReference Update="Serilog.AspNetCore" Version="5.0.0" />
 	<PackageReference Update="Serilog.Settings.Configuration" Version="3.3.0" />
 	<PackageReference Update="Serilog.Sinks.Console" Version="4.0.1" />
