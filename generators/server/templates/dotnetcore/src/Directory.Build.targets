@@ -32,7 +32,7 @@
 	<PackageReference Update="MediatR" Version="10.0.1" />
 	<PackageReference Update="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
 	<%_ } _%>
-	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="6.4.1" />
+	<PackageReference Update="Hellang.Middleware.ProblemDetails" Version="6.4.2" />
 	<PackageReference Update="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Scrutor" Version="4.1.0" />
