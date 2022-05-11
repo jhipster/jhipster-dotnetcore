@@ -76,10 +76,10 @@ function updatedValue(cSharpType) {
             updatedValue = `${updatedNumValue}M`;
             break;
         case 'DateTime?' :
-            updatedValue = "DateTime.Now";
+            updatedValue = "DateTime.UtcNow";
             break;
         case 'DateTime' :
-            updatedValue = "DateTime.Now";
+            updatedValue = "DateTime.UtcNow";
             break;
         case 'bool?' :
             updatedValue = "true";
