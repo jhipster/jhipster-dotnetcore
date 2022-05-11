@@ -42,6 +42,13 @@ namespace <%= namespace %>.Test.Controllers
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
+        public static string RandomNumeric(int length)
+        {
+            const string chars = "0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
         public static void EqualsVerifier(Type type)
         {
             var domainObject1 = Activator.CreateInstance(type);

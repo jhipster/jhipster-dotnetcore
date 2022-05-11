@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JHipsterNet.Core.Pagination;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
 using <%= namespace %>.Domain;
@@ -25,6 +26,8 @@ namespace <%= namespace %>.Domain.Services.Interfaces
     public interface IUserService
     {
         Task<User> CreateUser(User userToCreate);
+        Task<IPage<User>> GetAllManagedUsers(IPageable pageable);
+        Task<User> GetByLogin(string login);
         IEnumerable<string> GetAuthorities();
         Task DeleteUser(string login);
         Task<User> UpdateUser(User userToUpdate);

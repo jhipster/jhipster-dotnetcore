@@ -17,12 +17,20 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using <%= namespace %>.Domain.Interfaces;
+<%_ if (databaseType === 'mongodb') { _%>
+using AspNetCore.Identity.MongoDbCore.Models;
+<%_ } else { _%>
 using Microsoft.AspNetCore.Identity;
+<%_ } _%>
 using Newtonsoft.Json;
 
 namespace <%= namespace %>.Domain
 {
+    <%_ if (databaseType === 'mongodb') { _%>
+    public class User : MongoIdentityUser<string>, IAuditedEntityBase
+    <%_ } else { _%>
     public class User : IdentityUser, IAuditedEntityBase
+    <%_ } _%>
     {
         public string Login
         {

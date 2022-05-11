@@ -127,10 +127,7 @@ namespace <%= namespace %>.Controllers
             <%_ if (cqrsEnabled) { _%>
             (var headers, var userDtos) = await _mediator.Send(new UserGetAllQuery { Page = pageable });
             <%_ } else { _%>
-            var page = await _userManager.Users
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .UsePageableAsync(pageable);
+            var page = await _userService.GetAllManagedUsers(pageable);
             var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             <%_ } _%>
@@ -158,11 +155,7 @@ namespace <%= namespace %>.Controllers
             <%_ if (cqrsEnabled) { _%>
             var userDto = await _mediator.Send(new UserGetQuery { Login = login });
             <%_ } else { _%>
-            var result = await _userManager.Users
-                .Where(user => user.Login == login)
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .SingleOrDefaultAsync();
+            var result = await _userService.GetByLogin(login);
             var userDto = _mapper.Map<UserDto>(result);
             <%_ } _%>
             return ActionResultUtil.WrapOrNotFound(userDto);

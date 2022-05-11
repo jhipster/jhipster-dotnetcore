@@ -31,6 +31,9 @@ using Xunit;
 
 namespace <%= namespace %>.Test.Controllers
 {
+    <%_ if (databaseType === 'mongodb') { _%>
+    [Collection("MongoDB")]
+    <%_ } _%>
     public class UsersResourceIntTest
     {
         public UsersResourceIntTest()
@@ -418,9 +421,13 @@ namespace <%= namespace %>.Test.Controllers
             // Validate the User in the database
             var userList = _userManager.Users.ToList();
             userList.Count().Should().Be(databaseSizeBeforeUpdate);
+            <%_ if (databaseType === 'mongodb') { _%>
+            var testUser = userList[userList.Count - 1];
+            <%_ } else { _%>
             //            var testUser = userList[userList.Count - 1];
             //            TODO FIX database refresh to prevent the usage of context/Reload
             var testUser = Fixme.ReloadUser(_factory, updatedUser);
+            <%_ } _%>
             testUser.FirstName.Should().Be(UpdatedFirstname);
             testUser.LastName.Should().Be(UpdatedLastname);
             testUser.Email.Should().Be(UpdatedEmail);
@@ -550,10 +557,15 @@ namespace <%= namespace %>.Test.Controllers
             // Validate the User in the database
             var userList = _userManager.Users.ToList();
             userList.Count().Should().Be(databaseSizeBeforeUpdate);
+            <%_ if (databaseType === 'mongodb') { _%>
+            var testUser = userList[userList.Count - 1];
+            <%_ } else { _%>
             //            var testUser = userList[userList.Count - 1];
             //            TODO FIX database refresh to prevent the usage of context/Reload
             var testUser = Fixme.ReloadUser(_factory, updatedUser);
-            testUser.Login.Should().Be(UpdatedLogin);
+            <%_ } _%>
+            // Ignore case
+            testUser.Login.Should().BeEquivalentTo(UpdatedLogin);
             testUser.FirstName.Should().Be(UpdatedFirstname);
             testUser.LastName.Should().Be(UpdatedLastname);
             testUser.Email.Should().Be(UpdatedEmail);

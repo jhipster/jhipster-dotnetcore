@@ -17,6 +17,7 @@ using FluentAssertions;
 using FluentAssertions.Extensions;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Security;
 using <%= namespace %>.Dto;
 using <%= namespace %>.Test.Setup;
@@ -33,6 +34,9 @@ using Xunit;
 
 namespace <%= namespace %>.Test.Controllers
 {
+    <%_ if (databaseType === 'mongodb') { _%>
+    [Collection("MongoDB")]
+    <%_ } _%>
     public class AccountResourceIntTest
     {
         public AccountResourceIntTest()
@@ -65,8 +69,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             user = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             user = Fixme.ReloadUser(_factory, user);
+            <% } %>
             user.Activated.Should().Be(true);
         }
 
@@ -115,8 +121,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, "new password").Should()
                 .Be(PasswordVerificationResult.Success);
         }
@@ -148,8 +156,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         }
 
@@ -179,8 +189,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         }
 
@@ -210,8 +222,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         }
 
@@ -241,8 +255,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, "new password").Should()
                 .Be(PasswordVerificationResult.Failed);
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, currentPassword).Should()
@@ -278,8 +294,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, keyAndPassword.NewPassword)
                 .Should().Be(PasswordVerificationResult.Success);
         }
@@ -313,8 +331,10 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             var updatedUser = await userManager.FindByNameAsync(user.Login);
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, keyAndPassword.NewPassword)
                 .Should().Be(PasswordVerificationResult.Failed);
         }
@@ -761,6 +781,7 @@ namespace <%= namespace %>.Test.Controllers
         {
             var client = _factory.WithMockUser("save-account").CreateClient();
             var userManager = _factory.GetRequiredService<UserManager<User>>();
+            var userService = _factory.GetRequiredService<IUserService>();
             var passwordHasher = _factory.GetRequiredService<IPasswordHasher<User>>();
 
             var user = new User
@@ -790,13 +811,12 @@ namespace <%= namespace %>.Test.Controllers
             var response = await client.PostAsync("/api/account", TestUtil.ToJsonContent(userDto));
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var updatedUser = await userManager.Users
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .SingleOrDefaultAsync(it => it.UserName == user.Login);
+            var updatedUser = await userService.GetByLogin(user.Login);
 
+            <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
+            <% } %>
             updatedUser.FirstName.Should().Be(userDto.FirstName);
             updatedUser.LastName.Should().Be(userDto.LastName);
             updatedUser.Email.Should().Be(userDto.Email);

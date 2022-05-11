@@ -18,6 +18,7 @@
 -%>
 using Scrutor;
 using Microsoft.Extensions.DependencyInjection;
+using <%= namespace %>.Domain;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using <%= namespace %>.Infrastructure.Data.Repositories;
 
@@ -27,10 +28,16 @@ namespace <%= namespace %>.Configuration
     {
         public static IServiceCollection AddRepositoryModule(this IServiceCollection services)
         {
+    <%_ if (databaseType === 'mongodb') { _%>
+            services.Scan(scan => scan
+                .FromAssembliesOf(typeof(INoSqlGenericRepository<MongoBaseEntity<<%= primaryKeyType %>>, <%= primaryKeyType %>>),
+                        typeof(MongoGenericRepository<MongoBaseEntity<<%= primaryKeyType %>>, <%= primaryKeyType %>>))
+    <%_ } else { _%>
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.Scan(scan => scan
                 .FromAssembliesOf(typeof(IUnitOfWork), typeof(UnitOfWork))
+    <%_ } _%>
                     // Register repository interfaces using the I prefix convention for interfaces to match interface/class
                     .AddClasses(classes => classes.InNamespaces("<%= namespace %>.Infrastructure.Data.Repositories"))
                         .UsingRegistrationStrategy(RegistrationStrategy.Replace(ReplacementBehavior.ServiceType))

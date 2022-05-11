@@ -23,6 +23,7 @@ using <%= namespace %>.Security;
 using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Domain.Services;
 using <%= namespace %>.Domain.Services.Interfaces;
+using <%= namespace %>.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -81,6 +82,19 @@ namespace <%= namespace %>.Configuration
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
 
             <%_ if (applicationType !== 'microservice') { _%>
+                <%_ if (databaseType === 'mongodb') { _%>
+            var databaseSettings = services.BuildServiceProvider().GetRequiredService<IOptions<MongoDatabaseConfig>>().Value;
+
+            services.AddIdentityCore<User>(options =>
+                {
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
+                })
+                .AddRoles<Role>()
+                .AddMongoDbStores<User, Role, string>(databaseSettings.ConnectionString, databaseSettings.DatabaseName)
+                .AddUserStore<MongoDatabaseUserStore>()
+                .AddSignInManager()
+                <%_ } else { _%>
             services.AddIdentity<User, Role>(options =>
                 {
                     options.SignIn.RequireConfirmedEmail = true;
@@ -91,6 +105,7 @@ namespace <%= namespace %>.Configuration
                     UserRole, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>>()
                 .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
                 >()
+                <%_ } _%>
                 .AddDefaultTokenProviders();
             <%_ } _%>
 

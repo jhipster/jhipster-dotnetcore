@@ -1,0 +1,58 @@
+<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using AspNetCore.Identity.MongoDbCore;
+using <%= namespace %>.Domain;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using MongoDbGenericRepository;
+
+namespace <%= namespace %>.Infrastructure.Data.Repositories;
+
+public class MongoDatabaseUserStore : MongoUserStore<User, Role, IMongoDbContext>
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public MongoDatabaseUserStore(IMongoDbContext context, IHttpContextAccessor httpContextAccessor) : base(context)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+
+    public override Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+    {
+        string modifiedOrCreatedBy = _httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "System";
+        user.CreatedDate = DateTime.Now;
+        user.CreatedBy = modifiedOrCreatedBy;
+        user.LastModifiedDate = DateTime.Now;
+        user.LastModifiedBy = modifiedOrCreatedBy;
+
+        return base.CreateAsync(user, cancellationToken);
+    }
+
+    public override Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+    {
+        string modifiedOrCreatedBy = _httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "System";
+        user.LastModifiedDate = DateTime.Now;
+        user.LastModifiedBy = modifiedOrCreatedBy;
+
+        return base.UpdateAsync(user, cancellationToken);
+    }
+}
