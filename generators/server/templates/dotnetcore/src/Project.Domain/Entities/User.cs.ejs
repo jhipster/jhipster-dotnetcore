@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using <%= namespace %>.Domain.Interfaces;
+using <%= namespace %>.Domain.Entities.Interfaces;
 <%_ if (databaseType === 'mongodb') { _%>
 using AspNetCore.Identity.MongoDbCore.Models;
 <%_ } else { _%>
@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Identity;
 <%_ } _%>
 using Newtonsoft.Json;
 
-namespace <%= namespace %>.Domain
+namespace <%= namespace %>.Domain.Entities
 {
     <%_ if (databaseType === 'mongodb') { _%>
     public class User : MongoIdentityUser<string>, IAuditedEntityBase

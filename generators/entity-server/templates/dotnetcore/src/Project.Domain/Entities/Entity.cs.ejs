@@ -39,7 +39,7 @@ using <%= namespace %>.Crosscutting.Enums;
 using Newtonsoft.Json;
 <%_ } _%>
 
-namespace <%= namespace %>.Domain
+namespace <%= namespace %>.Domain.Entities
 {
     [Table("<%= entityTableName %>")]
     public class <%= entityClassName %> : <%_ if (databaseType == 'mongodb') { %> MongoBaseEntity<<%= primaryKeyType %>> <%_ } else { %> BaseEntity<<%= primaryKeyType %>> <%_ } %>

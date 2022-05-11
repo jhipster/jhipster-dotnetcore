@@ -21,7 +21,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JHipsterNet.Core.Pagination;
 using JHipsterNet.Core.Pagination.Extensions;
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Security;
 using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Dto;
@@ -31,6 +31,7 @@ using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Web.Rest.Utilities;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
+using <%= namespace %>.Infrastructure.Web.Rest.Utilities;
 <%_ if (cqrsEnabled) { _%>
 using <%= namespace %>.Application.Queries;
 using <%= namespace %>.Application.Commands;

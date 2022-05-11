@@ -17,8 +17,9 @@ using <%= namespace %>.Infrastructure.Configuration;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Infrastructure.Data;
-using <%= namespace %>.Domain;
+using <%= namespace %>.Infrastructure.Data.Repositories;
 using <%= namespace %>.Security;
 using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Domain.Services;

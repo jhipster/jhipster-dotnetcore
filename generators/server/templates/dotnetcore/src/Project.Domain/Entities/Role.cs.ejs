@@ -19,7 +19,7 @@ using AspNetCore.Identity.MongoDbCore.Models;
 using Microsoft.AspNetCore.Identity;
 <%_ } _%>
 
-namespace <%= namespace %>.Domain
+namespace <%= namespace %>.Domain.Entities
 {
     <%_ if (databaseType === 'mongodb') { _%>
     public class Role : MongoIdentityRole<string>

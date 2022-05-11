@@ -122,7 +122,7 @@ namespace <%= namespace %>
                 : "localhost";
             var appName = appConfiguration.GetSection(SerilogSection)[SyslogAppName] != null
                 ? appConfiguration.GetSection(SerilogSection)[SyslogAppName]
-                : "JhipsterApp";
+                : "<%= pascalizedBaseName %>App";
             var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.With<LoggerNameEnricher>()
                 .WriteTo.TcpSyslog(url, port, appName, FramingType.OCTET_COUNTING, SyslogFormat.RFC5424, Facility.Local0, SslProtocols.None)
