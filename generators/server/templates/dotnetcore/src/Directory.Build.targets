@@ -22,7 +22,7 @@
 	<PackageReference Update="AutoFixture" Version="4.17.0" />
 	<PackageReference Update="bunit" Version="1.0.0-preview-01" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 	<%_ } _%>
 
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
@@ -66,7 +66,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
-	<PackageReference Update="System.Text.Json" Version="6.0.3" />
+	<PackageReference Update="System.Text.Json" Version="6.0.4" />
 	<PackageReference Update="Serilog" Version="2.11.0" />
 
 	<%_ switch(databaseType) {
@@ -113,7 +113,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 	<PackageReference Update="Moq" Version="4.17.2" />
 	<PackageReference Update="xunit" Version="2.4.1" />
 	<PackageReference Update="xunit.runner.visualstudio" Version="2.4.5"/>
