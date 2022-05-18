@@ -7,12 +7,12 @@
 
 <div class="row justify-content-center">
     <div class="col-8">
+        @if (CurrentUser != null)
+        {
         <EditForm Model="@CurrentUser" OnValidSubmit="@Save">
             <h2 id="myUserLabel">
                 Create or edit a User
             </h2>
-            @if (CurrentUser != null)
-            {
 <div>
     @*TODO <jhi-alert-error></jhi-alert-error>*@
 
@@ -132,7 +132,8 @@
                         <button type="submit" class="btn btn-primary">
                             <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
                         </button>
-                    </div>}
+                    </div>
         </EditForm>
+        }
     </div>
 </div>
