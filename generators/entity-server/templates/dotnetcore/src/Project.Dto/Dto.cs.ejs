@@ -55,7 +55,7 @@ namespace <%= namespace %>.Dto
             <%_ } else if (field && field.blobContentTypeText) { _%>
         public String <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (reference.collection && reference.relationship) { _%>
-        public IList<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.nameCapitalized %> = new List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>>();
+        public IList<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.nameCapitalized %> { get; set; } = new List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>>();
             <%_ } else if (reference.relationship) { _%>
         public long? <%= reference.nameCapitalized %>Id { get; set; }
         public <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.nameCapitalized %> { get; set; }
