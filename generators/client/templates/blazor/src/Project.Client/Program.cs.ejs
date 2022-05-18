@@ -37,8 +37,8 @@ namespace <%= namespace %>.Client
                 .AddFontAwesomeIcons();
 
 
-                builder.RootComponents.Add<App>("#app");
-                builder.RootComponents.Add<HeadOutlet>("head::after");
+            builder.RootComponents.Add<App>("#app");
+            builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddBlazoredSessionStorage(config =>
             {
