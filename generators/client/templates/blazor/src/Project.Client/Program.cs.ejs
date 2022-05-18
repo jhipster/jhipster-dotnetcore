@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
 
 namespace <%= namespace %>.Client
 {
@@ -43,7 +44,7 @@ namespace <%= namespace %>.Client
             builder.Services.AddBlazoredSessionStorage(config =>
             {
                 config.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-                config.JsonSerializerOptions.IgnoreNullValues = true;
+                config.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 config.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
                 config.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 config.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
