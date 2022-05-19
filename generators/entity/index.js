@@ -19,6 +19,7 @@ module.exports = class extends EntityGenerator {
         const jhipsterNetPhaseSteps = {
             getConfigNetBlueprint() {
                 this.context.namespace = this.jhipsterConfig.namespace;
+                this.context.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
                 this.context.dtoSuffix = 'Dto';
             },
             fixConfig() {
@@ -63,6 +64,7 @@ module.exports = class extends EntityGenerator {
             ...super._preparing(),
             preparingDotnet() {
                 const context = this.context;
+                context.primaryKeyType = context.databaseType === 'mongodb' ? 'string' : 'long';
                 context.pascalizedBaseName = toPascalCase(context.baseName);
                 context.mainProjectDir = context.pascalizedBaseName;
                 context.testProjectDir = `${context.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}`;

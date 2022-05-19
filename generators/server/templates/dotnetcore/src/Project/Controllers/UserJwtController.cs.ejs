@@ -12,12 +12,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (cqrsEnabled) { _%>
+using MediatR;
+<%_ } _%>
 using <%= namespace %>.Dto;
 using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Web.Extensions;
 using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Crosscutting.Constants;
+<%_ if (cqrsEnabled) { _%>
+using <%= namespace %>.Application.Queries;
+using <%= namespace %>.Application.Commands;
+<%_ } _%>
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -30,21 +37,38 @@ namespace <%= namespace %>.Controllers
     [ApiController]
     public class UserJwtController : ControllerBase
     {
+        <%_ if (cqrsEnabled) { _%>
+        private readonly IMediator _mediator;
+        private readonly ITokenProvider _tokenProvider;
+        <%_ } else { _%>
         private readonly IAuthenticationService _authenticationService;
         private readonly ITokenProvider _tokenProvider;
+        <%_ } _%>
 
+        <%_ if (cqrsEnabled) { _%>
+        public UserJwtController(IMediator mediator, ITokenProvider tokenProvider)
+        {
+            _mediator = mediator;
+            _tokenProvider = tokenProvider;
+        }
+        <%_ } else { _%>
         public UserJwtController(IAuthenticationService authenticationService, ITokenProvider tokenProvider)
         {
             _authenticationService = authenticationService;
             _tokenProvider = tokenProvider;
         }
+        <%_ } _%>
 
         [HttpPost("authenticate")]
         [ValidateModel]
-        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDto LoginDto)
+        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDto loginDto)
         {
-            var user = await _authenticationService.Authenticate(LoginDto.Username, LoginDto.Password);
-            var rememberMe = LoginDto.RememberMe;
+            <%_ if (cqrsEnabled) { _%>
+            var user = await _mediator.Send(new UserJwtAuthorizeCommand { LoginDto = loginDto });
+            <%_ } else { _%>
+            var user = await _authenticationService.Authenticate(loginDto.Username, loginDto.Password);
+            <%_ } _%>
+            var rememberMe = loginDto.RememberMe;
             var jwt = _tokenProvider.CreateToken(user, rememberMe);
             var httpHeaders = new HeaderDictionary
             {

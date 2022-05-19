@@ -371,9 +371,14 @@ function askForDTO() {
 function askForService() {
     const context = this.context;
     // don't prompt if data is imported from a file or server is skipped
+    if (context.cqrsEnabled) {
+        context.service = 'serviceImpl';
+        return;
+    }
     if (context.useConfigurationFile || context.skipServer) {
         return;
     }
+
     const done = this.async();
     const prompts = [
         {

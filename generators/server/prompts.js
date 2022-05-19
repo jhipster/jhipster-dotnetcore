@@ -28,6 +28,32 @@ function askForModuleName() {
 function askForServerSideOpts() {
     if (this.existingProject) return;
     const applicationType = this.jhipsterConfig.applicationType;
+    const availableDb = [
+        {
+            value: 'sqllite',
+            name: 'SQLite in-memory',
+        },
+        {
+            value: 'mssql',
+            name: 'Microsoft SQL Server',
+        },
+        {
+            value: 'postgres',
+            name: 'PostgreSQL',
+        },
+        {
+            value: 'mysql',
+            name: 'MySQL',
+        },
+        {
+            value: 'oracle',
+            name: 'Oracle',
+        },
+        {
+            value: 'mongodb',
+            name: 'MongoDB',
+        },
+    ];
     const defaultPort = applicationType === 'gateway' || applicationType === 'monolith' ? '5000' : '5004';
     const prompts = [
         {
@@ -39,31 +65,43 @@ function askForServerSideOpts() {
             default: defaultPort,
         },
         {
+            type: 'confirm',
+            name: 'cqrsEnabled',
+            message: 'Do you want to use the CQRS design pattern?',
+            default: false,
+        },
+        /*
+        Questions for separate DB
+        {
+            when: response => response.cqrsEnabled === true,
+            type: 'confirm',
+            name: 'separateDataBase',
+            message: 'Do you want to use two separate databases for reading and writing?',
+            default: false,
+        },
+        {
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
+            type: 'list',
+            name: 'database',
+            message: 'Which database do you want to use for reading',
+            choices: availableDb,
+            default: 0,
+        },
+        {
+            when: response => response.cqrsEnabled === true && response.separateDataBase === true,
+            type: 'list',
+            name: 'databaseTwo',
+            message: 'Which database do you want to use for writing',
+            choices: availableDb,
+            default: 0,
+        },
+        */
+        {
+            // when: response => response.separateDataBase === false,
             type: 'list',
             name: 'database',
             message: 'Which database do you want to use',
-            choices: [
-                {
-                    value: 'sqllite',
-                    name: 'SQLite in-memory',
-                },
-                {
-                    value: 'mssql',
-                    name: 'Microsoft SQL Server',
-                },
-                {
-                    value: 'postgres',
-                    name: 'PostgreSQL',
-                },
-                {
-                    value: 'mysql',
-                    name: 'MySQL',
-                },
-                {
-                    value: 'oracle',
-                    name: 'Oracle',
-                },
-            ],
+            choices: availableDb,
             default: 0,
         },
         {
@@ -98,6 +136,9 @@ function askForServerSideOpts() {
     const done = this.async();
 
     this.prompt(prompts).then(prompt => {
+        this.separateDataBase = this.jhipsterConfig.separateDataBase = prompt.separateDataBase;
+        this.databaseWriteType = this.jhipsterConfig.databaseWriteType = prompt.databaseTwo;
+        this.cqrsEnabled = this.jhipsterConfig.cqrsEnabled = prompt.cqrsEnabled;
         this.databaseType = this.jhipsterConfig.databaseType = prompt.database;
         this.authenticationType = this.jhipsterConfig.authenticationType = prompt.authenticationType;
         this.serverPort = this.jhipsterConfig.serverPort = prompt.serverPort;

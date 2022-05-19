@@ -23,6 +23,7 @@ const CommonGenerator = require('generator-jhipster/generators/common');
 const packagejs = require('../../package.json');
 // eslint-disable-next-line import/no-extraneous-dependencies,import/order
 const writeFiles = require('./files').writeFiles;
+const jhipsterCommonFiles = require('./files').jhipsterCommonFiles;
 
 module.exports = class extends CommonGenerator {
     constructor(args, opts) {
@@ -51,6 +52,7 @@ module.exports = class extends CommonGenerator {
                 this.options.outputPathCustomizer = [
                     paths => (paths ? paths.replace(/^(\.prettierignore)$/, `src/${this.mainClientDir}/$1`) : paths),
                     paths => (paths ? paths.replace(/^(\.prettierrc)$/, `src/${this.mainClientDir}/$1`) : paths),
+                    paths => (paths ? paths.replace(/^(package.json)$/, `src/${this.mainClientDir}/$1`) : paths),
                 ];
             },
         };
@@ -77,36 +79,13 @@ module.exports = class extends CommonGenerator {
     }
 
     get writing() {
-        const commonFiles = {
-            global: [
-                {
-                    templates: [
-                        {
-                            file: 'gitattributes',
-                            renameTo: () => '.gitattributes',
-                            method: 'copy',
-                        },
-                        {
-                            file: 'editorconfig',
-                            renameTo: () => '.editorconfig',
-                            method: 'copy',
-                        },
-                    ],
-                },
-            ],
+        return {
+            writeJhipsterCommonFile() {
+                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+                return this.writeFilesToDisk(jhipsterCommonFiles);
+            },
+            ...writeFiles(),
         };
-
-        function writeCommonFiles() {
-            return {
-                writeFiles() {
-                    this.writeFilesToDisk(commonFiles, this, false, this.fetchFromInstalledJHipster('common/templates'));
-                },
-            };
-        }
-
-        const phaseFromJHipster = writeCommonFiles();
-        const jhipsterNetPhaseSteps = writeFiles();
-        return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
     }
 
     get postWriting() {

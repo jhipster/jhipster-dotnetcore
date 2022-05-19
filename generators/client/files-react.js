@@ -26,8 +26,13 @@ function updateHomeTitle() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/modules/home/home.tsx`, 'Java', '.Net Core', false);
 }
 
+function updateTsConfigTestJson() {
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.test.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+}
+
 function writeFiles() {
     updateHomeTitle.call(this);
+    updateTsConfigTestJson.call(this);
 }
 
 module.exports = {

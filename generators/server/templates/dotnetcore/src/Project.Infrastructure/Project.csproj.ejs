@@ -15,7 +15,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net6</TargetFramework>
         <RootNamespace><%= namespace %>.Infrastructure</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
@@ -40,6 +40,13 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"  />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+            <%_ break;
+            case 'mongodb': _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+        <PackageReference Include="MongoDB.Driver" />
             <%_ break;
             case 'mysql': _%>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />

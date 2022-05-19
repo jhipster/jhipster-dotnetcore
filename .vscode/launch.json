@@ -7,20 +7,6 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "JHipster Mocha Tests",
-            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-            "args": [
-                "--timeout",
-                "999999",
-                "--reporter",
-                "spec",
-                "${workspaceFolder}/test"
-            ],
-            "internalConsoleOptions": "openOnSessionStart"
-        },
-        {
-            "type": "node",
-            "request": "launch",
             "name": "jhipster generate dotnetcore blueprint",
             "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "timeout": 100000,
@@ -53,13 +39,29 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "jhipster heroku",
+            "name": "jhipster jdl",
             "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
             "args": [
-                "heroku",
+                "jdl",
+                "${workspaceFolder}/test-integration/samples/jdl-default/app.jdl",
+                "--force"
             ],
-            "cwd": "${workspaceFolder}/../estoquenuvem/",
+            "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
             "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "jhipster mocha tests",
+            "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "--timeout",
+                "999999",
+                "--reporter",
+                "spec",
+                "${workspaceFolder}/test"
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
         },
         {
             "type": "node",

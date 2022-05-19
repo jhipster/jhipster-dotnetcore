@@ -16,7 +16,7 @@
 
     <PropertyGroup>
         <Version>0.0.1</Version>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <RootNamespace><%= namespace %></RootNamespace>
@@ -37,6 +37,10 @@
         <PackageReference Include="JHipsterNet.Web"  />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"  />
         <PackageReference Include="Hellang.Middleware.ProblemDetails"  />
+        <%_ if (cqrsEnabled) { _%>
+        <PackageReference Include="MediatR" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
+        <%_ } _%>
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions"  />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson"  />
         <PackageReference Include="Scrutor"  />
@@ -71,6 +75,9 @@
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Infrastructure\<%= pascalizedBaseName %>.Infrastructure.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain.Services\<%= pascalizedBaseName %>.Domain.Services.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Crosscutting\<%= pascalizedBaseName %>.Crosscutting.csproj" />
+        <%_ if (cqrsEnabled) { _%>
+        <ProjectReference Include="..\<%= pascalizedBaseName %>.Application\<%= pascalizedBaseName %>.Application.csproj" />
+        <%_ } _%>
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
     </ItemGroup>
@@ -106,8 +113,8 @@
     </Target>
 
     <Target Name="RunWebPack" BeforeTargets="Build" DependsOnTargets="NpmInstall">
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" Condition="'$(Configuration)'=='Debug'" />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" Condition="'$(Configuration)'=='Release'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Debug'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Release'" />
     </Target>
 
     <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

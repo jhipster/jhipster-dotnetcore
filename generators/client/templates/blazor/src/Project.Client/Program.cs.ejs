@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using Blazored.Modal;
@@ -37,7 +38,17 @@ namespace <%= namespace %>.Client
 
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddSingleton<ISessionStorageService, SessionStorageService>().AddSingleton<ISyncSessionStorageService, SessionStorageService>();
+            builder.Services.AddBlazoredSessionStorage(config =>
+            {
+                config.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                config.JsonSerializerOptions.IgnoreNullValues = true;
+                config.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+                config.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                config.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                config.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                config.JsonSerializerOptions.WriteIndented = false;
+            });
+
             builder.Services.AddBlazoredModal();
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -59,10 +70,6 @@ namespace <%= namespace %>.Client
             builder.Services.AddAuthorizationCore();
 
             var host = builder.Build();
-
-            host.Services
-                .UseBootstrapProviders()
-                .UseFontAwesomeIcons();
 
             await host.RunAsync();
         }

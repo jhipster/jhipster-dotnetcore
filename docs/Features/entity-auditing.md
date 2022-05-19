@@ -20,7 +20,7 @@ public abstract class AuditedEntityBase
     public DateTime LastModifiedDate { get; set; }
 }
 ```
-## Audit of generated Entities 
+## Audit of generated Entities
 
 For example, if we have a ```Task``` entity and we want to add audit functionality we would inherit from our ```AuditedEntityBase``` like that:
 ```csharp

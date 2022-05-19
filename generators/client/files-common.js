@@ -25,7 +25,7 @@ const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function updateWebpackCommonJs() {
-    if(this.clientFramework === VUE || this.clientFramework === REACT ) {
+    if (this.clientFramework === VUE || this.clientFramework === REACT) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
             `${SERVER_SRC_DIR}${this.mainClientDir}/`,
@@ -50,11 +50,17 @@ function updateWebpackCommonJs() {
             "",
             true
         );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+            "target/classes/static/",
+            "dist",
+            true
+        );
     }
 }
 
 function updateWebpackDevJs() {
-    if(this.clientFramework === VUE || this.clientFramework === REACT ) {
+    if (this.clientFramework === VUE || this.clientFramework === REACT) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.dev.js`,
             `${SERVER_SRC_DIR}${this.mainClientDir}/`,
@@ -95,7 +101,7 @@ function updateWebpackDevJs() {
 }
 
 function updateWebpackProdJs() {
-    if(this.clientFramework === VUE || this.clientFramework === REACT ) {
+    if (this.clientFramework === VUE || this.clientFramework === REACT) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.prod.js`,
             `${SERVER_SRC_DIR}${this.mainClientDir}/`,
@@ -119,8 +125,16 @@ function updateWebpackProdJs() {
 
 function updateTsConfigJson() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`,"", true);
+    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    if (this.clientFramework === ANGULAR) {
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    }
+}
+
+function updateTsConfigSpecJson() {
+    if (this.clientFramework === ANGULAR || this.clientFramework === VUE) {
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.spec.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    }
 }
 
 function updatePackageJson() {
@@ -150,8 +164,8 @@ function updatePackageJson() {
     );
 }
 
-function updateJestConf(){
-    if(this.clientFramework === ANGULAR || this.clientFramework === REACT ) {
+function updateJestConf() {
+    if (this.clientFramework === ANGULAR || this.clientFramework === REACT) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/jest.conf.js`,
             '/src/test/javascript',
@@ -170,7 +184,7 @@ function updateJestConf(){
             '..',
             true
         );
-    } else if(this.clientFramework === VUE) {
+    } else if (this.clientFramework === VUE) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/jest.conf.js`,
             '/src/test/javascript',
@@ -192,7 +206,7 @@ function updateJestConf(){
     }
 }
 
-function updateEsLinIgnore(){
+function updateEsLinIgnore() {
     this.replaceContent(
         `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
         'src/test/javascript',
@@ -211,16 +225,34 @@ function updateEsLinIgnore(){
         "",
         true
     );
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.e2e.json`,
-        `/${SERVER_SRC_DIR}${this.mainClientDir}`,
-        "",
-        true
+    this.rewriteFile(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
+        'dist/',
+        'test/cypress/'
     );
+    if (this.protractorTests) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.e2e.json`,
+            `/${SERVER_SRC_DIR}${this.mainClientDir}`,
+            "",
+            true
+        );
+    }
 }
 
-function updateTestFramework(){
-    if(this.protractorTests){
+function updateEsLintrcJs() {
+    if (this.clientFramework === VUE) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintrc.js`,
+            'target/',
+            `dist/`,
+            true
+        );
+    }
+}
+
+function updateTestFramework() {
+    if (this.protractorTests) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/test/protractor.conf.js`,
             'http://localhost:8080',
@@ -231,12 +263,14 @@ function updateTestFramework(){
 }
 
 function updateVendor() {
-   this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientAppDir}/content/scss/vendor.scss`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/src/content`,
-        "..",
-        true
-    );
+    if (this.clientFramework === ANGULAR || this.clientFramework === VUE) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientAppDir}/content/scss/vendor.scss`,
+            `${SERVER_SRC_DIR}${this.mainClientDir}/src/content`,
+            "..",
+            true
+        );
+    }
 }
 
 function writeFiles() {
@@ -244,9 +278,11 @@ function writeFiles() {
     updateWebpackDevJs.call(this);
     updateWebpackProdJs.call(this);
     updateTsConfigJson.call(this);
+    updateTsConfigSpecJson.call(this);
     updatePackageJson.call(this);
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
+    updateEsLintrcJs.call(this);
     updateTestFramework.call(this);
     updateVendor.call(this);
 }

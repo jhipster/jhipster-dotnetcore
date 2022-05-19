@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using JHipsterNet.Core.Pagination;
@@ -27,31 +29,35 @@ using <%= namespace %>.Infrastructure.Data.Extensions;
 
 namespace <%= namespace %>.Infrastructure.Data.Repositories
 {
-    public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>>, I<%= pascalizedEntityClass %>Repository
+    <%_ if (databaseType == 'mongodb') { _%>
+    public class <%= pascalizedEntityClass %>Repository : MongoGenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, I<%= pascalizedEntityClass %>Repository
+    <%_ } else { _%>
+    public class <%= pascalizedEntityClass %>Repository : GenericRepository<<%= pascalizedEntityClass %>, <%= primaryKeyType %>>, I<%= pascalizedEntityClass %>Repository
+    <%_ } _%>
     {
+        <%_ if (databaseType == 'mongodb') { _%>
+        public <%= pascalizedEntityClass %>Repository(IMongoDatabaseContext context) : base(context)
+        {
+        }
+        <%_ } else { _%>
         public <%= pascalizedEntityClass %>Repository(IUnitOfWork context) : base(context)
         {
         }
+        <%_ } _%>
 
+        <%_ if (databaseType != 'mongodb' && relationships.length != 0) { _%>
         public override async Task<<%= pascalizedEntityClass %>> CreateOrUpdateAsync(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
         {
-            bool exists = await Exists(x => x.Id == <%= camelCasedEntityClass %>.Id);
+            List<Type> entitiesToBeUpdated = new List<Type>();
             <%_ relationships.forEach( relationship => {
                     if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
 
             await RemoveManyToManyRelationship("<%= relationship.joinEntityFieldNamePascalizedPlural %>", "<%= relationship.otherEntityRelationshipNamePascalizedPlural %>Id", "<%= relationship.relationshipFieldNamePascalizedPlural %>Id", <%= camelCasedEntityClass %>.Id, <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>.Select(x => x.Id).ToList());
+            entitiesToBeUpdated.Add(typeof(<%= relationship.otherEntityNamePascalized %>));
                         <%_ }
             }); _%>
-
-            if (<%= camelCasedEntityClass %>.Id != 0 && exists)
-            {
-                Update(<%= camelCasedEntityClass %>);
-            }
-            else
-            {
-                _context.AddOrUpdateGraph(<%= camelCasedEntityClass %>);
-            }
-            return <%= camelCasedEntityClass %>;
+            return await base.CreateOrUpdateAsync(<%= camelCasedEntityClass %>, entitiesToBeUpdated);
         }
+        <%_ } _%>
     }
 }
