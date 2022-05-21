@@ -16,9 +16,11 @@ using <%= namespace %>.Client.Services.EntityServices;
 // jhipster-needle-add-using-for-services - JHipster will add using services
 using <%= namespace %>.Client.Services.EntityServices.User;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
 
 namespace <%= namespace %>.Client
 {
@@ -30,18 +32,19 @@ namespace <%= namespace %>.Client
             builder.Services
                 .AddBlazorise(options =>
                 {
-                    options.ChangeTextOnKeyPress = true;
+                    options.Immediate = true;
                 })
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
 
 
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<App>("#app");
+            builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddBlazoredSessionStorage(config =>
             {
                 config.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-                config.JsonSerializerOptions.IgnoreNullValues = true;
+                config.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 config.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
                 config.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 config.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -53,11 +56,11 @@ namespace <%= namespace %>.Client
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            builder.Services.AddSingleton<AuthenticationStateProvider, AuthenticationService>();
+            builder.Services.AddScoped<AuthenticationStateProvider, AuthenticationService>();
             builder.Services.AddSingleton<INavigationService, NavigationService>();
 
-            builder.Services.AddSingleton<IUserService, UserService>();
-            builder.Services.AddSingleton<IRegisterService, RegisterService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRegisterService, RegisterService>();
 
             // jhipster-needle-add-services-in-di - JHipster will add services in DI
 
