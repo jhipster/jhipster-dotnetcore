@@ -120,6 +120,13 @@ namespace <%= namespace %>.Controllers
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
         }
 
+        [HttpPut("{id}")]
+        [ValidateModel]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto userDto)
+        {
+            return await UpdateUser(userDto);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
         {
