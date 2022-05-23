@@ -55,7 +55,7 @@ namespace <%= namespace %>.Client.Services
             if (!string.IsNullOrEmpty(token))
             {
                 JwtToken = new JwtToken { IdToken = token };
-                SetUserAndAuthorizationHeader(JwtToken);
+                _ = SetUserAndAuthorizationHeader(JwtToken);
             }
         }
 
@@ -72,7 +72,7 @@ namespace <%= namespace %>.Client.Services
             return IsAuthenticated;
         }
 
-        public async Task SignOut()
+        public Task SignOut()
         {
             _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
             JwtToken = null;
@@ -80,6 +80,7 @@ namespace <%= namespace %>.Client.Services
             CurrentUser = null;
             _sessionStorage.RemoveItem(JhiAuthenticationtoken);
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+            return Task.CompletedTask;
         }
 
         private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken)

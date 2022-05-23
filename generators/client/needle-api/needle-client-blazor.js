@@ -52,7 +52,7 @@ module.exports = class extends needleBase {
         const programPath = `src/${this.mainClientDir}/Program.cs`;
         const serviceEntry =
             // prettier-ignore
-            this.generator.stripMargin(`|builder.Services.AddSingleton<I${entityName}Service, ${entityName}Service>();`);
+            this.generator.stripMargin(`|builder.Services.AddScoped<I${entityName}Service, ${entityName}Service>();`);
         const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
 
         this.addBlockContentToFile(rewriteFileModel, errorMessage);

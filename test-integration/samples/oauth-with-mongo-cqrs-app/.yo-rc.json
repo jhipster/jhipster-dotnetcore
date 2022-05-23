@@ -10,7 +10,7 @@
 	  "cqrsEnabled": true,
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
-    "jhipsterVersion": "7.8.0",
+    "jhipsterVersion": "7.8.1",
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
@@ -22,7 +22,7 @@
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",
-        "version": "3.5.0"
+        "version": "3.6.0"
       }
     ],
     "blueprints": [
