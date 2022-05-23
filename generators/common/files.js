@@ -24,6 +24,9 @@ const files = {
             templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
         },
         {
+            templates: [{ file: 'docker-entrypoint.sh', renameTo: () => 'docker-entrypoint.sh' }],
+        },
+        {
             condition: generator => generator.clientFramework === constants.BLAZOR,
             templates: [{ file: 'Dockerfile-Front', renameTo: () => 'Dockerfile-Front' }],
         },
