@@ -14,8 +14,6 @@
 -%>
 #!/bin/sh
 
-echo "Starting the frontend..."
-
 echo "Replacing ServerUrl in appsettings.json..."
 sed -i "/ServerUrl/c\   "\"ServerUrl"\" : "\"$ServerUrl"\"," appsettings.json
 
