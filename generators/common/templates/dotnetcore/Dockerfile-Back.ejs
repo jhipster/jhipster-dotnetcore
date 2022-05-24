@@ -38,10 +38,10 @@ RUN dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS runtime
 WORKDIR /app
 EXPOSE 80
-COPY docker-entrypoint.sh .
-RUN chmod +x /app/docker-entrypoint.sh
+COPY docker-entrypoint-back.sh .
+RUN chmod +x /app/docker-entrypoint-back.sh
 COPY --from=build /app/out .
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+ENTRYPOINT ["/app/docker-entrypoint-back.sh"]
