@@ -26,6 +26,7 @@ using ILogger = Serilog.ILogger;
 using Winton.Extensions.Configuration.Consul;
 <%_ } _%>
 using static JHipsterNet.Core.Boot.BannerPrinter;
+using Microsoft.Extensions.Hosting;
 
 namespace <%= namespace %>
 {
@@ -50,7 +51,7 @@ namespace <%= namespace %>
                 var appConfiguration = GetAppConfiguration();
                 Log.Logger = CreateLogger(appConfiguration);
 
-                CreateWebHostBuilder(args)
+                CreateHostBuilder(args)
                 <%_ if (serviceDiscoveryType === 'consul') { _%>
                     .ConfigureAppConfiguration(
                         builder =>
@@ -83,21 +84,22 @@ namespace <%= namespace %>
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(params string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
-                <%_ if (applicationType === 'gateway') { _%>
-                .ConfigureAppConfiguration((host, config) =>
-                {
-                    config.AddJsonFile("ocelot.json");
-                })
-                <%_ } _%>
-                .UseStartup<Startup>()
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            <%_ if (applicationType === 'gateway') { _%>
+            .ConfigureAppConfiguration((host, config) =>
+            {
+                config.AddJsonFile("ocelot.json");
+            })
+            <%_ } _%>
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
                 <%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
-                .UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"))
+                webBuilder.UseWebRoot(Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"));
                 <%_ } _%>
-                .UseSerilog();
-        }
+            })
+            .UseSerilog();
 
         /// <summary>
         /// Create application logger from configuration.
