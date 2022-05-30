@@ -25,6 +25,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+<%_ if (databaseType === 'mongodb') { _%>
+using MongoDB.Driver.Linq;
+<%_ } _%>
 
 namespace <%= namespace %>.Application.Queries
 {
@@ -41,11 +44,17 @@ namespace <%= namespace %>.Application.Queries
 
         public async Task<UserDto> Handle(UserGetQuery request, CancellationToken cancellationToken)
         {
+            <%_ if (databaseType === 'mongodb') { _%>
+            var result = await (_userManager.Users as IMongoQueryable<User>)
+                .Where(user => user.Login == request.Login)
+                .SingleOrDefaultAsync(cancellationToken);
+            <%_ } else { _%>
             var result = await _userManager.Users
                 .Where(user => user.Login == request.Login)
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .SingleOrDefaultAsync();
+            <%_ } _%>
             return _mapper.Map<UserDto>(result);
         }
     }

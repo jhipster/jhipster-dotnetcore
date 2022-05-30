@@ -30,6 +30,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using JHipsterNet.Core.Pagination.Extensions;
+<%_ if (databaseType === 'mongodb') { _%>
+using MongoDB.Driver.Linq;
+<%_ } _%>
 
 namespace <%= namespace %>.Application.Queries
 {
@@ -47,10 +50,15 @@ namespace <%= namespace %>.Application.Queries
 
         public async Task<(IHeaderDictionary, IEnumerable<UserDto>)> Handle(UserGetAllQuery request, CancellationToken cancellationToken)
         {
+            <%_ if (databaseType === 'mongodb') { _%>
+            var page = await (_userManager.Users as IMongoQueryable<User>)
+                .UsePageableAsync(request.Page);
+            <%_ } else { _%>
             var page = await _userManager.Users
                 .Include(it => it.UserRoles)
                 .ThenInclude(r => r.Role)
                 .UsePageableAsync(request.Page);
+            <%_ } _%>
             var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
             var headers = page.GeneratePaginationHttpHeaders();
             return (headers, userDtos);
