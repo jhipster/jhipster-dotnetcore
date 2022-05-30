@@ -516,7 +516,7 @@ const serverFiles = {
             ],
         },
         {
-            condition: generator => generator.databaseType === 'mongodb',
+            condition: generator => generator.authenticationType === 'jwt' && generator.databaseType === 'mongodb',
             path: SERVER_SRC_DIR,
             templates: [
                 {
