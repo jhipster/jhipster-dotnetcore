@@ -73,7 +73,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             user = Fixme.ReloadUser(_factory, user);
-            <% } %>
+            <%_ } _%>
             user.Activated.Should().Be(true);
         }
 
@@ -125,7 +125,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, "new password").Should()
                 .Be(PasswordVerificationResult.Success);
         }
@@ -160,7 +160,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         }
 
@@ -193,7 +193,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         }
 
@@ -226,7 +226,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         }
 
@@ -259,7 +259,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, "new password").Should()
                 .Be(PasswordVerificationResult.Failed);
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, currentPassword).Should()
@@ -298,7 +298,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, keyAndPassword.NewPassword)
                 .Should().Be(PasswordVerificationResult.Success);
         }
@@ -335,7 +335,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             passwordHasher.VerifyHashedPassword(updatedUser, updatedUser.PasswordHash, keyAndPassword.NewPassword)
                 .Should().Be(PasswordVerificationResult.Failed);
         }
@@ -817,7 +817,7 @@ namespace <%= namespace %>.Test.Controllers
             <%_ if (databaseType !== 'mongodb') { _%>
             //TODO FIX database refresh to prevent the usage of context/Reload
             updatedUser = Fixme.ReloadUser(_factory, updatedUser);
-            <% } %>
+            <%_ } _%>
             updatedUser.FirstName.Should().Be(userDto.FirstName);
             updatedUser.LastName.Should().Be(userDto.LastName);
             updatedUser.Email.Should().Be(userDto.Email);
