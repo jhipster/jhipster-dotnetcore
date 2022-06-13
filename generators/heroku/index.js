@@ -25,11 +25,9 @@ const chalk = require('chalk');
 
 const BaseBlueprintGenerator = require('generator-jhipster/generators/generator-base-blueprint');
 const statistics = require('generator-jhipster/generators/statistics');
-// const constants = require('generator-jhipster/generators/generator-constants');
 const Which = require('which');
 const toPascalCase = require('to-pascal-case');
 const constants = require('../generator-dotnetcore-constants');
-// const netConstants = require('../generator-dotnetcore-constants');
 
 const execCmd = util.promisify(ChildProcess.exec);
 const BLAZOR = constants.BLAZOR;
