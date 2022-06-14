@@ -30,7 +30,7 @@
                 "version": "2.0.0"
             }
         ],
-        "herokuAppName": "jhipsterNet-existing",
+        "herokuAppName": "jhipster-existing",
         "herokuDeployType": "git"
     }
 }

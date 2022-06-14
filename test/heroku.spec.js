@@ -4,10 +4,7 @@ const helpers = require('yeoman-test');
 const fse = require('fs-extra');
 const sinon = require('sinon');
 const ChildProcess = require('child_process');
-const Which = require('which');
-
-const herokuExecutable = 'heroku';
-const dockerExecutable = 'docker';
+// const constants = require('generator-jhipster/generators/generator-constants');
 
 const expectedFiles = {
     monolith: [],
@@ -15,102 +12,75 @@ const expectedFiles = {
 
 describe('JHipster Heroku Sub Generator', () => {
     const herokuAppName = 'jhipster-test';
-    // let stub;
-    let stubExecFile;
-    // let stubExecSync;
-    let stubExecFileSync;
-    let stubWhich;
-    let sandbox;
+    let stub;
 
     beforeEach(() => {
-        sandbox = sinon.createSandbox();
-        stubWhich = sandbox.stub(Which, 'sync');
-        stubWhich.withArgs('heroku').returns(herokuExecutable);
-        stubWhich.withArgs('docker').returns(dockerExecutable);
-        stubExecFile = sandbox.stub(ChildProcess, 'execFile');
-        stubExecFile.withArgs(herokuExecutable, ['--version']).yields(false);
-
-        // stubExecFile
-        //     .withArgs(herokuExecutable, ['create', herokuAppName, '--region', 'eu'], { shell: false })
-        //     .yields(false, '', '')
-        //     .returns({
-        //         stdout: {
-        //             on: () => {},
-        //         },
-        //     });
-        // stubExecFile
-        //     .withArgs(herokuExecutable, ['create', herokuAppName, '--region', 'us'], { shell: false })
-        //     .yields(false, '', '')
-        //     .returns({
-        //         stdout: {
-        //             on: () => {},
-        //         },
-        //     });
-        // stubExecFileSync = sandbox.stub(ChildProcess, 'execFileSync');
-        // stubExecFileSync
-        //     .withArgs(herokuExecutable, ['stack:set', 'container', '--app', herokuAppName], {
-        //         shell: false,
-        //     })
-        //     .returns({});
-        // stubExecFileSync
-        //     .withArgs(this.herokuExecutablePath, ['config:set', '=', '--app', herokuAppName], {
-        //         shell: false,
-        //     })
-        //     .returns({});
-        // stubExecFileSync
-        //     .withArgs(this.dockerExecutablePath, ['build', '-f', './Dockerfile-Back', '-t', `${herokuAppName}:latest`, '.'], {
-        //         shell: false,
-        //         stdio: 'inherit',
-        //     })
-        //     .returns({});
-        // stubExecFileSync
-        //     .withArgs(this.dockerExecutablePath, ['tag', herokuAppName, `registry.heroku.com/${herokuAppName}/web}`], {
-        //         shell: false,
-        //         stdio: 'inherit',
-        //     })
-        //     .returns({});
-        // stubExecFileSync
-        //     .withArgs(this.dockerExecutablePath, ['push', `registry.heroku.com/${herokuAppName}/web`], { shell: false, stdio: 'inherit' })
-        //     .returns({});
-        // stubExecFileSync
-        //     .withArgs(this.herokuExecutablePath, ['container:release', 'web', '--app', herokuAppName], {
-        //         shell: false,
-        //         stdio: 'inherit',
-        //     })
-        //     .returns({});
+        stub = sinon.stub(ChildProcess, 'exec');
+        // log all calls to ChildProcess.exec
+        stub.callsFake(function (command, callback) {
+            console.log(command);
+            callback(null, '', '');
+        });
+        stub.withArgs('heroku --version').yields(false);
+        stub.withArgs('heroku plugins').yields(false, 'heroku-cli-deploy');
+        stub.withArgs('git init').yields([false, '', '']);
     });
     afterEach(() => {
-        sandbox.restore();
-        // ChildProcess.execFile.restore();
+        ChildProcess.exec.restore();
     });
+
+    // describe('microservice application', () => {
+    //     describe('with JAR deployment', () => {
+    //         beforeEach(done => {
+    //             stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
+    //             stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
+    //             stub
+    //                 .withArgs(`heroku config:set JHIPSTER_REGISTRY_URL=https://admin:changeme@sushi.herokuapp.com --app ${herokuAppName}`)
+    //                 .yields(false, '', '')
+    //                 .returns({
+    //                     stdout: {
+    //                         on: () => { },
+    //                     },
+    //                 });
+    //             helpers
+    //                 .run(require.resolve('../generators/heroku'))
+    //                 .inTmpDir(dir => {
+    //                     fse.copySync(path.join(__dirname, './templates/default-microservice/'), dir);
+    //                 })
+    //                 .withOptions({ skipBuild: true })
+    //                 .withPrompts({
+    //                     herokuAppName,
+    //                     herokuRegion: 'us',
+    //                     herokuDeployType: 'jar',
+    //                     herokuJHipsterRegistryApp: 'sushi',
+    //                     herokuJHipsterRegistryUsername: 'admin',
+    //                     herokuJHipsterRegistryPassword: 'changeme',
+    //                     herokuJavaVersion: '11',
+    //                     useOkta: false,
+    //                 })
+    //                 .on('end', done);
+    //         });
+    //         it('creates expected files', () => {
+    //             assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
+    //         });
+    //     });
+    // });
 
     describe('monolith application', () => {
         describe('with an unavailable app name', () => {
             const autogeneratedAppName = 'jhipster-new-name';
             beforeEach(done => {
-                stubExecFile
-                    .withArgs(herokuExecutable, ['create', herokuAppName, '--region', 'us'], { shell: false })
+                stub
+                    .withArgs(`heroku create ${herokuAppName}`)
                     .yields(true, '', `Name ${herokuAppName} is already taken`)
                     .returns({
                         stdout: {
-                            on: () => {},
+                            on: () => { },
                         },
                     });
-                stubExecFile
-                    .withArgs(herokuExecutable, ['create', '--region', 'us'], { shell: false })
-                    .yields(false, `https://${autogeneratedAppName}.herokuapp.com`);
-                stubExecFile
-                    .withArgs(herokuExecutable, ['git:remote', '--app', autogeneratedAppName], { shell: false })
-                    .yields(false, `https://${autogeneratedAppName}.herokuapp.com`);
-                stubExecFile
-                    .withArgs(
-                        herokuExecutable,
-                        ['addons:create', 'jawsdb:kitefin', '--as', 'DATABASE', '--app', autogeneratedAppName],
-                        {
-                            shell: false,
-                        }
-                    )
-                    .yields(false, '', '');
+                stub.withArgs('heroku create ').yields(false, `https://${autogeneratedAppName}.herokuapp.com`);
+                stub.withArgs(`heroku git:remote --app ${autogeneratedAppName}`).yields(false, `https://${autogeneratedAppName}.herokuapp.com`);
+                stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${autogeneratedAppName}`).yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
                     .inTmpDir(dir => {
@@ -120,8 +90,9 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'us',
-                        herokuDeployType: 'git',
+                        herokuDeployType: 'jar',
                         herokuForceName: 'No',
+                        herokuJavaVersion: '11',
                         useOkta: false,
                     })
                     .on('end', done);
@@ -129,21 +100,42 @@ describe('JHipster Heroku Sub Generator', () => {
             it('creates expected monolith files', () => {
                 assert.file(expectedFiles.monolith);
                 assert.fileContent('.yo-rc.json', `"herokuAppName": "${autogeneratedAppName}"`);
+            });
+        });
+
+        describe('with Git deployment', () => {
+            beforeEach(done => {
+                stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs('git add .').yields(false, '', '');
+                stub.withArgs('git commit -m "Deploy to Heroku" --allow-empty').yields(false, '', '');
+                stub.withArgs(`heroku config:set MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" --app ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku buildpacks:add heroku/java --app ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs('git push heroku HEAD:master').yields(false, '', '');
+                helpers
+                    .run(require.resolve('../generators/heroku'))
+                    .inTmpDir(dir => {
+                        fse.copySync(path.join(__dirname, './templates/default'), dir);
+                    })
+                    .withPrompts({
+                        herokuAppName,
+                        herokuRegion: 'us',
+                        herokuDeployType: 'git',
+                        herokuJavaVersion: '11',
+                        useOkta: false,
+                    })
+                    .on('end', done);
+            });
+            it('creates expected monolith files', () => {
+                assert.file(expectedFiles.monolith);
                 assert.fileContent('.yo-rc.json', '"herokuDeployType": "git"');
             });
         });
 
         describe('in the US', () => {
             beforeEach(done => {
-                stubExecFile
-                    .withArgs(
-                        herokuExecutable,
-                        ['addons:create', 'jawsdb:kitefin', '--as', 'DATABASE', '--app', this.herokuAppName],
-                        {
-                            shell: false,
-                        }
-                    )
-                    .yields(false, '', '');
+                stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
                     .inTmpDir(dir => {
@@ -153,28 +145,24 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'us',
-                        herokuDeployType: 'git',
+                        herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
                         useOkta: false,
                     })
                     .on('end', done);
             });
             it('creates expected monolith files', () => {
                 assert.file(expectedFiles.monolith);
-                assert.fileContent('.yo-rc.json', '"herokuDeployType": "git"');
+                assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
+                // assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+                // assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
             });
         });
 
         describe('in the EU', () => {
             beforeEach(done => {
-                stubExecFile
-                    .withArgs(
-                        herokuExecutable,
-                        ['addons:create', 'jawsdb:kitefin', '--as', 'DATABASE', '--app', this.herokuAppName],
-                        {
-                            shell: false,
-                        }
-                    )
-                    .yields(false, '', '');
+                stub.withArgs(`heroku create ${herokuAppName} --region eu`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
                     .inTmpDir(dir => {
@@ -184,7 +172,8 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'eu',
-                        herokuDeployType: 'git',
+                        herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
                         useOkta: false,
                     })
                     .on('end', done);
@@ -196,15 +185,8 @@ describe('JHipster Heroku Sub Generator', () => {
 
         describe('with PostgreSQL', () => {
             beforeEach(done => {
-                stubExecFile
-                    .withArgs(
-                        herokuExecutable,
-                        ['addons:create', 'heroku-postgresql', '--as', 'DATABASE', '--app', this.herokuAppName],
-                        {
-                            shell: false,
-                        }
-                    )
-                    .yields(false, '', '');
+                stub.withArgs(`heroku create ${herokuAppName} --region eu`).yields(false, '', '');
+                stub.withArgs(`heroku addons:create heroku-postgresql --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
                     .inTmpDir(dir => {
@@ -214,58 +196,26 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'eu',
-                        herokuDeployType: 'git',
+                        herokuDeployType: 'jar',
+                        herokuJavaVersion: '11',
                         useOkta: false,
                     })
                     .on('end', done);
             });
             it('creates expected monolith files', () => {
                 assert.file(expectedFiles.monolith);
-            });
-        });
-
-        describe('with Microsoft Sql Server', () => {
-            beforeEach(done => {
-                stubExecFile
-                    .withArgs(herokuExecutable, ['addons:create', 'mssql:micro', '--as', 'DATABASE', '--app', this.herokuAppName], {
-                        shell: false,
-                    })
-                    .yields(false, '', '');
-                helpers
-                    .run(require.resolve('../generators/heroku'))
-                    .inTmpDir(dir => {
-                        fse.copySync(path.join(__dirname, './templates/default-mssql/'), dir);
-                    })
-                    .withOptions({ skipBuild: true })
-                    .withPrompts({
-                        herokuAppName,
-                        herokuRegion: 'eu',
-                        herokuDeployType: 'git',
-                        useOkta: false,
-                    })
-                    .on('end', done);
-            });
-            it('creates expected monolith files', () => {
-                assert.file(expectedFiles.monolith);
+                // assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+                // assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
             });
         });
 
         describe('with existing app', () => {
             const existingHerokuAppName = 'jhipster-existing';
             beforeEach(done => {
-                // stub.withArgs('heroku apps:info --json').yields(false, `{"app":{"name":"${existingHerokuAppName}"}, "dynos":[]}`);
-                stubExecFile
-                    .withArgs(herokuExecutable, ['apps:info', '--json', existingHerokuAppName])
+                stub
+                    .withArgs(`heroku apps:info --json ${existingHerokuAppName}`)
                     .yields(false, `{"app":{"name":"${existingHerokuAppName}"}, "dynos":[]}`);
-                stubExecFile
-                    .withArgs(
-                        herokuExecutable,
-                        ['addons:create', 'jawsdb:kitefin', '--as', 'DATABASE', '--app', existingHerokuAppName],
-                        {
-                            shell: false,
-                        }
-                    )
-                    .yields(false, '', '');
+                stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${existingHerokuAppName}`).yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
                     .inTmpDir(dir => {
@@ -279,5 +229,34 @@ describe('JHipster Heroku Sub Generator', () => {
                 assert.fileContent('.yo-rc.json', `"herokuAppName": "${existingHerokuAppName}"`);
             });
         });
+
+        // describe('with elasticsearch', () => {
+        //     beforeEach(done => {
+        //         stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
+        //         stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
+        //         stub.withArgs(`heroku addons:create bonsai --as BONSAI --app ${herokuAppName}`).yields(false, '', '');
+
+        //         helpers
+        //             .run(require.resolve('../generators/heroku'))
+        //             .inTmpDir(dir => {
+        //                 fse.copySync(path.join(__dirname, './templates/default-elasticsearch/'), dir);
+        //             })
+        //             .withOptions({ skipBuild: true })
+        //             .withPrompts({
+        //                 herokuAppName,
+        //                 herokuRegion: 'us',
+        //                 herokuDeployType: 'jar',
+        //                 herokuJavaVersion: '11',
+        //                 useOkta: false,
+        //             })
+        //             .on('end', done);
+        //     });
+        //     it('creates expected monolith files', () => {
+        //         assert.file(expectedFiles.monolith);
+        //         assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
+        //         // assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+        //         // assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+        //     });
+        // });
     });
 });
