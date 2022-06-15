@@ -915,7 +915,7 @@ module.exports = class extends HerokuGenerator {
                 if (this.abort) return;
                 if (this.useOkta) {
                     try {
-                        fs.chmodSync('provision-okta-addon.sh', '755');
+                        fs.chmodSync('provision-okta-addon.sh', '750');
                     } catch (err) {
                         this.log(
                             `${chalk.yellow.bold(
