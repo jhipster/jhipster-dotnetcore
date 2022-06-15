@@ -654,13 +654,9 @@ module.exports = class extends HerokuGenerator {
                 this.log(chalk.bold('\nProvisioning addons'));
 
                 if (this.useOkta) {
-                    ChildProcess.execFile(
-                        this.herokuExecutablePath,
-                        ['addons:create', 'okta', '--app', this.herokuAppName],
-                        (err, stdout, stderr) => {
-                            addonCreateCallback('Okta', err, stdout, stderr);
-                        }
-                    );
+                    ChildProcess.execFile(this.herokuExecutablePath, ['addons:create', 'okta', '--app', this.herokuAppName], err => {
+                        addonCreateCallback('Okta', err);
+                    });
                 }
 
                 let dbAddOn;
