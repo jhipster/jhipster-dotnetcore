@@ -196,9 +196,8 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'us',
-                        herokuDeployType: 'jar',
+                        herokuDeployType: 'containerRegistry',
                         herokuForceName: 'No',
-                        herokuJavaVersion: '11',
                         useOkta: false,
                     })
                     .on('end', done);
@@ -238,7 +237,6 @@ describe('JHipster Heroku Sub Generator', () => {
                         herokuAppName,
                         herokuRegion: 'us',
                         herokuDeployType: 'git',
-                        herokuJavaVersion: '11',
                         useOkta: false,
                     })
                     .on('end', done);
@@ -266,15 +264,14 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'us',
-                        herokuDeployType: 'jar',
-                        herokuJavaVersion: '11',
+                        herokuDeployType: 'git',
                         useOkta: false,
                     })
                     .on('end', done);
             });
             it('creates expected monolith files', () => {
                 assert.file(expectedFiles.monolith);
-                assert.fileContent('.yo-rc.json', '"herokuDeployType": "jar"');
+                assert.fileContent('.yo-rc.json', '"herokuDeployType": "git"');
                 // assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
                 // assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
             });
@@ -297,8 +294,7 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'eu',
-                        herokuDeployType: 'jar',
-                        herokuJavaVersion: '11',
+                        herokuDeployType: 'git',
                         useOkta: false,
                     })
                     .on('end', done);
@@ -325,8 +321,7 @@ describe('JHipster Heroku Sub Generator', () => {
                     .withPrompts({
                         herokuAppName,
                         herokuRegion: 'eu',
-                        herokuDeployType: 'jar',
-                        herokuJavaVersion: '11',
+                        herokuDeployType: 'git',
                         useOkta: false,
                     })
                     .on('end', done);
