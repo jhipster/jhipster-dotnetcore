@@ -187,6 +187,68 @@ module.exports = class extends HerokuGenerator {
                 }
             },
 
+            askForBlazorApp() {
+                if (this.clientFramework !== constants.BLAZOR) return;
+                const done = this.async();
+
+                if (this.herokuBlazorAppName) {
+                    // ChildProcess.exec(`heroku apps:info --json ${this.herokuBlazorAppName}`, (err, stdout) => {
+                    ChildProcess.execFile(this.herokuExecutablePath, ['apps:info', '--json', this.herokuBlazorAppName], (err, stdout) => {
+                        if (err) {
+                            this.abort = true;
+                            this.log.error(`Could not find application: ${chalk.cyan(this.herokuBlazorAppName)}`);
+                            this.log.error('Run the generator again to create a new application.');
+                            this.herokuBlazorAppName = null;
+                        } else {
+                            const json = JSON.parse(stdout);
+                            this.herokuBlazorAppName = json.app.name;
+                            if (json.dynos.length > 0) {
+                                this.dynoSize = json.dynos[0].size;
+                            }
+                            this.log(`Deploying as existing application: ${chalk.bold(this.herokuBlazorAppName)}`);
+                            this.herokuBlazorAppExists = true;
+                            this.config.set({
+                                herokuBlazorAppName: this.herokuBlazorAppName,
+                                herokuDeployType: this.herokuDeployType,
+                            });
+                        }
+                        done();
+                    });
+                } else {
+                    const prompts = [
+                        {
+                            type: 'input',
+                            name: 'herokuBlazorAppName',
+                            message: 'Name to deploy as:',
+                            default: `${this.baseName}BlazorFrontend`,
+                        },
+                        {
+                            type: 'list',
+                            name: 'herokuRegion',
+                            message: 'On which region do you want to deploy ?',
+                            choices: ['us', 'eu'],
+                            default: 0,
+                        },
+                    ];
+
+                    // if region was provided before don't ask again
+                    if (this.herokuRegion) {
+                        // remove region prompt
+                        prompts.pop();
+                    }
+
+                    this.prompt(prompts).then(props => {
+                        this.herokuBlazorAppName = _.kebabCase(props.herokuBlazorAppName);
+                        if (!this.herokuRegion) {
+                            this.herokuRegion = props.herokuRegion;
+                        }
+                        this.herokuBlazorAppExists = false;
+                        done();
+                    });
+                }
+
+            },
+
             askForHerokuDeployType() {
                 if (this.abort) return null;
                 if (this.herokuDeployType) return null;
@@ -208,6 +270,11 @@ module.exports = class extends HerokuGenerator {
                         default: 0,
                     },
                 ];
+
+                // remove git deploy if blazor (use only docker deploy)
+                if (this.clientFramework === constants.BLAZOR) {
+                    prompts[0].choices.pop();
+                }
 
                 return this.prompt(prompts).then(props => {
                     this.herokuDeployType = props.herokuDeployType;
@@ -328,7 +395,6 @@ module.exports = class extends HerokuGenerator {
                     herokuAppName: this.herokuAppName,
                     herokuBlazorAppName: this.herokuBlazorAppName,
                     herokuDeployType: this.herokuDeployType,
-                    // herokuJavaVersion: this.herokuJavaVersion,
                     useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
                 });
@@ -484,6 +550,142 @@ module.exports = class extends HerokuGenerator {
                                                             done();
                                                         }
                                                     );
+                                                }
+                                            }
+                                        );
+                                    }
+                                });
+                            } else {
+                                this.abort = true;
+                                if (stderr.includes('Invalid credentials')) {
+                                    this.log.error(
+                                        "Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again."
+                                    );
+                                } else {
+                                    this.log.error(err);
+                                }
+                                done();
+                            }
+                        } else {
+                            done();
+                        }
+                    }
+                );
+
+                child.stdout.on('data', data => {
+                    const output = data.toString();
+                    if (data.search('Heroku credentials') >= 0) {
+                        this.abort = true;
+                        this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+                        done();
+                    } else {
+                        this.log(output.trim());
+                    }
+                });
+            },
+
+            herokuCreateBlazorApp() {
+                if (this.abort || this.herokuBlazorAppExists) return;
+                if (this.clientFramework !== constants.BLAZOR) return;
+                const done = this.async();
+
+                // const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
+
+                this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
+                // const child = ChildProcess.exec(
+                //     `heroku create ${this.herokuBlazorAppName}${regionParams}`,
+                //     { timeout: 6000 },
+                //     (err, stdout, stderr) => {
+                const child = ChildProcess.execFile(
+                    this.herokuExecutablePath,
+                    ['create', this.herokuBlazorAppName, '--region', this.herokuRegion],
+                    { shell: false },
+                    (err, stdout, stderr) => {
+                        if (err) {
+                            if (stderr.includes('is already taken')) {
+                                const prompts = [
+                                    {
+                                        type: 'list',
+                                        name: 'herokuForceName',
+                                        message: `The Heroku application "${chalk.cyan(
+                                            this.herokuBlazorAppName
+                                        )}" already exists! Use it anyways?`,
+                                        choices: [
+                                            {
+                                                value: 'Yes',
+                                                name: 'Yes, I have access to it',
+                                            },
+                                            {
+                                                value: 'No',
+                                                name: 'No, generate a random name',
+                                            },
+                                        ],
+                                        default: 0,
+                                    },
+                                ];
+
+                                this.log('');
+                                this.prompt(prompts).then(props => {
+                                    if (props.herokuForceName === 'Yes') {
+                                        this.config.set({
+                                            herokuBlazorAppName: this.herokuBlazorAppName,
+                                        });
+                                        done();
+                                        // ChildProcess.execFile(
+                                        //     this.herokuExecutablePath,
+                                        //     ['git:remote', '--app', this.herokuBlazorAppName],
+                                        //     (err, stdout, stderr) => {
+                                        //         if (err) {
+                                        //             this.abort = true;
+                                        //             this.log.error(err);
+                                        //         } else {
+                                        //             this.log(stdout.trim());
+                                        //             this.config.set({
+                                        //                 herokuBlazorAppName: this.herokuBlazorAppName,
+                                        //                 herokuDeployType: this.herokuDeployType,
+                                        //             });
+                                        //         }
+                                        //         done();
+                                        //     }
+                                        // );
+                                    } else {
+                                        ChildProcess.execFile(
+                                            this.herokuExecutablePath,
+                                            ['create', '--region', this.herokuRegion],
+                                            { shell: false },
+                                            (err, stdout, stderr) => {
+                                                if (err) {
+                                                    this.abort = true;
+                                                    this.log.error(err);
+                                                } else {
+                                                    // Extract from "Created random-app-name-1234... done"
+                                                    this.herokuBlazorAppName = stdout.substring(
+                                                        stdout.indexOf('https://') + 8,
+                                                        stdout.indexOf('.herokuapp')
+                                                    );
+                                                    this.log(stdout.trim());
+                                                    this.config.set({
+                                                        herokuBlazorAppName: this.herokuBlazorAppName,
+                                                    });
+                                                    done();
+
+                                                    // ensure that the git remote is the same as the appName
+                                                    // ChildProcess.execFile(
+                                                    //     this.herokuExecutablePath,
+                                                    //     ['git:remote', '--app', this.herokuBlazorAppName],
+                                                    //     (err, stdout, stderr) => {
+                                                    //         if (err) {
+                                                    //             this.abort = true;
+                                                    //             this.log.error(err);
+                                                    //         } else {
+                                                    //             this.config.set({
+                                                    //                 herokuBlazorAppName: this.herokuBlazorAppName,
+                                                    //                 herokuDeployType: this.herokuDeployType,
+                                                    //             });
+                                                    //         }
+                                                    //         done();
+                                                    //     }
+                                                    // );
                                                 }
                                             }
                                         );
