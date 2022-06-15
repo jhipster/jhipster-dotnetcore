@@ -23,7 +23,6 @@ const fs = require('fs');
 const ChildProcess = require('child_process');
 const util = require('util');
 const chalk = require('chalk');
-const glob = require('glob');
 const Which = require('which');
 const toPascalCase = require('to-pascal-case');
 
@@ -39,20 +38,10 @@ const {
     END_PRIORITY,
 } = require('generator-jhipster/lib/constants/priorities.cjs').compat;
 
-const statistics = require('generator-jhipster/generators/statistics');
 // const constants = require('generator-jhipster/generators/generator-constants');
-const constants = require('../generator-dotnetcore-constants');
-const { MARIADB, MYSQL, POSTGRESQL } = require('generator-jhipster/jdl/jhipster/database-types');
-const cacheProviderOptions = require('generator-jhipster/jdl/jhipster/cache-types');
-const { MEMCACHED, REDIS } = require('generator-jhipster/jdl/jhipster/cache-types');
 const { OAUTH2 } = require('generator-jhipster/jdl/jhipster/authentication-types');
-const { GRADLE, MAVEN } = require('generator-jhipster/jdl/jhipster/build-tool-types');
-const { ELASTICSEARCH } = require('generator-jhipster/jdl/jhipster/search-engine-types');
-const { GENERATOR_HEROKU } = require('generator-jhipster/generators/generator-list');
-const { EUREKA } = require('generator-jhipster/jdl/jhipster/service-discovery-types');
+const constants = require('../generator-dotnetcore-constants');
 
-const NO_CACHE_PROVIDER = cacheProviderOptions.NO;
-const execCmd = util.promisify(ChildProcess.exec);
 const execFileCmd = util.promisify(ChildProcess.execFile);
 
 module.exports = class extends HerokuGenerator {
@@ -246,7 +235,6 @@ module.exports = class extends HerokuGenerator {
                         done();
                     });
                 }
-
             },
 
             askForHerokuDeployType() {
@@ -754,7 +742,8 @@ module.exports = class extends HerokuGenerator {
                         ['addons:create', 'okta', '--app', this.herokuAppName],
                         (err, stdout, stderr) => {
                             addonCreateCallback('Okta', err, stdout, stderr);
-                    });
+                        }
+                    );
                 }
 
                 let dbAddOn;
