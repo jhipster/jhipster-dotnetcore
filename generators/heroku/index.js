@@ -528,7 +528,8 @@ module.exports = class extends HerokuGenerator {
                     const output = data.toString();
                     if (data.search('Heroku credentials') >= 0) {
                         this.abort = true;
-                        this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
+                        this.log.error('Error: Not authenticated.');
+                        this.log("Run 'heroku login' to login to your heroku account and try again.");
                         done();
                     } else {
                         this.log(output.trim());
@@ -537,8 +538,7 @@ module.exports = class extends HerokuGenerator {
             },
 
             herokuCreateBlazorApp() {
-                if (this.abort || this.herokuBlazorAppExists) return;
-                if (this.clientFramework !== constants.BLAZOR) return;
+                if (this.abort || this.herokuBlazorAppExists || this.clientFramework !== constants.BLAZOR) return;
                 const done = this.async();
 
                 this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
@@ -911,9 +911,8 @@ module.exports = class extends HerokuGenerator {
                                 try {
                                     await execFileCmd('./provision-okta-addon.sh');
                                     this.log(chalk.bold('\nOkta configured successfully!'));
-                                    this.log(
-                                        chalk.green(`\nUse ${chalk.bold(`${this.oktaAdminLogin}/${this.oktaAdminPassword}`)} to login.\n`)
-                                    );
+                                    const authMessage = `${this.oktaAdminLogin}/${this.oktaAdminPassword}`;
+                                    this.log(chalk.green(`\nUse ${chalk.bold(authMessage)} to login.\n`));
                                 } catch (err) {
                                     this.log(
                                         chalk.red(
