@@ -758,10 +758,10 @@ module.exports = class extends HerokuGenerator {
                 }
 
                 let dbAddOn;
-                if (this.prodDatabaseType === POSTGRESQL) {
-                    dbAddOn = 'heroku-postgresql --as DATABASE';
-                } else if (this.prodDatabaseType === MYSQL) {
-                    dbAddOn = 'jawsdb:kitefin --as DATABASE';
+                if (this.databaseType === 'postgresql') {
+                    dbAddOn = 'heroku-postgresql';
+                } else if (this.databaseType === 'mysql') {
+                    dbAddOn = 'jawsdb:kitefin';
                 }
 
                 if (this.databaseType === 'mssql') {
@@ -773,10 +773,12 @@ module.exports = class extends HerokuGenerator {
                     // ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                     ChildProcess.execFile(
                         this.herokuExecutablePath,
-                        ['addons:create', dbAddOn, '--app', this.herokuAppName],
+                        ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
+                        { shell: false },
                         (err, stdout, stderr) => {
                             addonCreateCallback('Database', err, stdout, stderr);
-                    });
+                        }
+                    );
                 } else {
                     this.log(chalk.bold(`\nNo suitable database addon for database ${this.prodDatabaseType} available.`));
                 }
@@ -863,9 +865,9 @@ module.exports = class extends HerokuGenerator {
             copyHerokuFiles() {
                 if (this.abort) return;
 
-                // this.log(chalk.bold('\nCreating Heroku deployment files'));
+                this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-                // this.template('bootstrap-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/bootstrap-heroku.yml`);
+                this.template('heroku.yml.ejs', 'heroku.yml');
                 // this.template('application-heroku.yml.ejs', `${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`);
                 // this.template('Procfile.ejs', 'Procfile');
                 // this.template('system.properties.ejs', 'system.properties');
@@ -990,6 +992,44 @@ module.exports = class extends HerokuGenerator {
                     return;
                 }
 
+                const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
+
+                const setHerokuStack = appName => {
+                    const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                    ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
+                        shell: false,
+                    });
+                };
+
+                const setHerokuConfig = (appName, configKey, configValue) => {
+                    const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                    ChildProcess.execFileSync(this.herokuExecutablePath, ['config:set', `${configKey}=${configValue}`, '--app', appName], {
+                        shell: false,
+                    });
+                };
+
+                const dockerPush = appName => {
+                    const processType = 'web';
+                    const dockerPushCommand = `docker push registry.heroku.com/${appName}/${processType}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+                    ChildProcess.execFileSync(this.dockerExecutablePath, ['push', `registry.heroku.com/${appName}/${processType}`], {
+                        shell: false,
+                        stdio: 'inherit',
+                    });
+                };
+
+                const herokuRelease = appName => {
+                    const processType = 'web';
+                    const herokuReleaseCommand = `heroku container:release ${processType} --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                    ChildProcess.execFileSync(this.herokuExecutablePath, ['container:release', processType, '--app', appName], {
+                        shell: false,
+                        stdio: 'inherit',
+                    });
+                };
+
                 if (this.herokuDeployType === 'git') {
                     try {
                         this.log(chalk.bold('\nUpdating Git repository'));
@@ -1020,18 +1060,20 @@ module.exports = class extends HerokuGenerator {
                         });
                         await gitCommit;
 
-                        let buildpack = 'heroku/java';
-                        let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
-                        if (this.buildTool === GRADLE) {
-                            buildpack = 'heroku/gradle';
-                            configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
-                        }
+                        // let buildpack = 'heroku/java';
+                        // let configVars = 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" ';
+                        // if (this.buildTool === GRADLE) {
+                        //     buildpack = 'heroku/gradle';
+                        //     configVars = 'GRADLE_TASK="stage -Pprod -PnodeInstall" ';
+                        // }
 
                         this.log(chalk.bold('\nConfiguring Heroku'));
+                        setHerokuStack(this.herokuAppName);
+
                         // await execCmd(`heroku config:set ${configVars}--app ${this.herokuAppName}`);
-                        await execFileCmd(this.herokuExecutablePath, ['config:set', configVars, '--app', this.herokuAppName]);
-                        // await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
-                        await execFileCmd(this.herokuExecutablePath, ['buildpacks:add', buildpack, '--app', this.herokuAppName]);
+                        // await execFileCmd(this.herokuExecutablePath, ['config:set', configVars, '--app', this.herokuAppName]);
+                        // // await execCmd(`heroku buildpacks:add ${buildpack} --app ${this.herokuAppName}`);
+                        // await execFileCmd(this.herokuExecutablePath, ['buildpacks:add', buildpack, '--app', this.herokuAppName]);
 
                         this.log(chalk.bold('\nDeploying application'));
 
@@ -1107,44 +1149,6 @@ module.exports = class extends HerokuGenerator {
                 }
 
                 try {
-                    const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
-                    const setHerokuStack = appName => {
-                        const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
-                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
-                        ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
-                            shell: false,
-                        });
-                    };
-                    const setHerokuConfig = (appName, configKey, configValue) => {
-                        const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
-                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
-                        ChildProcess.execFileSync(
-                            this.herokuExecutablePath,
-                            ['config:set', `${configKey}=${configValue}`, '--app', appName],
-                            {
-                                shell: false,
-                            }
-                        );
-                    };
-                    const dockerPush = appName => {
-                        const processType = 'web';
-                        const dockerPushCommand = `docker push registry.heroku.com/${appName}/${processType}`;
-                        this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
-                        ChildProcess.execFileSync(this.dockerExecutablePath, ['push', `registry.heroku.com/${appName}/${processType}`], {
-                            shell: false,
-                            stdio: 'inherit',
-                        });
-                    };
-                    const herokuRelease = appName => {
-                        const processType = 'web';
-                        const herokuReleaseCommand = `heroku container:release ${processType} --app ${appName}`;
-                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
-                        ChildProcess.execFileSync(this.herokuExecutablePath, ['container:release', processType, '--app', appName], {
-                            shell: false,
-                            stdio: 'inherit',
-                        });
-                    };
-
                     if (this.herokuDeployType === 'containerRegistry') {
                         this.log(chalk.bold(`\nDeploying ${this.herokuAppName} to Heroku's Container Registry`));
 
@@ -1203,6 +1207,7 @@ module.exports = class extends HerokuGenerator {
 
                         this.log(chalk.green('\nYour app should now be live. To view it open the following URL in your browser:'));
                         this.log(chalk.green(serverUrl));
+                        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                         if (this.clientFramework === constants.BLAZOR) {
                             this.log(
                                 chalk.green(
@@ -1210,8 +1215,15 @@ module.exports = class extends HerokuGenerator {
                                 )
                             );
                             this.log(chalk.green(`https://${this.herokuBlazorAppName}.herokuapp.com`));
+                            this.log(
+                                chalk.yellow(
+                                    `And you can view the logs with this command\n\t${chalk.bold(
+                                        `heroku logs --tail --app ${this.herokuBlazorAppName}`
+                                    )}`
+                                )
+                            );
                         }
-                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
+                        this.log(chalk.yellow(`\nAfter application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                     }
                 } catch (err) {
                     this.log.error(err);

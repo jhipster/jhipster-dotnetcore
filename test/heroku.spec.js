@@ -8,7 +8,7 @@ const ChildProcess = require('child_process');
 const Which = require('which');
 
 const expectedFiles = {
-    monolith: [],
+    monolith: ['heroku.yml'],
 };
 
 describe('JHipster Heroku Sub Generator', () => {
@@ -221,12 +221,12 @@ describe('JHipster Heroku Sub Generator', () => {
                 // stub.withArgs('git commit -m "Deploy to Heroku" --allow-empty').yields(false, '', '');
                 stubExecFile.withArgs(gitExecutable, ['commit', '-m', '"Deploy to Heroku"', '--allow-empty']).yields(false, '', '');
                 // stub.withArgs(`heroku config:set MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests" --app ${herokuAppName}`).yields(false, '', '');
-                stubExecFile
-                    .withArgs(herokuExecutable, ['config:set', 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests"', '--app', herokuAppName])
-                    .yields(false, '', '');
-                // stub.withArgs(`heroku buildpacks:add heroku/java --app ${herokuAppName}`).yields(false, '', '');
-                stubExecFile.withArgs(herokuExecutable, ['buildpacks:add', 'heroku/java', '--app', herokuAppName]).yields(false, '', '');
-                // stub.withArgs('git push heroku HEAD:master').yields(false, '', '');
+                // stubExecFile
+                //     .withArgs(herokuExecutable, ['config:set', 'MAVEN_CUSTOM_OPTS="-Pprod,heroku -DskipTests"', '--app', herokuAppName])
+                //     .yields(false, '', '');
+                // // stub.withArgs(`heroku buildpacks:add heroku/java --app ${herokuAppName}`).yields(false, '', '');
+                // stubExecFile.withArgs(herokuExecutable, ['buildpacks:add', 'heroku/java', '--app', herokuAppName]).yields(false, '', '');
+                // // stub.withArgs('git push heroku HEAD:master').yields(false, '', '');
                 stubExecFile.withArgs(gitExecutable, ['push', 'heroku', 'HEAD:master']).yields(false, '', '');
                 helpers
                     .run(require.resolve('../generators/heroku'))
