@@ -47,7 +47,7 @@ describe('JHipster Heroku Sub Generator', () => {
         stubExecFile.withArgs(herokuExecutable, ['plugins']).yields(false, 'heroku-cli-deploy');
     });
     afterEach(() => {
-        ChildProcess.exec.restore();
+        // ChildProcess.exec.restore();
         ChildProcess.execFile.restore();
         Which.sync.restore();
     });
