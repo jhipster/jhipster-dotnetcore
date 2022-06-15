@@ -207,17 +207,9 @@ module.exports = class extends HerokuGenerator {
                         },
                     ];
 
-                    // if region was provided before don't ask again
-                    if (this.herokuRegion) {
-                        // remove region prompt
-                        prompts.pop();
-                    }
-
                     this.prompt(prompts).then(props => {
                         this.herokuBlazorAppName = _.kebabCase(props.herokuBlazorAppName);
-                        if (!this.herokuRegion) {
-                            this.herokuRegion = props.herokuRegion;
-                        }
+                        this.herokuRegion = props.herokuRegion;
                         this.herokuBlazorAppExists = false;
                         done();
                     });
@@ -347,7 +339,7 @@ module.exports = class extends HerokuGenerator {
                 if (this.herokuDeployType === 'containerRegistry' || this.clientFramework === constants.BLAZOR) {
                     const herokuContainerLoginCommand = 'heroku container:login';
                     this.log(chalk.bold('\nRunning'), chalk.cyan(herokuContainerLoginCommand));
-                    ChildProcess.execFile(this.herokuExecutablePath, ['container:login'], (err, stdout, stderr) => {
+                    ChildProcess.execFile(this.herokuExecutablePath, ['container:login'], (err, stdout) => {
                         if (err) {
                             this.log.error(err);
                             this.log.error(
@@ -413,7 +405,7 @@ module.exports = class extends HerokuGenerator {
                 } catch (e) {
                     // An exception is thrown if the folder doesn't exist
                     this.log(chalk.bold('\nInitializing Git repository'));
-                    const child = ChildProcess.execFile(Which.sync('git'), ['init'], (err, stdout, stderr) => {
+                    const child = ChildProcess.execFile(Which.sync('git'), ['init'], () => {
                         done();
                     });
                     child.stdout.on('data', data => {
@@ -432,7 +424,7 @@ module.exports = class extends HerokuGenerator {
                     this.herokuExecutablePath,
                     ['create', this.herokuAppName, '--region', this.herokuRegion],
                     { shell: false },
-                    (err, stdout, stderr) => {
+                    (err, _stdout, stderr) => {
                         if (err) {
                             if (stderr.includes('is already taken')) {
                                 const prompts = [
@@ -462,12 +454,12 @@ module.exports = class extends HerokuGenerator {
                                         ChildProcess.execFile(
                                             this.herokuExecutablePath,
                                             ['git:remote', '--app', this.herokuAppName],
-                                            (err, stdout, stderr) => {
-                                                if (err) {
+                                            (error, stdoutput) => {
+                                                if (error) {
                                                     this.abort = true;
-                                                    this.log.error(err);
+                                                    this.log.error(error);
                                                 } else {
-                                                    this.log(stdout.trim());
+                                                    this.log(stdoutput.trim());
                                                     this.config.set({
                                                         herokuAppName: this.herokuAppName,
                                                         herokuDeployType: this.herokuDeployType,
@@ -481,26 +473,26 @@ module.exports = class extends HerokuGenerator {
                                             this.herokuExecutablePath,
                                             ['create', '--region', this.herokuRegion],
                                             { shell: false },
-                                            (err, stdout, stderr) => {
-                                                if (err) {
+                                            (error, stdoutput) => {
+                                                if (error) {
                                                     this.abort = true;
-                                                    this.log.error(err);
+                                                    this.log.error(error);
                                                 } else {
                                                     // Extract from "Created random-app-name-1234... done"
-                                                    this.herokuAppName = stdout.substring(
-                                                        stdout.indexOf('https://') + 8,
-                                                        stdout.indexOf('.herokuapp')
+                                                    this.herokuAppName = stdoutput.substring(
+                                                        stdoutput.indexOf('https://') + 8,
+                                                        stdoutput.indexOf('.herokuapp')
                                                     );
-                                                    this.log(stdout.trim());
+                                                    this.log(stdoutput.trim());
 
                                                     // ensure that the git remote is the same as the appName
                                                     ChildProcess.execFile(
                                                         this.herokuExecutablePath,
                                                         ['git:remote', '--app', this.herokuAppName],
-                                                        (err, stdout, stderr) => {
-                                                            if (err) {
+                                                        errr => {
+                                                            if (errr) {
                                                                 this.abort = true;
-                                                                this.log.error(err);
+                                                                this.log.error(errr);
                                                             } else {
                                                                 this.config.set({
                                                                     herokuAppName: this.herokuAppName,
@@ -555,7 +547,7 @@ module.exports = class extends HerokuGenerator {
                     this.herokuExecutablePath,
                     ['create', this.herokuBlazorAppName, '--region', this.herokuRegion],
                     { shell: false },
-                    (err, stdout, stderr) => {
+                    (err, _stdout, stderr) => {
                         if (err) {
                             if (stderr.includes('is already taken')) {
                                 const prompts = [
@@ -591,17 +583,17 @@ module.exports = class extends HerokuGenerator {
                                             this.herokuExecutablePath,
                                             ['create', '--region', this.herokuRegion],
                                             { shell: false },
-                                            (err, stdout, stderr) => {
-                                                if (err) {
+                                            (error, stdoutput) => {
+                                                if (error) {
                                                     this.abort = true;
-                                                    this.log.error(err);
+                                                    this.log.error(error);
                                                 } else {
                                                     // Extract from "Created random-app-name-1234... done"
-                                                    this.herokuBlazorAppName = stdout.substring(
-                                                        stdout.indexOf('https://') + 8,
-                                                        stdout.indexOf('.herokuapp')
+                                                    this.herokuBlazorAppName = stdoutput.substring(
+                                                        stdoutput.indexOf('https://') + 8,
+                                                        stdoutput.indexOf('.herokuapp')
                                                     );
-                                                    this.log(stdout.trim());
+                                                    this.log(stdoutput.trim());
                                                     this.config.set({
                                                         herokuBlazorAppName: this.herokuBlazorAppName,
                                                     });
@@ -644,7 +636,7 @@ module.exports = class extends HerokuGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                const addonCreateCallback = (addon, err, stdout, stderr) => {
+                const addonCreateCallback = (addon, err) => {
                     if (err) {
                         const verifyAccountUrl = 'https://heroku.com/verify';
                         if (_.includes(err, verifyAccountUrl)) {
