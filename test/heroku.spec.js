@@ -13,6 +13,7 @@ const expectedFiles = {
 
 describe('JHipster Heroku Sub Generator', () => {
     const herokuAppName = 'jhipster-test';
+    const herokuBlazorAppName = 'jhipster-blazor-test';
     const herokuExecutable = 'heroku';
     const dockerExecutable = 'docker';
     const gitExecutable = 'git';
@@ -52,7 +53,7 @@ describe('JHipster Heroku Sub Generator', () => {
         Which.sync.restore();
     });
 
-    describe('with heroku container registry deploy', () => {
+    describe('with container registry', () => {
         beforeEach(done => {
             // stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
             stubExecFile.withArgs(herokuExecutable, ['create', herokuAppName, '--region', 'us']).yields(false, '', '');
@@ -76,6 +77,41 @@ describe('JHipster Heroku Sub Generator', () => {
         });
         it('creates expected monolith files', () => {
             assert.file(expectedFiles.monolith);
+            assert.fileContent('.yo-rc.json', '"herokuDeployType": "containerRegistry"');
+            // assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
+            // assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
+        });
+    });
+
+    describe('with blazor', () => {
+        beforeEach(done => {
+            // stub.withArgs(`heroku create ${herokuAppName}`).yields(false, '', '');
+            stubExecFile.withArgs(herokuExecutable, ['create', herokuAppName, '--region', 'us']).yields(false, '', '');
+            stubExecFile.withArgs(herokuExecutable, ['create', herokuBlazorAppName, '--region', 'us']).yields(false, '', '');
+            // stub.withArgs(`heroku addons:create jawsdb:kitefin --as DATABASE --app ${herokuAppName}`).yields(false, '', '');
+            stubExecFile
+                .withArgs(herokuExecutable, ['addons:create', 'jawsdb:kitefin', '--as', 'DATABASE', '--app', herokuAppName])
+                .yields(false, '', '');
+            helpers
+                .run(require.resolve('../generators/heroku'))
+                .inTmpDir(dir => {
+                    fse.copySync(path.join(__dirname, './templates/default-blazor/'), dir);
+                })
+                .withOptions({ skipBuild: true })
+                .withPrompts({
+                    herokuAppName,
+                    herokuRegion: 'us',
+                    herokuDeployType: 'containerRegistry',
+                    herokuBlazorAppName,
+                    useOkta: false,
+                })
+                .on('end', done);
+        });
+        it('creates expected monolith files', () => {
+            assert.file(expectedFiles.monolith);
+            assert.fileContent('.yo-rc.json', `"herokuAppName": "${herokuAppName}"`);
+            assert.fileContent('.yo-rc.json', `"herokuBlazorAppName": "${herokuBlazorAppName}"`);
+            assert.fileContent('.yo-rc.json', '"clientFramework": "Blazor"');
             assert.fileContent('.yo-rc.json', '"herokuDeployType": "containerRegistry"');
             // assert.fileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'datasource:');
             // assert.noFileContent(`${constants.SERVER_MAIN_RES_DIR}/config/application-heroku.yml`, 'mongodb:');
