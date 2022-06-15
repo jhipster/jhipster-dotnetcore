@@ -18,6 +18,7 @@ echo "Starting the application..."
 
 # if $PORT is set in the environment, set ASPNETCORE_URLS to "http://*:$PORT"
 if [ -n "$PORT" ]; then
+    echo "Setting ASPNETCORE_URLS with the PORT environment variable..."
     export ASPNETCORE_URLS=http://*:$PORT
     echo "ASPNETCORE_URLS: $ASPNETCORE_URLS"
 fi
