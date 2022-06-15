@@ -40,7 +40,8 @@ const {
 } = require('generator-jhipster/lib/constants/priorities.cjs').compat;
 
 const statistics = require('generator-jhipster/generators/statistics');
-const constants = require('generator-jhipster/generators/generator-constants');
+// const constants = require('generator-jhipster/generators/generator-constants');
+const constants = require('../generator-dotnetcore-constants');
 const { MARIADB, MYSQL, POSTGRESQL } = require('generator-jhipster/jdl/jhipster/database-types');
 const cacheProviderOptions = require('generator-jhipster/jdl/jhipster/cache-types');
 const { MEMCACHED, REDIS } = require('generator-jhipster/jdl/jhipster/cache-types');
@@ -100,7 +101,7 @@ module.exports = class extends HerokuGenerator {
             initializing() {
                 this.log(chalk.bold('Heroku configuration is starting'));
                 const configuration = this.config;
-                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_SRC_DIR;
                 this.baseName = configuration.get('baseName');
                 this.databaseType = configuration.get('databaseType');
                 // this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
@@ -197,7 +198,7 @@ module.exports = class extends HerokuGenerator {
                         choices: [
                             {
                                 value: 'containerRegistry',
-                                name: 'Heroku Container Registry',
+                                name: 'Heroku Container Registry (build locally and push image)',
                             },
                             {
                                 value: 'git',
@@ -213,23 +214,6 @@ module.exports = class extends HerokuGenerator {
                 });
             },
 
-            askForHerokuJavaVersion() {
-                if (this.abort) return null;
-                if (this.herokuJavaVersion) return null;
-                const prompts = [
-                    {
-                        type: 'list',
-                        name: 'herokuJavaVersion',
-                        message: 'Which Java version would you like to use to build and run your app ?',
-                        choices: constants.JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
-                        default: constants.JAVA_VERSION,
-                    },
-                ];
-
-                return this.prompt(prompts).then(props => {
-                    this.herokuJavaVersion = props.herokuJavaVersion;
-                });
-            },
             askForOkta() {
                 if (this.abort) return null;
                 if (this.authenticationType !== OAUTH2) return null;
@@ -283,7 +267,7 @@ module.exports = class extends HerokuGenerator {
 
     _configuring() {
         return {
-            checkInstallation() {
+            checkHerokuInstallation() {
                 if (this.abort) return;
                 const done = this.async();
 
@@ -296,7 +280,7 @@ module.exports = class extends HerokuGenerator {
                 });
             },
 
-            checkDocker() {
+            checkDockerInstallation() {
                 if (this.abort) return;
                 const done = this.async();
 
@@ -310,7 +294,7 @@ module.exports = class extends HerokuGenerator {
                 });
             },
 
-            herokuContainerRegistryLogin() {
+            checkHerokuContainerRegistryLogin() {
                 if (this.abort) return;
                 const done = this.async();
 
@@ -319,7 +303,9 @@ module.exports = class extends HerokuGenerator {
                 ChildProcess.execFile(this.herokuExecutablePath, ['container:login'], (err, stdout, stderr) => {
                     if (err) {
                         this.log.error(err);
-                        this.log.error("There was a problem while running the command 'heroku container:login'");
+                        this.log.error(
+                            "There was a problem while running 'heroku container:login' to login to Heroku Container Registry. Make sure that you have docker and heroku CLI installed. Also verify if you have the right Heroku account configured."
+                        );
                         this.abort = true;
                     } else {
                         this.log(stdout);
@@ -334,7 +320,7 @@ module.exports = class extends HerokuGenerator {
                     herokuAppName: this.herokuAppName,
                     herokuBlazorAppName: this.herokuBlazorAppName,
                     herokuDeployType: this.herokuDeployType,
-                    herokuJavaVersion: this.herokuJavaVersion,
+                    // herokuJavaVersion: this.herokuJavaVersion,
                     useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
                 });
@@ -392,40 +378,11 @@ module.exports = class extends HerokuGenerator {
                 }
             },
 
-            installHerokuDeployPlugin() {
-                if (this.abort) return;
-                const done = this.async();
-                const cliPlugin = 'heroku-cli-deploy';
-
-                // ChildProcess.exec('heroku plugins', (err, stdout) => {
-                ChildProcess.execFile(this.herokuExecutablePath, ['plugins'], (err, stdout) => {
-                    if (_.includes(stdout, cliPlugin)) {
-                        this.log('\nHeroku CLI deployment plugin already installed');
-                        done();
-                    } else {
-                        this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-                        // const child = ChildProcess.exec(`heroku plugins:install ${cliPlugin}`, (err, stdout) => {
-                        const child = ChildProcess.execFile(this.herokuExecutablePath, ['plugins:install', cliPlugin], (err, stdout) => {
-                            if (err) {
-                                this.abort = true;
-                                this.log.error(err);
-                            }
-
-                            done();
-                        });
-
-                        child.stdout.on('data', data => {
-                            this.log(data.toString());
-                        });
-                    }
-                });
-            },
-
             herokuCreate() {
                 if (this.abort || this.herokuAppExists) return;
                 const done = this.async();
 
-                const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
+                // const regionParams = this.herokuRegion !== 'us' ? ` --region ${this.herokuRegion}` : '';
 
                 this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
                 // const child = ChildProcess.exec(
@@ -464,19 +421,23 @@ module.exports = class extends HerokuGenerator {
                                 this.prompt(prompts).then(props => {
                                     if (props.herokuForceName === 'Yes') {
                                         // ChildProcess.exec(`heroku git:remote --app ${this.herokuAppName}`, (err, stdout, stderr) => {
-                                        ChildProcess.execFile(this.herokuExecutablePath, ['git:remote', '--app', this.herokuAppName], (err, stdout, stderr) => {
-                                            if (err) {
-                                                this.abort = true;
-                                                this.log.error(err);
-                                            } else {
-                                                this.log(stdout.trim());
-                                                this.config.set({
-                                                    herokuAppName: this.herokuAppName,
-                                                    herokuDeployType: this.herokuDeployType,
-                                                });
+                                        ChildProcess.execFile(
+                                            this.herokuExecutablePath,
+                                            ['git:remote', '--app', this.herokuAppName],
+                                            (err, stdout, stderr) => {
+                                                if (err) {
+                                                    this.abort = true;
+                                                    this.log.error(err);
+                                                } else {
+                                                    this.log(stdout.trim());
+                                                    this.config.set({
+                                                        herokuAppName: this.herokuAppName,
+                                                        herokuDeployType: this.herokuDeployType,
+                                                    });
+                                                }
+                                                done();
                                             }
-                                            done();
-                                        });
+                                        );
                                     } else {
                                         // ChildProcess.exec(`heroku create ${regionParams}`, (err, stdout, stderr) => {
                                         ChildProcess.execFile(
@@ -484,39 +445,40 @@ module.exports = class extends HerokuGenerator {
                                             ['create', '--region', this.herokuRegion],
                                             { shell: false },
                                             (err, stdout, stderr) => {
-                                            if (err) {
-                                                this.abort = true;
-                                                this.log.error(err);
-                                            } else {
-                                                // Extract from "Created random-app-name-1234... done"
-                                                this.herokuAppName = stdout.substring(
-                                                    stdout.indexOf('https://') + 8,
-                                                    stdout.indexOf('.herokuapp')
-                                                );
-                                                this.log(stdout.trim());
+                                                if (err) {
+                                                    this.abort = true;
+                                                    this.log.error(err);
+                                                } else {
+                                                    // Extract from "Created random-app-name-1234... done"
+                                                    this.herokuAppName = stdout.substring(
+                                                        stdout.indexOf('https://') + 8,
+                                                        stdout.indexOf('.herokuapp')
+                                                    );
+                                                    this.log(stdout.trim());
 
-                                                // ensure that the git remote is the same as the appName
-                                                // ChildProcess.exec(
-                                                //     `heroku git:remote --app ${this.herokuAppName}`,
-                                                //     (err, stdout, stderr) => {
-                                                ChildProcess.execFile(
-                                                    this.herokuExecutablePath,
-                                                    ['git:remote', '--app', this.herokuAppName],
-                                                    (err, stdout, stderr) => {
-                                                        if (err) {
-                                                            this.abort = true;
-                                                            this.log.error(err);
-                                                        } else {
-                                                            this.config.set({
-                                                                herokuAppName: this.herokuAppName,
-                                                                herokuDeployType: this.herokuDeployType,
-                                                            });
+                                                    // ensure that the git remote is the same as the appName
+                                                    // ChildProcess.exec(
+                                                    //     `heroku git:remote --app ${this.herokuAppName}`,
+                                                    //     (err, stdout, stderr) => {
+                                                    ChildProcess.execFile(
+                                                        this.herokuExecutablePath,
+                                                        ['git:remote', '--app', this.herokuAppName],
+                                                        (err, stdout, stderr) => {
+                                                            if (err) {
+                                                                this.abort = true;
+                                                                this.log.error(err);
+                                                            } else {
+                                                                this.config.set({
+                                                                    herokuAppName: this.herokuAppName,
+                                                                    herokuDeployType: this.herokuDeployType,
+                                                                });
+                                                            }
+                                                            done();
                                                         }
-                                                        done();
-                                                    }
-                                                );
+                                                    );
+                                                }
                                             }
-                                        });
+                                        );
                                     }
                                 });
                             } else {
@@ -590,11 +552,13 @@ module.exports = class extends HerokuGenerator {
                     dbAddOn = 'heroku-postgresql --as DATABASE';
                 } else if (this.prodDatabaseType === MYSQL) {
                     dbAddOn = 'jawsdb:kitefin --as DATABASE';
-                } else if (this.prodDatabaseType === MARIADB) {
-                    dbAddOn = 'jawsdb-maria:kitefin --as DATABASE';
                 }
 
-                if (dbAddOn) {
+                if (this.databaseType === 'mssql') {
+                    this.log(chalk.yellow("Heroku's MS SQL Server addon is not free."));
+                    this.log(chalk.yellow('So we recommend to add it manually to avoid charges on your credit card.'));
+                    this.log(chalk.yellow('You can manually add it to your app visiting https://elements.heroku.com/addons/mssql'));
+                } else if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
                     // ChildProcess.exec(`heroku addons:create ${dbAddOn} --app ${this.herokuAppName}`, (err, stdout, stderr) => {
                     ChildProcess.execFile(
@@ -626,57 +590,57 @@ module.exports = class extends HerokuGenerator {
                 done();
             },
 
-            configureJHipsterRegistry() {
-                if (this.abort || this.herokuAppExists) return undefined;
+            // configureJHipsterRegistry() {
+            //     if (this.abort || this.herokuAppExists) return undefined;
 
-                if (this.serviceDiscoveryType === EUREKA) {
-                    const prompts = [
-                        {
-                            type: 'input',
-                            name: 'herokuJHipsterRegistryApp',
-                            message: 'What is the name of your JHipster Registry Heroku application?',
-                            default: 'jhipster-registry',
-                        },
-                        {
-                            type: 'input',
-                            name: 'herokuJHipsterRegistryUsername',
-                            message: 'What is your JHipster Registry username?',
-                            default: 'admin',
-                        },
-                        {
-                            type: 'input',
-                            name: 'herokuJHipsterRegistryPassword',
-                            message: 'What is your JHipster Registry password?',
-                            default: 'password',
-                        },
-                    ];
+            //     if (this.serviceDiscoveryType === EUREKA) {
+            //         const prompts = [
+            //             {
+            //                 type: 'input',
+            //                 name: 'herokuJHipsterRegistryApp',
+            //                 message: 'What is the name of your JHipster Registry Heroku application?',
+            //                 default: 'jhipster-registry',
+            //             },
+            //             {
+            //                 type: 'input',
+            //                 name: 'herokuJHipsterRegistryUsername',
+            //                 message: 'What is your JHipster Registry username?',
+            //                 default: 'admin',
+            //             },
+            //             {
+            //                 type: 'input',
+            //                 name: 'herokuJHipsterRegistryPassword',
+            //                 message: 'What is your JHipster Registry password?',
+            //                 default: 'password',
+            //             },
+            //         ];
 
-                    this.log('');
-                    return this.prompt(prompts).then(props => {
-                        // Encode username/password to avoid errors caused by spaces
-                        props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
-                        props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
-                        const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
-                        // const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
-                        // const child = ChildProcess.exec(configSetCmd, (err, stdout, stderr) => {
-                        const child = ChildProcess.execFile(
-                            this.herokuExecutablePath,
-                            ['config:set', `JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry}`, '--app', this.herokuAppName],
-                            (err, stdout, stderr) => {
-                                if (err) {
-                                    this.abort = true;
-                                    this.log.error(err);
-                                }
-                            }
-                        );
+            //         this.log('');
+            //         return this.prompt(prompts).then(props => {
+            //             // Encode username/password to avoid errors caused by spaces
+            //             props.herokuJHipsterRegistryUsername = encodeURIComponent(props.herokuJHipsterRegistryUsername);
+            //             props.herokuJHipsterRegistryPassword = encodeURIComponent(props.herokuJHipsterRegistryPassword);
+            //             const herokuJHipsterRegistry = `https://${props.herokuJHipsterRegistryUsername}:${props.herokuJHipsterRegistryPassword}@${props.herokuJHipsterRegistryApp}.herokuapp.com`;
+            //             // const configSetCmd = `heroku config:set JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry} --app ${this.herokuAppName}`;
+            //             // const child = ChildProcess.exec(configSetCmd, (err, stdout, stderr) => {
+            //             const child = ChildProcess.execFile(
+            //                 this.herokuExecutablePath,
+            //                 ['config:set', `JHIPSTER_REGISTRY_URL=${herokuJHipsterRegistry}`, '--app', this.herokuAppName],
+            //                 (err, stdout, stderr) => {
+            //                     if (err) {
+            //                         this.abort = true;
+            //                         this.log.error(err);
+            //                     }
+            //                 }
+            //             );
 
-                        child.stdout.on('data', data => {
-                            this.log(data.toString());
-                        });
-                    });
-                }
-                return undefined;
-            },
+            //             child.stdout.on('data', data => {
+            //                 this.log(data.toString());
+            //             });
+            //         });
+            //     }
+            //     return undefined;
+            // },
         };
     }
 
@@ -711,21 +675,21 @@ module.exports = class extends HerokuGenerator {
                 }
             },
 
-            addHerokuBuildPlugin() {
-                if (this.abort) return;
-                if (this.buildTool !== GRADLE) return;
-                this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '1.0.4');
-                this.applyFromGradleScript('gradle/heroku');
-            },
+            // addHerokuBuildPlugin() {
+            //     if (this.abort) return;
+            //     if (this.buildTool !== GRADLE) return;
+            //     this.addGradlePlugin('gradle.plugin.com.heroku.sdk', 'heroku-gradle', '1.0.4');
+            //     this.applyFromGradleScript('gradle/heroku');
+            // },
 
-            addHerokuMavenProfile() {
-                if (this.abort) return;
-                if (this.buildTool === MAVEN) {
-                    this.render('pom-profile.xml.ejs', profile => {
-                        this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
-                    });
-                }
-            },
+            // addHerokuMavenProfile() {
+            //     if (this.abort) return;
+            //     if (this.buildTool === MAVEN) {
+            //         this.render('pom-profile.xml.ejs', profile => {
+            //             this.addMavenProfile('heroku', `            ${profile.toString().trim()}`);
+            //         });
+            //     }
+            // },
         };
     }
 
@@ -760,19 +724,52 @@ module.exports = class extends HerokuGenerator {
                 const done = this.async();
                 this.log(chalk.bold('\nBuilding application'));
 
-                const child = this.buildApplication(this.buildTool, 'prod', false, err => {
-                    if (err) {
-                        this.abort = true;
-                        this.log.error(err);
+                // const child = this.buildApplication(this.buildTool, 'prod', false, err => {
+                //     if (err) {
+                //         this.abort = true;
+                //         this.log.error(err);
+                //     }
+                //     done();
+                // });
+
+                // this.buildCmd = child.buildCmd;
+
+                // child.stdout.on('data', data => {
+                //     process.stdout.write(data.toString());
+                // });
+
+                const dockerBuild = (appName, dockerFile) => {
+                    const processType = 'web';
+                    this.log(chalk.bold(`\nBuilding ${appName}`));
+
+                    const dockerBuildCommand = `docker build -f ${dockerFile} -t ${appName}:latest .`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(dockerBuildCommand));
+                    ChildProcess.execFileSync(this.dockerExecutablePath, ['build', '-f', dockerFile, '-t', `${appName}:latest`, '.'], {
+                        shell: false,
+                        stdio: 'inherit',
+                    });
+
+                    const dockerTagCommand = `docker tag ${appName} registry.heroku.com/${appName}/${processType}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(dockerTagCommand));
+                    ChildProcess.execFileSync(
+                        this.dockerExecutablePath,
+                        ['tag', appName, `registry.heroku.com/${appName}/${processType}`],
+                        {
+                            shell: false,
+                            stdio: 'inherit',
+                        }
+                    );
+                };
+
+                if (this.herokuDeployType === 'containerRegistry') {
+                    dockerBuild(this.herokuAppName, './Dockerfile-Back');
+
+                    if (this.clientFramework === constants.BLAZOR) {
+                        dockerBuild(this.herokuBlazorAppName, './Dockerfile-Front');
                     }
-                    done();
-                });
+                }
 
-                this.buildCmd = child.buildCmd;
-
-                child.stdout.on('data', data => {
-                    process.stdout.write(data.toString());
-                });
+                done();
             },
 
             async productionDeploy() {
@@ -894,6 +891,97 @@ module.exports = class extends HerokuGenerator {
                                 }
                             }
                         }
+                    } catch (err) {
+                        this.log.error(err);
+                    }
+                }
+
+                if (this.herokuDeployType === 'containerRegistry') {
+                    try {
+                        const processType = 'web';
+                        this.log(chalk.bold(`\nDeploying ${this.herokuAppName} to Heroku's Container Registry`));
+
+                        const setHerokuStack = appName => {
+                            const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
+                            this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                            ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
+                                shell: false,
+                            });
+                        };
+
+                        const setHerokuConfig = (appName, configKey, configValue) => {
+                            const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
+                            this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                            ChildProcess.execFileSync(
+                                this.herokuExecutablePath,
+                                ['config:set', `${configKey}=${configValue}`, '--app', appName],
+                                {
+                                    shell: false,
+                                }
+                            );
+                        };
+
+                        if (!this.herokuAppExists) {
+                            setHerokuStack(this.herokuAppName);
+                        }
+
+                        const dockerPushCommand = `docker push registry.heroku.com/${this.herokuAppName}/${processType}`;
+                        this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+                        ChildProcess.execFileSync(
+                            this.dockerExecutablePath,
+                            ['push', `registry.heroku.com/${this.herokuAppName}/${processType}`],
+                            { shell: false, stdio: 'inherit' }
+                        );
+
+                        const herokuReleaseCommand = `heroku container:release ${processType} --app ${this.herokuAppName}`;
+                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                        ChildProcess.execFileSync(
+                            this.herokuExecutablePath,
+                            ['container:release', processType, '--app', this.herokuAppName],
+                            {
+                                shell: false,
+                                stdio: 'inherit',
+                            }
+                        );
+
+                        const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
+                        this.log(chalk.green('\nYour app should now be live. To view it open the following URL in your browser:'));
+                        this.log(chalk.green(serverUrl));
+
+                        if (this.clientFramework === constants.BLAZOR) {
+                            const processType = 'web';
+                            const serverUrlBlazor = `https://${this.herokuBlazorAppName}.herokuapp.com`;
+                            this.log(chalk.bold(`\nDeploying ${this.herokuBlazorAppName} to Heroku's Container Registry`));
+
+                            if (!this.herokuBlazorAppExists) {
+                                setHerokuStack(this.herokuBlazorAppName);
+                                setHerokuConfig(this.herokuBlazorAppName, 'ServerUrl', serverUrl);
+                            }
+
+                            const dockerPushCommand = `docker push registry.heroku.com/${this.herokuBlazorAppName}/${processType}`;
+                            this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+                            ChildProcess.execFileSync(
+                                this.dockerExecutablePath,
+                                ['push', `registry.heroku.com/${this.herokuBlazorAppName}/${processType}`],
+                                { shell: false, stdio: 'inherit' }
+                            );
+
+                            const herokuReleaseCommand = `heroku container:release ${processType} --app ${this.herokuBlazorAppName}`;
+                            this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                            ChildProcess.execFileSync(
+                                this.herokuExecutablePath,
+                                ['container:release', processType, '--app', this.herokuBlazorAppName],
+                                { shell: false, stdio: 'inherit' }
+                            );
+
+                            this.log(
+                                chalk.green(
+                                    '\nYour blazor frontend app should now be live. To view it open the following URL in your browser:'
+                                )
+                            );
+                            this.log(chalk.green(serverUrlBlazor));
+                        }
+                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                     } catch (err) {
                         this.log.error(err);
                     }
