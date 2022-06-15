@@ -284,35 +284,43 @@ module.exports = class extends HerokuGenerator {
                 if (this.abort) return;
                 const done = this.async();
 
-                ChildProcess.execFile(this.dockerExecutablePath, ['--version'], err => {
-                    if (err) {
-                        this.log.error("You don't have the Docker CLI installed.");
-                        this.abort = true;
-                    }
+                if (this.herokuDeployType === 'containerRegistry' || this.clientFramework === constants.BLAZOR) {
+                    ChildProcess.execFile(this.dockerExecutablePath, ['--version'], err => {
+                        if (err) {
+                            this.log.error("You don't have the Docker CLI installed.");
+                            this.abort = true;
+                        }
 
+                        done();
+                    });
+                } else {
                     done();
-                });
+                }
             },
 
             checkHerokuContainerRegistryLogin() {
                 if (this.abort) return;
                 const done = this.async();
 
-                const herokuContainerLoginCommand = 'heroku container:login';
-                this.log(chalk.bold('\nRunning'), chalk.cyan(herokuContainerLoginCommand));
-                ChildProcess.execFile(this.herokuExecutablePath, ['container:login'], (err, stdout, stderr) => {
-                    if (err) {
-                        this.log.error(err);
-                        this.log.error(
-                            "There was a problem while running 'heroku container:login' to login to Heroku Container Registry. Make sure that you have docker and heroku CLI installed. Also verify if you have the right Heroku account configured."
-                        );
-                        this.abort = true;
-                    } else {
-                        this.log(stdout);
-                    }
+                if (this.herokuDeployType === 'containerRegistry' || this.clientFramework === constants.BLAZOR) {
+                    const herokuContainerLoginCommand = 'heroku container:login';
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuContainerLoginCommand));
+                    ChildProcess.execFile(this.herokuExecutablePath, ['container:login'], (err, stdout, stderr) => {
+                        if (err) {
+                            this.log.error(err);
+                            this.log.error(
+                                "There was a problem while running 'heroku container:login' to login to Heroku Container Registry. Make sure that you have docker and heroku CLI installed. Also verify if you have the right Heroku account configured."
+                            );
+                            this.abort = true;
+                        } else {
+                            this.log(stdout);
+                        }
 
+                        done();
+                    });
+                } else {
                     done();
-                });
+                }
             },
 
             saveConfig() {
@@ -716,7 +724,7 @@ module.exports = class extends HerokuGenerator {
             productionBuild() {
                 if (this.abort) return;
 
-                if (this.herokuSkipBuild || this.herokuDeployType === 'git') {
+                if (this.herokuSkipBuild) {
                     this.log(chalk.bold('\nSkipping build'));
                     return;
                 }
@@ -763,10 +771,10 @@ module.exports = class extends HerokuGenerator {
 
                 if (this.herokuDeployType === 'containerRegistry') {
                     dockerBuild(this.herokuAppName, './Dockerfile-Back');
+                }
 
-                    if (this.clientFramework === constants.BLAZOR) {
-                        dockerBuild(this.herokuBlazorAppName, './Dockerfile-Front');
-                    }
+                if (this.clientFramework === constants.BLAZOR) {
+                    dockerBuild(this.herokuBlazorAppName, './Dockerfile-Front');
                 }
 
                 done();
@@ -896,30 +904,28 @@ module.exports = class extends HerokuGenerator {
                     }
                 }
 
+                const setHerokuStack = appName => {
+                    const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                    ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
+                        shell: false,
+                    });
+                };
+
+                const setHerokuConfig = (appName, configKey, configValue) => {
+                    const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
+                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                    ChildProcess.execFileSync(this.herokuExecutablePath, ['config:set', `${configKey}=${configValue}`, '--app', appName], {
+                        shell: false,
+                    });
+                };
+
+                const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
+
                 if (this.herokuDeployType === 'containerRegistry') {
                     try {
                         const processType = 'web';
                         this.log(chalk.bold(`\nDeploying ${this.herokuAppName} to Heroku's Container Registry`));
-
-                        const setHerokuStack = appName => {
-                            const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
-                            this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
-                            ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
-                                shell: false,
-                            });
-                        };
-
-                        const setHerokuConfig = (appName, configKey, configValue) => {
-                            const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
-                            this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
-                            ChildProcess.execFileSync(
-                                this.herokuExecutablePath,
-                                ['config:set', `${configKey}=${configValue}`, '--app', appName],
-                                {
-                                    shell: false,
-                                }
-                            );
-                        };
 
                         if (!this.herokuAppExists) {
                             setHerokuStack(this.herokuAppName);
@@ -944,10 +950,15 @@ module.exports = class extends HerokuGenerator {
                             }
                         );
 
-                        const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
                         this.log(chalk.green('\nYour app should now be live. To view it open the following URL in your browser:'));
                         this.log(chalk.green(serverUrl));
+                    } catch (err) {
+                        this.log.error(err);
+                    }
+                }
 
+                if (this.clientFramework === constants.BLAZOR) {
+                    try {
                         if (this.clientFramework === constants.BLAZOR) {
                             const processType = 'web';
                             const serverUrlBlazor = `https://${this.herokuBlazorAppName}.herokuapp.com`;
@@ -981,11 +992,12 @@ module.exports = class extends HerokuGenerator {
                             );
                             this.log(chalk.green(serverUrlBlazor));
                         }
-                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                     } catch (err) {
                         this.log.error(err);
                     }
                 }
+
+                this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
             },
         };
     }
