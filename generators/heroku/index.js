@@ -112,7 +112,7 @@ module.exports = class extends HerokuGenerator {
                 this.clientFramework = configuration.get('clientFramework');
                 this.dynoSize = 'Free';
                 this.herokuDeployType = configuration.get('herokuDeployType');
-                this.herokuJavaVersion = configuration.get('herokuJavaVersion');
+                // this.herokuJavaVersion = configuration.get('herokuJavaVersion');
                 this.useOkta = configuration.get('useOkta');
                 this.oktaAdminLogin = configuration.get('oktaAdminLogin');
                 this.oktaAdminPassword = configuration.get('oktaAdminPassword');
@@ -1106,64 +1106,75 @@ module.exports = class extends HerokuGenerator {
                     }
                 }
 
-                const setHerokuStack = appName => {
-                    const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
-                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
-                    ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
-                        shell: false,
-                    });
-                };
-
-                const setHerokuConfig = (appName, configKey, configValue) => {
-                    const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
-                    this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
-                    ChildProcess.execFileSync(this.herokuExecutablePath, ['config:set', `${configKey}=${configValue}`, '--app', appName], {
-                        shell: false,
-                    });
-                };
-
-                const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
-
-                if (this.herokuDeployType === 'containerRegistry') {
-                    try {
+                try {
+                    const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
+                    const setHerokuStack = appName => {
+                        const herokuStackSetCommand = `heroku stack:set container --app ${appName}`;
+                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                        ChildProcess.execFileSync(this.herokuExecutablePath, ['stack:set', 'container', '--app', appName], {
+                            shell: false,
+                        });
+                    };
+                    const setHerokuConfig = (appName, configKey, configValue) => {
+                        const herokuStackSetCommand = `heroku config:set ${configKey}=${configValue} --app ${appName}`;
+                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuStackSetCommand));
+                        ChildProcess.execFileSync(
+                            this.herokuExecutablePath,
+                            ['config:set', `${configKey}=${configValue}`, '--app', appName],
+                            {
+                                shell: false,
+                            }
+                        );
+                    };
+                    const dockerPush = appName => {
                         const processType = 'web';
+                        const dockerPushCommand = `docker push registry.heroku.com/${appName}/${processType}`;
+                        this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+                        ChildProcess.execFileSync(this.dockerExecutablePath, ['push', `registry.heroku.com/${appName}/${processType}`], {
+                            shell: false,
+                            stdio: 'inherit',
+                        });
+                    };
+                    const herokuRelease = appName => {
+                        const processType = 'web';
+                        const herokuReleaseCommand = `heroku container:release ${processType} --app ${appName}`;
+                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                        ChildProcess.execFileSync(this.herokuExecutablePath, ['container:release', processType, '--app', appName], {
+                            shell: false,
+                            stdio: 'inherit',
+                        });
+                    };
+
+                    if (this.herokuDeployType === 'containerRegistry') {
                         this.log(chalk.bold(`\nDeploying ${this.herokuAppName} to Heroku's Container Registry`));
 
                         if (!this.herokuAppExists) {
                             setHerokuStack(this.herokuAppName);
                         }
 
-                        const dockerPushCommand = `docker push registry.heroku.com/${this.herokuAppName}/${processType}`;
-                        this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
-                        ChildProcess.execFileSync(
-                            this.dockerExecutablePath,
-                            ['push', `registry.heroku.com/${this.herokuAppName}/${processType}`],
-                            { shell: false, stdio: 'inherit' }
-                        );
+                        dockerPush(this.herokuAppName);
+                        herokuRelease(this.herokuAppName);
 
-                        const herokuReleaseCommand = `heroku container:release ${processType} --app ${this.herokuAppName}`;
-                        this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
-                        ChildProcess.execFileSync(
-                            this.herokuExecutablePath,
-                            ['container:release', processType, '--app', this.herokuAppName],
-                            {
-                                shell: false,
-                                stdio: 'inherit',
-                            }
-                        );
+                        // const dockerPushCommand = `docker push registry.heroku.com/${this.herokuAppName}/${processType}`;
+                        // this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+                        // ChildProcess.execFileSync(
+                        //     this.dockerExecutablePath,
+                        //     ['push', `registry.heroku.com/${this.herokuAppName}/${processType}`],
+                        //     { shell: false, stdio: 'inherit' }
+                        // );
 
-                        this.log(chalk.green('\nYour app should now be live. To view it open the following URL in your browser:'));
-                        this.log(chalk.green(serverUrl));
-                    } catch (err) {
-                        this.log.error(err);
-                    }
-                }
+                        // const herokuReleaseCommand = `heroku container:release ${processType} --app ${this.herokuAppName}`;
+                        // this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                        // ChildProcess.execFileSync(
+                        //     this.herokuExecutablePath,
+                        //     ['container:release', processType, '--app', this.herokuAppName],
+                        //     {
+                        //         shell: false,
+                        //         stdio: 'inherit',
+                        //     }
+                        // );
 
-                if (this.clientFramework === constants.BLAZOR) {
-                    try {
                         if (this.clientFramework === constants.BLAZOR) {
-                            const processType = 'web';
-                            const serverUrlBlazor = `https://${this.herokuBlazorAppName}.herokuapp.com`;
                             this.log(chalk.bold(`\nDeploying ${this.herokuBlazorAppName} to Heroku's Container Registry`));
 
                             if (!this.herokuBlazorAppExists) {
@@ -1171,35 +1182,40 @@ module.exports = class extends HerokuGenerator {
                                 setHerokuConfig(this.herokuBlazorAppName, 'ServerUrl', serverUrl);
                             }
 
-                            const dockerPushCommand = `docker push registry.heroku.com/${this.herokuBlazorAppName}/${processType}`;
-                            this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
-                            ChildProcess.execFileSync(
-                                this.dockerExecutablePath,
-                                ['push', `registry.heroku.com/${this.herokuBlazorAppName}/${processType}`],
-                                { shell: false, stdio: 'inherit' }
-                            );
+                            dockerPush(this.herokuBlazorAppName);
+                            herokuRelease(this.herokuBlazorAppName);
+                            // const dockerPushCommand = `docker push registry.heroku.com/${this.herokuBlazorAppName}/${processType}`;
+                            // this.log(chalk.bold('\nRunning'), chalk.cyan(dockerPushCommand));
+                            // ChildProcess.execFileSync(
+                            //     this.dockerExecutablePath,
+                            //     ['push', `registry.heroku.com/${this.herokuBlazorAppName}/${processType}`],
+                            //     { shell: false, stdio: 'inherit' }
+                            // );
 
-                            const herokuReleaseCommand = `heroku container:release ${processType} --app ${this.herokuBlazorAppName}`;
-                            this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
-                            ChildProcess.execFileSync(
-                                this.herokuExecutablePath,
-                                ['container:release', processType, '--app', this.herokuBlazorAppName],
-                                { shell: false, stdio: 'inherit' }
-                            );
+                            // const herokuReleaseCommand = `heroku container:release ${processType} --app ${this.herokuBlazorAppName}`;
+                            // this.log(chalk.bold('\nRunning'), chalk.cyan(herokuReleaseCommand));
+                            // ChildProcess.execFileSync(
+                            //     this.herokuExecutablePath,
+                            //     ['container:release', processType, '--app', this.herokuBlazorAppName],
+                            //     { shell: false, stdio: 'inherit' }
+                            // );
+                        }
 
+                        this.log(chalk.green('\nYour app should now be live. To view it open the following URL in your browser:'));
+                        this.log(chalk.green(serverUrl));
+                        if (this.clientFramework === constants.BLAZOR) {
                             this.log(
                                 chalk.green(
                                     '\nYour blazor frontend app should now be live. To view it open the following URL in your browser:'
                                 )
                             );
-                            this.log(chalk.green(serverUrlBlazor));
+                            this.log(chalk.green(`https://${this.herokuBlazorAppName}.herokuapp.com`));
                         }
-                    } catch (err) {
-                        this.log.error(err);
+                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
                     }
+                } catch (err) {
+                    this.log.error(err);
                 }
-
-                this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
             },
         };
     }
