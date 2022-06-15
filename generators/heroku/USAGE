@@ -1,9 +1,6 @@
 Description:
-    Initializes a Heroku app and generates that is ready to push to Heroku.
+    Deploys your JHipster .Net application to Heroku cloud
 
 Example:
     jhipster heroku
 
-    This will create:
-        package.json (required by heroku/nodejs buildpack, a pre-requisite to build the client application)
-        Heroku application with dotnetcore and nodejs

@@ -1,6 +1,6 @@
 # Deploying to Heroku
 
-This sub-generator  allows the deployment of your JHipster .Net application to Heroku cloud.
+This sub-generator allows the deployment of your JHipster .Net application to Heroku cloud.
 
 The Heroku sub-generator will always use free tiers/options. Nevertheless installing addons needs a properly verified Heroku account. 
 
