@@ -101,18 +101,21 @@ module.exports = class extends HerokuGenerator {
                 this.log(chalk.bold('Heroku configuration is starting'));
                 const configuration = this.config;
                 this.env.options.appPath = configuration.get('appPath') || constants.CLIENT_MAIN_SRC_DIR;
+                this.baseName = configuration.get('baseName');
+                this.databaseType = configuration.get('databaseType');
                 // this.cacheProvider = this.cacheProvider || NO_CACHE_PROVIDER;
                 // this.enableHibernateCache = this.enableHibernateCache && ![NO_CACHE_PROVIDER, MEMCACHED].includes(this.cacheProvider);
                 this.frontendAppName = this.getFrontendAppName();
                 this.herokuAppName = configuration.get('herokuAppName');
+                this.herokuBlazorAppName = configuration.get('herokuBlazorAppName');
+                this.clientFramework = configuration.get('clientFramework');
                 this.dynoSize = 'Free';
                 this.herokuDeployType = configuration.get('herokuDeployType');
                 this.herokuJavaVersion = configuration.get('herokuJavaVersion');
                 this.useOkta = configuration.get('useOkta');
                 this.oktaAdminLogin = configuration.get('oktaAdminLogin');
                 this.oktaAdminPassword = configuration.get('oktaAdminPassword');
-                this.herokuBlazorAppName = configuration.get('herokuBlazorAppName');
-                this.clientFramework = configuration.get('clientFramework');
+                this.authenticationType = configuration.get('authenticationType');
                 this.dasherizedBaseName = _.kebabCase(this.baseName);
                 this.pascalizedBaseName = toPascalCase(this.baseName);
                 this.herokuExecutablePath = Which.sync('heroku');
@@ -120,6 +123,7 @@ module.exports = class extends HerokuGenerator {
                 this.gitExecutablePath = Which.sync('git');
                 this.log(chalk.yellow.bold(`\nHeroku executable path: ${this.herokuExecutablePath}`));
                 this.log(chalk.yellow.bold(`\nDocker executable path: ${this.dockerExecutablePath}`));
+                this.log(chalk.yellow.bold(`\nGit executable path: ${this.gitExecutablePath}`));
             },
         };
     }
@@ -192,12 +196,12 @@ module.exports = class extends HerokuGenerator {
                         message: 'Which type of deployment do you want ?',
                         choices: [
                             {
-                                value: 'git',
-                                name: 'Git (compile on Heroku)',
+                                value: 'containerRegistry',
+                                name: 'Heroku Container Registry',
                             },
                             {
-                                value: 'jar',
-                                name: 'JAR (compile locally)',
+                                value: 'git',
+                                name: 'Git (compile on Heroku)',
                             },
                         ],
                         default: 0,
@@ -885,94 +889,6 @@ module.exports = class extends HerokuGenerator {
                                     this.log(
                                         chalk.red(
                                             'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.'
-                                        )
-                                    );
-                                }
-                            }
-                        }
-                    } catch (err) {
-                        this.log.error(err);
-                    }
-                } else {
-                    this.log(chalk.bold('\nDeploying application'));
-                    let jarFileWildcard = 'target/*.jar';
-                    if (this.buildTool === GRADLE) {
-                        jarFileWildcard = 'build/libs/*.jar';
-                    }
-
-                    const files = glob.sync(jarFileWildcard, {});
-                    const jarFile = files[0];
-                    // const herokuDeployCommand = `heroku deploy:jar ${jarFile} --app ${this.herokuAppName}`;
-                    const herokuDeployCommand = ['deploy:jar', jarFile, '--app', this.herokuAppName];
-                    // const herokuSetBuildpackCommand = 'heroku buildpacks:set heroku/jvm';
-                    const herokuSetBuildpackCommand = ['buildpacks:set', 'heroku/jvm'];
-
-                    this.log(
-                        chalk.bold(
-                            `\nUploading your application code.\nThis may take ${chalk.cyan(
-                                'several minutes'
-                            )} depending on your connection speed...`
-                        )
-                    );
-                    try {
-                        // await execCmd(herokuSetBuildpackCommand);
-                        await execFileCmd(this.herokuExecutablePath, herokuSetBuildpackCommand);
-                        // const herokuDeploy = execCmd(herokuDeployCommand);
-                        const herokuDeploy = execFileCmd(this.herokuExecutablePath, herokuDeployCommand);
-                        herokuDeploy.child.stdout.on('data', data => {
-                            this.log(data);
-                        });
-
-                        herokuDeploy.child.stderr.on('data', data => {
-                            this.log(data);
-                        });
-                        await herokuDeploy;
-                        this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
-                        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
-                        this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-
-                        if (this.useOkta) {
-                            let curlAvailable = false;
-                            let jqAvailable = false;
-                            try {
-                                // await execCmd('curl --help');
-                                await execFileCmd(Which.sync('curl'), ['--help']);
-                                curlAvailable = true;
-                            } catch (err) {
-                                this.log(
-                                    chalk.red(
-                                        'cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'
-                                    )
-                                );
-                                this.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
-                            }
-                            try {
-                                // await execCmd('jq --help');
-                                await execFileCmd(Which.sync('jq'), ['--help']);
-                                jqAvailable = true;
-                            } catch (err) {
-                                this.log(
-                                    chalk.red(
-                                        'jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'
-                                    )
-                                );
-                                this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
-                            }
-                            if (curlAvailable && jqAvailable) {
-                                this.log(
-                                    chalk.green('Running ./provision-okta-addon.sh to create all required roles and users for JHipster.')
-                                );
-                                try {
-                                    // await execCmd('./provision-okta-addon.sh');
-                                    await execFileCmd('./provision-okta-addon.sh');
-                                    this.log(chalk.bold('\nOkta configured successfully!'));
-                                    this.log(
-                                        chalk.green(`\nUse ${chalk.bold(`${this.oktaAdminLogin}/${this.oktaAdminPassword}`)} to login.`)
-                                    );
-                                } catch (err) {
-                                    this.log(
-                                        chalk.red(
-                                            'Failed to execute ./provision-okta-addon.sh. Make sure to set up Okta according to https://www.jhipster.tech/heroku/.'
                                         )
                                     );
                                 }
