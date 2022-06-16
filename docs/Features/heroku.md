@@ -31,7 +31,7 @@ jhipster heroku
 
 Currently MySql and PostgreSQL database addons are free and automatically added by this sub-generator when deploying to Heroku. Even though those resouces are free, an accound with verified credit card is required to add them.
 
-Since the available [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free it is not automatically included when deploying to heroku. It requires manual provisioning to avoid unwanted chages and a message will be displayed with instructions on how to manually install the MSSQL addon.
+Heroku's [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free of cost and to avoid unexpected costs It's not automatically added when deploying to Heroku. To use MSSQL It requires manual provisioning to avoid unwanted chages and a message will be displayed with instructions on how to manually install the addon.
 
 ## Limitations
 
