@@ -677,7 +677,7 @@ module.exports = class extends HerokuGenerator {
                         ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
                         { shell: false },
                         (err, stdout, stderr) => {
-                            addonCreateCallback('Database', err, stdout, stderr);
+                            addonCreateCallback('Database', err);
                         }
                     );
                 } else {
