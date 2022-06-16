@@ -930,22 +930,14 @@ module.exports = class extends HerokuGenerator {
                 try {
                     if (this.herokuDeployType === 'containerRegistry') {
                         this.log(chalk.bold(`\nDeploying ${this.herokuAppName} to Heroku's Container Registry`));
-
-                        if (!this.herokuAppExists) {
-                            setHerokuStack(this.herokuAppName);
-                        }
-
+                        setHerokuStack(this.herokuAppName);
                         dockerPush(this.herokuAppName);
                         herokuRelease(this.herokuAppName);
 
                         if (this.clientFramework === constants.BLAZOR) {
                             this.log(chalk.bold(`\nDeploying ${this.herokuBlazorAppName} to Heroku's Container Registry`));
-
-                            if (!this.herokuBlazorAppExists) {
-                                setHerokuStack(this.herokuBlazorAppName);
-                                setHerokuConfig(this.herokuBlazorAppName, 'ServerUrl', serverUrl);
-                            }
-
+                            setHerokuStack(this.herokuBlazorAppName);
+                            setHerokuConfig(this.herokuBlazorAppName, 'ServerUrl', serverUrl);
                             dockerPush(this.herokuBlazorAppName);
                             herokuRelease(this.herokuBlazorAppName);
                         }
@@ -968,7 +960,7 @@ module.exports = class extends HerokuGenerator {
                                 )
                             );
                         }
-                        this.log(chalk.yellow(`\nAfter application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
+                        this.log(chalk.yellow(`\nAfter application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}\n`));
                     }
                 } catch (err) {
                     this.log.error(err);
