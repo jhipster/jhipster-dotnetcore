@@ -91,7 +91,6 @@ module.exports = class extends HerokuGenerator {
                 this.clientFramework = configuration.get('clientFramework');
                 this.dynoSize = 'Free';
                 this.herokuDeployType = configuration.get('herokuDeployType');
-                this.useOkta = configuration.get('useOkta');
                 this.oktaAdminLogin = configuration.get('oktaAdminLogin');
                 this.oktaAdminPassword = configuration.get('oktaAdminPassword');
                 this.authenticationType = configuration.get('authenticationType');
@@ -247,51 +246,6 @@ module.exports = class extends HerokuGenerator {
                     this.herokuDeployType = props.herokuDeployType;
                 });
             },
-
-            askForOkta() {
-                if (this.abort) return null;
-                if (this.authenticationType !== OAUTH2) return null;
-                if (this.useOkta) return null;
-                const prompts = [
-                    {
-                        type: 'list',
-                        name: 'useOkta',
-                        message:
-                            'You are using OAuth 2.0. Do you want to use Okta? When you choose Okta, the automated configuration of users and groups requires cURL and jq.',
-                        choices: [
-                            {
-                                value: true,
-                                name: 'Yes, provision the Okta add-on',
-                            },
-                            {
-                                value: false,
-                                name: 'No, I want to configure my identity provider manually',
-                            },
-                        ],
-                        default: 1,
-                    },
-                    {
-                        when: answers => answers.useOkta,
-                        type: 'input',
-                        name: 'oktaAdminLogin',
-                        message: 'Login (valid email) for the JHipster Admin user:',
-                        validate: input => {
-                            if (!input) {
-                                return 'You must enter a login for the JHipster admin';
-                            }
-                            return true;
-                        },
-                    },
-                ];
-
-                return this.prompt(prompts).then(props => {
-                    this.useOkta = props.useOkta;
-                    if (this.useOkta) {
-                        this.oktaAdminLogin = props.oktaAdminLogin;
-                        this.oktaAdminPassword = this.randomPassword;
-                    }
-                });
-            },
         };
     }
 
@@ -362,7 +316,6 @@ module.exports = class extends HerokuGenerator {
                     herokuAppName: this.herokuAppName,
                     herokuBlazorAppName: this.herokuBlazorAppName,
                     herokuDeployType: this.herokuDeployType,
-                    useOkta: this.useOkta,
                     oktaAdminLogin: this.oktaAdminLogin,
                 });
             },
@@ -543,6 +496,38 @@ module.exports = class extends HerokuGenerator {
 
                 this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
 
+                const handleAppAlreadyExists = props => {
+                    if (props.herokuForceName === 'Yes') {
+                        this.config.set({
+                            herokuBlazorAppName: this.herokuBlazorAppName,
+                        });
+                        done();
+                    } else {
+                        ChildProcess.execFile(
+                            this.herokuExecutablePath,
+                            ['create', '--region', this.herokuRegion],
+                            { shell: false },
+                            (error, stdoutput) => {
+                                if (error) {
+                                    this.abort = true;
+                                    this.log.error(error);
+                                } else {
+                                    // Extract from "Created random-app-name-1234... done"
+                                    this.herokuBlazorAppName = stdoutput.substring(
+                                        stdoutput.indexOf('https://') + 8,
+                                        stdoutput.indexOf('.herokuapp')
+                                    );
+                                    this.log(stdoutput.trim());
+                                    this.config.set({
+                                        herokuBlazorAppName: this.herokuBlazorAppName,
+                                    });
+                                    done();
+                                }
+                            }
+                        );
+                    }
+                };
+
                 const child = ChildProcess.execFile(
                     this.herokuExecutablePath,
                     ['create', this.herokuBlazorAppName, '--region', this.herokuRegion],
@@ -573,35 +558,7 @@ module.exports = class extends HerokuGenerator {
 
                                 this.log('');
                                 this.prompt(prompts).then(props => {
-                                    if (props.herokuForceName === 'Yes') {
-                                        this.config.set({
-                                            herokuBlazorAppName: this.herokuBlazorAppName,
-                                        });
-                                        done();
-                                    } else {
-                                        ChildProcess.execFile(
-                                            this.herokuExecutablePath,
-                                            ['create', '--region', this.herokuRegion],
-                                            { shell: false },
-                                            (error, stdoutput) => {
-                                                if (error) {
-                                                    this.abort = true;
-                                                    this.log.error(error);
-                                                } else {
-                                                    // Extract from "Created random-app-name-1234... done"
-                                                    this.herokuBlazorAppName = stdoutput.substring(
-                                                        stdoutput.indexOf('https://') + 8,
-                                                        stdoutput.indexOf('.herokuapp')
-                                                    );
-                                                    this.log(stdoutput.trim());
-                                                    this.config.set({
-                                                        herokuBlazorAppName: this.herokuBlazorAppName,
-                                                    });
-                                                    done();
-                                                }
-                                            }
-                                        );
-                                    }
+                                    handleAppAlreadyExists(props);
                                 });
                             } else {
                                 this.abort = true;
@@ -653,23 +610,23 @@ module.exports = class extends HerokuGenerator {
 
                 this.log(chalk.bold('\nProvisioning addons'));
 
-                if (this.useOkta) {
+                if (this.authenticationType === OAUTH2) {
                     ChildProcess.execFile(this.herokuExecutablePath, ['addons:create', 'okta', '--app', this.herokuAppName], err => {
                         addonCreateCallback('Okta', err);
                     });
                 }
 
                 let dbAddOn;
-                if (this.databaseType === 'postgresql') {
+                if (this.databaseType === 'postgres') {
                     dbAddOn = 'heroku-postgresql';
                 } else if (this.databaseType === 'mysql') {
                     dbAddOn = 'jawsdb:kitefin';
                 }
 
                 if (this.databaseType === 'mssql') {
-                    this.log(chalk.yellow("Heroku's MS SQL Server addon is not free."));
-                    this.log(chalk.yellow('So we recommend to add it manually to avoid charges on your credit card.'));
-                    this.log(chalk.yellow('You can manually add it to your app visiting https://elements.heroku.com/addons/mssql'));
+                    this.log(chalk.yellow("Heroku's MS SQL Server addon is not free of cost and will NOT be provisioned."));
+                    this.log(chalk.yellow('Please see the documentation link below for more information:'));
+                    this.log(chalk.yellow('https://jhipsternet.readthedocs.io/en/latest/Features/heroku.html#databases'));
                 } else if (dbAddOn) {
                     this.log(chalk.bold(`\nProvisioning database addon ${dbAddOn}`));
                     ChildProcess.execFile(
@@ -700,18 +657,6 @@ module.exports = class extends HerokuGenerator {
 
                 this.log(chalk.bold('\nCreating Heroku deployment files'));
                 this.template('heroku.yml.ejs', 'heroku.yml');
-
-                if (this.useOkta) {
-                    this.template(
-                        '../../node_modules/generator-jhipster/generators/heroku/templates/provision-okta-addon.sh.ejs',
-                        'provision-okta-addon.sh'
-                    );
-                    fs.appendFile('.gitignore', 'provision-okta-addon.sh', 'utf8', (err, data) => {
-                        if (err) {
-                            this.log(`${chalk.yellow.bold('WARNING!')} Failed to add 'provision-okta-addon.sh' to .gitignore.'`);
-                        }
-                    });
-                }
             },
         };
     }
@@ -722,20 +667,6 @@ module.exports = class extends HerokuGenerator {
 
     _end() {
         return {
-            makeScriptExecutable() {
-                if (this.abort) return;
-                if (this.useOkta) {
-                    try {
-                        fs.chmodSync('provision-okta-addon.sh', '750');
-                    } catch (err) {
-                        this.log(
-                            `${chalk.yellow.bold(
-                                'WARNING!'
-                            )}Failed to make 'provision-okta-addon.sh' executable, you may need to run 'chmod +x provison-okta-addon.sh'`
-                        );
-                    }
-                }
-            },
             productionBuild() {
                 if (this.abort) return;
 
@@ -878,50 +809,6 @@ module.exports = class extends HerokuGenerator {
                         this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
                         this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));
                         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
-
-                        if (this.useOkta) {
-                            let curlAvailable = false;
-                            let jqAvailable = false;
-                            try {
-                                await execFileCmd(Which.sync('curl'), ['--help']);
-                                curlAvailable = true;
-                            } catch (err) {
-                                this.log(
-                                    chalk.red(
-                                        'cURL is not available but required. See https://curl.haxx.se/download.html for installation guidance.'
-                                    )
-                                );
-                                this.log(chalk.yellow('After you have installed curl execute ./provision-okta-addon.sh manually.'));
-                            }
-                            try {
-                                await execFileCmd(Which.sync('jq'), ['--help']);
-                                jqAvailable = true;
-                            } catch (err) {
-                                this.log(
-                                    chalk.red(
-                                        'jq is not available but required. See https://stedolan.github.io/jq/download/ for installation guidance.'
-                                    )
-                                );
-                                this.log(chalk.yellow('After you have installed jq execute ./provision-okta-addon.sh manually.'));
-                            }
-                            if (curlAvailable && jqAvailable) {
-                                this.log(
-                                    chalk.green('Running ./provision-okta-addon.sh to create all required roles and users for JHipster.')
-                                );
-                                try {
-                                    await execFileCmd('./provision-okta-addon.sh');
-                                    this.log(chalk.bold('\nOkta configured successfully!'));
-                                    const authMessage = `${this.oktaAdminLogin}/${this.oktaAdminPassword}`;
-                                    this.log(chalk.green(`\nUse ${chalk.bold(authMessage)} to login.\n`));
-                                } catch (err) {
-                                    this.log(
-                                        chalk.red(
-                                            'Failed to execute ./provision-okta-addon.sh. Make sure to setup okta according to https://www.jhipster.tech/heroku/.'
-                                        )
-                                    );
-                                }
-                            }
-                        }
                     } catch (err) {
                         this.log.error(err);
                     }
@@ -959,6 +846,14 @@ module.exports = class extends HerokuGenerator {
                                     )}`
                                 )
                             );
+                        }
+                        if (this.authenticationType === OAUTH2) {
+                            this.log(
+                                chalk.bold(
+                                    '\nYou are using OAuth 2.0. OAuth2/okta requires manual setup. Please see the documentation for more information:'
+                                )
+                            );
+                            this.log(chalk.green('https://jhipsternet.readthedocs.io/en/latest/Features/heroku.html#oauth2'));
                         }
                         this.log(chalk.yellow(`\nAfter application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}\n`));
                     }
