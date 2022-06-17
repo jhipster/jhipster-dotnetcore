@@ -496,30 +496,30 @@ module.exports = class extends HerokuGenerator {
 
                 this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
 
+                const createAppWithRandomNameCallback = (error, stdoutput) => {
+                    if (error) {
+                        this.abort = true;
+                        this.log.error(error);
+                    } else {
+                        // Extract from "Created random-app-name-1234... done"
+                        this.herokuBlazorAppName = stdoutput.substring(stdoutput.indexOf('https://') + 8, stdoutput.indexOf('.herokuapp'));
+                        this.log(stdoutput.trim());
+                        this.config.set({
+                            herokuBlazorAppName: this.herokuBlazorAppName,
+                        });
+                        done();
+                    }
+                };
+
                 const createAppWithRandomName = () => {
                     ChildProcess.execFile(
                         this.herokuExecutablePath,
                         ['create', '--region', this.herokuRegion],
                         { shell: false },
-                        (error, stdoutput) => {
-                            if (error) {
-                                this.abort = true;
-                                this.log.error(error);
-                            } else {
-                                // Extract from "Created random-app-name-1234... done"
-                                this.herokuBlazorAppName = stdoutput.substring(
-                                    stdoutput.indexOf('https://') + 8,
-                                    stdoutput.indexOf('.herokuapp')
-                                );
-                                this.log(stdoutput.trim());
-                                this.config.set({
-                                    herokuBlazorAppName: this.herokuBlazorAppName,
-                                });
-                                done();
-                            }
-                        }
+                        createAppWithRandomNameCallback
                     );
                 };
+
                 const handleAppAlreadyExists = props => {
                     if (props.herokuForceName === 'Yes') {
                         this.config.set({
@@ -531,53 +531,56 @@ module.exports = class extends HerokuGenerator {
                     }
                 };
 
+                const createAppCallback = (err, _stdout, stderr) => {
+                    if (err) {
+                        if (stderr.includes('is already taken')) {
+                            const prompts = [
+                                {
+                                    type: 'list',
+                                    name: 'herokuForceName',
+                                    message: `The Heroku application "${chalk.cyan(
+                                        this.herokuBlazorAppName
+                                    )}" already exists! Use it anyways?`,
+                                    choices: [
+                                        {
+                                            value: 'Yes',
+                                            name: 'Yes, I have access to it',
+                                        },
+                                        {
+                                            value: 'No',
+                                            name: 'No, generate a random name',
+                                        },
+                                    ],
+                                    default: 0,
+                                },
+                            ];
+
+                            this.log('');
+                            this.prompt(prompts).then(props => {
+                                handleAppAlreadyExists(props);
+                            });
+                        } else {
+                            this.abort = true;
+                            if (stderr.includes('Invalid credentials')) {
+                                this.log.error(
+                                    "Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again."
+                                );
+                            } else {
+                                this.log.error(err);
+                            }
+                            done();
+                        }
+                    } else {
+                        done();
+                    }
+                };
+
+                // Create the app
                 const child = ChildProcess.execFile(
                     this.herokuExecutablePath,
                     ['create', this.herokuBlazorAppName, '--region', this.herokuRegion],
                     { shell: false },
-                    (err, _stdout, stderr) => {
-                        if (err) {
-                            if (stderr.includes('is already taken')) {
-                                const prompts = [
-                                    {
-                                        type: 'list',
-                                        name: 'herokuForceName',
-                                        message: `The Heroku application "${chalk.cyan(
-                                            this.herokuBlazorAppName
-                                        )}" already exists! Use it anyways?`,
-                                        choices: [
-                                            {
-                                                value: 'Yes',
-                                                name: 'Yes, I have access to it',
-                                            },
-                                            {
-                                                value: 'No',
-                                                name: 'No, generate a random name',
-                                            },
-                                        ],
-                                        default: 0,
-                                    },
-                                ];
-
-                                this.log('');
-                                this.prompt(prompts).then(props => {
-                                    handleAppAlreadyExists(props);
-                                });
-                            } else {
-                                this.abort = true;
-                                if (stderr.includes('Invalid credentials')) {
-                                    this.log.error(
-                                        "Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again."
-                                    );
-                                } else {
-                                    this.log.error(err);
-                                }
-                                done();
-                            }
-                        } else {
-                            done();
-                        }
-                    }
+                    createAppCallback
                 );
 
                 child.stdout.on('data', data => {
