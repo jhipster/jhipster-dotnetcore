@@ -17,11 +17,11 @@ heroku login
 
 [Git](https://git-scm.com/) is also required to deploy to Heroku.
 
-Also make sure you have a working Docker installation (eg. `docker ps`) if deploying to Heroku Container Registry.
+Also make sure you have a working [Docker](https://docs.docker.com) installation (eg. `docker ps`) if deploying to Heroku Container Registry.
 
 ## Deploying to Heroku
 
-To deploy your .Net application to Heroku, run the following command:
+To deploy your application to Heroku, run the following command:
 
 ```bash
 jhipster heroku
@@ -29,14 +29,30 @@ jhipster heroku
 
 ## Databases
 
+- Mysql ✔
+- Postgres ✔ 
+- MSSQL ✔ (requires a manual step described below)
+
 Currently MySql and PostgreSQL database addons are free and automatically added by this sub-generator when deploying to Heroku. Even though those resouces are free, an accound with verified credit card is required to add them.
 
-Heroku's [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free of cost and to avoid unexpected costs It's not automatically added when deploying to Heroku. To use MSSQL It requires manual provisioning to avoid unwanted chages and a message will be displayed with instructions on how to manually install the addon.
+Heroku's [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free of cost and to avoid unexpected costs It will not be provisioned automatically when deploying to Heroku.
+
+Please visit [the MSSQL addon page](https://elements.heroku.com/addons/mssql), review the pricing and add the MSSQL addon to your account with the following command:
+```bash
+heroku addons:create mssql:REPLACE_PLAN_NAME --as DATABASE --app REPLACE_YOUR_APP_NAME
+```
+
+## Oauth2
+
+For applications that use Oauth2 the following manual steps are required:
+
+    1. Deploy the application to Heroku using `jhipster heroku`.
+    2. Access your (Heroku Dashboard)[https://dashboard.heroku.com/] and select the app you have just created.
+    3. Under `Installed add-ons` okta should be already installed.
+    4. Click on `okta` to open the addon's Dashboard.
+    5. To configure it follow the documentation (here)[https://jhipsternet.readthedocs.io/en/latest/Features/security.html#okta]
+
 
 ## Limitations
 
-Only monolithic deploys are supported. Microservice/Gateway deploys are not supported at the moment.
-
-**Notes:**
-
-This Heroku sub-generator is similar to its Java counterpart. Access the documentation at https://www.jhipster.tech/heroku/. It might provide helpful insight.
+Only monolithic deploys are supported.
