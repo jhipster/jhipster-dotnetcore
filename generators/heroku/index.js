@@ -496,6 +496,30 @@ module.exports = class extends HerokuGenerator {
 
                 this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
 
+                const createAppWithRandomName = () => {
+                    ChildProcess.execFile(
+                        this.herokuExecutablePath,
+                        ['create', '--region', this.herokuRegion],
+                        { shell: false },
+                        (error, stdoutput) => {
+                            if (error) {
+                                this.abort = true;
+                                this.log.error(error);
+                            } else {
+                                // Extract from "Created random-app-name-1234... done"
+                                this.herokuBlazorAppName = stdoutput.substring(
+                                    stdoutput.indexOf('https://') + 8,
+                                    stdoutput.indexOf('.herokuapp')
+                                );
+                                this.log(stdoutput.trim());
+                                this.config.set({
+                                    herokuBlazorAppName: this.herokuBlazorAppName,
+                                });
+                                done();
+                            }
+                        }
+                    );
+                };
                 const handleAppAlreadyExists = props => {
                     if (props.herokuForceName === 'Yes') {
                         this.config.set({
@@ -503,28 +527,7 @@ module.exports = class extends HerokuGenerator {
                         });
                         done();
                     } else {
-                        ChildProcess.execFile(
-                            this.herokuExecutablePath,
-                            ['create', '--region', this.herokuRegion],
-                            { shell: false },
-                            (error, stdoutput) => {
-                                if (error) {
-                                    this.abort = true;
-                                    this.log.error(error);
-                                } else {
-                                    // Extract from "Created random-app-name-1234... done"
-                                    this.herokuBlazorAppName = stdoutput.substring(
-                                        stdoutput.indexOf('https://') + 8,
-                                        stdoutput.indexOf('.herokuapp')
-                                    );
-                                    this.log(stdoutput.trim());
-                                    this.config.set({
-                                        herokuBlazorAppName: this.herokuBlazorAppName,
-                                    });
-                                    done();
-                                }
-                            }
-                        );
+                        createAppWithRandomName();
                     }
                 };
 
