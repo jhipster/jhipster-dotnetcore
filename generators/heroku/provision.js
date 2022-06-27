@@ -308,7 +308,7 @@ function provisionAddons() {
             Which.sync('heroku'),
             ['addons:create', dbAddOn, '--as', 'DATABASE', '--app', this.herokuAppName],
             { shell: false },
-            (err, stdout, stderr) => {
+            err => {
                 addonCreateCallback('Database', err);
             }
         );

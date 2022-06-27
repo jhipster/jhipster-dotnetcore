@@ -43,17 +43,17 @@ function herokuRelease(appName, log) {
     });
 }
 
-function herokuContainerRegistryDeploy(serverUrl) {
+function herokuContainerRegistryDeploy() {
     try {
         this.log(chalk.bold(`\nDeploying ${this.herokuAppName} to Heroku's Container Registry`));
         setHerokuStack(this.herokuAppName, this.log);
         dockerPush(this.herokuAppName, this.log);
         herokuRelease(this.herokuAppName, this.log);
+        const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
 
         if (this.clientFramework === BLAZOR) {
             this.log(chalk.bold(`\nDeploying ${this.herokuBlazorAppName} to Heroku's Container Registry`));
             setHerokuStack(this.herokuBlazorAppName, this.log);
-            const serverUrl = `https://${this.herokuAppName}.herokuapp.com`;
             setHerokuConfig(this.herokuBlazorAppName, 'ServerUrl', serverUrl, this.log);
             dockerPush(this.herokuBlazorAppName, this.log);
             herokuRelease(this.herokuBlazorAppName, this.log);
@@ -61,17 +61,13 @@ function herokuContainerRegistryDeploy(serverUrl) {
 
         this.log(chalk.green('\nYour app should now be live. To view it open the following URL in your browser:'));
         this.log(chalk.green(serverUrl));
-        this.log(
-            chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold(`heroku logs --tail --app ${this.herokuAppName}`)}`)
-        );
+        const herokuLogCommandDotnetBack = `heroku logs --tail --app ${this.herokuAppName}`;
+        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold(herokuLogCommandDotnetBack)}`));
         if (this.clientFramework === BLAZOR) {
             this.log(chalk.green('\nYour blazor frontend app should now be live. To view it open the following URL in your browser:'));
             this.log(chalk.green(`https://${this.herokuBlazorAppName}.herokuapp.com`));
-            this.log(
-                chalk.yellow(
-                    `And you can view the logs with this command\n\t${chalk.bold(`heroku logs --tail --app ${this.herokuBlazorAppName}`)}`
-                )
-            );
+            const herokuLogsCommandBlazorFront = `heroku logs --tail --app ${this.herokuBlazorAppName}`;
+            this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold(herokuLogsCommandBlazorFront)}`));
         }
         if (this.authenticationType === OAUTH2) {
             this.log(
@@ -137,9 +133,8 @@ async function herokuGitDeploy() {
         await herokuPush;
 
         this.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
-        this.log(
-            chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold(`heroku logs --tail --app ${this.herokuAppName}`)}`)
-        );
+        const herokuLogsCommand = `heroku logs --tail --app ${this.herokuAppName}`;
+        this.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold(herokuLogsCommand)}`));
         this.log(chalk.yellow(`After application modification, redeploy it with\n\t${chalk.bold('jhipster heroku')}`));
     } catch (err) {
         this.log.error(err);
