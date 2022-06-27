@@ -16,6 +16,8 @@ describe('JHipster Heroku Sub Generator', () => {
     const herokuExecutable = 'heroku';
     const dockerExecutable = 'docker';
     const gitExecutable = 'git';
+    const curlExecutable = 'curl';
+    const jqExecutable = 'jq';
 
     let stubWhich;
     let stubExecFile;
@@ -25,8 +27,8 @@ describe('JHipster Heroku Sub Generator', () => {
         stubWhich.withArgs('heroku').returns(herokuExecutable);
         stubWhich.withArgs('docker').returns(dockerExecutable);
         stubWhich.withArgs('git').returns(gitExecutable);
-        stubWhich.withArgs('curl').returns('curl');
-        stubWhich.withArgs('jq').returns('jq');
+        stubWhich.withArgs('curl').returns(curlExecutable);
+        stubWhich.withArgs('jq').returns(jqExecutable);
 
         stubExecFile = sinon.stub(ChildProcess, 'execFile');
         stubExecFile.withArgs(herokuExecutable, ['--version']).yields(false);
