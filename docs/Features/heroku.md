@@ -55,4 +55,4 @@ For applications that use Oauth2 the following manual steps are required:
 
 ## Limitations
 
-Only monolithic deploys are supported.
+Only monolithic deploys are supported at the moment.
