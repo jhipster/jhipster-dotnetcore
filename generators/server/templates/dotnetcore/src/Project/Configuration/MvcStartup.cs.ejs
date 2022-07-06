@@ -59,6 +59,9 @@ namespace <%= namespace %>.Configuration
         public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
         {
             app.UseDefaultFiles();
+            <%_ if (clientFramework === "Blazor") { _%>
+            app.UseBlazorFrameworkFiles();
+            <%_ } _%>
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -66,6 +69,9 @@ namespace <%= namespace %>.Configuration
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                <%_ if (clientFramework === "Blazor") { _%>
+                endpoints.MapFallbackToFile("index.html");
+                <%_ } _%>
             });
 
             <%_ if (applicationType === 'gateway') { _%>

@@ -69,6 +69,9 @@
         <PackageReference Include="Ocelot"  />
         <PackageReference Include="Ocelot.Provider.Consul"  />
         <%_ } _%>
+        <%_ if(!skipClient && clientFramework === "Blazor") { _%>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+        <%_ } _%>
     </ItemGroup>
 
     <ItemGroup>
