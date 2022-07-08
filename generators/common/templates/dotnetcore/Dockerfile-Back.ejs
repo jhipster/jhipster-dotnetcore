@@ -23,10 +23,21 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -yq nodejs && \
     rm -rf /var/lib/apt/lists/*
 
+<%_ if(!skipClient && clientFramework === "Blazor") { _%>
+# install blazor build tools only if INCLUDE_BLAZOR is set to 1
+ARG INCLUDE_BLAZOR=0
+RUN if [ "$INCLUDE_BLAZOR" -eq 1 ]; then dotnet tool install -g Microsoft.Web.LibraryManager.Cli ; fi
+RUN if [ "$INCLUDE_BLAZOR" -eq 1 ]; then dotnet tool install -g Excubo.WebCompiler ; fi
+ENV PATH="${PATH}:/root/.dotnet/tools"
+<%_ } _%>
 # Restore dependencies of .net core projects taking advantage of docker layer caching
 COPY src/*/*.csproj ./src/
 COPY Directory.Build.targets Directory.Build.targets
 RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
+<%_ if(!skipClient && clientFramework === "Blazor") { _%>
+COPY src/client/*/*.csproj ./src/client/
+RUN for file in $(ls src/client/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
+<%_ } _%>
 RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
 
 # Copy everything else and build app
