@@ -84,7 +84,6 @@ module.exports = class extends HerokuGenerator {
                 this.databaseType = configuration.get('databaseType');
                 this.frontendAppName = this.getFrontendAppName();
                 this.herokuAppName = configuration.get('herokuAppName');
-                this.herokuBlazorAppName = configuration.get('herokuBlazorAppName');
                 this.clientFramework = configuration.get('clientFramework');
                 this.dynoSize = 'Free';
                 this.herokuDeployType = configuration.get('herokuDeployType');
@@ -105,11 +104,6 @@ module.exports = class extends HerokuGenerator {
         return {
             askForApp() {
                 prompts.askForDotnetApp.call(this);
-            },
-
-            askForBlazorApp() {
-                if (this.clientFramework !== constants.BLAZOR) return;
-                prompts.askForBlazorApp.call(this);
             },
 
             askForHerokuDeployType() {
@@ -138,14 +132,13 @@ module.exports = class extends HerokuGenerator {
             },
 
             checkHerokuContainerRegistryLogin() {
-                if (this.abort) return;
+                if (this.abort || this.herokuDeployType === 'git') return;
                 provision.checkContainerRegistry.call(this);
             },
 
             saveConfig() {
                 this.config.set({
                     herokuAppName: this.herokuAppName,
-                    herokuBlazorAppName: this.herokuBlazorAppName,
                     herokuDeployType: this.herokuDeployType,
                     oktaAdminLogin: this.oktaAdminLogin,
                 });
@@ -189,12 +182,6 @@ module.exports = class extends HerokuGenerator {
                 provision.createDotnetApp.call(this);
             },
 
-            herokuCreateBlazorApp() {
-                if (this.abort || this.herokuBlazorAppExists || this.clientFramework !== constants.BLAZOR) return;
-                // Create the blazor app
-                provision.createBlazorApp.call(this);
-            },
-
             herokuAddonsCreate() {
                 if (this.abort) return;
                 provision.provisionAddons.call(this);
@@ -226,7 +213,7 @@ module.exports = class extends HerokuGenerator {
             productionBuild() {
                 if (this.abort) return;
 
-                if (this.herokuSkipBuild) {
+                if (this.herokuSkipBuild || this.herokuDeployType === 'git') {
                     this.log(chalk.bold('\nSkipping build'));
                     return;
                 }
@@ -235,10 +222,6 @@ module.exports = class extends HerokuGenerator {
 
                 if (this.herokuDeployType === 'containerRegistry') {
                     build.dockerBuild(this.herokuAppName, './Dockerfile-Back', this.log);
-                }
-
-                if (this.clientFramework === constants.BLAZOR) {
-                    build.dockerBuild(this.herokuBlazorAppName, './Dockerfile-Front', this.log);
                 }
             },
 
@@ -251,10 +234,8 @@ module.exports = class extends HerokuGenerator {
                 }
 
                 if (this.herokuDeployType === 'git') {
-                    deploy.herokuGitDeploy(this);
-                }
-
-                if (this.herokuDeployType === 'containerRegistry') {
+                    deploy.herokuGitDeploy.call(this);
+                } else if (this.herokuDeployType === 'containerRegistry') {
                     deploy.herokuContainerRegistryDeploy.call(this);
                 }
             },

@@ -23,7 +23,6 @@ const fs = require('fs');
 const Which = require('which');
 
 const { OAUTH2 } = require('generator-jhipster/jdl/jhipster/authentication-types');
-const { BLAZOR } = require('../generator-dotnetcore-constants');
 
 function gitInit() {
     const done = this.async();
@@ -59,7 +58,7 @@ function checkHeroku() {
 function checkDocker() {
     const done = this.async();
 
-    if (this.herokuDeployType === 'containerRegistry' || this.clientFramework === BLAZOR) {
+    if (this.herokuDeployType === 'containerRegistry') {
         ChildProcess.execFile(Which.sync('docker'), ['--version'], err => {
             if (err) {
                 this.log.error("You don't have the Docker CLI installed.");
@@ -76,7 +75,7 @@ function checkDocker() {
 function checkContainerRegistry() {
     const done = this.async();
 
-    if (this.herokuDeployType === 'containerRegistry' || this.clientFramework === BLAZOR) {
+    if (this.herokuDeployType === 'containerRegistry') {
         const herokuContainerLoginCommand = 'heroku container:login';
         this.log(chalk.bold('\nRunning'), chalk.cyan(herokuContainerLoginCommand));
         ChildProcess.execFile(Which.sync('heroku'), ['container:login'], (err, stdout) => {
@@ -97,75 +96,6 @@ function checkContainerRegistry() {
     }
 }
 
-function createBlazorAppWithRandomName(done) {
-    ChildProcess.execFile(Which.sync('heroku'), ['create', '--region', this.herokuRegion], { shell: false }, (error, stdoutput) => {
-        if (error) {
-            this.abort = true;
-            this.log.error(error);
-            return;
-        }
-        // Extract from "Created random-app-name-1234... done"
-        this.herokuBlazorAppName = stdoutput.substring(stdoutput.indexOf('https://') + 8, stdoutput.indexOf('.herokuapp'));
-        this.log(stdoutput.trim());
-        this.config.set({
-            herokuBlazorAppName: this.herokuBlazorAppName,
-        });
-        done();
-    });
-}
-
-function handleBlazorAppAlreadyExists(props, done) {
-    if (props.herokuForceName === 'Yes') {
-        this.config.set({
-            herokuBlazorAppName: this.herokuBlazorAppName,
-        });
-        done();
-    } else {
-        createBlazorAppWithRandomName();
-    }
-}
-
-function createBlazorAppCallback(err, stderr, done) {
-    if (!err) {
-        done();
-        return;
-    }
-
-    if (stderr.includes('is already taken')) {
-        const prompts = [
-            {
-                type: 'list',
-                name: 'herokuForceName',
-                message: `The Heroku application "${chalk.cyan(this.herokuBlazorAppName)}" already exists! Use it anyways?`,
-                choices: [
-                    {
-                        value: 'Yes',
-                        name: 'Yes, I have access to it',
-                    },
-                    {
-                        value: 'No',
-                        name: 'No, generate a random name',
-                    },
-                ],
-                default: 0,
-            },
-        ];
-
-        this.log('');
-        this.prompt(prompts).then(props => {
-            handleBlazorAppAlreadyExists.call(this, props, done);
-        });
-    } else {
-        this.abort = true;
-        if (stderr.includes('Invalid credentials')) {
-            this.log.error("Error: Not authenticated. Run 'heroku login' to login to your heroku account and try again.");
-        } else {
-            this.log.error(err);
-        }
-        done();
-    }
-}
-
 function verifyCredentialsCallback(data, done) {
     const output = data.toString();
     if (data.search('Heroku credentials') >= 0) {
@@ -175,24 +105,6 @@ function verifyCredentialsCallback(data, done) {
     } else {
         this.log(output.trim());
     }
-}
-
-function createBlazorApp() {
-    this.log(chalk.bold('\nCreating Heroku BLAZOR application and setting up node environment'));
-    const done = this.async();
-
-    const child = ChildProcess.execFile(
-        Which.sync('heroku'),
-        ['create', this.herokuBlazorAppName, '--region', this.herokuRegion],
-        { shell: false },
-        (err, _stdout, stderr) => {
-            createBlazorAppCallback.call(this, err, stderr, done);
-        }
-    );
-
-    child.stdout.on('data', data => {
-        verifyCredentialsCallback.call(this, data, done);
-    });
 }
 
 function gitRemote(done) {
@@ -343,6 +255,5 @@ module.exports = {
     checkDocker,
     checkContainerRegistry,
     createDotnetApp,
-    createBlazorApp,
     provisionAddons,
 };

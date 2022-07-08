@@ -19,5 +19,9 @@
 build:
   docker:
     web: Dockerfile-Back
+<%_ if(clientFramework === "Blazor") { _%>
+  config:
+    INCLUDE_BLAZOR: 1
+<%_ } _%>
 run:
   web: ./docker-entrypoint-back.sh

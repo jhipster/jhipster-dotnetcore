@@ -93,7 +93,6 @@ describe('JHipster Heroku Sub Generator', () => {
         it('creates expected monolith files', () => {
             assert.file(expectedFiles.monolith);
             assert.fileContent('.yo-rc.json', `"herokuAppName": "${herokuAppName}"`);
-            assert.fileContent('.yo-rc.json', `"herokuBlazorAppName": "${herokuBlazorAppName}"`);
             assert.fileContent('.yo-rc.json', '"clientFramework": "Blazor"');
             assert.fileContent('.yo-rc.json', '"herokuDeployType": "containerRegistry"');
         });

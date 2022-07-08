@@ -26,10 +26,14 @@ function dockerBuild(appName, dockerFile, log) {
 
     const dockerBuildCommand = `docker build -f ${dockerFile} -t ${appName}:latest .`;
     log(chalk.bold('\nRunning'), chalk.cyan(dockerBuildCommand));
-    ChildProcess.execFileSync(Which.sync('docker'), ['build', '-f', dockerFile, '-t', `${appName}:latest`, '.'], {
-        shell: false,
-        stdio: 'inherit',
-    });
+    ChildProcess.execFileSync(
+        Which.sync('docker'),
+        ['build', '-f', dockerFile, '--build-arg', 'INCLUDE_BLAZOR=1', '-t', `${appName}:latest`, '.'],
+        {
+            shell: false,
+            stdio: 'inherit',
+        }
+    );
 
     const dockerTagCommand = `docker tag ${appName} registry.heroku.com/${appName}/${processType}`;
     log(chalk.bold('\nRunning'), chalk.cyan(dockerTagCommand));
