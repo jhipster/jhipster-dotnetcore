@@ -83,6 +83,9 @@
         <%_ } _%>
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
+        <%_ if(!skipClient && clientFramework === "Blazor") { _%>
+        <ProjectReference Include="..\client\<%= pascalizedBaseName %>.Client\<%= pascalizedBaseName %>.Client.csproj" Condition="$(INCLUDE_BLAZOR) == 1" />
+        <%_ } _%>
     </ItemGroup>
 <%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
     <!-- https://stackoverflow.com/questions/46720148/exclude-wwwroot-dist-from-build-asp-net-dotnet-core-2-0 -->
