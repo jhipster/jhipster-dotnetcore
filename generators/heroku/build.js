@@ -28,7 +28,7 @@ function dockerBuild(appName, dockerFile, log) {
     log(chalk.bold('\nRunning'), chalk.cyan(dockerBuildCommand));
     ChildProcess.execFileSync(
         Which.sync('docker'),
-        ['build', '-f', dockerFile, '--build-arg', 'INCLUDE_BLAZOR=1', '-t', `${appName}:latest`, '.'],
+        ['build', '-f', dockerFile, '--build-arg', 'INCLUDE_BLAZOR=true', '-t', `${appName}:latest`, '.'],
         {
             shell: false,
             stdio: 'inherit',

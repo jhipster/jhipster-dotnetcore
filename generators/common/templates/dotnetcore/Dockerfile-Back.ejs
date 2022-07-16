@@ -24,10 +24,10 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     rm -rf /var/lib/apt/lists/*
 
 <%_ if(!skipClient && clientFramework === "Blazor") { _%>
-# install blazor build tools only if INCLUDE_BLAZOR is set to 1
-ARG INCLUDE_BLAZOR=0
-RUN if [ "$INCLUDE_BLAZOR" -eq 1 ]; then dotnet tool install -g Microsoft.Web.LibraryManager.Cli ; fi
-RUN if [ "$INCLUDE_BLAZOR" -eq 1 ]; then dotnet tool install -g Excubo.WebCompiler ; fi
+# install blazor build tools only if INCLUDE_BLAZOR is set to true
+ARG INCLUDE_BLAZOR=false
+RUN if [ "$INCLUDE_BLAZOR" = "true" ]; then dotnet tool install -g Microsoft.Web.LibraryManager.Cli ; fi
+RUN if [ "$INCLUDE_BLAZOR" = "true" ]; then dotnet tool install -g Excubo.WebCompiler ; fi
 ENV PATH="${PATH}:/root/.dotnet/tools"
 <%_ } _%>
 # Restore dependencies of .net core projects taking advantage of docker layer caching
@@ -54,6 +54,8 @@ RUN chmod +x /app/docker-entrypoint-back.sh
 COPY --from=build /app/out .
 ENV ASPNETCORE_ENVIRONMENT=Production
 <%_ if(!skipClient && clientFramework === "Blazor") { _%>
+ARG INCLUDE_BLAZOR
+ENV INCLUDE_BLAZOR $INCLUDE_BLAZOR
 ENV ServerUrl="https://localhost:8080"
 <%_ } _%>
 
