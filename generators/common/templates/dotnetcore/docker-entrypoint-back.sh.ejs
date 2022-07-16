@@ -23,9 +23,9 @@ if [ -n "$PORT" ]; then
     echo "ASPNETCORE_URLS: $ASPNETCORE_URLS"
 fi
 
-# replace blazor server url if ServerUrl is set in the environment
-if [ -n "$ServerUrl" ];  then
-    echo "Replacing the backend/api in appsettings.json with the ServerUrl environment variable..."
+if [ "$INCLUDE_BLAZOR" = "true" ];  then
+    # replace blazor server url if INCLUDE_BLAZOR is true
+    echo "Replacing blazor server url in appsettings.json with the ServerUrl environment variable..."
     sed -i "/ServerUrl/c\   "\"ServerUrl"\" : "\"$ServerUrl"\"," wwwroot/appsettings.json
 fi
 
