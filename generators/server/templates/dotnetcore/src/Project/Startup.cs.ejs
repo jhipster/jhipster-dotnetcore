@@ -110,7 +110,7 @@ namespace <%= namespace %>
                 .UseApplicationSecurity(securitySettings)
                 .UseApplicationProblemDetails()
                 .UseApplicationSwagger()
-                .UseApplicationWeb(env)
+                .UseApplicationWeb(env, Configuration)
                 <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
                 .UseConsul(Configuration)
                 <%_ } _%>
