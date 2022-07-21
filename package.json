@@ -58,7 +58,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "4.0.0",
     "fs-extra": "10.1.0",
-    "jsdoc": "3.6.10",
+    "jsdoc": "3.6.11",
     "mocha": "10.0.0",
     "nyc": "15.1.0",
     "release-it": "^15.0.0",
