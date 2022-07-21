@@ -31,7 +31,7 @@ module.exports = {
 function askForClient() {
     if (this.existingProject) return;
 
-    var choices = [
+    const choices = [
         {
             value: ANGULAR,
             name: 'Angular',
@@ -53,7 +53,7 @@ function askForClient() {
             name: 'No client',
         },
     ];
-    
+
     if (this.configOptions.isDebugEnabled) {
         choices.push(
             {
