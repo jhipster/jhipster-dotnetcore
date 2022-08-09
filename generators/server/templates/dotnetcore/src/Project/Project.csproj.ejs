@@ -15,7 +15,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <AssemblyName><%= dasherizedBaseName %></AssemblyName>
         <Version>0.0.1</Version>
         <TargetFramework>net6</TargetFramework>
         <LangVersion>latest</LangVersion>
@@ -70,6 +69,9 @@
         <PackageReference Include="Ocelot" />
         <PackageReference Include="Ocelot.Provider.Consul" />
         <%_ } _%>
+        <%_ if(!skipClient && clientFramework === "Blazor") { _%>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+        <%_ } _%>
     </ItemGroup>
 
     <ItemGroup>
@@ -81,6 +83,9 @@
         <%_ } _%>
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Dto\<%= pascalizedBaseName %>.Dto.csproj" />
         <ProjectReference Include="..\<%= pascalizedBaseName %>.Domain\<%= pascalizedBaseName %>.Domain.csproj" />
+        <%_ if(!skipClient && clientFramework === "Blazor") { _%>
+        <ProjectReference Include="..\client\<%= pascalizedBaseName %>.Client\<%= pascalizedBaseName %>.Client.csproj" Condition="$(INCLUDE_BLAZOR) == true" />
+        <%_ } _%>
     </ItemGroup>
 <%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
     <!-- https://stackoverflow.com/questions/46720148/exclude-wwwroot-dist-from-build-asp-net-dotnet-core-2-0 -->

@@ -23,6 +23,7 @@
 	<PackageReference Update="bunit" Version="1.7.7" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCorePackageVersion)" />
 	<%_ } _%>
 
 	<PackageReference Update="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />

@@ -1,38 +1,58 @@
-# Heroku Deploy
-This sub-generator initializes a Heroku [.Net 5](https://docs.microsoft.com/pt-br/dotnet/core/dotnet-five) app that is ready to push to Heroku.
+# Deploying to Heroku
+
+This sub-generator allows the deployment of your JHipster .Net application to Heroku cloud.
+
+The Heroku sub-generator will always use free tiers/options. Nevertheless installing addons needs a properly verified Heroku account. 
+
+Therefore to avoid any unexpected build failures, we would recommend verifying your Heroku account before starting this sub-generator.
 
 ## Pre-requisites
+
 Before running the sub-generator, you must install the [Heroku CLI](https://cli.heroku.com/).
-You must also create a Heroku account and run:
+
+Make sure that you are logged into Heroku.
 ```bash
 heroku login
 ```
+
 [Git](https://git-scm.com/) is also required to deploy to Heroku.
 
+Also make sure you have a working [Docker](https://docs.docker.com) installation (eg. `docker ps`) if deploying to Heroku Container Registry.
+
 ## Deploying to Heroku
-To deploy your .Net 5 application to Heroku, run this command:
+
+To deploy your application to Heroku, run the following command:
 
 ```bash
 jhipster heroku
-git push heroku main
 ```
-
-This will initialize a new Heroku app and git push your application to Heroku.
-Free tier dynos and database addons are used by the generator. A verified Heroku account might be needed to add some of the resources.
-
-This Heroku sub-generator is similar to its Java counterpart. Access the documentation at (https://www.jhipster.tech/heroku/). It might provide helpful insight. But keep in mind that there are some differences between both implementations of the Heroku sub-generator.
 
 ## Databases
 
-Currently MySql and PostgreSQL are supported and automatically added by the sub-generator when deploying to Heroku. [JawsDB MySQL addon](https://elements.heroku.com/addons/jawsdb) and [Heroku Postgres addon](https://elements.heroku.com/addons/heroku-postgresql) are added to the Heroku app using the free tier.
+- Mysql ✔
+- Postgres ✔ 
+- MSSQL ✔ (requires a manual step described below)
 
-Since the [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free it requires manual provisioning. This sub-generator provides instructions on how to manually install the MSSQL addon.
+Currently MySql and PostgreSQL database addons are free and automatically added by this sub-generator when deploying to Heroku. Even though those resouces are free, an accound with verified credit card is required to add them.
 
-Heroku creates an environment variable named `DATABASE_URL` when using database addons. It contains the following structure: `dbType://user:password@server-url:db-port/db-name`. If `DATABASE_URL` is present the database credentials are parsed at `DatabaseConfiguration.cs` to create a properly formed connection string. And it takes precedence over existing connection strings.
+Heroku's [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free of cost and to avoid unexpected costs It will not be provisioned automatically when deploying to Heroku.
 
-**Notes:**
-The [heroku/nodejs buildpack](https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-nodejs) is also added to the Heroku app. It is a pre-requisite to build Angular/React client applications.
+Please visit [the MSSQL addon page](https://elements.heroku.com/addons/mssql), review the pricing and add the MSSQL addon to your account with the following command:
+```bash
+heroku addons:create mssql:REPLACE_PLAN_NAME --as DATABASE --app REPLACE_YOUR_APP_NAME
+```
 
-A `package.json` is automatically added to the root folder as It's required by the heroku/nodejs buildpack, otherwise the application deploy will fail.
+## Oauth2
 
-[Jincod's Heroku .NET Core buildpack](https://github.com/jincod/dotnetcore-buildpack) is used to deploy this .Net 5 application to Heroku.
+For applications that use Oauth2 the following manual steps are required:
+
+    1. Deploy the application to Heroku using `jhipster heroku`.
+    2. Access your (Heroku Dashboard)[https://dashboard.heroku.com/] and select the app you have just created.
+    3. Under `Installed add-ons` okta should be already installed.
+    4. Click on `okta` to open the addon's Dashboard.
+    5. To configure it follow the documentation (here)[https://jhipsternet.readthedocs.io/en/latest/Features/security.html#okta]
+
+
+## Limitations
+
+Only monolithic deploys are supported at the moment.
