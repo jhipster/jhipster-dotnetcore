@@ -55,7 +55,7 @@
 	<PackageReference Update="Winton.Extensions.Configuration.Consul" Version="3.2.0" />
 	<%_ } _%>
 	<%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
-	<PackageReference Update="Consul" Version="1.6.10.5" />
+	<PackageReference Update="Consul" Version="1.6.10.7" />
 	<%_ } _%>
 	<%_ if (applicationType === 'gateway') { _%>
 	<PackageReference Update="Ocelot" Version="18.0.0" />
