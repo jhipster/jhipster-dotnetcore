@@ -31,33 +31,33 @@ namespace <%= namespace %>.Test.Setup
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IConfiguration configuration, IHostEnvironment environment) : base(configuration, environment)
+        public override void Configure(IConfiguration configuration, IServiceCollection services)
         {
-            Configuration = configuration;
+            base.Configure(configuration, services);
         }
 
-        private IConfiguration Configuration { get; }
-
-        public override void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
-    <%_ if (databaseType === 'mongodb') { _%>
-            IMongoDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
+        public override void ConfigureServices(IServiceCollection services, IHostEnvironment environment)
         {
+            base.ConfigureServices(services, environment);
+        }
+
+        public override void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment environment)
+        {
+            <%_ if (databaseType === 'mongodb') { _%>
+            IMongoDatabaseContext context = app.ApplicationServices.GetRequiredService<IMongoDatabaseContext>();
             context.Database.ListCollectionNames()
                 .ForEachAsync(collection => context.Database.DropCollection(collection))
                 .Wait();
-    <%_ } else { _%>
-            ApplicationDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
-        {
-    <%_ } _%>
-            base.Configure(app, env, serviceProvider, context, securitySettingsOptions);
+            <%_ } _%>
+            base.ConfigureMiddleware(app, environment);
         }
 
-        public override void ConfigureServices(IServiceCollection services)
+        public override void ConfigureEndpoints(IApplicationBuilder app, IHostEnvironment environment)
         {
-            base.ConfigureServices(services);
+            base.ConfigureEndpoints(app, environment);
         }
 
-        protected override void AddDatabase(IServiceCollection services)
+        protected override void AddDatabase(IConfiguration configuration, IServiceCollection services)
         {
             <%_ if (databaseType !== 'mongodb') { _%>
             var connection = new SqliteConnection(new SqliteConnectionStringBuilder
@@ -69,7 +69,7 @@ namespace <%= namespace %>.Test.Setup
             services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
             <%_ } else { _%>
             services.Configure<MongoDatabaseConfig>(
-                Configuration.GetSection(nameof(MongoDatabaseConfig) + "UnitTests"));
+                configuration.GetSection(nameof(MongoDatabaseConfig) + "UnitTests"));
             services.AddSingleton<IMongoDatabaseConfig>(sp =>
                 sp.GetRequiredService<IOptions<MongoDatabaseConfig>>().Value);
             services.AddSingleton<IMongoDatabaseContext, MongoDatabaseContext>();

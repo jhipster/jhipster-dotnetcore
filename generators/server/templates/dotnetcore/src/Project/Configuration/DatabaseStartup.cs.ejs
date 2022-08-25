@@ -137,13 +137,12 @@ namespace <%= namespace %>.Configuration
             return services;
         }
 
-        public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder app,
-            IServiceProvider serviceProvider, IHostEnvironment environment)
+        public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder app, IHostEnvironment environment)
         {
             <%_ if (databaseType !== 'mongodb') { _%>
             if (environment.IsDevelopment() || environment.IsProduction())
             {
-                using (var scope = serviceProvider.CreateScope())
+                using (var scope = app.ApplicationServices.CreateScope())
                 {
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
                     context.Database.OpenConnection();

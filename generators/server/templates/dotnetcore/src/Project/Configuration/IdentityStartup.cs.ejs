@@ -24,10 +24,9 @@ namespace <%= namespace %>.Configuration
 {
     public static class IdentityConfiguration
     {
-        public static IApplicationBuilder UseApplicationIdentity(this IApplicationBuilder builder,
-            IServiceProvider serviceProvider)
+        public static IApplicationBuilder UseApplicationIdentity(this IApplicationBuilder builder)
         {
-            using (var scope = serviceProvider.CreateScope())
+            using (var scope = builder.ApplicationServices.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();

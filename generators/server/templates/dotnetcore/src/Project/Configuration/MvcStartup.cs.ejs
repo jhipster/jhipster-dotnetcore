@@ -57,7 +57,7 @@ namespace <%= namespace %>.Configuration
             return services;
         }
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env, IConfiguration configuration)
+        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
         {
             app.UseDefaultFiles();
             <%_ if (clientFramework === "Blazor") { _%>

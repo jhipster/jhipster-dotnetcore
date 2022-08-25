@@ -630,6 +630,10 @@ const serverFiles = {
     serverStartup: [
         {
             path: SERVER_SRC_DIR,
+            templates: [{ file: 'Project/IStartup.cs', renameTo: generator => `${generator.mainProjectDir}/IStartup.cs` }],
+        },
+        {
+            path: SERVER_SRC_DIR,
             templates: [{ file: 'Project/Startup.cs', renameTo: generator => `${generator.mainProjectDir}/Startup.cs` }],
         },
         {
