@@ -28,6 +28,15 @@ namespace <%= namespace %>.Configuration;
 
 public static class WebConfiguration
 {
+    <%_ if (clientFramework === "Blazor") { _%>
+    private static bool s_includeBlazor;
+
+    public static void ConfigureWebModule(this IConfiguration configuration)
+    {
+        s_includeBlazor = configuration.GetValue<bool>("INCLUDE_BLAZOR");
+    }
+    <%_ } _%>
+
     public static IServiceCollection AddWebModule(this IServiceCollection services)
     {
         services.AddHttpContextAccessor();
@@ -61,7 +70,7 @@ public static class WebConfiguration
     {
         app.UseDefaultFiles();
         <%_ if (clientFramework === "Blazor") { _%>
-        if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
+        if (s_includeBlazor)
         {
             // Only serve blazor files if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
             app.UseBlazorFrameworkFiles();
@@ -75,7 +84,7 @@ public static class WebConfiguration
         {
             endpoints.MapControllers();
             <%_ if (clientFramework === "Blazor") { _%>
-            if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
+            if (s_includeBlazor)
             {
                 // Only add fallback for blazor's index.html if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
                 endpoints.MapFallbackToFile("index.html");

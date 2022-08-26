@@ -49,6 +49,10 @@ public class Startup : IStartup
 
             .AddConsul(configuration)<%_ } _%>;
 
+        <%_ if (clientFramework === "Blazor") { _%>
+        configuration.ConfigureWebModule();
+        <%_ } _%>
+
         AddDatabase(configuration, services);
     }
 
