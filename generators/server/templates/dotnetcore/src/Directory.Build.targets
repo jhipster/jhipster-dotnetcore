@@ -45,7 +45,7 @@
 	<PackageReference Update="Swashbuckle.AspNetCore" Version="6.3.1" />
 	<PackageReference Update="LanguageExt.Core" Version="4.1.0" />
 	<%_ if (authenticationType === 'jwt') { _%>
-	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.18.0" />
+	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.22.1" />
 	<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="BCrypt.Net-Next" Version="4.0.3" />
 	<%_ } else { _%>
