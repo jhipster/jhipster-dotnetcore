@@ -14,22 +14,21 @@
 -%>
 using System.ComponentModel.DataAnnotations;
 
-namespace <%= namespace %>.Dto
+namespace <%= namespace %>.Dto;
+
+public class ManagedUserDto : UserDto
 {
-    public class ManagedUserDto : UserDto
+    public const int PasswordMinLength = 4;
+
+    public const int PasswordMaxLength = 100;
+
+    [Required]
+    [MinLength(PasswordMinLength)]
+    [MaxLength(PasswordMaxLength)]
+    public string Password { get; set; }
+
+    public override string ToString()
     {
-        public const int PasswordMinLength = 4;
-
-        public const int PasswordMaxLength = 100;
-
-        [Required]
-        [MinLength(PasswordMinLength)]
-        [MaxLength(PasswordMaxLength)]
-        public string Password { get; set; }
-
-        public override string ToString()
-        {
-            return "ManagedUserDto{} " + base.ToString();
-        }
+        return "ManagedUserDto{} " + base.ToString();
     }
 }

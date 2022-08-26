@@ -25,10 +25,9 @@ using <%= namespace %>.Dto;
 using JHipsterNet.Core.Pagination;
 using MediatR;
 
-namespace <%= namespace %>.Application.Queries
+namespace <%= namespace %>.Application.Queries;
+
+public class <%= pascalizedEntityClass %>GetAllQuery : IRequest<<%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>
 {
-    public class <%= pascalizedEntityClass %>GetAllQuery : IRequest<<%= hasDto ? "Page" : "IPage" %><<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>>
-    {
-        public IPageable Page { get; set; }
-    }
+    public IPageable Page { get; set; }
 }

@@ -20,21 +20,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace <%= namespace %>.Client.Test.Helpers
+namespace <%= namespace %>.Client.Test.Helpers;
+
+public class MockAuthorizationService : IAuthorizationService
 {
-    public class MockAuthorizationService : IAuthorizationService
+    public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; }
+        = new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
+
+    public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
     {
-        public List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)> AuthorizeCalls { get; }
-            = new List<(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)>();
+        AuthorizeCalls.Add((user, resource, requirements));
 
-        public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
-        {
-            AuthorizeCalls.Add((user, resource, requirements));
-
-            return Task.FromResult(user.Identities.Any() ? AuthorizationResult.Success() : AuthorizationResult.Failed());
-        }
-
-        public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, string policyName)
-            => throw new NotImplementedException();
+        return Task.FromResult(user.Identities.Any() ? AuthorizationResult.Success() : AuthorizationResult.Failed());
     }
+
+    public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object resource, string policyName)
+        => throw new NotImplementedException();
 }

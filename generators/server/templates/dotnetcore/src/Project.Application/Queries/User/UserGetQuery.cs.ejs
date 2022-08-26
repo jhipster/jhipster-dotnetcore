@@ -19,10 +19,9 @@
 using <%= namespace %>.Dto;
 using MediatR;
 
-namespace <%= namespace %>.Application.Queries
+namespace <%= namespace %>.Application.Queries;
+
+public class UserGetQuery : IRequest<UserDto>
 {
-    public class UserGetQuery : IRequest<UserDto>
-    {
-        public string Login { get; set; }
-    }
+    public string Login { get; set; }
 }

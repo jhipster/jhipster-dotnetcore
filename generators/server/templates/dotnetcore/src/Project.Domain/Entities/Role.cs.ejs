@@ -19,14 +19,13 @@ using AspNetCore.Identity.MongoDbCore.Models;
 using Microsoft.AspNetCore.Identity;
 <%_ } _%>
 
-namespace <%= namespace %>.Domain.Entities
+namespace <%= namespace %>.Domain.Entities;
+
+<%_ if (databaseType === 'mongodb') { _%>
+public class Role : MongoIdentityRole<string>
+<%_ } else { _%>
+public class Role : IdentityRole<string>
+<%_ } _%>
 {
-    <%_ if (databaseType === 'mongodb') { _%>
-    public class Role : MongoIdentityRole<string>
-    <%_ } else { _%>
-    public class Role : IdentityRole<string>
-    <%_ } _%>
-    {
-        public ICollection<UserRole> UserRoles { get; set; }
-    }
+    public ICollection<UserRole> UserRoles { get; set; }
 }

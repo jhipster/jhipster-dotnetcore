@@ -21,30 +21,30 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="coverlet.msbuild" >
+        <PackageReference Include="coverlet.msbuild">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="FakeItEasy"  />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"  />
+        <PackageReference Include="FakeItEasy" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
         <%_ if (databaseType !== 'mongodb') { _%>
-        <PackageReference Include="Microsoft.Data.Sqlite.Core"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"  />
+        <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
         <%_ } _%>
-        <PackageReference Include="Microsoft.NET.Test.Sdk"  />
-        <PackageReference Include="Moq"  />
-        <PackageReference Include="xunit"  />
-        <PackageReference Include="xunit.runner.visualstudio" >
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="Moq" />
+        <PackageReference Include="xunit" />
+        <PackageReference Include="xunit.runner.visualstudio">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="xunit.runner.console" >
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        <PackageReference Include="xunit.runner.console">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="FluentAssertions"  />
-        <PackageReference Include="FluentAssertions.AspNetCore.Mvc"  />
-        <PackageReference Include="FluentAssertions.Json"  />
+        <PackageReference Include="FluentAssertions" />
+        <PackageReference Include="FluentAssertions.AspNetCore.Mvc" />
+        <PackageReference Include="FluentAssertions.Json" />
     </ItemGroup>
 
 

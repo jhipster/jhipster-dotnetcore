@@ -24,90 +24,89 @@ using Newtonsoft.Json.Serialization;
 using Ocelot.Middleware;
 <%_ } _%>
 
-namespace <%= namespace %>.Configuration
+namespace <%= namespace %>.Configuration;
+
+public static class WebConfiguration
 {
-    public static class WebConfiguration
+    public static IServiceCollection AddWebModule(this IServiceCollection services)
     {
-        public static IServiceCollection AddWebModule(this IServiceCollection services)
+        services.AddHttpContextAccessor();
+
+        services.AddMvc();
+
+        //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
+        services.AddHealthChecks();
+
+        services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
+        .AddNewtonsoftJson(options =>
         {
-            services.AddHttpContextAccessor();
+            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            options.SerializerSettings.Formatting = Formatting.Indented;
+            options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+        });
 
-            services.AddMvc();
+        <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
+        services.AddSpaStaticFiles(configuration =>
+        {
+            configuration.RootPath = "ClientApp/dist";
+        });
+        <%_ } _%>
 
-            //https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
-            services.AddHealthChecks();
+        return services;
+    }
 
-            services.AddControllers(options => { options.ModelBinderProviders.Insert(0, new PageableBinderProvider()); })
-            .AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                options.SerializerSettings.Formatting = Formatting.Indented;
-                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-            });
-
-            <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
-            <%_ } _%>
-
-            return services;
+    public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
+    {
+        app.UseDefaultFiles();
+        <%_ if (clientFramework === "Blazor") { _%>
+        if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
+        {
+            // Only serve blazor files if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
+            app.UseBlazorFrameworkFiles();
         }
+        <%_ } _%>
+        app.UseStaticFiles();
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
+        app.UseRouting();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints =>
         {
-            app.UseDefaultFiles();
+            endpoints.MapControllers();
             <%_ if (clientFramework === "Blazor") { _%>
             if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
             {
-                // Only serve blazor files if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
-                app.UseBlazorFrameworkFiles();
+                // Only add fallback for blazor's index.html if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
+                endpoints.MapFallbackToFile("index.html");
             }
             <%_ } _%>
-            app.UseStaticFiles();
-
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                <%_ if (clientFramework === "Blazor") { _%>
-                if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
-                {
-                    // Only add fallback for blazor's index.html if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
-                    endpoints.MapFallbackToFile("index.html");
-                }
-                <%_ } _%>
-            });
-
-            <%_ if (applicationType === 'gateway') { _%>
-            app.Map("/services", MapApiGateway);
-            <%_ } _%>
-
-            app.UseHealthChecks("/health");
-
-            <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-            });
-            if (!env.IsDevelopment())
-            {
-                app.UseSpaStaticFiles();
-            }
-            <%_ } _%>
-
-            return app;
-        }
+        });
 
         <%_ if (applicationType === 'gateway') { _%>
-        private static void MapApiGateway(IApplicationBuilder app)
+        app.Map("/services", MapApiGateway);
+        <%_ } _%>
+
+        app.UseHealthChecks("/health");
+
+        <%_ if (!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { _%>
+        app.UseSpa(spa =>
         {
-            app.UseOcelot().Wait();
+            spa.Options.SourcePath = "ClientApp";
+        });
+        if (!env.IsDevelopment())
+        {
+            app.UseSpaStaticFiles();
         }
         <%_ } _%>
+
+        return app;
     }
+
+    <%_ if (applicationType === 'gateway') { _%>
+    private static void MapApiGateway(IApplicationBuilder app)
+    {
+        app.UseOcelot().Wait();
+    }
+    <%_ } _%>
 }

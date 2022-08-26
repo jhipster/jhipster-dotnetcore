@@ -25,50 +25,49 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Logging;
 
-namespace <%= namespace %>.Client.Xamarin.Core
+namespace <%= namespace %>.Client.Xamarin.Core;
+
+public class App : MvxApplication
 {
-    public class App : MvxApplication
+    public override void Initialize()
     {
-        public override void Initialize()
+        Akavache.Registrations.Start("<%= namespace %>");
+        var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("<%= namespace %>");
+
+        #if DEBUG
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
         {
-            Akavache.Registrations.Start("<%= namespace %>");
-            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("<%= namespace %>");
+            if (cert.Issuer.Equals("CN=localhost"))
+                return true;
+            return errors == System.Net.Security.SslPolicyErrors.None;
+        };
+        HttpClient httpClient = new HttpClient(handler);
+        #else
+        HttpClient httpClient = new HttpClient();
+        #endif
+        httpClient.BaseAddress = new Uri(Configuration.BaseUri);
 
-            #if DEBUG
-            HttpClientHandler handler = new HttpClientHandler();
-            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
-            {
-                if (cert.Issuer.Equals("CN=localhost"))
-                    return true;
-                return errors == System.Net.Security.SslPolicyErrors.None;
-            };
-            HttpClient httpClient = new HttpClient(handler);
-            #else
-            HttpClient httpClient = new HttpClient();
-            #endif
-            httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+        var authenticationService = new AuthenticationService(httpClient, log);
+        Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
+        var registerService = new RegisterService(httpClient, log);
+        Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
+        // jhipster-needle-add-services-in-di - JHipster will add services in DI
 
-            var authenticationService = new AuthenticationService(httpClient, log);
-            Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
-            var registerService = new RegisterService(httpClient, log);
-            Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
-            // jhipster-needle-add-services-in-di - JHipster will add services in DI  
+        Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
+        Mvx.IoCProvider.RegisterSingleton(httpClient);
 
-            Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
-            Mvx.IoCProvider.RegisterSingleton(httpClient);
-
-            try
-            {
-                // sync trying to connect before loading home view
-                var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
-                Task.Run(async () => await authenticationService.SignIn(token));
-            }
-            catch (Exception ex)
-            {
-                log.ErrorException("Failed to fetch token and auto-login.", ex);
-            }
-
-            RegisterAppStart<HomeViewModel>();
+        try
+        {
+            // sync trying to connect before loading home view
+            var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
+            Task.Run(async () => await authenticationService.SignIn(token));
         }
+        catch (Exception ex)
+        {
+            log.ErrorException("Failed to fetch token and auto-login.", ex);
+        }
+
+        RegisterAppStart<HomeViewModel>();
     }
 }

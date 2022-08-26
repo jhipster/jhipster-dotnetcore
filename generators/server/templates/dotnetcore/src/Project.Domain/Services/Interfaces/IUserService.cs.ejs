@@ -21,22 +21,21 @@ using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
 using <%= namespace %>.Domain.Entities;
 
-namespace <%= namespace %>.Domain.Services.Interfaces
+namespace <%= namespace %>.Domain.Services.Interfaces;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<User> CreateUser(User userToCreate);
-        Task<IPage<User>> GetAllManagedUsers(IPageable pageable);
-        Task<User> GetByLogin(string login);
-        IEnumerable<string> GetAuthorities();
-        Task DeleteUser(string login);
-        Task<User> UpdateUser(User userToUpdate);
-        Task<User> CompletePasswordReset(string newPassword, string key);
-        Task<User> RequestPasswordReset(string mail);
-        Task ChangePassword(string currentClearTextPassword, string newPassword);
-        Task<User> ActivateRegistration(string key);
-        Task<User> RegisterUser(User userToRegister, string password);
-        Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
-        Task<User> GetUserWithUserRoles();
-    }
+    Task<User> CreateUser(User userToCreate);
+    Task<IPage<User>> GetAllManagedUsers(IPageable pageable);
+    Task<User> GetByLogin(string login);
+    IEnumerable<string> GetAuthorities();
+    Task DeleteUser(string login);
+    Task<User> UpdateUser(User userToUpdate);
+    Task<User> CompletePasswordReset(string newPassword, string key);
+    Task<User> RequestPasswordReset(string mail);
+    Task ChangePassword(string currentClearTextPassword, string newPassword);
+    Task<User> ActivateRegistration(string key);
+    Task<User> RegisterUser(User userToRegister, string password);
+    Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
+    Task<User> GetUserWithUserRoles();
 }

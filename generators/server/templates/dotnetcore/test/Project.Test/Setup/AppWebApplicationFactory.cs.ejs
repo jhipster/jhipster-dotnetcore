@@ -29,74 +29,73 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.JsonWebTokens;
 
-namespace <%= namespace %>.Test.Setup
+namespace <%= namespace %>.Test.Setup;
+
+public class AppWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint>
+    where TEntryPoint : class, IStartup, new()
 {
-    public class AppWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntryPoint>
-        where TEntryPoint : class, IStartup, new()
+    private IStartup _startup;
+    private IServiceProvider _serviceProvider;
+    private ClaimsPrincipal _user { get; set; }
+
+    public AppWebApplicationFactory()
     {
-        private IStartup _startup;
-        private IServiceProvider _serviceProvider;
-        private ClaimsPrincipal _user { get; set; }
+        _startup = new TEntryPoint();
+    }
 
-        public AppWebApplicationFactory()
-        {
-            _startup = new TEntryPoint();
-        }
+    protected override IWebHostBuilder CreateWebHostBuilder()
+    {
+        return WebHost.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                _startup.Configure(context.Configuration, services);
+                _startup.ConfigureServices(services, context.HostingEnvironment);
+            });
+    }
 
-        protected override IWebHostBuilder CreateWebHostBuilder()
-        {
-            return WebHost.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
-                {
-                    _startup.Configure(context.Configuration, services);
-                    _startup.ConfigureServices(services, context.HostingEnvironment);
-                });
-        }
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder
+            .UseSolutionRelativeContentRoot("<%= SERVER_SRC_DIR %><%= solutionName %>")
+            .ConfigureServices(services =>
+            {
+                services
+                    .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
+                services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
+                    ServiceLifetime.Transient));
+                services.AddTransient(_ => new MockClaimsPrincipalProvider(_user));
+            })
+            .Configure((context, applicationBuilder) =>
+            {
+                _serviceProvider = applicationBuilder.ApplicationServices;
+                _startup.ConfigureMiddleware(applicationBuilder, context.HostingEnvironment);
+                _startup.ConfigureEndpoints(applicationBuilder, context.HostingEnvironment);
+            });
+    }
 
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            builder
-                .UseSolutionRelativeContentRoot("<%= SERVER_SRC_DIR %><%= solutionName %>")
-                .ConfigureServices(services =>
-                {
-                    services
-                        .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
-                    services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
-                        ServiceLifetime.Transient));
-                    services.AddTransient(_ => new MockClaimsPrincipalProvider(_user));
-                })
-                .Configure((context, applicationBuilder) =>
-                {
-                    _serviceProvider = applicationBuilder.ApplicationServices;
-                    _startup.ConfigureMiddleware(applicationBuilder, context.HostingEnvironment);
-                    _startup.ConfigureEndpoints(applicationBuilder, context.HostingEnvironment);
-                });
-        }
+    public TService GetRequiredService<TService>()
+    {
+        return _serviceProvider.GetRequiredService<TService>();
+    }
 
-        public TService GetRequiredService<TService>()
-        {
-            return _serviceProvider.GetRequiredService<TService>();
-        }
+    public AppWebApplicationFactory<TEntryPoint> WithMockUser(string name = "user",
+        IEnumerable<string> roles = null, string authenticationType = "MockAuthenticationType")
+    {
+        _user = BuildClaimsPrincipal(name, roles, authenticationType);
+        return this;
+    }
 
-        public AppWebApplicationFactory<TEntryPoint> WithMockUser(string name = "user",
-            IEnumerable<string> roles = null, string authenticationType = "MockAuthenticationType")
-        {
-            _user = BuildClaimsPrincipal(name, roles, authenticationType);
-            return this;
-        }
+    private static ClaimsPrincipal BuildClaimsPrincipal(string name, IEnumerable<string> roles,
+        string authenticationType)
+    {
+        if (roles == null || !roles.Any()) roles = new HashSet<string> { RolesConstants.USER };
 
-        private static ClaimsPrincipal BuildClaimsPrincipal(string name, IEnumerable<string> roles,
-            string authenticationType)
-        {
-            if (roles == null || !roles.Any()) roles = new HashSet<string> { RolesConstants.USER };
-
-            <%_ if (authenticationType === 'jwt') { _%>
-            var claims = new List<Claim> { new Claim(SecurityStartup.UserNameClaimType, name) };
-            <%_ } else { _%>
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, name) };
-            <%_ } _%>
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
-            return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));
-        }
+        <%_ if (authenticationType === 'jwt') { _%>
+        var claims = new List<Claim> { new Claim(SecurityStartup.UserNameClaimType, name) };
+        <%_ } else { _%>
+        var claims = new List<Claim> { new Claim(ClaimTypes.Name, name) };
+        <%_ } _%>
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+        return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));
     }
 }

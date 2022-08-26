@@ -12,15 +12,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Configuration.Consul
+namespace <%= namespace %>.Configuration.Consul;
+
+public class ConsulOptions
 {
-    public class ConsulOptions
-    {
-        public bool Enabled { get; set; }
-        public string Host { get; set; }
-        public string Service { get; set; }
-        public string Address { get; set; }
-        public int Port { get; set; }
-        public bool PingEnabled { get; set; }
-    }
+    public bool Enabled { get; set; }
+    public string Host { get; set; }
+    public string Service { get; set; }
+    public string Address { get; set; }
+    public int Port { get; set; }
+    public bool PingEnabled { get; set; }
 }

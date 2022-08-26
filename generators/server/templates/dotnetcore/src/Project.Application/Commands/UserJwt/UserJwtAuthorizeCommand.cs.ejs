@@ -20,10 +20,9 @@ using MediatR;
 using <%= namespace %>.Dto.Authentication;
 using System.Security.Principal;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class UserJwtAuthorizeCommand : IRequest<IPrincipal>
 {
-    public class UserJwtAuthorizeCommand : IRequest<IPrincipal>
-    {
-        public LoginDto LoginDto { get; set; }
-    }
+    public LoginDto LoginDto { get; set; }
 }

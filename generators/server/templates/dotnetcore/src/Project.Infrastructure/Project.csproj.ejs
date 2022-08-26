@@ -21,47 +21,47 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"  />
-        <PackageReference Include="Serilog"  />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="Serilog" />
         <%_ switch(databaseType) {
             case 'sqllite': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
-            <%_ break;
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+        <%_ break;
             case 'mssql': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
-            <%_ break;
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+        <%_ break;
             case 'postgres': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
-            <%_ break;
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+        <%_ break;
             case 'mongodb': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity"  />
+        <PackageReference Include="Microsoft.AspNetCore.Identity" />
         <PackageReference Include="AspNetCore.Identity.MongoDbCore" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
         <PackageReference Include="MongoDB.Driver" />
-            <%_ break;
+        <%_ break;
             case 'mysql': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
-            <%_ break;
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+        <%_ break;
             case 'oracle': _%>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"  />
-        <PackageReference Include="Oracle.EntityFrameworkCore"  />
-        <PackageReference Include="Oracle.ManagedDataAccess.Core"  />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools"  />
-            <%_ break;
-         } _%>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+        <PackageReference Include="Oracle.EntityFrameworkCore" />
+        <PackageReference Include="Oracle.ManagedDataAccess.Core" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+        <%_ break;
+        } _%>
     </ItemGroup>
 
     <ItemGroup>

@@ -20,11 +20,10 @@ using MediatR;
 using <%= namespace %>.Dto;
 using System.Security.Claims;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountSaveCommand : IRequest<Unit>
 {
-    public class AccountSaveCommand : IRequest<Unit>
-    {
-        public ClaimsPrincipal User { get; set; }
-        public UserDto UserDto { get; set; }
-    }
+    public ClaimsPrincipal User { get; set; }
+    public UserDto UserDto { get; set; }
 }

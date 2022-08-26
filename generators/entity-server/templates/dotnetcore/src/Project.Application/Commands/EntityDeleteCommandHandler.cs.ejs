@@ -25,23 +25,22 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class <%= pascalizedEntityClass %>DeleteCommandHandler : IRequestHandler<<%= pascalizedEntityClass %>DeleteCommand, Unit>
 {
-    public class <%= pascalizedEntityClass %>DeleteCommandHandler : IRequestHandler<<%= pascalizedEntityClass %>DeleteCommand, Unit>
+    private I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+
+    public <%= pascalizedEntityClass %>DeleteCommandHandler(
+        I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
     {
-        private I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
+    }
 
-        public <%= pascalizedEntityClass %>DeleteCommandHandler(
-            I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
-        {
-            _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
-        }
-
-        public async Task<Unit> Handle(<%= pascalizedEntityClass %>DeleteCommand command, CancellationToken cancellationToken)
-        {
-            await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(command.Id);
-            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
-            return Unit.Value;
-        }
+    public async Task<Unit> Handle(<%= pascalizedEntityClass %>DeleteCommand command, CancellationToken cancellationToken)
+    {
+        await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(command.Id);
+        await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+        return Unit.Value;
     }
 }

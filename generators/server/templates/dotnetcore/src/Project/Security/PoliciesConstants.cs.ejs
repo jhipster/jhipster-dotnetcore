@@ -15,14 +15,13 @@
 using Microsoft.AspNetCore.Authorization;
 using <%= namespace %>.Crosscutting.Constants;
 
-namespace <%= namespace %>.Security
-{
-    public static class PoliciesConstants
-    {
-        public static readonly AuthorizationPolicy PolicyAdmin = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser().RequireRole(RolesConstants.ADMIN).Build();
+namespace <%= namespace %>.Security;
 
-        public static readonly AuthorizationPolicy PolicyUser = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser().RequireRole(RolesConstants.USER).Build();
-    }
+public static class PoliciesConstants
+{
+    public static readonly AuthorizationPolicy PolicyAdmin = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser().RequireRole(RolesConstants.ADMIN).Build();
+
+    public static readonly AuthorizationPolicy PolicyUser = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser().RequireRole(RolesConstants.USER).Build();
 }

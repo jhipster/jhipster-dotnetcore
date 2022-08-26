@@ -19,57 +19,55 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using <%= namespace %>.Dto.ProfileInfo;
 
-namespace <%= namespace %>.Controllers
+namespace <%= namespace %>.Controllers;
+
+[Route("management")]
+[ApiController]
+public class ProfileInfoController : ControllerBase
 {
 
-    [Route("management")]
-    [ApiController]
-    public class ProfileInfoController : ControllerBase
+    private readonly ILogger<ProfileInfoController> _log;
+    private readonly IHostEnvironment _environment;
+    private readonly IConfiguration _configuration;
+
+    public ProfileInfoController(ILogger<ProfileInfoController> log, IHostEnvironment environment, IConfiguration configuration)
     {
+        _log = log;
+        _environment = environment;
+        _configuration = configuration;
+    }
 
-        private readonly ILogger<ProfileInfoController> _log;
-        private readonly IHostEnvironment _environment;
-        private readonly IConfiguration _configuration;
+    [HttpGet("info")]
+    public ActionResult<ProfileInfoDto> GetProfileInfos()
+    {
+        _log.LogDebug("REST request to get profile informations");
+        return Ok(new ProfileInfoDto(GetDisplayRibbonOnProfiles(), GetActiveProfile()));
+    }
 
-        public ProfileInfoController(ILogger<ProfileInfoController> log, IHostEnvironment environment, IConfiguration configuration)
+    private List<string> GetActiveProfile()
+    {
+        var activeProfiles = new List<string>
         {
-            _log = log;
-            _environment = environment;
-            _configuration = configuration;
-        }
+            "api-docs"
+        };
 
-        [HttpGet("info")]
-        public ActionResult<ProfileInfoDto> GetProfileInfos()
+        if (_environment.IsDevelopment())
         {
-            _log.LogDebug("REST request to get profile informations");
-            return Ok(new ProfileInfoDto(GetDisplayRibbonOnProfiles(), GetActiveProfile()));
+            activeProfiles.Add("dev");
         }
-
-        private List<string> GetActiveProfile()
+        else if (_environment.IsProduction())
         {
-            var activeProfiles = new List<string>
-            {
-                "api-docs"
-            };
-
-            if (_environment.IsDevelopment())
-            {
-                activeProfiles.Add("dev");
-            }
-            else if (_environment.IsProduction())
-            {
-                activeProfiles.Add("prod");
-            }
-            else if (_environment.IsStaging())
-            {
-                activeProfiles.Add("stag");
-            }
-            return activeProfiles;
+            activeProfiles.Add("prod");
         }
-
-        private string GetDisplayRibbonOnProfiles()
+        else if (_environment.IsStaging())
         {
-            return _configuration.GetSection("RibbonInfo")["display-ribbon-on-profiles"];
+            activeProfiles.Add("stag");
         }
+        return activeProfiles;
+    }
+
+    private string GetDisplayRibbonOnProfiles()
+    {
+        return _configuration.GetSection("RibbonInfo")["display-ribbon-on-profiles"];
     }
 }

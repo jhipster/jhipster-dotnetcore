@@ -26,10 +26,9 @@ using MediatR;
 using <%= namespace %>.Dto;
 <%_ } _%>
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class <%= pascalizedEntityClass %>UpdateCommand : IRequest<<%= pascalizedEntityClass %>>
 {
-    public class <%= pascalizedEntityClass %>UpdateCommand : IRequest<<%= pascalizedEntityClass %>>
-    {
-        public <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> { get; set; }
-    }
+    public <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> { get; set; }
 }

@@ -15,12 +15,11 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace <%= namespace %>.Domain.Entities
+namespace <%= namespace %>.Domain.Entities;
+
+public class MongoBaseEntity<TKey>
 {
-    public class MongoBaseEntity<TKey>
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public TKey Id { get; set; }
-    }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public TKey Id { get; set; }
 }

@@ -21,10 +21,9 @@ using MediatR;
 using <%= namespace %>.Dto;
 using System.Security.Claims;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountGetAuthenticatedQuery : IRequest<string>
 {
-    public class AccountGetAuthenticatedQuery : IRequest<string>
-    {
-        public ClaimsPrincipal User { get; set; }
-    }
+    public ClaimsPrincipal User { get; set; }
 }

@@ -24,42 +24,41 @@ using <%= namespace %>.Client.Xamarin.Core.Models;
 using MvvmCross.Logging;
 using <%= namespace %>.Client.Xamarin.Shared.Constants;
 
-namespace <%= namespace %>.Client.Xamarin.Core.Services
+namespace <%= namespace %>.Client.Xamarin.Core.Services;
+
+public class RegisterService : IRegisterService
 {
-    public class RegisterService : IRegisterService
+    private const string RegisterUrl = "/api/register";
+    private readonly HttpClient _httpClient;
+    private readonly IMvxLog _log;
+
+    public RegisterService(HttpClient httpClient, IMvxLog log)
     {
-        private const string RegisterUrl = "/api/register";
-        private readonly HttpClient _httpClient;
-        private readonly IMvxLog _log;
+        _httpClient = httpClient;
+        _log = log;
+    }
 
-        public RegisterService(HttpClient httpClient, IMvxLog log)
+    public async Task<string> Save(UserSaveModel registerModel)
+    {
+        var resp = await _httpClient.PostAsJsonAsync(RegisterUrl, registerModel);
+        if (resp.IsSuccessStatusCode)
+            return null;
+        return await ProcessError(resp);
+    }
+
+    private async Task<string> ProcessError(HttpResponseMessage result)
+    {
+        if (result.StatusCode != HttpStatusCode.BadRequest) return ErrorConst.UnknownErrorType;
+
+        try
         {
-            _httpClient = httpClient;
-            _log = log;
+            var res = await result.Content.ReadFromJsonAsync<RegisterResultRequest>();
+            return res.Type;
         }
-
-        public async Task<string> Save(UserSaveModel registerModel)
+        catch (Exception ex)
         {
-            var resp = await _httpClient.PostAsJsonAsync(RegisterUrl, registerModel);
-            if (resp.IsSuccessStatusCode)
-                return null;
-            return await ProcessError(resp);
-        }
-
-        private async Task<string> ProcessError(HttpResponseMessage result)
-        {
-            if (result.StatusCode != HttpStatusCode.BadRequest) return ErrorConst.UnknownErrorType;
-
-            try
-            {
-                var res = await result.Content.ReadFromJsonAsync<RegisterResultRequest>();
-                return res.Type;
-            }
-            catch (Exception ex)
-            {
-                _log.ErrorException("Failed to parse JSON from error", ex);
-                return ErrorConst.UnknownErrorType;
-            }
+            _log.ErrorException("Failed to parse JSON from error", ex);
+            return ErrorConst.UnknownErrorType;
         }
     }
 }

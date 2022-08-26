@@ -24,183 +24,182 @@ using MvvmCross.ViewModels;
 using <%= namespace %>.Client.Xamarin.Shared.Constants;
 using Xamarin.Essentials;
 
-namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
+namespace <%= namespace %>.Client.Xamarin.Core.ViewModels;
+
+public class RegisterViewModel : BaseViewModel
 {
-    public class RegisterViewModel : BaseViewModel
+    private readonly IAuthenticationService _authenticationService;
+    private readonly IMvxNavigationService _navigationService;
+    private readonly IRegisterService _registerService;
+
+    private bool _active;
+    private bool _rememberMe;
+    private bool _errorMail;
+    private bool _errorLogin;
+    private bool _success;
+    private string _password;
+    private string _username;
+    private string _email;
+    private string _confirmPassword;
+    private bool _error = false;
+
+    public IMvxCommand SignUp => new MvxAsyncCommand(HandleSignUp);
+    public IMvxCommand ChangeStateCommand => new MvxCommand(InvertCheckBox);
+    public IMvxCommand GoBack => new MvxCommand(GoBackClicked);
+
+    public bool Active
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IMvxNavigationService _navigationService;
-        private readonly IRegisterService _registerService;
-
-        private bool _active;
-        private bool _rememberMe;       
-        private bool _errorMail;
-        private bool _errorLogin;
-        private bool _success;
-        private string _password;
-        private string _username;
-        private string _email;
-        private string _confirmPassword;
-        private bool _error = false;
-
-        public IMvxCommand SignUp => new MvxAsyncCommand(HandleSignUp);
-        public IMvxCommand ChangeStateCommand => new MvxCommand(InvertCheckBox);
-        public IMvxCommand GoBack => new MvxCommand(GoBackClicked);
-
-        public bool Active
+        get => _active;
+        set
         {
-            get => _active;
-            set
-            {
-                _active = value;
-                RaisePropertyChanged(() => Active);
-            }
+            _active = value;
+            RaisePropertyChanged(() => Active);
         }
+    }
 
-        public string Username
+    public string Username
+    {
+        get => _username;
+        set
         {
-            get => _username;
-            set
-            {
-                _username = value;
-                RaisePropertyChanged(() => Username);
-                ReloadActive();
-            }
+            _username = value;
+            RaisePropertyChanged(() => Username);
+            ReloadActive();
         }
+    }
 
-        public string Password
+    public string Password
+    {
+        get => _password;
+        set
         {
-            get => _password;
-            set
-            {
-                _password = value;
-                RaisePropertyChanged(() => Password);
-                ReloadActive();
-            }
+            _password = value;
+            RaisePropertyChanged(() => Password);
+            ReloadActive();
         }
+    }
 
-        public string Email
+    public string Email
+    {
+        get => _email;
+        set
         {
-            get => _email;
-            set
-            {
-                _email = value;
-                RaisePropertyChanged(() => Password);
-                ReloadActive();
-            }
+            _email = value;
+            RaisePropertyChanged(() => Password);
+            ReloadActive();
         }
+    }
 
-        public bool RememberMe
+    public bool RememberMe
+    {
+        get => _rememberMe;
+        set
         {
-            get => _rememberMe;
-            set
-            {
-                _rememberMe = value;
-                RaisePropertyChanged(() => RememberMe);
-            }
+            _rememberMe = value;
+            RaisePropertyChanged(() => RememberMe);
         }
+    }
 
-        public bool Error
+    public bool Error
+    {
+        get => _error;
+        set
         {
-            get => _error;
-            set
-            {
-                _error = value;
-                RaisePropertyChanged(() => Error);
-            }
+            _error = value;
+            RaisePropertyChanged(() => Error);
         }
+    }
 
-        public string ConfirmPassword
+    public string ConfirmPassword
+    {
+        get => _confirmPassword;
+        set
         {
-            get => _confirmPassword;
-            set
-            {
-                _confirmPassword = value;
-                RaisePropertyChanged(() => ConfirmPassword);
-                ReloadActive();
-            }
+            _confirmPassword = value;
+            RaisePropertyChanged(() => ConfirmPassword);
+            ReloadActive();
         }
+    }
 
-        public bool ErrorMail
+    public bool ErrorMail
+    {
+        get => _errorMail;
+        set
         {
-            get => _errorMail;
-            set
-            {
-                _errorMail = value;
-                RaisePropertyChanged(() => ErrorMail);
-            }
+            _errorMail = value;
+            RaisePropertyChanged(() => ErrorMail);
         }
+    }
 
-        public bool ErrorLogin
+    public bool ErrorLogin
+    {
+        get => _errorLogin;
+        set
         {
-            get => _errorLogin;
-            set
-            {
-                _errorLogin = value;
-                RaisePropertyChanged(() => ErrorLogin);
-            }
+            _errorLogin = value;
+            RaisePropertyChanged(() => ErrorLogin);
         }
+    }
 
-        public bool Success
+    public bool Success
+    {
+        get => _success;
+        set
         {
-            get => _success;
-            set
-            {
-                _success = value;
-                RaisePropertyChanged(() => Success);
-            }
+            _success = value;
+            RaisePropertyChanged(() => Success);
         }
+    }
 
-        public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)
+    public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)
+    {
+        _navigationService = navigationService;
+        _authenticationService = authenticationService;
+        _registerService = registerService;
+    }
+
+    private void GoBackClicked()
+    {
+        _navigationService.Navigate<LoginViewModel>();
+    }
+
+    private void InvertCheckBox()
+    {
+        RememberMe = !RememberMe;
+    }
+
+    private async Task HandleSignUp()
+    {
+        Active = false;
+        var resultError = await _registerService.Save(new UserSaveModel
         {
-            _navigationService = navigationService;
-            _authenticationService = authenticationService;
-            _registerService = registerService;
-        }
+            Password = Password,
+            Login = Username,
+            Email = Email,
+            LangKey = "en"
+        });
 
-        private void GoBackClicked()
-        {
-            _navigationService.Navigate<LoginViewModel>();
-        }
+        Error = resultError == ErrorConst.UnknownErrorType;
+        ErrorLogin = resultError == ErrorConst.LoginAlreadyUsedType;
+        ErrorMail = resultError == ErrorConst.EmailAlreadyUsedType;
 
-        private void InvertCheckBox()
-        {
-            RememberMe = !RememberMe;
-        }
+        Success = (!new List<bool>() { Error, ErrorLogin, ErrorMail }.Contains(true));
+    }
 
-        private async Task HandleSignUp()
-        {
-            Active = false;
-            var resultError = await _registerService.Save(new UserSaveModel
-            {
-                Password = Password,
-                Login = Username,
-                Email = Email,
-                LangKey = "en"
-            });
+    private void ReloadActive()
+    {
+        Active = CheckActive();
+    }
 
-            Error = resultError == ErrorConst.UnknownErrorType;
-            ErrorLogin = resultError == ErrorConst.LoginAlreadyUsedType;
-            ErrorMail = resultError == ErrorConst.EmailAlreadyUsedType;
-
-            Success = (!new List<bool>() { Error, ErrorLogin, ErrorMail }.Contains(true));
-        }
-
-        private void ReloadActive()
-        {
-            Active = CheckActive();
-        }
-
-        private bool CheckActive()
-        {
-            var fields = new List<string> { Password, ConfirmPassword, Username, Email };
-            if (fields.Any(field => string.IsNullOrEmpty(field))) return false; 
-            if (Password.Length < 4) return false;
-            if (ConfirmPassword != Password) return false;
-            if (Email.Length < 5) return false;
-            if (Email.Split('@').Length != 2) return false;
-            if (!Email.Split('@').All(val => val.Length > 0)) return false;
-            return true;
-        }
+    private bool CheckActive()
+    {
+        var fields = new List<string> { Password, ConfirmPassword, Username, Email };
+        if (fields.Any(field => string.IsNullOrEmpty(field))) return false;
+        if (Password.Length < 4) return false;
+        if (ConfirmPassword != Password) return false;
+        if (Email.Length < 5) return false;
+        if (Email.Split('@').Length != 2) return false;
+        if (!Email.Split('@').All(val => val.Length > 0)) return false;
+        return true;
     }
 }

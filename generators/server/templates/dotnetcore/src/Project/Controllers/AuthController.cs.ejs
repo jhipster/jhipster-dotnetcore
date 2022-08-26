@@ -6,40 +6,39 @@ using Microsoft.AspNetCore.Mvc;
 using <%= namespace %>.Infrastructure.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace <%= namespace %>.Controllers
+namespace <%= namespace %>.Controllers;
+
+[Route("")]
+[ApiController]
+public class AuthController : ControllerBase
 {
-    [Route("")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly SecuritySettings _settings;
+
+    public AuthController(IOptions<SecuritySettings> settings)
     {
-        private readonly SecuritySettings _settings;
+        _settings = settings.Value;
+    }
 
-        public AuthController(IOptions<SecuritySettings> settings)
-        {
-            _settings = settings.Value;
-        }
+    [HttpGet("oauth2/authorization/oidc")]
+    public async Task LogIn()
+    {
+        await HttpContext.ChallengeAsync(new AuthenticationProperties { RedirectUri = "/" });
+    }
 
-        [HttpGet("oauth2/authorization/oidc")]
-        public async Task LogIn()
-        {
-            await HttpContext.ChallengeAsync(new AuthenticationProperties { RedirectUri = "/" });
-        }
+    [HttpPost("login/oauth2/code/oidc")]
+    public IActionResult CallBack()
+    {
+        return Redirect("/");
+    }
 
-        [HttpPost("login/oauth2/code/oidc")]
-        public IActionResult CallBack()
+    [HttpPost("api/logout")]
+    public async Task<IActionResult> LogOut()
+    {
+        await HttpContext.SignOutAsync();
+        return Ok(new
         {
-            return Redirect("/");
-        }
-
-        [HttpPost("api/logout")]
-        public async Task<IActionResult> LogOut()
-        {
-            await HttpContext.SignOutAsync();
-            return Ok(new
-            {
-                logoutUrl = _settings.Authentication.OAuth2.Provider.LogOutUri,
-                idToken = await HttpContext.GetTokenAsync("id_token")
-            });
-        }
+            logoutUrl = _settings.Authentication.OAuth2.Provider.LogOutUri,
+            idToken = await HttpContext.GetTokenAsync("id_token")
+        });
     }
 }

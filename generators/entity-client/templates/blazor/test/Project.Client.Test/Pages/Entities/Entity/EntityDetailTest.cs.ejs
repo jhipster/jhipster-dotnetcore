@@ -36,61 +36,60 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
+namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>;
+
+public class <%= entityClassName %>DetailTest : TestContext
 {
-    public class <%= entityClassName %>DetailTest : TestContext
+    private readonly Mock<I<%= entityClassName %>Service> _<%= lowerCasedEntityClass %>Service;
+    private readonly Mock<INavigationService> _navigationService;
+    private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
+
+    public <%= entityClassName %>DetailTest()
     {
-        private readonly Mock<I<%= entityClassName %>Service> _<%= lowerCasedEntityClass %>Service;
-        private readonly Mock<INavigationService> _navigationService;
-        private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
+        _<%= lowerCasedEntityClass %>Service = new Mock<I<%= entityClassName %>Service>();
+        _navigationService = new Mock<INavigationService>();
+        Services.AddSingleton<I<%= entityClassName %>Service>(_<%= lowerCasedEntityClass %>Service.Object);
+        Services.AddSingleton<INavigationService>(_navigationService.Object);
+        Services.AddBlazorise(options =>
+            {
+                options.Immediate = true;
+            })
+            .AddBootstrapProviders()
+            .AddFontAwesomeIcons();
+        //This code is needed to support recursion
+        _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+            .ForEach(b => _fixture.Behaviors.Remove(b));
+        _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
+    }
 
-        public <%= entityClassName %>DetailTest()
-        {
-            _<%= lowerCasedEntityClass %>Service = new Mock<I<%= entityClassName %>Service>();
-            _navigationService = new Mock<INavigationService>();
-            Services.AddSingleton<I<%= entityClassName %>Service>(_<%= lowerCasedEntityClass %>Service.Object);
-            Services.AddSingleton<INavigationService>(_navigationService.Object);
-            Services.AddBlazorise(options =>
-                {
-                    options.Immediate = true;
-                })
-                .AddBootstrapProviders()
-                .AddFontAwesomeIcons();
-            //This code is needed to support recursion
-            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
-                .ForEach(b => _fixture.Behaviors.Remove(b));
-            _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
-        }
+    [Fact]
+    public void Should_Display<%= entityClassName %>_When_IdIsPresent()
+    {
+        //Arrange
+        var <%= lowerCasedEntityClass %> = _fixture.Create<<%= asModel(entityClassName) %>>();
+        _<%= lowerCasedEntityClass %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= lowerCasedEntityClass %>));
+        var <%= lowerCasedEntityClass %>Detail = RenderComponent<<%= entityClassName %>Detail>(ComponentParameter.CreateParameter("Id", 1));
 
-        [Fact]
-        public void Should_Display<%= entityClassName %>_When_IdIsPresent()
-        {
-            //Arrange
-            var <%= lowerCasedEntityClass %> = _fixture.Create<<%= asModel(entityClassName) %>>();
-            _<%= lowerCasedEntityClass %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= lowerCasedEntityClass %>));
-            var <%= lowerCasedEntityClass %>Detail = RenderComponent<<%= entityClassName %>Detail>(ComponentParameter.CreateParameter("Id", 1));
+        // Act
+        var title = <%= lowerCasedEntityClass %>Detail.Find("h2");
 
-            // Act
-            var title = <%= lowerCasedEntityClass %>Detail.Find("h2");
+        // Assert
+        title.MarkupMatches($"<h2><span><%= entityClassName %></span>{<%= lowerCasedEntityClass %>.Id}</h2>");
 
-            // Assert
-            title.MarkupMatches($"<h2><span><%= entityClassName %></span>{<%= lowerCasedEntityClass %>.Id}</h2>");
+    }
 
-        }
+    [Fact]
+    public void Should_NotDisplay<%= entityClassName %>_When_IdIsNotPresent()
+    {
+        //Arrange
+        _<%= lowerCasedEntityClass %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(new <%= asModel(entityClassName) %>()));
+        var <%= lowerCasedEntityClass %>Detail = RenderComponent<<%= entityClassName %>Detail>();
 
-        [Fact]
-        public void Should_NotDisplay<%= entityClassName %>_When_IdIsNotPresent()
-        {
-            //Arrange
-            _<%= lowerCasedEntityClass %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(new <%= asModel(entityClassName) %>()));
-            var <%= lowerCasedEntityClass %>Detail = RenderComponent<<%= entityClassName %>Detail>();
+        // Act
+        var title = <%= lowerCasedEntityClass %>Detail.Find("div.col-8");
 
-            // Act
-            var title = <%= lowerCasedEntityClass %>Detail.Find("div.col-8");
+        // Assert
+        title.Children.Length.Should().Be(0);
 
-            // Assert
-            title.Children.Length.Should().Be(0);
-
-        }
     }
 }

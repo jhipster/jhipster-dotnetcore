@@ -32,60 +32,59 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Controllers
+namespace <%= namespace %>.Controllers;
+
+[Route("api")]
+[ApiController]
+public class UserJwtController : ControllerBase
 {
-    [Route("api")]
-    [ApiController]
-    public class UserJwtController : ControllerBase
+    <%_ if (cqrsEnabled) { _%>
+    private readonly IMediator _mediator;
+    private readonly ITokenProvider _tokenProvider;
+    <%_ } else { _%>
+    private readonly IAuthenticationService _authenticationService;
+    private readonly ITokenProvider _tokenProvider;
+    <%_ } _%>
+
+    <%_ if (cqrsEnabled) { _%>
+    public UserJwtController(IMediator mediator, ITokenProvider tokenProvider)
+    {
+        _mediator = mediator;
+        _tokenProvider = tokenProvider;
+    }
+    <%_ } else { _%>
+    public UserJwtController(IAuthenticationService authenticationService, ITokenProvider tokenProvider)
+    {
+        _authenticationService = authenticationService;
+        _tokenProvider = tokenProvider;
+    }
+    <%_ } _%>
+
+    [HttpPost("authenticate")]
+    [ValidateModel]
+    public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDto loginDto)
     {
         <%_ if (cqrsEnabled) { _%>
-        private readonly IMediator _mediator;
-        private readonly ITokenProvider _tokenProvider;
+        var user = await _mediator.Send(new UserJwtAuthorizeCommand { LoginDto = loginDto });
         <%_ } else { _%>
-        private readonly IAuthenticationService _authenticationService;
-        private readonly ITokenProvider _tokenProvider;
+        var user = await _authenticationService.Authenticate(loginDto.Username, loginDto.Password);
         <%_ } _%>
-
-        <%_ if (cqrsEnabled) { _%>
-        public UserJwtController(IMediator mediator, ITokenProvider tokenProvider)
+        var rememberMe = loginDto.RememberMe;
+        var jwt = _tokenProvider.CreateToken(user, rememberMe);
+        var httpHeaders = new HeaderDictionary
         {
-            _mediator = mediator;
-            _tokenProvider = tokenProvider;
-        }
-        <%_ } else { _%>
-        public UserJwtController(IAuthenticationService authenticationService, ITokenProvider tokenProvider)
-        {
-            _authenticationService = authenticationService;
-            _tokenProvider = tokenProvider;
-        }
-        <%_ } _%>
-
-        [HttpPost("authenticate")]
-        [ValidateModel]
-        public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDto loginDto)
-        {
-            <%_ if (cqrsEnabled) { _%>
-            var user = await _mediator.Send(new UserJwtAuthorizeCommand { LoginDto = loginDto });
-            <%_ } else { _%>
-            var user = await _authenticationService.Authenticate(loginDto.Username, loginDto.Password);
-            <%_ } _%>
-            var rememberMe = loginDto.RememberMe;
-            var jwt = _tokenProvider.CreateToken(user, rememberMe);
-            var httpHeaders = new HeaderDictionary
-            {
-                [JwtConstants.AuthorizationHeader] = $"{JwtConstants.BearerPrefix} {jwt}"
-            };
-            return Ok(new JwtToken(jwt)).WithHeaders(httpHeaders);
-        }
+            [JwtConstants.AuthorizationHeader] = $"{JwtConstants.BearerPrefix} {jwt}"
+        };
+        return Ok(new JwtToken(jwt)).WithHeaders(httpHeaders);
     }
+}
 
-    public class JwtToken
+public class JwtToken
+{
+    public JwtToken(string idToken)
     {
-        public JwtToken(string idToken)
-        {
-            IdToken = idToken;
-        }
-
-        [JsonProperty("id_token")] private string IdToken { get; }
+        IdToken = idToken;
     }
+
+    [JsonProperty("id_token")] private string IdToken { get; }
 }

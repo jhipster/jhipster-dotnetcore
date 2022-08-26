@@ -27,60 +27,59 @@ using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace <%= namespace %>.Domain.Services
+namespace <%= namespace %>.Domain.Services;
+
+public class <%= serviceClassName %> : <%= serviceInterface %>
 {
-    public class <%= serviceClassName %> : <%= serviceInterface %>
+    protected readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+
+    public <%= serviceClassName %>(I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
     {
-        protected readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
+    }
 
-        public <%= serviceClassName %>(I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
-        {
-            _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
-        }
+    public virtual async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
+    {
+        await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+        await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+        return <%= camelCasedEntityClass %>;
+    }
 
-        public virtual async Task<<%= pascalizedEntityClass %>> Save(<%= pascalizedEntityClass %> <%= camelCasedEntityClass %>)
-        {
-            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
-            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
-            return <%= camelCasedEntityClass %>;
-        }
+    public virtual async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
+    {
+        var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+        <%_ if (databaseType != 'mongodb') { _%>
+        <%_ relationships.forEach( relationship => {
+            if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+            .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+            <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+            .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
+            <%_ }
+        }); _%>
+        <%_ } _%>
+            .GetPageAsync(pageable);
+        return page;
+    }
 
-        public virtual async Task<IPage<<%= pascalizedEntityClass %>>> FindAll(IPageable pageable)
-        {
-            var page = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
-            <%_ if (databaseType != 'mongodb') { _%>
-            <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
-                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
-                <%_ }
-            }); _%>
-            <%_ } _%>
-                .GetPageAsync(pageable);
-            return page;
-        }
+    public virtual async Task<<%= pascalizedEntityClass %>> FindOne(<%= primaryKeyType %> id)
+    {
+        var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+        <%_ if (databaseType != 'mongodb') { _%>
+        <%_ relationships.forEach( relationship => {
+            if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+            .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+            <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+            .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
+            <%_ }
+        }); _%>
+        <%_ } _%>
+            .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
+        return result;
+    }
 
-        public virtual async Task<<%= pascalizedEntityClass %>> FindOne(<%= primaryKeyType %> id)
-        {
-            var result = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
-            <%_ if (databaseType != 'mongodb') { _%>
-            <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
-                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
-                <%_ }
-            }); _%>
-            <%_ } _%>
-                .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
-            return result;
-        }
-
-        public virtual async Task Delete(<%= primaryKeyType %> id)
-        {
-            await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(id);
-            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
-        }
+    public virtual async Task Delete(<%= primaryKeyType %> id)
+    {
+        await _<%= camelCasedEntityClass %>Repository.DeleteByIdAsync(id);
+        await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
     }
 }

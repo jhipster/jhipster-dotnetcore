@@ -30,45 +30,44 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Application.Queries
+namespace <%= namespace %>.Application.Queries;
+
+public class <%= pascalizedEntityClass %>GetQueryHandler : IRequestHandler<<%= pascalizedEntityClass %>GetQuery, <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>
 {
-    public class <%= pascalizedEntityClass %>GetQueryHandler : IRequestHandler<<%= pascalizedEntityClass %>GetQuery, <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>
-    {
-        private IReadOnly<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+    private IReadOnly<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+    <%_ if (hasDto) { _%>
+    private readonly IMapper _mapper;
+    <%_ } _%>
+
+    public <%= pascalizedEntityClass %>GetQueryHandler(
         <%_ if (hasDto) { _%>
-        private readonly IMapper _mapper;
+        IMapper mapper,
         <%_ } _%>
+        IReadOnly<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
+    {
+        <%_ if (hasDto) { _%>
+        _mapper = mapper;
+        <%_ } _%>
+        _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
+    }
 
-        public <%= pascalizedEntityClass %>GetQueryHandler(
-            <%_ if (hasDto) { _%>
-            IMapper mapper,
-            <%_ } _%>
-            IReadOnly<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
-        {
-            <%_ if (hasDto) { _%>
-            _mapper = mapper;
-            <%_ } _%>
-            _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
-        }
-
-        public async Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>GetQuery request, CancellationToken cancellationToken)
-        {
-            var entity = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
-            <%_ if (databaseType != 'mongodb') { _%>
-            <%_ relationships.forEach( relationship => {
-                if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
-                <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
-                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
-                <%_ }
-            }); _%>
-            <%_ } _%>
-                .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == request.Id);
-            <%_ if (hasDto) { _%>
-            return _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity);
-            <%_ } else { _%>
-            return entity;
-            <%_ } _%>
-        }
+    public async Task<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>GetQuery request, CancellationToken cancellationToken)
+    {
+        var entity = await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+        <%_ if (databaseType != 'mongodb') { _%>
+        <%_ relationships.forEach( relationship => {
+            if (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one') { _%>
+            .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>)
+            <%_ } else if (relationship.relationshipType === 'many-to-many' && relationship.ownerSide) { _%>
+            .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalizedPlural %>)
+            <%_ }
+        }); _%>
+        <%_ } _%>
+            .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == request.Id);
+        <%_ if (hasDto) { _%>
+        return _mapper.Map<<%= asDto(pascalizedEntityClass) %>>(entity);
+        <%_ } else { _%>
+        return entity;
+        <%_ } _%>
     }
 }

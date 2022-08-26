@@ -19,10 +19,9 @@
 using <%= namespace %>.Domain.Entities;
 using MediatR;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class UserDeleteCommand : IRequest<Unit>
 {
-    public class UserDeleteCommand : IRequest<Unit>
-    {
-        public string Login { get; set; }
-    }
+    public string Login { get; set; }
 }

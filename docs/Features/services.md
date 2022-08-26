@@ -25,18 +25,18 @@ Add an Author entity with service generation enabled by using the generator's cl
 Then create the following class named `AuthorExtendedService.cs`:
 
 ```csharp
-namespace MyCompany.Domain.Services {
-    public class AuthorExtendedService : AuthorService, IAuthorService
-    {
-        public CountryExtendedService(ApplicationDatabaseContext applicationDatabaseContext) : base(applicationDatabaseContext)
-        {
-        }
+namespace MyCompany.Domain.Services;
 
-        public override async Task Delete(long id)
-        {
-            // add custom business logic before delete
-            await base.Delete(id);
-        }
+public class AuthorExtendedService : AuthorService, IAuthorService
+{
+    public CountryExtendedService(ApplicationDatabaseContext applicationDatabaseContext) : base(applicationDatabaseContext)
+    {
+    }
+
+    public override async Task Delete(long id)
+    {
+        // add custom business logic before delete
+        await base.Delete(id);
     }
 }
 ```
