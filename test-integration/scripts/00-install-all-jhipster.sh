@@ -6,7 +6,7 @@ set -e
 # Install JHipster Generator
 #-------------------------------------------------------------------------------
 echo "*** generator-jhipster: use last version"
-npm install -g generator-jhipster@7.8.1
+npm install -g generator-jhipster@7.9.3
 
 
 #-------------------------------------------------------------------------------
