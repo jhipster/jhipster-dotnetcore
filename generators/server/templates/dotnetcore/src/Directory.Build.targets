@@ -15,12 +15,12 @@
 	<PackageReference Update="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.161" />
+	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
 	<PackageReference Update="System.Net.Http.Json" Version="6.0.0" />
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="10.1.0" />
 
 	<PackageReference Update="AutoFixture" Version="4.17.0" />
-	<PackageReference Update="bunit" Version="1.8.15" />
+	<PackageReference Update="bunit" Version="1.9.8" />
 	<PackageReference Update="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 	<%_ } _%>
@@ -45,7 +45,7 @@
 	<PackageReference Update="Swashbuckle.AspNetCore" Version="6.3.1" />
 	<PackageReference Update="LanguageExt.Core" Version="4.2.9" />
 	<%_ if (authenticationType === 'jwt') { _%>
-	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.18.0" />
+	<PackageReference Update="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
 	<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="BCrypt.Net-Next" Version="4.0.3" />
 	<%_ } else { _%>
