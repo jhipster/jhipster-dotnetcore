@@ -38,7 +38,7 @@
 	<PackageReference Update="Scrutor" Version="4.2.0" />
 	<PackageReference Update="Serilog.AspNetCore" Version="6.0.1" />
 	<PackageReference Update="Serilog.Settings.Configuration" Version="3.3.0" />
-	<PackageReference Update="Serilog.Sinks.Console" Version="4.0.1" />
+	<PackageReference Update="Serilog.Sinks.Console" Version="4.1.0" />
 	<PackageReference Update="Serilog.Enrichers.Process" Version="2.0.2" />
 	<PackageReference Update="Serilog.Enrichers.Thread" Version="3.1.0" />
 	<PackageReference Update="Serilog.Sinks.SyslogMessages" Version="2.0.6" />
@@ -66,7 +66,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
-	<PackageReference Update="System.Text.Json" Version="6.0.4" />
+	<PackageReference Update="System.Text.Json" Version="6.0.6" />
 	<PackageReference Update="Serilog" Version="2.11.0" />
 
 	<%_ switch(databaseType) {
@@ -96,7 +96,7 @@
 		<%_ break;
 		case 'mysql': _%>
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
+	<PackageReference Update="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'oracle': _%>
