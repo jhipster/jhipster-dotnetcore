@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-		<AspNetCorePackageVersion>6.0.8</AspNetCorePackageVersion>
+		<AspNetCorePackageVersion>6.0.9</AspNetCorePackageVersion>
 		<EntityFrameworkPackageVersion>6.0.4</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.9</JHipsterNetPackageVersion>
   </PropertyGroup>
