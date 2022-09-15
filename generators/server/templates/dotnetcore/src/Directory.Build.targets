@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-		<AspNetCorePackageVersion>6.0.8</AspNetCorePackageVersion>
+		<AspNetCorePackageVersion>6.0.9</AspNetCorePackageVersion>
 		<EntityFrameworkPackageVersion>6.0.4</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.9</JHipsterNetPackageVersion>
   </PropertyGroup>
@@ -15,7 +15,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.161" />
+	<PackageReference Update="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
 	<PackageReference Update="System.Net.Http.Json" Version="6.0.0" />
 	<PackageReference Update="Toolbelt.Blazor.HttpClientInterceptor" Version="10.1.0" />
 
@@ -66,7 +66,7 @@
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
-	<PackageReference Update="System.Text.Json" Version="6.0.4" />
+	<PackageReference Update="System.Text.Json" Version="6.0.6" />
 	<PackageReference Update="Serilog" Version="2.11.0" />
 
 	<%_ switch(databaseType) {
