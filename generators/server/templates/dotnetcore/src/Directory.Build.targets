@@ -67,7 +67,7 @@
 	<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
 	<PackageReference Update="System.ComponentModel.Annotations" Version="5.0.0" />
 	<PackageReference Update="System.Text.Json" Version="6.0.6" />
-	<PackageReference Update="Serilog" Version="2.11.0" />
+	<PackageReference Update="Serilog" Version="2.12.0" />
 
 	<%_ switch(databaseType) {
 		case 'sqllite': _%>
