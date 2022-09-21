@@ -50,6 +50,12 @@ function updateWebpackCommonJs() {
             "",
             true
         );
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+            "target/classes/static/",
+            "dist",
+            true
+        );
     }
 }
 
@@ -120,7 +126,15 @@ function updateWebpackProdJs() {
 function updateTsConfigJson() {
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, '"outDir": ".*"', '"outDir": "dist/src/app"', true);
     this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    if (this.clientFramework === ANGULAR) {
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.app.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    }
+}
+
+function updateTsConfigSpecJson() {
+    if (this.clientFramework === ANGULAR || this.clientFramework === VUE) {
+        this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.spec.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
+    }
 }
 
 function updatePackageJson() {
@@ -211,11 +225,27 @@ function updateEsLinIgnore() {
         "",
         true
     );
+    this.rewriteFile(
+        `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintignore`,
+        'dist/',
+        'test/cypress/'
+    );
     if (this.protractorTests) {
         this.replaceContent(
             `${SERVER_SRC_DIR}${this.mainClientDir}/tsconfig.e2e.json`,
             `/${SERVER_SRC_DIR}${this.mainClientDir}`,
             "",
+            true
+        );
+    }
+}
+
+function updateEsLintrcJs() {
+    if (this.clientFramework === VUE) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientDir}/.eslintrc.js`,
+            'target/',
+            `dist/`,
             true
         );
     }
@@ -233,12 +263,14 @@ function updateTestFramework() {
 }
 
 function updateVendor() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientAppDir}/content/scss/vendor.scss`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/src/content`,
-        "..",
-        true
-    );
+    if (this.clientFramework === ANGULAR || this.clientFramework === VUE) {
+        this.replaceContent(
+            `${SERVER_SRC_DIR}${this.mainClientAppDir}/content/scss/vendor.scss`,
+            `${SERVER_SRC_DIR}${this.mainClientDir}/src/content`,
+            "..",
+            true
+        );
+    }
 }
 
 function writeFiles() {
@@ -246,9 +278,11 @@ function writeFiles() {
     updateWebpackDevJs.call(this);
     updateWebpackProdJs.call(this);
     updateTsConfigJson.call(this);
+    updateTsConfigSpecJson.call(this);
     updatePackageJson.call(this);
     updateJestConf.call(this);
     updateEsLinIgnore.call(this);
+    updateEsLintrcJs.call(this);
     updateTestFramework.call(this);
     updateVendor.call(this);
 }

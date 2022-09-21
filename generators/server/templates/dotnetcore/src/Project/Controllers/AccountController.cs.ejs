@@ -15,6 +15,7 @@
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using <%= namespace %>.Domain;
@@ -114,6 +115,20 @@ namespace <%= namespace %>.Controllers
         {
             _log.LogDebug("REST request to check if the current user is authenticated");
             return _userManager.GetUserName(User);
+        }
+        <%_ } _%>
+
+        [HttpGet("authorities")]
+        [Authorize(Roles = RolesConstants.ADMIN)]
+        <%_ if (cqrsEnabled) { _%>
+        public async Task<ActionResult<IEnumerable<string>>> GetAuthorities()
+        {
+            return Ok(await _mediator.Send(new UserGetAuthoritiesQuery()));
+        }
+        <%_ } else { _%>
+        public ActionResult<IEnumerable<string>> GetAuthorities()
+        {
+            return Ok(_userService.GetAuthorities());
         }
         <%_ } _%>
 

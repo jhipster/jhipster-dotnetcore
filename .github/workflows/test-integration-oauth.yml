@@ -9,7 +9,7 @@ jobs:
         strategy:
           fail-fast: false
           matrix:
-              node_version: [14.17.0]
+              node_version: [16.14.0]
               os: [ubuntu-latest]
               app-type:
                   - oauth-with-angular-app
@@ -48,13 +48,15 @@ jobs:
             JHI_ARG: ${{ matrix.arg }}
 
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v1
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
               with:
-                  node-version: ${{ matrix.node-version }}
+                node-version: ${{ matrix.node_version }}
+            - name: 'install required npm version'
+              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants').NPM_VERSION);")
             - uses: actions/setup-dotnet@v1
               with:
-                dotnet-version: '5.0.100'
+                dotnet-version: '6.0.x'
             - name: git history
               run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
             - name: PREPARE jhipster env

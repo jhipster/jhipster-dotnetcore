@@ -24,12 +24,23 @@ const files = {
             templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
         },
         {
+            templates: [{ file: 'docker-entrypoint-back.sh', renameTo: () => 'docker-entrypoint-back.sh' }],
+        },
+        {
             condition: generator => generator.clientFramework === constants.BLAZOR,
             templates: [{ file: 'Dockerfile-Front', renameTo: () => 'Dockerfile-Front' }],
         },
         {
             condition: generator => generator.clientFramework === constants.BLAZOR,
+            templates: [{ file: 'docker-entrypoint-front.sh', renameTo: () => 'docker-entrypoint-front.sh' }],
+        },
+        {
+            condition: generator => generator.clientFramework === constants.BLAZOR,
             templates: [{ file: 'nginx.conf', renameTo: () => 'nginx.conf' }],
+        },
+        {
+            condition: generator => generator.clientFramework === constants.BLAZOR,
+            templates: [{ file: 'default.conf', renameTo: () => 'default.conf' }],
         },
         {
             templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }],
@@ -48,9 +59,17 @@ const files = {
     ],
 };
 
+const jhipsterCommonFiles = {
+    global: [
+        {
+            templates: [{ file: 'gitattributes', renameTo: () => '.gitattributes', method: 'copy' }],
+        },
+    ],
+};
+
 function writeFiles() {
     return {
-        writeDockerFiles() {
+        writeFiles() {
             this.writeFilesToDisk(files, this, false, 'dotnetcore');
         },
     };
@@ -59,4 +78,5 @@ function writeFiles() {
 module.exports = {
     writeFiles,
     files,
+    jhipsterCommonFiles,
 };

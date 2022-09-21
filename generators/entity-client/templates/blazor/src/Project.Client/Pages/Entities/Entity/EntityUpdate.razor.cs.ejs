@@ -26,8 +26,11 @@ using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
 <%_ relationships.forEach(relation => { _%>
+    <%_ if( entityClassName !== relation.otherEntityNamePascalized ) { _%>
 using <%= namespace %>.Client.Services.EntityServices.<%= relation.otherEntityNamePascalized %>;
-<%_ }); _%>
+
+<%_ }
+}); _%>
 using Microsoft.AspNetCore.Components;
 
 namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>

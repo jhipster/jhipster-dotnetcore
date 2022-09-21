@@ -139,7 +139,7 @@ Blazor can run your client-side C# code directly in the browser, using WebAssemb
 
 ### Prerequisites
 
-- [dotnet5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
+- [dotnet 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 
 ### Generate your application 
 

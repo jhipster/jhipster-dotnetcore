@@ -81,7 +81,7 @@ namespace <%= namespace %>.Controllers
         public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
         {
             _log.LogDebug($"REST request to save User : {userDto}");
-            if (userDto.Id != null)
+            if (!string.IsNullOrEmpty(userDto.Id))
                 throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement",
                     "idexists");
             <%_ if (cqrsEnabled) { _%>
@@ -118,6 +118,13 @@ namespace <%= namespace %>.Controllers
 
             return ActionResultUtil.WrapOrNotFound(updatedUser)
                 .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", userDto.Login));
+        }
+
+        [HttpPut("{id}")]
+        [ValidateModel]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto userDto)
+        {
+            return await UpdateUser(userDto);
         }
 
         [HttpGet]
@@ -178,7 +185,7 @@ namespace <%= namespace %>.Controllers
             <%_ } else { _%>
             await _userService.DeleteUser(login);
             <%_ } _%>
-            return Ok().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
+            return NoContent().WithHeaders(HeaderUtil.CreateEntityDeletionAlert("userManagement.deleted", login));
         }
     }
 }

@@ -64,7 +64,7 @@ namespace <%= namespace %>
 
             <%_ if (authenticationType === 'oauth2') { _%>
             // Build an intermediate service provider
-            var sp = services.BuildServiceProvider();
+            var sp = CreateBuildServiceProvider(services);
             var securitySettings = sp.GetService<IOptions<SecuritySettings>>().Value;
             <%_ } _%>
 
@@ -94,6 +94,13 @@ namespace <%= namespace %>
 
         }
 
+        <%_ if (authenticationType === 'oauth2') { _%>
+        private ServiceProvider CreateBuildServiceProvider(IServiceCollection services)
+        {
+            return services.BuildServiceProvider();
+        }
+        <%_ } _%>
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
             ApplicationDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
@@ -103,7 +110,7 @@ namespace <%= namespace %>
                 .UseApplicationSecurity(securitySettings)
                 .UseApplicationProblemDetails()
                 .UseApplicationSwagger()
-                .UseApplicationWeb(env)
+                .UseApplicationWeb(env, Configuration)
                 <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
                 .UseConsul(Configuration)
                 <%_ } _%>

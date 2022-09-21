@@ -26,10 +26,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 <%_
 let hasEnumField = false;
-fields.forEach(field => {
-        if (field.fieldIsEnum) {
-            hasEnumField = true;
-        }
+dtoReferences.forEach(reference => {
+    const field = reference.field;
+    if (field && field.fieldIsEnum) {
+        hasEnumField = true;
+    }
     });
 if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
@@ -43,63 +44,26 @@ namespace <%= namespace %>.Dto
 
     public class <%= asDto(entityClassName) %>
     {
-
-        public <%= primaryKeyType %> Id { get; set; }
-
-        <%_ for (idx in fields){
-            if (fields[idx].id) continue;
-            let required = false;
-            const fieldValidate = fields[idx].fieldValidate;
-            const fieldValidateRules = fields[idx].fieldValidateRules;
-            const fieldType = equivalentCSharpType(fields[idx].fieldType);
-            const fieldNamePascalized = fields[idx].fieldNamePascalized;
-            if (fieldValidate === true) {
-                if (fieldValidateRules.includes('required')) {
-                    required = true;
-                }
-            }
-            if (required) { _%>
+        <%_ for (reference of dtoReferences) { _%>
+            <%_ const field = reference.field;
+        const required = field && field.fieldValidate && field.fieldValidationRequired; _%>
+            <%_ if (required) { _%>
         [Required]
             <%_ } _%>
-            <%_ if (fields[idx].fieldIsEnum) { _%>
-        public <%= fields[idx].fieldType %> <%= fieldNamePascalized %> { get; set; }
-                <%_ } else { _%>
-        public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
+            <%_ if (field && field.id) { _%>
+        public <%= primaryKeyType %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else if (field && field.blobContentTypeText) { _%>
+        public String <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else if (reference.collection && reference.relationship) { _%>
+        public IList<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.nameCapitalized %> { get; set; } = new List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>>();
+            <%_ } else if (reference.relationship) { _%>
+        public long? <%= reference.nameCapitalized %>Id { get; set; }
+        public <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else if (field && field.fieldIsEnum) { _%>
+        public <%= field.fieldType %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else { _%>
+        public <%= equivalentCSharpType(reference.type) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } _%>
-        <%_ }
-        for (idx in relationships) {
-            const relationshipType = relationships[idx].relationshipType;
-            const relationshipRequired = relationships[idx].relationshipRequired;
-            const otherEntityNamePascalized = relationships[idx].otherEntityNamePascalized;
-            const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
-            const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
-            if (relationshipType === 'one-to-one'){
-                if(otherEntityNamePascalized === 'User') { _%>
-        public string UserId { get; set; }
-                <%_ } else { _%>
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
-                <%_ }
-            }
-            if(relationshipType === 'one-to-many') { _%>
-        public IList<<%= asDto(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asDto(otherEntityNamePascalized) %>>();
-            <%_  } else if (relationshipType === 'many-to-one') {
-                if (relationshipRequired) { _%>
-        [Required]
-                <%_ }
-                if(otherEntityNamePascalized === 'User') { _%>
-        public string UserId { get; set; }
-                <%_ } else { _%>
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
-                <%_ }
-                } else if (relationshipType === 'many-to-many') {
-                const ownerSide = relationships[idx].ownerSide; _%>
-
-                <%_ if (!ownerSide) { _%>
-        [JsonIgnore]
-                <%_ } _%>
-        public IList<<%= asDto(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asDto(otherEntityNamePascalized) %>>();
-            <%_ } _%>
-
         <%_ } _%>
 
         // jhipster-needle-dto-add-field - JHipster will add fields here, do not remove

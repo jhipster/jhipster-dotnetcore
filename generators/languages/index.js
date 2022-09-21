@@ -1,7 +1,11 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const LanguageGenerator = require('generator-jhipster/generators/languages');
+const baseConstants = require('generator-jhipster/generators/generator-constants');
 
+const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
+
+const { writeFilesAngular, writeFilesReact, writeFilesVue } = require('./files-languages');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const constants = require('../generator-dotnetcore-constants');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
@@ -67,6 +71,19 @@ module.exports = class extends LanguageGenerator {
     }
 
     get postWriting() {
-        return super._postWriting();
+        return {
+            ...super._postWriting(),
+            postWritingDotnet() {
+                if (this.clientFramework === ANGULAR) {
+                    return writeFilesAngular.call(this);
+                }
+                if (this.clientFramework === REACT) {
+                    return writeFilesReact.call(this);
+                }
+                if (this.clientFramework === VUE) {
+                    return writeFilesVue.call(this);
+                }
+            },
+        };
     }
 };
