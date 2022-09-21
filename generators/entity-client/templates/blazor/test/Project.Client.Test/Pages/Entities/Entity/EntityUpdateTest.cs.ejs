@@ -113,11 +113,11 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
             }); _%>
 
             var <%= entityVariableName %>ToUpdate = _fixture.Create<<%= asModel(entityClassName) %>>();
-            <%= entityVariableName %>ToUpdate.Id = 1;
+            <%= entityVariableName %>ToUpdate.Id = <% if(primaryKeyType !== 'string') { _%> 1 <%_ } else { _%> "1" <%_ } _%>;
 
             _<%= entityVariableName %>Service.Setup(service => service.Get(It.IsAny<string>())).Returns(Task.FromResult(<%= entityVariableName %>ToUpdate));
 
-            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 1));
+            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", <% if(primaryKeyType !== 'string') { _%> 1L <%_ } else { _%> "1" <%_ } _%>));
 
             // Act
             var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
@@ -141,7 +141,7 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>
                 <%_ }
             }); _%>
 
-            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", 0));
+            var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", <% if(primaryKeyType !== 'string') { _%> 0L <%_ } else { _%> null <%_ } _%>));
 
             // Act
             var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");

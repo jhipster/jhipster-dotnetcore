@@ -45,7 +45,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             <%= entityClassNamePluralized %> = await <%= entityClassName %>Service.GetAll();
         }
 
-        private async Task Delete(long <%= lowerCasedEntityClassPlural %>Id)
+        private async Task Delete(<%= primaryKeyType %> <%= lowerCasedEntityClassPlural %>Id)
         {
             var deleteModal = ModalService.Show<DeleteModal>("Confirm delete operation");
             var deleteResult = await deleteModal.Result;
