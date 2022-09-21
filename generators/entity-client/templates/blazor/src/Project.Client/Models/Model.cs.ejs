@@ -34,7 +34,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace <%= namespace %>.Client.Models
 {
-    public class <%= asModel(entityClassName) %> : BaseModel<long>
+    public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
     {
         <%_ for (idx in fields){
             if (fields[idx].id) continue;
@@ -67,7 +67,7 @@ namespace <%= namespace %>.Client.Models
                 if(otherEntityNamePascalized === 'User') { _%>
         public string UserId { get; set; }
                 <%_ } else { _%>
-        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ }
             }
             if(relationshipType === 'one-to-many') { _%>
@@ -79,7 +79,7 @@ namespace <%= namespace %>.Client.Models
                 if(otherEntityNamePascalized === 'User') { _%>
         public string UserId { get; set; }
                 <%_ } else { _%>
-        public long? <%= relationshipFieldNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
                 <%_ }
                 } else if (relationshipType === 'many-to-many') { _%>
         public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();

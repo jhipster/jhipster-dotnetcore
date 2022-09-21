@@ -30,7 +30,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
     public partial class <%= entityClassName %>Detail : ComponentBase
     {
         [Parameter]
-        public int Id { get; set; }
+        public <%= primaryKeyType %> Id { get; set; }
 
         [Inject]
         public I<%= entityClassName %>Service <%= entityClassName %>Service { get; set; }
@@ -42,7 +42,11 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
         protected override async Task OnInitializedAsync()
         {
+            <%_ if(primaryKeyType !== 'string') { %>
             if (Id != 0)
+            <%_ } else { _%>
+            if (Id != null)
+            <%_ } _%>
             {
                 <%= entityClassName %> = await <%= entityClassName %>Service.Get(Id.ToString());
             }
