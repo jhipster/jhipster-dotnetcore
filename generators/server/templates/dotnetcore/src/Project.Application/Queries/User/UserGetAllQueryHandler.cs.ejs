@@ -52,7 +52,7 @@ public class UserGetAllQueryHandler : IRequestHandler<UserGetAllQuery, (IHeaderD
     {
         <%_ if (databaseType === 'mongodb') { _%>
         var page = await Task.FromResult((_userManager.Users as IMongoQueryable<User>)
-            .UsePageableAsync(request.Page));
+            .UsePageable(request.Page));
         <%_ } else { _%>
         var page = await _userManager.Users
             .Include(it => it.UserRoles)
