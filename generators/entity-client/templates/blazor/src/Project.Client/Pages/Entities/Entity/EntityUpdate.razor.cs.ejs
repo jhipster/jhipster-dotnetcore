@@ -38,7 +38,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
     public partial class <%= entityClassName %>Update : ComponentBase
     {
         [Parameter]
-        public int Id { get; set; }
+        public <%= primaryKeyType %> Id { get; set; }
 
         [Inject]
         private I<%= entityClassName %>Service <%= entityClassName %>Service { get; set; }
@@ -71,15 +71,15 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
         public string <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } else { _%>
-        public IEnumerable<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
+        public IEnumerable<<%= primaryKeyType %>> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<<%= primaryKeyType %>>();
 
-        public long? <%= relation.otherEntityNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
-        public IReadOnlyList<long> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<long>();
+        public IReadOnlyList<<%= primaryKeyType %>> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<<%= primaryKeyType %>>();
 
-        public IReadOnlyList<long> Selected<%= relation.relationshipFieldNamePascalizedPlural %> { get; set; }
+        public IReadOnlyList<<%= primaryKeyType %>> Selected<%= relation.relationshipFieldNamePascalizedPlural %> { get; set; }
 
             <%_ }
         }); _%>
@@ -93,14 +93,18 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             <%= relation.relationshipFieldNamePascalizedPlural %> = await <%= relation.otherEntityNamePascalized %>Service.GetAll();
             <%= relation.otherEntityNamePascalized %>Ids = <%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id).ToList();
             <%_ }}); _%>
+            <%_ if(primaryKeyType !== 'string') { %>
             if (Id != 0)
+            <%_ } else { _%>
+            if (Id != null)
+            <%_ } _%>
             {
                 <%= asModel(entityClassName) %> = await <%= entityClassName %>Service.Get(Id.ToString());
                 <%_ relationships.forEach(relation => {
                     if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
                 <%= relation.otherEntityNamePascalized %>Id = <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalized %>Id;
                     <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
-                Selected<%= relation.relationshipFieldNamePascalizedPlural %> = new List<long>(<%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id));
+                Selected<%= relation.relationshipFieldNamePascalizedPlural %> = new List<<%= primaryKeyType %>>(<%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id));
                     <%_ }
                 }); _%>
             }
@@ -126,7 +130,11 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                 <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = null;
             }
             <%_ }}); _%>
+            <%_ if(primaryKeyType !== 'string') { %>
             if (Id != 0)
+            <%_ } else { _%>
+            if (Id != null)
+            <%_ } _%>
             {
                 await <%= entityClassName %>Service.Update(<%= asModel(entityClassName) %>);
             }
