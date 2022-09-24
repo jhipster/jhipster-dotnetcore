@@ -112,6 +112,9 @@
             "MaxAge": 1800
         }
     },
+    <%_ if (clientFramework === "Blazor") { _%>
+    "INCLUDE_BLAZOR": false,
+    <%_ } _%>
     "RibbonInfo": {
       "display-ribbon-on-profiles": "dev"
     }

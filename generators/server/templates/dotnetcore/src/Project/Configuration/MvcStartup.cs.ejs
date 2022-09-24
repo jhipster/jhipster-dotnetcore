@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 <%_ if ( applicationType === 'gateway') { _%>
@@ -56,9 +57,16 @@ namespace <%= namespace %>.Configuration
             return services;
         }
 
-        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env)
+        public static IApplicationBuilder UseApplicationWeb(this IApplicationBuilder app, IHostEnvironment env, IConfiguration configuration)
         {
             app.UseDefaultFiles();
+            <%_ if (clientFramework === "Blazor") { _%>
+            if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
+            {
+                // Only serve blazor files if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
+                app.UseBlazorFrameworkFiles();
+            }
+            <%_ } _%>
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -66,6 +74,13 @@ namespace <%= namespace %>.Configuration
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                <%_ if (clientFramework === "Blazor") { _%>
+                if (configuration.GetValue<bool>("INCLUDE_BLAZOR"))
+                {
+                    // Only add fallback for blazor's index.html if config INCLUDE_BLAZOR is true in appsettings.json or in environment variable.
+                    endpoints.MapFallbackToFile("index.html");
+                }
+                <%_ } _%>
             });
 
             <%_ if (applicationType === 'gateway') { _%>

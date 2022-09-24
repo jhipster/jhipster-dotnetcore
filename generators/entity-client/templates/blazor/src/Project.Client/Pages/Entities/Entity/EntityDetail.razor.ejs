@@ -5,7 +5,7 @@ const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass;
 const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
-@page "/<%= lowerCasedEntityClass %>/{Id:int}/view"
+@page "/<%= lowerCasedEntityClass %>/{Id<%_ if(primaryKeyType !== 'string') { %>:<%= primaryKeyType %> <%_ } _%> }/view"
 @using Microsoft.AspNetCore.Authorization
 @namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
@@ -13,7 +13,11 @@ _%>
 
 <div class="row justify-content-center">
     <div class="col-8">
+        <%_ if(primaryKeyType !== 'string') { %>
         @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0)
+        <%_ } else { _%>
+        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != null)
+        <%_ } _%>
         {
             <div>
                 <h2><span><%= entityClassName %></span>@<%= entityClassName %>.Id</h2>
@@ -37,7 +41,11 @@ _%>
                         <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
                         @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>Id != string.Empty)
                         <%_ } else { _%>
+                            <%_ if(primaryKeyType !== 'string') { %>
                         @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>Id != 0)
+                                <%_ } else { _%>
+                                    @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>Id != null)
+                            <%_ } _%>
                         <%_ } _%>
                         {
                             <div>

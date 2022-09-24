@@ -89,9 +89,9 @@ services:
         build:
                 context: ../
                 dockerfile: Dockerfile-Front
-                args:
-                    - ServerUrl=http://localhost:8080
         ports:
             - 8081:80
+        environment:
+            - ServerUrl=http://localhost:8080
 <%_ } _%>
 
