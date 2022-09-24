@@ -26,7 +26,7 @@ if [[ ("$APP_FOLDER" = "jwt-with-blazor-app" || "$APP_FOLDER" = "jwt-with-blazor
     SONAR_ANALYSE_BLAZOR=true
 fi
 
-if [[ ("$APP_FOLDER" = "jwt-with-mongo-app" || "$APP_FOLDER" = "jwt-with-mongo-cqrs-app") ]]; then
+if [[ ("$APP_FOLDER" = "jwt-with-mongo-app" || "$APP_FOLDER" = "jwt-with-mongo-cqrs-app" || "$APP_FOLDER" = "oauth-with-mongo-app" || "$APP_FOLDER" = "oauth-with-mongo-cqrs-app") ]]; then
     IS_MONGO=true
 fi
 
