@@ -11,6 +11,7 @@ public class ExtendedServiceRegistrationTest
     public ExtendedServiceRegistrationTest()
     {
         _factory = new AppWebApplicationFactory<TestStartup>().WithMockUser();
+        _factory.CreateClient();
         _countryService = _factory.GetRequiredService<ICountryService>();
         _departmentService = _factory.GetRequiredService<IDepartmentService>();
     }
