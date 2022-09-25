@@ -112,9 +112,11 @@
 	<PackageReference Update="coverlet.msbuild" Version="3.1.2"/>
 	<PackageReference Update="FakeItEasy" Version="7.3.1" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
+	<%_ if (databaseType !== 'mongodb') { _%>
+    <PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.1" />
+	<%_ } _%>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.1" />
 	<PackageReference Update="Moq" Version="4.17.2" />
 	<PackageReference Update="xunit" Version="2.4.2" />
 	<PackageReference Update="xunit.runner.visualstudio" Version="2.4.5"/>
