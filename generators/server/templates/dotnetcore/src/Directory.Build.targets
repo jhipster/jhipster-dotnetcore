@@ -3,7 +3,7 @@
 		<AspNetCorePackageVersion>6.0.9</AspNetCorePackageVersion>
 		<EntityFrameworkPackageVersion>6.0.7</EntityFrameworkPackageVersion>
 		<JHipsterNetPackageVersion>1.0.9</JHipsterNetPackageVersion>
-  </PropertyGroup>
+    </PropertyGroup>
 
   <ItemGroup>
 	<%_ if(!skipClient && clientFramework === "Blazor") { _%>
@@ -91,7 +91,7 @@
 		case 'mongodb': _%>
 	<PackageReference Update="MongoDB.Driver" Version="2.17.1" />
 	<PackageReference Update="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageReference Update="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
@@ -112,9 +112,11 @@
 	<PackageReference Update="coverlet.msbuild" Version="3.1.2"/>
 	<PackageReference Update="FakeItEasy" Version="7.3.1" />
 	<PackageReference Update="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
-	<PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
+	<%_ if (databaseType !== 'mongodb') { _%>
+    <PackageReference Update="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageReference Update="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.1" />
+	<%_ } _%>
+    <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.3.1" />
 	<PackageReference Update="Moq" Version="4.17.2" />
 	<PackageReference Update="xunit" Version="2.4.2" />
 	<PackageReference Update="xunit.runner.visualstudio" Version="2.4.5"/>

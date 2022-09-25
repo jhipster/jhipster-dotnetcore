@@ -14,15 +14,14 @@
 -%>
 using System.Security.Claims;
 
-namespace <%= namespace %>.Test.Setup
-{
-    public class MockClaimsPrincipalProvider
-    {
-        public MockClaimsPrincipalProvider(ClaimsPrincipal user)
-        {
-            User = user;
-        }
+namespace <%= namespace %>.Test.Setup;
 
-        public ClaimsPrincipal User { get; }
+public class MockClaimsPrincipalProvider
+{
+    public MockClaimsPrincipalProvider(ClaimsPrincipal user)
+    {
+        User = user;
     }
+
+    public ClaimsPrincipal User { get; }
 }

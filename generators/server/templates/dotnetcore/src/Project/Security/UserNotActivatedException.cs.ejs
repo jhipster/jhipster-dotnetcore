@@ -14,12 +14,11 @@
 -%>
 using System.Security.Authentication;
 
-namespace <%= namespace %>.Crosscutting.Exceptions
+namespace <%= namespace %>.Crosscutting.Exceptions;
+
+public class UserNotActivatedException : AuthenticationException
 {
-    public class UserNotActivatedException : AuthenticationException
+    public UserNotActivatedException(string message) : base(message)
     {
-        public UserNotActivatedException(string message) : base(message)
-        {
-        }
     }
 }

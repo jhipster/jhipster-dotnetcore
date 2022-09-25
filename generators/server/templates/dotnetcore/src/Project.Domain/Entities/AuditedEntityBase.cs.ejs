@@ -13,15 +13,14 @@
  limitations under the License.
 -%>
 using System;
-using <%= namespace %>.Domain.Interfaces;
+using <%= namespace %>.Domain.Entities.Interfaces;
 
-namespace <%= namespace %>.Domain
+namespace <%= namespace %>.Domain.Entities;
+
+public abstract class AuditedEntityBase : IAuditedEntityBase
 {
-    public abstract class AuditedEntityBase : IAuditedEntityBase
-    {
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string LastModifiedBy { get; set; }
-        public DateTime LastModifiedDate { get; set; }
-    }
+    public string CreatedBy { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public string LastModifiedBy { get; set; }
+    public DateTime LastModifiedDate { get; set; }
 }

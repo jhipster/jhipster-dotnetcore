@@ -89,7 +89,7 @@ module.exports = class extends ServerGenerator {
         return {
             ...super._default(),
             fixConfig() {
-                this.jhipsterConfig.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
+                this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType === 'mongodb' ? 'mongodb' : 'mysql'; // set only for jdl-importer compatibility
             },
         };
     }

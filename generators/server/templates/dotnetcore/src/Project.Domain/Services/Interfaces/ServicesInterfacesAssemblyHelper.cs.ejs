@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Domain.Services.Interfaces
+namespace <%= namespace %>.Domain.Services.Interfaces;
+
+// This class is used as a helper type for assembly scanning
+public class ServicesInterfacesAssemblyHelper
 {
-    // This class is used as a helper type for assembly scanning
-    public class ServicesInterfacesAssemblyHelper
-    {
-        public static readonly string Namespace = "<%= namespace %>.Domain.Services.Interfaces";
-    }
+    public static readonly string Namespace = "<%= namespace %>.Domain.Services.Interfaces";
 }

@@ -205,7 +205,7 @@ module.exports = class extends ClientGenerator {
                     }
                     await dotnet.slnAdd(`${this.solutionName}.sln`, [
                         `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
-                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,                       
+                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
                     ]);
                     await dotnet.newSlnAddProj(this.solutionName, [
                         {
@@ -213,9 +213,9 @@ module.exports = class extends ClientGenerator {
                             'name' : `${this.pascalizedBaseName}.Client.Xamarin.Android`
                         },
                         {
-                            'path': `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,  
+                            'path': `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
                             'name' : `${this.pascalizedBaseName}.Client.Xamarin.iOS`
-                        }                                                
+                        }
                     ]);
                     this.log(chalk.green.bold('\Client application generated successfully.\n'));
 

@@ -23,43 +23,42 @@ let hasDto = dto === 'mapstruct';
 using AutoMapper;
 using System.Linq;
 <%_ } _%>
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class <%= pascalizedEntityClass %>UpdateCommandHandler : IRequestHandler<<%= pascalizedEntityClass %>UpdateCommand, <%= pascalizedEntityClass %>>
 {
-    public class <%= pascalizedEntityClass %>UpdateCommandHandler : IRequestHandler<<%= pascalizedEntityClass %>UpdateCommand, <%= pascalizedEntityClass %>>
-    {
-        private I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+    private I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+    <%_ if (hasDto) { _%>
+    private readonly IMapper _mapper;
+    <%_ } _%>
+
+    public <%= pascalizedEntityClass %>UpdateCommandHandler(
         <%_ if (hasDto) { _%>
-        private readonly IMapper _mapper;
+        IMapper mapper,
         <%_ } _%>
+        I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
+    {
+        <%_ if (hasDto) { _%>
+        _mapper = mapper;
+        <%_ } _%>
+        _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
+    }
 
-        public <%= pascalizedEntityClass %>UpdateCommandHandler(
-            <%_ if (hasDto) { _%>
-            IMapper mapper,
-            <%_ } _%>
-            I<%= pascalizedEntityClass %>Repository <%= camelCasedEntityClass %>Repository)
-        {
-            <%_ if (hasDto) { _%>
-            _mapper = mapper;
-            <%_ } _%>
-            _<%= camelCasedEntityClass %>Repository = <%= camelCasedEntityClass %>Repository;
-        }
-
-        public async Task<<%= pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>UpdateCommand command, CancellationToken cancellationToken)
-        {
-            <%_ if (hasDto) { _%>
-            <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(command.<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>);
-            var entity = await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
-            <%_ } else { _%>
-            var entity = await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(command.<%= pascalizedEntityClass %>);
-            <%_ } _%>
-            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
-            return entity;
-        }
+    public async Task<<%= pascalizedEntityClass %>> Handle(<%= pascalizedEntityClass %>UpdateCommand command, CancellationToken cancellationToken)
+    {
+        <%_ if (hasDto) { _%>
+        <%= pascalizedEntityClass %> <%= camelCasedEntityClass %> = _mapper.Map<<%= pascalizedEntityClass %>>(command.<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>);
+        var entity = await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+        <%_ } else { _%>
+        var entity = await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(command.<%= pascalizedEntityClass %>);
+        <%_ } _%>
+        await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+        return entity;
     }
 }

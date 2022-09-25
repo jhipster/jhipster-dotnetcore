@@ -19,9 +19,8 @@
 using MediatR;
 using System.Collections.Generic;
 
-namespace <%= namespace %>.Application.Queries
+namespace <%= namespace %>.Application.Queries;
+
+public class UserGetAuthoritiesQuery : IRequest<IEnumerable<string>>
 {
-    public class UserGetAuthoritiesQuery : IRequest<IEnumerable<string>>
-    {
-    }
 }

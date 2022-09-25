@@ -76,10 +76,10 @@ function updatedValue(cSharpType) {
             updatedValue = `${updatedNumValue}M`;
             break;
         case 'DateTime?' :
-            updatedValue = "DateTime.Now";
+            updatedValue = "DateTime.UtcNow";
             break;
         case 'DateTime' :
-            updatedValue = "DateTime.Now";
+            updatedValue = "DateTime.UtcNow";
             break;
         case 'bool?' :
             updatedValue = "true";
@@ -130,7 +130,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using <%= namespace %>.Infrastructure.Data;
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Repositories.Interfaces;
 <%_
 let hasEnumField = false;
@@ -156,6 +156,9 @@ using MongoDB.Bson;
 
 namespace <%= namespace %>.Test.Controllers
 {
+    <%_ if (databaseType === 'mongodb') { _%>
+    [Collection("MongoDB")]
+    <%_ } _%>
     public class <%= pascalizedEntityClassPlural %>ControllerIntTest
     {
         public <%= pascalizedEntityClassPlural %>ControllerIntTest()

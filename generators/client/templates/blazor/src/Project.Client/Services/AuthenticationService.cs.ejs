@@ -23,109 +23,109 @@ using AutoMapper;
 using Blazored.SessionStorage;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Dto;
+using <%= namespace %>.Dto.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 
-namespace <%= namespace %>.Client.Services
+namespace <%= namespace %>.Client.Services;
+
+public class AuthenticationService : AuthenticationStateProvider, IAuthenticationService
 {
-    public class AuthenticationService : AuthenticationStateProvider, IAuthenticationService
+    private const string AuthenticatationUrl = "/api/authenticate";
+    private const string AccountUrl = "/api/account";
+    private const string AuthorizationHeader = "Authorization";
+    private const string JhiAuthenticationtoken = "jhi-authenticationtoken";
+
+    private readonly HttpClient _httpClient;
+    private readonly ISyncSessionStorageService _sessionStorage;
+    private readonly IMapper _mapper;
+    private readonly ConfigurationModel _configurationModel = new ConfigurationModel();
+
+    public bool IsAuthenticated { get; set; }
+    public UserModel CurrentUser { get; set; }
+    public JwtToken JwtToken { get; set; }
+
+    public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage, IMapper mapper, IConfiguration configuration)
     {
-        private const string AuthenticatationUrl = "/api/authenticate";
-        private const string AccountUrl = "/api/account";
-        private const string AuthorizationHeader = "Authorization";
-        private const string JhiAuthenticationtoken = "jhi-authenticationtoken";
-
-        private readonly HttpClient _httpClient;
-        private readonly ISyncSessionStorageService _sessionStorage;
-        private readonly IMapper _mapper;
-        private readonly ConfigurationModel _configurationModel = new ConfigurationModel();
-
-        public bool IsAuthenticated { get; set; }
-        public UserModel CurrentUser { get; set; }
-        public JwtToken JwtToken { get; set; }
-
-        public AuthenticationService(HttpClient httpClient, ISyncSessionStorageService sessionStorage, IMapper mapper, IConfiguration configuration)
+        _httpClient = httpClient;
+        _sessionStorage = sessionStorage;
+        _mapper = mapper;
+        configuration.Bind(_configurationModel);
+        _httpClient.BaseAddress = new Uri(_configurationModel.ServerUrl);
+        var token = _sessionStorage.GetItem<string>(JhiAuthenticationtoken);
+        if (!string.IsNullOrEmpty(token))
         {
-            _httpClient = httpClient;
-            _sessionStorage = sessionStorage;
-            _mapper = mapper;
-            configuration.Bind(_configurationModel);
-            _httpClient.BaseAddress = new Uri(_configurationModel.ServerUrl);
-            var token = _sessionStorage.GetItem<string>(JhiAuthenticationtoken);
-            if (!string.IsNullOrEmpty(token))
-            {
-                JwtToken = new JwtToken { IdToken = token };
-                _ = SetUserAndAuthorizationHeader(JwtToken);
-            }
+            JwtToken = new JwtToken { IdToken = token };
+            _ = SetUserAndAuthorizationHeader(JwtToken);
         }
+    }
 
-        public async Task<bool> SignIn(LoginModel loginModel)
+    public async Task<bool> SignIn(LoginModel loginModel)
+    {
+        var loginDto = _mapper.Map<LoginDto>(loginModel);
+        var result = await _httpClient.PostAsJsonAsync(AuthenticatationUrl, loginDto);
+        if (result.IsSuccessStatusCode)
         {
-            var loginDto = _mapper.Map<LoginDto>(loginModel);
-            var result = await _httpClient.PostAsJsonAsync(AuthenticatationUrl, loginDto);
-            if (result.IsSuccessStatusCode)
-            {
-                JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
-                _sessionStorage.SetItem(JhiAuthenticationtoken, JwtToken.IdToken);
-                await SetUserAndAuthorizationHeader(JwtToken);
-            }
-            return IsAuthenticated;
+            JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
+            _sessionStorage.SetItem(JhiAuthenticationtoken, JwtToken.IdToken);
+            await SetUserAndAuthorizationHeader(JwtToken);
         }
+        return IsAuthenticated;
+    }
 
-        public Task SignOut()
+    public Task SignOut()
+    {
+        _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
+        JwtToken = null;
+        IsAuthenticated = false;
+        CurrentUser = null;
+        _sessionStorage.RemoveItem(JhiAuthenticationtoken);
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+        return Task.CompletedTask;
+    }
+
+    private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken)
+    {
+        IsAuthenticated = true;
+        _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
+        _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {jwtToken.IdToken}");
+        try
         {
-            _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
-            JwtToken = null;
+            var userDto = await _httpClient.GetFromJsonAsync<UserDto>(AccountUrl);
+            CurrentUser = _mapper.Map<UserModel>(userDto);
+        }
+        catch
+        {
             IsAuthenticated = false;
-            CurrentUser = null;
-            _sessionStorage.RemoveItem(JhiAuthenticationtoken);
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-            return Task.CompletedTask;
+        }
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
+
+    public override Task<AuthenticationState> GetAuthenticationStateAsync()
+    {
+        var identity = new ClaimsIdentity();
+        if (IsAuthenticated && CurrentUser != null)
+        {
+            var claims = new List<Claim>();
+            AddClaim(ref claims, ClaimTypes.NameIdentifier, CurrentUser.Login);
+            AddClaim(ref claims, ClaimTypes.Name, CurrentUser.FirstName);
+            AddClaim(ref claims, ClaimTypes.Email, CurrentUser.Email);
+            AddClaim(ref claims, ClaimTypes.GivenName, CurrentUser.FirstName);
+            AddClaim(ref claims, ClaimTypes.Surname, CurrentUser.LastName);
+            AddClaim(ref claims, "langKey", CurrentUser.LangKey);
+            AddClaim(ref claims, "picture", CurrentUser.ImageUrl);
+            claims.AddRange(CurrentUser.Authorities?.Select(role => new Claim(ClaimTypes.Role, role)) ?? Array.Empty<Claim>());
+            identity = new ClaimsIdentity(claims, "JWT Auth", ClaimTypes.Name, ClaimTypes.Role);
         }
 
-        private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken)
-        {
-            IsAuthenticated = true;
-            _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
-            _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {jwtToken.IdToken}");
-            try
-            {
-                var userDto = await _httpClient.GetFromJsonAsync<UserDto>(AccountUrl);
-                CurrentUser = _mapper.Map<UserModel>(userDto);
-            }
-            catch
-            {
-                IsAuthenticated = false;
-            }
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-        }
+        return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
+    }
 
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+    private void AddClaim(ref List<Claim> claims, string claimType, string value)
+    {
+        if (!string.IsNullOrEmpty(value))
         {
-            var identity = new ClaimsIdentity();
-            if (IsAuthenticated && CurrentUser != null)
-            {
-                var claims = new List<Claim>();
-                AddClaim(ref claims, ClaimTypes.NameIdentifier, CurrentUser.Login);
-                AddClaim(ref claims, ClaimTypes.Name, CurrentUser.FirstName);
-                AddClaim(ref claims, ClaimTypes.Email, CurrentUser.Email);
-                AddClaim(ref claims, ClaimTypes.GivenName, CurrentUser.FirstName);
-                AddClaim(ref claims, ClaimTypes.Surname, CurrentUser.LastName);
-                AddClaim(ref claims, "langKey", CurrentUser.LangKey);
-                AddClaim(ref claims, "picture", CurrentUser.ImageUrl);
-                claims.AddRange(CurrentUser.Authorities?.Select(role => new Claim(ClaimTypes.Role, role)) ?? Array.Empty<Claim>());
-                identity = new ClaimsIdentity(claims, "JWT Auth", ClaimTypes.Name, ClaimTypes.Role);
-            }
-
-            return Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
-        }
-
-        private void AddClaim(ref List<Claim> claims, string claimType, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                claims.Add(new Claim(claimType, value));
-            }
+            claims.Add(new Claim(claimType, value));
         }
     }
 }

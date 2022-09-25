@@ -20,9 +20,6 @@ using Microsoft.Extensions.Hosting;
     case 'sqllite': _%>
 using Microsoft.Data.Sqlite;
     <%_ break;
-    case 'mongodb': _%>
-using Microsoft.Data.Sqlite;
-    <%_ break;
     case 'mssql': _%>
 using Microsoft.Data.SqlClient;
     <%_ break;
@@ -37,115 +34,123 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using <%= namespace %>.Infrastructure.Configuration;
 
-namespace <%= namespace %>.Configuration
+namespace <%= namespace %>.Configuration;
+
+public static class DatabaseConfiguration
 {
-    public static class DatabaseConfiguration
+    public static IServiceCollection AddDatabaseModule(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddDatabaseModule(this IServiceCollection services, IConfiguration configuration)
+        <%_ if (databaseType !== 'mongodb') { _%>
+        string connectionString = null;
+        string databaseUrl = configuration.GetValue<string>("DATABASE_URL");
+
+        if (!String.IsNullOrEmpty(databaseUrl) && Uri.IsWellFormedUriString(databaseUrl, UriKind.RelativeOrAbsolute))
         {
-            string connectionString = null;
-            string databaseUrl = configuration.GetValue<string>("DATABASE_URL");
+            Console.WriteLine("DATABASE_URL will be used to create the connection string.");
+            //  Parse the connection string
+            var databaseUri = new Uri(databaseUrl);
+            string db = databaseUri.LocalPath.TrimStart('/');
+            string[] userInfo = databaseUri.UserInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
 
-            if (!String.IsNullOrEmpty(databaseUrl) && Uri.IsWellFormedUriString(databaseUrl, UriKind.RelativeOrAbsolute))
+            switch (databaseUri.Scheme)
             {
-                Console.WriteLine("DATABASE_URL will be used to create the connection string.");
-                //  Parse the connection string
-                var databaseUri = new Uri(databaseUrl);
-                string db = databaseUri.LocalPath.TrimStart('/');
-                string[] userInfo = databaseUri.UserInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
-
-                switch (databaseUri.Scheme)
-                {
-                    case "postgres":
-                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User Id={userInfo[0]};Password={userInfo[1]};Integrated Security=true;Pooling=true;MinPoolSize=0;MaxPoolSize=20;";
-                        break;
-                    case "mysql":
-                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Pooling=true;MinimumPoolSize=0;MaximumPoolsize=10;";
-                        break;
-                    case "mssql":
-                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Trusted_Connection=False;Pooling=true;";
-                        break;
-                    case "mongodb":
-                        connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Pooling=true;MinimumPoolSize=0;MaximumPoolsize=10;";
-                        break;
-                    default:
-                        Console.WriteLine("It was not possible to determine the database type provided by DATABASE_URL");
-                        break;
-                }
+                case "postgres":
+                    connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User Id={userInfo[0]};Password={userInfo[1]};Integrated Security=true;Pooling=true;MinPoolSize=0;MaxPoolSize=20;";
+                    break;
+                case "mysql":
+                    connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Pooling=true;MinimumPoolSize=0;MaximumPoolsize=10;";
+                    break;
+                case "mssql":
+                    connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Trusted_Connection=False;Pooling=true;";
+                    break;
+                case "mongodb":
+                    connectionString = $"Server={databaseUri.Host};Port={databaseUri.Port};Database={db};User={userInfo[0]};Password={userInfo[1]};Pooling=true;MinimumPoolSize=0;MaximumPoolsize=10;";
+                    break;
+                default:
+                    Console.WriteLine("It was not possible to determine the database type provided by DATABASE_URL");
+                    break;
             }
-            else
-            {
-                connectionString = configuration.GetConnectionString("AppDbContext");
-            }
+        }
+        else
+        {
+            connectionString = configuration.GetConnectionString("AppDbContext");
+        }
 
-            <%_ switch(databaseType) {
-                case 'sqllite': _%>
-            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
-            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder
-            {
-                DataSource = entityFrameworkConfiguration["DataSource"]
-            }.ToString());
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
-                <%_ break;
-                case 'mssql': _%>
-            services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
-                <%_ break;
-                case 'postgres': _%>
-            // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
-                <%_ break;
-                case 'mysql': _%>
-            services.AddDbContext<ApplicationDatabaseContext>(options =>
-                options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 19)))
-            );
-                <%_ break;
+        <%_ } _%>
+        <%_ switch(databaseType) {
+            case 'sqllite': _%>
+        var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
+        var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder
+        {
+            DataSource = entityFrameworkConfiguration["DataSource"]
+        }.ToString());
+        services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
+
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
+            case 'mssql': _%>
+        services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
+
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
+            case 'postgres': _%>
+        // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
+
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
+            case 'mysql': _%>
+        services.AddDbContext<ApplicationDatabaseContext>(options =>
+            options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 19)))
+        );
+
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
             case 'mongodb': _%>
-            var entityFrameworkConfiguration = configuration.GetSection("EntityFramework");
-            var sqliteConnection = new SqliteConnection(new SqliteConnectionStringBuilder
-            {
-                DataSource = entityFrameworkConfiguration["DataSource"]
-            }.ToString());
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseSqlite(sqliteConnection); });
-            services.Configure<MongoDatabaseConfig>(
-                configuration.GetSection(nameof(MongoDatabaseConfig)));
-            services.AddSingleton<IMongoDatabaseConfig>(sp =>
-                sp.GetRequiredService<IOptions<MongoDatabaseConfig>>().Value);
-            services.AddSingleton<IMongoDatabaseContext, MongoDatabaseContext>();
-                <%_ break;
-                case 'mssql': _%>
-            services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
-                <%_ break;
-                case 'postgres': _%>
-            // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
-                <%_ break;
-                case 'oracle': _%>
-            services.AddDbContext<ApplicationDatabaseContext>(options =>
-                options.UseOracle(connectionString));
-                <%_ break;
-            } _%>
+        services.Configure<MongoDatabaseConfig>(
+            configuration.GetSection(nameof(MongoDatabaseConfig)));
+        services.AddSingleton<IMongoDatabaseConfig>(sp =>
+            sp.GetRequiredService<IOptions<MongoDatabaseConfig>>().Value);
+        services.AddSingleton<IMongoDatabaseContext, MongoDatabaseContext>();
+            <%_ break;
+            case 'mssql': _%>
+        services.AddDbContext<ApplicationDatabaseContext>(options => options.UseSqlServer(connectionString));
 
-            services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
+            case 'postgres': _%>
+        // Opt out of the new timestamp mapping logic for postgres (https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic)
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        services.AddDbContext<ApplicationDatabaseContext>(context => { context.UseNpgsql(connectionString); });
 
-            return services;
-        }
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
+            case 'oracle': _%>
+        services.AddDbContext<ApplicationDatabaseContext>(options =>
+            options.UseOracle(connectionString));
 
-        public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder app,
-            IServiceProvider serviceProvider, IHostEnvironment environment)
+        services.AddScoped<DbContext>(provider => provider.GetService<ApplicationDatabaseContext>());
+            <%_ break;
+        } _%>
+
+        return services;
+    }
+
+    public static IApplicationBuilder UseApplicationDatabase(this IApplicationBuilder app, IHostEnvironment environment)
+    {
+        <%_ if (databaseType !== 'mongodb') { _%>
+        if (environment.IsDevelopment() || environment.IsProduction())
         {
-            if (environment.IsDevelopment() || environment.IsProduction())
+            using (var scope = app.ApplicationServices.CreateScope())
             {
-                using (var scope = serviceProvider.CreateScope())
-                {
-                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
-                    context.Database.OpenConnection();
-                    context.Database.EnsureCreated();
-                }
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDatabaseContext>();
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
             }
-
-            return app;
         }
+
+        <%_ } _%>
+        return app;
     }
 }

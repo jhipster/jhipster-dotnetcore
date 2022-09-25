@@ -16,15 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using MediatR;
 using <%= namespace %>.Dto;
 using System.Security.Claims;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountGetAuthenticatedQuery : IRequest<string>
 {
-    public class AccountGetAuthenticatedQuery : IRequest<string>
-    {
-        public ClaimsPrincipal User { get; set; }
-    }
+    public ClaimsPrincipal User { get; set; }
 }

@@ -16,13 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using MediatR;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class <%= pascalizedEntityClass %>DeleteCommand : IRequest<Unit>
 {
-    public class <%= pascalizedEntityClass %>DeleteCommand : IRequest<Unit>
-    {
-        public <%= primaryKeyType %> Id { get; set; }
-    }
+    public <%= primaryKeyType %> Id { get; set; }
 }

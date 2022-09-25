@@ -21,21 +21,20 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class UserDeleteCommandHandler : IRequestHandler<UserDeleteCommand, Unit>
 {
-    public class UserDeleteCommandHandler : IRequestHandler<UserDeleteCommand, Unit>
+    private readonly IUserService _userService;
+
+    public UserDeleteCommandHandler(IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public UserDeleteCommandHandler(IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        public async Task<Unit> Handle(UserDeleteCommand request, CancellationToken cancellationToken)
-        {
-            await _userService.DeleteUser(request.Login);
-            return Unit.Value;
-        }
+    public async Task<Unit> Handle(UserDeleteCommand request, CancellationToken cancellationToken)
+    {
+        await _userService.DeleteUser(request.Login);
+        return Unit.Value;
     }
 }
