@@ -24,24 +24,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using <%= namespace %>.Crosscutting.Exceptions;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountGetQueryHandler : IRequestHandler<AccountGetQuery, UserDto>
 {
-    public class AccountGetQueryHandler : IRequestHandler<AccountGetQuery, UserDto>
+    private readonly IUserService _userService;
+    private readonly IMapper _userMapper;
+
+    public AccountGetQueryHandler(IUserService userService, IMapper mapper)
     {
-        private readonly IUserService _userService;
-        private readonly IMapper _userMapper;
+        _userMapper = mapper;
+        _userService = userService;
+    }
 
-        public AccountGetQueryHandler(IUserService userService, IMapper mapper)
-        {
-            _userMapper = mapper;
-            _userService = userService;
-        }
-
-        public async Task<UserDto> Handle(AccountGetQuery command, CancellationToken cancellationToken)
-        {
-            var user = await _userService.GetUserWithUserRoles();
-            if (user == null) throw new InternalServerErrorException("User could not be found");
-            return _userMapper.Map<UserDto>(user);
-        }
+    public async Task<UserDto> Handle(AccountGetQuery command, CancellationToken cancellationToken)
+    {
+        var user = await _userService.GetUserWithUserRoles();
+        if (user == null) throw new InternalServerErrorException("User could not be found");
+        return _userMapper.Map<UserDto>(user);
     }
 }

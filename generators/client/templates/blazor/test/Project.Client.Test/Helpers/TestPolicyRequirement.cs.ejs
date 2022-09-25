@@ -18,10 +18,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 
-namespace <%= namespace %>.Client.Test.Helpers
+namespace <%= namespace %>.Client.Test.Helpers;
+
+public class TestPolicyRequirement : IAuthorizationRequirement
 {
-    public class TestPolicyRequirement : IAuthorizationRequirement
-    {
-        public string PolicyName { get; set; }
-    }
+    public string PolicyName { get; set; }
 }

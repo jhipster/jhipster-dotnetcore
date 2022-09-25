@@ -15,18 +15,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace><%= namespace %>.Domain</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Identity"  />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"  />
-        <PackageReference Include="Newtonsoft.Json"  />
-        <PackageReference Include="JHipsterNet.Core"  />
+        <PackageReference Include="Microsoft.AspNetCore.Identity" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="JHipsterNet.Core" />
         <%_ if (databaseType == 'mongodb') { _%>
         <PackageReference Include="MongoDB.Driver" />
+        <PackageReference Include="AspNetCore.Identity.MongoDbCore" />
         <%_ } _%>
     </ItemGroup>
 

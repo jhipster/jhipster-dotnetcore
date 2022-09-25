@@ -16,14 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using MediatR;
 using <%= namespace %>.Dto;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class UserUpdateCommand : IRequest<User>
 {
-    public class UserUpdateCommand : IRequest<User>
-    {
-        public UserDto UserDto { get; set; }
-    }
+    public UserDto UserDto { get; set; }
 }

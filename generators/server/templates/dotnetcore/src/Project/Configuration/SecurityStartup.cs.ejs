@@ -14,11 +14,13 @@
 -%>
 using System;
 using <%= namespace %>.Infrastructure.Configuration;
+using Microsoft.Extensions.Options;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Infrastructure.Data;
-using <%= namespace %>.Domain;
+using <%= namespace %>.Infrastructure.Data.Repositories;
 using <%= namespace %>.Security;
 using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Domain.Services;
@@ -30,7 +32,6 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 <%_ if (applicationType !== 'microservice') { _%>
 using AuthenticationService = <%= namespace %>.Domain.Services.AuthenticationService;
@@ -47,148 +48,156 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 <%_ } _%>
 
-namespace <%= namespace %>.Configuration
+namespace <%= namespace %>.Configuration;
+
+public static class SecurityStartup
 {
-    public static class SecurityStartup
+    <%_ if (authenticationType === 'jwt') { _%>
+    public const string UserNameClaimType = JwtRegisteredClaimNames.Sub;
+    <%_ } _%>
+
+    public static IServiceCollection AddSecurityModule(this IServiceCollection services)
     {
-
+        //TODO Retrieve the signing key properly (DRY with TokenProvider)
+        var opt = services.BuildServiceProvider().GetRequiredService<IOptions<SecuritySettings>>();
+        var securitySettings = opt.Value;
         <%_ if (authenticationType === 'jwt') { _%>
-        public const string UserNameClaimType = JwtRegisteredClaimNames.Sub;
-        <%_ } _%>
+        byte[] keyBytes;
+        var secret = securitySettings.Authentication.Jwt.Secret;
 
-        <%_ if (authenticationType === 'jwt') { _%>
-        public static IServiceCollection AddSecurityModule(this IServiceCollection services)
-        <%_ } else { _%>
-        public static IServiceCollection AddSecurityModule(this IServiceCollection services, SecuritySettings securitySettings)
-        <%_ } _%>
+        if (!string.IsNullOrWhiteSpace(secret))
         {
-            <%_ if (authenticationType === 'jwt') { _%>
-            //TODO Retrieve the signing key properly (DRY with TokenProvider)
-            var opt = services.BuildServiceProvider().GetRequiredService<IOptions<SecuritySettings>>();
-            var securitySettings = opt.Value;
-            byte[] keyBytes;
-            var secret = securitySettings.Authentication.Jwt.Secret;
+            keyBytes = Encoding.ASCII.GetBytes(secret);
+        }
+        else
+        {
+            keyBytes = Convert.FromBase64String(securitySettings.Authentication.Jwt.Base64Secret);
+        }
 
-            if (!string.IsNullOrWhiteSpace(secret))
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+
+        <%_ if (applicationType !== 'microservice') { _%>
+            <%_ if (databaseType === 'mongodb') { _%>
+        var databaseSettings = services.BuildServiceProvider().GetRequiredService<IOptions<MongoDatabaseConfig>>().Value;
+
+        services.AddIdentityCore<User>(options =>
             {
-                keyBytes = Encoding.ASCII.GetBytes(secret);
-            }
-            else
-            {
-                keyBytes = Convert.FromBase64String(securitySettings.Authentication.Jwt.Base64Secret);
-            }
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
-
-            <%_ if (applicationType !== 'microservice') { _%>
-            services.AddIdentity<User, Role>(options =>
-                {
-                    options.SignIn.RequireConfirmedEmail = true;
-                    options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
-                })
-                .AddEntityFrameworkStores<ApplicationDatabaseContext>()
-                .AddUserStore<UserStore<User, Role, ApplicationDatabaseContext, string, IdentityUserClaim<string>,
-                    UserRole, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>>()
-                .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
-                >()
-                .AddDefaultTokenProviders();
-            <%_ } _%>
-
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-                        ClockSkew = TimeSpan.Zero,/// remove delay of token when expire
-                        NameClaimType = UserNameClaimType
-                    };
-                });
-
-            <%_ if (applicationType !== 'microservice') { _%>
-            services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
-            <%_ } _%>
-            services.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
-            services.AddScoped<ITokenProvider, TokenProvider>();
-            <%_ } else { _%>
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.SignIn.RequireConfirmedEmail = true;
+                options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
             })
-            .AddCookie()
-            .AddOpenIdConnect(options =>
+            .AddRoles<Role>()
+            .AddMongoDbStores<User, Role, string>(databaseSettings.ConnectionString, databaseSettings.DatabaseName)
+            .AddUserStore<MongoDatabaseUserStore>()
+            .AddSignInManager()
+            <%_ } else { _%>
+        services.AddIdentity<User, Role>(options =>
             {
-                options.Authority = securitySettings.Authentication.OAuth2.Provider.IssuerUri;
-                options.ClientId = securitySettings.Authentication.OAuth2.Provider.ClientId;
-                options.ClientSecret = securitySettings.Authentication.OAuth2.Provider.ClientSecret;
-                options.SaveTokens = true;
-                options.ResponseType = OpenIdConnectResponseType.Code;
-                options.RequireHttpsMetadata = false; // dev only
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("email");
-                options.CallbackPath = new PathString("/login/oauth2/code/oidc");
-                options.ClaimActions.MapJsonKey("role", "roles", "role");
-                options.ClaimActions.MapJsonKey("role", "groups", "role");
+                options.SignIn.RequireConfirmedEmail = true;
+                options.ClaimsIdentity.UserNameClaimType = UserNameClaimType;
+            })
+            .AddEntityFrameworkStores<ApplicationDatabaseContext>()
+            .AddUserStore<UserStore<User, Role, ApplicationDatabaseContext, string, IdentityUserClaim<string>,
+                UserRole, IdentityUserLogin<string>, IdentityUserToken<string>, IdentityRoleClaim<string>>>()
+            .AddRoleStore<RoleStore<Role, ApplicationDatabaseContext, string, UserRole, IdentityRoleClaim<string>>
+            >()
+            <%_ } _%>
+            .AddDefaultTokenProviders();
+        <%_ } _%>
+
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+                    ClockSkew = TimeSpan.Zero,/// remove delay of token when expire
+                    NameClaimType = UserNameClaimType
+                };
             });
 
-            services.AddAuthorization();
-            <%_ } _%>
-            return services;
-        }
-
-        public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder app,
-            SecuritySettings securitySettings)
+        <%_ if (applicationType !== 'microservice') { _%>
+        services.AddScoped<IPasswordHasher<User>, BCryptPasswordHasher>();
+        <%_ } _%>
+        services.AddScoped<IClaimsTransformation, RoleClaimsTransformation>();
+        services.AddScoped<ITokenProvider, TokenProvider>();
+        <%_ } else { _%>
+        services.AddAuthentication(options =>
         {
-            app.UseCors(CorsPolicyBuilder(securitySettings.Cors));
-            app.UseAuthentication();
-            <%_ if (authenticationType === 'oauth2') { _%>
-            app.UseAuthorization();
-            <%_ } _%>
-            if (securitySettings.EnforceHttps)
-            {
-                app.UseHsts();
-                app.UseHttpsRedirection();
-            }
-            return app;
-        }
-
-        private static Action<CorsPolicyBuilder> CorsPolicyBuilder(Cors config)
+            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+        })
+        .AddCookie()
+        .AddOpenIdConnect(options =>
         {
-            //TODO implement an url based cors policy rather than global or per controller
-            return builder =>
+            options.Authority = securitySettings.Authentication.OAuth2.Provider.IssuerUri;
+            options.ClientId = securitySettings.Authentication.OAuth2.Provider.ClientId;
+            options.ClientSecret = securitySettings.Authentication.OAuth2.Provider.ClientSecret;
+            options.SaveTokens = true;
+            options.ResponseType = OpenIdConnectResponseType.Code;
+            options.RequireHttpsMetadata = false; // dev only
+            options.GetClaimsFromUserInfoEndpoint = true;
+            options.Scope.Add("openid");
+            options.Scope.Add("profile");
+            options.Scope.Add("email");
+            options.CallbackPath = new PathString("/login/oauth2/code/oidc");
+            options.ClaimActions.MapJsonKey("role", "roles", "role");
+            options.ClaimActions.MapJsonKey("role", "groups", "role");
+        });
+
+        services.AddAuthorization();
+        <%_ } _%>
+        return services;
+    }
+
+    public static IApplicationBuilder UseApplicationSecurity(this IApplicationBuilder app,
+        SecuritySettings securitySettings)
+    {
+        app.UseCors(CorsPolicyBuilder(securitySettings.Cors));
+        app.UseAuthentication();
+        <%_ if (authenticationType === 'oauth2') { _%>
+        app.UseAuthorization();
+        <%_ } _%>
+        if (securitySettings.EnforceHttps)
+        {
+            app.UseHsts();
+            app.UseHttpsRedirection();
+        }
+        return app;
+    }
+
+    private static Action<CorsPolicyBuilder> CorsPolicyBuilder(Cors config)
+    {
+        //TODO implement an url based cors policy rather than global or per controller
+        return builder =>
+        {
+            if (!config.AllowedOrigins.Equals("*"))
             {
-                if (!config.AllowedOrigins.Equals("*"))
+                if (config.AllowCredentials)
                 {
-                    if (config.AllowCredentials)
-                    {
-                        builder.AllowCredentials();
-                    }
-                    else
-                    {
-                        builder.DisallowCredentials();
-                    }
+                    builder.AllowCredentials();
                 }
+                else
+                {
+                    builder.DisallowCredentials();
+                }
+            }
 
-                builder.WithOrigins(config.AllowedOrigins)
-                    .WithMethods(config.AllowedMethods)
-                    .WithHeaders(config.AllowedHeaders)
-                    .WithExposedHeaders(config.ExposedHeaders)
-                    .SetPreflightMaxAge(TimeSpan.FromSeconds(config.MaxAge));
-            };
-        }
+            builder.WithOrigins(config.AllowedOrigins)
+                .WithMethods(config.AllowedMethods)
+                .WithHeaders(config.AllowedHeaders)
+                .WithExposedHeaders(config.ExposedHeaders)
+                .SetPreflightMaxAge(TimeSpan.FromSeconds(config.MaxAge));
+        };
     }
 }

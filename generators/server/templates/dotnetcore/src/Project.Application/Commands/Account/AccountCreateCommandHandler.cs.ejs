@@ -17,33 +17,32 @@
  limitations under the License.
 -%>
 using AutoMapper;
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Services.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountCreateCommandHandler : IRequestHandler<AccountCreateCommand, User>
 {
-    public class AccountCreateCommandHandler : IRequestHandler<AccountCreateCommand, User>
+    private readonly IMailService _mailService;
+    private readonly IUserService _userService;
+    private readonly IMapper _userMapper;
+
+    public AccountCreateCommandHandler(IUserService userService,
+        IMapper mapper, IMailService mailService)
     {
-        private readonly IMailService _mailService;
-        private readonly IUserService _userService;
-        private readonly IMapper _userMapper;
+        _userService = userService;
+        _mailService = mailService;
+        _userMapper = mapper;
+    }
 
-        public AccountCreateCommandHandler(IUserService userService,
-            IMapper mapper, IMailService mailService)
-        {
-            _userService = userService;
-            _mailService = mailService;
-            _userMapper = mapper;
-        }
-
-        public async Task<User> Handle(AccountCreateCommand command, CancellationToken cancellationToken)
-        {
-            var user = await _userService.RegisterUser(_userMapper.Map<User>(command.ManagedUserDto), command.ManagedUserDto.Password);
-            await _mailService.SendActivationEmail(user);
-            return user;
-        }
+    public async Task<User> Handle(AccountCreateCommand command, CancellationToken cancellationToken)
+    {
+        var user = await _userService.RegisterUser(_userMapper.Map<User>(command.ManagedUserDto), command.ManagedUserDto.Password);
+        await _mailService.SendActivationEmail(user);
+        return user;
     }
 }

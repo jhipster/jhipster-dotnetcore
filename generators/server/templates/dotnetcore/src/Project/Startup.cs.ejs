@@ -38,92 +38,75 @@ using <%= namespace %>.Application;
 
 [assembly: ApiController]
 
-namespace <%= namespace %>
+namespace <%= namespace %>;
+
+public class Startup : IStartup
 {
-    public class Startup
+    public virtual void Configure(IConfiguration configuration, IServiceCollection services)
     {
-        public Startup(IConfiguration configuration, IHostEnvironment environment)
-        {
-            Configuration = configuration;
-            Environment = environment;
-        }
+        services
+            .AddAppSettingsModule(configuration)<%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
 
-        private IConfiguration Configuration { get; }
+            .AddConsul(configuration)<%_ } _%>;
 
-        public IHostEnvironment Environment { get; }
-
-        public virtual void ConfigureServices(IServiceCollection services)
-        {
-            <%_ if (cqrsEnabled) { _%>
-            services.AddMediatR(typeof(ApplicationClassesAssemblyHelper));
-            <%_ } _%>
-            services
-                .AddAppSettingsModule(Configuration);
-
-            AddDatabase(services);
-
-            <%_ if (authenticationType === 'oauth2') { _%>
-            // Build an intermediate service provider
-            var sp = CreateBuildServiceProvider(services);
-            var securitySettings = sp.GetService<IOptions<SecuritySettings>>().Value;
-            <%_ } _%>
-
-            services
-            <%_ if (authenticationType === 'jwt') { _%>
-                .AddSecurityModule()
-            <%_ } else {
-                if (applicationType !== 'microservice') { _%>
-                .AddSecurityModule(securitySettings)
-                <%_ }
-            } _%>
-                .AddProblemDetailsModule(Environment)
-                .AddAutoMapperModule()
-                .AddSwaggerModule()
-                .AddWebModule()
-            <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
-                .AddConsul(Configuration)
-            <%_ } _%>
-                .AddRepositoryModule()
-                .AddServiceModule();
-
-            <%_ if (applicationType === 'gateway') { _%>
-            services
-                .AddOcelot()
-                .AddConsul();
-            <%_ } _%>
-
-        }
-
-        <%_ if (authenticationType === 'oauth2') { _%>
-        private ServiceProvider CreateBuildServiceProvider(IServiceCollection services)
-        {
-            return services.BuildServiceProvider();
-        }
+        <%_ if (clientFramework === "Blazor") { _%>
+        configuration.ConfigureWebModule();
         <%_ } _%>
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider serviceProvider,
-            ApplicationDatabaseContext context, IOptions<SecuritySettings> securitySettingsOptions)
-        {
-            var securitySettings = securitySettingsOptions.Value;
-            app
-                .UseApplicationSecurity(securitySettings)
-                .UseApplicationProblemDetails()
-                .UseApplicationSwagger()
-                .UseApplicationWeb(env, Configuration)
-                <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
-                .UseConsul(Configuration)
-                <%_ } _%>
-                .UseApplicationDatabase(serviceProvider, env)<%_ if (authenticationType === 'oauth2' || applicationType === 'microservice') { _%>;<%_ } _%>
+        AddDatabase(configuration, services);
+    }
 
-                <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
-                .UseApplicationIdentity(serviceProvider);
-                <%_ } _%>
-        }
+    public virtual void ConfigureServices(IServiceCollection services, IHostEnvironment environment)
+    {
+        <%_ if (cqrsEnabled) { _%>
+        services.AddMediatR(typeof(ApplicationClassesAssemblyHelper));
 
-        protected virtual void AddDatabase(IServiceCollection services)
-        {
-            services.AddDatabaseModule(Configuration);
-        }
+        <%_ } _%>
+        services
+        <%_ if (authenticationType === 'jwt' || applicationType !== 'microservice') { _%>
+            .AddSecurityModule()
+        <%_ } _%>
+            .AddProblemDetailsModule(environment)
+            .AddAutoMapperModule()
+            .AddSwaggerModule()
+            .AddWebModule()
+            .AddRepositoryModule()
+            .AddServiceModule();
+        <%_ if (applicationType === 'gateway') { _%>
+
+        services
+            .AddOcelot()
+            .AddConsul();
+        <%_ } _%>
+    }
+
+    public virtual void ConfigureMiddleware(IApplicationBuilder app, IHostEnvironment environment)
+    {
+        IServiceProvider serviceProvider = app.ApplicationServices;
+        var securitySettingsOptions = serviceProvider.GetRequiredService<IOptions<SecuritySettings>>();
+        var securitySettings = securitySettingsOptions.Value;
+        app
+            .UseApplicationSecurity(securitySettings)
+            .UseApplicationProblemDetails()
+            <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+            .UseConsul()
+            <%_ } _%>
+            .UseApplicationDatabase(environment)<%_ if (authenticationType === 'oauth2' || applicationType === 'microservice') { _%>;<%_ } _%>
+
+            <%_ if (authenticationType === 'jwt' && applicationType !== 'microservice') { _%>
+            .UseApplicationIdentity();
+            <%_ } _%>
+    }
+
+    public virtual void ConfigureEndpoints(IApplicationBuilder app, IHostEnvironment environment)
+    {
+        app
+            .UseApplicationSwagger()
+            .UseApplicationWeb(environment);
+    }
+
+    protected virtual void AddDatabase(IConfiguration configuration, IServiceCollection services)
+    {
+        services.AddDatabaseModule(configuration);
     }
 }

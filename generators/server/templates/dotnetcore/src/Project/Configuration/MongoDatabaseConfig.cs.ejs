@@ -12,11 +12,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-namespace <%= namespace %>.Infrastructure.Configuration
+namespace <%= namespace %>.Infrastructure.Configuration;
+
+public class MongoDatabaseConfig : IMongoDatabaseConfig
 {
-    public class MongoDatabaseConfig : IMongoDatabaseConfig
-    {
-        public string ConnectionString { get; set; }
-        public string DatabaseName { get; set; }
-    }
+    public string ConnectionString { get; set; }
+    public string DatabaseName { get; set; }
 }

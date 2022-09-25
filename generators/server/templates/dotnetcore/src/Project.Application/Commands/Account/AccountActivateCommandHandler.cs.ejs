@@ -16,26 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Services.Interfaces;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountActivateCommandHandler : IRequestHandler<AccountActivateCommand, User>
 {
-    public class AccountActivateCommandHandler : IRequestHandler<AccountActivateCommand, User>
+    private readonly IUserService _userService;
+
+    public AccountActivateCommandHandler(IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userService = userService;
+    }
 
-        public AccountActivateCommandHandler(IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        public Task<User> Handle(AccountActivateCommand command, CancellationToken cancellationToken)
-        {
-            return _userService.ActivateRegistration(command.Key);
-        }
+    public Task<User> Handle(AccountActivateCommand command, CancellationToken cancellationToken)
+    {
+        return _userService.ActivateRegistration(command.Key);
     }
 }

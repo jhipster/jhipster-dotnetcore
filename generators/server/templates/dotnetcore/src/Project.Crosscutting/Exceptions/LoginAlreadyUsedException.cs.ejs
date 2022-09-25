@@ -14,13 +14,12 @@
 -%>
 using <%= namespace %>.Crosscutting.Constants;
 
-namespace <%= namespace %>.Crosscutting.Exceptions
+namespace <%= namespace %>.Crosscutting.Exceptions;
+
+public class LoginAlreadyUsedException : BadRequestAlertException
 {
-    public class LoginAlreadyUsedException : BadRequestAlertException
+    public LoginAlreadyUsedException() : base(ErrorConstants.LoginAlreadyUsedType, "Login name is already in use!",
+        "userManagement", "userexists")
     {
-        public LoginAlreadyUsedException() : base(ErrorConstants.LoginAlreadyUsedType, "Login name is already in use!",
-            "userManagement", "userexists")
-        {
-        }
     }
 }

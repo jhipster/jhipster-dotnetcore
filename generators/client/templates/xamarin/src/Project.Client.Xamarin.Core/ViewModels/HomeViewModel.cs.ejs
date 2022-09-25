@@ -20,28 +20,27 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 
-namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
+namespace <%= namespace %>.Client.Xamarin.Core.ViewModels;
+
+public class HomeViewModel : BaseViewModel
 {
-    public class HomeViewModel : BaseViewModel
+    private readonly IMvxNavigationService _navigationService;
+
+    public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(ShowMenuViewModelCommandClicked);
+    public IMvxAsyncCommand ShowWelcomeViewModelCommand => new MvxAsyncCommand(ShowWelcomeViewModelCommandClicked);
+
+    public HomeViewModel(IMvxNavigationService navigationService)
     {
-        private readonly IMvxNavigationService _navigationService;
+        _navigationService = navigationService;
+    }
 
-        public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(ShowMenuViewModelCommandClicked);
-        public IMvxAsyncCommand ShowWelcomeViewModelCommand => new MvxAsyncCommand(ShowWelcomeViewModelCommandClicked);
+    private async Task ShowWelcomeViewModelCommandClicked()
+    {
+        await _navigationService.Navigate<WelcomeViewModel>();
+    }
 
-        public HomeViewModel(IMvxNavigationService navigationService)
-        {
-            _navigationService = navigationService;
-        }
-
-        private async Task ShowWelcomeViewModelCommandClicked()
-        {
-            await _navigationService.Navigate<WelcomeViewModel>();
-        }
-
-        private async Task ShowMenuViewModelCommandClicked()
-        {
-            await _navigationService.Navigate<MenuViewModel>();
-        }
+    private async Task ShowMenuViewModelCommandClicked()
+    {
+        await _navigationService.Navigate<MenuViewModel>();
     }
 }

@@ -33,32 +33,32 @@ In order to create your own commands and/or queries you have to create two class
 For instance, let's create a query `MyEntityGetQuery.cs`:
 
 ```csharp
-namespace MyCompany.Application.Queries {
-    public class MyEntityGetQuery : IRequest<MyEntity>
-    {
-        public long Id { get; set; }
-    }
+namespace MyCompany.Application.Queries;
+
+public class MyEntityGetQuery : IRequest<MyEntity>
+{
+    public long Id { get; set; }
 }
 ```
 This Query should have an Id and returns a MyEntity object.
 Here's the handler `MyEntityGetQueryHandler.cs` :
 ```csharp
-namespace MyCompany.Application.Queries {
-    public class MyEntityGetQueryHandler : IRequestHandler<MyEntityGetQuery, MyEntity>
+namespace MyCompany.Application.Queries;
+
+public class MyEntityGetQueryHandler : IRequestHandler<MyEntityGetQuery, MyEntity>
+{
+    private IReadOnlyMyEntityRepository _myEntityRepository;
+
+    public MyEntityGetQueryHandler(IReadOnlyMyEntityRepository myEntityRepository)
     {
-        private IReadOnlyMyEntityRepository _myEntityRepository;
+        _myEntityRepository = myEntityRepository;
+    }
 
-        public MyEntityGetQueryHandler(IReadOnlyMyEntityRepository myEntityRepository)
-        {
-            _myEntityRepository = myEntityRepository;
-        }
-
-        public Task<MyEntity> Handle(MyEntityGetQuery request,
-	        CancellationToken cancellationToken)
-        {
-            return _myEntityRepository.QueryHelper()
-                .GetOneAsync(myEntity => myEntity.Id == request.Id);
-        }
+    public Task<MyEntity> Handle(MyEntityGetQuery request,
+        CancellationToken cancellationToken)
+    {
+        return _myEntityRepository.QueryHelper()
+            .GetOneAsync(myEntity => myEntity.Id == request.Id);
     }
 }
 ```

@@ -102,6 +102,8 @@ function customizeDotnetPaths() {
     this.modelSuffix = 'Model';
     this.backendName = '.Net';
 
+    this.primaryKeyType = this.databaseType === 'mongodb' ? 'string' : 'long';
+
     if (this.clientFramework === BLAZOR) {
         this.mainClientDir = `client/${this.pascalizedBaseName}.Client`;
         this.sharedClientDir = `client/${this.pascalizedBaseName}.Client.Shared`;

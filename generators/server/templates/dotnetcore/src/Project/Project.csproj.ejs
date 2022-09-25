@@ -33,41 +33,41 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JHipsterNet.Core"  />
-        <PackageReference Include="JHipsterNet.Web"  />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"  />
-        <PackageReference Include="Hellang.Middleware.ProblemDetails"  />
+        <PackageReference Include="JHipsterNet.Core" />
+        <PackageReference Include="JHipsterNet.Web" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="Hellang.Middleware.ProblemDetails" />
         <%_ if (cqrsEnabled) { _%>
         <PackageReference Include="MediatR" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
         <%_ } _%>
-        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions"  />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson"  />
-        <PackageReference Include="Scrutor"  />
-        <PackageReference Include="Serilog.AspNetCore"  />
-        <PackageReference Include="Serilog.Settings.Configuration"  />
-        <PackageReference Include="Serilog.Sinks.Console"  />
-        <PackageReference Include="Serilog.Enrichers.Process"  />
-        <PackageReference Include="Serilog.Enrichers.Thread"  />
-        <PackageReference Include="Serilog.Sinks.SyslogMessages"  />
-        <PackageReference Include="Swashbuckle.AspNetCore"  />
-        <PackageReference Include="LanguageExt.Core"  />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+        <PackageReference Include="Scrutor" />
+        <PackageReference Include="Serilog.AspNetCore" />
+        <PackageReference Include="Serilog.Settings.Configuration" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="Serilog.Enrichers.Process" />
+        <PackageReference Include="Serilog.Enrichers.Thread" />
+        <PackageReference Include="Serilog.Sinks.SyslogMessages" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
+        <PackageReference Include="LanguageExt.Core" />
         <%_ if (authenticationType === 'jwt') { _%>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt"  />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"  />
-        <PackageReference Include="BCrypt.Net-Next"  />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="BCrypt.Net-Next" />
         <%_ } else { _%>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"  />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'consul') { _%>
-        <PackageReference Include="Winton.Extensions.Configuration.Consul"  />
+        <PackageReference Include="Winton.Extensions.Configuration.Consul" />
         <%_ } _%>
         <%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
-        <PackageReference Include="Consul"  />
+        <PackageReference Include="Consul" />
         <%_ } _%>
         <%_ if (applicationType === 'gateway') { _%>
-        <PackageReference Include="Ocelot"  />
-        <PackageReference Include="Ocelot.Provider.Consul"  />
+        <PackageReference Include="Ocelot" />
+        <PackageReference Include="Ocelot.Provider.Consul" />
         <%_ } _%>
         <%_ if(!skipClient && clientFramework === "Blazor") { _%>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />

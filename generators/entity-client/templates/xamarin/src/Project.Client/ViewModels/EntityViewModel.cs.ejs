@@ -34,144 +34,143 @@ if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
 <%_ } _%>
 
-<%_ 
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
-const entityVariableName = camelCasedEntityClass; 
+const entityVariableName = camelCasedEntityClass;
 _%>
 
-namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
+namespace <%= namespace %>.Client.Xamarin.Core.ViewModels;
+
+public class <%= entityClassName %>ViewModel : MvxViewModel
 {
-    public class <%= entityClassName %>ViewModel : MvxViewModel
+    private readonly I<%= entityClassName %>Service _<%= entityVariableName %>Service;
+    private readonly IMvxNavigationService _navigationService;
+
+    private <%= asModel(entityClassName) %> _currentElement;
+    private List<<%= asModel(entityClassName) %>> _listElement;
+
+    <%_ for (idx in fields){
+        const fieldType = equivalentCSharpType(fields[idx].fieldType);
+        const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
+    if (fields[idx].fieldIsEnum) { _%>
+    public <%= fields[idx].fieldType %> _<%= fieldNameCamelCased %>;
+            <%_ } else { _%>
+    public <%= fieldType %> _<%= fieldNameCamelCased %>;
+        <%_ } _%>
+    <%_ } _%>
+
+    // Workaround to fix MvvmCross issue where buttons remain disabled with MvxAsyncCommand
+    public IMvxCommand AddCommand => new MvxCommand(async () => await AddCommandClicked());
+    public IMvxCommand RemoveCommand => new MvxCommand(async () => await RemoveCommandClicked());
+    public IMvxCommand EditCommand => new MvxCommand(async () => await EditCommandClicked());
+
+    public List<<%= asModel(entityClassName) %>> ListElement
     {
-        private readonly I<%= entityClassName %>Service _<%= entityVariableName %>Service;
-        private readonly IMvxNavigationService _navigationService;
-
-        private <%= asModel(entityClassName) %> _currentElement;
-        private List<<%= asModel(entityClassName) %>> _listElement;
-
-        <%_ for (idx in fields){
-            const fieldType = equivalentCSharpType(fields[idx].fieldType);
-            const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
-        if (fields[idx].fieldIsEnum) { _%>
-        public <%= fields[idx].fieldType %> _<%= fieldNameCamelCased %>;
-                <%_ } else { _%>
-        public <%= fieldType %> _<%= fieldNameCamelCased %>;
-            <%_ } _%>
-        <%_ } _%>
-
-        // Workaround to fix MvvmCross issue where buttons remain disabled with MvxAsyncCommand
-        public IMvxCommand AddCommand => new MvxCommand(async () => await AddCommandClicked());
-        public IMvxCommand RemoveCommand => new MvxCommand(async () => await RemoveCommandClicked());
-        public IMvxCommand EditCommand => new MvxCommand(async () => await EditCommandClicked());
-
-        public List<<%= asModel(entityClassName) %>> ListElement
+        get => _listElement;
+        set
         {
-            get => _listElement;
-            set
-            {
-                _listElement = value;
-                RaisePropertyChanged(() => ListElement);
-            }
+            _listElement = value;
+            RaisePropertyChanged(() => ListElement);
         }
+    }
 
-        public <%= asModel(entityClassName) %> CurrentElement
+    public <%= asModel(entityClassName) %> CurrentElement
+    {
+        get => _currentElement;
+        set
         {
-            get => _currentElement;
-            set
+            _currentElement = value;
+            if (_currentElement != null)
             {
-                _currentElement = value;
-                if (_currentElement != null)
-                {
-                    <%_ for (idx in fields){
-                        const fieldNamePascalized = fields[idx].fieldNamePascalized;
-                    _%>
-                    <%= fieldNamePascalized %> = _currentElement.<%= fieldNamePascalized %>;             
-                    <%_ } _%>
-                }
-                RaisePropertyChanged(() => CurrentElement);
-            }
-        }
-
-        <%_ for (idx in fields) {
-            const fieldType = equivalentCSharpType(fields[idx].fieldType);
-            const fieldNamePascalized = fields[idx].fieldNamePascalized;
-            const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
-        if (fields[idx].fieldIsEnum) { _%>
-        public <%= fields[idx].fieldType %> <%= fieldNamePascalized %> 
-        { 
-            get => _<%= fieldNameCamelCased %>;
-            set 
-            {
-                _<%= fieldNameCamelCased %> = value;
-                RaisePropertyChanged(() => <%= fieldNamePascalized %>);
-            }
-        }
-        <%_ } else { _%>
-        public <%= fieldType %> <%= fieldNamePascalized %> 
-        { 
-            get => _<%= fieldNameCamelCased %>;
-            set 
-            {
-                _<%= fieldNameCamelCased %> = value;
-                RaisePropertyChanged(() => <%= fieldNamePascalized %>);
-            }
-        }
-        <%_ } _%>
-        <%_ } _%>
-        
-        public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, I<%= entityClassName %>Service <%= entityVariableName %>Service)
-        {
-            _navigationService = navigationService;
-            _<%= entityVariableName %>Service = <%= entityVariableName %>Service;
-        }
-
-        public async Task AddCommandClicked()
-        {
-            var entity = new <%= asModel(entityClassName) %>
-            {               
                 <%_ for (idx in fields){
                     const fieldNamePascalized = fields[idx].fieldNamePascalized;
                 _%>
-                <%= fieldNamePascalized %> = <%= fieldNamePascalized %>,                  
+                <%= fieldNamePascalized %> = _currentElement.<%= fieldNamePascalized %>;
                 <%_ } _%>
-                Id = null
-            };
-
-            await _<%= entityVariableName %>Service.CreateEntity(entity);
-            await RefreshList();
+            }
+            RaisePropertyChanged(() => CurrentElement);
         }
+    }
 
-        public async Task RemoveCommandClicked()
+    <%_ for (idx in fields) {
+        const fieldType = equivalentCSharpType(fields[idx].fieldType);
+        const fieldNamePascalized = fields[idx].fieldNamePascalized;
+        const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
+    if (fields[idx].fieldIsEnum) { _%>
+    public <%= fields[idx].fieldType %> <%= fieldNamePascalized %>
+    {
+        get => _<%= fieldNameCamelCased %>;
+        set
         {
-            if (CurrentElement.Id.HasValue)
-            {
-                await _<%= entityVariableName %>Service.DeleteEntity(CurrentElement.Id.Value);
-                await RefreshList();
-            }  // TODO: Handle errors
+            _<%= fieldNameCamelCased %> = value;
+            RaisePropertyChanged(() => <%= fieldNamePascalized %>);
         }
+    }
+    <%_ } else { _%>
+    public <%= fieldType %> <%= fieldNamePascalized %>
+    {
+        get => _<%= fieldNameCamelCased %>;
+        set
+        {
+            _<%= fieldNameCamelCased %> = value;
+            RaisePropertyChanged(() => <%= fieldNamePascalized %>);
+        }
+    }
+    <%_ } _%>
+    <%_ } _%>
 
-        public async Task EditCommandClicked()
+    public <%= entityClassName %>ViewModel(IMvxNavigationService navigationService, I<%= entityClassName %>Service <%= entityVariableName %>Service)
+    {
+        _navigationService = navigationService;
+        _<%= entityVariableName %>Service = <%= entityVariableName %>Service;
+    }
+
+    public async Task AddCommandClicked()
+    {
+        var entity = new <%= asModel(entityClassName) %>
         {
             <%_ for (idx in fields){
                 const fieldNamePascalized = fields[idx].fieldNamePascalized;
             _%>
-            CurrentElement.<%= fieldNamePascalized %> = <%= fieldNamePascalized %>;                     
+            <%= fieldNamePascalized %> = <%= fieldNamePascalized %>,
             <%_ } _%>
-            await _<%= entityVariableName %>Service.UpdateEntity(CurrentElement);
-            await RefreshList();
-        }
+            Id = null
+        };
 
-        public async Task RefreshList()
-        {
-            ListElement = await _<%= entityVariableName %>Service.GetEntities();
-        }
+        await _<%= entityVariableName %>Service.CreateEntity(entity);
+        await RefreshList();
+    }
 
-        public override async Task Initialize()
+    public async Task RemoveCommandClicked()
+    {
+        if (CurrentElement.Id.HasValue)
         {
-            await base.Initialize();
+            await _<%= entityVariableName %>Service.DeleteEntity(CurrentElement.Id.Value);
             await RefreshList();
-        }
+        }  // TODO: Handle errors
+    }
+
+    public async Task EditCommandClicked()
+    {
+        <%_ for (idx in fields){
+            const fieldNamePascalized = fields[idx].fieldNamePascalized;
+        _%>
+        CurrentElement.<%= fieldNamePascalized %> = <%= fieldNamePascalized %>;
+        <%_ } _%>
+        await _<%= entityVariableName %>Service.UpdateEntity(CurrentElement);
+        await RefreshList();
+    }
+
+    public async Task RefreshList()
+    {
+        ListElement = await _<%= entityVariableName %>Service.GetEntities();
+    }
+
+    public override async Task Initialize()
+    {
+        await base.Initialize();
+        await RefreshList();
     }
 }

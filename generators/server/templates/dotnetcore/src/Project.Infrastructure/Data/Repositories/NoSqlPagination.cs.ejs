@@ -1,11 +1,15 @@
 <%#
  Copyright 2019-2021 the original author or authors from the JHipster project.
+
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
+
       http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +22,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using JHipsterNet.Core.Pagination;
-using JHipsterNet.Core.Pagination.Extensions;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
-namespace <%= namespace %>.Infrastructure.Data.Extensions;
+namespace JHipsterNet.Core.Pagination.Extensions;
 
 public static class QueryableExtensions
 {
@@ -34,8 +36,8 @@ public static class QueryableExtensions
     {
         var entitiesQuery = query.ApplySort(pageable.Sort).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
         var entitiesList = await entitiesQuery
-            .Select(entity => mapper.Map<TDto>(entity))
-            .ToListAsync();
+                                    .Select(entity => mapper.Map<TDto>(entity))
+                                    .ToListAsync();
 
         return new Page<TDto>(entitiesList, pageable, query.Count());
     }
@@ -45,7 +47,7 @@ public static class QueryableExtensions
     {
         var entitiesQuery = query.ApplySort(pageable.Sort).Skip(pageable.Offset).Take(Math.Min(pageable.PageSize, PageableBinderConfig.DefaultMaxPageSize));
         var entitiesList = await entitiesQuery
-            .ToListAsync();
+                                    .ToListAsync();
         return new Page<TEntity>(entitiesList, pageable, query.Count());
     }
 

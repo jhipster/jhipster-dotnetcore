@@ -16,26 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using <%= namespace %>.Domain;
+using <%= namespace %>.Domain.Entities;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 
-namespace <%= namespace %>.Application.Commands
+namespace <%= namespace %>.Application.Commands;
+
+public class AccountGetAuthenticatedQueryHandler : IRequestHandler<AccountGetAuthenticatedQuery, string>
 {
-    public class AccountGetAuthenticatedQueryHandler : IRequestHandler<AccountGetAuthenticatedQuery, string>
+    private readonly UserManager<User> _userManager;
+
+    public AccountGetAuthenticatedQueryHandler(UserManager<User> userManager)
     {
-        private readonly UserManager<User> _userManager;
+        _userManager = userManager;
+    }
 
-        public AccountGetAuthenticatedQueryHandler(UserManager<User> userManager)
-        {
-            _userManager = userManager;
-        }
-
-        public Task<string> Handle(AccountGetAuthenticatedQuery command, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(_userManager.GetUserName(command.User));
-        }
+    public Task<string> Handle(AccountGetAuthenticatedQuery command, CancellationToken cancellationToken)
+    {
+        return Task.FromResult(_userManager.GetUserName(command.User));
     }
 }

@@ -18,48 +18,47 @@ using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using System.Threading.Tasks;
 
-namespace <%= namespace %>.Client.Xamarin.Core.ViewModels
+namespace <%= namespace %>.Client.Xamarin.Core.ViewModels;
+
+public class MenuViewModel : BaseViewModel
 {
-    public class MenuViewModel : BaseViewModel
+    private readonly IMvxNavigationService _navigationService;
+    private readonly IAuthenticationService _authenticationService;
+
+    public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
+    public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
+    public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
+    // jhipster-needle-declare-entity-command - JHipster will declare commands
+    public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
+    public bool IsConnected  => _authenticationService.IsAuthenticated;
+
+    public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
     {
-        private readonly IMvxNavigationService _navigationService;
-        private readonly IAuthenticationService _authenticationService;
+        _navigationService = navigationService;
+        _authenticationService = authenticationService;
+    }
 
-        public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
-        public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
-        public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
-        // jhipster-needle-declare-entity-command - JHipster will declare commands
-        public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
-        public bool IsConnected  => _authenticationService.IsAuthenticated;
+    // jhipster-needle-add-entity-command - JHipster will add commands
 
-        public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
-        {
-            _navigationService = navigationService;
-            _authenticationService = authenticationService;          
-        }
+    private async Task ShowWelcomeCommandClicked()
+    {
+        await _navigationService.Navigate<WelcomeViewModel>();
+    }
 
-        // jhipster-needle-add-entity-command - JHipster will add commands
+    private async Task SignInClicked()
+    {
+        await _navigationService.Navigate<LoginViewModel>();
+    }
 
-        private async Task ShowWelcomeCommandClicked()
-        {
-            await _navigationService.Navigate<WelcomeViewModel>();
-        }
+    private async Task SignUpClicked()
+    {
+        await _navigationService.Navigate<RegisterViewModel>();
+    }
 
-        private async Task SignInClicked()
-        {
-            await _navigationService.Navigate<LoginViewModel>();
-        }
-
-        private async Task SignUpClicked()
-        {
-            await _navigationService.Navigate<RegisterViewModel>();
-        }
-
-        private void SignOutClicked()
-        {
-            _authenticationService.SignOut();
-            RaisePropertyChanged(() => IsConnected);
-            _navigationService.Navigate<WelcomeViewModel>();
-        }
+    private void SignOutClicked()
+    {
+        _authenticationService.SignOut();
+        RaisePropertyChanged(() => IsConnected);
+        _navigationService.Navigate<WelcomeViewModel>();
     }
 }
