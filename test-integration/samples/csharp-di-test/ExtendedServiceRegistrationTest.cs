@@ -6,6 +6,7 @@ using Xunit;
 
 namespace JhipsterSampleApplication.Test.DependencyInjection;
 
+[Collection("MongoDB")]
 public class ExtendedServiceRegistrationTest
 {
     public ExtendedServiceRegistrationTest()
