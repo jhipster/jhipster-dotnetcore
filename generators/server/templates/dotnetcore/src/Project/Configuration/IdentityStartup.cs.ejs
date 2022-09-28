@@ -146,14 +146,14 @@ public static class IdentityConfiguration
             {
                 try
                 {
-                    await userManager.CreateAsync(role);
+                    await userManager.CreateAsync(user);
                 }
                 catch (Exception e)
                 {
                     Log.ForContext(typeof(IdentityConfiguration)).Warning(e,
                         "Tests are running in parallel, take care of database race conditions");
 
-                    await userManager.CreateAsync(role);
+                    await userManager.CreateAsync(user);
                 }
             }
             else

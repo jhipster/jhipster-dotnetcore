@@ -31,6 +31,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 <%_ if (databaseType === 'mongodb') { _%>
 using MongoDB.Driver.Linq;
+using <%= namespace %>.Infrastructure.Data.Extensions;
 <%_ } _%>
 
 namespace <%= namespace %>.Domain.Services;

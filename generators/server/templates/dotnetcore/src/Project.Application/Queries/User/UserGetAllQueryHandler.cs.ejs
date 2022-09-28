@@ -51,8 +51,8 @@ public class UserGetAllQueryHandler : IRequestHandler<UserGetAllQuery, (IHeaderD
     public async Task<(IHeaderDictionary, IEnumerable<UserDto>)> Handle(UserGetAllQuery request, CancellationToken cancellationToken)
     {
         <%_ if (databaseType === 'mongodb') { _%>
-        var page = await (_userManager.Users as IMongoQueryable<User>)
-            .UsePageableAsync(request.Page);
+        var page = await Task.FromResult((_userManager.Users as IMongoQueryable<User>)
+            .UsePageable(request.Page));
         <%_ } else { _%>
         var page = await _userManager.Users
             .Include(it => it.UserRoles)

@@ -23,7 +23,7 @@ module.exports = class extends EntityGenerator {
                 this.context.dtoSuffix = 'Dto';
             },
             fixConfig() {
-                this.context.prodDatabaseType = 'mysql'; // set only for jdl-importer compatibility
+                this.context.prodDatabaseType = this.context.databaseType === 'mongodb' ? 'mongodb' : 'mysql'; // set only for jdl-importer compatibility
             },
         };
         return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
