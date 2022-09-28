@@ -10,7 +10,7 @@
 	<PackageReference Update="AutoMapper" Version="11.0.1" />
 	<PackageReference Update="Blazored.Modal" Version="7.0.0" />
 	<PackageReference Update="Blazored.SessionStorage" Version="2.2.0" />
-	<PackageReference Update="Blazorise.Bootstrap" Version="1.0.4" />
+	<PackageReference Update="Blazorise.Bootstrap" Version="1.1.0" />
 	<PackageReference Update="Blazorise.Icons.FontAwesome" Version="1.0.4" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageReference Update="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
