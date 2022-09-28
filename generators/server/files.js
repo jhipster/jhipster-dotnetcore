@@ -1556,8 +1556,8 @@ function writeFiles() {
         },
         writeDirectoryTargetsFile() {
             this.fs.copyTpl(
-                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
-                this.destinationPath('Directory.Build.targets'),
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Packages.props`),
+                this.destinationPath('Directory.Packages.props'),
                 this
             );
         },
