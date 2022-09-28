@@ -1,0 +1,66 @@
+<%#
+ Copyright 2019-2021 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using <%= namespace %>.Domain.Entities;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+
+namespace <%= namespace %>.Configuration;
+
+public static class SerilogConfiguration
+{
+    const string SerilogSection = "Serilog";
+    const string SyslogPort = "SyslogPort";
+    const string SyslogUrl = "SyslogUrl";
+    const string SyslogAppName = "SyslogAppName";
+
+    /// <summary>
+    /// Create application logger from configuration.
+    /// </summary>
+    /// <returns></returns>
+    public static ILoggingBuilder AddSerilog(this ILoggingBuilder loggingBuilder, IConfiguration configuration)
+    {
+        var port = 6514;
+
+        // for logger configuration
+        // https://github.com/serilog/serilog-settings-configuration
+        if (appConfiguration.GetSection(SerilogSection)[SyslogPort] != null)
+        {
+            if (int.TryParse(appConfiguration.GetSection(SerilogSection)[SyslogPort], out var portFromConf))
+            {
+                port = portFromConf;
+            }
+        }
+
+        var url = appConfiguration.GetSection(SerilogSection)[SyslogUrl] != null
+            ? appConfiguration.GetSection(SerilogSection)[SyslogUrl]
+            : "localhost";
+        var appName = appConfiguration.GetSection(SerilogSection)[SyslogAppName] != null
+            ? appConfiguration.GetSection(SerilogSection)[SyslogAppName]
+            : "<%= pascalizedBaseName %>App";
+        var loggerConfiguration = new LoggerConfiguration()
+            .Enrich.With<LoggerNameEnricher>()
+            .WriteTo.TcpSyslog(url, port, appName, FramingType.OCTET_COUNTING, SyslogFormat.RFC5424, Facility.Local0, SslProtocols.None)
+            .ReadFrom.Configuration(appConfiguration);
+
+        Log.Logger = loggerConfiguration.CreateLogger();
+
+        return loggingBuilder.AddSerilog(Log.Logger);
+    }
+}

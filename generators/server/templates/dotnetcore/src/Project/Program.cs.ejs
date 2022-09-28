@@ -20,16 +20,17 @@ using Serilog;
 using System;
 using System.IO;
 using System.Security.Authentication;
-using JHipsterNet.Web.Logging;
-using Serilog.Sinks.Syslog;
-using ILogger = Serilog.ILogger;
 using <%= namespace %>;
+using <%= namespace %>.Configuration;
 using IStartup = <%= namespace %>.IStartup;
-<%_ if (serviceDiscoveryType === 'consul') { _%>
-using Winton.Extensions.Configuration.Consul;
-<%_ } _%>
 using static JHipsterNet.Core.Boot.BannerPrinter;
 using Microsoft.Extensions.Hosting;
+<%_ if (serviceDiscoveryType === 'consul') { _%>
+using Winton.Extensions.Configuration.Consul;
+
+const string ConsulSection = "Consul";
+const string ConsulHost = "Host";
+<%_ } _%>
 
 PrintBanner(10 * 1000);
 
@@ -63,7 +64,7 @@ try
         });
 
     <%_ } _%>
-    builder.Logging.AddSerilog(CreateLogger(builder.Configuration));
+    builder.Logging.AddSerilog(builder.Configuration);
 
     IStartup startup = new Startup();
 
@@ -93,48 +94,4 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
-}
-
-public partial class Program
-{
-    const string SerilogSection = "Serilog";
-    const string SyslogPort = "SyslogPort";
-    const string SyslogUrl = "SyslogUrl";
-    const string SyslogAppName = "SyslogAppName";
-    <%_ if (serviceDiscoveryType === 'consul') { _%>
-    const string ConsulSection = "Consul";
-    const string ConsulHost = "Host";
-    <%_ } _%>
-
-    /// <summary>
-    /// Create application logger from configuration.
-    /// </summary>
-    /// <returns></returns>
-    private static ILogger CreateLogger(IConfiguration appConfiguration)
-    {
-        var port = 6514;
-
-        // for logger configuration
-        // https://github.com/serilog/serilog-settings-configuration
-        if (appConfiguration.GetSection(SerilogSection)[SyslogPort] != null)
-        {
-            if (int.TryParse(appConfiguration.GetSection(SerilogSection)[SyslogPort], out var portFromConf))
-            {
-                port = portFromConf;
-            }
-        }
-
-        var url = appConfiguration.GetSection(SerilogSection)[SyslogUrl] != null
-            ? appConfiguration.GetSection(SerilogSection)[SyslogUrl]
-            : "localhost";
-        var appName = appConfiguration.GetSection(SerilogSection)[SyslogAppName] != null
-            ? appConfiguration.GetSection(SerilogSection)[SyslogAppName]
-            : "<%= pascalizedBaseName %>App";
-        var loggerConfiguration = new LoggerConfiguration()
-            .Enrich.With<LoggerNameEnricher>()
-            .WriteTo.TcpSyslog(url, port, appName, FramingType.OCTET_COUNTING, SyslogFormat.RFC5424, Facility.Local0, SslProtocols.None)
-            .ReadFrom.Configuration(appConfiguration);
-
-        return loggerConfiguration.CreateLogger();
-    }
 }

@@ -30,7 +30,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+<%_ if (databaseType !== 'mongodb') { _%>
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+<%_ } _%>
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 <%_ if (applicationType !== 'microservice') { _%>
