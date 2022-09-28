@@ -695,6 +695,15 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Configuration/LoggerStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/LoggerStartup.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Configuration/ProblemDetailsStartup.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/ProblemDetailsStartup.cs`,
                 },
