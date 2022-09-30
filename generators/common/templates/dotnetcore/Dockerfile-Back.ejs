@@ -32,7 +32,7 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 <%_ } _%>
 # Restore dependencies of .net core projects taking advantage of docker layer caching
 COPY src/*/*.csproj ./src/
-COPY Directory.Build.targets Directory.Build.targets
+COPY Directory.Packages.props Directory.Packages.props
 RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 <%_ if(!skipClient && clientFramework === "Blazor") { _%>
 COPY src/client/*/*.csproj ./src/client/
