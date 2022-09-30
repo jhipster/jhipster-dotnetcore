@@ -23,7 +23,3 @@ GenericRepository => MongoGenericRepository
 ReadOnlyGenericRepository => MongoReadOnlyGenericRepository
 FluentRepository => NoSqlFluentRepository
 ```
-
-## WIP
-
-Currently, MongoDB is only used for entities. Users/Accounts are managed with a in-memory Sqlite. This feature is still under development.
