@@ -695,6 +695,15 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Configuration/LoggerStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/LoggerStartup.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Configuration/ProblemDetailsStartup.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/ProblemDetailsStartup.cs`,
                 },
@@ -1556,8 +1565,8 @@ function writeFiles() {
         },
         writeDirectoryTargetsFile() {
             this.fs.copyTpl(
-                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
-                this.destinationPath('Directory.Build.targets'),
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Packages.props`),
+                this.destinationPath('Directory.Packages.props'),
                 this
             );
         },

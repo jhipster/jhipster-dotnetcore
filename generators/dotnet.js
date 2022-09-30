@@ -68,6 +68,14 @@ async function newSlnAddProj(solutionName, projects) {
     let projectText = '';
     let dirText = '';
 
+    projectText += `\nProject("{${firstGuid}}") = "Solution Items", "Solution Items", "{${_.toUpper(Guid.newGuid())}}"`;
+    projectText += '\n\tProjectSection(SolutionItems) = preProject';
+    projectText += '\n\t\t.editorconfig = .editorconfig';
+    projectText += '\n\t\tDirectory.Packages.props = Directory.Packages.props';
+    projectText += '\n\t\tREADME.md = README.md';
+    projectText += '\n\tEndProjectSection';
+    projectText += '\nEndProject';
+
     projects.forEach(project => {
         const existingProjects = solutionFile.matchAll(reg);
         let alreadyExist = false;
