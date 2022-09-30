@@ -113,35 +113,35 @@ module.exports = class extends AppGenerator {
     }
 
     get configuring() {
-        return super._configuring();
+        return super.configuring();
     }
 
     get composing() {
-        return super._composing();
+        return super.composing();
     }
 
     get loading() {
-        return super._loading();
+        return super.loading();
     }
 
     get preparing() {
-        return super._preparing();
+        return super.preparing();
     }
 
     get default() {
-        return super._default();
+        return super.default();
     }   
 
     get writing() {
-        return super._writing();
+        return super.writing();
     }
 
     get postWriting() {
-        return super._postWriting();
+        return super.postWriting();
     }
 
     get end() {
         // Here we are not overriding this phase and hence its being handled by JHipster
-        return super._end();
+        return super.end();
     }
 };
