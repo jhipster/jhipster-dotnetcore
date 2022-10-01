@@ -1,5 +1,5 @@
 /**
- * Copyright 2019-2021 the original author or authors from the JHipster project.
+ * Copyright 2019-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -688,6 +688,15 @@ const serverFiles = {
                 {
                     file: 'Project/Configuration/AppSettingsStartup.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/AppSettingsStartup.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Configuration/LoggerStartup.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/LoggerStartup.cs`,
                 },
             ],
         },
@@ -1556,8 +1565,8 @@ function writeFiles() {
         },
         writeDirectoryTargetsFile() {
             this.fs.copyTpl(
-                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Build.targets`),
-                this.destinationPath('Directory.Build.targets'),
+                this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Packages.props`),
+                this.destinationPath('Directory.Packages.props'),
                 this
             );
         },

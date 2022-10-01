@@ -1,5 +1,5 @@
 /**
- * Copyright 2019-2021 the original author or authors from the JHipster project.
+ * Copyright 2019-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -67,6 +67,14 @@ async function newSlnAddProj(solutionName, projects) {
     const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
     let projectText = '';
     let dirText = '';
+
+    projectText += `\nProject("{${firstGuid}}") = "Solution Items", "Solution Items", "{${_.toUpper(Guid.newGuid())}}"`;
+    projectText += '\n\tProjectSection(SolutionItems) = preProject';
+    projectText += '\n\t\t.editorconfig = .editorconfig';
+    projectText += '\n\t\tDirectory.Packages.props = Directory.Packages.props';
+    projectText += '\n\t\tREADME.md = README.md';
+    projectText += '\n\tEndProjectSection';
+    projectText += '\nEndProject';
 
     projects.forEach(project => {
         const existingProjects = solutionFile.matchAll(reg);

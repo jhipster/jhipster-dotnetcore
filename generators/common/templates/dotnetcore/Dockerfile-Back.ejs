@@ -1,5 +1,5 @@
 <%#
- Copyright 2019-2021 the original author or authors from the JHipster project.
+ Copyright 2019-2022 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 <%_ } _%>
 # Restore dependencies of .net core projects taking advantage of docker layer caching
 COPY src/*/*.csproj ./src/
-COPY Directory.Build.targets Directory.Build.targets
+COPY Directory.Packages.props Directory.Packages.props
 RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 <%_ if(!skipClient && clientFramework === "Blazor") { _%>
 COPY src/client/*/*.csproj ./src/client/

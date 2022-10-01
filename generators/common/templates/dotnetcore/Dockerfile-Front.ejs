@@ -7,7 +7,7 @@ WORKDIR /app
 # Restore dependencies of .net core projects taking advantage of docker layer caching
 COPY src/*/*.csproj ./src/
 COPY src/client/*/*.csproj ./src/client/
-COPY Directory.Build.targets Directory.Build.targets
+COPY Directory.Packages.props Directory.Packages.props
 RUN for file in $(ls src/client/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 RUN dotnet restore "src/client/<%= pascalizedBaseName %>.Client/<%= pascalizedBaseName %>.Client.csproj"
 RUN dotnet tool install -g Microsoft.Web.LibraryManager.Cli
