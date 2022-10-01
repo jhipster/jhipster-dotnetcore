@@ -9,7 +9,7 @@ module.exports = class extends AppGenerator {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
     }
 
-    get initializing() {
+    get [INITIALIZING_PRIORITY]() {
         const initPhaseFromJHipster = this._initializing();
 
         const dotnetInitAppPhaseSteps = {
@@ -98,7 +98,7 @@ module.exports = class extends AppGenerator {
         return Object.assign(initPhaseFromJHipster, dotnetInitAppPhaseSteps);
     }
 
-    get prompting() {
+    get [PROMPTING_PRIORITY]() {
         return {
             askForModuleName: prompts.askForModuleName,
             askForApplicationType: prompts.askForApplicationType,
@@ -112,35 +112,35 @@ module.exports = class extends AppGenerator {
         };
     }
 
-    get configuring() {
+    get [CONFIGURING_PRIORITY]() {
         return super._configuring();
     }
 
-    get composing() {
+    get [COMPOSING_PRIORITY]() {
         return super._composing();
     }
 
-    get loading() {
+    get [LOADING_PRIORITY]() {
         return super._loading();
     }
 
-    get preparing() {
+    get [PREPARING_PRIORITY]() {
         return super._preparing();
     }
 
-    get default() {
+    get [DEFAULT_PRIORITY]() {
         return super._default();
     }   
 
-    get writing() {
+    get [WRITIING_PRIORITY]() {
         return super._writing();
     }
 
-    get postWriting() {
+    get [POST_WRITING_PRIORITY]() {
         return super._postWriting();
     }
 
-    get end() {
+    get [END_PRIORITY]() {
         // Here we are not overriding this phase and hence its being handled by JHipster
         return super._end();
     }
