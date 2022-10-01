@@ -140,6 +140,10 @@ module.exports = class extends AppGenerator {
         return super._postWriting();
     }
 
+    get install() {
+        return super._install();
+    }
+
     get end() {
         // Here we are not overriding this phase and hence its being handled by JHipster
         return super._end();
