@@ -4,6 +4,9 @@ const AppGenerator = require('generator-jhipster/generators/app');
 const packagejs = require('../../package.json');
 const prompts = require('./prompts');
 
+const constants = reuire('generator-jhipster/lib/constants/priorities.cjs');
+const {INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY} = constants;
+
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
         super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
