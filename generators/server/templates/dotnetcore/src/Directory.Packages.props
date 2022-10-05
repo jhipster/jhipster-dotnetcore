@@ -26,7 +26,6 @@
 	<PackageVersion Include="AutoFixture" Version="4.17.0" />
 	<PackageVersion Include="bunit" Version="1.10.14" />
 	<PackageVersion Include="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
-	<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
 	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCorePackageVersion)" />
 
 	<%_ } _%>
@@ -112,6 +111,7 @@
 	<PackageVersion Include="coverlet.msbuild" Version="3.1.2"/>
 	<PackageVersion Include="FakeItEasy" Version="7.3.1" />
 	<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
 	<PackageVersion Include="Moq" Version="4.17.2" />
 	<PackageVersion Include="xunit" Version="2.4.2" />
 	<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5"/>
