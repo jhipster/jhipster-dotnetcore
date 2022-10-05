@@ -123,6 +123,6 @@
 	<PackageVersion Include="xunit.runner.console" Version="2.4.2"/>
 	<PackageVersion Include="FluentAssertions" Version="5.10.3" />
 	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="3.2.0" />
-	<PackageVersion Include="FluentAssertions.Json" Version="5.5.0" />
+	<PackageVersion Include="FluentAssertions.Json" Version="6.1.0" />
   </ItemGroup>
 </Project>
