@@ -1,16 +1,12 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
-
 const AppGenerator = require('generator-jhipster/generators/app');
-
 const constants = require('generator-jhipster/lib/constants/priorities.cjs');
-
 const packagejs = require('../../package.json');
-
 const prompts = require('./prompts');
 
 
-const {INITIALIZING_PRIORITY,    PROMPTING_PRIORITY,    CONFIGURING_PRIORITY,    COMPOSING_PRIORITY,    LOADING_PRIORITY,    PREPARING_PRIORITY,    DEFAULT_PRIORITY,    WRITING_PRIORITY,    POST_WRITING_PRIORITY,    END_PRIORITY} = constants;
+const {INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY} = constants;
 
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
@@ -140,7 +136,7 @@ module.exports = class extends AppGenerator {
         return super._default();
     }   
 
-    get [WRITIING_PRIORITY]() {
+    get [WRITING_PRIORITY]() {
         return super._writing();
     }
 
