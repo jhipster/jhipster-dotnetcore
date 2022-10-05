@@ -11,7 +11,7 @@
 
   <ItemGroup>
 	<%_ if(!skipClient && clientFramework === "Blazor") { _%>
-	<PackageVersion Include="AutoMapper" Version="11.0.1" />
+	<PackageVersion Include="AutoMapper" Version="12.0.0" />
 	<PackageVersion Include="Blazored.Modal" Version="7.0.0" />
 	<PackageVersion Include="Blazored.SessionStorage" Version="2.2.0" />
 	<PackageVersion Include="Blazorise.Bootstrap" Version="1.0.4" />
