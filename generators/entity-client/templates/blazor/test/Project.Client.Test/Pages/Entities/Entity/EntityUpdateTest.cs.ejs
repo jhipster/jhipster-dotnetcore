@@ -61,14 +61,14 @@ public class <%= entityClassName %>UpdateTest : TestContext
             <%_ }
         }
     }); _%>
-    private readonly Mock<IModalService> _modalService;
+    private readonly Mock<Blazored.Modal.Services.IModalService> _modalService;
     private readonly Mock<INavigationService> _navigationService;
     private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
 
     public <%= entityClassName %>UpdateTest()
     {
         _<%= entityVariableName %>Service = new Mock<I<%= entityClassName %>Service>();
-        _modalService = new Mock<IModalService>();
+        _modalService = new Mock<Blazored.Modal.Services.IModalService>();
         _navigationService = new Mock<INavigationService>();
         <%_ relationships.forEach(relation => {
             if (relation.otherEntityNamePascalized !== entityClassName ) {
@@ -80,7 +80,7 @@ public class <%= entityClassName %>UpdateTest : TestContext
         }); _%>
         Services.AddSingleton<INavigationService>(_navigationService.Object);
         Services.AddSingleton<I<%= entityClassName %>Service>(_<%= entityVariableName %>Service.Object);
-        Services.AddSingleton<IModalService>(_modalService.Object);
+        Services.AddSingleton<Blazored.Modal.Services.IModalService>(_modalService.Object);
         Services.AddBlazorise(options =>
             {
                 options.Immediate = true;
