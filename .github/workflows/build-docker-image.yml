@@ -1,6 +1,10 @@
 name: build docker image
 
-on: pull_request
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build_docker_image:

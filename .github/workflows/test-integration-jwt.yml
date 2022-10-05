@@ -1,5 +1,11 @@
 name: Test Integration JWT
-on: [push, pull_request]
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
 jobs:
     applications:
         name: ${{ matrix.app-type }}
