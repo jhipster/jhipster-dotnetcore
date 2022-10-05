@@ -1,12 +1,16 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
+
 const AppGenerator = require('generator-jhipster/generators/app');
+
 const constants = require('generator-jhipster/lib/constants/priorities.cjs');
+
 const packagejs = require('../../package.json');
+
 const prompts = require('./prompts');
 
 
-const {INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY} = constants;
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY } = constants;
 
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
@@ -86,13 +90,13 @@ module.exports = class extends AppGenerator {
                 this.namespace = this.jhipsterConfig.namespace;
                 this.applicationType = this.jhipsterConfig.applicationType;
                 this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType;
-                const serverConfigFound = this.namespace !== undefined ;
+                const serverConfigFound = this.namespace !== undefined;
 
                 if (this.baseName !== undefined && serverConfigFound) {
                     this.log(
                         chalk.green(
                             'This is an existing project, using the configuration from your .yo-rc.json file \n' +
-                                'to re-generate the project...\n'
+                            'to re-generate the project...\n'
                         )
                     );
                     this.existingProject = true;
@@ -134,7 +138,7 @@ module.exports = class extends AppGenerator {
 
     get [DEFAULT_PRIORITY]() {
         return super._default();
-    }   
+    }
 
     get [WRITING_PRIORITY]() {
         return super._writing();
