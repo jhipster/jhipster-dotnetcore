@@ -865,8 +865,7 @@ function askForField(done) {
                 fieldType: props.enumType || props.fieldType,
                 /* fieldTypeBlobContent: props.fieldTypeBlobContent, */
                 fieldValues: props.fieldValues,
-                fieldValidateRules:
-                    props.fieldValidateRules /* ,
+                fieldValidateRules: props.fieldValidateRules /* ,
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
                 fieldValidateRulesPattern: props.fieldValidateRulesPattern,
