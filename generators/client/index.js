@@ -93,6 +93,7 @@ module.exports = class extends ClientGenerator {
             loadingDotnet () {
                 this.serverPort = this.jhipsterConfig.serverPort;
                 this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
+                this.withAdminUi = false;
             }
         }
     }
