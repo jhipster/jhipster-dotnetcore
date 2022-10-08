@@ -46,7 +46,7 @@ public class AlertErrorTest : TestContext
         {
             options.Immediate = true;
         })
-            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())            
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
 
