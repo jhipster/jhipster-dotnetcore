@@ -34,10 +34,11 @@ using FluentAssertions;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
 using <%= namespace %>.Client.Shared;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>;
