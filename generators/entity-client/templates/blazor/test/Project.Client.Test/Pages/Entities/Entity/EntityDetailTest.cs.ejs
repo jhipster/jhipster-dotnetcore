@@ -33,6 +33,7 @@ using <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>;
 using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Xunit;
 
@@ -54,6 +55,7 @@ public class <%= entityClassName %>DetailTest : TestContext
             {
                 options.Immediate = true;
             })
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
         //This code is needed to support recursion

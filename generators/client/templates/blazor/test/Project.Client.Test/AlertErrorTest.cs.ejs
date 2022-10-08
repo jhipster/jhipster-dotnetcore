@@ -28,6 +28,7 @@ using Moq.Protected;
 using <%= namespace %>.Client.Shared.Constants;
 using <%= namespace %>.Client.Shared.Models;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 using Blazorise;
 using Blazorise.Bootstrap;
@@ -43,6 +44,7 @@ public class AlertErrorTest : TestContext
         {
             options.Immediate = true;
         })
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())            
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
 

@@ -37,6 +37,7 @@ using <%= namespace %>.Client.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
 
 namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>;
@@ -57,6 +58,7 @@ public class <%= entityClassName %>Test : TestContext
             {
                 options.Immediate = true;
             })
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
         Services.AddHttpClientInterceptor();

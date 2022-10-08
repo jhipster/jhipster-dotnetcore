@@ -45,6 +45,7 @@ using <%= namespace %>.Client.Services.EntityServices.<%= relation.otherEntityNa
 using <%= namespace %>.Client.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Xunit;
@@ -85,6 +86,7 @@ public class <%= entityClassName %>UpdateTest : TestContext
             {
                 options.Immediate = true;
             })
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
         Services.AddHttpClientInterceptor();
