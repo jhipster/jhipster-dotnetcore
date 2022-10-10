@@ -2,7 +2,7 @@
 
 This sub-generator allows the deployment of your JHipster .Net application to Heroku cloud.
 
-The Heroku sub-generator will always use free tiers/options but there would be no resources and dynos available hence a paid plan of Heroku is required. 
+The Heroku sub-generator would have no resources and dynos available hence a paid plan of Heroku is required. 
 
 Therefore to avoid any unexpected build failures, we would recommend verifying your Heroku account before starting this sub-generator.
 
@@ -33,7 +33,7 @@ jhipster heroku
 - Postgres ✔ 
 - MSSQL ✔ (requires a manual step described below)
 
-The MySql and PostgreSQL database addons are not free of cost and won't be automatically added by the sub-generator when deploying to Heroku. A paid plan is required to use the resources and addons.
+The MySql and PostgreSQL database addons are not free of cost and won't be automatically added by the sub-generator when deploying to Heroku. A paid plan is required to use the resources and addons. 
 
 Likewise, Heroku's [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free of cost and to avoid unexpected costs It will not be provisioned automatically when deploying to Heroku.
 
