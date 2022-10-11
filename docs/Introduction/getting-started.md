@@ -1,18 +1,14 @@
-# Getting Started 
+# Getting Started
 
-## Prerequisites
+## Installation of the blueprint
 
-As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
-
-- [Installing JHipster](https://www.jhipster.tech/installation/)
-
-## Generate your first application
-
-Installation of the blueprint 
+Run the following command to install jhipster-dotnetcore
 
 ```bash
 npm install -g generator-jhipster-dotnetcore
 ```
+
+## Generate your first application
 
 Call the generator
 
