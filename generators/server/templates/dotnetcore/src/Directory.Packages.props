@@ -32,7 +32,7 @@
 	<%_ } _%>
 	<PackageVersion Include="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageVersion Include="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
-	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 	<%_ if (cqrsEnabled) { _%>
 	<PackageVersion Include="MediatR" Version="11.0.0" />
 	<PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
