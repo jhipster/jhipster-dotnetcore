@@ -9,8 +9,11 @@ const packagejs = require('../../package.json');
 
 const prompts = require('./prompts');
 
+constructor(args, opts, features) {
+        super(args, opts, { fromBlueprint: true, taskPrefix: PRIORITY_PREFIX, ...features }); 
+    }
 
-const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY } = constants;
+const { INITIALIZING_PRIORITY, PROMPTING_PRIORITY, CONFIGURING_PRIORITY, COMPOSING_PRIORITY, LOADING_PRIORITY, PREPARING_PRIORITY, DEFAULT_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY, END_PRIORITY, PRIORITY_PREFIX } = constants;
 
 module.exports = class extends AppGenerator {
     constructor(args, opts) {
