@@ -129,6 +129,9 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
+<%_ if (hasDateTimeTypeField()) { _%>
+using FluentAssertions.Extensions;
+<%_ } _%>
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Repositories.Interfaces;
@@ -380,9 +383,13 @@ namespace <%= namespace %>.Test.Controllers
             <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeUpdate);
             var test<%= pascalizedEntityClass %> = <%= camelCasedEntityClass %>List.Last();
             <%_ fields.forEach(field => {
-                if (field.id) return; _%>
-            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be<%_ if (field.fieldType === 'Instant') { _%>CloseTo<%_ } _%>(Updated<%= field.fieldNamePascalized %>);
-            <%_ }); _%>
+                if (field.id) return; 
+                if (field.fieldType === 'Instant') { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().BeCloseTo(Updated<%= field.fieldNamePascalized %>, 1.Milliseconds());
+                <%_ } else { _%>     
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
+                <%_ }
+            }); _%>
         }
 
         [Fact]
