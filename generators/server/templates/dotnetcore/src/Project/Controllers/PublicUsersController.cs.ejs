@@ -92,18 +92,4 @@ public class PublicUsersController : ControllerBase
         return Ok(userDtos).WithHeaders(headers);
     }
 
-    [HttpGet("authorities")]
-    [Authorize(Roles = RolesConstants.ADMIN)]
-    <%_ if (cqrsEnabled) { _%>
-    public async Task<ActionResult<IEnumerable<string>>> GetAuthorities()
-    {
-        return Ok(await _mediator.Send(new UserGetAuthoritiesQuery()));
-    }
-    <%_ } else { _%>
-    public ActionResult<IEnumerable<string>> GetAuthorities()
-    {
-        return Ok(_userService.GetAuthorities());
-    }
-    <%_ } _%>
-
 }
