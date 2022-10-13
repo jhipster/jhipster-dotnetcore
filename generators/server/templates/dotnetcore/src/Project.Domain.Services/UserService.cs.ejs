@@ -1,4 +1,5 @@
 <%#
+<%#
  Copyright 2019-2022 the original author or authors from the JHipster project.
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -87,6 +88,20 @@ public class UserService : IUserService
         return await _userManager.Users
             .Include(it => it.UserRoles)
             .ThenInclude(r => r.Role)
+            .UsePageableAsync(pageable);
+        <%_ } _%>
+    }
+
+    public async Task<IPage<User>> GetAllPublicUsers(IPageable pageable)
+    {
+        IPage<User> users = await (_userManager.Users as IMongoQueryable<User>)
+                 .Where(it.Activated == true && !IsNullOrEmpty(it.Id))
+                 .UsePageableAsync(pageable);
+        return users;
+        <%_ } else { _%>
+        return await _userManager.Users
+            .Include(it => it.UserRoles)
+            .Where(it.Activated == true && !IsNullOrEmpty(it.Id))
             .UsePageableAsync(pageable);
         <%_ } _%>
     }
@@ -249,6 +264,7 @@ public class UserService : IUserService
         if (userName == null) return null;
         return await GetUserWithUserRolesByName(userName);
     }
+
 
     public virtual IEnumerable<string> GetAuthorities()
     {
