@@ -36,7 +36,7 @@ using MongoDB.Driver.Linq;
 
 namespace <%= namespace %>.Application.Queries;
 
-public class UserGetAllPublicUsersQueryHandler : IRequestHandler<UserGetAllQuery, (IHeaderDictionary, IEnumerable<UserDto>)>
+public class UserGetAllPublicUsersQueryHandler : IRequestHandler<UserGetAllPublicUsersQuery, (IHeaderDictionary, IEnumerable<UserDto>)>
 {
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
