@@ -70,7 +70,7 @@ public class PublicUsersControllerTest
 
         var json = JToken.Parse(await response.Content.ReadAsStringAsync());
         json.SelectTokens("$.[*].Id).Should().NotBeNull();
-        json.SelectTokens("$.[*].Activated").Should().Contain(true);
+        json.SelectTokens("$.[*].Activated").Should().Be(true);
         json.SelectTokens("$.[*].login").Should().Contain(DefaultLogin);
         json.SelectTokens("$.[*].firstName").Should().Contain(DefaultFirstname);
         json.SelectTokens("$.[*].lastName").Should().Contain(DefaultLastname);

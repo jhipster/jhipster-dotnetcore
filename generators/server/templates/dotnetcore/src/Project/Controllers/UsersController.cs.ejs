@@ -131,7 +131,8 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
     {
-        _log.LogDebug("REST request to get a page of Users");
+     
+     _log.LogDebug("REST request to get a page of Users");
         <%_ if (cqrsEnabled) { _%>
         (var headers, var userDtos) = await _mediator.Send(new UserGetAllQuery { Page = pageable });
         <%_ } else { _%>

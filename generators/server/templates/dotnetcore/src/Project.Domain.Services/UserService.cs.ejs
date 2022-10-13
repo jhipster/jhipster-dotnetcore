@@ -93,14 +93,16 @@ public class UserService : IUserService
 
     public async Task<IPage<User>> GetAllPublicUsers(IPageable pageable)
     {
+        <%_ if (databaseType === 'mongodb') { _%>
         IPage<User> users = await (_userManager.Users as IMongoQueryable<User>)
-                 .Where(it.Activated == true && !IsNullOrEmpty(it.Id))
+                 .Include(it => it.UserRoles)
+                 .Where(it => it.Activated == true && !String.IsNullOrEmpty(it.Id))
                  .UsePageableAsync(pageable);
         return users;
         <%_ } else { _%>
         return await _userManager.Users
             .Include(it => it.UserRoles)
-            .Where(it.Activated == true && !IsNullOrEmpty(it.Id))
+            .Where(it => it.Activated == true && !String.IsNullOrEmpty(it.Id))
             .UsePageableAsync(pageable);
         <%_ } _%>
     }
