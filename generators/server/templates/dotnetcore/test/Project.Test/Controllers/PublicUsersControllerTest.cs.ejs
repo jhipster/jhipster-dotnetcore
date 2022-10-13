@@ -69,12 +69,14 @@ public class PublicUsersControllerTest
         response.StatusCode.Should().Be(HttpStatusCode.OK);
 
         var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+        json.SelectTokens("$.[*].Id).Should().NotBeNull();
+        json.SelectTokens("$.[*].Authenticated").Should().Contain(true);
         json.SelectTokens("$.[*].login").Should().Contain(DefaultLogin);
         json.SelectTokens("$.[*].firstName").Should().Contain(DefaultFirstname);
         json.SelectTokens("$.[*].lastName").Should().Contain(DefaultLastname);
         json.SelectTokens("$.[*].email").Should().Contain(DefaultEmail);
         json.SelectTokens("$.[*].imageUrl").Should().Contain(DefaultImageurl);
         json.SelectTokens("$.[*].langKey").Should().Contain(DefaultLangkey);
-        json.SelectTokens("$.[*].Authenticated").Should().Contain(true);
+    
     }
 }
