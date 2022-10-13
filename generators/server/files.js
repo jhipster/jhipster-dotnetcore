@@ -1039,6 +1039,16 @@ const serverFiles = {
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQuery.cs`,
                 },
                 {
+                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
+                },
+                {
                     file: 'Project.Application/Queries/User/UserGetQueryHandler.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQueryHandler.cs`,
@@ -1047,12 +1057,7 @@ const serverFiles = {
                     file: 'Project.Application/Queries/User/UserGetAuthoritiesQuery.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQuery.cs`,
-                },
-                {
-                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQueryHandler.cs',
-                    renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
-                },
+                },             
                 {
                     file: 'Project.Application/Queries/User/UserGetAuthoritiesQueryHandler.cs',
                     renameTo: generator =>
