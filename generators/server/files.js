@@ -1041,12 +1041,12 @@ const serverFiles = {
                 {
                     file: 'Project.Application/Queries/User/UserGetAllPublicUsersQuery.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllPublicUsersQuery.cs`,
                 },
                 {
                     file: 'Project.Application/Queries/User/UserGetAllPublicUsersQueryHandler.cs',
                     renameTo: generator =>
-                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllPublicUsersQueryHandler.cs`,
                 },
                 {
                     file: 'Project.Application/Queries/User/UserGetQueryHandler.cs',
