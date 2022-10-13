@@ -96,13 +96,13 @@ public class UserService : IUserService
         <%_ if (databaseType === 'mongodb') { _%>
         IPage<User> users = await (_userManager.Users as IMongoQueryable<User>)
                  .Include(it => it.UserRoles)
-                 .Where(it => it.Activated == true && !String.IsNullOrEmpty(it.Id))
+                 .Where(it => it.Activated == true && !string.IsNullOrEmpty(it.Id))
                  .UsePageableAsync(pageable);
         return users;
         <%_ } else { _%>
         return await _userManager.Users
             .Include(it => it.UserRoles)
-            .Where(it => it.Activated == true && !String.IsNullOrEmpty(it.Id))
+            .Where(it => it.Activated == true && !string.IsNullOrEmpty(it.Id))
             .UsePageableAsync(pageable);
         <%_ } _%>
     }
