@@ -81,7 +81,6 @@ public class UsersController : ControllerBase
     [ValidateModel]
     public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
     {
-
         _log.LogDebug($"REST request to save User : {userDto}");
         if (!string.IsNullOrEmpty(userDto.Id))
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement",
@@ -94,7 +93,6 @@ public class UsersController : ControllerBase
             throw new LoginAlreadyUsedException();
         if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
             throw new EmailAlreadyUsedException();
-
         var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
         await _mailService.SendCreationEmail(newUser);
         <%_ } _%>
@@ -114,7 +112,6 @@ public class UsersController : ControllerBase
         if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new EmailAlreadyUsedException();
         existingUser = await _userManager.FindByNameAsync(userDto.Login);
         if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
-
         var updatedUser = await _userService.UpdateUser(_mapper.Map<User>(userDto));
         <%_ } _%>
 
@@ -132,8 +129,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> GetAllUsers(IPageable pageable)
     {
-     
-     _log.LogDebug("REST request to get a page of Users");
+        _log.LogDebug("REST request to get a page of Users");
         <%_ if (cqrsEnabled) { _%>
         (var headers, var userDtos) = await _mediator.Send(new UserGetAllQuery { Page = pageable });
         <%_ } else { _%>
