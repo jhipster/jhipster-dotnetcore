@@ -1057,12 +1057,12 @@ const serverFiles = {
                     file: 'Project.Application/Queries/User/UserGetAuthoritiesQuery.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQuery.cs`,
-                },             
+                },
                 {
                     file: 'Project.Application/Queries/User/UserGetAuthoritiesQueryHandler.cs',
                     renameTo: generator =>
                         `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAuthoritiesQueryHandler.cs`,
-                },              
+                },
                 {
                     file: 'Project.Application/Commands/UserJwt/UserJwtAuthorizeCommandHandler.cs',
                     renameTo: generator =>
