@@ -30,7 +30,9 @@ using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services.EntityServices.User;
 using <%= namespace %>.Client.Test.Helpers;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Xunit;
 
@@ -50,6 +52,7 @@ public class UserDetailTest : TestContext
             {
                 options.Immediate = true;
             })
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
         Services.AddSingleton<IUserService>(_userService.Object);
