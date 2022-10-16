@@ -26,7 +26,7 @@ public static class SwaggerConfiguration
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v2", new OpenApiInfo { Title = "<%=pascalizedBaseName%> API", Version = "0.0.1" });
+            c.SwaggerDoc("v3", new OpenApiInfo { Title = "<%=pascalizedBaseName%> API", Version = "0.0.1" });
             c.OperationFilter<PageableModelFilter>();
         });
 
@@ -41,7 +41,7 @@ public static class SwaggerConfiguration
         });
         app.UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint("/v2/api-docs", "<%=pascalizedBaseName%> API");
+            c.SwaggerEndpoint("/v3/api-docs", "<%=pascalizedBaseName%> API");
         });
         return app;
     }
