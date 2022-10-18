@@ -103,7 +103,7 @@
 	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageVersion Include="Oracle.EntityFrameworkCore" Version="6.21.61" />
-	<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.70" />
+	<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.80" />
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 	} _%>
