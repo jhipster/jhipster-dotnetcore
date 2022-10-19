@@ -48,6 +48,10 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 
 https://gitter.im/JHipster-NET/jhipster-dotnetcore
 
+# Prerequisites
+
+npm install -g generator-jhipster
+
 # Installation
 
 ## With NPM
