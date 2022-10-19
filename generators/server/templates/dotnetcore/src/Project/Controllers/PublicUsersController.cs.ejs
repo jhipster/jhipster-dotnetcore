@@ -36,8 +36,10 @@ using <%= namespace %>.Infrastructure.Web.Rest.Utilities;
 using <%= namespace %>.Application.Queries;
 using <%= namespace %>.Application.Commands;
 <%_ } _%>
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 namespace <%= namespace %>.Controllers;
 
 
