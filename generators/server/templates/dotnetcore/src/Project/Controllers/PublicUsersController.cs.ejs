@@ -78,7 +78,7 @@ public class PublicUsersController : ControllerBase
 
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetAllPublicUsers(IPageable pageable)
+    public async Task<ActionResult<IEnumerable<UserDto>>> GetAllPublicUsers(IPageable pageable)
     {
         _log.LogDebug("REST request to get a page of Users");
         <%_ if (cqrsEnabled) { _%>
