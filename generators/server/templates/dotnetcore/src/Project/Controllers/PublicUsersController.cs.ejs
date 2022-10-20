@@ -63,8 +63,7 @@ public class PublicUsersController : ControllerBase
         _mediator = mediator;
     }
     <%_ } else { _%>
-    public PublicUsersController(ILogger<UsersController> log, IUserService userService,
-        IMapper mapper)
+    public PublicUsersController(ILogger<UsersController> log, IUserService userService, IMapper mapper)
     {
         _log = log;
         _userService = userService;
