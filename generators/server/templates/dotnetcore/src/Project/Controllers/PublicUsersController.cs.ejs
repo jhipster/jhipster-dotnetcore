@@ -53,8 +53,6 @@ public class PublicUsersController : ControllerBase
     private readonly IMediator _mediator;
     <%_ } else { _%>
     private readonly IMapper _mapper;
-    private readonly IMailService _mailService;
-    private readonly UserManager<User> _userManager;
     private readonly IUserService _userService;
     <%_ } _%>
 
@@ -65,13 +63,11 @@ public class PublicUsersController : ControllerBase
         _mediator = mediator;
     }
     <%_ } else { _%>
-    public PublicUsersController(ILogger<UsersController> log, UserManager<User> userManager, IUserService userService,
-        IMapper mapper, IMailService mailService)
+    public PublicUsersController(ILogger<UsersController> log, IUserService userService,
+        IMapper mapper)
     {
         _log = log;
-        _userManager = userManager;
         _userService = userService;
-        _mailService = mailService;
         _mapper = mapper;
     }
     <%_ } _%>
