@@ -93,7 +93,6 @@ public class UsersController : ControllerBase
             throw new LoginAlreadyUsedException();
         if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
             throw new EmailAlreadyUsedException();
-
         var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
         await _mailService.SendCreationEmail(newUser);
         <%_ } _%>
@@ -113,7 +112,6 @@ public class UsersController : ControllerBase
         if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new EmailAlreadyUsedException();
         existingUser = await _userManager.FindByNameAsync(userDto.Login);
         if (existingUser != null && !existingUser.Id.Equals(userDto.Id)) throw new LoginAlreadyUsedException();
-
         var updatedUser = await _userService.UpdateUser(_mapper.Map<User>(userDto));
         <%_ } _%>
 

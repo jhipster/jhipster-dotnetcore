@@ -1,0 +1,66 @@
+<%#
+ Copyright 2019-2022 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using AutoMapper;
+using System.Linq;
+using <%= namespace %>.Domain.Entities;
+using <%= namespace %>.Dto;
+using <%= namespace %>.Domain.Services.Interfaces;
+using <%= namespace %>.Infrastructure.Web.Rest.Utilities;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using JHipsterNet.Core.Pagination.Extensions;
+<%_ if (databaseType === 'mongodb') { _%>
+using MongoDB.Driver.Linq;
+<%_ } _%>
+
+namespace <%= namespace %>.Application.Queries;
+
+public class UserGetAllPublicUsersQueryHandler : IRequestHandler<UserGetAllPublicUsersQuery, (IHeaderDictionary, IEnumerable<UserDto>)>
+{
+    private readonly UserManager<User> _userManager;
+    private readonly IMapper _mapper;
+
+    public UserGetAllPublicUsersQueryHandler(UserManager<User> userManager, IUserService userService,
+        IMapper mapper, IMailService mailService)
+    {
+        _userManager = userManager;
+        _mapper = mapper;
+    }
+
+    public async Task<(IHeaderDictionary, IEnumerable<UserDto>)> Handle(UserGetAllPublicUsersQuery request, CancellationToken cancellationToken)
+    {
+        <%_ if (databaseType === 'mongodb') { _%>
+        var page = await Task.FromResult((_userManager.Users as IMongoQueryable<User>)
+            .Where(it => it.Activated == true && !string.IsNullOrEmpty(it.Id))
+            .UsePageable(request.Page));
+        <%_ } else { _%>
+        var page = await _userManager.Users
+            .Where(it => it.Activated == true && !string.IsNullOrEmpty(it.Id))
+            .UsePageableAsync(request.Page);
+        <%_ } _%>
+        var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
+        var headers = page.GeneratePaginationHttpHeaders();
+        return (headers, userDtos);
+    }
+}

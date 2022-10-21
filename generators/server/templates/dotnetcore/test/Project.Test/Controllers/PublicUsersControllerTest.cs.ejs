@@ -1,0 +1,82 @@
+<%#
+ Copyright 2019-2022 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using FluentAssertions;
+using FluentAssertions.Json;
+using <%= namespace %>.Domain.Entities;
+using <%= namespace %>.Dto;
+using <%= namespace %>.Dto.Authentication;
+using <%= namespace %>.Test.Setup;
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace <%= namespace %>.Test.Controllers;
+
+<%_ if (databaseType === 'mongodb') { _%>
+[Collection("MongoDB")]
+<%_ } _%>
+public class PublicUsersControllerTest
+{   
+    public PublicUsersControllerTest()
+    {
+        _factory = new AppWebApplicationFactory<TestStartup>();
+        _client = _factory.CreateClient();
+
+        _userManager = _factory.GetRequiredService<UserManager<User>>();
+        _passwordHasher = _userManager.PasswordHasher;
+
+        var config = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile(new AutoMapperProfile());
+        });
+
+        _mapper = config.CreateMapper();
+
+        InitTest();
+    }
+
+    private readonly AppWebApplicationFactory<TestStartup> _factory;
+    private readonly HttpClient _client;
+
+    private readonly UserManager<User> _userManager;
+    private readonly IPasswordHasher<User> _passwordHasher;
+      
+
+    [Fact]
+    public async Task GetAllUsersTest()
+    {
+        // Initialize the database
+        await _userManager.CreateAsync(_user);
+
+        // Get all authenticated users
+        var response = await _client.GetAsync("/api/users");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+        json.SelectTokens("$.[*].Id).Should().NotBeNull();
+        json.SelectTokens("$.[*].Activated").Should().Be(true);
+        json.SelectTokens("$.[*].login").Should().Contain(DefaultLogin);
+        json.SelectTokens("$.[*].firstName").Should().Contain(DefaultFirstname);
+        json.SelectTokens("$.[*].lastName").Should().Contain(DefaultLastname);
+        json.SelectTokens("$.[*].email").Should().Contain(DefaultEmail);
+        json.SelectTokens("$.[*].imageUrl").Should().Contain(DefaultImageurl);
+        json.SelectTokens("$.[*].langKey").Should().Contain(DefaultLangkey);
+    
+    }
+}

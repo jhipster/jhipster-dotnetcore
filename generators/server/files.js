@@ -981,6 +981,16 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/PublicUsersController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/PublicUsersController.cs`,
+                },
+            ],
+        },
+        {
             condition: generator =>
                 generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice' && generator.cqrsEnabled === true,
             path: SERVER_SRC_DIR,
@@ -1027,6 +1037,16 @@ const serverFiles = {
                 {
                     file: 'Project.Application/Queries/User/UserGetQuery.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllPublicUsersQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllPublicUsersQueryHandler.cs`,
                 },
                 {
                     file: 'Project.Application/Queries/User/UserGetQueryHandler.cs',
