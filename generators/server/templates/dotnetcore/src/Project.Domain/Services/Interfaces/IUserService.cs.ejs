@@ -38,4 +38,5 @@ public interface IUserService
     Task<User> RegisterUser(User userToRegister, string password);
     Task UpdateUser(string firstName, string lastName, string email, string langKey, string imageUrl);
     Task<User> GetUserWithUserRoles();
+    Task<IPage<User>> GetAllPublicUsers(IPageable pageable);
 }
