@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import CiCdGenerator from 'generator-jhipster/esm/generators/ci-cd';
+import { GITHUB, GITLAB } from '../generator-dotnetcore-constants.mjs';
 import {
   PRIORITY_PREFIX,
   PROMPTING_PRIORITY,
@@ -28,8 +29,8 @@ export default class extends CiCdGenerator {
         if (this.ciType) return;
 
         const ciTypeChoices = [
-          { value: 'gitlab', name: 'Gitlab CI', },
-          { value: 'github', name: 'Github Action', },
+          { value: GITHUB , name: 'Github Action', },
+          { value: GITLAB, name: 'Gitlab CI', },          
         ];
 
         const answers = await this.prompt([
@@ -38,7 +39,7 @@ export default class extends CiCdGenerator {
             name: 'ciType',
             message: `What CI/CD pipeline do you want to generate ?`,
             choices: ciTypeChoices,
-            default: 'github',
+            default: GITHUB,
           },
         ]);
         this.ciType = this.blueprintConfig.ciType = answers.ciType;
@@ -63,7 +64,12 @@ export default class extends CiCdGenerator {
       async writingCiFiles() {
         await this.writeFiles({
           sections: {
-            files: [{ templates: ['template-file-app'] }],
+            files: [
+              { 
+                condition: ctx => ctx.ciType === GITHUB,
+                templates: ['.github/workflows/dotnet.yml'] 
+              },
+            ],
           },
           context: this,
         });

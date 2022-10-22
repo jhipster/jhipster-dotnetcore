@@ -5,7 +5,7 @@ const toPascalCase = require('to-pascal-case');
 const pluralize = require('pluralize');
 const _ = require('lodash');
 const utilsNet = require('../utils');
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const prompts = require('./prompts');
 const asModel = require('../utils').asModel;
 

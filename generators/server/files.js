@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const mkdirp = require('mkdirp');
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
