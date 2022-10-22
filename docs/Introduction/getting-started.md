@@ -1,5 +1,9 @@
 # Getting Started
 
+## Prerequisites
+
+npm install -g generator-jhipster
+
 ## Installation of the blueprint
 
 Run the following command to install jhipster-dotnetcore
