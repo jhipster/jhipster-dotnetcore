@@ -7,7 +7,7 @@ const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 const { writeFilesAngular, writeFilesReact, writeFilesVue } = require('./files-languages');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 
 const BLAZOR = constants.BLAZOR;

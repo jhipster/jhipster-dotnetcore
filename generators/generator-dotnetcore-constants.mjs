@@ -1,5 +1,5 @@
 /**
- * Copyright 2013-2022 the original author or authors from the JHipster project.
+ * Copyright 2019-2022 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
@@ -17,20 +17,24 @@
  * limitations under the License.
  */
 
-const constants = require('../generator-dotnetcore-constants.cjs');
-
-/* Constants use throughout */
-const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
-
-
-function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/core/home/home.vue`, 'Java', '.Net Core', false);
-}
-
-function writeFiles() {
-    updateHomeTitle.call(this);
-}
-
-module.exports = {
-    writeFiles,
-};
+export {
+    SERVER_SRC_DIR,
+    CLIENT_SRC_DIR,
+    CLIENT_TEST_DIR,
+    SERVER_TEST_DIR,
+    PROJECT_DTO_SUFFIX,
+    PROJECT_DOMAIN_SUFFIX,
+    PROJECT_APPLICATION_SUFFIX,
+    PROJECT_TEST_SUFFIX,
+    DOCKER_DIR,
+    PROJECT_CROSSCUTTING_SUFFIX,
+    PROJECT_INFRASTRUCTURE_SUFFIX,
+    PROJECT_SERVICE_SUFFIX,
+    BLAZOR,
+    XAMARIN,
+    TERRAFORM_DIR,
+    NODE_VERSION,
+    NPM_VERSION,
+    GITHUB,
+    GITLAB
+} from "./generator-dotnetcore-constants.cjs";

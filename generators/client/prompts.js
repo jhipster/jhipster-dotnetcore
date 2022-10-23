@@ -18,7 +18,7 @@
  */
 const chalk = require('chalk');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 
 const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 const BLAZOR = constants.BLAZOR;

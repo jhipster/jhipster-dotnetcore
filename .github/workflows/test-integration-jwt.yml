@@ -62,7 +62,7 @@ jobs:
               with:
                 node-version: ${{ matrix.node_version }}
             - name: 'install required npm version'
-              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants').NPM_VERSION);")
+              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
             - uses: joschi/setup-jdk@v2
               with:
                 java-version: '11' # The OpenJDK version to make available on the path

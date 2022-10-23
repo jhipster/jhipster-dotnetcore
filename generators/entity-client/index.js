@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 const EntityClientGenerator = require('generator-jhipster/generators/entity-client');
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const writeBlazorFiles = require('./files-blazor').writeFiles;
 const writeXamarinFiles = require('./files-xamarin').writeFiles;
