@@ -30,7 +30,8 @@ export default class extends CiCdGenerator {
 
         const ciTypeChoices = [
           { value: GITHUB , name: 'Github Action', },
-          { value: GITLAB, name: 'Gitlab CI', },          
+          { value: GITLAB, name: 'Gitlab CI', },
+          { value: 'noci' , name: 'No CI', },
         ];
 
         const answers = await this.prompt([
