@@ -44,5 +44,8 @@
             "fr"
         ],
         "blueprint": "generator-jhipster-dotnetcore"
+    },
+    "generator-jhipster-dotnetcore": {
+      "ciType": "Github"
     }
 }

@@ -9,7 +9,7 @@
     "prodDatabaseType": "mongodb",
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
-    "jhipsterVersion": "7.8.1",
+    "jhipsterVersion": "7.9.3",
     "useSass": true,
     "clientPackageManager": "npm",
     "clientFramework": "angularX",
@@ -30,5 +30,8 @@
         "version": "2.0.0"
       }
     ]
+  },
+  "generator-jhipster-dotnetcore": {
+    "ciType": "Github"
   }
 }
