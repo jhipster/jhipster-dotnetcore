@@ -70,6 +70,10 @@ export default class extends CiCdGenerator {
                 condition: ctx => ctx.ciType === GITHUB,
                 templates: ['.github/workflows/dotnet.yml'] 
               },
+              { 
+                condition: ctx => ctx.ciType === GITLAB,
+                templates: ['.gitlab-ci.yml'] 
+              },
             ],
           },
           context: this,
