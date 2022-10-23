@@ -33,7 +33,7 @@ const {
     END_PRIORITY,
 } = require('generator-jhipster/lib/constants/priorities.cjs').compat;
 
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const build = require('./build');
 const deploy = require('./deploy');
 const provision = require('./provision');

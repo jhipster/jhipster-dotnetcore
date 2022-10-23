@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 

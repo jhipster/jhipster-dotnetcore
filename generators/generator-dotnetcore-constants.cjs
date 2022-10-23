@@ -13,12 +13,14 @@ const PROJECT_SERVICE_SUFFIX = '.Domain.Services';
 const BLAZOR = 'Blazor';
 const XAMARIN = 'Xamarin';
 const TERRAFORM_DIR = 'terraform/';
+const GITHUB = 'Github';
+const GITLAB = 'Gitlab';
 
 // Version of Node, NPM
 const NODE_VERSION = '16.14.0';
 const NPM_VERSION = '8.6.0';
 
-const constants = {
+module.exports = {
     SERVER_SRC_DIR,
     CLIENT_SRC_DIR,
     CLIENT_TEST_DIR,
@@ -36,6 +38,6 @@ const constants = {
     TERRAFORM_DIR,
     NODE_VERSION,
     NPM_VERSION,
+    GITHUB,
+    GITLAB
 };
-
-module.exports = constants;

@@ -19,7 +19,7 @@
 const EntitiesClientGenerator = require('generator-jhipster/generators/entities-client');
 const chalk = require('chalk');
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 
 const BLAZOR = constants.BLAZOR;
 const XAMARIN = constants.XAMARIN;
