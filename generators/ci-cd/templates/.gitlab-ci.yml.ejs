@@ -1,0 +1,18 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0
+
+before_script:
+  - dotnet --info
+  - curl -sL https://deb.nodesource.com/setup_12.x | bash -
+  - apt-get install -y nodejs
+  - node --version
+  - dotnet restore
+
+build:
+  stage: build
+  script:
+    - dotnet build --no-restore
+
+tests:
+  stage: test
+  script:
+    - dotnet test --no-restore
