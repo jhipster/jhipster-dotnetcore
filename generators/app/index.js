@@ -136,7 +136,7 @@ module.exports = class extends AppGenerator {
 
     get default() {
         return super._default();
-    }   
+    }
 
     get writing() {
         return super._writing();
@@ -144,6 +144,10 @@ module.exports = class extends AppGenerator {
 
     get postWriting() {
         return super._postWriting();
+    }
+
+    get install() {
+        return super._install();
     }
 
     get end() {
