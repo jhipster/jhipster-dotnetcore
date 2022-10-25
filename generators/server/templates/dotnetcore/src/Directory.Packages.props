@@ -12,10 +12,10 @@
   <ItemGroup>
 	<%_ if(!skipClient && clientFramework === "Blazor") { _%>
 	<PackageVersion Include="AutoMapper" Version="12.0.0" />
-	<PackageVersion Include="Blazored.Modal" Version="7.0.0" />
+	<PackageVersion Include="Blazored.Modal" Version="7.1.0" />
 	<PackageVersion Include="Blazored.SessionStorage" Version="2.2.0" />
-	<PackageVersion Include="Blazorise.Bootstrap" Version="1.1.1" />
-	<PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.1.1" />
+	<PackageVersion Include="Blazorise.Bootstrap" Version="1.1.2" />
+	<PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.1.2" />
 	<PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
@@ -90,7 +90,7 @@
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'mongodb': _%>
-	<PackageVersion Include="MongoDB.Driver" Version="2.17.1" />
+	<PackageVersion Include="MongoDB.Driver" Version="2.18.0" />
 	<PackageVersion Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
 		<%_ break;
 		case 'mysql': _%>
@@ -103,7 +103,7 @@
 	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageVersion Include="Oracle.EntityFrameworkCore" Version="6.21.61" />
-	<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.70" />
+	<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.80" />
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 	} _%>
@@ -119,7 +119,7 @@
 	<PackageVersion Include="xunit" Version="2.4.2" />
 	<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5"/>
 	<PackageVersion Include="xunit.runner.console" Version="2.4.2"/>
-	<PackageVersion Include="FluentAssertions" Version="6.7.0" />
+	<PackageVersion Include="FluentAssertions" Version="6.8.0" />
 	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
 	<PackageVersion Include="FluentAssertions.Json" Version="6.1.0" />
   </ItemGroup>
