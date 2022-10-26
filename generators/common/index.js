@@ -87,8 +87,4 @@ module.exports = class extends CommonGenerator {
             ...writeFiles(),
         };
     }
-
-    get postWriting() {
-        return super._postWriting();
-    }
 };
