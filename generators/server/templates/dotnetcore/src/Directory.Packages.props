@@ -49,7 +49,7 @@
 	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	<PackageVersion Include="LanguageExt.Core" Version="4.2.9" />
 	<%_ if (authenticationType === 'jwt') { _%>
-	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.24.0" />
+	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
 	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
 	<%_ } else { _%>
