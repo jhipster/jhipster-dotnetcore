@@ -151,6 +151,9 @@ module.exports = class extends EntityGenerator {
                         relationship.relationshipType === 'one-to-one' ||
                         relationship.otherEntityName.toLowerCase() === 'user'
                     ) {
+                        if(relationship.otherEntityRelationshipName === undefined){
+                            return;
+                        } 
                         relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
                         relationship.otherEntityRelationshipFieldName = _.lowerFirst(relationship.otherEntityRelationshipName);
                         relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(
