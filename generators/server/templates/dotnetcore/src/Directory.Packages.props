@@ -47,7 +47,7 @@
 	<PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
 	<PackageVersion Include="Serilog.Sinks.SyslogMessages" Version="2.0.6" />
 	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-	<PackageVersion Include="LanguageExt.Core" Version="4.2.9" />
+	<PackageVersion Include="LanguageExt.Core" Version="4.4.0" />
 	<%_ if (authenticationType === 'jwt') { _%>
 	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />
 	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
