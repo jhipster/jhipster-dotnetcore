@@ -1,5 +1,11 @@
 name: Test Integration OAUTH
-on: [push, pull_request]
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
 jobs:
     applications:
         name: ${{ matrix.app-type }}
@@ -53,8 +59,8 @@ jobs:
               with:
                 node-version: ${{ matrix.node_version }}
             - name: 'install required npm version'
-              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants').NPM_VERSION);")
-            - uses: actions/setup-dotnet@v1
+              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
+            - uses: actions/setup-dotnet@v3
               with:
                 dotnet-version: '6.0.x'
             - name: git history

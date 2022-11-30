@@ -20,7 +20,7 @@ const _ = require('lodash');
 const toPascalCase = require('to-pascal-case');
 const getEnumInfo = require('generator-jhipster/generators/utils').getEnumInfo;
 const packagejs = require('../package.json');
-const constants = require('./generator-dotnetcore-constants');
+const constants = require('./generator-dotnetcore-constants.cjs');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const BLAZOR = constants.BLAZOR;

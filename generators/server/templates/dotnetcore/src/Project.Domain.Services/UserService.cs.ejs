@@ -91,6 +91,20 @@ public class UserService : IUserService
         <%_ } _%>
     }
 
+    public async Task<IPage<User>> GetAllPublicUsers(IPageable pageable)
+    {
+        <%_ if (databaseType === 'mongodb') { _%>
+        IPage<User> users = await (_userManager.Users as IMongoQueryable<User>)
+                 .Where(it => it.Activated == true && !string.IsNullOrEmpty(it.Id))
+                 .UsePageableAsync(pageable);
+        return users;
+        <%_ } else { _%>
+        return await _userManager.Users
+            .Where(it => it.Activated == true && !string.IsNullOrEmpty(it.Id))
+            .UsePageableAsync(pageable);
+        <%_ } _%>
+    }
+
     public async Task<User> GetByLogin(string login)
     {
         <%_ if (databaseType === 'mongodb') { _%>
@@ -249,6 +263,7 @@ public class UserService : IUserService
         if (userName == null) return null;
         return await GetUserWithUserRolesByName(userName);
     }
+
 
     public virtual IEnumerable<string> GetAuthorities()
     {

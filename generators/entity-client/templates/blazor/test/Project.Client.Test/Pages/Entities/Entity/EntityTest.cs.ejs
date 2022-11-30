@@ -34,7 +34,9 @@ using FluentAssertions;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
 using <%= namespace %>.Client.Shared;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
 using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Xunit;
@@ -44,19 +46,20 @@ namespace <%= namespace %>.Client.Test.Pages.Entities.<%= entityClassName %>;
 public class <%= entityClassName %>Test : TestContext
 {
     private readonly Mock<I<%= entityClassName %>Service> _<%= entityVariableName %>Service;
-    private readonly Mock<IModalService> _modalService;
+    private readonly Mock<Blazored.Modal.Services.IModalService> _modalService;
     private readonly AutoFixture.Fixture _fixture = new AutoFixture.Fixture();
 
     public <%= entityClassName %>Test()
     {
         _<%= entityVariableName %>Service = new Mock<I<%= entityClassName %>Service>();
-        _modalService = new Mock<IModalService>();
+        _modalService = new Mock<Blazored.Modal.Services.IModalService>();
         Services.AddSingleton<I<%= entityClassName %>Service>(_<%= entityVariableName %>Service.Object);
-        Services.AddSingleton<IModalService>(_modalService.Object);
+        Services.AddSingleton<Blazored.Modal.Services.IModalService>(_modalService.Object);
         Services.AddBlazorise(options =>
             {
                 options.Immediate = true;
             })
+            .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
         Services.AddHttpClientInterceptor();

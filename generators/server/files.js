@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const mkdirp = require('mkdirp');
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -308,15 +308,6 @@ const serverFiles = {
                 {
                     file: 'Project.Dto/LoginDto.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/LoginDto.cs`,
-                },
-            ],
-        },
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Dto/SwaggerResourceDto.cs',
-                    renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/SwaggerResourceDto.cs`,
                 },
             ],
         },
@@ -990,6 +981,16 @@ const serverFiles = {
             ],
         },
         {
+            condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
+                    file: 'Project/Controllers/PublicUsersController.cs',
+                    renameTo: generator => `${generator.mainProjectDir}/Controllers/PublicUsersController.cs`,
+                },
+            ],
+        },
+        {
             condition: generator =>
                 generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice' && generator.cqrsEnabled === true,
             path: SERVER_SRC_DIR,
@@ -1036,6 +1037,16 @@ const serverFiles = {
                 {
                     file: 'Project.Application/Queries/User/UserGetQuery.cs',
                     renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQuery.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllPublicUsersQuery.cs`,
+                },
+                {
+                    file: 'Project.Application/Queries/User/UserGetAllPublicUsersQueryHandler.cs',
+                    renameTo: generator =>
+                        `${generator.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/Queries/User/UserGetAllPublicUsersQueryHandler.cs`,
                 },
                 {
                     file: 'Project.Application/Queries/User/UserGetQueryHandler.cs',
@@ -1380,15 +1391,6 @@ const serverFiles = {
         },
     ],
     serverMisc: [
-        {
-            path: SERVER_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project/Controllers/SwaggerController.cs',
-                    renameTo: generator => `${generator.mainProjectDir}/Controllers/SwaggerController.cs`,
-                },
-            ],
-        },
         {
             condition: generator =>
                 generator.authenticationType === 'jwt' &&

@@ -5,6 +5,8 @@ const AppGenerator = require('generator-jhipster/generators/app');
 
 const constants = require('generator-jhipster/lib/constants/priorities.cjs');
 
+const { GENERATOR_CI_CD } = require('generator-jhipster/generators/generator-list');
+
 const packagejs = require('../../package.json');
 
 const prompts = require('./prompts');
@@ -129,6 +131,15 @@ module.exports = class extends AppGenerator {
 
     get [COMPOSING_PRIORITY]() {
         return super._composing();
+        
+    get composing() {
+        return {
+            ...super._composing(),
+            async composeWithCiCd () {
+                await this.composeWithJHipster(GENERATOR_CI_CD, true);
+            }
+        };
+
     }
 
     get [LOADING_PRIORITY]() {
@@ -152,6 +163,13 @@ module.exports = class extends AppGenerator {
     }
 
     get [END_PRIORITY]() {
+
+    get install() {
+        return super._install();
+    }
+
+    get end() {
+
         // Here we are not overriding this phase and hence its being handled by JHipster
         return super._end();
     }

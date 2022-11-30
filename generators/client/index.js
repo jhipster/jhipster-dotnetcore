@@ -20,7 +20,7 @@
 const chalk = require('chalk');
 const ClientGenerator = require('generator-jhipster/generators/client');
 // eslint-disable-next-line import/no-extraneous-dependencies
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
 const basePrompts = require('generator-jhipster/generators/client/prompts');
 const baseWriteAngularFiles = require('generator-jhipster/generators/client/files-angular').writeFiles;
@@ -93,6 +93,7 @@ module.exports = class extends ClientGenerator {
             loadingDotnet () {
                 this.serverPort = this.jhipsterConfig.serverPort;
                 this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
+                this.withAdminUi = false;
             }
         }
     }

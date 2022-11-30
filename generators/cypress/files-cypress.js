@@ -1,4 +1,4 @@
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 

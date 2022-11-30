@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 const baseConstants = require('generator-jhipster/generators/generator-constants');
-const constants = require('../generator-dotnetcore-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
 const utils = require('../utils');
 
 /* Constants use throughout */
