@@ -168,41 +168,41 @@ function askForFieldsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
     if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.fields.length === 0) {
-      return undefined;
+        return undefined;
     }
-  
+
     const prompts = [
-      {
-        type: 'checkbox',
-        name: 'fieldsToRemove',
-        message: 'Please choose the fields you want to remove',
-        choices: () =>
-          this.entityConfig.fields.map(field => {
-            return { name: field.fieldName, value: field.fieldName };
-          }),
-      },
-      {
-        when: response => response.fieldsToRemove.length !== 0,
-        type: 'confirm',
-        name: 'confirmRemove',
-        message: 'Are you sure to remove these fields?',
-        default: true,
-      },
+        {
+            type: 'checkbox',
+            name: 'fieldsToRemove',
+            message: 'Please choose the fields you want to remove',
+            choices: () =>
+                this.entityConfig.fields.map(field => {
+                    return { name: field.fieldName, value: field.fieldName };
+                }),
+        },
+        {
+            when: response => response.fieldsToRemove.length !== 0,
+            type: 'confirm',
+            name: 'confirmRemove',
+            message: 'Are you sure to remove these fields?',
+            default: true,
+        },
     ];
     return this.prompt(prompts).then(props => {
-      if (props.confirmRemove) {
-        this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
-        const fields = this.entityConfig.fields;
-        for (let i = fields.length - 1; i >= 0; i -= 1) {
-          const field = this.entityConfig.fields[i];
-          if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
-            fields.splice(i, 1);
-          }
+        if (props.confirmRemove) {
+            this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
+            const fields = this.entityConfig.fields;
+            for (let i = fields.length - 1; i >= 0; i -= 1) {
+                const field = this.entityConfig.fields[i];
+                if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
+                    fields.splice(i, 1);
+                }
+            }
+            this.entityConfig.fields = fields;
         }
-        this.entityConfig.fields = fields;
-      }
     });
-  }
+}
 
 function askForRelationships() {
     const context = this.context;
@@ -223,44 +223,44 @@ function askForRelationsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
     if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
-      return undefined;
+        return undefined;
     }
-  
+
     const prompts = [
-      {
-        type: 'checkbox',
-        name: 'relsToRemove',
-        message: 'Please choose the relationships you want to remove',
-        choices: () =>
-          this.entityConfig.relationships.map(rel => {
-            return {
-              name: `${rel.relationshipName}:${rel.relationshipType}`,
-              value: `${rel.relationshipName}:${rel.relationshipType}`,
-            };
-          }),
-      },
-      {
-        when: response => response.relsToRemove.length !== 0,
-        type: 'confirm',
-        name: 'confirmRemove',
-        message: 'Are you sure to remove these relationships?',
-        default: true,
-      },
+        {
+            type: 'checkbox',
+            name: 'relsToRemove',
+            message: 'Please choose the relationships you want to remove',
+            choices: () =>
+                this.entityConfig.relationships.map(rel => {
+                    return {
+                        name: `${rel.relationshipName}:${rel.relationshipType}`,
+                        value: `${rel.relationshipName}:${rel.relationshipType}`,
+                    };
+                }),
+        },
+        {
+            when: response => response.relsToRemove.length !== 0,
+            type: 'confirm',
+            name: 'confirmRemove',
+            message: 'Are you sure to remove these relationships?',
+            default: true,
+        },
     ];
     return this.prompt(prompts).then(props => {
-      if (props.confirmRemove) {
-        this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
-        const relationships = this.entityConfig.relationships;
-        for (let i = relationships.length - 1; i >= 0; i -= 1) {
-          const rel = relationships[i];
-          if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
-            relationships.splice(i, 1);
-          }
+        if (props.confirmRemove) {
+            this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
+            const relationships = this.entityConfig.relationships;
+            for (let i = relationships.length - 1; i >= 0; i -= 1) {
+                const rel = relationships[i];
+                if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
+                    relationships.splice(i, 1);
+                }
+            }
+            this.entityConfig.relationships = relationships;
         }
-        this.entityConfig.relationships = relationships;
-      }
     });
-  }
+}
 
 function askForTableName() {
     const context = this.context;
