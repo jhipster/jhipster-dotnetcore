@@ -114,7 +114,7 @@ function installBlazorDependencies() {
         console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
     }
     if (!webcompilerIsInstalled()) {
-        if (shelljs.exec('dotnet tool install Excubo.WebCompiler --global').code !== 0) {
+        if (shelljs.exec('dotnet tool install Excubo.WebCompiler --global --version 2.7.14').code !== 0) {
             throw new Error('Could not install Excubo.WebCompiler');
         }
         console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
