@@ -69,7 +69,7 @@
 	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 	<PackageVersion Include="Newtonsoft.Json" Version="13.0.2" />
 	<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-	<PackageVersion Include="System.Text.Json" Version="6.0.6" />
+	<PackageVersion Include="System.Text.Json" Version="7.0.1" />
 	<PackageVersion Include="Serilog" Version="2.12.0" />
 
 	<%_ switch(databaseType) {
