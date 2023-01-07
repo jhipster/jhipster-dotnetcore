@@ -16,7 +16,7 @@ jobs:
           fail-fast: false
           matrix:
               node_version: [16.14.0]
-              os: [ubuntu-latest]
+              os: [ubuntu-20.04]
               app-type:
                   - oauth-with-angular-app
                   - oauth-with-angular-cqrs-app

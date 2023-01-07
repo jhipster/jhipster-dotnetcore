@@ -167,17 +167,19 @@ function askForFields() {
 function askForFieldsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
-    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.fieldNameChoices.length === 0) {
-        return;
+    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.fields.length === 0) {
+        return undefined;
     }
-    const done = this.async();
 
     const prompts = [
         {
             type: 'checkbox',
             name: 'fieldsToRemove',
             message: 'Please choose the fields you want to remove',
-            choices: context.fieldNameChoices,
+            choices: () =>
+                this.entityConfig.fields.map(field => {
+                    return { name: field.fieldName, value: field.fieldName };
+                }),
         },
         {
             when: response => response.fieldsToRemove.length !== 0,
@@ -187,17 +189,18 @@ function askForFieldsToRemove() {
             default: true,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
-            for (let i = this.entityConfig.fields.length - 1; i >= 0; i -= 1) {
+            const fields = this.entityConfig.fields;
+            for (let i = fields.length - 1; i >= 0; i -= 1) {
                 const field = this.entityConfig.fields[i];
                 if (props.fieldsToRemove.filter(val => val === field.fieldName).length > 0) {
-                    this.entityConfig.fields.splice(i, 1);
+                    fields.splice(i, 1);
                 }
             }
+            this.entityConfig.fields = fields;
         }
-        done();
     });
 }
 
@@ -219,21 +222,22 @@ function askForRelationships() {
 function askForRelationsToRemove() {
     const context = this.context;
     // prompt only if data is imported from a file
-    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || context.relNameChoices.length === 0) {
-        return;
+    if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
+        return undefined;
     }
-    /* if (context.databaseType === 'cassandra') {
-        return;
-    } */
-
-    const done = this.async();
 
     const prompts = [
         {
             type: 'checkbox',
             name: 'relsToRemove',
             message: 'Please choose the relationships you want to remove',
-            choices: context.relNameChoices,
+            choices: () =>
+                this.entityConfig.relationships.map(rel => {
+                    return {
+                        name: `${rel.relationshipName}:${rel.relationshipType}`,
+                        value: `${rel.relationshipName}:${rel.relationshipType}`,
+                    };
+                }),
         },
         {
             when: response => response.relsToRemove.length !== 0,
@@ -243,17 +247,18 @@ function askForRelationsToRemove() {
             default: true,
         },
     ];
-    this.prompt(prompts).then(props => {
+    return this.prompt(prompts).then(props => {
         if (props.confirmRemove) {
             this.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
-            for (let i = this.entityConfig.relationships.length - 1; i >= 0; i -= 1) {
-                const rel = this.entityConfig.relationships[i];
+            const relationships = this.entityConfig.relationships;
+            for (let i = relationships.length - 1; i >= 0; i -= 1) {
+                const rel = relationships[i];
                 if (props.relsToRemove.filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
-                    this.entityConfig.relationships.splice(i, 1);
+                    relationships.splice(i, 1);
                 }
             }
+            this.entityConfig.relationships = relationships;
         }
-        done();
     });
 }
 
