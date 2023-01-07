@@ -44,7 +44,7 @@
     "through2": "4.0.2",
     "to-pascal-case": "1.0.0",
     "which": "3.0.0",
-    "yeoman-environment": "3.12.1",
+    "yeoman-environment": "3.13.0",
     "yeoman-generator": "5.7.0"
   },
   "devDependencies": {
