@@ -23,7 +23,7 @@ on:
 jobs:
   pipeline:
     name: copyright update
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     timeout-minutes: 40
 
     steps:
