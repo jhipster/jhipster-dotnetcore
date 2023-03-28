@@ -63,6 +63,7 @@ public class <%= entityClassName %>DetailTest : TestContext
         _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
             .ForEach(b => _fixture.Behaviors.Remove(b));
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior(1));
+        JSInterop.Mode = JSRuntimeMode.Loose;
     }
 
     [Fact]
