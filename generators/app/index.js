@@ -117,13 +117,8 @@ module.exports = class extends AppGenerator {
         return super._configuring();
     }
 
-    get composing() {
-        return {
-            ...super._composing(),
-            async composeWithCiCd () {
-                await this.composeWithJHipster(GENERATOR_CI_CD, true);
-            }
-        };
+    get composing() { 
+        return super._composing();
     }
 
     get loading() {
