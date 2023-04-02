@@ -1,7 +1,6 @@
 /* eslint-disable consistent-return */
 const chalk = require('chalk');
 const AppGenerator = require('generator-jhipster/generators/app');
-const { GENERATOR_CI_CD } = require('generator-jhipster/generators/generator-list');
 const packagejs = require('../../package.json');
 const prompts = require('./prompts');
 
@@ -117,13 +116,8 @@ module.exports = class extends AppGenerator {
         return super._configuring();
     }
 
-    get composing() {
-        return {
-            ...super._composing(),
-            async composeWithCiCd () {
-                await this.composeWithJHipster(GENERATOR_CI_CD, true);
-            }
-        };
+    get composing() { 
+        return super._composing();
     }
 
     get loading() {
