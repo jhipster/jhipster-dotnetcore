@@ -49,7 +49,7 @@ public class AlertErrorTest : TestContext
             .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
-
+        JSInterop.Mode = JSRuntimeMode.Loose;
     }
     [Fact]
     public async Task Should_Display404_When_404()

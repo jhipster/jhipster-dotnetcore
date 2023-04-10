@@ -62,7 +62,7 @@ jobs:
               run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
             - uses: actions/setup-dotnet@v3
               with:
-                dotnet-version: '6.0.x'
+                dotnet-version: '7.0.x'
             - name: git history
               run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
             - name: PREPARE jhipster env
