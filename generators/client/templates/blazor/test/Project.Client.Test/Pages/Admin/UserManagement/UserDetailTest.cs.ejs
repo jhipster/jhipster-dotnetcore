@@ -57,6 +57,7 @@ public class UserDetailTest : TestContext
             .AddFontAwesomeIcons();
         Services.AddSingleton<IUserService>(_userService.Object);
         Services.AddSingleton<INavigationService>(_navidationService.Object);
+        JSInterop.Mode = JSRuntimeMode.Loose;
     }
 
     [Fact]
