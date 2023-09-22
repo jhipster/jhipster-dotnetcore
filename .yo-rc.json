@@ -1,10 +1,101 @@
 {
-  "generator-jhipster-blueprint": {
-    "promptValues": {
-      "githubName": "danielpetisme",
-      "authorName": "Daniel Petisme",
-      "authorEmail": "daniel@jhipster.tech",
-      "authorUrl": ""
-    }
+  "generator-jhipster": {
+    "additionalSubGenerators": "bazor,xamarin",
+    "baseName": "dotnetcore",
+    "cli": true,
+    "entities": [],
+    "generators": {
+      "angular": {
+        "command": false,
+        "priorities": ["postWriting"],
+        "sbs": true,
+        "written": true
+      },
+      "bazor": {
+        "command": false,
+        "priorities": ["writing"],
+        "sbs": null,
+        "written": true
+      },
+      "ci-cd": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "default",
+          "writing",
+          "postWriting"
+        ],
+        "sbs": false,
+        "written": true
+      },
+      "client": {
+        "command": false,
+        "priorities": ["prompting", "composing"],
+        "sbs": true,
+        "written": true
+      },
+      "common": {
+        "command": false,
+        "priorities": ["writing"],
+        "sbs": true,
+        "written": true
+      },
+      "cypress": {
+        "command": false,
+        "priorities": ["postWriting"],
+        "sbs": true,
+        "written": true
+      },
+      "heroku": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "configuringEachEntity",
+          "loadingEntities",
+          "preparingEachEntity",
+          "preparingEachEntityField",
+          "preparingEachEntityRelationship",
+          "postPreparingEachEntity",
+          "default",
+          "writing",
+          "writingEntities",
+          "postWriting",
+          "postWritingEntities",
+          "loadingTranslations",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false,
+        "written": true
+      },
+      "server": {
+        "command": false,
+        "priorities": ["composing"],
+        "sbs": false,
+        "written": true
+      },
+      "xamarin": {
+        "command": false,
+        "priorities": ["writing"],
+        "sbs": null,
+        "written": true
+      }
+    },
+    "jhipsterVersion": "8.0.0-beta.3",
+    "localBlueprint": false,
+    "sampleWritten": true,
+    "skipCommitHook": true,
+    "subGenerators": ["angular", "ci-cd", "client", "common", "cypress", "heroku", "server"]
   }
 }
