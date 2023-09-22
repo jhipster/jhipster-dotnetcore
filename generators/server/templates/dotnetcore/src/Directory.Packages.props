@@ -117,7 +117,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
 	<PackageVersion Include="Moq" Version="4.18.2" />
 	<PackageVersion Include="xunit" Version="2.4.2" />
-	<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5"/>
+	<PackageVersion Include="xunit.runner.visualstudio" Version="2.5.1"/>
 	<PackageVersion Include="xunit.runner.console" Version="2.4.2"/>
 	<PackageVersion Include="FluentAssertions" Version="6.8.0" />
 	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
