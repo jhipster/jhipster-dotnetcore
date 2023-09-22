@@ -5,7 +5,7 @@
   "keywords": [
     "yeoman-generator",
     "jhipster-blueprint",
-    "jhipster-7",
+    "jhipster-8",
     "dotnet"
   ],
   "homepage": "https://github.com/jhipster/jhipster-dotnetcore",
@@ -14,71 +14,43 @@
     "email": "daniel@jhipster.tech",
     "url": ""
   },
+  "type": "module",
+  "bin": {
+    "jhipster-dotnetcore": "cli/cli.cjs"
+  },
   "files": [
     "cli",
     "generators"
   ],
-  "main": "generators/app/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jhipster/jhipster-dotnetcore.git"
   },
+  "scripts": {
+    "ejslint": "ejslint generators/**/*.ejs",
+    "lint": "eslint .",
+    "lint-fix": "npm run ejslint && npm run lint -- --fix",
+    "pretest": "npm run prettier-check && npm run lint",
+    "test": "vitest run",
+    "update-snapshot": "vitest run --update",
+    "vitest": "vitest"
+  },
   "dependencies": {
-    "chalk": "4.1.2",
-    "ejs": "3.1.8",
-    "generator-jhipster": "7.8.1",
-    "glob": "8.0.3",
-    "gulp-filter": "6.0.0",
-    "insight": "0.11.1",
-    "jhipster-core": "7.3.4",
-    "js-guid": "1.0.0",
-    "js-yaml": "4.1.0",
-    "lodash": "4.17.21",
-    "meow": "11.0.0",
-    "mkdirp": "1.0.4",
-    "pluralize": "8.0.0",
-    "prettier": "2.7.1",
-    "randexp": "0.5.3",
-    "semver": "7.3.8",
-    "shelljs": "0.8.5",
-    "through2": "4.0.2",
-    "to-pascal-case": "1.0.0",
-    "which": "2.0.2",
-    "yeoman-environment": "3.12.1",
-    "yeoman-generator": "5.7.0"
+    "generator-jhipster": "jhipster/generator-jhipster#main"
   },
   "devDependencies": {
-    "@j-ulrich/release-it-regex-bumper": "^4.0.0",
-    "@release-it/bumper": "^4.0.0",
-    "chai": "4.3.6",
     "ejs-lint": "2.0.0",
-    "eslint": "8.26.0",
+    "eslint": "8.49.0",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-prettier": "4.2.1",
-    "fs-extra": "10.1.0",
-    "jsdoc": "3.6.11",
-    "mocha": "10.1.0",
-    "nyc": "15.1.0",
-    "release-it": "^15.0.0",
-    "sinon": "14.0.1",
-    "sonarqube-scanner": "2.8.2",
-    "yeoman-assert": "3.1.1",
-    "yeoman-test": "6.3.0"
+    "eslint-config-prettier": "9.0.0",
+    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-prettier": "5.0.0",
+    "prettier": "3.0.3",
+    "vitest": "0.34.5",
+    "yeoman-test": ">=8.0.0-rc.1"
   },
-  "scripts": {
-    "lint": "eslint .",
-    "lint-fix": "npm run lint -- --fix",
-    "pretest": "npm run lint",
-    "sonar:scanner": "sonar-scanner",
-    "test": "npm run test:unit -- test/*.spec.js",
-    "test:unit": "nyc --reporter=lcov mocha --timeout 300000 --slow 0",
-    "jsdoc": "jsdoc --configure jsdoc-conf.json",
-    "release": "git push && git push --tags && npm publish",
-    "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
-    "release:major": "npm version major -a -m \"Update to %s\" && npm run release"
+  "engines": {
+    "node": "^18.13.0 || >= 20.2.0"
   },
   "license": "Apache-2.0",
   "bugs": {
