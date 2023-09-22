@@ -90,7 +90,7 @@
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'mongodb': _%>
-	<PackageVersion Include="MongoDB.Driver" Version="2.18.0" />
+	<PackageVersion Include="MongoDB.Driver" Version="2.21.0" />
 	<PackageVersion Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
 		<%_ break;
 		case 'mysql': _%>
