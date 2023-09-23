@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "additionalSubGenerators": "bazor,xamarin",
+    "additionalSubGenerators": "blazor,bootstrap-dotnetcore,xamarin,dotnetcore",
     "baseName": "dotnetcore",
     "cli": true,
     "entities": [],
@@ -11,9 +11,15 @@
         "sbs": true,
         "written": true
       },
-      "bazor": {
+      "blazor": {
         "command": false,
         "priorities": ["writing"],
+        "sbs": null,
+        "written": true
+      },
+      "bootstrap-dotnetcore": {
+        "command": false,
+        "priorities": ["loading", "preparing"],
         "sbs": null,
         "written": true
       },
@@ -49,6 +55,12 @@
         "command": false,
         "priorities": ["postWriting"],
         "sbs": true,
+        "written": true
+      },
+      "dotnetcore": {
+        "command": false,
+        "priorities": [],
+        "sbs": null,
         "written": true
       },
       "heroku": {

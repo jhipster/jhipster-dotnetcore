@@ -16,13 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const shelljs = require('shelljs');
-const fs = require('fs');
-const { Guid } = require('js-guid');
-const _ = require('lodash');
-const chalk = require('chalk');
+import shelljs from 'shelljs';
+import fs from 'fs';
+import { Guid } from 'js-guid';
+import _ from 'lodash';
+import chalk from 'chalk';
 
-function exec(cmd, opts = {}) {
+export function exec(cmd, opts = {}) {
   return new Promise((resolve, reject) => {
     shelljs.exec(cmd, opts, (code, stdout, stderr) => {
       if (code !== 0) {
@@ -33,7 +33,7 @@ function exec(cmd, opts = {}) {
   });
 }
 
-function hasDotnet() {
+export function hasDotnet() {
   return new Promise((resolve, reject) => {
     if (!shelljs.exec('dotnet', { silent: true })) {
       return reject(Error("'dotnet' not found in the PATH."));
@@ -42,7 +42,7 @@ function hasDotnet() {
   });
 }
 
-async function newSln(solutionName) {
+export async function newSln(solutionName) {
   await hasDotnet();
   try {
     await fs.promises.access(`${solutionName}.sln`);
@@ -52,12 +52,12 @@ async function newSln(solutionName) {
   }
 }
 
-async function slnAdd(solutionFile, projects) {
+export async function slnAdd(solutionFile, projects) {
   await hasDotnet();
   return exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
 }
 
-async function newSlnAddProj(solutionName, projects) {
+export async function newSlnAddProj(solutionName, projects) {
   const solutionFile = fs.readFileSync(`${solutionName}.sln`, 'utf8');
   const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
   const exc = regex.exec(solutionFile);
@@ -106,45 +106,15 @@ async function newSlnAddProj(solutionName, projects) {
   }
 }
 
-function installBlazorDependencies() {
-  if (!libmanIsInstalled()) {
-    if (shelljs.exec('dotnet tool install -g Microsoft.Web.LibraryManager.Cli').code !== 0) {
-      throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
-    }
-    console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
-  }
-  if (!webcompilerIsInstalled()) {
-    if (shelljs.exec('dotnet tool install Excubo.WebCompiler --global').code !== 0) {
-      throw new Error('Could not install Excubo.WebCompiler');
-    }
-    console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
-  }
-}
-
-function libmanIsInstalled() {
-  if (shelljs.exec('libman', { silent: true }).code !== 0) {
-    return false;
-  }
-  return true;
-}
-
-function webcompilerIsInstalled() {
-  if (shelljs.exec('webcompiler', { silent: true }).code !== 0) {
-    return false;
-  }
-  return true;
-}
-
-async function restore() {
+export async function restore() {
   await hasDotnet();
   return exec('dotnet restore');
 }
 
-module.exports = {
+export default {
   hasDotnet,
   newSlnAddProj,
   newSln,
   slnAdd,
   restore,
-  installBlazorDependencies,
 };
