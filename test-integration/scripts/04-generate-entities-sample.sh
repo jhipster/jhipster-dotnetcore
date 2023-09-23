@@ -19,7 +19,7 @@ if [[ "$2" = "import-jdl" ]]; then
   else
       runOptions="import-jdl ../jdl-default/app.jdl $runOptions"
   fi
-  jhipster $runOptions
+  jhipster-dotnetcore $runOptions
 
   # copy files required for testing automatic service class/interface registration on dependency injection container
   if [[ -n $(find src/JhipsterSampleApplication.Domain.Services -type f -name "*CountryService.cs") ]]; then

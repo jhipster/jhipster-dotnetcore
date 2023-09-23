@@ -14,7 +14,7 @@ echo "*** run generation app with dotnetcore blueprint for : "$APP_FOLDER
 
 runOptions="--blueprints dotnetcore --skip-checks --force --no-insight --skip-install"
 
-jhipster $runOptions
+jhipster-dotnetcore $runOptions
 
 echo "*** check if the generation is ok for csharp classes :"
 

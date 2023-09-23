@@ -12,10 +12,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
     timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
     strategy:
       fail-fast: false
       matrix:
-        node_version: [16.14.0]
+        node_version: [18]
         os: [ubuntu-20.04]
         app-type:
           - jwt-with-angular-app
@@ -58,9 +61,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          path: jhipster-dotnetcore
+          fetch-depth: 2
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
+      - name: Create app dir
+        working-directory: ${{ github.workspace }}
+        run: mkdir app
       - name: 'install required npm version'
         run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
       - uses: joschi/setup-jdk@v2
@@ -73,7 +82,8 @@ jobs:
       - name: git history
         run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
       - name: PREPARE jhipster env
-        run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
+        run: npm ci && npm link
       - name: 'GENERATE JHipster.NET app'
         run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
       - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
