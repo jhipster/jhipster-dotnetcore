@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-dotnetcore-constants.cjs');
+import constants from '../generator-dotnetcore-constants.cjs';
 
-const files = {
+export const files = {
   docker: [
     {
       templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
@@ -59,24 +59,10 @@ const files = {
   ],
 };
 
-const jhipsterCommonFiles = {
+export const jhipsterCommonFiles = {
   global: [
     {
       templates: [{ file: 'gitattributes', renameTo: () => '.gitattributes', method: 'copy' }],
     },
   ],
-};
-
-function writeFiles() {
-  return {
-    writeFiles() {
-      this.writeFilesToDisk(files, this, false, 'dotnetcore');
-    },
-  };
-}
-
-module.exports = {
-  writeFiles,
-  files,
-  jhipsterCommonFiles,
 };
