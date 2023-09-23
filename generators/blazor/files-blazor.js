@@ -97,6 +97,7 @@ export const files = {
     {
       path: CLIENT_SRC_DIR,
       transform: false,
+      renameTo: (data, filename) => filename.replace('Project.Client/', data.mainClientDir),
       templates: [
         'Project.Client/wwwroot/content/images/jhipster_family_member_0.svg',
         'Project.Client/wwwroot/content/images/jhipster_family_member_1.svg',
@@ -126,6 +127,7 @@ export const files = {
   blazorTestHelpers: [
     {
       path: CLIENT_TEST_DIR,
+      renameTo: (data, filename) => filename.replace('Project.Client.Test/', data.clientTestProject),
       templates: [
         'Project.Client.Test/Helpers/AuthorizationHelper.cs',
         'Project.Client.Test/Helpers/MockAuthenticationService.cs',

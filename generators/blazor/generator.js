@@ -31,10 +31,10 @@ export default class extends BaseApplicationGenerator {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
         try {
           try {
-            await access(`${solutionName}.sln`);
+            await access(`${application.solutionName}.sln`);
           } catch (error) {
             if (!this.skipChecks) {
-              await this.spawnCommand(`dotnet new sln --name ${solutionName}`);
+              await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
             }
           }
         } catch (err) {
@@ -61,7 +61,7 @@ export default class extends BaseApplicationGenerator {
             await this.spawnCommand('libman');
           } catch (error) {
             try {
-              await this.spawnCommand('dotnet tool install -g Microsoft.Web.LibraryManager.Cli')
+              await this.spawnCommand('dotnet tool install -g Microsoft.Web.LibraryManager.Cli');
             } catch (error) {
               throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
             }
@@ -72,7 +72,7 @@ export default class extends BaseApplicationGenerator {
             await this.spawnCommand('webcompiler');
           } catch (error) {
             try {
-              await this.spawnCommand('dotnet tool install Excubo.WebCompiler --global')
+              await this.spawnCommand('dotnet tool install Excubo.WebCompiler --global');
             } catch (error) {
               throw new Error('Could not install Excubo.WebCompiler');
             }
