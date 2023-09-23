@@ -26,7 +26,12 @@ const command = {
       type: String,
     },
   },
-  options: {},
+  options: {
+    withEntities: {
+      type: Boolean,
+      scope: 'generator',
+    },
+  },
   import: [GENERATOR_APP],
 };
 

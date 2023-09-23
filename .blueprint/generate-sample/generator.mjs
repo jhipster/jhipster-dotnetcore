@@ -1,18 +1,17 @@
-import { readdir } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import BaseGenerator from 'generator-jhipster/generators/base';
 import command from './command.mjs';
+import { statSync } from 'node:fs';
 
 export default class extends BaseGenerator {
   sampleName;
+  jdlSample;
+  withEntities;
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       async initializeOptions() {
-        this.parseJHipsterArguments(command.arguments);
-        if (this.sampleName && !this.sampleName.endsWith('.jdl')) {
-          this.sampleName += '.jdl';
-        }
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
     });
   }
@@ -36,7 +35,35 @@ export default class extends BaseGenerator {
   get [BaseGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async copySample() {
-        this.copyTemplate(`samples/${this.sampleName}`, this.sampleName, { noGlob: true });
+        let isDir = false;
+        let jdlFile = false;
+        try {
+          const pathStat = await stat(this.templatePath(`samples/${this.sampleName}`));
+          isDir = pathStat.isDirectory();
+          jdlFile = pathStat.isFile();
+        } catch (error) {
+          try {
+            this.sampleName += '.jdl';
+            jdlFile = (await stat(this.templatePath(`samples/${this.sampleName}`))).isFile();
+          } catch {
+            throw error;
+          }
+        }
+
+        if (jdlFile) {
+          this.jdlSample = this.sampleName;
+          this.copyTemplate(`samples/${this.sampleName}`, this.sampleName, { noGlob: true });
+        } else if (isDir) {
+          this.copyTemplate(`samples/${this.sampleName}/.yo-rc.json`, '.yo-rc.json', { noGlob: true });
+        } else {
+          throw new Error(`Sample ${this.sampleName} was not identified`);
+        }
+      },
+      async jdlEntities() {
+        if (this.withEntities) {
+          this.jdlSample = this.sampleName.includes('-mongo-') ? 'app_mongo.jdl' : 'app.jdl';
+          this.copyTemplate(`samples/jdl-default/${this.jdlSample}`, this.jdlSample, { noGlob: true });
+        }
       },
     });
   }
@@ -44,15 +71,20 @@ export default class extends BaseGenerator {
   get [BaseGenerator.END]() {
     return this.asEndTaskGroup({
       async generateSample() {
-        await this.composeWithJHipster('jdl', {
-          generatorArgs: [this.sampleName],
-          generatorOptions: {
-            skipJhipsterDependencies: true,
-            insight: false,
-            skipChecks: true,
-            skipInstall: true,
-          },
-        });
+        const generatorOptions = {
+          skipJhipsterDependencies: true,
+          insight: false,
+          skipChecks: true,
+          skipInstall: true,
+        };
+        if (this.jdlSample) {
+          await this.composeWithJHipster('jdl', {
+            generatorArgs: [this.jdlSample],
+            generatorOptions,
+          });
+        } else {
+          await this.composeWithJHipster('app', { generatorOptions });
+        }
       },
       async jhipsterInfo() {
         await this.composeWithJHipster('info');
