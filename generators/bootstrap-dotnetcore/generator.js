@@ -1,5 +1,7 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import toPascalCase from 'to-pascal-case';
+import pluralize from 'pluralize';
+import utilsNet from '../utils.cjs';
 import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
 
 export default class extends BaseApplicationGenerator {
@@ -73,6 +75,120 @@ export default class extends BaseApplicationGenerator {
           application.iOSClientDir = `client/${application.pascalizedBaseName}.Client.Xamarin.iOS`;
           application.clientTestProject = `${application.pascalizedBaseName}.Client.Xamarin${PROJECT_TEST_SUFFIX}`;
         }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asPreparingEachEntityTaskGroup({
+      async preparingTemplateTask({ application, entity }) {
+        entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : 'long';
+        entity.pascalizedBaseName = toPascalCase(entity.baseName);
+        entity.mainProjectDir = entity.pascalizedBaseName;
+        entity.testProjectDir = `${entity.pascalizedBaseName}${PROJECT_TEST_SUFFIX}`;
+        entity.pascalizedEntityClass = toPascalCase(entity.entityClass);
+        entity.pascalizedEntityClassPlural = toPascalCase(entity.entityClassPlural);
+        entity.snakeCasedEntityClass = this._.snakeCase(entity.entityClass);
+        entity.snakeCasedEntityClassPlural = this._.snakeCase(entity.entityClassPlural);
+        entity.camelCasedEntityClass = this._.camelCase(entity.entityClass);
+        entity.camelCasedEntityClassPlural = this._.camelCase(entity.entityClassPlural);
+        entity.kebabCasedEntityClass = this._.kebabCase(entity.entityClass);
+        entity.kebabCasedEntityClassPlural = this._.kebabCase(entity.entityClassPlural);
+        entity.lowerCasedEntityClass = this._.toLower(entity.entityClass);
+        entity.lowerCasedEntityClassPlural = this._.toLower(entity.entityClassPlural);
+        entity.entityClassHasManyToMany = false;
+        entity.entities = this.getExistingEntities();
+        entity.mainClientAppDir = `${application.mainProjectDir}/ClientApp/src`;
+        entity.mainClientDir = `${application.mainProjectDir}/ClientApp`;
+
+        // Embed functions to use in EJS templates
+        entity.toPascalCase = toPascalCase;
+        entity.pluralize = pluralize;
+        entity._ = this._;
+        entity.equivalentCSharpType = utilsNet.equivalentCSharpType;
+        entity.asModel = utilsNet.asModel;
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      async preparingTemplateTask({ entity, field }) {
+        field.fieldNamePascalized = toPascalCase(field.fieldName);
+        field.fieldNameCamelCased = this._.camelCase(field.fieldName);
+
+        const fieldType = field.fieldType;
+
+        field.fieldIsEnum = ![
+          'String',
+          'Integer',
+          'Long',
+          'Float',
+          'Double',
+          'BigDecimal',
+          'LocalDate',
+          'Instant',
+          'ZonedDateTime',
+          'Duration',
+          'UUID',
+          'Boolean',
+          'byte[]',
+          'ByteBuffer',
+        ].includes(fieldType);
+
+        if (field.fieldIsEnum === true) {
+          entity.i18nToLoad.push(field.enumInstance);
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      async preparingTemplateTask({ entity, relationship }) {
+        relationship.relationshipNamePascalized = toPascalCase(relationship.relationshipName);
+        relationship.relationshipNamePascalizedPlural = pluralize(relationship.relationshipNamePascalized);
+        relationship.relationshipFieldNamePascalized = toPascalCase(relationship.relationshipFieldName);
+        relationship.relationshipFieldNameLowerCased = this._.toLower(relationship.relationshipFieldName);
+        relationship.relationshipFieldNamePascalizedPlural = pluralize(relationship.relationshipFieldNamePascalized);
+        relationship.otherEntityNamePascalized = toPascalCase(relationship.otherEntityName);
+        relationship.otherEntityNamePascalizedPlural = toPascalCase(relationship.otherEntityNamePlural);
+        relationship.otherEntityNameCamelCased = this._.camelCase(relationship.otherEntityName);
+        relationship.otherEntityNameLowerCased = this._.toLower(relationship.otherEntityName);
+        relationship.otherEntityNameLowerCasedPlural = this._.toLower(relationship.otherEntityNamePlural);
+
+        if (
+          relationship.relationshipType === 'one-to-many' ||
+          relationship.relationshipType === 'many-to-many' ||
+          relationship.relationshipType === 'one-to-one' ||
+          relationship.otherEntityName.toLowerCase() === 'user'
+        ) {
+          relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
+          relationship.otherEntityRelationshipFieldName = this._.lowerFirst(relationship.otherEntityRelationshipName);
+          relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
+          relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
+            relationship.otherEntityRelationshipFieldNamePascalized,
+          );
+        }
+
+        if (relationship.relationshipType === 'many-to-many') {
+          if (relationship.ownerSide) {
+            relationship.otherEntityRelationshipNamePascalizedPlural = pluralize(relationship.otherEntityRelationshipNamePascalized);
+            relationship.joinEntityName = relationship.otherEntityRelationshipName + this._.upperFirst(relationship.relationshipName);
+            relationship.joinEntityNamePascalized =
+              relationship.otherEntityRelationshipNamePascalized + relationship.relationshipNamePascalized;
+          } else {
+            relationship.joinEntityName = relationship.relationshipName + this._.upperFirst(relationship.otherEntityRelationshipName);
+            relationship.joinEntityNamePascalized =
+              relationship.relationshipNamePascalized + relationship.otherEntityRelationshipNamePascalized;
+          }
+          relationship.joinEntityNameSnakeCased = this._.snakeCase(relationship.joinEntityName);
+          relationship.joinEntityNameCamelCased = this._.camelCase(relationship.joinEntityName);
+          relationship.joinEntityFieldNamePascalizedPlural = pluralize(relationship.joinEntityNamePascalized);
+          entity.entityClassHasManyToMany = true;
+        }
+
+        relationship.joinEntityGenerated = false;
       },
     });
   }
