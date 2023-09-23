@@ -9,6 +9,14 @@
     "dotnet"
   ],
   "homepage": "https://github.com/jhipster/jhipster-dotnetcore",
+  "bugs": {
+    "url": "https://github.com/danielpetisme/generator-jhipster-dotnetcore/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhipster/jhipster-dotnetcore.git"
+  },
+  "license": "Apache-2.0",
   "author": {
     "name": "Daniel Petisme",
     "email": "daniel@jhipster.tech",
@@ -22,10 +30,6 @@
     "cli",
     "generators"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jhipster/jhipster-dotnetcore.git"
-  },
   "scripts": {
     "ejslint": "ejslint generators/**/*.ejs",
     "lint": "eslint .",
@@ -36,11 +40,14 @@
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "github:jhipster/generator-jhipster#main"
+    "chalk": "^5.3.0",
+    "generator-jhipster": "github:jhipster/generator-jhipster#main",
+    "js-guid": "^1.0.2",
+    "to-pascal-case": "^1.0.0"
   },
   "devDependencies": {
     "ejs-lint": "2.0.0",
-    "eslint": "8.49.0",
+    "eslint": "8.50.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-import": "2.28.1",
@@ -51,9 +58,5 @@
   },
   "engines": {
     "node": "^18.13.0 || >= 20.2.0"
-  },
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/danielpetisme/generator-jhipster-dotnetcore/issues"
   }
 }
