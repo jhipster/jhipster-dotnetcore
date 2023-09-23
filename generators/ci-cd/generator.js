@@ -1,37 +1,38 @@
-import chalk from 'chalk';
-import CiCdGenerator from 'generator-jhipster/esm/generators/ci-cd';
-import { GITHUB, GITLAB } from '../generator-dotnetcore-constants.mjs';
-import {
-  PRIORITY_PREFIX,
-  PROMPTING_PRIORITY,
-  CONFIGURING_PRIORITY,
-  INITIALIZING_PRIORITY,
-  WRITING_PRIORITY
-} from 'generator-jhipster/esm/priorities';
+import CiCdGenerator from 'generator-jhipster/generators/ci-cd';
+import command from './command.mjs';
 
 export default class extends CiCdGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, ...features });
-
-    if (this.options.help) return;
-
-    if (!this.options.jhipsterContext) {
-      throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints TestFolder2')}`);
-    }
-
+    super(args, opts, {
+      ...features,
+      checkBlueprint: true,
+      // Dropped it once migration is done.
+      jhipster7Migration: true,
+    });
   }
 
-  get [PROMPTING_PRIORITY]() {
-    return {
-      async promptingCiChoices() {
+  get [CiCdGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup({
+      async initializingTemplateTask() {
+        this.parseJHipsterArguments(command.arguments);
+        this.parseJHipsterOptions(command.options);
+      },
+      async initializingCiConfig() {
+        this.ciType = this.blueprintConfig.ciType;
+      },
+    });
+  }
 
+  get [CiCdGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup({
+      async promptingCiChoices() {
         if (this.existingProject) return;
         if (this.ciType) return;
 
         const ciTypeChoices = [
-          { value: GITHUB , name: 'Github Action', },
-          { value: GITLAB, name: 'Gitlab CI', },
-          { value: 'noci' , name: 'No CI', },
+          { value: GITHUB, name: 'Github Action' },
+          { value: GITLAB, name: 'Gitlab CI' },
+          { value: 'noci', name: 'No CI' },
         ];
 
         const answers = await this.prompt([
@@ -45,40 +46,58 @@ export default class extends CiCdGenerator {
         ]);
         this.ciType = this.blueprintConfig.ciType = answers.ciType;
       },
-    };
+    });
   }
 
-  get [INITIALIZING_PRIORITY]() {
-    return {
-      async initializingCiConfig() {
-        this.ciType = this.blueprintConfig.ciType;
-      },
-    };
+  get [CiCdGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup({
+      async configuringTemplateTask() {},
+    });
   }
 
-  get [CONFIGURING_PRIORITY]() {
-    return {};
+  get [CiCdGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
+      async composingTemplateTask() {},
+    });
   }
 
-  get [WRITING_PRIORITY]() {
-    return {
+  get [CiCdGenerator.LOADING]() {
+    return this.asLoadingTaskGroup({
+      async loadingTemplateTask() {},
+    });
+  }
+
+  get [CiCdGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      async preparingTemplateTask() {},
+    });
+  }
+
+  get [CiCdGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup({
+      async defaultTemplateTask() {},
+    });
+  }
+
+  get [CiCdGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
       async writingCiFiles() {
         await this.writeFiles({
           sections: {
             files: [
-              { 
+              {
                 condition: ctx => ctx.ciType === GITHUB,
-                templates: ['.github/workflows/dotnet.yml'] 
+                templates: ['.github/workflows/dotnet.yml'],
               },
-              { 
+              {
                 condition: ctx => ctx.ciType === GITLAB,
-                templates: ['.gitlab-ci.yml'] 
+                templates: ['.gitlab-ci.yml'],
               },
             ],
           },
           context: this,
         });
       },
-    };
+    });
   }
 }

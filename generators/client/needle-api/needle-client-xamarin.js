@@ -21,22 +21,22 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 module.exports = class extends needleBase {
-    constructor(generator) {
-        super(generator);
+  constructor(generator) {
+    super(generator);
 
-        this.mainClientDir = generator.mainClientDir;
+    this.mainClientDir = generator.mainClientDir;
 
-        if (!this.mainClientDir) {
-            generator.error('Client destination folder is missing');
-        }
+    if (!this.mainClientDir) {
+      generator.error('Client destination folder is missing');
     }
+  }
 
-    addEntityToMenu(entityName) {
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `src/${this.mainClientDir}/Views/MenuPage.xaml`;
-        const entityEntry =
-            // prettier-ignore
-            this.generator.stripMargin(
+  addEntityToMenu(entityName) {
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
+    const entityMenuPath = `src/${this.mainClientDir}/Views/MenuPage.xaml`;
+    const entityEntry =
+      // prettier-ignore
+      this.generator.stripMargin(
                 `|<Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" Padding="8" BackgroundColor="LightBlue" IsVisible="{Binding IsConnected}">
                 |                    <Label Text="${entityName}" />
                 |                    <Grid.GestureRecognizers>
@@ -45,53 +45,53 @@ module.exports = class extends needleBase {
                 |                </Grid>
                 |`);
 
-        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
+    const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 
-    declareCommandToMenu(entityName) {
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `src/${this.mainClientDir}/ViewModels/MenuViewModel.cs`;
-        const entityEntry =
-            // prettier-ignore
-            this.generator.stripMargin(
+  declareCommandToMenu(entityName) {
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
+    const entityMenuPath = `src/${this.mainClientDir}/ViewModels/MenuViewModel.cs`;
+    const entityEntry =
+      // prettier-ignore
+      this.generator.stripMargin(
                 `|public IMvxCommand Show${entityName}Command => new MvxAsyncCommand(${entityName}CommandClicked);`);
 
-        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-declare-entity-command', entityEntry);
+    const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-declare-entity-command', entityEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 
-    addCommandToMenu(entityName) {
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `src/${this.mainClientDir}/ViewModels/MenuViewModel.cs`;
-        const entityEntry =
-            // prettier-ignore
-            this.generator.stripMargin(
+  addCommandToMenu(entityName) {
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
+    const entityMenuPath = `src/${this.mainClientDir}/ViewModels/MenuViewModel.cs`;
+    const entityEntry =
+      // prettier-ignore
+      this.generator.stripMargin(
                 `|private async Task ${entityName}CommandClicked()
                 |        {
                 |            await _navigationService.Navigate<${entityName}ViewModel>();
                 |        }
                 `);
 
-        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-command', entityEntry);
+    const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-command', entityEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 
-    addServiceInDI(entityName) {
-        const lowerEntityName = _.toLower(entityName);
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
-        const programPath = `src/${this.mainClientDir}/App.cs`;
-        const serviceEntry =
-            // prettier-ignore
-            this.generator.stripMargin(
+  addServiceInDI(entityName) {
+    const lowerEntityName = _.toLower(entityName);
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
+    const programPath = `src/${this.mainClientDir}/App.cs`;
+    const serviceEntry =
+      // prettier-ignore
+      this.generator.stripMargin(
                 `|var ${lowerEntityName}Service = new ${entityName}Service(httpClient);                       
                  |            Mvx.IoCProvider.RegisterSingleton<I${entityName}Service>(${lowerEntityName}Service);`);
 
-        const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
+    const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 };

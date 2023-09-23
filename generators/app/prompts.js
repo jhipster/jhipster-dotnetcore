@@ -20,73 +20,73 @@ const toPascalCase = require('to-pascal-case');
 const chalk = require('chalk');
 
 function askForModuleName() {
-    if (this.existingProject) return;
-    const done = this.async();
-    const defaultAppBaseName = toPascalCase(this.getDefaultAppName());
-    const prompts = [
-        {
-            type: 'input',
-            name: 'baseName',
-            validate: input => {
-                if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
-                    return 'Your base name cannot contain special characters or a blank space';
-                }
-                return true;
-            },
-            message: 'What is the base name of your application?',
-            default: defaultAppBaseName,
-        },
-        {
-            type: 'input',
-            name: 'namespace',
-            validate: input =>
-                /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
-            message: 'What is your default C# namespace?',
-            default: defaultAppBaseName,
-        },
-    ];
-    this.prompt(prompts).then(prompt => {
-        this.baseName = this.jhipsterConfig.baseName = prompt.baseName;
-        this.namespace = this.jhipsterConfig.namespace = prompt.namespace;
-        done();
-    });
+  if (this.existingProject) return;
+  const done = this.async();
+  const defaultAppBaseName = toPascalCase(this.getDefaultAppName());
+  const prompts = [
+    {
+      type: 'input',
+      name: 'baseName',
+      validate: input => {
+        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+          return 'Your base name cannot contain special characters or a blank space';
+        }
+        return true;
+      },
+      message: 'What is the base name of your application?',
+      default: defaultAppBaseName,
+    },
+    {
+      type: 'input',
+      name: 'namespace',
+      validate: input =>
+        /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
+      message: 'What is your default C# namespace?',
+      default: defaultAppBaseName,
+    },
+  ];
+  this.prompt(prompts).then(prompt => {
+    this.baseName = this.jhipsterConfig.baseName = prompt.baseName;
+    this.namespace = this.jhipsterConfig.namespace = prompt.namespace;
+    done();
+  });
 }
 
 async function askForApplicationType() {
-    if (this.existingProject) return;
+  if (this.existingProject) return;
 
-    const applicationTypeChoices = [
-        {
-            value: 'monolith',
-            name: 'Monolithic application (recommended for simple projects)',
-        },
-        {
-            value: 'microservice',
-            name: 'Microservice application',
-        },
-        {
-            value: 'gateway',
-            name: 'Microservice gateway',
-        },
-    ];
+  const applicationTypeChoices = [
+    {
+      value: 'monolith',
+      name: 'Monolithic application (recommended for simple projects)',
+    },
+    {
+      value: 'microservice',
+      name: 'Microservice application',
+    },
+    {
+      value: 'gateway',
+      name: 'Microservice gateway',
+    },
+  ];
 
-    const answers = await this.prompt([
-        {
-            type: 'list',
-            name: 'applicationType',
-            message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
-            choices: applicationTypeChoices,
-            default: 'monolith',
-        },
-    ]);
-    this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
+  const answers = await this.prompt([
+    {
+      type: 'list',
+      name: 'applicationType',
+      message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
+      choices: applicationTypeChoices,
+      default: 'monolith',
+    },
+  ]);
+  this.applicationType = this.jhipsterConfig.applicationType = answers.applicationType;
 
-    if (this.applicationType !== 'monolith') {
-        this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = 'consul';
-    }
+  if (this.applicationType !== 'monolith') {
+    this.serviceDiscoveryType = this.jhipsterConfig.serviceDiscoveryType = 'consul';
+  }
 }
 
 module.exports = {
-    askForModuleName,
-    askForApplicationType,
+  askForModuleName,
+  askForApplicationType,
 };

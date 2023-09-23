@@ -9,65 +9,65 @@ const BLAZOR = constants.BLAZOR;
 const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends EntityClientGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        if (this.jhipsterConfig.baseName) {
-            this.baseName = this.jhipsterConfig.baseName;
-            this.clientFramework = this.jhipsterConfig.clientFramework;
-        }
+    if (this.jhipsterConfig.baseName) {
+      this.baseName = this.jhipsterConfig.baseName;
+      this.clientFramework = this.jhipsterConfig.clientFramework;
     }
+  }
 
-    get configuring() {
-        return {
-            ...super._configuring(),
-            dtoWorkaround() {
-                // only work with relation id rather than complete json
-                this.dto = 'yes';
-            },
-        };
-    }
+  get configuring() {
+    return {
+      ...super._configuring(),
+      dtoWorkaround() {
+        // only work with relation id rather than complete json
+        this.dto = 'yes';
+      },
+    };
+  }
 
-    get composing() {
-        return super._composing();
-    }
+  get composing() {
+    return super._composing();
+  }
 
-    get loading() {
-        return super._loading();
-    }
+  get loading() {
+    return super._loading();
+  }
 
-    get preparing() {
-        return super._preparing();
-    }
+  get preparing() {
+    return super._preparing();
+  }
 
-    get default() {
-        return {
-            ...super._default(),
-            customizeDotnetPaths,
-        };
-    }
+  get default() {
+    return {
+      ...super._default(),
+      customizeDotnetPaths,
+    };
+  }
 
-    get writing() {
-        if (this.clientFramework === BLAZOR) {
-            return {
-                writeFilesDotnetcore() {
-                    if (this.skipClient) return;
-                    return writeBlazorFiles.call(this);
-                },
-            };
-        }
-        if (this.clientFramework === XAMARIN) {
-            return {
-                writeFilesDotnetcore() {
-                    if (this.skipClient) return;
-                    return writeXamarinFiles.call(this);
-                },
-            };
-        }
-        return super._writing();
+  get writing() {
+    if (this.clientFramework === BLAZOR) {
+      return {
+        writeFilesDotnetcore() {
+          if (this.skipClient) return;
+          return writeBlazorFiles.call(this);
+        },
+      };
     }
+    if (this.clientFramework === XAMARIN) {
+      return {
+        writeFilesDotnetcore() {
+          if (this.skipClient) return;
+          return writeXamarinFiles.call(this);
+        },
+      };
+    }
+    return super._writing();
+  }
 
-    get postWriting() {
-        return super._postWriting();
-    }
+  get postWriting() {
+    return super._postWriting();
+  }
 };

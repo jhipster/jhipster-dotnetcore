@@ -13,77 +13,77 @@ const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 const BLAZOR = constants.BLAZOR;
 
 module.exports = class extends LanguageGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
+    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
+    if (!jhContext) {
+      this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
+    }
+
+    if (this.configOptions.baseName) {
+      this.baseName = this.configOptions.baseName;
+    }
+  }
+
+  get initializing() {
+    return {
+      ...super._initializing(),
+      customizeDotnetPaths,
+    };
+  }
+
+  get prompting() {
+    return super._prompting();
+  }
+
+  get configuring() {
+    return super._configuring();
+  }
+
+  get default() {
+    return super._default();
+  }
+
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return super._loading();
+  }
+
+  get preparing() {
+    return {
+      ...super._preparing(),
+      preparingDotnet() {
+        this.skipServer = true; // Skip server transalation for the dotnet
+        if (this.clientFramework === BLAZOR) {
+          this.skipClient = true; // Skip client translation for the blazor framework
         }
+      },
+    };
+  }
 
-        if (this.configOptions.baseName) {
-            this.baseName = this.configOptions.baseName;
+  get writing() {
+    return super._writing();
+  }
+
+  get postWriting() {
+    return {
+      ...super._postWriting(),
+      postWritingDotnet() {
+        if (this.clientFramework === ANGULAR) {
+          return writeFilesAngular.call(this);
         }
-    }
-
-    get initializing() {
-        return {
-            ...super._initializing(),
-            customizeDotnetPaths,
-        };
-    }
-
-    get prompting() {
-        return super._prompting();
-    }
-
-    get configuring() {
-        return super._configuring();
-    }
-
-    get default() {
-        return super._default();
-    }
-
-    get composing() {
-        return super._composing();
-    }
-
-    get loading() {
-        return super._loading();
-    }
-
-    get preparing() {
-        return {
-            ...super._preparing(),
-            preparingDotnet() {
-                this.skipServer = true; // Skip server transalation for the dotnet
-                if (this.clientFramework === BLAZOR) {
-                    this.skipClient = true; // Skip client translation for the blazor framework
-                }
-            },
-        };
-    }
-
-    get writing() {
-        return super._writing();
-    }
-
-    get postWriting() {
-        return {
-            ...super._postWriting(),
-            postWritingDotnet() {
-                if (this.clientFramework === ANGULAR) {
-                    return writeFilesAngular.call(this);
-                }
-                if (this.clientFramework === REACT) {
-                    return writeFilesReact.call(this);
-                }
-                if (this.clientFramework === VUE) {
-                    return writeFilesVue.call(this);
-                }
-            },
-        };
-    }
+        if (this.clientFramework === REACT) {
+          return writeFilesReact.call(this);
+        }
+        if (this.clientFramework === VUE) {
+          return writeFilesVue.call(this);
+        }
+      },
+    };
+  }
 };

@@ -1,6 +1,6 @@
 # Security
 
-## JWT 
+## JWT
 
 You can find the jwt configuration in `appsettings.json`
 
@@ -18,7 +18,7 @@ You can find the jwt configuration in `appsettings.json`
 
 ## Enforce HTTPS
 
-You can enforce HTTPS  by setting  `"EnforceHttps":  true` in `appsettings.Development.json` or `appsettings.Production.json`.
+You can enforce HTTPS by setting `"EnforceHttps":  true` in `appsettings.Development.json` or `appsettings.Production.json`.
 
 ```json
 "Security": {
@@ -27,7 +27,6 @@ You can enforce HTTPS  by setting  `"EnforceHttps":  true` in `appsettings.Devel
 ```
 
 For more details, please see [Enforce HTTPS in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?view=aspnetcore-2.1&tabs=visual-studio#http-strict-transport-security-protocol-hsts)
-
 
 ## OAuth2 and OpenID Connect
 
@@ -56,7 +55,7 @@ appsettings.json:
           "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
           "ClientId": "web_app",
           "ClientSecret": "web_app"
-        }  
+        }
 ```
 
 Keycloak uses an embedded H2 database by default, so you will lose the created users if you restart your Docker container. To keep your data, please read the [Keycloak Docker documentation](https://hub.docker.com/r/jboss/keycloak/). One solution, with keeping the H2 database, is to do the following:

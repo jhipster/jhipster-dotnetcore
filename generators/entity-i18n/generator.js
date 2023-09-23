@@ -21,38 +21,38 @@ const EntityI18nGenerator = require('generator-jhipster/generators/entity-i18n')
 const customizeDotnetPaths = require('../utils').customizeDotnetPaths;
 
 module.exports = class extends EntityI18nGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        if (this.jhipsterConfig.baseName) {
-            this.baseName = this.jhipsterConfig.baseName;
-        }
+    if (this.jhipsterConfig.baseName) {
+      this.baseName = this.jhipsterConfig.baseName;
     }
+  }
 
-    get composing() {
-        return super._composing();
-    }
+  get composing() {
+    return super._composing();
+  }
 
-    get loading() {
-        return super._loading();
-    }
+  get loading() {
+    return super._loading();
+  }
 
-    get preparing() {
-        return super._preparing();
-    }
+  get preparing() {
+    return super._preparing();
+  }
 
-    get default() {
-        return {
-            customizeDotnetPaths,
-            ...super._default(),
-        };
-    }
+  get default() {
+    return {
+      customizeDotnetPaths,
+      ...super._default(),
+    };
+  }
 
-    get writing() {
-        return super._writing();
-    }
+  get writing() {
+    return super._writing();
+  }
 
-    get postWriting() {
-        return super._postWriting();
-    }
+  get postWriting() {
+    return super._postWriting();
+  }
 };

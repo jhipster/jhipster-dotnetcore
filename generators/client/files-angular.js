@@ -23,29 +23,29 @@ const constants = require('../generator-dotnetcore-constants.cjs');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function angularJson() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, "", true);
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, "dist/", true);
+  this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `${SERVER_SRC_DIR}${this.mainClientDir}/`, '', true);
+  this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientDir}/angular.json`, `target/classes/static/`, 'dist/', true);
 }
 
 function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
+  this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/home/home.component.html`, 'Java', '.Net Core', false);
 }
 
 function updateWebpackCustomJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        "",
-        true
-    );
+  this.replaceContent(
+    `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
+    `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+    '',
+    true,
+  );
 }
 
 function writeFiles() {
-    angularJson.call(this);
-    updateHomeTitle.call(this);
-    updateWebpackCustomJs.call(this);
+  angularJson.call(this);
+  updateHomeTitle.call(this);
+  updateWebpackCustomJs.call(this);
 }
 
 module.exports = {
-    writeFiles,
+  writeFiles,
 };

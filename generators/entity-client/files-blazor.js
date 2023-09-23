@@ -28,139 +28,134 @@ const BlazorNeedle = require('../client/needle-api/needle-client-blazor');
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const files = {
-    blazorAppModels: [
+  blazorAppModels: [
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Models/Model.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Models/${generator.asModel(generator.entityClass)}.cs`,
-                },
-            ],
+          file: 'Project.Client/Models/Model.cs',
+          renameTo: generator => `${generator.mainClientDir}/Models/${generator.asModel(generator.entityClass)}.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Services/EntityServices/EntityService/EntityService.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Services/EntityServices/${generator.entityClass}/${generator.entityClass}Service.cs`,
-                },
-            ],
+          file: 'Project.Client/Services/EntityServices/EntityService/EntityService.cs',
+          renameTo: generator =>
+            `${generator.mainClientDir}/Services/EntityServices/${generator.entityClass}/${generator.entityClass}Service.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Services/EntityServices/EntityService/IEntityService.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Services/EntityServices/${generator.entityClass}/I${generator.entityClass}Service.cs`,
-                },
-            ],
+          file: 'Project.Client/Services/EntityServices/EntityService/IEntityService.cs',
+          renameTo: generator =>
+            `${generator.mainClientDir}/Services/EntityServices/${generator.entityClass}/I${generator.entityClass}Service.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Pages/Entities/Entity/Entity.razor.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}.razor.cs`,
-                },
-            ],
+          file: 'Project.Client/Pages/Entities/Entity/Entity.razor.cs',
+          renameTo: generator => `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}.razor.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Pages/Entities/Entity/Entity.razor',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}.razor`,
-                },
-            ],
+          file: 'Project.Client/Pages/Entities/Entity/Entity.razor',
+          renameTo: generator => `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}.razor`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Pages/Entities/Entity/EntityDetail.razor.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Detail.razor.cs`,
-                },
-            ],
+          file: 'Project.Client/Pages/Entities/Entity/EntityDetail.razor.cs',
+          renameTo: generator =>
+            `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Detail.razor.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Pages/Entities/Entity/EntityDetail.razor',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Detail.razor`,
-                },
-            ],
+          file: 'Project.Client/Pages/Entities/Entity/EntityDetail.razor',
+          renameTo: generator => `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Detail.razor`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Pages/Entities/Entity/EntityUpdate.razor.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Update.razor.cs`,
-                },
-            ],
+          file: 'Project.Client/Pages/Entities/Entity/EntityUpdate.razor.cs',
+          renameTo: generator =>
+            `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Update.razor.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Pages/Entities/Entity/EntityUpdate.razor',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Update.razor`,
-                },
-            ],
+          file: 'Project.Client/Pages/Entities/Entity/EntityUpdate.razor',
+          renameTo: generator => `${generator.mainClientDir}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Update.razor`,
         },
+      ],
+    },
+    {
+      path: CLIENT_TEST_DIR,
+      templates: [
         {
-            path: CLIENT_TEST_DIR,
-            templates: [
-                {
-                    file: 'Project.Client.Test/Pages/Entities/Entity/EntityTest.cs',
-                    renameTo: generator =>
-                        `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Test.cs`,
-                },
-            ],
+          file: 'Project.Client.Test/Pages/Entities/Entity/EntityTest.cs',
+          renameTo: generator => `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}Test.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_TEST_DIR,
+      templates: [
         {
-            path: CLIENT_TEST_DIR,
-            templates: [
-                {
-                    file: 'Project.Client.Test/Pages/Entities/Entity/EntityUpdateTest.cs',
-                    renameTo: generator =>
-                        `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}UpdateTest.cs`,
-                },
-            ],
+          file: 'Project.Client.Test/Pages/Entities/Entity/EntityUpdateTest.cs',
+          renameTo: generator =>
+            `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}UpdateTest.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_TEST_DIR,
+      templates: [
         {
-            path: CLIENT_TEST_DIR,
-            templates: [
-                {
-                    file: 'Project.Client.Test/Pages/Entities/Entity/EntityDetailTest.cs',
-                    renameTo: generator =>
-                        `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}DetailTest.cs`,
-                },
-            ],
+          file: 'Project.Client.Test/Pages/Entities/Entity/EntityDetailTest.cs',
+          renameTo: generator =>
+            `${generator.clientTestProject}/Pages/Entities/${generator.entityClass}/${generator.entityClass}DetailTest.cs`,
         },
-    ],
+      ],
+    },
+  ],
 };
 
 module.exports = {
-    writeFiles,
-    files,
+  writeFiles,
+  files,
 };
 
 function writeFiles() {
-    this.writeFilesToDisk(files, this, false, 'blazor');
-    const blazorNeedle = new BlazorNeedle(this);
-    blazorNeedle.addEntityToMenu(this.entityClass);
-    blazorNeedle.addServiceInDI(this.entityClass);
-    blazorNeedle.addUsingForService(this.namespace, this.entityClass);
-    blazorNeedle.addDtoMapping(this.entityClass);
+  this.writeFilesToDisk(files, this, false, 'blazor');
+  const blazorNeedle = new BlazorNeedle(this);
+  blazorNeedle.addEntityToMenu(this.entityClass);
+  blazorNeedle.addServiceInDI(this.entityClass);
+  blazorNeedle.addUsingForService(this.namespace, this.entityClass);
+  blazorNeedle.addDtoMapping(this.entityClass);
 }

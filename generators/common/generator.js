@@ -26,65 +26,65 @@ const writeFiles = require('./files').writeFiles;
 const jhipsterCommonFiles = require('./files').jhipsterCommonFiles;
 
 module.exports = class extends CommonGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
+    const jhContext = (this.jhipsterContext = this.options.jhipsterContext);
 
-        if (!jhContext) {
-            this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
-        }
-
-        if (this.configOptions.baseName) {
-            this.baseName = this.configOptions.baseName;
-        }
+    if (!jhContext) {
+      this.error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprint dotnetcore')}`);
     }
 
-    get initializing() {
-        return {
-            ...super._initializing(),
-            configureGlobal() {
-                this.kebabCasedBaseName = _.kebabCase(this.baseName);
-                this.pascalizedBaseName = toPascalCase(this.baseName);
-                this.mainProjectDir = this.pascalizedBaseName;
-                this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
-                this.jhipsterDotnetVersion = packagejs.version;
-                this.options.outputPathCustomizer = [
-                    paths => (paths ? paths.replace(/^(\.prettierignore)$/, `src/${this.mainClientDir}/$1`) : paths),
-                    paths => (paths ? paths.replace(/^(\.prettierrc)$/, `src/${this.mainClientDir}/$1`) : paths),
-                    paths => (paths ? paths.replace(/^(package.json)$/, `src/${this.mainClientDir}/$1`) : paths),
-                ];
-            },
-        };
+    if (this.configOptions.baseName) {
+      this.baseName = this.configOptions.baseName;
     }
+  }
 
-    get configuring() {
-        return super._configuring();
-    }
+  get initializing() {
+    return {
+      ...super._initializing(),
+      configureGlobal() {
+        this.kebabCasedBaseName = _.kebabCase(this.baseName);
+        this.pascalizedBaseName = toPascalCase(this.baseName);
+        this.mainProjectDir = this.pascalizedBaseName;
+        this.mainClientDir = `${this.mainProjectDir}/ClientApp`;
+        this.jhipsterDotnetVersion = packagejs.version;
+        this.options.outputPathCustomizer = [
+          paths => (paths ? paths.replace(/^(\.prettierignore)$/, `src/${this.mainClientDir}/$1`) : paths),
+          paths => (paths ? paths.replace(/^(\.prettierrc)$/, `src/${this.mainClientDir}/$1`) : paths),
+          paths => (paths ? paths.replace(/^(package.json)$/, `src/${this.mainClientDir}/$1`) : paths),
+        ];
+      },
+    };
+  }
 
-    get composing() {
-        return super._composing();
-    }
+  get configuring() {
+    return super._configuring();
+  }
 
-    get loading() {
-        return super._loading();
-    }
+  get composing() {
+    return super._composing();
+  }
 
-    get preparing() {
-        return super._preparing();
-    }
+  get loading() {
+    return super._loading();
+  }
 
-    get default() {
-        return {};
-    }
+  get preparing() {
+    return super._preparing();
+  }
 
-    get writing() {
-        return {
-            writeJhipsterCommonFile() {
-                // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
-                return this.writeFilesToDisk(jhipsterCommonFiles);
-            },
-            ...writeFiles(),
-        };
-    }
+  get default() {
+    return {};
+  }
+
+  get writing() {
+    return {
+      writeJhipsterCommonFile() {
+        // Prettier configuration needs to be the first written files - all subgenerators considered - for prettier transform to work
+        return this.writeFilesToDisk(jhipsterCommonFiles);
+      },
+      ...writeFiles(),
+    };
+  }
 };

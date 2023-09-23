@@ -7,75 +7,75 @@ on:
   pull_request:
 
 jobs:
-    applications:
-        name: ${{ matrix.app-type }}
-        runs-on: ${{ matrix.os }}
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
-        timeout-minutes: 40
-        strategy:
-          fail-fast: false
-          matrix:
-              node_version: [16.14.0]
-              os: [ubuntu-20.04]
-              app-type:
-                  - oauth-with-angular-app
-                  - oauth-with-angular-cqrs-app
-                  - oauth-with-mssql-app
-                  - oauth-with-mysql-app
-                  - oauth-with-mongo-app
-                  - oauth-with-mongo-cqrs-app
-                  - oauth-with-oracle-app
-                  - oauth-with-postgres-app
-                  - oauth-with-react-app
-                  - oauth-with-vue-app
-              include:
-                  - app-type: oauth-with-angular-app
-                    arg: 'import-jdl'
-                  - app-type: oauth-with-angular-cqrs-app
-                    arg: 'import-jdl'
-                  - app-type: oauth-with-mssql-app
-                    arg: 'no'
-                  - app-type: oauth-with-mysql-app
-                    arg: 'no'
-                  - app-type: oauth-with-mongo-app
-                    arg: 'no'
-                  - app-type: oauth-with-mongo-cqrs-app
-                    arg: 'no'
-                  - app-type: oauth-with-oracle-app
-                    arg: 'no'
-                  - app-type: oauth-with-postgres-app
-                    arg: 'no'
-                  - app-type: oauth-with-react-app
-                    arg: 'import-jdl'
-                  - app-type: oauth-with-vue-app
-                    arg: 'import-jdl'
-        env:
-            JHI_APP: ${{ matrix.app-type }}
-            JHI_ARG: ${{ matrix.arg }}
+  applications:
+    name: ${{ matrix.app-type }}
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: [16.14.0]
+        os: [ubuntu-20.04]
+        app-type:
+          - oauth-with-angular-app
+          - oauth-with-angular-cqrs-app
+          - oauth-with-mssql-app
+          - oauth-with-mysql-app
+          - oauth-with-mongo-app
+          - oauth-with-mongo-cqrs-app
+          - oauth-with-oracle-app
+          - oauth-with-postgres-app
+          - oauth-with-react-app
+          - oauth-with-vue-app
+        include:
+          - app-type: oauth-with-angular-app
+            arg: 'import-jdl'
+          - app-type: oauth-with-angular-cqrs-app
+            arg: 'import-jdl'
+          - app-type: oauth-with-mssql-app
+            arg: 'no'
+          - app-type: oauth-with-mysql-app
+            arg: 'no'
+          - app-type: oauth-with-mongo-app
+            arg: 'no'
+          - app-type: oauth-with-mongo-cqrs-app
+            arg: 'no'
+          - app-type: oauth-with-oracle-app
+            arg: 'no'
+          - app-type: oauth-with-postgres-app
+            arg: 'no'
+          - app-type: oauth-with-react-app
+            arg: 'import-jdl'
+          - app-type: oauth-with-vue-app
+            arg: 'import-jdl'
+    env:
+      JHI_APP: ${{ matrix.app-type }}
+      JHI_ARG: ${{ matrix.arg }}
 
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                node-version: ${{ matrix.node_version }}
-            - name: 'install required npm version'
-              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
-            - uses: actions/setup-dotnet@v3
-              with:
-                dotnet-version: '7.0.x'
-            - name: git history
-              run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
-            - name: PREPARE jhipster env
-              run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
-            - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG
-            - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
-            - name: 'GENERATE JHipster.NET entities'
-              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
-            - name: 'RUN CLIENT UNIT TESTS of generated app'
-              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
-            - name: 'RUN SERVER UNIT TESTS of generated app'
-              run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
-            - name: 'VERIFY FORMAT'
-              run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: 'install required npm version'
+        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: git history
+        run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
+      - name: PREPARE jhipster env
+        run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
+      - name: 'GENERATE JHipster.NET app'
+        run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG
+      - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
+        run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
+      - name: 'GENERATE JHipster.NET entities'
+        run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
+      - name: 'RUN CLIENT UNIT TESTS of generated app'
+        run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
+      - name: 'RUN SERVER UNIT TESTS of generated app'
+        run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+      - name: 'VERIFY FORMAT'
+        run: ./test-integration/scripts/09-verify-format.sh $JHI_APP

@@ -7,7 +7,7 @@
     "serverPort": "5000",
     "databaseType": "sqllite",
     "prodDatabaseType": "mysql",
-	  "cqrsEnabled": true,
+    "cqrsEnabled": true,
     "enableTranslation": false,
     "namespace": "JhipsterSampleApplication",
     "jhipsterVersion": "7.9.3",
@@ -19,7 +19,7 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-	"testFrameworks": ["cypress"],
+    "testFrameworks": ["cypress"],
     "otherModules": [
       {
         "name": "generator-jhipster-dotnetcore",

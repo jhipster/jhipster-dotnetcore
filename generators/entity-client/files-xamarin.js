@@ -27,78 +27,75 @@ const XamarinNeedle = require('../client/needle-api/needle-client-xamarin');
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
 const files = {
-    xamarinAppModels: [
+  xamarinAppModels: [
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Models/Model.cs',
-                    renameTo: generator => `${generator.mainClientDir}/Models/Entities/${generator.asModel(generator.entityClass)}.cs`,
-                },
-            ],
+          file: 'Project.Client/Models/Model.cs',
+          renameTo: generator => `${generator.mainClientDir}/Models/Entities/${generator.asModel(generator.entityClass)}.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/ViewModels/EntityViewModel.cs',
-                    renameTo: generator => `${generator.mainClientDir}/ViewModels/Entities/${generator.entityClass}ViewModel.cs`,
-                },
-            ],
+          file: 'Project.Client/ViewModels/EntityViewModel.cs',
+          renameTo: generator => `${generator.mainClientDir}/ViewModels/Entities/${generator.entityClass}ViewModel.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Services/EntityService.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/${generator.entityClass}Service.cs`,
-                },
-            ],
+          file: 'Project.Client/Services/EntityService.cs',
+          renameTo: generator => `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/${generator.entityClass}Service.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Services/IEntityService.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/I${generator.entityClass}Service.cs`,
-                },
-            ],
+          file: 'Project.Client/Services/IEntityService.cs',
+          renameTo: generator =>
+            `${generator.mainClientDir}/Services/Entities/${generator.entityClass}/I${generator.entityClass}Service.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Views/EntityView.xaml.cs',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.cs`,
-                },
-            ],
+          file: 'Project.Client/Views/EntityView.xaml.cs',
+          renameTo: generator => `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.cs`,
         },
+      ],
+    },
+    {
+      path: CLIENT_SRC_DIR,
+      templates: [
         {
-            path: CLIENT_SRC_DIR,
-            templates: [
-                {
-                    file: 'Project.Client/Views/EntityView.xaml',
-                    renameTo: generator =>
-                        `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.xaml`,
-                },
-            ],
+          file: 'Project.Client/Views/EntityView.xaml',
+          renameTo: generator => `${generator.mainClientDir}/Views/Entities/${generator.entityClass}/${generator.entityClass}View.xaml`,
         },
-    ],
+      ],
+    },
+  ],
 };
 
 module.exports = {
-    writeFiles,
-    files,
+  writeFiles,
+  files,
 };
 
 function writeFiles() {
-    this.writeFilesToDisk(files, this, false, 'xamarin');
-    const xamarinNeedle = new XamarinNeedle(this);
-    xamarinNeedle.addEntityToMenu(this.entityClass);
-    xamarinNeedle.addServiceInDI(this.entityClass);
-    xamarinNeedle.addCommandToMenu(this.entityClass);
-    xamarinNeedle.declareCommandToMenu(this.entityClass);
+  this.writeFilesToDisk(files, this, false, 'xamarin');
+  const xamarinNeedle = new XamarinNeedle(this);
+  xamarinNeedle.addEntityToMenu(this.entityClass);
+  xamarinNeedle.addServiceInDI(this.entityClass);
+  xamarinNeedle.addCommandToMenu(this.entityClass);
+  xamarinNeedle.declareCommandToMenu(this.entityClass);
 }

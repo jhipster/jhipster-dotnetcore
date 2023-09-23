@@ -1,6 +1,6 @@
 # Monolith
 
-## Monolith Artictecture 
+## Monolith Artictecture
 
 ### With JWT
 
@@ -10,14 +10,14 @@
 
 ![monolith-jwt](../assets/Monolith-with-identity-server.png)
 
-## Monolith structure 
+## Monolith structure
 
 ```
 AppFolder
 ├───docker -> all docker related files
 ├───src
 │   ├───MyApp
-│   │   └───ClientApp -> all client related files 
+│   │   └───ClientApp -> all client related files
 │   │       ├───src
 │   │       ├───test
 │   │       └───webpack

@@ -25,44 +25,44 @@ const BLAZOR = constants.BLAZOR;
 const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends EntitiesClientGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        if (this.jhipsterConfig.baseName) {
-            this.baseName = this.jhipsterConfig.baseName;
-            this.clientFramework = this.jhipsterConfig.clientFramework;
-        }
+    if (this.jhipsterConfig.baseName) {
+      this.baseName = this.jhipsterConfig.baseName;
+      this.clientFramework = this.jhipsterConfig.clientFramework;
     }
+  }
 
-    get initializing() {
-        return super._initializing();
-    }
+  get initializing() {
+    return super._initializing();
+  }
 
-    get loading() {
-        return super._loading();
-    }
+  get loading() {
+    return super._loading();
+  }
 
-    get default() {
-        return {
-            ...super._default(),
-            customizeDotnetPaths,
-        };
-    }
+  get default() {
+    return {
+      ...super._default(),
+      customizeDotnetPaths,
+    };
+  }
 
-    get end() {
-        return {
-            rebuildClient() {
-                if (!this.options.skipInstall && !this.skipClient && this.clientFramework !== BLAZOR && this.clientFramework !== XAMARIN) {
-                    const done = this.async();
-                    this.log(`\n${chalk.bold.green('Running `webapp:build` to update client app\n')}`);
-                    this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webapp:build']).on(
-                        'close',
-                        () => {
-                            done();
-                        }
-                    );
-                }
+  get end() {
+    return {
+      rebuildClient() {
+        if (!this.options.skipInstall && !this.skipClient && this.clientFramework !== BLAZOR && this.clientFramework !== XAMARIN) {
+          const done = this.async();
+          this.log(`\n${chalk.bold.green('Running `webapp:build` to update client app\n')}`);
+          this.spawnCommand('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'webapp:build']).on(
+            'close',
+            () => {
+              done();
             },
-        };
-    }
+          );
+        }
+      },
+    };
+  }
 };

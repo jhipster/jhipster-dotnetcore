@@ -21,33 +21,33 @@ const jhipsterUtils = require('generator-jhipster/generators/utils');
 const chalk = require('chalk');
 
 module.exports = class extends needleBase {
-    constructor(generator) {
-        super(generator);
+  constructor(generator) {
+    super(generator);
 
-        this.mainProjectDir = generator.mainProjectDir;
+    this.mainProjectDir = generator.mainProjectDir;
 
-        if (!this.mainProjectDir) {
-            generator.error('Server destination folder is missing');
-        }
+    if (!this.mainProjectDir) {
+      generator.error('Server destination folder is missing');
     }
+  }
 
-    addRouteToGateway(entityName, microserviceName) {
-        const errorMessage = `${chalk.yellow('Route to ') + entityName} ${chalk.yellow('not added to the gateway.\n')}`;
-        const ocelotConfigPath = `src/${this.mainProjectDir}/ocelot.json`;
-        const haveAlreadyOneRoute = jhipsterUtils.checkStringInFile(ocelotConfigPath, 'UpstreamPathTemplate', this.generator);
-        const isRoutesAlreadyDeclared = jhipsterUtils.checkStringInFile(
-            ocelotConfigPath,
-            `${microserviceName}/api/${entityName}`,
-            this.generator
-        );
-        if (!isRoutesAlreadyDeclared) {
-            let firstRouteEntry = '';
-            if (haveAlreadyOneRoute) {
-                firstRouteEntry = ',';
-            }
-            firstRouteEntry +=
-                // prettier-ignore
-                this.generator.stripMargin(
+  addRouteToGateway(entityName, microserviceName) {
+    const errorMessage = `${chalk.yellow('Route to ') + entityName} ${chalk.yellow('not added to the gateway.\n')}`;
+    const ocelotConfigPath = `src/${this.mainProjectDir}/ocelot.json`;
+    const haveAlreadyOneRoute = jhipsterUtils.checkStringInFile(ocelotConfigPath, 'UpstreamPathTemplate', this.generator);
+    const isRoutesAlreadyDeclared = jhipsterUtils.checkStringInFile(
+      ocelotConfigPath,
+      `${microserviceName}/api/${entityName}`,
+      this.generator,
+    );
+    if (!isRoutesAlreadyDeclared) {
+      let firstRouteEntry = '';
+      if (haveAlreadyOneRoute) {
+        firstRouteEntry = ',';
+      }
+      firstRouteEntry +=
+        // prettier-ignore
+        this.generator.stripMargin(
                                `|{
                                 |  "DownstreamPathTemplate": "/api/${entityName}",
                                 |  "DownstreamScheme": "https",
@@ -59,9 +59,9 @@ module.exports = class extends needleBase {
                                 |  "UpstreamPathTemplate": "/${microserviceName}/api/${entityName}",
                                 |  "UpstreamHttpMethod": [ "Get", "Post", "Delete","Put" ]
                                 |}, `);
-            const secondRouteEntry =
-                // prettier-ignore
-                this.generator.stripMargin(
+      const secondRouteEntry =
+        // prettier-ignore
+        this.generator.stripMargin(
                                    `|{
                                     |  "DownstreamPathTemplate": "/api/${entityName}/{everything}",
                                     |  "DownstreamScheme": "https",
@@ -73,14 +73,10 @@ module.exports = class extends needleBase {
                                     |  "UpstreamPathTemplate": "/${microserviceName}/api/${entityName}/{everything}",
                                     |  "UpstreamHttpMethod": [ "Get", "Post", "Delete","Put" ]
                                     |}`);
-            const firstRewriteFileModel = this.generateFileModel(ocelotConfigPath, 'jhipster-needle-add-route-to-gateway', firstRouteEntry);
-            const secondRewriteFileModel = this.generateFileModel(
-                ocelotConfigPath,
-                'jhipster-needle-add-route-to-gateway',
-                secondRouteEntry
-            );
-            this.addBlockContentToFile(firstRewriteFileModel, errorMessage);
-            this.addBlockContentToFile(secondRewriteFileModel, errorMessage);
-        }
+      const firstRewriteFileModel = this.generateFileModel(ocelotConfigPath, 'jhipster-needle-add-route-to-gateway', firstRouteEntry);
+      const secondRewriteFileModel = this.generateFileModel(ocelotConfigPath, 'jhipster-needle-add-route-to-gateway', secondRouteEntry);
+      this.addBlockContentToFile(firstRewriteFileModel, errorMessage);
+      this.addBlockContentToFile(secondRewriteFileModel, errorMessage);
     }
+  }
 };

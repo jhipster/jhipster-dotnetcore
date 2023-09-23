@@ -43,192 +43,191 @@ const BLAZOR = constants.BLAZOR;
 const XAMARIN = constants.XAMARIN;
 
 module.exports = class extends ClientGenerator {
-    constructor(args, opts) {
-        super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+  constructor(args, opts) {
+    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
 
-        if (this.configOptions.baseName) {
-            this.baseName = this.configOptions.baseName;
+    if (this.configOptions.baseName) {
+      this.baseName = this.configOptions.baseName;
+    }
+  }
+
+  get initializing() {
+    return {
+      customizeDotnetPaths,
+      ...super._initializing(),
+      initializingDotnet() {
+        this.namespace = this.jhipsterConfig.namespace;
+        this.clientFramework = this.jhipsterConfig.clientFramework;
+      },
+    };
+  }
+
+  get prompting() {
+    return {
+      askForModuleName: basePrompts.askForModuleName,
+      askForClient: prompts.askForClient,
+      askFori18n: basePrompts.askForI18n,
+      askForClientTheme: basePrompts.askForClientTheme,
+      askForClientThemeVariant: basePrompts.askForClientThemeVariant,
+    };
+  }
+
+  get configuring() {
+    return {
+      customizeDotnetPaths,
+      ...super._configuring(),
+    };
+  }
+
+  get default() {
+    return super._default();
+  }
+
+  get composing() {
+    return super._composing();
+  }
+
+  get loading() {
+    return {
+      ...super._loading(),
+      loadingDotnet() {
+        this.serverPort = this.jhipsterConfig.serverPort;
+        this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
+        this.withAdminUi = false;
+      },
+    };
+  }
+
+  get preparing() {
+    return super._preparing();
+  }
+
+  get writing() {
+    // The writing phase is being overriden so that we can write our own templates as well.
+    // If the templates doesnt need to be overrriden then just return `super._writing()` here
+    return {
+      writeFilesDotnetcore() {
+        if (this.skipClient) return;
+        switch (this.clientFramework) {
+          case BLAZOR:
+            return writeBlazorFiles.call(this);
+          case XAMARIN:
+            return writeXamarinFiles.call(this);
+          case REACT:
+            baseWriteReactFiles.call(this);
+            return baseWriteCommonFiles.call(this);
+          case ANGULAR:
+            baseWriteAngularFiles.call(this);
+            return baseWriteCommonFiles.call(this);
+          case VUE:
+            baseWriteVueFiles.call(this);
+            return baseWriteCommonFiles.call(this);
+          default:
+          // do nothing by default
         }
-    }
+      },
+    };
+  }
 
-    get initializing() {
-        return {
-            customizeDotnetPaths,
-            ...super._initializing(),
-            initializingDotnet () {
-                this.namespace = this.jhipsterConfig.namespace;
-                this.clientFramework = this.jhipsterConfig.clientFramework;
-            }
+  get postWriting() {
+    return {
+      postWritingDotnet() {
+        if (this.clientFramework === BLAZOR) {
+          this.skipClient = true;
         }
-    }
-
-    get prompting() {
-        return {
-            askForModuleName: basePrompts.askForModuleName,
-            askForClient: prompts.askForClient,
-            askFori18n: basePrompts.askForI18n,
-            askForClientTheme: basePrompts.askForClientTheme,
-            askForClientThemeVariant: basePrompts.askForClientThemeVariant
-        };
-    }
-
-    get configuring() {
-        return {
-            customizeDotnetPaths,
-            ...super._configuring()
-        };
-    }
-
-    get default() {
-        return super._default();
-    }
-
-    get composing() {
-        return super._composing();
-    }
-
-    get loading() {
-        return {
-            ...super._loading(),
-            loadingDotnet () {
-                this.serverPort = this.jhipsterConfig.serverPort;
-                this.serverPortSecured = parseInt(this.serverPort, 10) + 1;
-                this.withAdminUi = false;
-            }
+      },
+      ...super._postWriting(),
+      postWriteFilesDotnetcore() {
+        if (this.skipClient) return;
+        switch (this.clientFramework) {
+          case REACT:
+            writeCommonFiles.call(this);
+            return writeReactFiles.call(this);
+          case ANGULAR:
+            writeCommonFiles.call(this);
+            return writeAngularFiles.call(this);
+          case VUE:
+            writeCommonFiles.call(this);
+            return writeVueFiles.call(this);
+          default:
+          // do nothing by default
         }
-    }
+      },
+    };
+  }
 
-    get preparing() {
-        return super._preparing();
-    }
+  get install() {
+    // Override default yeoman installDependencies
+    const customPhase = {
+      installDependencies() {
+        if (this.clientFramework !== BLAZOR && !this.options.skipInstall) {
+          this.log(
+            `\n\nI'm all done. Running ${chalk.green.bold(
+              `npm install `,
+            )}for you to install the required dependencies. If this fails, try running the command yourself.`,
+          );
+          this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}` });
+        }
+      },
+    };
+    return customPhase;
+  }
 
-    get writing() {
-        // The writing phase is being overriden so that we can write our own templates as well.
-        // If the templates doesnt need to be overrriden then just return `super._writing()` here
-        return {
-            writeFilesDotnetcore() {
-                if (this.skipClient) return;
-                switch (this.clientFramework) {
-                    case BLAZOR:
-                        return writeBlazorFiles.call(this);
-                    case XAMARIN:
-                        return writeXamarinFiles.call(this);
-                    case REACT:
-                        baseWriteReactFiles.call(this);
-                        return baseWriteCommonFiles.call(this);
-                    case ANGULAR:
-                        baseWriteAngularFiles.call(this);
-                        return baseWriteCommonFiles.call(this);
-                    case VUE:
-                        baseWriteVueFiles.call(this);
-                        return baseWriteCommonFiles.call(this);
-                    default:
-                    // do nothing by default
-                }
-            }
-        };
-    }
-
-    get postWriting() {
-        return {
-            postWritingDotnet(){
-                if (this.clientFramework === BLAZOR) {
-                   this.skipClient = true;
-                }
+  get end() {
+    return {
+      async end() {
+        if (this.clientFramework === BLAZOR) {
+          this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+          try {
+            await dotnet.newSln(this.solutionName);
+          } catch (err) {
+            this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+          }
+          await dotnet.slnAdd(`${this.solutionName}.sln`, [
+            `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
+            `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Shared.csproj`,
+            `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
+          ]);
+          this.log(chalk.green.bold('Client application generated successfully.\n'));
+          this.log(
+            chalk.green(
+              `Run your blazor application:\n${chalk.yellow.bold(
+                `dotnet run --verbosity normal --project ./${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
+              )}`,
+            ),
+          );
+          dotnet.installBlazorDependencies();
+        } else if (this.clientFramework === XAMARIN) {
+          this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
+          try {
+            await dotnet.newSln(this.solutionName);
+          } catch (err) {
+            this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+          }
+          await dotnet.slnAdd(`${this.solutionName}.sln`, [
+            `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
+            `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
+          ]);
+          await dotnet.newSlnAddProj(this.solutionName, [
+            {
+              path: `${constants.CLIENT_SRC_DIR}${this.androidClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
+              name: `${this.pascalizedBaseName}.Client.Xamarin.Android`,
             },
-            ... super._postWriting(),
-            postWriteFilesDotnetcore() {
-                if (this.skipClient) return;
-                switch (this.clientFramework) {
-                    case REACT:
-                        writeCommonFiles.call(this);
-                        return writeReactFiles.call(this);
-                    case ANGULAR:
-                        writeCommonFiles.call(this);
-                        return writeAngularFiles.call(this);
-                    case VUE:
-                        writeCommonFiles.call(this);
-                        return writeVueFiles.call(this);
-                    default:
-                    // do nothing by default
-                }
-            }
-        }
-    }
-
-    get install() {
-        // Override default yeoman installDependencies
-        const customPhase = {
-            installDependencies() {
-                if (this.clientFramework !== BLAZOR && !this.options.skipInstall) {
-                    this.log(
-                        `\n\nI'm all done. Running ${chalk.green.bold(
-                            `npm install `
-                        )}for you to install the required dependencies. If this fails, try running the command yourself.`
-                    );
-                    this.spawnCommandSync('npm', ['install'], { cwd: `${constants.SERVER_SRC_DIR}${this.mainClientDir}` });
-                }
-            }
-        };
-        return customPhase;
-    }
-
-    get end() {
-        return {
-            async end() {
-                if (this.clientFramework === BLAZOR) {
-                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-                    try {
-                        await dotnet.newSln(this.solutionName);
-                    } catch (err) {
-                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
-                    }
-                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
-                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`,
-                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Shared.csproj`,
-                        `${constants.CLIENT_TEST_DIR}${this.clientTestProject}/${this.pascalizedBaseName}.Client.Test.csproj`,
-                    ]);
-                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
-                    this.log(
-                        chalk.green(
-                            `Run your blazor application:\n${chalk.yellow.bold(
-                                `dotnet run --verbosity normal --project ./${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.csproj`
-                            )}`
-                        )
-                    );
-                    dotnet.installBlazorDependencies();
-                } else if (this.clientFramework === XAMARIN) {
-                    this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-                    try {
-                        await dotnet.newSln(this.solutionName);
-                    } catch (err) {
-                        this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
-                    }
-                    await dotnet.slnAdd(`${this.solutionName}.sln`, [
-                        `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
-                        `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
-                    ]);
-                    await dotnet.newSlnAddProj(this.solutionName, [
-                        {
-                            'path': `${constants.CLIENT_SRC_DIR}${this.androidClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
-                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.Android`
-                        },
-                        {
-                            'path': `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
-                            'name' : `${this.pascalizedBaseName}.Client.Xamarin.iOS`
-                        }
-                    ]);
-                    this.log(chalk.green.bold('\Client application generated successfully.\n'));
-
-                } else {
-                    if (this.skipClient) return;
-                    this.log(chalk.green.bold('\nClient application generated successfully.\n'));
-
-                    if (!this.options.skipInstall) {
-                        this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
-                    }
-                }
+            {
+              path: `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
+              name: `${this.pascalizedBaseName}.Client.Xamarin.iOS`,
             },
+          ]);
+          this.log(chalk.green.bold('Client application generated successfully.\n'));
+        } else {
+          if (this.skipClient) return;
+          this.log(chalk.green.bold('\nClient application generated successfully.\n'));
+
+          if (!this.options.skipInstall) {
+            this.spawnCommandSync('npm', ['--prefix', `${constants.SERVER_SRC_DIR}${this.mainClientDir}`, 'run', 'cleanup']);
+          }
         }
-    }
+      },
+    };
+  }
 };

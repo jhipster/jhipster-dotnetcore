@@ -25,58 +25,56 @@ const BLAZOR = constants.BLAZOR;
 const XAMARIN = constants.XAMARIN;
 
 module.exports = {
-    askForClient,
+  askForClient,
 };
 
 function askForClient() {
-    if (this.existingProject) return;
+  if (this.existingProject) return;
 
-    const choices = [
-        {
-            value: ANGULAR,
-            name: 'Angular',
-        },
-        {
-            value: REACT,
-            name: 'React',
-        },
-        {
-            value: VUE,
-            name: 'Vue',
-        },
-        {
-            value: BLAZOR,
-            name: '[Alpha] - Blazor (WebAssembly)',
-        },
-        {
-            value: 'no',
-            name: 'No client',
-        },
-    ];
+  const choices = [
+    {
+      value: ANGULAR,
+      name: 'Angular',
+    },
+    {
+      value: REACT,
+      name: 'React',
+    },
+    {
+      value: VUE,
+      name: 'Vue',
+    },
+    {
+      value: BLAZOR,
+      name: '[Alpha] - Blazor (WebAssembly)',
+    },
+    {
+      value: 'no',
+      name: 'No client',
+    },
+  ];
 
-    if (this.configOptions.isDebugEnabled) {
-        choices.push(
-            {
-                value: XAMARIN,
-                name: '[Alpha] - Xamarin',
-            },
-        )
-    }
-
-    const PROMPT = {
-        type: 'list',
-        name: 'clientFramework',
-        message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
-        choices,
-        default: ANGULAR,
-    };
-    const done = this.async();
-
-    this.prompt(PROMPT).then(prompt => {
-        this.clientFramework = this.jhipsterConfig.clientFramework = prompt.clientFramework;
-        if (this.clientFramework === 'no') {
-            this.skipClient = true;
-        }
-        done();
+  if (this.configOptions.isDebugEnabled) {
+    choices.push({
+      value: XAMARIN,
+      name: '[Alpha] - Xamarin',
     });
+  }
+
+  const PROMPT = {
+    type: 'list',
+    name: 'clientFramework',
+    message: `Which ${chalk.yellow('*Framework*')} would you like to use for the client?`,
+    choices,
+    default: ANGULAR,
+  };
+  const done = this.async();
+
+  this.prompt(PROMPT).then(prompt => {
+    this.clientFramework = this.jhipsterConfig.clientFramework = prompt.clientFramework;
+    if (this.clientFramework === 'no') {
+      this.skipClient = true;
+    }
+    done();
+  });
 }

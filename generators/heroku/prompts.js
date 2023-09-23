@@ -22,84 +22,84 @@ const ChildProcess = require('child_process');
 const Which = require('which');
 
 function askForDotnetApp() {
-    const done = this.async();
+  const done = this.async();
 
-    if (this.herokuAppName) {
-        ChildProcess.execFile(Which.sync('heroku'), ['apps:info', '--json', this.herokuAppName], (err, stdout) => {
-            if (err) {
-                this.abort = true;
-                this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
-                this.log.error('Run the generator again to create a new application.');
-                this.herokuAppName = null;
-            } else {
-                const json = JSON.parse(stdout);
-                this.herokuAppName = json.app.name;
-                if (json.dynos.length > 0) {
-                    this.dynoSize = json.dynos[0].size;
-                }
-                this.log(`Deploying as existing application: ${chalk.bold(this.herokuAppName)}`);
-                this.herokuAppExists = true;
-                this.config.set({
-                    herokuAppName: this.herokuAppName,
-                    herokuDeployType: this.herokuDeployType,
-                });
-            }
-            done();
+  if (this.herokuAppName) {
+    ChildProcess.execFile(Which.sync('heroku'), ['apps:info', '--json', this.herokuAppName], (err, stdout) => {
+      if (err) {
+        this.abort = true;
+        this.log.error(`Could not find application: ${chalk.cyan(this.herokuAppName)}`);
+        this.log.error('Run the generator again to create a new application.');
+        this.herokuAppName = null;
+      } else {
+        const json = JSON.parse(stdout);
+        this.herokuAppName = json.app.name;
+        if (json.dynos.length > 0) {
+          this.dynoSize = json.dynos[0].size;
+        }
+        this.log(`Deploying as existing application: ${chalk.bold(this.herokuAppName)}`);
+        this.herokuAppExists = true;
+        this.config.set({
+          herokuAppName: this.herokuAppName,
+          herokuDeployType: this.herokuDeployType,
         });
-    } else {
-        const prompts = [
-            {
-                type: 'input',
-                name: 'herokuAppName',
-                message: 'Name to deploy as:',
-                default: this.baseName,
-            },
-            {
-                type: 'list',
-                name: 'herokuRegion',
-                message: 'On which region do you want to deploy ?',
-                choices: ['us', 'eu'],
-                default: 0,
-            },
-        ];
+      }
+      done();
+    });
+  } else {
+    const prompts = [
+      {
+        type: 'input',
+        name: 'herokuAppName',
+        message: 'Name to deploy as:',
+        default: this.baseName,
+      },
+      {
+        type: 'list',
+        name: 'herokuRegion',
+        message: 'On which region do you want to deploy ?',
+        choices: ['us', 'eu'],
+        default: 0,
+      },
+    ];
 
-        this.prompt(prompts).then(props => {
-            this.herokuAppName = _.kebabCase(props.herokuAppName);
-            this.herokuRegion = props.herokuRegion;
-            this.herokuAppExists = false;
-            done();
-        });
-    }
+    this.prompt(prompts).then(props => {
+      this.herokuAppName = _.kebabCase(props.herokuAppName);
+      this.herokuRegion = props.herokuRegion;
+      this.herokuAppExists = false;
+      done();
+    });
+  }
 }
 
 function askForHerokuDeployType() {
-    if (this.abort) return null;
-    if (this.herokuDeployType) return null;
-    const prompts = [
+  if (this.abort) return null;
+  if (this.herokuDeployType) return null;
+  const prompts = [
+    {
+      type: 'list',
+      name: 'herokuDeployType',
+      message: 'Which type of deployment do you want ?',
+      choices: [
         {
-            type: 'list',
-            name: 'herokuDeployType',
-            message: 'Which type of deployment do you want ?',
-            choices: [
-                {
-                    value: 'containerRegistry',
-                    name: 'Heroku Container Registry (build image locally and push)',
-                },
-                {
-                    value: 'git',
-                    name: 'Git (compile on Heroku)',
-                },
-            ],
-            default: 0,
+          value: 'containerRegistry',
+          name: 'Heroku Container Registry (build image locally and push)',
         },
-    ];
+        {
+          value: 'git',
+          name: 'Git (compile on Heroku)',
+        },
+      ],
+      default: 0,
+    },
+  ];
 
-    return this.prompt(prompts).then(props => {
-        this.herokuDeployType = props.herokuDeployType;
-    });
+  return this.prompt(prompts).then(props => {
+    this.herokuDeployType = props.herokuDeployType;
+  });
 }
 
 module.exports = {
-    askForDotnetApp,
-    askForHerokuDeployType,
+  askForDotnetApp,
+  askForHerokuDeployType,
 };

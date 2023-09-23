@@ -21,62 +21,62 @@ const chalk = require('chalk');
 const _ = require('lodash');
 
 module.exports = class extends needleBase {
-    constructor(generator) {
-        super(generator);
+  constructor(generator) {
+    super(generator);
 
-        this.mainClientDir = generator.mainClientDir;
+    this.mainClientDir = generator.mainClientDir;
 
-        if (!this.mainClientDir) {
-            generator.error('Client destination folder is missing');
-        }
+    if (!this.mainClientDir) {
+      generator.error('Client destination folder is missing');
     }
+  }
 
-    addEntityToMenu(entityName) {
-        const lowerCasedEntityName = _.toLower(entityName);
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
-        const entityMenuPath = `src/${this.mainClientDir}/Shared/NavMenu.razor`;
-        const entityEntry =
-            // prettier-ignore
-            this.generator.stripMargin(
+  addEntityToMenu(entityName) {
+    const lowerCasedEntityName = _.toLower(entityName);
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to menu.\n')}`;
+    const entityMenuPath = `src/${this.mainClientDir}/Shared/NavMenu.razor`;
+    const entityEntry =
+      // prettier-ignore
+      this.generator.stripMargin(
                             `|<BarDropdownItem Class="dropdown-item" To="${lowerCasedEntityName}">
                              |                                    <Icon Name='"fa-asterisk"' />
                              |                                    ${entityName}
                              |                                </BarDropdownItem>`);
-        const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
+    const rewriteFileModel = this.generateFileModel(entityMenuPath, 'jhipster-needle-add-entity-to-menu', entityEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 
-    addServiceInDI(entityName) {
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
-        const programPath = `src/${this.mainClientDir}/Program.cs`;
-        const serviceEntry =
-            // prettier-ignore
-            this.generator.stripMargin(`|builder.Services.AddScoped<I${entityName}Service, ${entityName}Service>();`);
-        const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
+  addServiceInDI(entityName) {
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
+    const programPath = `src/${this.mainClientDir}/Program.cs`;
+    const serviceEntry =
+      // prettier-ignore
+      this.generator.stripMargin(`|builder.Services.AddScoped<I${entityName}Service, ${entityName}Service>();`);
+    const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-services-in-di', serviceEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 
-    addUsingForService(namespace,entityName) {
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
-        const programPath = `src/${this.mainClientDir}/Program.cs`;
-        const usingEntry =
-            // prettier-ignore
-            this.generator.stripMargin(`|using ${namespace}.Client.Services.EntityServices.${entityName};`);
-        const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-using-for-services', usingEntry);
+  addUsingForService(namespace, entityName) {
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to Program.\n')}`;
+    const programPath = `src/${this.mainClientDir}/Program.cs`;
+    const usingEntry =
+      // prettier-ignore
+      this.generator.stripMargin(`|using ${namespace}.Client.Services.EntityServices.${entityName};`);
+    const rewriteFileModel = this.generateFileModel(programPath, 'jhipster-needle-add-using-for-services', usingEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 
-    addDtoMapping(entityName) {
-        const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to AutoMapper.\n')}`;
-        const autoMapperProfilePath = `src/${this.mainClientDir}/AutoMapper/AutoMapperProfile.cs`;
-        const mappingEntry =
-            // prettier-ignore
-            this.generator.stripMargin(`|CreateMap<${entityName}Model, ${entityName}Dto>().ReverseMap();`);
-        const rewriteFileModel = this.generateFileModel(autoMapperProfilePath, 'jhipster-needle-add-dto-model-mapping', mappingEntry);
+  addDtoMapping(entityName) {
+    const errorMessage = `${chalk.yellow('Reference to ') + entityName} ${chalk.yellow('not added to AutoMapper.\n')}`;
+    const autoMapperProfilePath = `src/${this.mainClientDir}/AutoMapper/AutoMapperProfile.cs`;
+    const mappingEntry =
+      // prettier-ignore
+      this.generator.stripMargin(`|CreateMap<${entityName}Model, ${entityName}Dto>().ReverseMap();`);
+    const rewriteFileModel = this.generateFileModel(autoMapperProfilePath, 'jhipster-needle-add-dto-model-mapping', mappingEntry);
 
-        this.addBlockContentToFile(rewriteFileModel, errorMessage);
-    }
+    this.addBlockContentToFile(rewriteFileModel, errorMessage);
+  }
 };

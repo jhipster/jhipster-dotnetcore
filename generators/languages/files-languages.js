@@ -23,35 +23,35 @@ const constants = require('../generator-dotnetcore-constants.cjs');
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
 function updateAngularWebpackCustomJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        '',
-        true
-    );
+  this.replaceContent(
+    `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.custom.js`,
+    `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+    '',
+    true,
+  );
 }
 
 function updateReactWebpackCommonJs() {
-    this.replaceContent(
-        `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
-        `${SERVER_SRC_DIR}${this.mainClientDir}/`,
-        '',
-        true
-    );
+  this.replaceContent(
+    `${SERVER_SRC_DIR}${this.mainClientDir}/webpack/webpack.common.js`,
+    `${SERVER_SRC_DIR}${this.mainClientDir}/`,
+    '',
+    true,
+  );
 }
 
 function writeFilesAngular() {
-    updateAngularWebpackCustomJs.call(this);
+  updateAngularWebpackCustomJs.call(this);
 }
 function writeFilesReact() {
-    updateReactWebpackCommonJs.call(this);
+  updateReactWebpackCommonJs.call(this);
 }
 function writeFilesVue() {
-    updateReactWebpackCommonJs.call(this);
+  updateReactWebpackCommonJs.call(this);
 }
 
 module.exports = {
-    writeFilesAngular,
-    writeFilesReact,
-    writeFilesVue,
+  writeFilesAngular,
+  writeFilesReact,
+  writeFilesVue,
 };

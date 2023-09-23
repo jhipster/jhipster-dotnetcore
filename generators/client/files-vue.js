@@ -22,15 +22,14 @@ const constants = require('../generator-dotnetcore-constants.cjs');
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 
-
 function updateHomeTitle() {
-    this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/core/home/home.vue`, 'Java', '.Net Core', false);
+  this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/core/home/home.vue`, 'Java', '.Net Core', false);
 }
 
 function writeFiles() {
-    updateHomeTitle.call(this);
+  updateHomeTitle.call(this);
 }
 
 module.exports = {
-    writeFiles,
+  writeFiles,
 };
