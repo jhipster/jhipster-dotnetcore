@@ -59,7 +59,7 @@
       },
       "dotnetcore": {
         "command": false,
-        "priorities": [],
+        "priorities": ["initializing", "prompting", "configuring", "composing", "preparing", "writing", "default", "install", "end"],
         "sbs": null,
         "written": true
       },

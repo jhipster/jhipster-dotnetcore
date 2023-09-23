@@ -1,6 +1,6 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import toPascalCase from 'to-pascal-case';
-import { BLAZOR, PROJECT_TEST_SUFFIX, XAMARIN } from '../generator-dotnetcore-constants.js';
+import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
 
 export default class extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -25,6 +25,10 @@ export default class extends BaseApplicationGenerator {
     return this.asLoadingTaskGroup({
       async loadingTemplateTask({ application }) {
         application.namespace = this.jhipsterConfig.namespace;
+        application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
+        application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
+        application.SERVER_SRC_DIR = SERVER_SRC_DIR;
+        application.SERVER_TEST_DIR = SERVER_TEST_DIR;
       },
     });
   }

@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const mkdirp = require('mkdirp');
-const constants = require('../generator-dotnetcore-constants.cjs');
+import constants from '../generator-dotnetcore-constants.cjs';
 
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
@@ -31,7 +30,7 @@ const PROJECT_INFRASTRUCTURE_SUFFIX = constants.PROJECT_INFRASTRUCTURE_SUFFIX;
 const PROJECT_SERVICE_SUFFIX = constants.PROJECT_SERVICE_SUFFIX;
 const TERRAFORM_DIR = constants.TERRAFORM_DIR;
 
-const serverFiles = {
+export const serverFiles = {
   serverCsProj: [
     {
       path: SERVER_SRC_DIR,
@@ -1366,6 +1365,7 @@ const serverFiles = {
       ],
     },
   ],
+  /*
   docker: [
     {
       path: DOCKER_DIR,
@@ -1424,6 +1424,7 @@ const serverFiles = {
       ],
     },
   ],
+  */
   serverServiceDiscovery: [
     {
       condition: generator =>
@@ -1479,18 +1480,9 @@ const serverFiles = {
   ],
 };
 
-const gatlingTestsFiles = {
+export const gatlingTestsFiles = {
   gatlingTests: [
     {
-      condition: generator => {
-        if (generator.gatlingTests) {
-          mkdirp(`${SERVER_TEST_DIR}gatling/user-files/data`);
-          mkdirp(`${SERVER_TEST_DIR}gatling/user-files/bodies`);
-          mkdirp(`${SERVER_TEST_DIR}gatling/user-files/simulations`);
-          return true;
-        }
-        return false;
-      },
       path: SERVER_TEST_DIR,
       templates: [
         // Create Gatling test files
@@ -1501,7 +1493,7 @@ const gatlingTestsFiles = {
   ],
 };
 
-const baseServiceDiscoveryFiles = {
+export const baseServiceDiscoveryFiles = {
   baseServiceDiscovery: [
     {
       condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
@@ -1509,30 +1501,4 @@ const baseServiceDiscoveryFiles = {
       templates: [{ file: 'config/git2consul.json', method: 'copy' }],
     },
   ],
-};
-
-function writeFiles() {
-  return {
-    writeFiles() {
-      this.writeFilesToDisk(serverFiles, this, false, 'dotnetcore');
-    },
-    writeFilesGatling() {
-      this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src'));
-    },
-    writeFilesBaseServiceDiscovery() {
-      this.writeFilesToDisk(baseServiceDiscoveryFiles, this, false, this.fetchFromInstalledJHipster('server/templates/src/main'));
-    },
-    writeDirectoryTargetsFile() {
-      this.fs.copyTpl(
-        this.templatePath(`dotnetcore/${constants.SERVER_SRC_DIR}/Directory.Packages.props`),
-        this.destinationPath('Directory.Packages.props'),
-        this,
-      );
-    },
-  };
-}
-
-module.exports = {
-  serverFiles,
-  writeFiles,
 };

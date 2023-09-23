@@ -26,7 +26,7 @@ export default class extends BaseApplicationGenerator {
         ];
       },
       */
-     /*
+      /*
       async writingCommonFiles({ application }) {
         await this.writeFiles({
           sections: jhipsterCommonFiles,
