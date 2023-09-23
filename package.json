@@ -36,7 +36,7 @@
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "jhipster/generator-jhipster#main"
+    "generator-jhipster": "github:jhipster/generator-jhipster#main"
   },
   "devDependencies": {
     "ejs-lint": "2.0.0",

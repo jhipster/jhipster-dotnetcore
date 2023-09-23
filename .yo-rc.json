@@ -93,6 +93,7 @@
       }
     },
     "jhipsterVersion": "8.0.0-beta.3",
+    "js": true,
     "localBlueprint": false,
     "sampleWritten": true,
     "skipCommitHook": true,
