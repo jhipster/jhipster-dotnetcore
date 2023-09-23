@@ -57,55 +57,6 @@ export async function slnAdd(solutionFile, projects) {
   return exec(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
 }
 
-export async function newSlnAddProj(solutionName, projects) {
-  const solutionFile = fs.readFileSync(`${solutionName}.sln`, 'utf8');
-  const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
-  const exc = regex.exec(solutionFile);
-  const firstGuid = exc[1];
-  const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
-  const clientDir = regexp.exec(solutionFile)[1];
-  const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
-  let projectText = '';
-  let dirText = '';
-
-  projectText += `\nProject("{${firstGuid}}") = "Solution Items", "Solution Items", "{${_.toUpper(Guid.newGuid())}}"`;
-  projectText += '\n\tProjectSection(SolutionItems) = preProject';
-  projectText += '\n\t\t.editorconfig = .editorconfig';
-  projectText += '\n\t\tDirectory.Packages.props = Directory.Packages.props';
-  projectText += '\n\t\tREADME.md = README.md';
-  projectText += '\n\tEndProjectSection';
-  projectText += '\nEndProject';
-
-  projects.forEach(project => {
-    const existingProjects = solutionFile.matchAll(reg);
-    let alreadyExist = false;
-    let existingProject = existingProjects.next();
-    while (!existingProject.done && !alreadyExist) {
-      alreadyExist = existingProject.value[1] === project.name;
-      existingProject = existingProjects.next();
-    }
-    if (!alreadyExist) {
-      const randomGuid = _.toUpper(Guid.newGuid());
-      projectText += `\nProject("{${firstGuid}}") = "${project.name}", "${project.path}", "{${randomGuid}}"\nEndProject`;
-      dirText += `\n\t\t{${randomGuid}} = {${clientDir}}`;
-    }
-  });
-
-  const projectRe = new RegExp('MinimumVisualStudioVersion = .*\\D', 'g');
-  const projectFound = solutionFile.match(projectRe);
-  projectText = `${projectFound}${projectText}`;
-  let newBody = solutionFile.replace(projectRe, projectText);
-
-  const dirRe = new RegExp('GlobalSection\\(NestedProjects\\) = .*\\D', 'g');
-  const dirFound = solutionFile.match(dirRe);
-  dirText = `${dirFound}${dirText}`;
-  newBody = newBody.replace(dirRe, dirText);
-
-  if (solutionFile !== newBody) {
-    fs.writeFileSync(`${solutionName}.sln`, newBody);
-  }
-}
-
 export async function restore() {
   await hasDotnet();
   return exec('dotnet restore');
@@ -113,7 +64,6 @@ export async function restore() {
 
 export default {
   hasDotnet,
-  newSlnAddProj,
   newSln,
   slnAdd,
   restore,
