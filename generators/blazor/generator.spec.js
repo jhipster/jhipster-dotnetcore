@@ -2,10 +2,10 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
-const SUB_GENERATOR = 'bazor';
+const SUB_GENERATOR = 'blazor';
 const SUB_GENERATOR_NAMESPACE = `jhipster-dotnetcore:${SUB_GENERATOR}`;
 
-describe('SubGenerator bazor of dotnetcore JHipster blueprint', () => {
+describe('SubGenerator blazor of dotnetcore JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers

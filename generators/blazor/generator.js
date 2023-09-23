@@ -6,7 +6,7 @@ export default class extends BaseApplicationGenerator {
       async writingTemplateTask({ application }) {
         await this.writeFiles({
           sections: {
-            files: [{ templates: ['template-file-bazor'] }],
+            files: [{ templates: ['template-file-blazor'] }],
           },
           context: application,
         });
