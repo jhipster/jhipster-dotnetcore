@@ -81,6 +81,7 @@ jobs:
           dotnet-version: '7.0.x'
       - name: git history
         run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
       - name: PREPARE jhipster env
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
         run: npm ci && npm link
