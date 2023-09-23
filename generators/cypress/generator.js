@@ -1,16 +1,20 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { writeFiles } from './files-cypress.js';
+import { SERVER_SRC_DIR } from '../generator-dotnetcore-constants.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
+  async beforeQueue() {
+    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
+  }
+
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
         application.cypressDir = `${SERVER_SRC_DIR}${application.clientTestProject}/cypress/`;
-        application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
+        application.cypressRootDir = ''; // `${SERVER_SRC_DIR}${application.mainClientDir}/`;
       },
     });
   }
@@ -22,18 +26,15 @@ export default class extends BaseApplicationGenerator {
         this.deleteDestination(`${application.cypressDir}integration/administration/administration.spec.ts`);
       },
 
-      updateTsConfigCypress() {
+      updateTsConfigCypress({ application }) {
         this.editFile(`${application.cypressDir}/tsconfig.json`, content => content.replace('./../../../../', './../../'));
       },
 
-      updateCypressJson() {
-        this.editFile(`${SERVER_SRC_DIR}${application.mainClientDir}/cypress.json`, content =>
-          content.replace(`${SERVER_SRC_DIR}${application.mainClientDir}/`, ''),
-        );
-        this.editFile(`${SERVER_SRC_DIR}${application.mainClientDir}/cypress.json`, content =>
+      updateCypressJson({ application }) {
+        this.editFile(`${application.cypressRootDir}cypress.config.ts`, content => content.replace(`${application.cypressRootDir}/`, ''));
+        this.editFile(`${application.cypressRootDir}cypress.config.ts`, content =>
           content.replace(`http://localhost:${application.serverPort}`, `https://localhost:${application.serverPortSecured}`),
         );
-        this.editFile(`${SERVER_SRC_DIR}${application.mainClientDir}/cypress.json`, content => content.replace('target', 'dist'));
       },
     });
   }
