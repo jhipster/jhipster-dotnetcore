@@ -16,17 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-dotnetcore-constants.cjs');
-
-/* Constants use throughout */
-const CLIENT_SRC_DIR = constants.CLIENT_SRC_DIR;
-const CLIENT_TEST_DIR = constants.CLIENT_TEST_DIR;
+import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.cjs';
 
 /**
  * The default is to use a file path string. It implies use of the template method.
  * For any other config an object { file:.., method:.., template:.. } can be used
  */
-const files = {
+export const files = {
   xamarinAppModels: [
     {
       path: CLIENT_SRC_DIR,
@@ -781,11 +777,3 @@ const files = {
   ],
 };
 
-module.exports = {
-  writeFiles,
-  files,
-};
-
-function writeFiles() {
-  this.writeFilesToDisk(files, this, false, 'xamarin');
-}
