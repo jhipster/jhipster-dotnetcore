@@ -1,7 +1,19 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import chalk from 'chalk';
 import { files } from './files-xamarin.js';
+import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.js';
+import { readFileSync, writeFileSync } from 'fs';
 
 export default class extends BaseApplicationGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { ...features, jhipster7Migration: true });
+  }
+
+  async beforeQueue() {
+    await this.dependsOnJHipster('bootstrap-application');
+    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
+  }
+
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
@@ -15,29 +27,92 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.INSTALL]() {
     return this.asInstallTaskGroup({
-      async install() {
-        this.log(chalk.green.bold(`\nCreating ${this.solutionName} .Net Core solution if it does not already exist.\n`));
-        try {
-          await dotnet.newSln(this.solutionName);
-        } catch (err) {
-          this.warning(`Failed to create ${this.solutionName} .Net Core solution: ${err}`);
+      async install({ application }) {
+        this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
+
+        if (!this.skipChecks) {
+          try {
+            await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
+          } catch (err) {
+            this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
+          }
+
+          const projects = [
+            `${constants.CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
+            `${constants.CLIENT_SRC_DIR}${application.sharedClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
+          ];
+          await this.spawnCommand(`dotnet sln ${application.solutionName}.sln add ${projects.join(' ')}`);
+          this.log(chalk.green.bold('Client application generated successfully.\n'));
+          this.log(
+            chalk.green(
+              `Run your blazor application:\n${chalk.yellow.bold(
+                `dotnet run --verbosity normal --project ./${CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.csproj`,
+              )}`,
+            ),
+          );
+
+          await this.newSlnAddProj(application.solutionName, [
+            {
+              path: `${constants.CLIENT_SRC_DIR}${application.androidClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
+              name: `${application.pascalizedBaseName}.Client.Xamarin.Android`,
+            },
+            {
+              path: `${constants.CLIENT_SRC_DIR}${application.iOSClientDir}/${application.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
+              name: `${application.pascalizedBaseName}.Client.Xamarin.iOS`,
+            },
+          ]);
+          this.log(chalk.green.bold('Client application generated successfully.\n'));
         }
-        await dotnet.slnAdd(`${this.solutionName}.sln`, [
-          `${constants.CLIENT_SRC_DIR}${this.mainClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
-          `${constants.CLIENT_SRC_DIR}${this.sharedClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
-        ]);
-        await dotnet.newSlnAddProj(this.solutionName, [
-          {
-            path: `${constants.CLIENT_SRC_DIR}${this.androidClientDir}/${this.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
-            name: `${this.pascalizedBaseName}.Client.Xamarin.Android`,
-          },
-          {
-            path: `${constants.CLIENT_SRC_DIR}${this.iOSClientDir}/${this.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
-            name: `${this.pascalizedBaseName}.Client.Xamarin.iOS`,
-          },
-        ]);
-        this.log(chalk.green.bold('Client application generated successfully.\n'));
       },
     });
+  }
+
+  async newSlnAddProj(solutionName, projects) {
+    const solutionFile = readFileSync(`${solutionName}.sln`, 'utf8');
+    const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const exc = regex.exec(solutionFile);
+    const firstGuid = exc[1];
+    const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const clientDir = regexp.exec(solutionFile)[1];
+    const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
+    let projectText = '';
+    let dirText = '';
+
+    projectText += `\nProject("{${firstGuid}}") = "Solution Items", "Solution Items", "{${_.toUpper(Guid.newGuid())}}"`;
+    projectText += '\n\tProjectSection(SolutionItems) = preProject';
+    projectText += '\n\t\t.editorconfig = .editorconfig';
+    projectText += '\n\t\tDirectory.Packages.props = Directory.Packages.props';
+    projectText += '\n\t\tREADME.md = README.md';
+    projectText += '\n\tEndProjectSection';
+    projectText += '\nEndProject';
+
+    projects.forEach(project => {
+      const existingProjects = solutionFile.matchAll(reg);
+      let alreadyExist = false;
+      let existingProject = existingProjects.next();
+      while (!existingProject.done && !alreadyExist) {
+        alreadyExist = existingProject.value[1] === project.name;
+        existingProject = existingProjects.next();
+      }
+      if (!alreadyExist) {
+        const randomGuid = _.toUpper(Guid.newGuid());
+        projectText += `\nProject("{${firstGuid}}") = "${project.name}", "${project.path}", "{${randomGuid}}"\nEndProject`;
+        dirText += `\n\t\t{${randomGuid}} = {${clientDir}}`;
+      }
+    });
+
+    const projectRe = new RegExp('MinimumVisualStudioVersion = .*\\D', 'g');
+    const projectFound = solutionFile.match(projectRe);
+    projectText = `${projectFound}${projectText}`;
+    let newBody = solutionFile.replace(projectRe, projectText);
+
+    const dirRe = new RegExp('GlobalSection\\(NestedProjects\\) = .*\\D', 'g');
+    const dirFound = solutionFile.match(dirRe);
+    dirText = `${dirFound}${dirText}`;
+    newBody = newBody.replace(dirRe, dirText);
+
+    if (solutionFile !== newBody) {
+      writeFileSync(`${solutionName}.sln`, newBody);
+    }
   }
 }

@@ -1,0 +1,240 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SubGenerator xamarin of dotnetcore JHipster blueprint > run > should succeed 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppApp.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppAssemblyInfo.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppFormsApp.xaml": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppFormsApp.xaml.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppJhipster.Client.Xamarin.Core.csproj": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppLinkerPreserve.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppModels/JwtToken.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppModels/LoginModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppModels/RegisterResultRequest.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppModels/UserModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppModels/UserSaveModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppResources/Strings.Designer.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppResources/Strings.resx": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/AbstractEntityService.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/AuthenticationService.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/Configuration.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/IAbstractEntityService.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/IAuthenticationService.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/IRegisterService.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppServices/RegisterService.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViewModels/BaseViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViewModels/HomeViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViewModels/LoginViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViewModels/MenuViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViewModels/RegisterViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViewModels/WelcomeViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/HomeView.xaml": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/HomeView.xaml.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/LoginView.xaml": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/LoginView.xaml.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/MenuPage.xaml": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/MenuPage.xaml.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/RegisterView.xaml": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/RegisterView.xaml.cs": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/WelcomeView.xaml": {
+    "stateCleared": "modified",
+  },
+  "Jhipster/ClientAppViews/WelcomeView.xaml.cs": {
+    "stateCleared": "modified",
+  },
+  "undefinedAppDelegate.cs": {
+    "stateCleared": "modified",
+  },
+  "undefinedConstants/ErrorConst.cs": {
+    "stateCleared": "modified",
+  },
+  "undefinedEntitlements.plist": {
+    "stateCleared": "modified",
+  },
+  "undefinedInfo.plist": {
+    "stateCleared": "modified",
+  },
+  "undefinedJhipster.Client.Xamarin.Android.csproj": {
+    "stateCleared": "modified",
+  },
+  "undefinedJhipster.Client.Xamarin.Android.csproj.user": {
+    "stateCleared": "modified",
+  },
+  "undefinedJhipster.Client.Xamarin.iOS.csproj": {
+    "stateCleared": "modified",
+  },
+  "undefinedJhipster.Client.Xamarin.iOS.csproj.user": {
+    "stateCleared": "modified",
+  },
+  "undefinedMain.cs": {
+    "stateCleared": "modified",
+  },
+  "undefinedMainActivity.cs": {
+    "stateCleared": "modified",
+  },
+  "undefinedProject.Client.Xamarin.Shared.csproj": {
+    "stateCleared": "modified",
+  },
+  "undefinedProperties/AndroidManifest.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedProperties/AssemblyInfo.cs": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Default-568h@2x.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Default-Portrait.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Default-Portrait@2x.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Default.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Default@2x.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/LaunchScreen.storyboard": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Layout/SplashScreen.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Layout/Tabbar.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/Layout/Toolbar.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/drawable/menu.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/drawable/splashscreen.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/menu.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-anydpi-v26/icon.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-anydpi-v26/icon_round.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-hdpi/icon.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-hdpi/launcher_foreground.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-mdpi/icon.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-mdpi/launcher_foreground.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-xhdpi/icon.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-xhdpi/launcher_foreground.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-xxhdpi/icon.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-xxhdpi/launcher_foreground.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-xxxhdpi/icon.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/mipmap-xxxhdpi/launcher_foreground.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/splashscreen.png": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/values/colors.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedResources/values/styles.xml": {
+    "stateCleared": "modified",
+  },
+  "undefinedSplashScreenActivity.cs": {
+    "stateCleared": "modified",
+  },
+}
+`;
