@@ -19,17 +19,10 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "testFrameworks": ["cypress"],
-    "otherModules": [
-      {
-        "name": "generator-jhipster-dotnetcore",
-        "version": "3.9.1"
-      }
-    ],
     "enableTranslation": false,
     "blueprints": [
       {
-        "name": "generator-jhipster-dotnetcore",
-        "version": "2.0.0"
+        "name": "generator-jhipster-dotnetcore"
       }
     ]
   },

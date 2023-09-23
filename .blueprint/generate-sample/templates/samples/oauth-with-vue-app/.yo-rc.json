@@ -18,12 +18,6 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "otherModules": [
-      {
-        "name": "generator-jhipster-dotnetcore",
-        "version": "3.9.1"
-      }
-    ],
     "enableTranslation": false,
     "blueprints": [
       {

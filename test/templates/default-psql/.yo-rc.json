@@ -18,16 +18,9 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "otherModules": [
-      {
-        "name": "generator-jhipster-dotnetcore",
-        "version": "2.0.0"
-      }
-    ],
     "blueprints": [
       {
-        "name": "generator-jhipster-dotnetcore",
-        "version": "2.0.0"
+        "name": "generator-jhipster-dotnetcore"
       }
     ]
   },
