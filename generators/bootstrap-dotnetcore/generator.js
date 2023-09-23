@@ -3,6 +3,10 @@ import toPascalCase from 'to-pascal-case';
 import { BLAZOR, PROJECT_TEST_SUFFIX, XAMARIN } from '../generator-dotnetcore-constants.js';
 
 export default class extends BaseApplicationGenerator {
+  async beforeQueue() {
+    await this.dependsOnJHipster('bootstrap-application');
+  }
+
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       async checks() {
