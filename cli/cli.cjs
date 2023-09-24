@@ -12,6 +12,7 @@ const devBlueprintPath = join(packagePath, '.blueprint');
 (async () => {
   const { runJHipster, done, logger } = await import('generator-jhipster/cli');
   const executableName = Object.keys(bin)[0];
+  const { getLogo } = await import('./logo.js');
 
   runJHipster({
     executableName,
@@ -21,9 +22,9 @@ const devBlueprintPath = join(packagePath, '.blueprint');
     blueprints: {
       [packageFolderName]: version,
     },
+    printLogo: () => {},
     printBlueprintLogo: () => {
-      console.log('===================== JHipster dotnetcore =====================');
-      console.log('');
+      console.log(getLogo(version));
     },
     lookups: [{ packagePaths: [packagePath], lookups: ['generators'] }],
   }).catch(done);
