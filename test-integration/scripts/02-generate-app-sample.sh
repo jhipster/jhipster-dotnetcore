@@ -21,7 +21,7 @@ echo "*** check if the generation is ok for csharp classes :"
 if [[ -n $(find src -type f -name "*.cs") ]]; then
       echo "${GREEN}GENERATION OK"
 else
-      echo "${RED}WRONG GENERATION"
+      echo "${RED}WRONG GENERATION, NO CSHARP FILE FOUND"
       exit 1
 fi
 
@@ -31,7 +31,7 @@ echo "*** check if the generation do not generate java classes :"
 if [[ -z $(find src -type f -name "*.java") ]]; then
       echo "${GREEN}GENERATION OK"
 else
-      echo "${RED}WRONG GENERATION"
+      echo "${RED}WRONG GENERATION, JAVA FILE FOUND"
       exit 1
 fi
 
