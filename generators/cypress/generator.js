@@ -13,8 +13,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
-        application.cypressDir = `${SERVER_SRC_DIR}${application.clientTestProject}/cypress/`;
-        application.cypressRootDir = ''; // `${SERVER_SRC_DIR}${application.mainClientDir}/`;
+        // application.cypressDir = `${SERVER_SRC_DIR}${application.clientTestProject}/cypress/`;
       },
     });
   }
@@ -31,8 +30,8 @@ export default class extends BaseApplicationGenerator {
       },
 
       updateCypressJson({ application }) {
-        this.editFile(`${application.cypressRootDir}cypress.config.ts`, content => content.replace(`${application.cypressRootDir}/`, ''));
-        this.editFile(`${application.cypressRootDir}cypress.config.ts`, content =>
+        // this.editFile(`${application.clientRootDir}cypress.config.ts`, content => content.replace(`${application.cypressRootDir}/`, ''));
+        this.editFile(`${application.clientRootDir}cypress.config.ts`, content =>
           content.replace(`http://localhost:${application.serverPort}`, `https://localhost:${application.serverPortSecured}`),
         );
       },
