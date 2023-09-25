@@ -5,235 +5,238 @@ exports[`SubGenerator xamarin of dotnetcore JHipster blueprint > run > should su
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppApp.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Jhipster.Client.Xamarin.Android.csproj": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppAssemblyInfo.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Jhipster.Client.Xamarin.Android.csproj.user": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppFormsApp.xaml": {
+  "client/Jhipster.Client.Xamarin.Android/MainActivity.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppFormsApp.xaml.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Properties/AndroidManifest.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppJhipster.Client.Xamarin.Core.csproj": {
+  "client/Jhipster.Client.Xamarin.Android/Properties/AssemblyInfo.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppLinkerPreserve.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/Layout/SplashScreen.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppModels/JwtToken.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/Layout/Tabbar.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppModels/LoginModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/Layout/Toolbar.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppModels/RegisterResultRequest.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/drawable/menu.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppModels/UserModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/drawable/splashscreen.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppModels/UserSaveModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-anydpi-v26/icon.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppResources/Strings.Designer.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-anydpi-v26/icon_round.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppResources/Strings.resx": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-hdpi/icon.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/AbstractEntityService.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-hdpi/launcher_foreground.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/AuthenticationService.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-mdpi/icon.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/Configuration.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-mdpi/launcher_foreground.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/IAbstractEntityService.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-xhdpi/icon.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/IAuthenticationService.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-xhdpi/launcher_foreground.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/IRegisterService.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-xxhdpi/icon.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppServices/RegisterService.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-xxhdpi/launcher_foreground.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViewModels/BaseViewModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-xxxhdpi/icon.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViewModels/HomeViewModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-xxxhdpi/launcher_foreground.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViewModels/LoginViewModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/values/colors.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViewModels/MenuViewModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/Resources/values/styles.xml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViewModels/RegisterViewModel.cs": {
+  "client/Jhipster.Client.Xamarin.Android/SplashScreenActivity.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViewModels/WelcomeViewModel.cs": {
+  "client/Jhipster.Client.Xamarin.Core/App.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/HomeView.xaml": {
+  "client/Jhipster.Client.Xamarin.Core/AssemblyInfo.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/HomeView.xaml.cs": {
+  "client/Jhipster.Client.Xamarin.Core/FormsApp.xaml": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/LoginView.xaml": {
+  "client/Jhipster.Client.Xamarin.Core/FormsApp.xaml.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/LoginView.xaml.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Jhipster.Client.Xamarin.Core.csproj": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/MenuPage.xaml": {
+  "client/Jhipster.Client.Xamarin.Core/LinkerPreserve.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/MenuPage.xaml.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Models/JwtToken.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/RegisterView.xaml": {
+  "client/Jhipster.Client.Xamarin.Core/Models/LoginModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/RegisterView.xaml.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Models/RegisterResultRequest.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/WelcomeView.xaml": {
+  "client/Jhipster.Client.Xamarin.Core/Models/UserModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientAppViews/WelcomeView.xaml.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Models/UserSaveModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedAppDelegate.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Resources/Strings.Designer.cs": {
     "stateCleared": "modified",
   },
-  "undefinedConstants/ErrorConst.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Resources/Strings.resx": {
     "stateCleared": "modified",
   },
-  "undefinedEntitlements.plist": {
+  "client/Jhipster.Client.Xamarin.Core/Services/AbstractEntityService.cs": {
     "stateCleared": "modified",
   },
-  "undefinedInfo.plist": {
+  "client/Jhipster.Client.Xamarin.Core/Services/AuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "undefinedJhipster.Client.Xamarin.Android.csproj": {
+  "client/Jhipster.Client.Xamarin.Core/Services/Configuration.cs": {
     "stateCleared": "modified",
   },
-  "undefinedJhipster.Client.Xamarin.Android.csproj.user": {
+  "client/Jhipster.Client.Xamarin.Core/Services/IAbstractEntityService.cs": {
     "stateCleared": "modified",
   },
-  "undefinedJhipster.Client.Xamarin.iOS.csproj": {
+  "client/Jhipster.Client.Xamarin.Core/Services/IAuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "undefinedJhipster.Client.Xamarin.iOS.csproj.user": {
+  "client/Jhipster.Client.Xamarin.Core/Services/IRegisterService.cs": {
     "stateCleared": "modified",
   },
-  "undefinedMain.cs": {
+  "client/Jhipster.Client.Xamarin.Core/Services/RegisterService.cs": {
     "stateCleared": "modified",
   },
-  "undefinedMainActivity.cs": {
+  "client/Jhipster.Client.Xamarin.Core/ViewModels/BaseViewModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedProject.Client.Xamarin.Shared.csproj": {
+  "client/Jhipster.Client.Xamarin.Core/ViewModels/HomeViewModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedProperties/AndroidManifest.xml": {
+  "client/Jhipster.Client.Xamarin.Core/ViewModels/LoginViewModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedProperties/AssemblyInfo.cs": {
+  "client/Jhipster.Client.Xamarin.Core/ViewModels/MenuViewModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Default-568h@2x.png": {
+  "client/Jhipster.Client.Xamarin.Core/ViewModels/RegisterViewModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Default-Portrait.png": {
+  "client/Jhipster.Client.Xamarin.Core/ViewModels/WelcomeViewModel.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Default-Portrait@2x.png": {
+  "client/Jhipster.Client.Xamarin.Core/Views/HomeView.xaml": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Default.png": {
+  "client/Jhipster.Client.Xamarin.Core/Views/HomeView.xaml.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Default@2x.png": {
+  "client/Jhipster.Client.Xamarin.Core/Views/LoginView.xaml": {
     "stateCleared": "modified",
   },
-  "undefinedResources/LaunchScreen.storyboard": {
+  "client/Jhipster.Client.Xamarin.Core/Views/LoginView.xaml.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Layout/SplashScreen.xml": {
+  "client/Jhipster.Client.Xamarin.Core/Views/MenuPage.xaml": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Layout/Tabbar.xml": {
+  "client/Jhipster.Client.Xamarin.Core/Views/MenuPage.xaml.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/Layout/Toolbar.xml": {
+  "client/Jhipster.Client.Xamarin.Core/Views/RegisterView.xaml": {
     "stateCleared": "modified",
   },
-  "undefinedResources/drawable/menu.png": {
+  "client/Jhipster.Client.Xamarin.Core/Views/RegisterView.xaml.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/drawable/splashscreen.png": {
+  "client/Jhipster.Client.Xamarin.Core/Views/WelcomeView.xaml": {
     "stateCleared": "modified",
   },
-  "undefinedResources/menu.png": {
+  "client/Jhipster.Client.Xamarin.Core/Views/WelcomeView.xaml.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-anydpi-v26/icon.xml": {
+  "client/Jhipster.Client.Xamarin.Shared/Constants/ErrorConst.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-anydpi-v26/icon_round.xml": {
+  "client/Jhipster.Client.Xamarin.Shared/Project.Client.Xamarin.Shared.csproj": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-hdpi/icon.png": {
+  "client/Jhipster.Client.Xamarin.iOS/AppDelegate.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-hdpi/launcher_foreground.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Entitlements.plist": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-mdpi/icon.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Info.plist": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-mdpi/launcher_foreground.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Jhipster.Client.Xamarin.iOS.csproj": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-xhdpi/icon.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Jhipster.Client.Xamarin.iOS.csproj.user": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-xhdpi/launcher_foreground.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Main.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-xxhdpi/icon.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Properties/AssemblyInfo.cs": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-xxhdpi/launcher_foreground.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/Default-568h@2x.png": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-xxxhdpi/icon.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/Default-Portrait.png": {
     "stateCleared": "modified",
   },
-  "undefinedResources/mipmap-xxxhdpi/launcher_foreground.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/Default-Portrait@2x.png": {
     "stateCleared": "modified",
   },
-  "undefinedResources/splashscreen.png": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/Default.png": {
     "stateCleared": "modified",
   },
-  "undefinedResources/values/colors.xml": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/Default@2x.png": {
     "stateCleared": "modified",
   },
-  "undefinedResources/values/styles.xml": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/LaunchScreen.storyboard": {
     "stateCleared": "modified",
   },
-  "undefinedSplashScreenActivity.cs": {
+  "client/Jhipster.Client.Xamarin.iOS/Resources/menu.png": {
+    "stateCleared": "modified",
+  },
+  "client/Jhipster.Client.Xamarin.iOS/Resources/splashscreen.png": {
     "stateCleared": "modified",
   },
 }

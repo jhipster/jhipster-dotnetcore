@@ -10,7 +10,9 @@ describe('SubGenerator blazor of dotnetcore JHipster blueprint', () => {
     beforeAll(async function () {
       await helpers
         .run(SUB_GENERATOR_NAMESPACE)
-        .withJHipsterConfig()
+        .withJHipsterConfig({
+          clientFramework: 'Blazor',
+        })
         .withOptions({
           ignoreNeedlesError: true,
         })

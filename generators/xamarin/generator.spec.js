@@ -10,7 +10,9 @@ describe('SubGenerator xamarin of dotnetcore JHipster blueprint', () => {
     beforeAll(async function () {
       await helpers
         .run(SUB_GENERATOR_NAMESPACE)
-        .withJHipsterConfig()
+        .withJHipsterConfig({
+          clientFramework: 'Xamarin',
+        })
         .withOptions({
           ignoreNeedlesError: true,
         })

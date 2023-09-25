@@ -38,6 +38,8 @@ export default class extends BaseApplicationGenerator {
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
         application.clientRootDir = `src/${application.mainProjectDir}/ClientApp/`;
         application.clientSrcDir = `src/${application.mainProjectDir}/ClientApp/src/`;
+        application.clientTestDir = `src/${application.mainProjectDir}/ClientApp/test/`;
+        application.backendType = '.Net';
       },
     });
   }

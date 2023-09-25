@@ -5,13 +5,13 @@ exports[`SubGenerator cypress of dotnetcore JHipster blueprint > run > should su
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "cypress-audits.config.ts": {
+  "src/Jhipster/ClientApp/cypress-audits.config.ts": {
     "stateCleared": "modified",
   },
-  "cypress.config.ts": {
+  "src/Jhipster/ClientApp/cypress.config.ts": {
     "stateCleared": "modified",
   },
-  "package.json": {
+  "src/Jhipster/ClientApp/package.json": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/test/cypress/.eslintrc.json": {

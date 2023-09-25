@@ -1,0 +1,378 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SubGenerator server of dotnetcore JHipster blueprint > run > should succeed 1`] = `
+{
+  ".editorconfig": {
+    "stateCleared": "modified",
+  },
+  ".gitattributes": {
+    "stateCleared": "modified",
+  },
+  ".gitignore": {
+    "stateCleared": "modified",
+  },
+  ".husky/pre-commit": {
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.js": {
+    "stateCleared": "modified",
+  },
+  ".prettierignore": {
+    "stateCleared": "modified",
+  },
+  ".prettierrc": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Directory.Packages.props": {
+    "stateCleared": "modified",
+  },
+  "README.md": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+  "sonar-project.properties": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Constants/Constants.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Constants/ErrorConstants.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Constants/JwtConstants.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Constants/RolesConstants.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/BadRequestAlertException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/BaseException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/EmailAlreadyUsedException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/EmailNotFoundException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/InternalServerErrorException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/InvalidPasswordException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/LoginAlreadyUsedException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/UserNotActivatedException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Exceptions/UsernameNotFoundException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Jhipster.Crosscutting.csproj": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Crosscutting/Utilities/RandomUtil.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain.Services/AuthenticationService.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain.Services/Jhipster.Domain.Services.csproj": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain.Services/MailService.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain.Services/ServicesClassesAssemblyHelper.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain.Services/UserService.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Entities/AuditedEntityBase.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Entities/BaseEntity.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Entities/Interfaces/IAuditedEntityBase.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Entities/Role.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Entities/User.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Entities/UserRole.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Jhipster.Domain.csproj": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Repositories/Interfaces/IFluentRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Repositories/Interfaces/IGenericRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Repositories/Interfaces/INoSqlFluentRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Repositories/Interfaces/IReadOnlyGenericRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Repositories/Interfaces/IUnitOfWork.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Services/Interfaces/IAuthenticationService.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Services/Interfaces/IMailService.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Services/Interfaces/IUserService.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Domain/Services/Interfaces/ServicesInterfacesAssemblyHelper.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/Authentication/KeyAndPasswordDto.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/Authentication/LoginDto.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/Authentication/PasswordChangeDto.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/Jhipster.Dto.csproj": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/ManagedUserDto.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/ProfileInfo/ProfileInfoDto.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Dto/UserDto.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Configuration/IMongoDatabaseConfig.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Configuration/MongoDatabaseConfig.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Configuration/SecuritySettings.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/ApplicationDatabaseContext.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/Extensions/DbSetExtensions.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/Extensions/PropertyAccessorCache.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/Repositories/FluentRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/Repositories/GenericRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/Repositories/ReadOnlyGenericRepository.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Data/Repositories/UnitOfWork.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Jhipster.Infrastructure.csproj": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Web/Rest/Utilities/HeaderUtil.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster.Infrastructure/Web/Rest/Utilities/PaginationUtil.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/AppSettingsStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/AutoMapper/AutoMapperProfile.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/AutoMapperStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/ConfigurationHelper.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/DatabaseStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/IdentityStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/LoggerStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/MvcStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/ProblemDetailsStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/RepositoryStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/SecurityStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/ServiceStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Configuration/SwaggerStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Controllers/AccountController.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Controllers/ProfileInfoController.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Controllers/PublicUsersController.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Controllers/UserJwtController.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Controllers/UsersController.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/IStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Jhipster.csproj": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Program.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Properties/launchSettings.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Security/BCryptPasswordHasher.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Security/Jwt/RoleClaimsTransformation.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Security/Jwt/TokenProvider.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Security/PoliciesConstants.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Startup.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Extensions/ActionResultExtensions.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Extensions/ActionResultWithHeaders.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Extensions/HttpRequestExtensions.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Filters/ValidateModelAttribute.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Rest/Problems/ExceptionTranslator.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Rest/Problems/ProblemDetailsConfiguration.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Rest/Problems/ValidationFailedException.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/Web/Rest/Utilities/ActionResultUtil.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/appsettings.Development.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/appsettings.Production.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/appsettings.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/gatling.conf": {
+    "stateCleared": "modified",
+  },
+  "src/test/gatling/conf/logback.xml": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Configuration/MockClaimsPrincipalProvider.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Configuration/TestMvcStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Controllers/AccountResourceIntTest.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Controllers/ProfileInfoControllerIntTest.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Controllers/TestUtil.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Controllers/UserJwtControllerIntTest.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Controllers/UsersResourceIntTest.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Fixme.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Jhipster.Test.csproj": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Properties/launchSettings.json": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Setup/AppWebApplicationFactory.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Setup/MockHttpContextFactory.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/Setup/TestStartup.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Test/xunit.runner.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
