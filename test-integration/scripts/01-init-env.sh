@@ -33,4 +33,4 @@ fi
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
-cp -r "$WORKSPACE/jhipster-dotnetcore/.blueprint/generate-samples/templates/samples/csharp-di-test" ..
+cp -r "$WORKSPACE/jhipster-dotnetcore/.blueprint/generate-sample/templates/samples/csharp-di-test" ..
