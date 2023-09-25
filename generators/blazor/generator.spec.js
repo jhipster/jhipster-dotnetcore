@@ -17,11 +17,15 @@ describe('SubGenerator blazor of dotnetcore JHipster blueprint', () => {
           ignoreNeedlesError: true,
         })
         .withJHipsterLookup()
+        .withSpawnMock()
         .withParentBlueprintLookup();
     });
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+    it('execute commands', () => {
+      expect(result.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
   });
 });

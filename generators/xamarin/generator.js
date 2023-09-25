@@ -29,45 +29,47 @@ export default class extends BaseApplicationGenerator {
       async install({ application }) {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
 
-        if (!this.skipChecks) {
-          try {
-            await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
-          } catch (err) {
-            this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
-          }
+        try {
+          await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
+        } catch (err) {
+          this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
+        }
 
-          const projects = [
-            `${constants.CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
-            `${constants.CLIENT_SRC_DIR}${application.sharedClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
-          ];
-          await this.spawnCommand(`dotnet sln ${application.solutionName}.sln add ${projects.join(' ')}`);
-          this.log(chalk.green.bold('Client application generated successfully.\n'));
-          this.log(
-            chalk.green(
-              `Run your blazor application:\n${chalk.yellow.bold(
-                `dotnet run --verbosity normal --project ./${CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.csproj`,
-              )}`,
-            ),
-          );
+        const projects = [
+          `${CLIENT_SRC_DIR}${application.mainClientDir}${application.pascalizedBaseName}.Client.Xamarin.Core.csproj`,
+          `${CLIENT_SRC_DIR}${application.sharedClientDir}${application.pascalizedBaseName}.Client.Xamarin.Shared.csproj`,
+        ];
+        await this.spawnCommand(`dotnet sln ${application.solutionName}.sln add ${projects.join(' ')}`);
+        this.log(chalk.green.bold('Client application generated successfully.\n'));
+        this.log(
+          chalk.green(
+            `Run your blazor application:\n${chalk.yellow.bold(
+              `dotnet run --verbosity normal --project ./${CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.csproj`,
+            )}`,
+          ),
+        );
 
+        try {
           await this.newSlnAddProj(application.solutionName, [
             {
-              path: `${constants.CLIENT_SRC_DIR}${application.androidClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
+              path: `${CLIENT_SRC_DIR}${application.androidClientDir}/${application.pascalizedBaseName}.Client.Xamarin.Android.csproj`,
               name: `${application.pascalizedBaseName}.Client.Xamarin.Android`,
             },
             {
-              path: `${constants.CLIENT_SRC_DIR}${application.iOSClientDir}/${application.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
+              path: `${CLIENT_SRC_DIR}${application.iOSClientDir}/${application.pascalizedBaseName}.Client.Xamarin.iOS.csproj`,
               name: `${application.pascalizedBaseName}.Client.Xamarin.iOS`,
             },
           ]);
           this.log(chalk.green.bold('Client application generated successfully.\n'));
+        } catch (error) {
+          this.log.error('Failed to add project.');
         }
       },
     });
   }
 
   async newSlnAddProj(solutionName, projects) {
-    const solutionFile = readFileSync(`${solutionName}.sln`, 'utf8');
+    const solutionFile = this.readDestination(`${solutionName}.sln`);
     const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
     const exc = regex.exec(solutionFile);
     const firstGuid = exc[1];

@@ -16,12 +16,17 @@ describe('SubGenerator xamarin of dotnetcore JHipster blueprint', () => {
         .withOptions({
           ignoreNeedlesError: true,
         })
+        .withSpawnMock()
         .withJHipsterLookup()
         .withParentBlueprintLookup();
     });
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('execute commands', () => {
+      expect(result.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
   });
 });

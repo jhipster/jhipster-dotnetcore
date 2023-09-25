@@ -33,51 +33,47 @@ export default class extends BaseApplicationGenerator {
           try {
             await access(`${application.solutionName}.sln`);
           } catch (error) {
-            if (!this.skipChecks) {
-              await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
-            }
+            await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
           }
         } catch (err) {
           this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
         }
         const projects = [
-          `${CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.csproj`,
-          `${CLIENT_SRC_DIR}${application.sharedClientDir}/${application.pascalizedBaseName}.Client.Shared.csproj`,
-          `${CLIENT_TEST_DIR}${application.clientTestProject}/${application.pascalizedBaseName}.Client.Test.csproj`,
+          `${CLIENT_SRC_DIR}${application.mainClientDir}${application.pascalizedBaseName}.Client.csproj`,
+          `${CLIENT_SRC_DIR}${application.sharedClientDir}${application.pascalizedBaseName}.Client.Shared.csproj`,
+          `${CLIENT_TEST_DIR}${application.clientTestProject}${application.pascalizedBaseName}.Client.Test.csproj`,
         ];
 
-        if (!this.skipChecks) {
-          await this.spawnCommand(`dotnet sln ${application.solutionName}.sln add ${projects.join(' ')}`);
-          this.log(chalk.green.bold('Client application generated successfully.\n'));
-          this.log(
-            chalk.green(
-              `Run your blazor application:\n${chalk.yellow.bold(
-                `dotnet run --verbosity normal --project ./${CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.csproj`,
-              )}`,
-            ),
-          );
+        await this.spawnCommand(`dotnet sln ${application.solutionName}.sln add ${projects.join(' ')}`);
+        this.log(chalk.green.bold('Client application generated successfully.\n'));
+        this.log(
+          chalk.green(
+            `Run your blazor application:\n${chalk.yellow.bold(
+              `dotnet run --verbosity normal --project ./${CLIENT_SRC_DIR}${application.mainClientDir}/${application.pascalizedBaseName}.Client.csproj`,
+            )}`,
+          ),
+        );
 
+        try {
+          await this.spawnCommand('libman');
+        } catch (error) {
           try {
-            await this.spawnCommand('libman');
+            await this.spawnCommand('dotnet tool install -g Microsoft.Web.LibraryManager.Cli');
           } catch (error) {
-            try {
-              await this.spawnCommand('dotnet tool install -g Microsoft.Web.LibraryManager.Cli');
-            } catch (error) {
-              throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
-            }
-            console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
+            throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
           }
+          console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
+        }
 
+        try {
+          await this.spawnCommand('webcompiler');
+        } catch (error) {
           try {
-            await this.spawnCommand('webcompiler');
+            await this.spawnCommand('dotnet tool install Excubo.WebCompiler --global');
           } catch (error) {
-            try {
-              await this.spawnCommand('dotnet tool install Excubo.WebCompiler --global');
-            } catch (error) {
-              throw new Error('Could not install Excubo.WebCompiler');
-            }
-            console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
+            throw new Error('Could not install Excubo.WebCompiler');
           }
+          console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
         }
       },
     });

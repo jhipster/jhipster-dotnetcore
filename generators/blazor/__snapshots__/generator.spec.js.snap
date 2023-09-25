@@ -1,5 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > execute commands 1`] = `
+[
+  [
+    "spawnCommand",
+    "dotnet new sln --name Jhipster",
+  ],
+  [
+    "spawnCommand",
+    "dotnet sln Jhipster.sln add src/client/Jhipster.Client/Jhipster.Client.csproj src/client/Jhipster.Client.Shared/Jhipster.Client.Shared.csproj test/Jhipster.Client.Test/Jhipster.Client.Test.csproj",
+  ],
+  [
+    "spawnCommand",
+    "libman",
+  ],
+  [
+    "spawnCommand",
+    "webcompiler",
+  ],
+]
+`;
+
 exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > should succeed 1`] = `
 {
   ".yo-rc.json": {

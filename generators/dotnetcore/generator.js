@@ -3,8 +3,17 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 import chalk from 'chalk';
 import command from './command.js';
 import { baseServiceDiscoveryFiles, serverFiles } from './files.js';
-import { SERVER_SRC_DIR } from '../generator-dotnetcore-constants.js';
-import constants from '../generator-dotnetcore-constants.cjs';
+import {
+  PROJECT_APPLICATION_SUFFIX,
+  PROJECT_CROSSCUTTING_SUFFIX,
+  PROJECT_DOMAIN_SUFFIX,
+  PROJECT_DTO_SUFFIX,
+  PROJECT_INFRASTRUCTURE_SUFFIX,
+  PROJECT_SERVICE_SUFFIX,
+  PROJECT_TEST_SUFFIX,
+  SERVER_SRC_DIR,
+  SERVER_TEST_DIR,
+} from '../generator-dotnetcore-constants.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -101,36 +110,34 @@ export default class extends BaseApplicationGenerator {
       async end({ application }) {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
         const slns = [
-          `${constants.SERVER_SRC_DIR}${application.mainProjectDir}/${application.pascalizedBaseName}.csproj`,
-          `${constants.SERVER_TEST_DIR}${application.testProjectDir}/${application.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
-          `${constants.SERVER_SRC_DIR}${application.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}/${application.pascalizedBaseName}${constants.PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
-          `${constants.SERVER_SRC_DIR}${application.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}/${application.pascalizedBaseName}${constants.PROJECT_DOMAIN_SUFFIX}.csproj`,
-          `${constants.SERVER_SRC_DIR}${application.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/${application.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}.csproj`,
-          `${constants.SERVER_SRC_DIR}${application.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}/${application.pascalizedBaseName}${constants.PROJECT_SERVICE_SUFFIX}.csproj`,
-          `${constants.SERVER_SRC_DIR}${application.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/${application.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
+          `${SERVER_SRC_DIR}${application.mainProjectDir}${application.pascalizedBaseName}.csproj`,
+          `${SERVER_TEST_DIR}${application.testProjectDir}${application.pascalizedBaseName}${PROJECT_TEST_SUFFIX}.csproj`,
+          `${SERVER_SRC_DIR}${application.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/${application.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}.csproj`,
+          `${SERVER_SRC_DIR}${application.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}/${application.pascalizedBaseName}${PROJECT_DOMAIN_SUFFIX}.csproj`,
+          `${SERVER_SRC_DIR}${application.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/${application.pascalizedBaseName}${PROJECT_DTO_SUFFIX}.csproj`,
+          `${SERVER_SRC_DIR}${application.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}/${application.pascalizedBaseName}${PROJECT_SERVICE_SUFFIX}.csproj`,
+          `${SERVER_SRC_DIR}${application.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/${application.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}.csproj`,
         ];
         if (application.cqrsEnabled) {
           slns.push(
-            `${constants.SERVER_SRC_DIR}${application.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}/${application.pascalizedBaseName}${constants.PROJECT_APPLICATION_SUFFIX}.csproj`,
+            `${SERVER_SRC_DIR}${application.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}/${application.pascalizedBaseName}${PROJECT_APPLICATION_SUFFIX}.csproj`,
           );
         }
-        if (!this.skipChecks) {
-          try {
-            await this.newSln(application.solutionName);
-            await this.slnAdd(`${application.solutionName}.sln`, slns);
-          } catch (error) {
-            this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
-          } finally {
-            this.log(chalk.green.bold('\nServer application generated successfully.\n'));
-            this.log(
-              chalk.green(
-                `Run your .Net Core application:\n${chalk.yellow.bold(
-                  `dotnet run --verbosity normal --project ./${constants.SERVER_SRC_DIR}${application.mainProjectDir}/${application.pascalizedBaseName}.csproj`,
-                )}`,
-              ),
-            );
-            this.log(chalk.green(`Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --verbosity normal')}`));
-          }
+        try {
+          await this.newSln(application.solutionName);
+          await this.slnAdd(`${application.solutionName}.sln`, slns);
+        } catch (error) {
+          this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${error}`);
+        } finally {
+          this.log(chalk.green.bold('\nServer application generated successfully.\n'));
+          this.log(
+            chalk.green(
+              `Run your .Net Core application:\n${chalk.yellow.bold(
+                `dotnet run --verbosity normal --project ./${SERVER_SRC_DIR}${application.mainProjectDir}/${application.pascalizedBaseName}.csproj`,
+              )}`,
+            ),
+          );
+          this.log(chalk.green(`Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --verbosity normal')}`));
         }
       },
     });
