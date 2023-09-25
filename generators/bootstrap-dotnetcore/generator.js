@@ -1,4 +1,5 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { addOtherRelationship } from 'generator-jhipster/generators/base-application/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
 import utilsNet from '../utils.cjs';
@@ -110,6 +111,12 @@ export default class extends BaseApplicationGenerator {
         entity._ = this._;
         entity.equivalentCSharpType = utilsNet.equivalentCSharpType;
         entity.asModel = utilsNet.asModel;
+
+        for (const relationship of entity.relationships ?? []) {
+          if (!relationship.otherRelationship && entity.databaseType !== 'mongodb') {
+            relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+          }
+        }
       },
     });
   }
