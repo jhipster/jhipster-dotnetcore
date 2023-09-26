@@ -47,13 +47,15 @@ export default class extends BaseApplicationGenerator {
         application.solutionName = application.pascalizedBaseName;
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
 
-        application.clientDistDir = 'dist/'
-        application.temporaryDir = 'temp/'
+        application.clientDistDir = 'dist/';
+        application.temporaryDir = 'temp/';
         // application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
         application.clientAppRootDir = `src/${application.mainProjectDir}ClientApp/`;
         application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
         application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
         application.backendType = '.Net';
+
+        application.jhipsterDotnetVersion = undefined;
       },
     });
   }

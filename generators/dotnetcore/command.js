@@ -18,7 +18,7 @@ const command = {
           /^([a-z_A-Z]\w+(?:\.[a-z_A-Z]\w+)*)$/.test(input) ? true : 'The namespace you have provided is not a valid C# namespace',
         default: () => toPascalCase(gen.jhipsterConfig.baseName),
       }),
-    }
+    },
   },
 };
 
