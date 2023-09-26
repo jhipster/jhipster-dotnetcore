@@ -5,6 +5,12 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   ".editorconfig": {
     "stateCleared": "modified",
   },
+  ".eslintignore": {
+    "stateCleared": "modified",
+  },
+  ".eslintrc.json": {
+    "stateCleared": "modified",
+  },
   ".gitattributes": {
     "stateCleared": "modified",
   },
@@ -29,28 +35,19 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "README.md": {
     "stateCleared": "modified",
   },
+  "angular.json": {
+    "stateCleared": "modified",
+  },
+  "ngsw-config.json": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
   "sonar-project.properties": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/ClientApp/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/.eslintrc.json": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/angular.json": {
-    "stateCleared": "modified",
-  },
   "src/Jhipster/ClientApp/jest.conf.js": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/ngsw-config.json": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/package.json": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/src/404.html": {
@@ -740,9 +737,6 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "src/Jhipster/ClientApp/tsconfig.app.json": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/ClientApp/tsconfig.json": {
-    "stateCleared": "modified",
-  },
   "src/Jhipster/ClientApp/tsconfig.spec.json": {
     "stateCleared": "modified",
   },
@@ -756,6 +750,9 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/webpack/webpack.custom.js": {
+    "stateCleared": "modified",
+  },
+  "tsconfig.json": {
     "stateCleared": "modified",
   },
 }
