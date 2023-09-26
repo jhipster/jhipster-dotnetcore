@@ -153,7 +153,7 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.INSTALL]() {
     return this.asInstallTaskGroup({
-      async installTemplateTask() {
+      async installTemplateTask({ application }) {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
         const slns = [
           `${SERVER_SRC_DIR}${application.mainProjectDir}${application.pascalizedBaseName}.csproj`,
