@@ -107,7 +107,7 @@ export default class extends BaseApplicationGenerator {
                 const fieldType = field.fieldType;
                 this.writeFile(
                   'dotnetcore/src/Project.Crosscutting/Enums/Enum.cs.ejs',
-                  `src/${this.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Enums/${fieldType}.cs`,
+                  `src/${application.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Enums/${fieldType}.cs`,
                   enumInfo,
                 );
               }
@@ -116,12 +116,21 @@ export default class extends BaseApplicationGenerator {
 
           await this.writeFiles({
             sections: entityFiles,
-            context: { ...application, ...entity, asDto: str => `${str}${application.dtoSuffix}` },
+            context: {
+              ...application,
+              ...entity,
+              asDto: str => `${str}${application.dtoSuffix}`,
+            },
             rootTemplatesPath: ['dotnetcore'],
           });
           await this.writeFiles({
             sections: entityCommonFiles,
-            context: { ...application, ...entity, entities: this.getExistingEntities(), asDto: str => `${str}${application.dtoSuffix}` },
+            context: {
+              ...application,
+              ...entity,
+              entities: this.getExistingEntities(),
+              asDto: str => `${str}${application.dtoSuffix}`,
+            },
             rootTemplatesPath: ['dotnetcore'],
           });
         }
