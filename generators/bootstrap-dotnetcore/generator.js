@@ -36,9 +36,13 @@ export default class extends BaseApplicationGenerator {
         application.pascalizedBaseName = toPascalCase(application.baseName);
         application.solutionName = application.pascalizedBaseName;
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
-        application.clientRootDir = `src/${application.mainProjectDir}/ClientApp/`;
-        application.clientSrcDir = `src/${application.mainProjectDir}/ClientApp/src/`;
-        application.clientTestDir = `src/${application.mainProjectDir}/ClientApp/test/`;
+
+        application.clientDistDir = 'dist/'
+        application.temporaryDir = 'temp/'
+        // application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
+        application.clientAppRootDir = `src/${application.mainProjectDir}ClientApp/`;
+        application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
+        application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
         application.backendType = '.Net';
       },
     });
@@ -47,7 +51,6 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       async preparingTemplateTask({ application }) {
-        application.temporaryDir = 'dist/';
         application.withAdminUi = false;
         application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
 
@@ -55,13 +58,13 @@ export default class extends BaseApplicationGenerator {
         application.dasherizedBaseName = this._.kebabCase(application.baseName);
         application.lowercaseBaseName = application.baseName.toLowerCase();
         application.humanizedBaseName = this._.startCase(application.baseName);
-        application.mainClientDir = `${application.mainProjectDir}/ClientApp/`;
-        application.mainClientAppDir = `${application.mainProjectDir}/ClientApp/src/`;
+        application.mainClientDir = `${application.mainProjectDir}ClientApp/`;
+        application.mainClientAppDir = `${application.mainProjectDir}ClientApp/src/`;
         application.relativeMainClientDir = 'ClientApp/';
-        application.relativeMainAppDir = `${application.relativeMainClientDir}/src/`;
-        application.relativeMainTestDir = `${application.relativeMainClientDir}/test/`;
+        application.relativeMainAppDir = `${application.relativeMainClientDir}src/`;
+        application.relativeMainTestDir = `${application.relativeMainClientDir}test/`;
         application.testProjectDir = `${application.pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`;
-        application.clientTestProject = `${application.mainClientDir}/test/`;
+        application.clientTestProject = `${application.mainClientDir}test/`;
         application.kebabCasedBaseName = this._.kebabCase(application.baseName);
         // application.jhipsterDotnetVersion = packagejs.version;
         application.modelSuffix = 'Model';
@@ -89,9 +92,7 @@ export default class extends BaseApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup({
       async preparingTemplateTask({ application, entity }) {
         entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : 'long';
-        entity.pascalizedBaseName = toPascalCase(entity.baseName);
-        entity.mainProjectDir = entity.pascalizedBaseName;
-        entity.testProjectDir = `${entity.pascalizedBaseName}${PROJECT_TEST_SUFFIX}`;
+
         entity.pascalizedEntityClass = toPascalCase(entity.entityClass);
         entity.pascalizedEntityClassPlural = toPascalCase(entity.entityClassPlural);
         entity.snakeCasedEntityClass = this._.snakeCase(entity.entityClass);
@@ -104,8 +105,6 @@ export default class extends BaseApplicationGenerator {
         entity.lowerCasedEntityClassPlural = this._.toLower(entity.entityClassPlural);
         entity.entityClassHasManyToMany = false;
         entity.entities = this.getExistingEntities();
-        entity.mainClientAppDir = `${application.mainProjectDir}/ClientApp/src`;
-        entity.mainClientDir = `${application.mainProjectDir}/ClientApp`;
 
         // Embed functions to use in EJS templates
         entity.toPascalCase = toPascalCase;
