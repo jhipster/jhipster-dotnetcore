@@ -28,7 +28,7 @@ export default class extends BaseApplicationGenerator {
     return this.asConfiguringTaskGroup({
       async configuring() {
         if (!this.jhipsterConfig.namespace) {
-          this.jhipsterConfig.namespace = toPascalCase(this.jhipsterConfig.baseName),
+          this.jhipsterConfig.namespace = toPascalCase(this.jhipsterConfig.baseName);
         }
       },
     });
