@@ -14,7 +14,8 @@ import {
   SERVER_SRC_DIR,
   SERVER_TEST_DIR,
 } from '../generator-dotnetcore-constants.js';
-import { entityFiles } from './entity-files.js';
+import { entityCommonFiles, entityFiles } from './entity-files.js';
+import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -101,7 +102,7 @@ export default class extends BaseApplicationGenerator {
           entity.fields.forEach(field => {
             if (field.fieldIsEnum) {
               if (!entity.skipServer) {
-                const enumInfo = utils.getEnumInfo(field, entity.clientRootFolder);
+                const enumInfo = getEnumInfo(field, entity.clientRootFolder);
                 enumInfo.namespace = application.namespace;
                 const fieldType = field.fieldType;
                 this.writeFile(
@@ -115,7 +116,12 @@ export default class extends BaseApplicationGenerator {
 
           await this.writeFiles({
             sections: entityFiles,
-            context: { ...application, ...entity },
+            context: { ...application, ...entity, asDto: str => `${str}${application.dtoSuffix}` },
+            rootTemplatesPath: ['dotnetcore'],
+          });
+          await this.writeFiles({
+            sections: entityCommonFiles,
+            context: { ...application, ...entity, entities: this.getExistingEntities(), asDto: str => `${str}${application.dtoSuffix}` },
             rootTemplatesPath: ['dotnetcore'],
           });
         }

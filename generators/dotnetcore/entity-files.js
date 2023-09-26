@@ -24,6 +24,7 @@ const renameDotNetCore = (data, filepath) =>
   filepath
     .replace(/^Project\./, `${data.pascalizedBaseName}.`)
     .replace(/^Project\//, `${data.pascalizedBaseName}/`)
+    .replace('_withEntities_', '')
     .replaceAll('_persistClass_', data.persistClass)
     .replace('_entityClass_', data.entityClass)
     .replace('_pascalizedEntityClassPlural_', data.pascalizedEntityClassPlural)
@@ -95,7 +96,7 @@ export const entityCommonFiles = {
     {
       path: SERVER_SRC_DIR,
       renameTo: renameDotNetCore,
-      templates: ['Project/Configuration/AutoMapper/AutoMapperProfile.cs'],
+      templates: ['Project/Configuration/AutoMapper/AutoMapperProfile_withEntities_.cs'],
     },
   ],
   db: [
@@ -103,7 +104,7 @@ export const entityCommonFiles = {
       condition: generator => generator.databaseType !== 'mongodb',
       path: SERVER_SRC_DIR,
       renameTo: renameDotNetCore,
-      templates: ['Project.Infrastructure/Data/ApplicationDatabaseContext.cs'],
+      templates: ['Project.Infrastructure/Data/ApplicationDatabaseContext_withEntities_.cs'],
     },
   ],
 };
