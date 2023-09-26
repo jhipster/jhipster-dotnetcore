@@ -19,50 +19,18 @@
 import constants from '../generator-dotnetcore-constants.cjs';
 
 export const files = {
-  docker: [
-    {
-      templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
-    },
-    {
-      templates: [{ file: 'docker-entrypoint-back.sh', renameTo: () => 'docker-entrypoint-back.sh' }],
-    },
-    {
-      condition: generator => generator.clientFramework === constants.BLAZOR,
-      templates: [{ file: 'Dockerfile-Front', renameTo: () => 'Dockerfile-Front' }],
-    },
-    {
-      condition: generator => generator.clientFramework === constants.BLAZOR,
-      templates: [{ file: 'docker-entrypoint-front.sh', renameTo: () => 'docker-entrypoint-front.sh' }],
-    },
-    {
-      condition: generator => generator.clientFramework === constants.BLAZOR,
-      templates: [{ file: 'nginx.conf', renameTo: () => 'nginx.conf' }],
-    },
-    {
-      condition: generator => generator.clientFramework === constants.BLAZOR,
-      templates: [{ file: 'default.conf', renameTo: () => 'default.conf' }],
-    },
-    {
-      templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }],
-    },
-  ],
   general: [
     {
-      templates: [{ file: 'README.md' }],
-    },
-    {
-      templates: [
-        { file: 'gitignore', renameTo: () => '.gitignore', method: 'copy' },
-        { file: 'editorconfig', renameTo: () => '.editorconfig', method: 'copy' },
-      ],
+      templates: ['.gitignore.jhi.dotnetcore-common', 'README.md'],
     },
   ],
-};
-
-export const jhipsterCommonFiles = {
-  global: [
+  docker: [
     {
-      templates: [{ file: 'gitattributes', renameTo: () => '.gitattributes', method: 'copy' }],
+      templates: ['Dockerfile-Back', 'docker-entrypoint-back.sh', '.dockerignore'],
+    },
+    {
+      condition: generator => generator.clientFramework === constants.BLAZOR,
+      templates: ['Dockerfile-Front', 'docker-entrypoint-front.sh', 'nginx.conf', 'default.conf'],
     },
   ],
 };

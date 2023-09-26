@@ -1,5 +1,5 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { jhipsterCommonFiles, files } from './files.js';
+import { files } from './files.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -33,13 +33,13 @@ export default class extends BaseApplicationGenerator {
           context: application,
         });
       },
+      */
       async writingDotNetFiles({ application }) {
         await this.writeFiles({
           sections: files,
           context: application,
         });
       },
-      */
     });
   }
 }

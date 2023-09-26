@@ -38,7 +38,7 @@ RUN for file in $(ls src/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*
 COPY src/client/*/*.csproj ./src/client/
 RUN for file in $(ls src/client/*.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 <%_ } _%>
-RUN dotnet restore "src/<%= mainProjectDir %>/<%= pascalizedBaseName %>.csproj"
+RUN dotnet restore "src/<%= mainProjectDir %><%= pascalizedBaseName %>.csproj"
 
 # Copy everything else and build app
 COPY . ./
