@@ -14,6 +14,7 @@ import {
   SERVER_SRC_DIR,
   SERVER_TEST_DIR,
 } from '../generator-dotnetcore-constants.js';
+import { entityFiles } from './entity-files.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -93,9 +94,54 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
-    return this.asDefaultTaskGroup({
-      async defaultTemplateTask() {},
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup({
+      async writeServerFiles({ application, entities }) {
+        for (const entity of entities) {
+          entity.fields.forEach(field => {
+            if (field.fieldIsEnum) {
+              if (!entity.skipServer) {
+                const enumInfo = utils.getEnumInfo(field, entity.clientRootFolder);
+                enumInfo.namespace = application.namespace;
+                const fieldType = field.fieldType;
+                this.writeFile(
+                  'dotnetcore/src/Project.Crosscutting/Enums/Enum.cs.ejs',
+                  `src/${this.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Enums/${fieldType}.cs`,
+                  enumInfo,
+                );
+              }
+            }
+          });
+
+          await this.writeFiles({
+            sections: entityFiles,
+            context: { ...application, ...entity },
+            rootTemplatesPath: ['dotnetcore'],
+          });
+        }
+      },
+      writeFilesGatling() {
+        /*
+        this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates/src'));
+        */
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingTaskGroup({
+      async postWritingTemplateTask() {
+        /*
+        if (this.applicationType === 'gateway') {
+          return {
+            writeFilesNeedle() {
+              const gatewayNeedle = new GatewayNeedle(this);
+              gatewayNeedle.addRouteToGateway(this.entityApiUrl, _.toLower(this.microserviceName));
+            },
+          };
+        }
+        */
+      },
     });
   }
 

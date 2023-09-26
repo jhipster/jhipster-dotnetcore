@@ -71,20 +71,24 @@ export default class extends BaseGenerator {
   get [BaseGenerator.END]() {
     return this.asEndTaskGroup({
       async generateSample() {
-        const generatorOptions = {
-          skipJhipsterDependencies: true,
-          insight: false,
-          skipChecks: true,
-          skipInstall: true,
-        };
         if (this.jdlSample) {
           await this.composeWithJHipster('jdl', {
             generatorArgs: [this.jdlSample],
-            generatorOptions,
+            generatorOptions: {
+              jsonOnly: true,
+            },
           });
-        } else {
-          await this.composeWithJHipster('app', { generatorOptions });
         }
+      },
+      async generateApp() {
+        await this.composeWithJHipster('app', {
+          generatorOptions: {
+            skipJhipsterDependencies: true,
+            insight: false,
+            skipChecks: true,
+            skipInstall: true,
+          },
+        });
       },
       async jhipsterInfo() {
         await this.composeWithJHipster('info');
