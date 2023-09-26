@@ -24,6 +24,16 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup({
+      async configuring() {
+        if (!this.jhipsterConfig.namespace) {
+          this.jhipsterConfig.namespace = toPascalCase(this.jhipsterConfig.baseName),
+        }
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
       async loadingTemplateTask({ application }) {
