@@ -94,7 +94,7 @@ jobs:
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
         run: npm ci && npm link
       - name: 'GENERATE JHipster.NET app'
-        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight
+        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
       - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
         run: dotnet build
         env:
