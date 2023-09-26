@@ -88,7 +88,6 @@ export default class extends BaseApplicationGenerator {
             {
               templates: [
                 {
-                  transform: false,
                   sourceFile: `dotnetcore/${SERVER_SRC_DIR}/Directory.Packages.props`,
                   destinationFile: 'Directory.Packages.props',
                 },
@@ -104,7 +103,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writeServerFiles({ application, entities }) {
-        for (const entity of entities) {
+        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
           entity.fields.forEach(field => {
             if (field.fieldIsEnum) {
               if (!entity.skipServer) {
