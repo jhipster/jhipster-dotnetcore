@@ -29,21 +29,27 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       async initializingTemplateTask() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
+        this.parseJHipsterCommand(command);
       },
     });
   }
 
   get [BaseApplicationGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
-      async promptingTemplateTask() {},
+      async promptingTemplateTask({ control }) {
+        if (control.existingProject && this.options.askAnswered !== true) return;
+        await this.prompt(this.prepareQuestions(command.configs));
+      },
     });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.asConfiguringTaskGroup({
-      async configuringTemplateTask() {},
+      async configuringTemplateTask() {
+        if ((this.jhipsterConfig.applicationType ?? 'monolith') !== 'monolith') {
+          this.jhipsterConfig.serviceDiscoveryType = 'consul';
+        }
+      },
     });
   }
 
