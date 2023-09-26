@@ -50,7 +50,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup({
       async composingTemplateTask() {
-        await this.composeWithJHipster('gatling');
+        // await this.composeWithJHipster('gatling');
       },
     });
   }
@@ -153,13 +153,7 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.INSTALL]() {
     return this.asInstallTaskGroup({
-      async installTemplateTask() {},
-    });
-  }
-
-  get [BaseApplicationGenerator.END]() {
-    return this.asEndTaskGroup({
-      async end({ application }) {
+      async installTemplateTask() {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
         const slns = [
           `${SERVER_SRC_DIR}${application.mainProjectDir}${application.pascalizedBaseName}.csproj`,
@@ -180,17 +174,23 @@ export default class extends BaseApplicationGenerator {
           await this.slnAdd(`${application.solutionName}.sln`, slns);
         } catch (error) {
           this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${error}`);
-        } finally {
-          this.log(chalk.green.bold('\nServer application generated successfully.\n'));
-          this.log(
-            chalk.green(
-              `Run your .Net Core application:\n${chalk.yellow.bold(
-                `dotnet run --verbosity normal --project ./${SERVER_SRC_DIR}${application.mainProjectDir}/${application.pascalizedBaseName}.csproj`,
-              )}`,
-            ),
-          );
-          this.log(chalk.green(`Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --verbosity normal')}`));
         }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.END]() {
+    return this.asEndTaskGroup({
+      async end({ application }) {
+        this.log.ok('.Net Core application generated successfully.');
+        this.log(
+          chalk.green(
+            `Run your .Net Core application:\n${chalk.yellow.bold(
+              `dotnet run --verbosity normal --project ./${SERVER_SRC_DIR}${application.mainProjectDir}/${application.pascalizedBaseName}.csproj`,
+            )}`,
+          ),
+        );
+        this.log(chalk.green(`Test your .Net Core application:\n${chalk.yellow.bold('dotnet test --verbosity normal')}`));
       },
     });
   }

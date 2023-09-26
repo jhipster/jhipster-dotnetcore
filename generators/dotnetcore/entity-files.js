@@ -21,6 +21,7 @@
 import { SERVER_SRC_DIR, SERVER_TEST_DIR } from '../generator-dotnetcore-constants.js';
 
 const renameDotNetCore = (data, filepath) =>
+  SERVER_SRC_DIR +
   filepath
     .replace(/^Project\./, `${data.pascalizedBaseName}.`)
     .replace(/^Project\//, `${data.pascalizedBaseName}/`)
