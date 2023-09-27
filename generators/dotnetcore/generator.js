@@ -149,9 +149,25 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
-      async postWritingTemplateTask() {
+      async postWritingTemplateTask({ application }) {
+        this.packageJson.merge({
+          devDependencies: {
+            concurrently: application.nodeDependencies.concurrently,
+          },
+          scripts: {
+            'ci:e2e:server:start': 'docker compose -f docker/app.yml up --wait',
+            'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
+          },
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup({
+      async postWritingEntitiesTemplateTask() {
         /*
         if (this.applicationType === 'gateway') {
           return {

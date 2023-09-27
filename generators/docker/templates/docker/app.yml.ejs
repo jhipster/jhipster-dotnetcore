@@ -27,8 +27,13 @@ services:
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:8080:80
+      - 127.0.0.1:<%= serverPort %>:80
 <%_ } _%>
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:80/health']
+      interval: 5s
+      timeout: 5s
+      retries: 40
 <%_ if (!skipClient && clientFramework === "Blazor") { _%>
   front:
     build:
