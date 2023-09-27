@@ -80,10 +80,6 @@ jobs:
         run: mkdir app
       - name: 'install required npm version'
         run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
-      - uses: joschi/setup-jdk@v2
-        with:
-          java-version: '11' # The OpenJDK version to make available on the path
-          architecture: 'x64' # defaults to 'x64'
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
