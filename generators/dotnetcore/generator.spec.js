@@ -120,4 +120,56 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertFileContent(dtoMappingFile, /public class AutoMapperProfile : Profile/);
     });
   });
+
+  describe('generating enum', () => {
+    const orderClass = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain/Entities/Order.cs`;
+    const orderStatusEnum = `${SERVER_SRC_DIR}JhipsterBlueprint.Crosscutting/Enums/OrderStatus.cs`;
+    const efMappings = `${SERVER_SRC_DIR}JhipsterBlueprint.Infrastructure/Data/ApplicationDatabaseContext.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Order',
+              fields: [
+                {
+                  fieldName: 'status',
+                  fieldType: 'OrderStatus',
+                  fieldValues: 'IN_PROGRESS,FINISHED',
+                },
+              ],
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('copies entity file', () => {
+      result.assertFile('.jhipster/Order.json');
+      result.assertFile('.yo-rc.json');
+    });
+
+    it('creates entity class', () => {
+      result.assertFile(orderClass);
+    });
+
+    it('generates the enum', () => {
+      result.assertFile(orderStatusEnum);
+      result.assertFileContent(orderStatusEnum, /IN_PROGRESS,\s+FINISHED/);
+    });
+
+    it('generates the enum to string mapping at ApplicationDatabaseContext', () => {
+      result.assertFileContent(efMappings, /builder\.Entity<Order>\(\)\s+\.Property\(e => e.Status\)\s+\.HasConversion<string>\(\);/);
+    });
+  });
 });
