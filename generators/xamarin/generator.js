@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import { files } from './files-xamarin.js';
 import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.js';
 import { readFileSync, writeFileSync } from 'fs';
+import { entityFiles } from './entities-xamarin.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -24,6 +25,25 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup({
+      async writingEntitiesTemplateTask({ application, entities }) {
+        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
+          await this.writeFiles({
+            sections: entityFiles,
+            context: { ...application, ...entity },
+          });
+          /*
+  const xamarinNeedle = new XamarinNeedle(this);
+  xamarinNeedle.addEntityToMenu(this.entityClass);
+  xamarinNeedle.addServiceInDI(this.entityClass);
+  xamarinNeedle.addCommandToMenu(this.entityClass);
+  xamarinNeedle.declareCommandToMenu(this.entityClass);
+          */
+        }
+      },
+    });
+  }
   get [BaseApplicationGenerator.INSTALL]() {
     return this.asInstallTaskGroup({
       async install({ application }) {
