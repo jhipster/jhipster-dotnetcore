@@ -47,8 +47,13 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.CONFIGURING]() {
     return this.asConfiguringTaskGroup({
       async configuringTemplateTask() {
+        // Force consul for gateways and microservices
         if ((this.jhipsterConfig.applicationType ?? 'monolith') !== 'monolith') {
           this.jhipsterConfig.serviceDiscoveryType = 'consul';
+        }
+        // Terraform is supported my mssql
+        if (this.jhipsterConfig.withTerraformAzureScripts && this.jhipsterConfig.database !== 'mssql') {
+          this.jhipsterConfig.withTerraformAzureScripts = false;
         }
       },
     });
