@@ -13,7 +13,7 @@ export default class extends DockerGenerator {
   }
 
   async beforeQueue() {
-    await super.beforeQueue();
+    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
   }
 
   get [DockerGenerator.INITIALIZING]() {

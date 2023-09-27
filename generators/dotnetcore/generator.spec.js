@@ -14,6 +14,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
@@ -41,6 +42,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         })
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
@@ -66,6 +68,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         })
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
@@ -100,6 +103,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         )
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
@@ -112,7 +116,6 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
     });
 
     it('checks dto files', () => {
-      console.log(result.getStateSnapshot());
       result.assertFile(personClass);
       result.assertFile(personDto);
       result.assertFile(dtoMappingFile);
@@ -148,6 +151,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         )
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
@@ -194,6 +198,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         )
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()

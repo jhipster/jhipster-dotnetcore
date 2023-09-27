@@ -8,6 +8,45 @@ exports[`SubGenerator server of dotnetcore JHipster blueprint > run > should suc
   "Directory.Packages.props": {
     "stateCleared": "modified",
   },
+  "docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/grafana/data/dashboard/Docker Monitoring.json": {
+    "stateCleared": "modified",
+  },
+  "docker/grafana/data/dashboard/default-dashboard.yaml": {
+    "stateCleared": "modified",
+  },
+  "docker/grafana/data/provisioning/influxdb.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/influxdb/config/influxdb.conf": {
+    "stateCleared": "modified",
+  },
+  "docker/kapacitor/config/kapacitor.conf": {
+    "stateCleared": "modified",
+  },
+  "docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/postgresql.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/services.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/telegraf/telegraf.conf": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
   "src/Jhipster.Crosscutting/Constants/Constants.cs": {
     "stateCleared": "modified",
   },
