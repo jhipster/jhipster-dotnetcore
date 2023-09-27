@@ -4,6 +4,7 @@ import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constan
 import { files } from './files-blazor.js';
 import { access } from 'fs/promises';
 import { entityFiles } from './entities-blazor.js';
+import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -13,6 +14,59 @@ export default class extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
     await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      async preparingTemplateTask({ application, source }) {
+        source.addEntityToMenu = ({ entityName }) => {
+          const entityMenuPath = `src/${application.mainClientDir}/Shared/NavMenu.razor`;
+          const lowerCasedEntityName = this._.toLower(entityName);
+          this.editFile(
+            entityMenuPath,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-entity-to-menu',
+              contentToAdd: `<BarDropdownItem Class="dropdown-item" To="${lowerCasedEntityName}">
+    <Icon Name='"fa-asterisk"' />
+    ${entityName}
+</BarDropdownItem>`,
+              contentToCheck: `To="${lowerCasedEntityName}"`,
+              autoIndent: true,
+            }),
+          );
+        };
+
+        source.addServiceInDI = ({ entityName }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/Program.cs`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-services-in-di',
+              contentToAdd: `builder.Services.AddScoped<I${entityName}Service, ${entityName}Service>();`,
+              autoIndent: true,
+            }),
+          );
+
+        source.addUsingForService = ({ entityName, namespace }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/Program.cs`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-using-for-services',
+              contentToAdd: `using ${namespace}.Client.Services.EntityServices.${entityName};`,
+              autoIndent: true,
+            }),
+          );
+
+        source.addDtoMapping = ({ entityName }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/AutoMapper/AutoMapperProfile.cs`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-dto-model-mapping',
+              contentToAdd: `CreateMap<${entityName}Model, ${entityName}Dto>().ReverseMap();`,
+              autoIndent: true,
+            }),
+          );
+      },
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -38,13 +92,19 @@ export default class extends BaseApplicationGenerator {
               asDto: str => `${str}${application.dtoSuffix}`,
             },
           });
-          /*
-          const blazorNeedle = new BlazorNeedle(this);
-          blazorNeedle.addEntityToMenu(this.entityClass);
-          blazorNeedle.addServiceInDI(this.entityClass);
-          blazorNeedle.addUsingForService(this.namespace, this.entityClass);
-          blazorNeedle.addDtoMapping(this.entityClass);
-          */
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup({
+      async postWritingEntitiesTemplateTask({ application, source, entities }) {
+        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
+          source.addEntityToMenu({ entityName: entity.entityClass });
+          source.addServiceInDI({ entityName: entity.entityClass });
+          source.addUsingForService({ entityName: entity.entityClass, namespace: application.namespace });
+          source.addDtoMapping({ entityName: entity.entityClass });
         }
       },
     });

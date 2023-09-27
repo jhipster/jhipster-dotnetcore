@@ -12,8 +12,8 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       removeNotImplementedFeatureInCypress({ application }) {
-        this.deleteDestination(`${application.cypressDir}integration/account/reset-password-page.spec.ts`);
-        this.deleteDestination(`${application.cypressDir}integration/administration/administration.spec.ts`);
+        this.deleteDestination(`${application.cypressDir}e2e/account/reset-password-page.cy.ts`);
+        this.deleteDestination(`${application.cypressDir}e2e/administration/administration.cy.ts`);
       },
       updateCypressJson({ application }) {
         /*
