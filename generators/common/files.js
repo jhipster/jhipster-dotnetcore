@@ -21,7 +21,11 @@ import constants from '../generator-dotnetcore-constants.cjs';
 export const files = {
   general: [
     {
-      templates: ['.gitignore.jhi.dotnetcore-common', 'README.md'],
+      templates: [
+        '.gitignore.jhi.dotnetcore-common',
+        // TODO convert to .jhi
+        // 'README.md',
+      ],
     },
   ],
   docker: [
