@@ -132,9 +132,14 @@ export default class extends BaseApplicationGenerator {
           if (
             !relationship.otherRelationship &&
             entity.databaseType !== 'mongodb' &&
-            (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many')
+            (relationship.relationshipType === 'many-to-many' ||
+              relationship.relationshipType === 'one-to-many' ||
+              relationship.relationshipType === 'one-to-one')
           ) {
-            relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+            // TODO remove this condition
+            if (relationship.relationshipType !== 'one-to-one') {
+              relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
+            }
           }
         }
       },
@@ -143,7 +148,7 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.asPreparingEachEntityFieldTaskGroup({
-      async preparingTemplateTask({ entity, field }) {
+      async preparingTemplateTask({ field }) {
         field.fieldNamePascalized = toPascalCase(field.fieldName);
         field.fieldNameCamelCased = this._.camelCase(field.fieldName);
 
@@ -195,8 +200,9 @@ export default class extends BaseApplicationGenerator {
           relationship.relationshipType === 'one-to-one' ||
           relationship.otherEntityName.toLowerCase() === 'user'
         ) {
-          relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
-          relationship.otherEntityRelationshipFieldName = this._.lowerFirst(relationship.otherEntityRelationshipName);
+          const { otherEntityRelationshipName = entity.entityInstance } = relationship;
+          relationship.otherEntityRelationshipNamePascalized = toPascalCase(otherEntityRelationshipName);
+          relationship.otherEntityRelationshipFieldName = this._.lowerFirst(otherEntityRelationshipName);
           relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
           relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
             relationship.otherEntityRelationshipFieldNamePascalized,
