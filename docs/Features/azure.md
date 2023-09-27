@@ -53,7 +53,7 @@ _Note:_ Terraform plan command will work only if the user is authenticated using
 location                = "Central US"
 subscription_id         = "<your-azure-subscription>"
 mssql_admin_user        = "dbUser"
-mssql_admin_password    = "Password!12"
+mssql_admin_password    = "yourStrong(!)Password"
 docker_image            = "a5ingh/jhipster-dotnetcore-sampleapp"
 docker_image_tag        = "0.1"
 ```

@@ -75,6 +75,12 @@ export default class extends BaseApplicationGenerator {
         application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
         application.dockerServicesDir = 'docker/';
 
+        application[`databaseType${this._.upperFirst(application.databaseType)}`] = true;
+        if (['postgresql', 'mysql', 'mariadb', 'mssql'].includes(application.databaseType)) {
+          application.databaseTypeSql = true;
+          application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
+        }
+
         application.camelizedBaseName = this._.camelCase(application.baseName);
         application.dasherizedBaseName = this._.kebabCase(application.baseName);
         application.lowercaseBaseName = application.baseName.toLowerCase();
