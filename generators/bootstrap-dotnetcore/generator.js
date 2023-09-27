@@ -201,9 +201,9 @@ export default class extends BaseApplicationGenerator {
           relationship.relationshipType === 'one-to-one' ||
           relationship.otherEntityName.toLowerCase() === 'user'
         ) {
-          const { otherEntityRelationshipName = entity.entityInstance } = relationship;
-          relationship.otherEntityRelationshipNamePascalized = toPascalCase(otherEntityRelationshipName);
-          relationship.otherEntityRelationshipFieldName = this._.lowerFirst(otherEntityRelationshipName);
+          relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? entity.entityInstance;
+          relationship.otherEntityRelationshipNamePascalized = toPascalCase(relationship.otherEntityRelationshipName);
+          relationship.otherEntityRelationshipFieldName = this._.lowerFirst(relationship.otherEntityRelationshipName);
           relationship.otherEntityRelationshipFieldNamePascalized = toPascalCase(relationship.otherEntityRelationshipFieldName);
           relationship.otherEntityRelationshipFieldNamePascalizedPlural = pluralize(
             relationship.otherEntityRelationshipFieldNamePascalized,

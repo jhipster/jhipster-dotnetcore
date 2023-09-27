@@ -116,7 +116,7 @@ namespace <%= namespace %>.Infrastructure.Data
                     entity.definition.relationships.forEach(relationship => {
                         if (relationship.relationshipType === 'many-to-many') {
                             // executed when importing entities by jdl (jhipster import-jdl fileName.jdl)
-                            if (relationship.ownerSide) {
+                            if (relationship.relationshipSide === 'left') {
                                 let relationshipNamePascalized = toPascalCase(relationship.relationshipName);
                                 let relationshipNamePascalizedPlural = pluralize(relationshipNamePascalized);
                                 let relationshipFieldNamePascalizedPlural = relationship.relationshipFieldNamePascalizedPlural;
@@ -146,7 +146,7 @@ namespace <%= namespace %>.Infrastructure.Data
             relationships.forEach(relationship => {
                 if (relationship.relationshipType === 'many-to-many') {
                     // executed when using the entity generator to add relationships (jhipster entity entityName)
-                    if (relationship.ownerSide) {
+                    if (relationship.relationshipSide === 'left') {
                         let ownerRelationshipFieldName = pascalizedEntityClass;
                         let nonOwnerRelationshipFieldName = relationship.otherEntityNamePascalized;
                         let relationshipNamePascalizedPlural = relationship.relationshipNamePascalizedPlural;
