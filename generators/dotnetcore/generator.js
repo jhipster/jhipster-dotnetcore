@@ -1,6 +1,7 @@
 import { access } from 'fs/promises';
 import chalk from 'chalk';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
 import command from './command.js';
@@ -70,7 +71,41 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
-      async preparingTemplateTask() {},
+      async preparingTemplateTask({ source, application }) {
+        if (application.applicationTypeGateway) {
+          source.addRouteToGateway = ({ serviceEndpoint, serviceName }) => {
+            const ocelotConfigPath = `src/${application.mainProjectDir}/ocelot.json`;
+            const ocelotStorage = this.createStorage(ocelotConfigPath);
+            const endpoint = `/${serviceName}/api/${serviceEndpoint}`;
+            ocelotStorage.merge({
+              Routes: [
+                {
+                  DownstreamPathTemplate: `/api/${serviceEndpoint}`,
+                  DownstreamScheme: 'https',
+                  ServiceName: `${serviceName}-service`,
+                  LoadBalancerOptions: {
+                    Type: 'LeastConnection',
+                  },
+                  ReRoutesCaseSensitive: false,
+                  UpstreamPathTemplate: endpoint,
+                  UpstreamHttpMethod: ['Get', 'Post', 'Delete', 'Put'],
+                },
+                {
+                  DownstreamPathTemplate: `/api/${serviceEndpoint}/{everything}`,
+                  DownstreamScheme: 'https',
+                  ServiceName: `${serviceName}-service`,
+                  LoadBalancerOptions: {
+                    Type: 'LeastConnection',
+                  },
+                  ReRoutesCaseSensitive: false,
+                  UpstreamPathTemplate: `${endpoint}/{everything}`,
+                  UpstreamHttpMethod: ['Get', 'Post', 'Delete', 'Put'],
+                },
+              ],
+            });
+          };
+        }
+      },
     });
   }
 
@@ -167,17 +202,15 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.asPostWritingEntitiesTaskGroup({
-      async postWritingEntitiesTemplateTask() {
-        /*
-        if (this.applicationType === 'gateway') {
-          return {
-            writeFilesNeedle() {
-              const gatewayNeedle = new GatewayNeedle(this);
-              gatewayNeedle.addRouteToGateway(this.entityApiUrl, _.toLower(this.microserviceName));
-            },
-          };
+      async postWritingEntitiesTemplateTask({ application, entities, source }) {
+        if (application.applicationTypeGateway) {
+          for (const entity of entities.filter(entity => !entity.builtIn && entity.microserviceName)) {
+            source.addRouteToGateway({
+              serviceEndpoint: entity.entityApiUrl,
+              serviceName: _.toLower(entity.microserviceName),
+            });
+          }
         }
-        */
       },
     });
   }
