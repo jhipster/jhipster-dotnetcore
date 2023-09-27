@@ -27,13 +27,13 @@ exports[`SubGenerator cypress of dotnetcore JHipster blueprint > run > should su
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/test/cypress/e2e/account/reset-password-page.cy.ts": {
-    "stateCleared": "modified",
+    "state": "deleted",
   },
   "src/Jhipster/ClientApp/test/cypress/e2e/account/settings-page.cy.ts": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/test/cypress/e2e/administration/administration.cy.ts": {
-    "stateCleared": "modified",
+    "state": "deleted",
   },
   "src/Jhipster/ClientApp/test/cypress/e2e/lighthouse.audits.ts": {
     "stateCleared": "modified",

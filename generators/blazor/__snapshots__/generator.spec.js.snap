@@ -8,313 +8,316 @@ exports[`SubGenerator blazor of dotnetcore JHipster blueprint > generating dto >
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/App.razor": {
+  "src/client/Jhipster.Client.Shared/Constants/ErrorConst.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/App.razor.cs": {
+  "src/client/Jhipster.Client.Shared/Constants/TypeAlert.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/AutoMapper/AutoMapperProfile.cs": {
+  "src/client/Jhipster.Client.Shared/Jhipster.Client.Shared.csproj": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/BaseModel.cs": {
+  "src/client/Jhipster.Client.Shared/Models/JhiAlert.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/ConfigurationModel.cs": {
+  "src/client/Jhipster.Client/App.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/JwtToken.cs": {
+  "src/client/Jhipster.Client/App.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/LoginModel.cs": {
+  "src/client/Jhipster.Client/AutoMapper/AutoMapperProfile.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/Register/RegisterModel.cs": {
+  "src/client/Jhipster.Client/Jhipster.Client.csproj": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/Register/RegisterResultRequest.cs": {
+  "src/client/Jhipster.Client/Models/BaseModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/Register/UserSaveModel.cs": {
+  "src/client/Jhipster.Client/Models/ConfigurationModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Models/UserModel.cs": {
+  "src/client/Jhipster.Client/Models/JwtToken.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Account/Register.razor": {
+  "src/client/Jhipster.Client/Models/LoginModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Account/Register.razor.cs": {
+  "src/client/Jhipster.Client/Models/PersonModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Admin/UserManagement/UserDetail.razor": {
+  "src/client/Jhipster.Client/Models/Register/RegisterModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Admin/UserManagement/UserDetail.razor.cs": {
+  "src/client/Jhipster.Client/Models/Register/RegisterResultRequest.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Admin/UserManagement/UserManagement.razor": {
+  "src/client/Jhipster.Client/Models/Register/UserSaveModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Admin/UserManagement/UserManagement.razor.cs": {
+  "src/client/Jhipster.Client/Models/UserModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Admin/UserManagement/UserUpdate.razor": {
+  "src/client/Jhipster.Client/Pages/Account/Register.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Admin/UserManagement/UserUpdate.razor.cs": {
+  "src/client/Jhipster.Client/Pages/Account/Register.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Index.razor": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserDetail.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Index.razor.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserDetail.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Login.razor": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserManagement.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Login.razor.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserManagement.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Utils/INavigationService.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserUpdate.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Pages/Utils/NavigationService.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserUpdate.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Program.cs": {
+  "src/client/Jhipster.Client/Pages/Entities/Person/Person.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Project.Client.csproj": {
+  "src/client/Jhipster.Client/Pages/Entities/Person/Person.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Properties/launchSettings.json": {
+  "src/client/Jhipster.Client/Pages/Entities/Person/PersonDetail.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/AccountServices/IRegisterService.cs": {
+  "src/client/Jhipster.Client/Pages/Entities/Person/PersonDetail.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/AccountServices/RegisterService.cs": {
+  "src/client/Jhipster.Client/Pages/Entities/Person/PersonUpdate.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/AuthenticationService.cs": {
+  "src/client/Jhipster.Client/Pages/Entities/Person/PersonUpdate.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/EntityServices/AbstractEntityService.cs": {
+  "src/client/Jhipster.Client/Pages/Index.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/EntityServices/User/IUserService.cs": {
+  "src/client/Jhipster.Client/Pages/Index.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/EntityServices/User/UserService.cs": {
+  "src/client/Jhipster.Client/Pages/Login.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Services/IAuthenticationService.cs": {
+  "src/client/Jhipster.Client/Pages/Login.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/Components/AlertError.razor": {
+  "src/client/Jhipster.Client/Pages/Utils/INavigationService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/Components/AlertError.razor.cs": {
+  "src/client/Jhipster.Client/Pages/Utils/NavigationService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/Components/DynInputText.razor": {
+  "src/client/Jhipster.Client/Program.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/DeleteModal.razor": {
+  "src/client/Jhipster.Client/Properties/launchSettings.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/DeleteModal.razor.cs": {
+  "src/client/Jhipster.Client/Services/AccountServices/IRegisterService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/MainLayout.razor": {
+  "src/client/Jhipster.Client/Services/AccountServices/RegisterService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/NavMenu.razor": {
+  "src/client/Jhipster.Client/Services/AuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/Shared/NavMenu.razor.cs": {
+  "src/client/Jhipster.Client/Services/EntityServices/AbstractEntityService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/_Imports.razor": {
+  "src/client/Jhipster.Client/Services/EntityServices/Person/IPersonService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/libman.json": {
+  "src/client/Jhipster.Client/Services/EntityServices/Person/PersonService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/AlertErrorTest.cs": {
+  "src/client/Jhipster.Client/Services/EntityServices/User/IUserService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Helpers/AuthorizationHelper.cs": {
+  "src/client/Jhipster.Client/Services/EntityServices/User/UserService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Helpers/MockAuthenticationService.cs": {
+  "src/client/Jhipster.Client/Services/IAuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Helpers/MockAuthorizationPolicyProvider.cs": {
+  "src/client/Jhipster.Client/Shared/Components/AlertError.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Helpers/MockAuthorizationService.cs": {
+  "src/client/Jhipster.Client/Shared/Components/AlertError.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Helpers/MockRegisterService.cs": {
+  "src/client/Jhipster.Client/Shared/Components/DynInputText.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Helpers/TestPolicyRequirement.cs": {
+  "src/client/Jhipster.Client/Shared/DeleteModal.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/IndexTest.cs": {
+  "src/client/Jhipster.Client/Shared/DeleteModal.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/LoginTest.cs": {
+  "src/client/Jhipster.Client/Shared/MainLayout.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Pages/Admin/UserManagement/UserDetailTest.cs": {
+  "src/client/Jhipster.Client/Shared/NavMenu.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Pages/TestPages/TestAlertError.razor": {
+  "src/client/Jhipster.Client/Shared/NavMenu.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/test/Project.Client.Test.csproj": {
+  "src/client/Jhipster.Client/_Imports.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/appsettings.Development.json": {
+  "src/client/Jhipster.Client/libman.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/appsettings.Production.json": {
+  "src/client/Jhipster.Client/wwwroot/appsettings.Development.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/appsettings.json": {
+  "src/client/Jhipster.Client/wwwroot/appsettings.Production.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/css/loading.css": {
+  "src/client/Jhipster.Client/wwwroot/appsettings.json": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_0.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_0_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_0_head-256.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_0_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_0_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_1.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_1_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_1_head-256.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_1_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_1_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_2.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_2_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_2_head-256.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_2_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_2_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_3.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_3_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_3_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/jhipster_family_member_3_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/images/logo-jhipster.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/scss/_bootstrap-variables.scss": {
+  "src/client/Jhipster.Client/wwwroot/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/scss/global.scss": {
+  "src/client/Jhipster.Client/wwwroot/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/content/scss/vendor.scss": {
+  "src/client/Jhipster.Client/wwwroot/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/favicon.ico": {
+  "src/client/Jhipster.Client/wwwroot/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/index.html": {
+  "src/client/Jhipster.Client/wwwroot/favicon.ico": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/manifest.webapp": {
+  "src/client/Jhipster.Client/wwwroot/index.html": {
     "stateCleared": "modified",
   },
-  "Jhipster/ClientApp/wwwroot/robots.txt": {
+  "src/client/Jhipster.Client/wwwroot/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Constants/ErrorConst.cs": {
+  "src/client/Jhipster.Client/wwwroot/robots.txt": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Constants/TypeAlert.cs": {
+  "test/Jhipster.Client.Test/AlertErrorTest.cs": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Models/JhiAlert.cs": {
+  "test/Jhipster.Client.Test/Helpers/AuthorizationHelper.cs": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Project.Client.Shared.csproj": {
+  "test/Jhipster.Client.Test/Helpers/MockAuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Models/PersonModel.cs": {
+  "test/Jhipster.Client.Test/Helpers/MockAuthorizationPolicyProvider.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Pages/Entities/Person/_entityClass_.razor": {
+  "test/Jhipster.Client.Test/Helpers/MockAuthorizationService.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Pages/Entities/Person/_entityClass_.razor.cs": {
+  "test/Jhipster.Client.Test/Helpers/MockRegisterService.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Pages/Entities/Person/_entityClass_Detail.razor": {
+  "test/Jhipster.Client.Test/Helpers/TestPolicyRequirement.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Pages/Entities/Person/_entityClass_Detail.razor.cs": {
+  "test/Jhipster.Client.Test/IndexTest.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Pages/Entities/Person/_entityClass_Update.razor": {
+  "test/Jhipster.Client.Test/Jhipster.Client.Test.csproj": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Pages/Entities/Person/_entityClass_Update.razor.cs": {
+  "test/Jhipster.Client.Test/LoginTest.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster.Client/Services/EntityServices/Person/_entityClass_Service.cs": {
+  "test/Jhipster.Client.Test/Pages/Admin/UserManagement/UserDetailTest.cs": {
     "stateCleared": "modified",
   },
-  "test/Jhipster.Client.Test/Pages/Entities/Person/_entityClass_DetailTest.cs": {
+  "test/Jhipster.Client.Test/Pages/Entities/Person/PersonDetailTest.cs": {
     "stateCleared": "modified",
   },
-  "test/Jhipster.Client.Test/Pages/Entities/Person/_entityClass_Test.cs": {
+  "test/Jhipster.Client.Test/Pages/Entities/Person/PersonTest.cs": {
     "stateCleared": "modified",
   },
-  "test/Jhipster.Client.Test/Pages/Entities/Person/_entityClass_UpdateTest.cs": {
+  "test/Jhipster.Client.Test/Pages/Entities/Person/PersonUpdateTest.cs": {
+    "stateCleared": "modified",
+  },
+  "test/Jhipster.Client.Test/Pages/TestPages/TestAlertError.razor": {
     "stateCleared": "modified",
   },
 }
@@ -346,280 +349,280 @@ exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > should suc
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/AlertErrorTest.cs": {
+  "src/client/Jhipster.Client.Shared/Constants/ErrorConst.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Helpers/AuthorizationHelper.cs": {
+  "src/client/Jhipster.Client.Shared/Constants/TypeAlert.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Helpers/MockAuthenticationService.cs": {
+  "src/client/Jhipster.Client.Shared/Jhipster.Client.Shared.csproj": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Helpers/MockAuthorizationPolicyProvider.cs": {
+  "src/client/Jhipster.Client.Shared/Models/JhiAlert.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Helpers/MockAuthorizationService.cs": {
+  "src/client/Jhipster.Client/App.razor": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Helpers/MockRegisterService.cs": {
+  "src/client/Jhipster.Client/App.razor.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Helpers/TestPolicyRequirement.cs": {
+  "src/client/Jhipster.Client/AutoMapper/AutoMapperProfile.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/IndexTest.cs": {
+  "src/client/Jhipster.Client/Jhipster.Client.csproj": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/LoginTest.cs": {
+  "src/client/Jhipster.Client/Models/BaseModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Pages/Admin/UserManagement/UserDetailTest.cs": {
+  "src/client/Jhipster.Client/Models/ConfigurationModel.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Pages/TestPages/TestAlertError.razor": {
+  "src/client/Jhipster.Client/Models/JwtToken.cs": {
     "stateCleared": "modified",
   },
-  "Jhipster.Client.Test/Project.Client.Test.csproj": {
+  "src/client/Jhipster.Client/Models/LoginModel.cs": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Constants/ErrorConst.cs": {
+  "src/client/Jhipster.Client/Models/Register/RegisterModel.cs": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Constants/TypeAlert.cs": {
+  "src/client/Jhipster.Client/Models/Register/RegisterResultRequest.cs": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Models/JhiAlert.cs": {
+  "src/client/Jhipster.Client/Models/Register/UserSaveModel.cs": {
     "stateCleared": "modified",
   },
-  "Project.Client.Shared/Project.Client.Shared.csproj": {
+  "src/client/Jhipster.Client/Models/UserModel.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/App.razor": {
+  "src/client/Jhipster.Client/Pages/Account/Register.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/App.razor.cs": {
+  "src/client/Jhipster.Client/Pages/Account/Register.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/AutoMapper/AutoMapperProfile.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserDetail.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/BaseModel.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserDetail.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/ConfigurationModel.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserManagement.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/JwtToken.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserManagement.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/LoginModel.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserUpdate.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/Register/RegisterModel.cs": {
+  "src/client/Jhipster.Client/Pages/Admin/UserManagement/UserUpdate.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/Register/RegisterResultRequest.cs": {
+  "src/client/Jhipster.Client/Pages/Index.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/Register/UserSaveModel.cs": {
+  "src/client/Jhipster.Client/Pages/Index.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Models/UserModel.cs": {
+  "src/client/Jhipster.Client/Pages/Login.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Account/Register.razor": {
+  "src/client/Jhipster.Client/Pages/Login.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Account/Register.razor.cs": {
+  "src/client/Jhipster.Client/Pages/Utils/INavigationService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Admin/UserManagement/UserDetail.razor": {
+  "src/client/Jhipster.Client/Pages/Utils/NavigationService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Admin/UserManagement/UserDetail.razor.cs": {
+  "src/client/Jhipster.Client/Program.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Admin/UserManagement/UserManagement.razor": {
+  "src/client/Jhipster.Client/Properties/launchSettings.json": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Admin/UserManagement/UserManagement.razor.cs": {
+  "src/client/Jhipster.Client/Services/AccountServices/IRegisterService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Admin/UserManagement/UserUpdate.razor": {
+  "src/client/Jhipster.Client/Services/AccountServices/RegisterService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Admin/UserManagement/UserUpdate.razor.cs": {
+  "src/client/Jhipster.Client/Services/AuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Index.razor": {
+  "src/client/Jhipster.Client/Services/EntityServices/AbstractEntityService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Index.razor.cs": {
+  "src/client/Jhipster.Client/Services/EntityServices/User/IUserService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Login.razor": {
+  "src/client/Jhipster.Client/Services/EntityServices/User/UserService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Login.razor.cs": {
+  "src/client/Jhipster.Client/Services/IAuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Utils/INavigationService.cs": {
+  "src/client/Jhipster.Client/Shared/Components/AlertError.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Pages/Utils/NavigationService.cs": {
+  "src/client/Jhipster.Client/Shared/Components/AlertError.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Program.cs": {
+  "src/client/Jhipster.Client/Shared/Components/DynInputText.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Project.Client.csproj": {
+  "src/client/Jhipster.Client/Shared/DeleteModal.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Properties/launchSettings.json": {
+  "src/client/Jhipster.Client/Shared/DeleteModal.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/AccountServices/IRegisterService.cs": {
+  "src/client/Jhipster.Client/Shared/MainLayout.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/AccountServices/RegisterService.cs": {
+  "src/client/Jhipster.Client/Shared/NavMenu.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/AuthenticationService.cs": {
+  "src/client/Jhipster.Client/Shared/NavMenu.razor.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/EntityServices/AbstractEntityService.cs": {
+  "src/client/Jhipster.Client/_Imports.razor": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/EntityServices/User/IUserService.cs": {
+  "src/client/Jhipster.Client/libman.json": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/EntityServices/User/UserService.cs": {
+  "src/client/Jhipster.Client/wwwroot/appsettings.Development.json": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Services/IAuthenticationService.cs": {
+  "src/client/Jhipster.Client/wwwroot/appsettings.Production.json": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/Components/AlertError.razor": {
+  "src/client/Jhipster.Client/wwwroot/appsettings.json": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/Components/AlertError.razor.cs": {
+  "src/client/Jhipster.Client/wwwroot/content/css/loading.css": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/Components/DynInputText.razor": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0.svg": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/DeleteModal.razor": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-192.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/DeleteModal.razor.cs": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-256.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/MainLayout.razor": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-384.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/NavMenu.razor": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-512.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/Shared/NavMenu.razor.cs": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1.svg": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/_Imports.razor": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-192.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/libman.json": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-256.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/appsettings.Development.json": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-384.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/appsettings.Production.json": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-512.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/appsettings.json": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2.svg": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/css/loading.css": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-192.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-256.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-384.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-256.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-512.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3.svg": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_0_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-192.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-384.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-512.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-256.png": {
+  "src/client/Jhipster.Client/wwwroot/content/images/logo-jhipster.png": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/content/scss/_bootstrap-variables.scss": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_1_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/content/scss/global.scss": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2.svg": {
+  "src/client/Jhipster.Client/wwwroot/content/scss/vendor.scss": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-192.png": {
+  "src/client/Jhipster.Client/wwwroot/favicon.ico": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-256.png": {
+  "src/client/Jhipster.Client/wwwroot/index.html": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-384.png": {
+  "src/client/Jhipster.Client/wwwroot/manifest.webapp": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_2_head-512.png": {
+  "src/client/Jhipster.Client/wwwroot/robots.txt": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3.svg": {
+  "test/Jhipster.Client.Test/AlertErrorTest.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-192.png": {
+  "test/Jhipster.Client.Test/Helpers/AuthorizationHelper.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-384.png": {
+  "test/Jhipster.Client.Test/Helpers/MockAuthenticationService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/jhipster_family_member_3_head-512.png": {
+  "test/Jhipster.Client.Test/Helpers/MockAuthorizationPolicyProvider.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/images/logo-jhipster.png": {
+  "test/Jhipster.Client.Test/Helpers/MockAuthorizationService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/scss/_bootstrap-variables.scss": {
+  "test/Jhipster.Client.Test/Helpers/MockRegisterService.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/scss/global.scss": {
+  "test/Jhipster.Client.Test/Helpers/TestPolicyRequirement.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/content/scss/vendor.scss": {
+  "test/Jhipster.Client.Test/IndexTest.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/favicon.ico": {
+  "test/Jhipster.Client.Test/Jhipster.Client.Test.csproj": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/index.html": {
+  "test/Jhipster.Client.Test/LoginTest.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/manifest.webapp": {
+  "test/Jhipster.Client.Test/Pages/Admin/UserManagement/UserDetailTest.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client/wwwroot/robots.txt": {
+  "test/Jhipster.Client.Test/Pages/TestPages/TestAlertError.razor": {
     "stateCleared": "modified",
   },
 }

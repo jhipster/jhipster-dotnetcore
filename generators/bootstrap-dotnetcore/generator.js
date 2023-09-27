@@ -38,10 +38,10 @@ export default class extends BaseApplicationGenerator {
     return this.asLoadingTaskGroup({
       async loadingTemplateTask({ application }) {
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
-        application.databaseType = this.jhipsterConfig.databaseType;
+        application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
-        if (application.databaseType !== 'mongodb') {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
         }
 
