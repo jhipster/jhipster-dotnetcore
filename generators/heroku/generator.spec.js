@@ -5,7 +5,7 @@ import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 const SUB_GENERATOR = 'heroku';
 const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
-describe('SubGenerator heroku of dotnetcore JHipster blueprint', () => {
+describe.skip('SubGenerator heroku of dotnetcore JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers

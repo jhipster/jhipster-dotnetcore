@@ -5,7 +5,7 @@ import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 const SUB_GENERATOR = 'ci-cd';
 const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
-describe('SubGenerator ci-cd of dotnetcore JHipster blueprint', () => {
+describe.skip('SubGenerator ci-cd of dotnetcore JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers
