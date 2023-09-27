@@ -35,7 +35,8 @@ export const dockerFiles = {
         'influxdb/config/influxdb.conf',
         'grafana/data/dashboard/default-dashboard.yaml',
         'grafana/data/dashboard/Docker Monitoring.json',
-        'grafana/data/provisioning/influxdb.yml',      ],
+        'grafana/data/provisioning/influxdb.yml',
+      ],
     },
   ],
 };
