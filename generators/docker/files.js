@@ -19,7 +19,7 @@
 import { DOCKER_DIR } from '../generator-dotnetcore-constants.js';
 
 export const dockerFiles = {
-  docker: [
+  sonar: [
     {
       templates: ['SonarAnalysis.ps1', 'SonarQube.Analysis.xml'],
     },
