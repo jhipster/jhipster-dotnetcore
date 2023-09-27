@@ -2,6 +2,9 @@
 
 exports[`SubGenerator common of dotnetcore JHipster blueprint > run > should succeed 1`] = `
 {
+  ".dockerignore": {
+    "stateCleared": "modified",
+  },
   ".editorconfig": {
     "stateCleared": "modified",
   },
@@ -26,7 +29,13 @@ exports[`SubGenerator common of dotnetcore JHipster blueprint > run > should suc
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "Dockerfile-Back": {
+    "stateCleared": "modified",
+  },
   "README.md": {
+    "stateCleared": "modified",
+  },
+  "docker-entrypoint-back.sh": {
     "stateCleared": "modified",
   },
   "package.json": {

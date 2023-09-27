@@ -2,40 +2,10 @@
 
 exports[`SubGenerator server of dotnetcore JHipster blueprint > run > should succeed 1`] = `
 {
-  ".editorconfig": {
-    "stateCleared": "modified",
-  },
-  ".gitattributes": {
-    "stateCleared": "modified",
-  },
-  ".gitignore": {
-    "stateCleared": "modified",
-  },
-  ".husky/pre-commit": {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": {
-    "stateCleared": "modified",
-  },
-  ".prettierignore": {
-    "stateCleared": "modified",
-  },
-  ".prettierrc": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
   "Directory.Packages.props": {
-    "stateCleared": "modified",
-  },
-  "README.md": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "sonar-project.properties": {
     "stateCleared": "modified",
   },
   "src/Jhipster.Crosscutting/Constants/Constants.cs": {
@@ -318,18 +288,6 @@ exports[`SubGenerator server of dotnetcore JHipster blueprint > run > should suc
     "stateCleared": "modified",
   },
   "src/Jhipster/appsettings.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
     "stateCleared": "modified",
   },
   "test/Jhipster.Test/Configuration/MockClaimsPrincipalProvider.cs": {

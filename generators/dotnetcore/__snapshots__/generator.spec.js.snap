@@ -303,12 +303,6 @@ exports[`SubGenerator dotnetcore of dotnetcore JHipster blueprint > run > should
   "src/Jhipster/appsettings.json": {
     "stateCleared": "modified",
   },
-  "src/test/gatling/conf/gatling.conf": {
-    "stateCleared": "modified",
-  },
-  "src/test/gatling/conf/logback.xml": {
-    "stateCleared": "modified",
-  },
   "test/Jhipster.Test/Configuration/MockClaimsPrincipalProvider.cs": {
     "stateCleared": "modified",
   },
