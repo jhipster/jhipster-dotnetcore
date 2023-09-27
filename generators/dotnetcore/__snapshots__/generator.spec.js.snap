@@ -21,6 +21,12 @@ exports[`SubGenerator dotnetcore of dotnetcore JHipster blueprint > run > should
   "Directory.Packages.props": {
     "stateCleared": "modified",
   },
+  "SonarAnalysis.ps1": {
+    "stateCleared": "modified",
+  },
+  "SonarQube.Analysis.xml": {
+    "stateCleared": "modified",
+  },
   "docker/app.yml": {
     "stateCleared": "modified",
   },
