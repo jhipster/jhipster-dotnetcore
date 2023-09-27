@@ -28,4 +28,27 @@ describe('SubGenerator blazor of dotnetcore JHipster blueprint', () => {
       expect(result.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
   });
+
+  describe('generating dto', () => {
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig({}, [
+          {
+            name: 'Person',
+            dto: 'mapstruct',
+          },
+        ])
+        .withOptions({
+          ignoreNeedlesError: true,
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('should succeed', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
 });

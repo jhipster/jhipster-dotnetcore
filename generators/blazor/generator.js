@@ -32,7 +32,11 @@ export default class extends BaseApplicationGenerator {
         for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
           await this.writeFiles({
             sections: entityFiles,
-            context: { ...application, ...entity },
+            context: {
+              ...application,
+              ...entity,
+              asDto: str => `${str}${application.dtoSuffix}`,
+            },
           });
           /*
           const blazorNeedle = new BlazorNeedle(this);
