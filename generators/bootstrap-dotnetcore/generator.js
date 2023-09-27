@@ -37,9 +37,14 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
       async loadingTemplateTask({ application }) {
-        application.namespace = this.jhipsterConfig.namespace;
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
+        application.databaseType = this.jhipsterConfig.databaseType;
+        application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
+        if (application.databaseType !== 'mongodb') {
+          application.prodDatabaseType = application.databaseType;
+        }
+
         application.SERVER_SRC_DIR = SERVER_SRC_DIR;
         application.SERVER_TEST_DIR = SERVER_TEST_DIR;
 
