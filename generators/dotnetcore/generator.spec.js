@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
+
+import { SERVER_SRC_DIR } from '../generator-dotnetcore-constants.js';
 
 const SUB_GENERATOR = 'dotnetcore';
 const SUB_GENERATOR_NAMESPACE = `jhipster-dotnetcore:${SUB_GENERATOR}`;
@@ -75,6 +76,48 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertNoFile('terraform/main.tf');
       result.assertNoFile('terraform/variables.tf');
       result.assertNoFile('terraform/outputs.tf');
+    });
+  });
+
+  describe('generating dto', () => {
+    const personClass = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain/Entities/Person.cs`;
+    const personDto = `${SERVER_SRC_DIR}JhipsterBlueprint.Dto/PersonDto.cs`;
+    const dtoMappingFile = `${SERVER_SRC_DIR}JhipsterBlueprint/Configuration/AutoMapper/AutoMapperProfile.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Person',
+              dto: 'mapstruct',
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('check if required files for dto are copied', () => {
+      result.assertFile('.jhipster/Person.json');
+      result.assertFile('.yo-rc.json');
+    });
+
+    it('checks dto files', () => {
+      console.log(result.getStateSnapshot());
+      result.assertFile(personClass);
+      result.assertFile(personDto);
+      result.assertFile(dtoMappingFile);
+      result.assertFileContent(personDto, /public class PersonDto/);
+      result.assertFileContent(dtoMappingFile, /public class AutoMapperProfile : Profile/);
     });
   });
 });
