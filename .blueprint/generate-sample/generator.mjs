@@ -7,6 +7,7 @@ export default class extends BaseGenerator {
   sampleName;
   jdlSample;
   withEntities;
+  configOnly;
 
   get [BaseGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
@@ -71,7 +72,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.END]() {
     return this.asEndTaskGroup({
       async generateSample() {
-        if (this.jdlSample) {
+        if (this.jdlSample && !this.configOnly) {
           await this.composeWithJHipster('jdl', {
             generatorArgs: [this.jdlSample],
             generatorOptions: {
@@ -81,6 +82,10 @@ export default class extends BaseGenerator {
         }
       },
       async generateApp() {
+        if (this.configOnly) {
+          return;
+        }
+
         await this.composeWithJHipster('app', {
           generatorOptions: {
             skipJhipsterDependencies: true,

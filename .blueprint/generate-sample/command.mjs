@@ -31,6 +31,10 @@ const command = {
       type: Boolean,
       scope: 'generator',
     },
+    configOnly: {
+      type: Boolean,
+      scope: 'generator',
+    },
   },
   import: [GENERATOR_APP],
 };
