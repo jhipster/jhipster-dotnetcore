@@ -26,12 +26,12 @@ import { CLIENT_SRC_DIR, CLIENT_TEST_DIR, renameDotNetCore } from '../generator-
 export const entityFiles = {
   blazorAppModels: [
     {
-      path: CLIENT_SRC_DIR,
-      renameTo: renameDotNetCore(CLIENT_SRC_DIR),
+      path: `${CLIENT_SRC_DIR}client/`,
+      renameTo: renameDotNetCore(`${CLIENT_SRC_DIR}client/`),
       templates: [
         'Project.Client/Models/_dotnetEntityModel_.cs',
         'Project.Client/Services/EntityServices/_entityClass_/_entityClass_Service.cs',
-        'Project.Client/Services/EntityServices/_entityClass_/_entityClass_Service.cs',
+        'Project.Client/Services/EntityServices/_entityClass_/I_entityClass_Service.cs',
         'Project.Client/Pages/Entities/_entityClass_/_entityClass_.razor.cs',
         'Project.Client/Pages/Entities/_entityClass_/_entityClass_.razor',
         'Project.Client/Pages/Entities/_entityClass_/_entityClass_Detail.razor.cs',

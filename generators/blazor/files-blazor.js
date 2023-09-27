@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
+import { CLIENT_SRC_DIR, CLIENT_TEST_DIR, renameDotNetCore } from '../generator-dotnetcore-constants.js';
 
 /* Constants use throughout */
 
@@ -28,8 +28,8 @@ import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constan
 export const files = {
   blazorAutoMapperProfiles: [
     {
-      path: CLIENT_SRC_DIR,
-      renameTo: (data, filename) => filename.replace('Project.Client/', data.mainClientDir),
+      path: `${CLIENT_SRC_DIR}client/`,
+      renameTo: renameDotNetCore(`${CLIENT_SRC_DIR}client/`),
       templates: [
         'Project.Client/AutoMapper/AutoMapperProfile.cs',
         'Project.Client/Models/BaseModel.cs',
@@ -95,9 +95,9 @@ export const files = {
   ],
   blazorAppWeb: [
     {
-      path: CLIENT_SRC_DIR,
+      path: `${CLIENT_SRC_DIR}client/`,
       transform: false,
-      renameTo: (data, filename) => filename.replace('Project.Client/', data.mainClientDir),
+      renameTo: renameDotNetCore(`${CLIENT_SRC_DIR}client/`),
       templates: [
         'Project.Client/wwwroot/content/images/jhipster_family_member_0.svg',
         'Project.Client/wwwroot/content/images/jhipster_family_member_1.svg',
@@ -127,7 +127,7 @@ export const files = {
   blazorTestHelpers: [
     {
       path: CLIENT_TEST_DIR,
-      renameTo: (data, filename) => filename.replace('Project.Client.Test/', data.clientTestProject),
+      renameTo: renameDotNetCore(CLIENT_TEST_DIR),
       templates: [
         'Project.Client.Test/Helpers/AuthorizationHelper.cs',
         'Project.Client.Test/Helpers/MockAuthenticationService.cs',
