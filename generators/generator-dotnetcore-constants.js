@@ -17,6 +17,20 @@
  * limitations under the License.
  */
 
+export const renameDotNetCore =
+  (prefix = SERVER_SRC_DIR) =>
+  (data, filepath) =>
+    prefix +
+    filepath
+      .replace(/^Project\./, `${data.pascalizedBaseName}.`)
+      .replace(/^Project\//, `${data.pascalizedBaseName}/`)
+      .replace('_withEntities_', '')
+      .replace('_dotnetEntityModel_', data.dotnetEntityModel)
+      .replaceAll('_persistClass_', data.persistClass)
+      .replace('_entityClass_', data.entityClass)
+      .replace('_pascalizedEntityClassPlural_', data.pascalizedEntityClassPlural)
+      .replace('_dtoClass_', data.dtoClass);
+
 export {
   SERVER_SRC_DIR,
   CLIENT_SRC_DIR,

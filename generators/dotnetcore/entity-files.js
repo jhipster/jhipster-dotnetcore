@@ -18,20 +18,7 @@
  */
 /* Constants use throughout */
 
-import { SERVER_SRC_DIR, SERVER_TEST_DIR } from '../generator-dotnetcore-constants.js';
-
-const renameDotNetCore =
-  (prefix = SERVER_SRC_DIR) =>
-  (data, filepath) =>
-    prefix +
-    filepath
-      .replace(/^Project\./, `${data.pascalizedBaseName}.`)
-      .replace(/^Project\//, `${data.pascalizedBaseName}/`)
-      .replace('_withEntities_', '')
-      .replaceAll('_persistClass_', data.persistClass)
-      .replace('_entityClass_', data.entityClass)
-      .replace('_pascalizedEntityClassPlural_', data.pascalizedEntityClassPlural)
-      .replace('_dtoClass_', data.dtoClass);
+import { SERVER_SRC_DIR, SERVER_TEST_DIR, renameDotNetCore } from '../generator-dotnetcore-constants.js';
 
 export const entityFiles = {
   server: [

@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
 import { files } from './files-blazor.js';
 import { access } from 'fs/promises';
+import { entityFiles } from './entities-blazor.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -21,6 +22,26 @@ export default class extends BaseApplicationGenerator {
           sections: files,
           context: application,
         });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup({
+      async writingEntitiesTemplateTask({ application, entities }) {
+        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
+          await this.writeFiles({
+            sections: entityFiles,
+            context: { ...application, ...entity },
+          });
+          /*
+          const blazorNeedle = new BlazorNeedle(this);
+          blazorNeedle.addEntityToMenu(this.entityClass);
+          blazorNeedle.addServiceInDI(this.entityClass);
+          blazorNeedle.addUsingForService(this.namespace, this.entityClass);
+          blazorNeedle.addDtoMapping(this.entityClass);
+          */
+        }
       },
     });
   }

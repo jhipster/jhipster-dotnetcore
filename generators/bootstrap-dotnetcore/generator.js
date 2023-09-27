@@ -108,6 +108,7 @@ export default class extends BaseApplicationGenerator {
       async preparingTemplateTask({ application, entity }) {
         entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : 'long';
 
+        entity.dotnetEntityModel = `${generator.entityClass}${application.modelSuffix}`;
         entity.pascalizedEntityClass = toPascalCase(entity.entityClass);
         entity.pascalizedEntityClassPlural = toPascalCase(entity.entityClassPlural);
         entity.snakeCasedEntityClass = this._.snakeCase(entity.entityClass);
