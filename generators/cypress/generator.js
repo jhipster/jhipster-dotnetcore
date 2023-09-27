@@ -18,8 +18,8 @@ export default class extends BaseApplicationGenerator {
         this.editFile(`${application.cypressDir}e2e/account/settings-page.cy.ts`, content =>
           content
             .replace(
-              `it("should be able to change 'user' firstname settings"`,
-              `it.skip("should be able to change 'user' firstname settings"`,
+              `it("should not be able to change 'user' email to same value"`,
+              `it.skip("should not be able to change 'user' email to same value"`,
             )
             .replace(
               `it("should be able to change 'user' lastname settings"`,
