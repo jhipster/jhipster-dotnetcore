@@ -57,6 +57,25 @@
         "sbs": true,
         "written": true
       },
+      "docker": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "default",
+          "writing",
+          "postWriting",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false,
+        "written": true
+      },
       "dotnetcore": {
         "command": false,
         "priorities": ["initializing", "prompting", "configuring", "composing", "preparing", "writing", "default", "install", "end"],
@@ -109,6 +128,6 @@
     "localBlueprint": false,
     "sampleWritten": true,
     "skipCommitHook": true,
-    "subGenerators": ["angular", "ci-cd", "client", "common", "cypress", "heroku", "server"]
+    "subGenerators": ["angular", "ci-cd", "client", "common", "cypress", "docker", "heroku", "server"]
   }
 }

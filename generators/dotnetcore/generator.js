@@ -4,7 +4,7 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
 import command from './command.js';
-import { baseServiceDiscoveryFiles, serverFiles } from './files.js';
+import { serverFiles } from './files.js';
 import {
   PROJECT_APPLICATION_SUFFIX,
   PROJECT_CROSSCUTTING_SUFFIX,
@@ -62,6 +62,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup({
       async composingTemplateTask() {
+        await this.composeWithJHipster('docker');
         // await this.composeWithJHipster('gatling');
       },
     });
@@ -80,12 +81,6 @@ export default class extends BaseApplicationGenerator {
           sections: serverFiles,
           context: application,
           rootTemplatesPath: 'dotnetcore',
-        });
-      },
-      async writeFilesBaseServiceDiscovery({ application }) {
-        await this.writeFiles({
-          sections: baseServiceDiscoveryFiles,
-          context: application,
         });
       },
       async writeDirectoryTargetsFile({ application }) {

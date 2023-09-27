@@ -21,7 +21,6 @@ import constants from '../generator-dotnetcore-constants.cjs';
 /* Constants use throughout */
 const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
 const SERVER_TEST_DIR = constants.SERVER_TEST_DIR;
-const DOCKER_DIR = constants.DOCKER_DIR;
 const PROJECT_DOMAIN_SUFFIX = constants.PROJECT_DOMAIN_SUFFIX;
 const PROJECT_APPLICATION_SUFFIX = constants.PROJECT_APPLICATION_SUFFIX;
 const PROJECT_DTO_SUFFIX = constants.PROJECT_DTO_SUFFIX;
@@ -1365,66 +1364,6 @@ export const serverFiles = {
       ],
     },
   ],
-  /*
-  docker: [
-    {
-      path: DOCKER_DIR,
-      templates: ['app.yml', 'sonar.yml', 'monitoring.yml'],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [{ file: 'telegraf/telegraf.conf', renameTo: () => 'telegraf/telegraf.conf' }],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [{ file: 'kapacitor/config/kapacitor.conf', renameTo: () => 'kapacitor/config/kapacitor.conf' }],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [{ file: 'influxdb/config/influxdb.conf', renameTo: () => 'influxdb/config/influxdb.conf' }],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [
-        { file: 'grafana/data/dashboard/default-dashboard.yaml', renameTo: () => 'grafana/data/dashboard/default-dashboard.yaml' },
-      ],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [
-        { file: 'grafana/data/dashboard/Docker Monitoring.json', renameTo: () => 'grafana/data/dashboard/Docker Monitoring.json' },
-      ],
-    },
-    {
-      path: DOCKER_DIR,
-      templates: [{ file: 'grafana/data/provisioning/influxdb.yml', renameTo: () => 'grafana/data/provisioning/influxdb.yml' }],
-    },
-    {
-      path: '',
-      templates: [{ file: 'SonarAnalysis.ps1', renameTo: () => 'SonarAnalysis.ps1' }],
-    },
-    {
-      path: '',
-      templates: [{ file: 'SonarQube.Analysis.xml', renameTo: () => 'SonarQube.Analysis.xml' }],
-    },
-    {
-      condition: generator => generator.authenticationType === 'oauth2',
-      path: DOCKER_DIR,
-      templates: [
-        'keycloak.yml',
-        {
-          file: 'keycloak/config/realm-config/jhipster-realm.json',
-          renameTo: () => 'keycloak/config/realm-config/jhipster-realm.json',
-        },
-        {
-          file: 'keycloak/config/realm-config/jhipster-users-0.json',
-          method: 'copy',
-          renameTo: () => 'keycloak/config/realm-config/jhipster-users-0.json',
-        },
-      ],
-    },
-  ],
-  */
   serverServiceDiscovery: [
     {
       condition: generator =>
@@ -1438,23 +1377,6 @@ export const serverFiles = {
         {
           file: 'Project/Configuration/Consul/ConsulStartup.cs',
           renameTo: generator => `${generator.mainProjectDir}/Configuration/Consul/ConsulStartup.cs`,
-        },
-      ],
-    },
-    {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
-      path: DOCKER_DIR,
-      templates: [
-        'consul.yml',
-        {
-          file: 'central-server-config/application.json',
-          method: 'copy',
-          renameTo: () => 'central-server-config/application.json',
-        },
-        {
-          file: 'central-server-config/README.md',
-          method: 'copy',
-          renameTo: () => 'central-server-config/README.md',
         },
       ],
     },
@@ -1489,16 +1411,6 @@ export const gatlingTestsFiles = {
         'gatling/conf/gatling.conf',
         'gatling/conf/logback.xml',
       ],
-    },
-  ],
-};
-
-export const baseServiceDiscoveryFiles = {
-  baseServiceDiscovery: [
-    {
-      condition: generator => generator.serviceDiscoveryType && generator.serviceDiscoveryType === 'consul',
-      path: DOCKER_DIR,
-      templates: [{ file: 'config/git2consul.json', method: 'copy' }],
     },
   ],
 };

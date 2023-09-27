@@ -68,6 +68,7 @@ export default class extends BaseApplicationGenerator {
       async preparingTemplateTask({ application }) {
         application.withAdminUi = false;
         application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
+        application.dockerServicesDir = 'docker/';
 
         application.camelizedBaseName = this._.camelCase(application.baseName);
         application.dasherizedBaseName = this._.kebabCase(application.baseName);
