@@ -172,4 +172,48 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertFileContent(efMappings, /builder\.Entity<Order>\(\)\s+\.Property\(e => e.Status\)\s+\.HasConversion<string>\(\);/);
     });
   });
+
+  describe('generating service interface and implementation', () => {
+    const personService = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain.Services/PersonService.cs`;
+    const personServiceInterface = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain/Services/Interfaces/IPersonService.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Person',
+              dto: 'mapstruct',
+              service: 'serviceImpl',
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('check if required files are copied', () => {
+      // result.assertFile('.jhipster/Person.json');
+      result.assertFile('.yo-rc.json');
+    });
+
+    it('checks if service interface and implementation files exist', () => {
+      // result.assertFile(personClass);
+      result.assertFile(personService);
+      result.assertFile(personServiceInterface);
+    });
+
+    it('checks service interface and implementation contents', () => {
+      result.assertFileContent(personService, /public class PersonService/);
+      result.assertFileContent(personServiceInterface, /public interface IPersonService/);
+    });
+  });
 });
