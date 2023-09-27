@@ -43,6 +43,9 @@ export default class extends BaseApplicationGenerator {
         application.SERVER_SRC_DIR = SERVER_SRC_DIR;
         application.SERVER_TEST_DIR = SERVER_TEST_DIR;
 
+        if (this.jhipsterConfig.dtoSuffix === undefined || application.dtoSuffix === 'DTO') {
+          application.dtoSuffix = 'Dto';
+        }
         application.pascalizedBaseName = toPascalCase(application.baseName);
         application.solutionName = application.pascalizedBaseName;
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
@@ -126,7 +129,11 @@ export default class extends BaseApplicationGenerator {
         entity.asModel = utilsNet.asModel;
 
         for (const relationship of entity.relationships ?? []) {
-          if (!relationship.otherRelationship && entity.databaseType !== 'mongodb') {
+          if (
+            !relationship.otherRelationship &&
+            entity.databaseType !== 'mongodb' &&
+            (relationship.relationshipType === 'many-to-many' || relationship.relationshipType === 'one-to-many')
+          ) {
             relationship.otherRelationship = addOtherRelationship(entity, relationship.otherEntity, relationship);
           }
         }

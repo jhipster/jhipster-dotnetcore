@@ -1,6 +1,8 @@
 import { access } from 'fs/promises';
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import chalk from 'chalk';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
+
 import command from './command.js';
 import { baseServiceDiscoveryFiles, serverFiles } from './files.js';
 import {
@@ -15,7 +17,6 @@ import {
   SERVER_TEST_DIR,
 } from '../generator-dotnetcore-constants.js';
 import { entityCommonFiles, entityFiles } from './entity-files.js';
-import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {

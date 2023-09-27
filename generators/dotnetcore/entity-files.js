@@ -20,22 +20,24 @@
 
 import { SERVER_SRC_DIR, SERVER_TEST_DIR } from '../generator-dotnetcore-constants.js';
 
-const renameDotNetCore = (data, filepath) =>
-  SERVER_SRC_DIR +
-  filepath
-    .replace(/^Project\./, `${data.pascalizedBaseName}.`)
-    .replace(/^Project\//, `${data.pascalizedBaseName}/`)
-    .replace('_withEntities_', '')
-    .replaceAll('_persistClass_', data.persistClass)
-    .replace('_entityClass_', data.entityClass)
-    .replace('_pascalizedEntityClassPlural_', data.pascalizedEntityClassPlural)
-    .replace('_dtoClass_', data.dtoClass);
+const renameDotNetCore =
+  (prefix = SERVER_SRC_DIR) =>
+  (data, filepath) =>
+    prefix +
+    filepath
+      .replace(/^Project\./, `${data.pascalizedBaseName}.`)
+      .replace(/^Project\//, `${data.pascalizedBaseName}/`)
+      .replace('_withEntities_', '')
+      .replaceAll('_persistClass_', data.persistClass)
+      .replace('_entityClass_', data.entityClass)
+      .replace('_pascalizedEntityClassPlural_', data.pascalizedEntityClassPlural)
+      .replace('_dtoClass_', data.dtoClass);
 
 export const entityFiles = {
   server: [
     {
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: [
         'Project.Domain/Entities/_persistClass_.cs',
         'Project/Controllers/_pascalizedEntityClassPlural_Controller.cs',
@@ -48,7 +50,7 @@ export const entityFiles = {
     {
       condition: generator => generator.cqrsEnabled === true,
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: [
         'Project.Application/Queries/_persistClass_/_persistClass_GetQuery.cs',
         'Project.Application/Queries/_persistClass_/_persistClass_GetQueryHandler.cs',
@@ -65,20 +67,20 @@ export const entityFiles = {
     {
       condition: generator => generator.dto === 'mapstruct',
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: ['Project.Dto/_dtoClass_.cs'],
     },
     {
       condition: generator => generator.dto === 'mapstruct',
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: ['Project.Dto/AuditedEntityBaseDto.cs'],
     },
   ],
   test: [
     {
       path: SERVER_TEST_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(SERVER_TEST_DIR),
       templates: ['Project.Test/Controllers/_persistClass_ControllerIntTest.cs'],
     },
   ],
@@ -86,7 +88,7 @@ export const entityFiles = {
     {
       condition: generator => generator.service === 'serviceImpl' && generator.cqrsEnabled !== true,
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: ['Project.Domain.Services/_entityClass_Service.cs', 'Project.Domain/Services/Interfaces/I_entityClass_Service.cs'],
     },
   ],
@@ -96,7 +98,7 @@ export const entityCommonFiles = {
   server: [
     {
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: ['Project/Configuration/AutoMapper/AutoMapperProfile_withEntities_.cs'],
     },
   ],
@@ -104,7 +106,7 @@ export const entityCommonFiles = {
     {
       condition: generator => generator.databaseType !== 'mongodb',
       path: SERVER_SRC_DIR,
-      renameTo: renameDotNetCore,
+      renameTo: renameDotNetCore(),
       templates: ['Project.Infrastructure/Data/ApplicationDatabaseContext_withEntities_.cs'],
     },
   ],
