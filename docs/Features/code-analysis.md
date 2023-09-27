@@ -2,12 +2,12 @@
 
 ## Running SonarQube by script
 
-1. Run Sonar in container : `docker-compose -f ./docker/sonar.yml up -d`
+1. Run Sonar in container : `docker compose -f ./docker/sonar.yml up -d`
 2. Wait container was up Run `SonarAnalysis.ps1` and go to http://localhost:9001
 
 ## Running SonarQube manually
 
-1. Run Sonar in container : `docker-compose -f ./docker/sonar.yml up -d`
+1. Run Sonar in container : `docker compose -f ./docker/sonar.yml up -d`
 
 2. Install sonar scanner for .net :
 

@@ -39,7 +39,7 @@ OAuth is a stateful security mechanism, like HTTP Session. Spring Security provi
 To log into your application, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
 
 ```
-docker-compose -f ./docker/keycloak.yml up
+docker compose -f ./docker/keycloak.yml up
 ```
 
 The security settings in `appsettings.json` are configured for this image.

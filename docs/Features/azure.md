@@ -6,7 +6,7 @@ Currently supports only monolithic app with SQL Server as database (support for 
 
 ### Prerequisites
 
-1. [Docker](https://www.docker.com/products/docker-desktop) installed with docker-compose and have push access to any of the docker repository like docker hub or Azure container registry.
+1. [Docker](https://www.docker.com/products/docker-desktop) installed with docker compose and have push access to any of the docker repository like docker hub or Azure container registry.
 2. [Azure CLI](https://docs.microsoft.com/fr-fr/cli/azure/install-azure-cli) installed on your system. Terraform will require it to authenticate in Azure subscription.
 3. [Terraform CLI](https://www.terraform.io/downloads.html) installed on your system.
 
@@ -15,10 +15,10 @@ Currently supports only monolithic app with SQL Server as database (support for 
 1. Execute generate app command and select app as Monolithic with Microsoft SQL server as database. Select **yes** to generate Terraform scripts. (_default:_ is _No_)
    ![use-azure](../assets/use-azure.png)
 
-2. Use docker-compose command to first build the docker image.
+2. Use docker compose command to first build the docker image.
 
 ```bash
-docker-compose -f docker/app.yml build
+docker compose -f docker/app.yml build
 ```
 
 3. Tag the image built during the previous step to push to docker repository by using

@@ -11,7 +11,7 @@ source $(dirname $0)/01-init-env.sh
 #-------------------------------------------------------------------------------
 
 if [[ "$3" != "blazor" ]]; then
-  docker-compose -f docker/app.yml up -d
+  docker compose -f docker/app.yml up -d
 
   timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://localhost:8080/health)" != "200" ]]; do echo "Waiting for http://localhost:8080/health" && sleep 5; done' || false
 
@@ -28,7 +28,7 @@ if [[ "$3" != "blazor" ]]; then
 
   cd ../../../
 
-  docker-compose -f docker/app.yml down
+  docker compose -f docker/app.yml down
 
 fi
 

@@ -183,13 +183,13 @@ jhipster import-jdl my_file.jdl
 
 By Script :
 
-1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
+1. Run Sonar in container : ```docker compose -f ./docker/sonar.yml up -d```
 
 2. Wait container was up Run ```SonarAnalysis.ps1``` and go to http://localhost:9001
 
 Manually :
 
-1. Run Sonar in container : ```docker-compose -f ./docker/sonar.yml up -d```
+1. Run Sonar in container : ```docker compose -f ./docker/sonar.yml up -d```
 
 2. Install sonar scanner for .net :
 
@@ -205,7 +205,7 @@ Manually :
 
 ### Monitoring
 
-1. Run container (uncomment chronograf and kapacitor if you would use it): ```docker-compose -f ./docker/monitoring.yml up -d```
+1. Run container (uncomment chronograf and kapacitor if you would use it): ```docker compose -f ./docker/monitoring.yml up -d```
 
 2. Go to http://localhost:3000 (or http://localhost:8888 if you use chronograf)
 
@@ -248,13 +248,13 @@ docker run -p 8081:80 -e ServerUrl=https://localhost:8080 <%= baseName.toLowerCa
 Or you can simply run :
 
 ```bash
-docker-compose -f .\docker\app.yml build
+docker compose -f .\docker\app.yml build
 ```
 
 And
 
 ```bash
-docker-compose -f .\docker\app.yml up
+docker compose -f .\docker\app.yml up
 ```
 
 <% if (testFrameworks.includes("gatling")) { %>[Gatling]: http://gatling.io/<% } %>

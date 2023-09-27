@@ -1,6 +1,6 @@
 # Monitoring
 
-1. Run container (uncomment chronograf and kapacitor if you would use it): `docker-compose -f ./docker/monitoring.yml up -d`
+1. Run container (uncomment chronograf and kapacitor if you would use it): `docker compose -f ./docker/monitoring.yml up -d`
 
 2. Go to http://localhost:3000 (or http://localhost:8888 if you use chronograf)
 3. (Only for chronograf) Change influxdb connection string by `YourApp-influxdb`

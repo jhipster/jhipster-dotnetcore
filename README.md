@@ -156,13 +156,13 @@ docker run -d -p [A host port]:80 [Image name]:[Image tag]
 Docker compose file can be used to start the application with database as a service. To build images, run
 
 ```bash
-docker-compose -f docker/app.yml build
+docker compose -f docker/app.yml build
 ```
 
 To start services, use
 
 ```bash
-docker-compose -f docker/app.yml up
+docker compose -f docker/app.yml up
 ```
 
 In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/main/OracleDatabase/SingleInstance/README.md)
