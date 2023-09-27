@@ -16,9 +16,11 @@ export default class extends BaseApplicationGenerator {
         this.deleteDestination(`${application.cypressDir}integration/administration/administration.spec.ts`);
       },
       updateCypressJson({ application }) {
+        /*
         this.editFile(`${application.clientAppRootDir}cypress.config.ts`, content =>
           content.replace(`http://localhost:${application.serverPort}`, `https://localhost:${application.serverPortSecured}`),
         );
+        */
       },
     });
   }
