@@ -14,6 +14,63 @@ export default class extends BaseApplicationGenerator {
     await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
   }
 
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      async preparingTemplateTask({ application, source }) {
+        source.addEntityToMenu = ({ entityName }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/Views/MenuPage.xaml`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-entity-to-menu',
+              contentToAdd: `
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="StartAndExpand" Padding="8" BackgroundColor="LightBlue" IsVisible="{Binding IsConnected}">
+                    <Label Text="${entityName}" />
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ToggleClicked" Command="{Binding Show${entityName}Command}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>`,
+              autoIndent: true,
+            }),
+          );
+
+        source.declareCommandToMenu = ({ entityName }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/ViewModels/MenuViewModel.cs`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-declare-entity-command',
+              contentToAdd: `public IMvxCommand Show${entityName}Command => new MvxAsyncCommand(${entityName}CommandClicked);`,
+              autoIndent: true,
+            }),
+          );
+
+        source.addCommandToMenu = ({ entityName }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/ViewModels/MenuViewModel.cs`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-entity-command',
+              contentToAdd: `
+                private async Task ${entityName}CommandClicked() {
+                    await _navigationService.Navigate<${entityName}ViewModel>();
+                }`,
+              autoIndent: true,
+            }),
+          );
+
+        source.addServiceInDI = ({ entityName }) =>
+          this.editFile(
+            `src/${application.mainClientDir}/App.cs`,
+            createNeedleCallback({
+              needle: 'jhipster-needle-add-services-in-di',
+              contentToAdd: `
+                var ${lowerEntityName}Service = new ${entityName}Service(httpClient);                       
+                Mvx.IoCProvider.RegisterSingleton<I${entityName}Service>(${lowerEntityName}Service);`,
+              autoIndent: true,
+            }),
+          );
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
@@ -33,17 +90,24 @@ export default class extends BaseApplicationGenerator {
             sections: entityFiles,
             context: { ...application, ...entity },
           });
-          /*
-  const xamarinNeedle = new XamarinNeedle(this);
-  xamarinNeedle.addEntityToMenu(this.entityClass);
-  xamarinNeedle.addServiceInDI(this.entityClass);
-  xamarinNeedle.addCommandToMenu(this.entityClass);
-  xamarinNeedle.declareCommandToMenu(this.entityClass);
-          */
         }
       },
     });
   }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup({
+      async postWritingEntitiesTemplateTask({ entities, source }) {
+        for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipClient)) {
+          source.addEntityToMenu({ entityName: entity.entityClass });
+          source.addServiceInDI({ entityName: entity.entityClass });
+          source.addCommandToMenu({ entityName: entity.entityClass });
+          source.declareCommandToMenu({ entityName: entity.entityClass });
+        }
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.INSTALL]() {
     return this.asInstallTaskGroup({
       async install({ application }) {

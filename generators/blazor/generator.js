@@ -26,10 +26,11 @@ export default class extends BaseApplicationGenerator {
             entityMenuPath,
             createNeedleCallback({
               needle: 'jhipster-needle-add-entity-to-menu',
-              contentToAdd: `<BarDropdownItem Class="dropdown-item" To="${lowerCasedEntityName}">
-    <Icon Name='"fa-asterisk"' />
-    ${entityName}
-</BarDropdownItem>`,
+              contentToAdd: `
+                <BarDropdownItem Class="dropdown-item" To="${lowerCasedEntityName}">
+                    <Icon Name='"fa-asterisk"' />
+                    ${entityName}
+                </BarDropdownItem>`,
               contentToCheck: `To="${lowerCasedEntityName}"`,
               autoIndent: true,
             }),
