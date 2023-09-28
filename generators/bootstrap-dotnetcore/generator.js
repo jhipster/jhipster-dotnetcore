@@ -62,7 +62,6 @@ export default class extends BaseApplicationGenerator {
 
         application.temporaryDir = 'temp/';
         application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
-        application.clientAppRootDir = `src/${application.mainProjectDir}ClientApp/`;
         application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
         application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
         application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
