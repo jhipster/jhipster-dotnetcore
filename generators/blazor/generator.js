@@ -101,7 +101,7 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
-      async postWritingTemplateTask() {
+      async postWritingTemplateTask({ application }) {
         this.packageJson.merge({
           scripts: {
             test: `cd test/${application.clientTestProject} && dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover`,
