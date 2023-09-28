@@ -21,4 +21,13 @@ export default class extends BaseApplicationGenerator {
       },
     });
   }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
+      async postWritingTemplateTask({ application }) {
+        // TODO drop if jhipster generates.
+        this.editFile(`${application.clientRootDir}.eslintignore`, content => `${content}\ndist\n`);
+      },
+    });
+  }
 }
