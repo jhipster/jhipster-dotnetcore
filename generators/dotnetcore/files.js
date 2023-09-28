@@ -16,10 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-dotnetcore-constants.cjs';
-
-/* Constants use throughout */
-const {
+import {
   SERVER_SRC_DIR,
   SERVER_TEST_DIR,
   PROJECT_DOMAIN_SUFFIX,
@@ -29,7 +26,8 @@ const {
   PROJECT_INFRASTRUCTURE_SUFFIX,
   PROJECT_SERVICE_SUFFIX,
   TERRAFORM_DIR,
-} = constants;
+  PROJECT_TEST_SUFFIX,
+} from '../generator-dotnetcore-constants.js';
 
 export const serverFiles = {
   serverCsProj: [
@@ -47,7 +45,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Test/Project.Test.csproj',
-          renameTo: generator => `${generator.testProjectDir}/${generator.pascalizedBaseName}${constants.PROJECT_TEST_SUFFIX}.csproj`,
+          renameTo: generator => `${generator.testProjectDir}/${generator.pascalizedBaseName}${PROJECT_TEST_SUFFIX}.csproj`,
         },
       ],
     },
@@ -252,7 +250,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Dto/ManagedUserDto.cs',
-          renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/ManagedUserDto.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/ManagedUserDto.cs`,
         },
       ],
     },
@@ -262,7 +260,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Dto/PasswordChangeDto.cs',
-          renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/PasswordChangeDto.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/Authentication/PasswordChangeDto.cs`,
         },
       ],
     },
@@ -272,7 +270,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Dto/UserDto.cs',
-          renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/UserDto.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/UserDto.cs`,
         },
       ],
     },
@@ -281,7 +279,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Dto/ProfileInfoDto.cs',
-          renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/ProfileInfo/ProfileInfoDto.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/ProfileInfo/ProfileInfoDto.cs`,
         },
       ],
     },
@@ -291,7 +289,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Dto/KeyAndPasswordDto.cs',
-          renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/KeyAndPasswordDto.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/Authentication/KeyAndPasswordDto.cs`,
         },
       ],
     },
@@ -301,7 +299,7 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Dto/LoginDto.cs',
-          renameTo: generator => `${generator.pascalizedBaseName}${constants.PROJECT_DTO_SUFFIX}/Authentication/LoginDto.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_DTO_SUFFIX}/Authentication/LoginDto.cs`,
         },
       ],
     },
@@ -566,18 +564,15 @@ export const serverFiles = {
       templates: [
         {
           file: 'Project.Infrastructure/Configuration/SecuritySettings.cs',
-          renameTo: generator =>
-            `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/SecuritySettings.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/SecuritySettings.cs`,
         },
         {
           file: 'Project.Infrastructure/Configuration/IMongoDatabaseConfig.cs',
-          renameTo: generator =>
-            `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/IMongoDatabaseConfig.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/IMongoDatabaseConfig.cs`,
         },
         {
           file: 'Project.Infrastructure/Configuration/MongoDatabaseConfig.cs',
-          renameTo: generator =>
-            `${generator.pascalizedBaseName}${constants.PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/MongoDatabaseConfig.cs`,
+          renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_INFRASTRUCTURE_SUFFIX}/Configuration/MongoDatabaseConfig.cs`,
         },
       ],
     },

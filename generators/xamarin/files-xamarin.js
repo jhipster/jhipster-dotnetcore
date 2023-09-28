@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.cjs';
+import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.js';
 
 /**
  * The default is to use a file path string. It implies use of the template method.

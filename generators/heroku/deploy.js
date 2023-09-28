@@ -21,7 +21,7 @@ const ChildProcess = require('child_process');
 const util = require('util');
 const Which = require('which');
 const { OAUTH2 } = require('generator-jhipster/jdl/jhipster/authentication-types');
-const { BLAZOR } = require('../generator-dotnetcore-constants.cjs');
+const { BLAZOR } = require('../generator-dotnetcore-constants.js');
 
 const execFileCmd = util.promisify(ChildProcess.execFile);
 

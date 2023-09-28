@@ -16,8 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+export const SERVER_SRC_DIR = 'src/';
+export const CLIENT_SRC_DIR = 'src/';
+export const CLIENT_TEST_DIR = 'test/';
+export const SERVER_TEST_DIR = 'test/';
+export const PROJECT_TEST_SUFFIX = '.Test';
+export const PROJECT_DTO_SUFFIX = '.Dto';
+export const PROJECT_DOMAIN_SUFFIX = '.Domain';
+export const PROJECT_APPLICATION_SUFFIX = '.Application';
+export const DOCKER_DIR = 'docker/';
+export const PROJECT_CROSSCUTTING_SUFFIX = '.Crosscutting';
+export const PROJECT_INFRASTRUCTURE_SUFFIX = '.Infrastructure';
+export const PROJECT_SERVICE_SUFFIX = '.Domain.Services';
+export const BLAZOR = 'Blazor';
+export const XAMARIN = 'Xamarin';
+export const TERRAFORM_DIR = 'terraform/';
+export const GITHUB = 'Github';
+export const GITLAB = 'Gitlab';
 
-import { SERVER_SRC_DIR } from './generator-dotnetcore-constants.cjs';
+// Version of Node, NPM
+export const NODE_VERSION = '16.14.0';
+export const NPM_VERSION = '8.6.0';
 
 export const renameDotNetCore =
   (prefix = SERVER_SRC_DIR) =>
@@ -33,25 +52,3 @@ export const renameDotNetCore =
       .replaceAll('_entityClass_', data.entityClass)
       .replace('_pascalizedEntityClassPlural_', data.pascalizedEntityClassPlural)
       .replace('_dtoClass_', data.dtoClass);
-
-export {
-  SERVER_SRC_DIR,
-  CLIENT_SRC_DIR,
-  CLIENT_TEST_DIR,
-  SERVER_TEST_DIR,
-  PROJECT_DTO_SUFFIX,
-  PROJECT_DOMAIN_SUFFIX,
-  PROJECT_APPLICATION_SUFFIX,
-  PROJECT_TEST_SUFFIX,
-  DOCKER_DIR,
-  PROJECT_CROSSCUTTING_SUFFIX,
-  PROJECT_INFRASTRUCTURE_SUFFIX,
-  PROJECT_SERVICE_SUFFIX,
-  BLAZOR,
-  XAMARIN,
-  TERRAFORM_DIR,
-  NODE_VERSION,
-  NPM_VERSION,
-  GITHUB,
-  GITLAB,
-} from './generator-dotnetcore-constants.cjs';

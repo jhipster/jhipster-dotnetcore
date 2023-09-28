@@ -206,12 +206,10 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
     });
 
     it('check if required files are copied', () => {
-      // result.assertFile('.jhipster/Person.json');
       result.assertFile('.yo-rc.json');
     });
 
     it('checks if service interface and implementation files exist', () => {
-      // result.assertFile(personClass);
       result.assertFile(personService);
       result.assertFile(personServiceInterface);
     });

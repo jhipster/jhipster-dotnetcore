@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import constants from '../generator-dotnetcore-constants.cjs';
+import { BLAZOR } from '../generator-dotnetcore-constants.js';
 
 export const files = {
   general: [
@@ -34,7 +34,7 @@ export const files = {
       templates: ['Dockerfile-Back', 'docker-entrypoint-back.sh', '.dockerignore'],
     },
     {
-      condition: generator => generator.clientFramework === constants.BLAZOR,
+      condition: generator => generator.clientFramework === BLAZOR,
       templates: ['Dockerfile-Front', 'docker-entrypoint-front.sh', 'nginx.conf', 'default.conf'],
     },
   ],

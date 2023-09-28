@@ -2,12 +2,7 @@ import ServerGenerator from 'generator-jhipster/generators/server';
 
 export default class extends ServerGenerator {
   constructor(args, opts, features) {
-    super(args, opts, {
-      ...features,
-      checkBlueprint: true,
-      // Dropped it once migration is done.
-      jhipster7Migration: true,
-    });
+    super(args, opts, { ...features, checkBlueprint: true });
   }
 
   get [ServerGenerator.COMPOSING]() {
