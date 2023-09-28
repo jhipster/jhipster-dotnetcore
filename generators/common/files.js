@@ -23,6 +23,7 @@ export const files = {
     {
       templates: [
         '.gitignore.jhi.dotnetcore-common',
+        '.devcontainer/devcontainer.json',
         // TODO convert to .jhi
         // 'README.md',
       ],
