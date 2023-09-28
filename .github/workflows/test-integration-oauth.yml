@@ -34,8 +34,10 @@ jobs:
         include:
           - app-type: oauth-with-angular-app
             arg: 'import-jdl'
+            extra-args: '--with-entities'
           - app-type: oauth-with-angular-cqrs-app
             arg: 'import-jdl'
+            extra-args: '--with-entities'
           - app-type: oauth-with-mssql-app
             arg: 'no'
           - app-type: oauth-with-mysql-app
@@ -50,8 +52,10 @@ jobs:
             arg: 'no'
           - app-type: oauth-with-react-app
             arg: 'import-jdl'
+            extra-args: '--with-entities'
           - app-type: oauth-with-vue-app
             arg: 'import-jdl'
+            extra-args: '--with-entities'
     env:
       JHI_APP: ${{ matrix.app-type }}
       JHI_ARG: ${{ matrix.arg }}
@@ -79,14 +83,20 @@ jobs:
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
         run: npm ci && npm link
       - name: 'GENERATE JHipster.NET app'
-        run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP $JHI_ARG
+        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
       - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-        run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
+        run: dotnet build
+        env:
+          NODE_ENV: development
+          APP_VERSION: 1.0
       - name: 'GENERATE JHipster.NET entities'
-        run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
+        run: ../jhipster-dotnetcore/test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
       - name: 'RUN CLIENT UNIT TESTS of generated app'
-        run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP
+        run: ../jhipster-dotnetcore/test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
       - name: 'RUN SERVER UNIT TESTS of generated app'
-        run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+        run: ../jhipster-dotnetcore/test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
       - name: 'VERIFY FORMAT'
-        run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
+        run: ../jhipster-dotnetcore/test-integration/scripts/09-verify-format.sh $JHI_APP
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2

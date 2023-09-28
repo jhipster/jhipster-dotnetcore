@@ -55,20 +55,26 @@ jobs:
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
         run: npm ci && npm link
       - name: 'GENERATE JHipster.NET app'
-        run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
+        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
       - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-        run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
+        run: dotnet build
+        env:
+          NODE_ENV: development
+          APP_VERSION: 1.0
       - name: 'GENERATE JHipster.NET entities'
-        run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
+        run: ../jhipster-dotnetcore/test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: 'RUN SERVER UNIT TESTS of generated app'
-        run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+        run: ../jhipster-dotnetcore/test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
       - name: 'RUN SONAR ANALYZE on generated app'
-        run: ./test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
+        run: ../jhipster-dotnetcore/test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: 'VERIFY FORMAT'
-        run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
+        run: ../jhipster-dotnetcore/test-integration/scripts/09-verify-format.sh $JHI_APP
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2
