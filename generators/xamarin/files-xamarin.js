@@ -147,9 +147,9 @@ export const files = {
       path: CLIENT_SRC_DIR,
       renameTo: (data, filename) => filename.replace('Project.Client.Xamarin.Android/', data.androidClientDir),
       templates: [
-        'Project.Client.Xamarin.Android/Resources/Layout/Tabbar.xml',
-        'Project.Client.Xamarin.Android/Resources/Layout/Toolbar.xml',
-        'Project.Client.Xamarin.Android/Resources/Layout/SplashScreen.xml',
+        'Project.Client.Xamarin.Android/Resources/layout/Tabbar.xml',
+        'Project.Client.Xamarin.Android/Resources/layout/Toolbar.xml',
+        'Project.Client.Xamarin.Android/Resources/layout/SplashScreen.xml',
       ],
     },
   ],
