@@ -179,11 +179,6 @@ export default class extends BaseApplicationGenerator {
           });
         }
       },
-      writeFilesGatling() {
-        /*
-        this.writeFilesToDisk(gatlingTestsFiles, this, false, this.fetchFromInstalledJHipster('entity-server/templates/src'));
-        */
-      },
     });
   }
 
