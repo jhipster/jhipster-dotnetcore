@@ -13,7 +13,6 @@
     "jhipsterVersion": "7.9.3",
     "useSass": true,
     "clientPackageManager": "npm",
-    "clientFramework": "angularX",
     "clientTheme": "none",
     "creationTimestamp": 1585496278113,
     "jhiPrefix": "jhi",
