@@ -95,8 +95,8 @@ relationship OneToMany {
 // defining multiple oneToOne relationships
 relationship OneToOne {
 	JobHistory{job} to Job,
-	JobHistory{department} to Department,
-	JobHistory{employee} to Employee
+//	JobHistory{department} to Department,
+//	JobHistory{employee} to Employee
 }
 
 relationship ManyToMany {
