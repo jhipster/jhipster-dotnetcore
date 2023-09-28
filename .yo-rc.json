@@ -5,12 +5,6 @@
     "cli": true,
     "entities": [],
     "generators": {
-      "angular": {
-        "command": false,
-        "priorities": ["postWriting"],
-        "sbs": true,
-        "written": true
-      },
       "blazor": {
         "command": false,
         "priorities": ["writing"],
@@ -128,6 +122,6 @@
     "localBlueprint": false,
     "sampleWritten": true,
     "skipCommitHook": true,
-    "subGenerators": ["angular", "ci-cd", "client", "common", "cypress", "docker", "heroku", "server"]
+    "subGenerators": ["ci-cd", "client", "common", "cypress", "docker", "heroku", "server"]
   }
 }
