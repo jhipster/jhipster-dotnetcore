@@ -164,11 +164,11 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.asPreparingEachEntityFieldTaskGroup({
       async preparingTemplateTask({ field }) {
-        field.cSharpType = equivalentCSharpType(field.fieldType),
+        field.cSharpType = equivalentCSharpType(field.fieldType);
         field.fieldNamePascalized = toPascalCase(field.fieldName);
         field.fieldNameCamelCased = this._.camelCase(field.fieldName);
 
-        const fieldType = field.fieldType;
+        const { fieldType } = field;
 
         field.fieldIsEnum = ![
           'String',

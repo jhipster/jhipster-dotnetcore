@@ -17,12 +17,13 @@
  * limitations under the License.
  */
 
-const constants = require('../generator-dotnetcore-constants.cjs');
 const baseConstants = require('generator-jhipster/generators/generator-constants');
+const constants = require('../generator-dotnetcore-constants.cjs');
+
 const { ANGULAR, REACT, VUE } = baseConstants.SUPPORTED_CLIENT_FRAMEWORKS;
 
 /* Constants use throughout */
-const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+const { SERVER_SRC_DIR } = constants;
 
 function updateWebpackCommonJs() {
   if (this.clientFramework === VUE || this.clientFramework === REACT) {

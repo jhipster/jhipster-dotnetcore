@@ -34,6 +34,8 @@
     "ejslint": "ejslint generators/**/*.ejs",
     "lint": "eslint .",
     "lint-fix": "npm run ejslint && npm run lint -- --fix",
+    "prettier-check": "prettier --check \"{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}\"",
+    "prettier-format": "prettier --write \"{,src/**/}*.{md,json,yml,html,js,ts,tsx,css,scss,vue,java}\"",
     "pretest": "npm run prettier-check && npm run lint",
     "test": "vitest run",
     "update-snapshot": "vitest run --update",

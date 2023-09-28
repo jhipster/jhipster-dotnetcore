@@ -20,7 +20,7 @@
 const constants = require('../generator-dotnetcore-constants.cjs');
 
 /* Constants use throughout */
-const SERVER_SRC_DIR = constants.SERVER_SRC_DIR;
+const { SERVER_SRC_DIR } = constants;
 
 function updateHomeTitle() {
   this.replaceContent(`${SERVER_SRC_DIR}${this.mainClientAppDir}/app/modules/home/home.tsx`, 'Java', '.Net Core', false);

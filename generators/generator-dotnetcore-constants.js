@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { SERVER_SRC_DIR } from './generator-dotnetcore-constants.js';
+import { SERVER_SRC_DIR } from './generator-dotnetcore-constants.cjs';
 
 export const renameDotNetCore =
   (prefix = SERVER_SRC_DIR) =>

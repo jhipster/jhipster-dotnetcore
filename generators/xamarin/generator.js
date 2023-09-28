@@ -1,8 +1,11 @@
+/* eslint-disable prefer-regex-literals */
+import { writeFileSync } from 'fs';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 import chalk from 'chalk';
+import { Guid } from 'js-guid';
 import { files } from './files-xamarin.js';
 import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.js';
-import { readFileSync, writeFileSync } from 'fs';
 import { entityFiles } from './entities-xamarin.js';
 
 export default class extends BaseApplicationGenerator {
@@ -62,8 +65,8 @@ export default class extends BaseApplicationGenerator {
             createNeedleCallback({
               needle: 'jhipster-needle-add-services-in-di',
               contentToAdd: `
-                var ${lowerEntityName}Service = new ${entityName}Service(httpClient);                       
-                Mvx.IoCProvider.RegisterSingleton<I${entityName}Service>(${lowerEntityName}Service);`,
+                var ${this._.lowerCase(entityName)}Service = new ${entityName}Service(httpClient);                       
+                Mvx.IoCProvider.RegisterSingleton<I${entityName}Service>(${this._.lowerCase(entityName)}Service);`,
               autoIndent: true,
             }),
           );
@@ -167,7 +170,7 @@ export default class extends BaseApplicationGenerator {
     let projectText = '';
     let dirText = '';
 
-    projectText += `\nProject("{${firstGuid}}") = "Solution Items", "Solution Items", "{${_.toUpper(Guid.newGuid())}}"`;
+    projectText += `\nProject("{${firstGuid}}") = "Solution Items", "Solution Items", "{${this._.toUpper(Guid.newGuid())}}"`;
     projectText += '\n\tProjectSection(SolutionItems) = preProject';
     projectText += '\n\t\t.editorconfig = .editorconfig';
     projectText += '\n\t\tDirectory.Packages.props = Directory.Packages.props';
@@ -184,7 +187,7 @@ export default class extends BaseApplicationGenerator {
         existingProject = existingProjects.next();
       }
       if (!alreadyExist) {
-        const randomGuid = _.toUpper(Guid.newGuid());
+        const randomGuid = this._.toUpper(Guid.newGuid());
         projectText += `\nProject("{${firstGuid}}") = "${project.name}", "${project.path}", "{${randomGuid}}"\nEndProject`;
         dirText += `\n\t\t{${randomGuid}} = {${clientDir}}`;
       }

@@ -1,10 +1,10 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import chalk from 'chalk';
+import { access } from 'fs/promises';
+import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
 import { files } from './files-blazor.js';
-import { access } from 'fs/promises';
 import { entityFiles } from './entities-blazor.js';
-import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -149,7 +149,7 @@ export default class extends BaseApplicationGenerator {
           } catch (error) {
             throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
           }
-          console.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
+          this.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
         }
 
         try {
@@ -160,7 +160,7 @@ export default class extends BaseApplicationGenerator {
           } catch (error) {
             throw new Error('Could not install Excubo.WebCompiler');
           }
-          console.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
+          this.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
         }
       },
     });

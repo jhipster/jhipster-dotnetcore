@@ -150,7 +150,7 @@ export default class extends BaseApplicationGenerator {
               if (!entity.skipServer) {
                 const enumInfo = getEnumInfo(field, entity.clientRootFolder);
                 enumInfo.namespace = application.namespace;
-                const fieldType = field.fieldType;
+                const { fieldType } = field;
                 this.writeFile(
                   'dotnetcore/src/Project.Crosscutting/Enums/Enum.cs.ejs',
                   `src/${application.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Enums/${fieldType}.cs`,
@@ -207,7 +207,7 @@ export default class extends BaseApplicationGenerator {
           for (const entity of entities.filter(entity => !entity.builtIn && entity.microserviceName)) {
             source.addRouteToGateway({
               serviceEndpoint: entity.entityApiUrl,
-              serviceName: _.toLower(entity.microserviceName),
+              serviceName: this._.toLower(entity.microserviceName),
             });
           }
         }
