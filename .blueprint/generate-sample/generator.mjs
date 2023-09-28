@@ -62,7 +62,13 @@ export default class extends BaseGenerator {
       },
       async jdlEntities() {
         if (this.withEntities) {
-          this.jdlSample = this.sampleName.includes('-mongo-') ? 'app_mongo.jdl' : 'app.jdl';
+          if (this.sampleName.includes('-mongo-')) {
+            this.jdlSample = 'app_mongo.jdl';
+          } else if (this.sampleName.includes('-react-')) {
+            this.jdlSample = 'app-react.jdl';
+          } else {
+            this.jdlSample = 'app.jdl';
+          }
           this.copyTemplate(`samples/jdl-default/${this.jdlSample}`, this.jdlSample, { noGlob: true });
         }
       },
