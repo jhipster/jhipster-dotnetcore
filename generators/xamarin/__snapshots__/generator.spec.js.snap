@@ -15,6 +15,9 @@ exports[`SubGenerator xamarin of dotnetcore JHipster blueprint > run > execute c
 
 exports[`SubGenerator xamarin of dotnetcore JHipster blueprint > run > should succeed 1`] = `
 {
+  ".jhipster/Person.json": {
+    "stateCleared": "modified",
+  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
@@ -250,6 +253,24 @@ exports[`SubGenerator xamarin of dotnetcore JHipster blueprint > run > should su
     "stateCleared": "modified",
   },
   "client/Jhipster.Client.Xamarin.iOS/Resources/splashscreen.png": {
+    "stateCleared": "modified",
+  },
+  "src/Project.Client/Models/Entities/_dotnetEntityModel_.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Project.Client/Services/Entities/_entityClass_/I_entityClass_Service.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Project.Client/Services/Entities/_entityClass_/_entityClass_Service.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Project.Client/ViewModels/Entities/_entityClass_/_entityClass_ViewModel.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Project.Client/Views/Entities/_entityClass_/_entityClass_View.cs": {
+    "stateCleared": "modified",
+  },
+  "src/Project.Client/Views/Entities/_entityClass_/_entityClass_View.xaml": {
     "stateCleared": "modified",
   },
 }

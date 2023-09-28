@@ -22,7 +22,7 @@ export default class extends BaseApplicationGenerator {
       async preparingTemplateTask({ application, source }) {
         source.addEntityToMenu = ({ entityName }) =>
           this.editFile(
-            `src/${application.mainClientDir}/Views/MenuPage.xaml`,
+            `${application.mainClientDir}/Views/MenuPage.xaml`,
             createNeedleCallback({
               needle: 'jhipster-needle-add-entity-to-menu',
               contentToAdd: `
@@ -38,7 +38,7 @@ export default class extends BaseApplicationGenerator {
 
         source.declareCommandToMenu = ({ entityName }) =>
           this.editFile(
-            `src/${application.mainClientDir}/ViewModels/MenuViewModel.cs`,
+            `${application.mainClientDir}/ViewModels/MenuViewModel.cs`,
             createNeedleCallback({
               needle: 'jhipster-needle-declare-entity-command',
               contentToAdd: `public IMvxCommand Show${entityName}Command => new MvxAsyncCommand(${entityName}CommandClicked);`,
@@ -48,7 +48,7 @@ export default class extends BaseApplicationGenerator {
 
         source.addCommandToMenu = ({ entityName }) =>
           this.editFile(
-            `src/${application.mainClientDir}/ViewModels/MenuViewModel.cs`,
+            `${application.mainClientDir}/ViewModels/MenuViewModel.cs`,
             createNeedleCallback({
               needle: 'jhipster-needle-add-entity-command',
               contentToAdd: `
@@ -61,7 +61,7 @@ export default class extends BaseApplicationGenerator {
 
         source.addServiceInDI = ({ entityName }) =>
           this.editFile(
-            `src/${application.mainClientDir}/App.cs`,
+            `${application.mainClientDir}/App.cs`,
             createNeedleCallback({
               needle: 'jhipster-needle-add-services-in-di',
               contentToAdd: `
