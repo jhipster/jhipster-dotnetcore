@@ -36,19 +36,19 @@ exports[`SubGenerator xamarin of dotnetcore JHipster blueprint > run > should su
   "client/Jhipster.Client.Xamarin.Android/Properties/AssemblyInfo.cs": {
     "stateCleared": "modified",
   },
-  "client/Jhipster.Client.Xamarin.Android/Resources/Layout/SplashScreen.xml": {
-    "stateCleared": "modified",
-  },
-  "client/Jhipster.Client.Xamarin.Android/Resources/Layout/Tabbar.xml": {
-    "stateCleared": "modified",
-  },
-  "client/Jhipster.Client.Xamarin.Android/Resources/Layout/Toolbar.xml": {
-    "stateCleared": "modified",
-  },
   "client/Jhipster.Client.Xamarin.Android/Resources/drawable/menu.png": {
     "stateCleared": "modified",
   },
   "client/Jhipster.Client.Xamarin.Android/Resources/drawable/splashscreen.png": {
+    "stateCleared": "modified",
+  },
+  "client/Jhipster.Client.Xamarin.Android/Resources/layout/SplashScreen.xml": {
+    "stateCleared": "modified",
+  },
+  "client/Jhipster.Client.Xamarin.Android/Resources/layout/Tabbar.xml": {
+    "stateCleared": "modified",
+  },
+  "client/Jhipster.Client.Xamarin.Android/Resources/layout/Toolbar.xml": {
     "stateCleared": "modified",
   },
   "client/Jhipster.Client.Xamarin.Android/Resources/mipmap-anydpi-v26/icon.xml": {
