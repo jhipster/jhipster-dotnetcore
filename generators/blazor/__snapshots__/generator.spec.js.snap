@@ -8,6 +8,9 @@ exports[`SubGenerator blazor of dotnetcore JHipster blueprint > generating dto >
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
   "src/client/Jhipster.Client.Shared/Constants/ErrorConst.cs": {
     "stateCleared": "modified",
   },
@@ -347,6 +350,9 @@ exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > execute co
 exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > should succeed 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
   "src/client/Jhipster.Client.Shared/Constants/ErrorConst.cs": {
