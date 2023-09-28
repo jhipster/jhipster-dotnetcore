@@ -1,5 +1,6 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { addOtherRelationship } from 'generator-jhipster/generators/base-application/support';
+import { getDatabaseData } from 'generator-jhipster/generators/spring-data-relational/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
 import utilsNet from '../utils.cjs';
@@ -41,7 +42,7 @@ export default class extends BaseApplicationGenerator {
         application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
         }
 
@@ -76,9 +77,10 @@ export default class extends BaseApplicationGenerator {
         application.dockerServicesDir = 'docker/';
 
         application[`databaseType${this._.upperFirst(application.databaseType)}`] = true;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.databaseTypeSql = true;
           application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
+          application.databaseData = getDatabaseData(application.databaseType);
         }
 
         application.camelizedBaseName = this._.camelCase(application.baseName);

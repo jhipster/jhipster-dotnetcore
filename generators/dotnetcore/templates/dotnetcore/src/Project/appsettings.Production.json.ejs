@@ -46,17 +46,17 @@
             <%_ break;
             case 'mssql': _%>
     "ConnectionStrings": {
-        "AppDbContext": "Server=db;Database=<%= baseName %>;User=sa;Password=yourStrong(!)Password;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;"
+        "AppDbContext": "Server=mssql;Database=<%= baseName %>;User=<%- databaseData.defaultUsername %>;Password=<%- databaseData.defaultPassword %>;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;"
     },
             <%_ break;
             case 'postgresql': _%>
     "ConnectionStrings": {
-        "AppDbContext": "Server=db;Database=jhipster;Port=5432;User Id=postgres;Password=postgres;Integrated Security=true;Pooling=true;"
+        "AppDbContext": "Server=postgresql;Database=<%= baseName %>;Port=5432;User Id=<%= baseName %>;Password=;Integrated Security=true;Pooling=true;"
     },
             <%_ break;
             case 'mysql': _%>
     "ConnectionStrings": {
-        "AppDbContext": "Server=db;Port=3306;Database=jhipster;User=root;Password=root;"
+        "AppDbContext": "Server=mysql;Port=3306;Database=<%= baseName.toLowerCase() %>;User=<%- databaseData.defaultUsername %>;Password=;"
     },
             <%_ break;
             case 'mongodb': _%>
@@ -64,13 +64,13 @@
         "DataSource": ":memory:"
     },
     "MongoDatabaseConfig": {
-        "ConnectionString": "mongodb://db:27017",
+        "ConnectionString": "mongodb://mongodb:27017",
         "DatabaseName": "<%= baseName %>"
     },
             <%_ break;
             case 'oracle': _%>
     "ConnectionStrings": {
-        "AppDbContext": "User Id=system;Password=oracle;Data Source=db:1521/xe"
+        "AppDbContext": "User Id=<%- databaseData.defaultUsername %>;Password=<%- databaseData.defaultPassword %>;Data Source=oracle:1521/<%- databaseData.defaultDatabaseName %>"
     },
             <%_ break;
     }_%>

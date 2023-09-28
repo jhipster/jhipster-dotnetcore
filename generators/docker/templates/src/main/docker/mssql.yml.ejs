@@ -26,7 +26,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
-      - SA_PASSWORD=yourStrong(!)Password
+      - SA_PASSWORD=<%- databaseData.defaultPassword %>
       - MSSQL_DATABASE=<%= baseName %>
       - MSSQL_SLEEP=15
     # If you want to expose these ports outside your dev PC,

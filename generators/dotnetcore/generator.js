@@ -1,7 +1,7 @@
 import { access } from 'fs/promises';
 import chalk from 'chalk';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
+import { createBase64Secret } from 'generator-jhipster/generators/base/support';
 import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
 import command from './command.js';
@@ -58,6 +58,9 @@ export default class extends BaseApplicationGenerator {
         // Terraform is supported my mssql
         if (this.jhipsterConfig.withTerraformAzureScripts && this.jhipsterConfig.database !== 'mssql') {
           this.jhipsterConfig.withTerraformAzureScripts = false;
+        }
+        if (this.jhipsterConfig.jwtSecretKey === undefined) {
+          this.jhipsterConfig.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
         }
       },
     });
