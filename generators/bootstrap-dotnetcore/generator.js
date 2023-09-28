@@ -1,11 +1,15 @@
+import { readFile } from 'fs/promises';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'node:path';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { addOtherRelationship } from 'generator-jhipster/generators/base-application/support';
 import { getDatabaseData } from 'generator-jhipster/generators/spring-data-relational/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
-import utilsNet from '../utils.cjs';
+import { asModel, equivalentCSharpType } from '../utils.js';
 import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
 
+const packagejs = JSON.parse((await readFile(join(dirname(fileURLToPath(import.meta.url)), '../../package.json'))).toString()).version;
 export default class extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
@@ -64,7 +68,7 @@ export default class extends BaseApplicationGenerator {
         application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
         application.backendType = '.Net';
 
-        application.jhipsterDotnetVersion = undefined;
+        application.jhipsterDotnetVersion = this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version;
       },
     });
   }
@@ -95,7 +99,6 @@ export default class extends BaseApplicationGenerator {
         application.testProjectDir = `${application.pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`;
         application.clientTestProject = `${application.mainClientDir}test/`;
         application.kebabCasedBaseName = this._.kebabCase(application.baseName);
-        // application.jhipsterDotnetVersion = packagejs.version;
         application.modelSuffix = 'Model';
         application.backendName = '.Net';
 
@@ -140,8 +143,8 @@ export default class extends BaseApplicationGenerator {
         entity.toPascalCase = toPascalCase;
         entity.pluralize = pluralize;
         entity._ = this._;
-        entity.equivalentCSharpType = utilsNet.equivalentCSharpType;
-        entity.asModel = utilsNet.asModel;
+        entity.equivalentCSharpType = equivalentCSharpType;
+        entity.asModel = asModel;
 
         for (const relationship of entity.relationships ?? []) {
           if (
@@ -185,12 +188,6 @@ export default class extends BaseApplicationGenerator {
           'byte[]',
           'ByteBuffer',
         ].includes(fieldType);
-
-        /*
-        if (field.fieldIsEnum === true) {
-          entity.i18nToLoad.push(field.enumInstance);
-        }
-        */
       },
     });
   }

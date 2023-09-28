@@ -70,7 +70,6 @@ export default class extends BaseApplicationGenerator {
     return this.asComposingTaskGroup({
       async composingTemplateTask() {
         await this.composeWithJHipster('docker');
-        // await this.composeWithJHipster('gatling');
       },
     });
   }

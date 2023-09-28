@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR, renameDotNetCore } from '../generator-dotnetcore-constants.js';
-//const BlazorNeedle = require('../client/needle-api/needle-client-blazor');
 
 /**
  * The default is to use a file path string. It implies use of the template method.
