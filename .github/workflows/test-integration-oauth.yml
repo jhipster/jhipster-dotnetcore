@@ -92,7 +92,7 @@ jobs:
       - name: 'GENERATE JHipster.NET entities'
         run: ../jhipster-dotnetcore/test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
       - name: 'RUN CLIENT UNIT TESTS of generated app'
-        run: ../jhipster-dotnetcore/test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
+        run: npm test
       - name: 'RUN SERVER UNIT TESTS of generated app'
         run: ../jhipster-dotnetcore/test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
       - name: 'VERIFY FORMAT'
