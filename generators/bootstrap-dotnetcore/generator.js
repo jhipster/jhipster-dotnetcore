@@ -60,7 +60,7 @@ export default class extends BaseApplicationGenerator {
         application.solutionName = application.pascalizedBaseName;
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
 
-        application.temporaryDir = 'temp/';
+        application.temporaryDir = 'tmp/';
         application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
         application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
         application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
