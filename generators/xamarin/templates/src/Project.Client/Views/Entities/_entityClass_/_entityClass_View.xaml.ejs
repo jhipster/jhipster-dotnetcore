@@ -23,7 +23,7 @@ _%>
                     <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16" />
                 </StackLayout>
                 <%_ for (idx in fields){
-                    const fieldType = equivalentCSharpType(fields[idx].fieldType);
+                    const fieldType = fields[idx].cSharpType;
                     const fieldNamePascalized = fields[idx].fieldNamePascalized;
                     const fieldNameCamelCased = fields[idx].fieldNameCamelCased;_%>
                 <Label Text="<%= fieldNamePascalized %>" />

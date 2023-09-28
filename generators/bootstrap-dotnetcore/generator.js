@@ -6,7 +6,7 @@ import { addOtherRelationship } from 'generator-jhipster/generators/base-applica
 import { getDatabaseData } from 'generator-jhipster/generators/spring-data-relational/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
-import { asModel, equivalentCSharpType } from '../utils.js';
+import { equivalentCSharpType } from './support/utils.js';
 import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
 
 const packagejs = JSON.parse((await readFile(join(dirname(fileURLToPath(import.meta.url)), '../../package.json'))).toString()).version;
@@ -143,8 +143,6 @@ export default class extends BaseApplicationGenerator {
         entity.toPascalCase = toPascalCase;
         entity.pluralize = pluralize;
         entity._ = this._;
-        entity.equivalentCSharpType = equivalentCSharpType;
-        entity.asModel = asModel;
 
         for (const relationship of entity.relationships ?? []) {
           if (
@@ -167,6 +165,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.asPreparingEachEntityFieldTaskGroup({
       async preparingTemplateTask({ field }) {
+        field.cSharpType = equivalentCSharpType(field.fieldType),
         field.fieldNamePascalized = toPascalCase(field.fieldName);
         field.fieldNameCamelCased = this._.camelCase(field.fieldName);
 

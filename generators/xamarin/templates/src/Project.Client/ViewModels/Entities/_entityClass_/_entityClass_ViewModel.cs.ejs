@@ -52,7 +52,7 @@ public class <%= entityClassName %>ViewModel : MvxViewModel
     private List<<%= asModel(entityClassName) %>> _listElement;
 
     <%_ for (idx in fields){
-        const fieldType = equivalentCSharpType(fields[idx].fieldType);
+        const fieldType = fields[idx].cSharpType;
         const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
     if (fields[idx].fieldIsEnum) { _%>
     public <%= fields[idx].fieldType %> _<%= fieldNameCamelCased %>;
@@ -95,7 +95,7 @@ public class <%= entityClassName %>ViewModel : MvxViewModel
     }
 
     <%_ for (idx in fields) {
-        const fieldType = equivalentCSharpType(fields[idx].fieldType);
+        const fieldType = fields[idx].cSharpType;
         const fieldNamePascalized = fields[idx].fieldNamePascalized;
         const fieldNameCamelCased = fields[idx].fieldNameCamelCased;
     if (fields[idx].fieldIsEnum) { _%>

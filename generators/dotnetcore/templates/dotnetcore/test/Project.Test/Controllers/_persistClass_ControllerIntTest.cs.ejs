@@ -184,7 +184,7 @@ namespace <%= namespace %>.Test.Controllers
 
         <%_ fields.forEach(field => {
             if (field.id) return;
-            const fieldType = equivalentCSharpType(field.fieldType, field);
+            const fieldType = field.cSharpType;
             if (field.fieldIsEnum) { _%>
         private const <%= field.fieldType %> Default<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
         private const <%= field.fieldType %> Updated<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;

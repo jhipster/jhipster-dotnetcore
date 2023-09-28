@@ -91,6 +91,7 @@ export default class extends BaseApplicationGenerator {
               ...application,
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
+              asModel: str => `${str}${application.modelSuffix}`,
             },
           });
         }

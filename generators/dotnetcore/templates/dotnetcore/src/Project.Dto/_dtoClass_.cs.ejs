@@ -62,7 +62,7 @@ namespace <%= namespace %>.Dto
             <%_ } else if (field && field.fieldIsEnum) { _%>
         public <%= field.fieldType %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } else { _%>
-        public <%= equivalentCSharpType(reference.type) %> <%= reference.nameCapitalized %> { get; set; }
+        public <%= field.cSharpType %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } _%>
         <%_ } _%>
 

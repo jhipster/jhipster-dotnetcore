@@ -17,10 +17,6 @@
  * limitations under the License.
  */
 
-export function asModel(name) {
-  return name + this.modelSuffix;
-}
-
 export function equivalentCSharpType(javaType) {
   let cSharpType;
 

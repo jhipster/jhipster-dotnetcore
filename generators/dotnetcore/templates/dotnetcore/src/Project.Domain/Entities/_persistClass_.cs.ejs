@@ -49,7 +49,7 @@ namespace <%= namespace %>.Domain.Entities
             let required = false;
             const fieldValidate = fields[idx].fieldValidate;
             const fieldValidateRules = fields[idx].fieldValidateRules;
-            const fieldType = equivalentCSharpType(fields[idx].fieldType);
+            const fieldType = fields[idx].cSharpType;
             const fieldNamePascalized = fields[idx].fieldNamePascalized;
             if (fieldValidate === true) {
                 if (fieldValidateRules.includes('required')) {
