@@ -38,7 +38,7 @@ function askForServerSideOpts() {
       name: 'Microsoft SQL Server',
     },
     {
-      value: 'postgres',
+      value: 'postgresql',
       name: 'PostgreSQL',
     },
     {

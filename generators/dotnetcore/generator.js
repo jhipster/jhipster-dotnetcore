@@ -52,6 +52,9 @@ export default class extends BaseApplicationGenerator {
         if ((this.jhipsterConfig.applicationType ?? 'monolith') !== 'monolith') {
           this.jhipsterConfig.serviceDiscoveryType = 'consul';
         }
+        if (this.jhipsterConfig.databaseType === 'postgres') {
+          this.jhipsterConfig.databaseType = 'postgresql';
+        }
         // Terraform is supported my mssql
         if (this.jhipsterConfig.withTerraformAzureScripts && this.jhipsterConfig.database !== 'mssql') {
           this.jhipsterConfig.withTerraformAzureScripts = false;

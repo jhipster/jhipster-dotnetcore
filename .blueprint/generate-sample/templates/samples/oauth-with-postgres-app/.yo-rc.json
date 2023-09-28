@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "namespace": "JhipsterSampleApplication",
-    "databaseType": "postgres",
+    "databaseType": "postgresql",
     "prodDatabaseType": "mysql",
     "authenticationType": "oauth2",
     "serverPort": "5000",

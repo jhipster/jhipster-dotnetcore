@@ -222,7 +222,7 @@ function provisionAddons() {
   }
 
   let dbAddOn;
-  if (this.databaseType === 'postgres') {
+  if (this.databaseType === 'postgresql') {
     dbAddOn = 'heroku-postgresql';
   } else if (this.databaseType === 'mysql') {
     dbAddOn = 'jawsdb:kitefin';
