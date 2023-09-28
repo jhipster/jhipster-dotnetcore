@@ -21,4 +21,18 @@ export default class extends BaseApplicationGenerator {
       },
     });
   }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
+      async postWritingTemplateTask({ application }) {
+        if (application.clientFramework !== BLAZOR && application.clientRootDir) {
+          this.packageJson.merge({
+            scripts: {
+              test: `npm test --prefix ${application.clientRootDir}`,
+            },
+          });
+        }
+      },
+    });
+  }
 }

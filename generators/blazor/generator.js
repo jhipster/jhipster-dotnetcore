@@ -99,6 +99,18 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
+      async postWritingTemplateTask() {
+        this.packageJson.merge({
+          scripts: {
+            test: `cd test/${application.clientTestProject} && dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover`,
+          },
+        });
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.asPostWritingEntitiesTaskGroup({
       async postWritingEntitiesTemplateTask({ application, source, entities }) {
