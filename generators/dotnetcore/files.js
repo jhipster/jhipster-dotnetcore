@@ -32,6 +32,9 @@ import {
 export const serverFiles = {
   serverCsProj: [
     {
+      templates: ['README.md.jhi.dotnetcore'],
+    },
+    {
       path: SERVER_SRC_DIR,
       templates: [
         {
