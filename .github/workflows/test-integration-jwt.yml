@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         node_version: [18]
-        os: [ubuntu-20.04]
+        os: [ubuntu-22.04]
         app-type:
           - jwt-with-angular-app
           - jwt-with-blazor-app
@@ -68,7 +68,7 @@ jobs:
       JHI_ARG: ${{ matrix.arg }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: jhipster-dotnetcore
           fetch-depth: 2
