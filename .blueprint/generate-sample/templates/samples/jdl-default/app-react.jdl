@@ -87,16 +87,15 @@ relationship OneToMany {
 	Employee{department}
 }
 
-// Workaround React bug.
-//relationship ManyToOne {
-//	Employee{manager} to Employee
-//}
+relationship ManyToOne {
+	Employee{manager} to Employee
+}
 
 // defining multiple oneToOne relationships
 relationship OneToOne {
 	JobHistory{job} to Job,
-//	JobHistory{department} to Department,
-//	JobHistory{employee} to Employee
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
 }
 
 relationship ManyToMany {
@@ -104,8 +103,9 @@ relationship ManyToMany {
 }
 
 // Set pagination options
-paginate JobHistory, Employee with infinite-scroll
-paginate Job with pagination
+// .Net does not generates link header for pagination.
+// paginate JobHistory, Employee with infinite-scroll
+// paginate Job with pagination
 
 // Use Data Transfert Objects (DTO)
 dto * with mapstruct
