@@ -33,7 +33,7 @@
 	<PackageVersion Include="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
 	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 	<%_ if (cqrsEnabled) { _%>
-	<PackageVersion Include="MediatR" Version="11.1.0" />
+	<PackageVersion Include="MediatR" Version="12.1.1" />
 	<PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	<%_ } _%>
 	<PackageVersion Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
