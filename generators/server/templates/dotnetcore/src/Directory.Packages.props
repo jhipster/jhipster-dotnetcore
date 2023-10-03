@@ -63,7 +63,7 @@
 	<%_ } _%>
 	<%_ if (applicationType === 'gateway') { _%>
 	<PackageVersion Include="Ocelot" Version="18.0.0" />
-	<PackageVersion Include="Ocelot.Provider.Consul" Version="18.0.0" />
+	<PackageVersion Include="Ocelot.Provider.Consul" Version="19.0.3" />
 	<%_ } _%>
 
 	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
