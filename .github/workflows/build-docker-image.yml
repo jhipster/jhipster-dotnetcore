@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build docker image
-        run: docker build -t jhipster/jhipster-dotnetcore:test-build ./docker/
+        run: docker build -t jhipster/jhipster-dotnetcore:test-build .
       - name: Check if docker image exists and remove it
         run: |
           imageId=$(docker images -q jhipster/jhipster-dotnetcore:test-build)

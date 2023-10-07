@@ -1,4 +1,8 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
+
+# copy sources
+COPY . /home/jhipster/jhipster-dotnetcore
+
 RUN \
   # configure the "jhipster" user
   groupadd jhipster && \
@@ -15,12 +19,14 @@ RUN \
     sudo \
     git && \
   # install node.js
-  wget https://nodejs.org/dist/v14.17.3/node-v14.17.3-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v18.17.1/node-v18.17.1-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
   # install yeoman
   npm install -g yo && \
+  #install dotnet
+  apt-get install -y dotnet-sdk-7.0 && \
   # cleanup
   apt-get clean && \
   rm -rf \
@@ -30,10 +36,8 @@ RUN \
     /var/tmp/*
 
 RUN \
-  # install jhipster
-  npm install -g generator-jhipster && \
   # install the blueprint
-  npm install -g generator-jhipster-dotnetcore && \
+  npm install -g /home/jhipster/jhipster-dotnetcore && \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
     /home/jhipster \
@@ -50,4 +54,4 @@ USER jhipster
 ENV PATH $PATH:/usr/bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
-CMD ["jhipster", "--blueprints", "dotnetcore"]
+CMD ["jhipster-dotnetcore"]
