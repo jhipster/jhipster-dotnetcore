@@ -1,9 +1,5 @@
 # Getting Started
 
-## Prerequisites
-
-npm install -g generator-jhipster
-
 ## Installation of the blueprint
 
 Run the following command to install jhipster-dotnetcore
@@ -17,7 +13,7 @@ npm install -g generator-jhipster-dotnetcore
 Call the generator
 
 ```bash
-jhipster --blueprints dotnetcore
+jhipster-dotnetcore
 ```
 
 After running this command you have few questions to answer, as Application name, authentication mode, client framework etc
@@ -34,13 +30,13 @@ JHipster allow you to add entity with cli or with jdl file (add link)
 JHipster.NET have the same behavior.
 
 ```bash
-jhipster entity <entity-name>
+jhipster-dotnetcore entity <entity-name>
 ```
 
 Or with jdl
 
 ```bash
-jhipster import-jdl my_file.jdl
+jhipster-dotnetcore import-jdl my_file.jdl
 ```
 
 You can edit jdl with https://start.jhipster.tech/jdl-studio/
