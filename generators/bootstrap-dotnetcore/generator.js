@@ -20,7 +20,7 @@ export default class extends BaseApplicationGenerator {
       async checks() {
         if (!this.skipChecks) {
           try {
-            await this.spawnCommand('dotnet');
+            await this.spawnCommand('dotnet --info');
           } catch (error) {
             throw new Error(`dotnet was not found. Check the installation. ${error}`);
           }
