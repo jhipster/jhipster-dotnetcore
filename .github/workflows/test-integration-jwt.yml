@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [18]
+        node_version: [18.17.1]
         os: [ubuntu-22.04]
         app-type:
           - jwt-with-angular-app
