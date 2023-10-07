@@ -16,67 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const constants = require('../generator-dotnetcore-constants.cjs');
+import { BLAZOR } from '../generator-dotnetcore-constants.js';
 
-const files = {
-    docker: [
-        {
-            templates: [{ file: 'Dockerfile-Back', renameTo: () => 'Dockerfile-Back' }],
-        },
-        {
-            templates: [{ file: 'docker-entrypoint-back.sh', renameTo: () => 'docker-entrypoint-back.sh' }],
-        },
-        {
-            condition: generator => generator.clientFramework === constants.BLAZOR,
-            templates: [{ file: 'Dockerfile-Front', renameTo: () => 'Dockerfile-Front' }],
-        },
-        {
-            condition: generator => generator.clientFramework === constants.BLAZOR,
-            templates: [{ file: 'docker-entrypoint-front.sh', renameTo: () => 'docker-entrypoint-front.sh' }],
-        },
-        {
-            condition: generator => generator.clientFramework === constants.BLAZOR,
-            templates: [{ file: 'nginx.conf', renameTo: () => 'nginx.conf' }],
-        },
-        {
-            condition: generator => generator.clientFramework === constants.BLAZOR,
-            templates: [{ file: 'default.conf', renameTo: () => 'default.conf' }],
-        },
-        {
-            templates: [{ file: 'dockerignore', renameTo: () => '.dockerignore', method: 'copy' }],
-        },
-    ],
-    general: [
-        {
-            templates: [{ file: 'README.md' }],
-        },
-        {
-            templates: [
-                { file: 'gitignore', renameTo: () => '.gitignore', method: 'copy' },
-                { file: 'editorconfig', renameTo: () => '.editorconfig', method: 'copy' },
-            ],
-        },
-    ],
-};
-
-const jhipsterCommonFiles = {
-    global: [
-        {
-            templates: [{ file: 'gitattributes', renameTo: () => '.gitattributes', method: 'copy' }],
-        },
-    ],
-};
-
-function writeFiles() {
-    return {
-        writeFiles() {
-            this.writeFilesToDisk(files, this, false, 'dotnetcore');
-        },
-    };
-}
-
-module.exports = {
-    writeFiles,
-    files,
-    jhipsterCommonFiles,
+export const files = {
+  general: [
+    {
+      templates: ['.gitignore.jhi.dotnetcore-common', '.devcontainer/devcontainer.json'],
+    },
+  ],
+  docker: [
+    {
+      templates: ['Dockerfile-Back', 'docker-entrypoint-back.sh', '.dockerignore'],
+    },
+    {
+      condition: generator => generator.clientFramework === BLAZOR,
+      templates: ['Dockerfile-Front', 'docker-entrypoint-front.sh', 'nginx.conf', 'default.conf'],
+    },
+  ],
 };

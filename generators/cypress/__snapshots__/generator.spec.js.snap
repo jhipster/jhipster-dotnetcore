@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SubGenerator cypress of dotnetcore JHipster blueprint > run > should succeed 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/cypress-audits.config.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/cypress.config.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/package.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/.eslintrc.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/login-page.cy.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/password-page.cy.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/register-page.cy.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/reset-password-page.cy.ts": {
+    "state": "deleted",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/settings-page.cy.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/administration/administration.cy.ts": {
+    "state": "deleted",
+  },
+  "src/Jhipster/ClientApp/test/cypress/e2e/lighthouse.audits.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/fixtures/integration-test.png": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/plugins/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/support/account.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/support/commands.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/support/entity.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/support/index.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/support/management.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/support/navbar.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/test/cypress/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

@@ -33,6 +33,4 @@ fi
 #-------------------------------------------------------------------------------
 # Change in template directory
 #-------------------------------------------------------------------------------
-cp -r "$WORKSPACE/test-integration" "$DEST_FOLDER"
-cd "$DEST_FOLDER/test-integration/samples/$APP_FOLDER"
-echo "*** changed directory in : $DEST_FOLDER/test-integration/samples/"$APP_FOLDER
+cp -r "$WORKSPACE/jhipster-dotnetcore/.blueprint/generate-sample/templates/samples/csharp-di-test" ..

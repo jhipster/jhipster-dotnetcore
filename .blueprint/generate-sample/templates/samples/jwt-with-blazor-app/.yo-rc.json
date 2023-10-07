@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "JhipsterSampleApplication",
+    "packageName": "JhipsterSampleApplication",
+    "authenticationType": "jwt",
+    "serverPort": "5000",
+    "databaseType": "sqllite",
+    "prodDatabaseType": "mysql",
+    "enableTranslation": false,
+    "namespace": "JhipsterSampleApplication",
+    "jhipsterVersion": "7.9.3",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "clientFramework": "Blazor",
+    "clientTheme": "none",
+    "creationTimestamp": 1585496278113,
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-dotnetcore"
+      }
+    ]
+  },
+  "generator-jhipster-dotnetcore": {
+    "ciType": "Github"
+  }
+}

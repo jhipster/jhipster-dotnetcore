@@ -20,7 +20,7 @@ Call the generator
 jhipster --blueprints dotnetcore
 ```
 
-After running this command you have few questions to answer, as Application name, authentication mode, client framework etc 
+After running this command you have few questions to answer, as Application name, authentication mode, client framework etc
 Once it's done, you can build and run your application.
 
 ```bash
@@ -29,7 +29,7 @@ dotnet run --verbosity normal --project ./src/YourAppName/YourAppName.csproj
 
 Your first application is ready and you can now use it with default user like JHipster (admin admin or user user)
 
-Ok now you have an application but without entity. 
+Ok now you have an application but without entity.
 JHipster allow you to add entity with cli or with jdl file (add link)
 JHipster.NET have the same behavior.
 
@@ -37,11 +37,12 @@ JHipster.NET have the same behavior.
 jhipster entity <entity-name>
 ```
 
-Or with jdl 
+Or with jdl
 
 ```bash
 jhipster import-jdl my_file.jdl
 ```
+
 You can edit jdl with https://start.jhipster.tech/jdl-studio/
 
 You have now an application with CRUD operations on each new entities with potentially link between entities (one-to-one, many-to-one or many-to-many)

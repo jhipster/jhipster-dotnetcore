@@ -1,0 +1,70 @@
+<%#
+ Copyright 2019-2023 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "Serilog": {
+        "MinimumLevel": "Debug",
+        "SyslogUrl": "localhost",
+        "SyslogPort": "6514",
+        "SyslogAppName": "<%= baseName %>",
+        "WriteTo": [
+            {
+                "Name": "Console",
+                "Args": {
+                    "theme": "Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme::Code, Serilog.Sinks.Console",
+                    "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level:u4} {ProcessId} --- [{ThreadId,3}] {LoggerName,-40} : {Message:lj}{NewLine}{Exception}"
+                }
+            }
+        ]
+    },
+    <%_ switch(databaseType) {
+        case 'sqllite': _%>
+    "EntityFramework": {
+        "DataSource": ":memory:"
+    },
+        <%_ break;
+        case 'mssql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=mssql;Database=<%= baseName %>;User=<%- databaseData.defaultUsername %>;Password=<%- databaseData.defaultPassword %>;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;"
+    },
+        <%_ break;
+        case 'postgresql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=postgresql;Database=<%= baseName %>;Port=5432;User Id=<%= baseName %>;Password=;Integrated Security=true;Pooling=true;"
+    },
+        <%_ break;
+        case 'mysql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=mysql;Port=3306;Database=<%= baseName.toLowerCase() %>;User=<%- databaseData.defaultUsername %>;Password=;"
+    },
+        <%_ break;
+        case 'mongodb': _%>
+    "EntityFramework": {
+        "DataSource": ":memory:"
+    },
+    "MongoDatabaseConfig": {
+        "ConnectionString": "mongodb://mongodb:27017",
+        "DatabaseName": "<%= baseName %>"
+    },
+        <%_ break;
+        case 'oracle': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "User Id=<%- databaseData.defaultUsername %>;Password=<%- databaseData.defaultPassword %>;Data Source=oracle:1521/<%- databaseData.defaultDatabaseName %>"
+    },
+        <%_ break;
+    }_%>
+    "Security": {
+        "EnforceHttps":  false,
+    }
+}

@@ -15,15 +15,21 @@ When generating your application, make sure to check "Cypress" in your optional 
 ## How to use it
 
 Once your application is generated, you can optionally add some entities, it will automatically generate the corresponding tests for your entities. To begin, go to your ClientApp folder:
+
 ```bash
 cd src/YourApplication/ClientApp
 ```
+
 Then execute one of the following commands:
+
 ```bash
 npx cypress open
 ```
+
 or
+
 ```bash
 ./node_modules/.bin/cypress open
 ```
+
 For futher information you can visit [Cypress wiki](https://docs.cypress.io/guides/guides/command-line#How-to-run-commands).

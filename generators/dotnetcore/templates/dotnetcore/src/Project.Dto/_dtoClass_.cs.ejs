@@ -1,0 +1,71 @@
+<%#
+ Copyright 2019-2023 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_ let importJsonIgnore = false;
+const hasManyToMany = entityClassHasManyToMany;
+const entityTableName = snakeCasedEntityClass;
+const entityClassName = pascalizedEntityClass;
+const entityVariableName = camelCasedEntityClass; _%>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+<%_
+let hasEnumField = false;
+dtoReferences.forEach(reference => {
+    const field = reference.field;
+    if (field && field.fieldIsEnum) {
+        hasEnumField = true;
+    }
+    });
+if (hasEnumField) { _%>
+using <%= namespace %>.Crosscutting.Enums;
+<%_ } _%>
+<%_ if (importJsonIgnore === true || hasManyToMany) { _%>
+using Newtonsoft.Json;
+<%_ } _%>
+
+namespace <%= namespace %>.Dto
+{
+
+    public class <%= asDto(entityClassName) %>
+    {
+        <%_ for (reference of dtoReferences) { _%>
+            <%_ const field = reference.field;
+        const required = field && field.fieldValidate && field.fieldValidationRequired; _%>
+            <%_ if (required) { _%>
+        [Required]
+            <%_ } _%>
+            <%_ if (field && field.id) { _%>
+        public <%= primaryKeyType %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else if (field && field.blobContentTypeText) { _%>
+        public String <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else if (reference.collection && reference.relationship) { _%>
+        public IList<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.nameCapitalized %> { get; set; } = new List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>>();
+            <%_ } else if (reference.relationship) { _%>
+        public long? <%= reference.nameCapitalized %>Id { get; set; }
+        public <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else if (field && field.fieldIsEnum) { _%>
+        public <%= field.fieldType %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } else { _%>
+        public <%= field.cSharpType %> <%= reference.nameCapitalized %> { get; set; }
+            <%_ } _%>
+        <%_ } _%>
+
+        // jhipster-needle-dto-add-field - JHipster will add fields here, do not remove
+    }
+}

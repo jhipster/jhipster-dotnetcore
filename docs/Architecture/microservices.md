@@ -2,6 +2,6 @@
 
 You can also take a look at https://www.jhipster.tech/microservices-architecture/
 
-## Microservices Artictecture 
+## Microservices Artictecture
 
 ![microservices](../assets/Microservices.png)

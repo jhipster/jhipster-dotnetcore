@@ -6,6 +6,6 @@ Notice that this blueprint uses [AutoMapper](https://automapper.org/) to handle 
 
 Example using JDL:
 
- ```dto * with mapstruct```
+`dto * with mapstruct`
 
- See [JHispter's documentation](https://www.jhipster.tech/using-dtos/) for more details about using DTOs.
+See [JHispter's documentation](https://www.jhipster.tech/using-dtos/) for more details about using DTOs.

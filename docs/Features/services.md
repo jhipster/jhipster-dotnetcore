@@ -10,7 +10,7 @@ You can generate services using the entity generator:
 
 Or by using JDL:
 
- `service all with serviceImpl except Employee, Job`
+`service all with serviceImpl except Employee, Job`
 
 Notice that only the service with interface option (serviceImpl) is enabled on this generator.
 
@@ -47,11 +47,12 @@ Currently the automatic registration strategy for class/interface is used only f
 
 ## Automatic Service Registration In DI Container
 
-Under the hood this project uses reflection for assembly scanning to automatically register service classes/interfaces with dotnet's dependency injection container.  Implementation details can be found at `ServiceStartup.cs` file located at `src/ProjectName/Configuration/` folder.
+Under the hood this project uses reflection for assembly scanning to automatically register service classes/interfaces with dotnet's dependency injection container. Implementation details can be found at `ServiceStartup.cs` file located at `src/ProjectName/Configuration/` folder.
 
 The following steps are used to automatically register service classes and interfaces:
+
 - Scan `ProjectName.Domain.Services.Interfaces` namespace (at `ProjectName.Domain` assembly) for service interfaces and `ProjectName.Domain.Services` namespace (at `ProjectName.Domain.Services` assembly) for service classes.
 - Find matching classes and its interfaces using the "I" prefix convention for interface name. This step registers the generated service classes/interfaces since they use "I" interface prefix convention, but user-defined services and interfaces can also be automatically registered using this convention.
-For example: JobService class matches IJobService interface, EmployeeService class matches IEmployeeService interface, MyNewService class matches IMyNewService interface, etc...
+  For example: JobService class matches IJobService interface, EmployeeService class matches IEmployeeService interface, MyNewService class matches IMyNewService interface, etc...
 - Service class names ending with 'ExtendedService' have higher priority for registration on the DI container. This is useful to make sure that the class will be registered and will replace any existing DI registrations.
-For example: if JobExtendedService class is present and implements IJobService, then replace existing registrations.
+  For example: if JobExtendedService class is present and implements IJobService, then replace existing registrations.

@@ -7,93 +7,120 @@ on:
   pull_request:
 
 jobs:
-    applications:
-        name: ${{ matrix.app-type }}
-        runs-on: ${{ matrix.os }}
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
-        timeout-minutes: 40
-        strategy:
-            fail-fast: false
-            matrix:
-                node_version: [16.14.0]
-                os: [ubuntu-20.04]
-                app-type:
-                    - jwt-with-angular-app
-                    - jwt-with-blazor-app
-                    - jwt-with-angular-cqrs-app
-                    - jwt-with-blazor-cqrs-app
-                    - jwt-with-mssql-app
-                    - jwt-with-mysql-app
-                    - jwt-with-mongo-app
-                    - jwt-with-mongo-cqrs-app
-                    - jwt-with-postgres-app
-                    - jwt-with-react-app
-                    - jwt-with-vue-app
-                include:
-                    - app-type: jwt-with-angular-app
-                      arg: 'import-jdl'
-                    - app-type: jwt-with-angular-cqrs-app
-                      arg: 'import-jdl'
-                    - app-type: jwt-with-blazor-app
-                      arg: 'import-jdl blazor'
-                    - app-type: jwt-with-blazor-cqrs-app
-                      arg: 'import-jdl blazor'
-                    - app-type: jwt-with-mssql-app
-                      arg: 'no'
-                    - app-type: jwt-with-mysql-app
-                      arg: 'no'
-                    - app-type: jwt-with-mongo-app
-                      arg: 'import-jdl'
-                    - app-type: jwt-with-mongo-cqrs-app
-                      arg: 'import-jdl'
-                    - app-type: jwt-with-postgres-app
-                      arg: 'no'
-                    - app-type: jwt-with-react-app
-                      arg: 'import-jdl'
-                    - app-type: jwt-with-vue-app
-                      arg: 'import-jdl'
+  applications:
+    name: ${{ matrix.app-type }}
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: [18]
+        os: [ubuntu-22.04]
+        app-type:
+          - jwt-with-angular-app
+          - jwt-with-blazor-app
+          - jwt-with-angular-cqrs-app
+          - jwt-with-blazor-cqrs-app
+          - jwt-with-mssql-app
+          - jwt-with-mysql-app
+          - jwt-with-mongo-app
+          - jwt-with-mongo-cqrs-app
+          - jwt-with-postgres-app
+          - jwt-with-react-app
+          - jwt-with-vue-app
+        include:
+          - app-type: jwt-with-angular-app
+            arg: 'import-jdl'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-angular-cqrs-app
+            arg: 'import-jdl'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-blazor-app
+            arg: 'import-jdl blazor'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-blazor-cqrs-app
+            arg: 'import-jdl blazor'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-mssql-app
+            arg: 'no'
+          - app-type: jwt-with-mysql-app
+            arg: 'no'
+          - app-type: jwt-with-mongo-app
+            arg: 'import-jdl'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-mongo-cqrs-app
+            arg: 'import-jdl'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-postgres-app
+            arg: 'no'
+          - app-type: jwt-with-react-app
+            arg: 'import-jdl'
+            extra-args: '--with-entities'
+          - app-type: jwt-with-vue-app
+            arg: 'import-jdl'
+            extra-args: '--with-entities'
+    env:
+      JHI_APP: ${{ matrix.app-type }}
+      JHI_ARG: ${{ matrix.arg }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: jhipster-dotnetcore
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Create app dir
+        working-directory: ${{ github.workspace }}
+        run: mkdir app
+      - name: 'install required npm version'
+        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: git history
+        run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
+      - name: PREPARE jhipster env
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
+        run: npm ci && npm link
+      - name: 'GENERATE JHipster.NET app'
+        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
+      - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
+        run: dotnet build
         env:
-            JHI_APP: ${{ matrix.app-type }}
-            JHI_ARG: ${{ matrix.arg }}
-
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                node-version: ${{ matrix.node_version }}
-            - name: 'install required npm version'
-              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
-            - uses: joschi/setup-jdk@v2
-              with:
-                java-version: '11' # The OpenJDK version to make available on the path
-                architecture: 'x64' # defaults to 'x64'
-            - uses: actions/setup-dotnet@v3
-              with:
-                dotnet-version: '7.0.x'
-            - name: git history
-              run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
-            - name: PREPARE jhipster env
-              run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
-            - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
-            - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
-            - name: 'GENERATE JHipster.NET entities'
-              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            - name: 'RUN CLIENT UNIT TESTS of generated app'
-              run: ./test-integration/scripts/05-run-generated-client-tests-of-sample.sh $JHI_APP $JHI_ARG
-            - name: 'RUN SERVER UNIT TESTS of generated app'
-              run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
-            - name: 'RUN E2E TESTS of generated app'
-              run: ./test-integration/scripts/07-tests-e2e.sh $JHI_APP $JHI_ARG
-            - name: 'RUN SONAR ANALYZE on generated app'
-              run: ./test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            - name: 'VERIFY FORMAT'
-              run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
-
+          NODE_ENV: development
+          APP_VERSION: 1.0
+      - name: 'GENERATE JHipster.NET entities'
+        run: ../jhipster-dotnetcore/test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: 'RUN CLIENT UNIT TESTS of generated app'
+        run: npm test
+      - name: 'RUN SERVER UNIT TESTS of generated app'
+        run: ../jhipster-dotnetcore/test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+      - name: 'RUN E2E TESTS of generated app'
+        run: ../jhipster-dotnetcore/test-integration/scripts/07-tests-e2e.sh $JHI_APP $JHI_ARG
+        id: e2e
+      - name: 'RUN SONAR ANALYZE on generated app'
+        run: ../jhipster-dotnetcore/test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: 'VERIFY FORMAT'
+        run: ../jhipster-dotnetcore/test-integration/scripts/09-verify-format.sh $JHI_APP
+      - name: 'E2E: Store failure screenshots'
+        uses: actions/upload-artifact@v3
+        if: always() && steps.e2e.outcome == 'failure'
+        with:
+          name: screenshots-${{ matrix.app-type }}
+          path: ${{ github.workspace }}/app/**/cypress/screenshots
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2

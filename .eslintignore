@@ -1,6 +1,5 @@
-coverage
-generators/**/templates
-node_modules
-travis
-docs
-generators/client/**
+*.back.js
+**/heroku/**
+**/entity/**
+**/ci-cd/**
+**/client/*.cjs
