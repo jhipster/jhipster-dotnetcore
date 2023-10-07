@@ -50,10 +50,6 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 
 https://gitter.im/JHipster-NET/jhipster-dotnetcore
 
-# Prerequisites
-
-npm install -g generator-jhipster
-
 # Installation
 
 ## With NPM
@@ -89,18 +85,10 @@ yarn global upgrade generator-jhipster-dotnetcore
 To use this blueprint, run the below command
 
 ```bash
-jhipster --blueprints dotnetcore
+jhipster-dotnetcore
 ```
 
 ## Using Docker
-
-Download the Dockerfile:
-
-```bash
-mkdir docker
-cd docker
-wget https://github.com/jhipster/jhipster-dotnetcore/raw/main/docker/Dockerfile
-```
 
 Build the Docker images:
 
@@ -125,17 +113,17 @@ docker run -it --rm -v $PWD:/home/jhipster/app jhipster-generator-dotnetcore
 
 ✅ General App generation
 
-- `jhipster --blueprints dotnetcore`
+- `jhipster-dotnetcore`
   - JWT : ✅
   - Oauth2 : ✅
 
 ✅ Entity generation
 
-- `jhipster entity <entity-name>`
+- `jhipster-dotnetcore <entity-name>`
 
 ✅ JDL Entity model support generation
 
-- `jhipster import-jdl my_file.jdl`
+- `jhipster-dotnetcore import-jdl my_file.jdl`
 
 ## Running the generated app in a Docker container
 
