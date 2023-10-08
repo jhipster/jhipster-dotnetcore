@@ -7,64 +7,33 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "jhipster generate dotnetcore blueprint",
-      "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
+      "preLaunchTask" : "makeSamplefolder",
+      "name": "jhipster-dotnetcore blueprint",
+      "program": "${workspaceFolder}/cli/cli.cjs",
       "timeout": 100000,
-      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache", "--skip-install", "--no-insight", "--blueprints", "dotnetcore"],
-      "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
+      "args": ["-d", "--skip-checks", "--skip-git", "--skip-cache", "--skip-install", "--no-insight"],
+      "cwd": "${workspaceFolder}/samples/",
       "console": "integratedTerminal"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "jhipster entity",
-      "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
+      "preLaunchTask" : "makeSamplefolder",
+      "name": "jhipster-dotnetcore entity",
+      "program": "${workspaceFolder}/cli/cli.cjs",
       "args": ["entity", "BankAccount", "--force"],
-      "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
+      "cwd": "${workspaceFolder}/samples/",
       "console": "integratedTerminal"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "jhipster jdl",
-      "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
-      "args": ["jdl", "${workspaceFolder}/test-integration/samples/jdl-default/app.jdl", "--force"],
-      "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
+      "preLaunchTask" : "makeSamplefolder",
+      "name": "jhipster-dotnetcore jdl",
+      "program": "${workspaceFolder}/cli/cli.cjs",
+      "args": ["jdl", "${workspaceFolder}/.blueprint/generate-sample/template/default/jdl-default/app.jdl", "--force"],
+      "cwd": "${workspaceFolder}/samples/",
       "console": "integratedTerminal"
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "jhipster mocha tests",
-      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      "args": ["--timeout", "999999", "--reporter", "spec", "${workspaceFolder}/test"],
-      "internalConsoleOptions": "openOnSessionStart"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "jhipster info",
-      "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
-      "args": ["info"],
-      "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "jhipster language",
-      "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
-      "args": ["language"],
-      "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app",
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "jhipster upgrade",
-      "program": "${workspaceFolder}/node_modules/generator-jhipster/cli/jhipster.js",
-      "args": ["upgrade"],
-      "cwd": "${workspaceFolder}/test-integration/samples/jwt-with-angular-app"
-    }
   ]
 }
