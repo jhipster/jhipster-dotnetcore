@@ -45,7 +45,7 @@
     "to-pascal-case": "1.0.0",
     "which": "3.0.0",
     "yeoman-environment": "3.12.1",
-    "yeoman-generator": "5.7.0"
+    "yeoman-generator": "6.0.0"
   },
   "devDependencies": {
     "@j-ulrich/release-it-regex-bumper": "^4.0.0",
