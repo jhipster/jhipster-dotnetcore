@@ -54,7 +54,6 @@
       "docker": {
         "command": false,
         "priorities": [
-          "initializing",
           "prompting",
           "configuring",
           "composing",
