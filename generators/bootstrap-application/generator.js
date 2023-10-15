@@ -47,6 +47,8 @@ export default class extends BaseApplicationGenerator {
         // - lint-staged paths needs adjusts.
         application.skipCommitHook = true;
 
+        application.withAdminUi = false;
+
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
         application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
@@ -65,11 +67,9 @@ export default class extends BaseApplicationGenerator {
         application.solutionName = application.pascalizedBaseName;
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
 
-        application.temporaryDir = 'tmp/';
         application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
         application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
         application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
-        application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
         application.backendType = '.Net';
 
         application.jhipsterDotnetVersion = this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version;
@@ -80,7 +80,8 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       async preparingTemplateTask({ application }) {
-        application.withAdminUi = false;
+        application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
+        application.temporaryDir = 'tmp/';
         application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
         application.dockerServicesDir = 'docker/';
 
