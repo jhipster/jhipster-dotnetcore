@@ -10,7 +10,7 @@ export default class extends DockerGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
   }
-  
+
   get [DockerGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
