@@ -17,12 +17,6 @@ exports[`SubGenerator common of dotnetcore JHipster blueprint > run > should suc
   ".gitignore": {
     "stateCleared": "modified",
   },
-  ".husky/pre-commit": {
-    "stateCleared": "modified",
-  },
-  ".lintstagedrc.js": {
-    "stateCleared": "modified",
-  },
   ".prettierignore": {
     "stateCleared": "modified",
   },

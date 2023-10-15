@@ -398,7 +398,7 @@ exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > r
   "serviceDiscoveryType": "no",
   "skipCheckLengthOfIdentifier": false,
   "skipClient": undefined,
-  "skipCommitHook": undefined,
+  "skipCommitHook": true,
   "skipFakeData": false,
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,

@@ -42,6 +42,11 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
       async loadingTemplateTask({ application }) {
+        // Paths needs adjusts for husky and lint-staged:
+        // - prettier should be installed at root package.json.
+        // - lint-staged paths needs adjusts.
+        application.skipCommitHook = true;
+
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
         application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
