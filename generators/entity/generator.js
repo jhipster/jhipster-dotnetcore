@@ -1,32 +1,66 @@
-/* eslint-disable consistent-return */
-const EntityGenerator = require('generator-jhipster/generators/entity');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const prompts = require('./prompts');
+import EntityGenerator from 'generator-jhipster/generators/entity';
+import command from './command.js';
+import prompts from './prompts.js';
 
-module.exports = class extends EntityGenerator {
-  constructor(args, opts) {
-    super(args, { fromBlueprint: true, ...opts }); // fromBlueprint variable is important
+export default class extends EntityGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, {
+      ...features,
+      unique: undefined,
+      checkBlueprint: true,
+    });
   }
 
-  get initializing() {
-    const phaseFromJHipster = super._initializing();
-    const jhipsterNetPhaseSteps = {
-      getConfigNetBlueprint() {
-        this.context.namespace = this.jhipsterConfig.namespace;
-        this.context.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
-        this.context.dtoSuffix = 'Dto';
-      },
-      fixConfig() {
-        this.context.prodDatabaseType = this.context.databaseType === 'mongodb' ? 'mongodb' : 'mysql'; // set only for jdl-importer compatibility
-      },
-    };
-    return Object.assign(phaseFromJHipster, jhipsterNetPhaseSteps);
+  async beforeQueue() {
+    await super.beforeQueue();
   }
 
-  get prompting() {
-    return {
-      /* pre entity hook needs to be written here */
-      askForMicroserviceJson: prompts.askForMicroserviceJson,
+  get [EntityGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup({
+      ...super.initializing,
+      async initializingTemplateTask() {
+        this.parseJHipsterArguments(command.arguments);
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [EntityGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup({
+      ...super.prompting,
+    });
+  }
+
+  get [EntityGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup({
+      ...super.configuring,
+      async configuringTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
+      ...super.composing,
+      async composingTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.LOADING]() {
+    return this.asLoadingTaskGroup({
+      ...super.loading,
+      async loadingTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      ...super.preparing,
+      async preparingTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.POST_PREPARING]() {
+    return this.asPostPreparingTaskGroup({
       /* ask question to user if s/he wants to update entity */
       askForUpdate: prompts.askForUpdate,
       askForFields: prompts.askForFields,
@@ -38,10 +72,111 @@ module.exports = class extends EntityGenerator {
       askForDTO: prompts.askForDTO,
       // askForFiltering: prompts.askForFiltering,
       askForPagination: prompts.askForPagination,
-    };
+    });
   }
 
-  get configuring() {
-    return super._configuring();
+  get [EntityGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.asConfiguringEachEntityTaskGroup({
+      ...super.configuringEachEntity,
+      async configuringEachEntityTemplateTask() {},
+    });
   }
-};
+
+  get [EntityGenerator.LOADING_ENTITIES]() {
+    return this.asLoadingEntitiesTaskGroup({
+      ...super.loadingEntities,
+      async loadingEntitiesTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asPreparingEachEntityTaskGroup({
+      ...super.preparingEachEntity,
+      async preparingEachEntityTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      ...super.preparingEachEntityField,
+      async preparingEachEntityFieldTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      ...super.preparingEachEntityRelationship,
+      async preparingEachEntityRelationshipTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      ...super.postPreparingEachEntity,
+      async postPreparingEachEntityTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.DEFAULT]() {
+    return this.asDefaultTaskGroup({
+      ...super.default,
+      async defaultTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
+      ...super.writing,
+      async writingTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup({
+      ...super.writingEntities,
+      async writingEntitiesTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
+      ...super.postWriting,
+      async postWritingTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.POST_WRITING_ENTITIES]() {
+    return this.asPostWritingEntitiesTaskGroup({
+      ...super.postWritingEntities,
+      async postWritingEntitiesTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.LOADING_TRANSLATIONS]() {
+    return this.asLoadingTranslationsTaskGroup({
+      ...super.loadingTranslations,
+      async loadingTranslationsTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.INSTALL]() {
+    return this.asInstallTaskGroup({
+      ...super.install,
+      async installTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.POST_INSTALL]() {
+    return this.asPostInstallTaskGroup({
+      ...super.postInstall,
+      async postInstallTemplateTask() {},
+    });
+  }
+
+  get [EntityGenerator.END]() {
+    return this.asEndTaskGroup({
+      ...super.end,
+      async endTemplateTask() {},
+    });
+  }
+}

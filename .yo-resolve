@@ -20,3 +20,7 @@ generators/server/generator.js skip
 generators/server/index.js skip
 generators/xamarin/generator.spec.js skip
 generators/xamarin/generator.js skip
+.blueprint/generate-sample/command.mjs skip
+.blueprint/generate-sample/generator.mjs skip
+.eslintrc.json skip
+README.md skip

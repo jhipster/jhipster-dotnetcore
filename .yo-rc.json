@@ -75,6 +75,34 @@
         "sbs": null,
         "written": true
       },
+      "entity": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "configuringEachEntity",
+          "loadingEntities",
+          "preparingEachEntity",
+          "preparingEachEntityField",
+          "preparingEachEntityRelationship",
+          "postPreparingEachEntity",
+          "default",
+          "writing",
+          "writingEntities",
+          "postWriting",
+          "postWritingEntities",
+          "loadingTranslations",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false,
+        "written": true
+      },
       "heroku": {
         "command": false,
         "priorities": [
@@ -121,6 +149,6 @@
     "localBlueprint": false,
     "sampleWritten": true,
     "skipCommitHook": true,
-    "subGenerators": ["bootstrap-application", "ci-cd", "client", "common", "cypress", "docker", "heroku", "server"]
+    "subGenerators": ["bootstrap-application", "ci-cd", "client", "common", "cypress", "docker", "entity", "heroku", "server"]
   }
 }
