@@ -1,5 +1,5 @@
 import DockerGenerator from 'generator-jhipster/generators/docker';
-import command from './command.js';
+import { GENERATOR_BOOTSTRAP_APPLICATION } from 'generator-jhipster/generators';
 import { dockerFiles } from './files.js';
 
 export default class extends DockerGenerator {
@@ -8,18 +8,9 @@ export default class extends DockerGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
+    await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION);
   }
-
-  get [DockerGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
-      async initializingTemplateTask() {
-        this.parseJHipsterArguments(command.arguments);
-        this.parseJHipsterOptions(command.options);
-      },
-    });
-  }
-
+  
   get [DockerGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {

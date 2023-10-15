@@ -11,8 +11,8 @@ import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN }
 
 const packagejs = JSON.parse((await readFile(join(dirname(fileURLToPath(import.meta.url)), '../../package.json'))).toString()).version;
 export default class extends BaseApplicationGenerator {
-  async beforeQueue() {
-    await this.dependsOnJHipster('bootstrap-application');
+  constructor(args, options, features) {
+    super(args, options, { ...features, sbsBlueprint: true });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {

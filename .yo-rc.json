@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "additionalSubGenerators": "blazor,bootstrap-dotnetcore,xamarin,dotnetcore",
+    "additionalSubGenerators": "blazor,xamarin,dotnetcore",
     "baseName": "dotnetcore",
     "cli": true,
     "entities": [],
@@ -11,7 +11,7 @@
         "sbs": null,
         "written": true
       },
-      "bootstrap-dotnetcore": {
+      "bootstrap-application": {
         "command": false,
         "priorities": ["loading", "preparing"],
         "sbs": null,
@@ -122,6 +122,6 @@
     "localBlueprint": false,
     "sampleWritten": true,
     "skipCommitHook": true,
-    "subGenerators": ["ci-cd", "client", "common", "cypress", "docker", "heroku", "server"]
+    "subGenerators": ["bootstrap-application", "ci-cd", "client", "common", "cypress", "docker", "heroku", "server"]
   }
 }

@@ -13,6 +13,7 @@ describe('SubGenerator xamarin of dotnetcore JHipster blueprint', () => {
         .withJHipsterConfig({ clientFramework: 'Xamarin' }, [{ name: 'Person', dto: 'mapstruct' }])
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withSpawnMock()
         .withJHipsterLookup()
