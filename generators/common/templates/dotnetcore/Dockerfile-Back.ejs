@@ -52,6 +52,7 @@ WORKDIR /app
 COPY docker-entrypoint-back.sh .
 RUN chmod +x /app/docker-entrypoint-back.sh
 COPY --from=build /app/out .
+COPY src/<%= mainProjectDir %>/Configuration/users-data.csv ./Configuration/users-data.csv
 ENV ASPNETCORE_ENVIRONMENT=Production
 <%_ if(!skipClient && clientFramework === "Blazor") { _%>
 ARG INCLUDE_BLAZOR

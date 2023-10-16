@@ -668,6 +668,15 @@ const serverFiles = {
             path: SERVER_SRC_DIR,
             templates: [
                 {
+                    file: 'Project/Configuration/users-data.csv',
+                    renameTo: generator => `${generator.mainProjectDir}/Configuration/users-data.csv`,
+                },
+            ],
+        },
+        {
+            path: SERVER_SRC_DIR,
+            templates: [
+                {
                     file: 'Project/Configuration/MvcStartup.cs',
                     renameTo: generator => `${generator.mainProjectDir}/Configuration/MvcStartup.cs`,
                 },
@@ -1386,6 +1395,15 @@ const serverFiles = {
                 {
                     file: 'Project.Test/Setup/TestStartup.cs',
                     renameTo: generator => `${generator.testProjectDir}/Setup/TestStartup.cs`,
+                },
+            ],
+        },
+        {
+            path: SERVER_TEST_DIR,
+            templates: [
+                {
+                    file: 'Project.Test/Configuration/users-data.csv',
+                    renameTo: generator => `${generator.testProjectDir}/bin/Debug/net6.0/Configuration/users-data.csv`,
                 },
             ],
         },
