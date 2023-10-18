@@ -15,6 +15,7 @@ describe('SubGenerator blazor of dotnetcore JHipster blueprint', () => {
         })
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
@@ -46,6 +47,7 @@ describe('SubGenerator blazor of dotnetcore JHipster blueprint', () => {
         )
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()

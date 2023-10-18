@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
-const _ = require('lodash');
+import chalk from 'chalk';
+import _ from 'lodash';
+import { reservedKeywords } from 'generator-jhipster/jdl';
 
 const getFieldNameUndercored = fields =>
   ['id'].concat(
@@ -25,12 +26,7 @@ const getFieldNameUndercored = fields =>
       return _.snakeCase(field.fieldName);
     }),
   );
-const path = require('path');
-const jhiCore = require('jhipster-core');
-const shelljs = require('shelljs');
-
-module.exports = {
-  askForMicroserviceJson,
+export default {
   askForUpdate,
   askForFields,
   askForFieldsToRemove,
@@ -43,75 +39,14 @@ module.exports = {
   askForPagination,
 };
 
-function askForMicroserviceJson() {
-  const context = this.context;
-  if (context.applicationType !== 'gateway' || context.useConfigurationFile) {
-    return;
-  }
-
-  const done = this.async();
-  const databaseType = context.databaseType;
-
-  const prompts = [
-    {
-      when: () => databaseType !== 'no',
-      type: 'confirm',
-      name: 'useMicroserviceJson',
-      message: 'Do you want to generate this entity from an existing microservice?',
-      default: true,
-    },
-    {
-      when: response => response.useMicroserviceJson === true || databaseType === 'no',
-      type: 'input',
-      name: 'microservicePath',
-      message: 'Enter the path to the microservice root directory:',
-      store: true,
-      validate: input => {
-        let fromPath;
-        if (path.isAbsolute(input)) {
-          fromPath = `${input}/${context.filename}`;
-        } else {
-          fromPath = this.destinationPath(`${input}/${context.filename}`);
-        }
-
-        if (shelljs.test('-f', fromPath)) {
-          return true;
-        }
-        return `${context.filename} not found in ${input}/`;
-      },
-    },
-  ];
-
-  this.prompt(prompts).then(props => {
-    if (props.microservicePath) {
-      this.log(chalk.green(`\nFound the ${context.filename} configuration file, entity can be automatically generated!\n`));
-      if (path.isAbsolute(props.microservicePath)) {
-        context.microservicePath = props.microservicePath;
-      } else {
-        context.microservicePath = path.resolve(props.microservicePath);
-      }
-      context.useConfigurationFile = true;
-      context.useMicroserviceJson = true;
-      const fromPath = `${context.microservicePath}/${context.jhipsterConfigDirectory}/${context.entityNameCapitalized}.json`;
-
-      this.loadEntityJson(fromPath);
-      if (this.context.applicationType === 'gateway') {
-        this.context.skipServer = false;
-      }
-    }
-    done();
-  });
-}
-
-function askForUpdate() {
-  const context = this.context;
+async function askForUpdate() {
+  const context = this.entityData;
   // ask only if running an existing entity without arg option --force or --regenerate
   const isForce = this.options.force || context.regenerate;
   context.updateEntity = 'regenerate'; // default if skipping questions by --force
   if (isForce || !context.useConfigurationFile) {
     return;
   }
-  const done = this.async();
   const prompts = [
     {
       type: 'list',
@@ -139,17 +74,16 @@ function askForUpdate() {
       default: 0,
     },
   ];
-  this.prompt(prompts).then(props => {
+  await this.prompt(prompts).then(props => {
     context.updateEntity = props.updateEntity;
     if (context.updateEntity === 'none') {
       this.env.error(chalk.green('Aborting entity update, no changes were made.'));
     }
-    done();
   });
 }
 
-function askForFields() {
-  const context = this.context;
+async function askForFields() {
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
     return;
@@ -159,13 +93,11 @@ function askForFields() {
     logFieldsAndRelationships.call(this);
   }
 
-  const done = this.async();
-
-  askForField.call(this, done);
+  await askForField.call(this);
 }
 
 function askForFieldsToRemove() {
-  const context = this.context;
+  const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.fields.length === 0) {
     return undefined;
@@ -204,8 +136,8 @@ function askForFieldsToRemove() {
   });
 }
 
-function askForRelationships() {
-  const context = this.context;
+async function askForRelationships() {
+  const context = this.entityData;
   // don't prompt if data is imported from a file
   if (context.useConfigurationFile && context.updateEntity !== 'add') {
     return;
@@ -214,13 +146,11 @@ function askForRelationships() {
         return;
     } */
 
-  const done = this.async();
-
-  askForRelationship.call(this, done);
+  await askForRelationship.call(this);
 }
 
 function askForRelationsToRemove() {
-  const context = this.context;
+  const context = this.entityData;
   // prompt only if data is imported from a file
   if (!context.useConfigurationFile || context.updateEntity !== 'remove' || this.entityConfig.relationships.length === 0) {
     return undefined;
@@ -262,8 +192,8 @@ function askForRelationsToRemove() {
   });
 }
 
-function askForTableName() {
-  const context = this.context;
+async function askForTableName() {
+  const context = this.entityData;
   // don't prompt if there are no relationships
   const entityTableName = context.entityTableName;
   // const prodDatabaseType = context.prodDatabaseType;
@@ -277,7 +207,6 @@ function askForTableName() {
   ) {
     return;
   }
-  const done = this.async();
   const prompts = [
     {
       type: 'input',
@@ -301,17 +230,15 @@ function askForTableName() {
       default: entityTableName,
     },
   ];
-  this.prompt(prompts).then(props => {
-    /* overwrite the table name for the entity using name obtained from the user */
-    if (props.entityTableName !== context.entityTableName) {
-      context.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
-    }
-    done();
-  });
+  const props = await this.prompt(prompts);
+  /* overwrite the table name for the entity using name obtained from the user */
+  if (props.entityTableName !== context.entityTableName) {
+    context.entityTableName = _.snakeCase(props.entityTableName).toLowerCase();
+  }
 }
 
 /* function askForFiltering() {
-    const context = this.context;
+    const context = this.entityData;
     // don't prompt if server is skipped, or the backend is not sql, or no service requested
     if (context.useConfigurationFile || context.skipServer || context.databaseType !== 'sql' || this.entityConfig.service === 'no') {
         return;
@@ -341,14 +268,13 @@ function askForTableName() {
     });
 } */
 
-function askForDTO() {
-  const context = this.context;
+async function askForDTO() {
+  const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped or if no service layer
   if (context.useConfigurationFile || context.skipServer || this.entityConfig.service === 'no') {
     context.dto = context.dto || 'no';
     return;
   }
-  const done = this.async();
   const prompts = [
     {
       type: 'list',
@@ -367,14 +293,12 @@ function askForDTO() {
       default: 0,
     },
   ];
-  this.prompt(prompts).then(props => {
-    this.entityConfig.dto = props.dto;
-    done();
-  });
+  const props = await this.prompt(prompts);
+  this.entityConfig.dto = props.dto;
 }
 
-function askForService() {
-  const context = this.context;
+async function askForService() {
+  const context = this.entityData;
   // don't prompt if data is imported from a file or server is skipped
   if (context.cqrsEnabled) {
     context.service = 'serviceImpl';
@@ -384,7 +308,6 @@ function askForService() {
     return;
   }
 
-  const done = this.async();
   const prompts = [
     {
       type: 'list',
@@ -403,14 +326,12 @@ function askForService() {
       default: 0,
     },
   ];
-  this.prompt(prompts).then(props => {
-    this.entityConfig.service = props.service;
-    done();
-  });
+  const props = await this.prompt(prompts);
+  this.entityConfig.service = props.service;
 }
 
-function askForPagination() {
-  const context = this.context;
+async function askForPagination() {
+  const context = this.entityData;
   // don't prompt if data are imported from a file
   if (context.useConfigurationFile) {
     return;
@@ -418,7 +339,6 @@ function askForPagination() {
   /* if (context.databaseType === 'cassandra') {
         return;
     } */
-  const done = this.async();
   const prompts = [
     {
       type: 'list',
@@ -441,18 +361,16 @@ function askForPagination() {
       default: 0,
     },
   ];
-  this.prompt(prompts).then(props => {
-    this.entityConfig.pagination = props.pagination;
-    this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
-    done();
-  });
+  const props = await this.prompt(prompts);
+  this.entityConfig.pagination = props.pagination;
+  this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
 }
 
 /**
  * ask question for a field creation
  */
-function askForField(done) {
-  const context = this.context;
+async function askForField() {
+  const context = this.entityData;
   this.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
   // const skipServer = context.skipServer;
   const prodDatabaseType = context.prodDatabaseType;
@@ -483,10 +401,10 @@ function askForField(done) {
         if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
           return 'Your field name cannot use an already existing field name';
         }
-        if ((clientFramework === undefined || clientFramework === 'angularX') && jhiCore.isReservedFieldName(input, 'angularX')) {
+        if ((clientFramework === undefined || clientFramework === 'angularX') && reservedKeywords.isReservedFieldName(input, 'angularX')) {
           return 'Your field name cannot contain a Java or Angular reserved keyword';
         }
-        if ((clientFramework !== undefined || clientFramework === 'react') && jhiCore.isReservedFieldName(input, 'react')) {
+        if ((clientFramework !== undefined || clientFramework === 'react') && reservedKeywords.isReservedFieldName(input, 'react')) {
           return 'Your field name cannot contain a Java or React reserved keyword';
         }
         if (prodDatabaseType === 'oracle' && input.length > 30 && !skipCheckLengthOfIdentifier) {
@@ -575,7 +493,7 @@ function askForField(done) {
         if (input === '') {
           return 'Your class name cannot be empty.';
         }
-        if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+        if (reservedKeywords.isReserved(input, 'JAVA')) {
           return 'Your enum name cannot contain a Java reserved keyword';
         }
         if (!/^[A-Za-z0-9_]*$/.test(input)) {
@@ -858,19 +776,19 @@ function askForField(done) {
             default: '^[a-zA-Z0-9]*$'
         } */,
   ];
-  this.prompt(prompts).then(props => {
-    if (props.fieldAdd) {
-      if (props.fieldIsEnum) {
-        props.fieldType = _.upperFirst(props.fieldType);
-        props.fieldValues = props.fieldValues.toUpperCase();
-      }
+  const props = await this.prompt(prompts);
+  if (props.fieldAdd) {
+    if (props.fieldIsEnum) {
+      props.fieldType = _.upperFirst(props.fieldType);
+      props.fieldValues = props.fieldValues.toUpperCase();
+    }
 
-      const field = {
-        fieldName: props.fieldName,
-        fieldType: props.enumType || props.fieldType,
-        /* fieldTypeBlobContent: props.fieldTypeBlobContent, */
-        fieldValues: props.fieldValues,
-        fieldValidateRules: props.fieldValidateRules /* ,
+    const field = {
+      fieldName: props.fieldName,
+      fieldType: props.enumType || props.fieldType,
+      /* fieldTypeBlobContent: props.fieldTypeBlobContent, */
+      fieldValues: props.fieldValues,
+      fieldValidateRules: props.fieldValidateRules /* ,
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
                 fieldValidateRulesPattern: props.fieldValidateRulesPattern,
@@ -878,24 +796,21 @@ function askForField(done) {
                 fieldValidateRulesMax: props.fieldValidateRulesMax,
                 fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes */,
-      };
+    };
 
-      this.entityConfig.fields = this.entityConfig.fields.concat(field);
-    }
-    logFieldsAndRelationships.call(this);
-    if (props.fieldAdd) {
-      askForField.call(this, done);
-    } else {
-      done();
-    }
-  });
+    this.entityConfig.fields = this.entityConfig.fields.concat(field);
+  }
+  logFieldsAndRelationships.call(this);
+  if (props.fieldAdd) {
+    await askForField.call(this);
+  }
 }
 
 /**
  * ask question for a relationship creation
  */
-function askForRelationship(done) {
-  const context = this.context;
+async function askForRelationship() {
+  const context = this.entityData;
   const name = context.name;
   this.log(chalk.green('\nGenerating relationships to other entities\n'));
   const prompts = [
@@ -916,7 +831,7 @@ function askForRelationship(done) {
         if (input === '') {
           return 'Your other entity name cannot be empty';
         }
-        if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+        if (reservedKeywords.isReserved(input, 'JAVA')) {
           return 'Your other entity name cannot contain a Java reserved keyword';
         }
         /* if (input.toLowerCase() === 'user' && context.applicationType === 'microservice') {
@@ -943,7 +858,7 @@ function askForRelationship(done) {
         if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(_.snakeCase(input))) {
           return 'Your relationship cannot use an already existing field name';
         }
-        if (jhiCore.isReservedKeyword(input, 'JAVA')) {
+        if (reservedKeywords.isReserved(input, 'JAVA')) {
           return 'Your relationship cannot contain a Java reserved keyword';
         }
         return true;
@@ -1053,41 +968,39 @@ function askForRelationship(done) {
             default: 0
         } */,
   ];
-  this.prompt(prompts).then(props => {
-    if (props.relationshipAdd) {
-      const relationship = {
-        relationshipName: props.relationshipName,
-        otherEntityName: _.lowerFirst(props.otherEntityName),
-        relationshipType: props.relationshipType,
-        // relationshipValidateRules: props.relationshipValidateRules,
-        otherEntityField: props.otherEntityField,
-        ownerSide: props.ownerSide,
-        // useJPADerivedIdentifier: props.useJPADerivedIdentifier,
-        otherEntityRelationshipName: props.otherEntityRelationshipName,
-      };
+  const props = await this.prompt(prompts);
+  if (props.relationshipAdd) {
+    const relationship = {
+      relationshipName: props.relationshipName,
+      otherEntityName: _.lowerFirst(props.otherEntityName),
+      relationshipType: props.relationshipType,
+      // relationshipValidateRules: props.relationshipValidateRules,
+      otherEntityField: props.otherEntityField,
+      ownerSide: props.ownerSide,
+      // useJPADerivedIdentifier: props.useJPADerivedIdentifier,
+      otherEntityRelationshipName: props.otherEntityRelationshipName,
+    };
 
-      if (props.otherEntityName.toLowerCase() === 'user') {
-        relationship.ownerSide = true;
-        relationship.otherEntityField = 'login';
-        relationship.otherEntityRelationshipName = _.lowerFirst(name);
-      }
-      this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
+    if (props.otherEntityName.toLowerCase() === 'user') {
+      relationship.ownerSide = true;
+      relationship.otherEntityField = 'login';
+      relationship.otherEntityRelationshipName = _.lowerFirst(name);
     }
-    logFieldsAndRelationships.call(this);
-    if (props.relationshipAdd) {
-      askForRelationship.call(this, done);
-    } else {
-      this.log('\n');
-      done();
-    }
-  });
+    this.entityConfig.relationships = this.entityConfig.relationships.concat(relationship);
+  }
+  logFieldsAndRelationships.call(this);
+  if (props.relationshipAdd) {
+    await askForRelationship.call(this);
+  } else {
+    this.log('\n');
+  }
 }
 
 /**
  * Show the entity and it's fields and relationships in console
  */
 function logFieldsAndRelationships() {
-  const context = this.context;
+  const context = this.entityData;
   if (this.entityConfig.fields.length > 0 || this.entityConfig.relationships.length > 0) {
     this.log(chalk.red(chalk.white('\n================= ') + context.name + chalk.white(' =================')));
   }

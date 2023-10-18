@@ -2,17 +2,17 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
-const SUB_GENERATOR = 'bootstrap-dotnetcore';
-const SUB_GENERATOR_NAMESPACE = `jhipster-dotnetcore:${SUB_GENERATOR}`;
+const SUB_GENERATOR = 'bootstrap-application';
 
-describe('SubGenerator bootstrap-dotnetcore of dotnetcore JHipster blueprint', () => {
+describe('SubGenerator bootstrap-application of dotnetcore JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers
-        .run(SUB_GENERATOR_NAMESPACE)
+        .runJHipster(SUB_GENERATOR)
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();
@@ -20,6 +20,9 @@ describe('SubGenerator bootstrap-dotnetcore of dotnetcore JHipster blueprint', (
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+    it('application should match snapshot', () => {
+      expect({ ...result.generator.sharedData.getApplication(), user: undefined }).toMatchSnapshot();
     });
   });
 });

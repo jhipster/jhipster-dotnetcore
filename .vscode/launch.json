@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "preLaunchTask" : "makeSamplefolder",
+      "preLaunchTask": "makeSamplefolder",
       "name": "jhipster-dotnetcore blueprint",
       "program": "${workspaceFolder}/cli/cli.cjs",
       "timeout": 100000,
@@ -18,7 +18,7 @@
     {
       "type": "node",
       "request": "launch",
-      "preLaunchTask" : "makeSamplefolder",
+      "preLaunchTask": "makeSamplefolder",
       "name": "jhipster-dotnetcore entity",
       "program": "${workspaceFolder}/cli/cli.cjs",
       "args": ["entity", "BankAccount", "--force"],
@@ -28,12 +28,12 @@
     {
       "type": "node",
       "request": "launch",
-      "preLaunchTask" : "makeSamplefolder",
+      "preLaunchTask": "makeSamplefolder",
       "name": "jhipster-dotnetcore jdl",
       "program": "${workspaceFolder}/cli/cli.cjs",
       "args": ["jdl", "${workspaceFolder}/.blueprint/generate-sample/template/default/jdl-default/app.jdl", "--force"],
       "cwd": "${workspaceFolder}/samples/",
       "console": "integratedTerminal"
-    },
+    }
   ]
 }

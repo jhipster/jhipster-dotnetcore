@@ -13,7 +13,6 @@ export default class extends BaseApplicationGenerator {
 
   async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
-    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
   }
 
   get [BaseApplicationGenerator.PREPARING]() {

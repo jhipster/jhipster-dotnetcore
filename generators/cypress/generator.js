@@ -5,10 +5,6 @@ export default class extends BaseApplicationGenerator {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
-  async beforeQueue() {
-    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
-  }
-
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       removeNotImplementedFeatureInCypress({ application }) {

@@ -11,8 +11,8 @@ import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN }
 
 const packagejs = JSON.parse((await readFile(join(dirname(fileURLToPath(import.meta.url)), '../../package.json'))).toString()).version;
 export default class extends BaseApplicationGenerator {
-  async beforeQueue() {
-    await this.dependsOnJHipster('bootstrap-application');
+  constructor(args, options, features) {
+    super(args, options, { ...features, sbsBlueprint: true });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
@@ -42,6 +42,13 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
       async loadingTemplateTask({ application }) {
+        // Paths needs adjusts for husky and lint-staged:
+        // - prettier should be installed at root package.json.
+        // - lint-staged paths needs adjusts.
+        application.skipCommitHook = true;
+
+        application.withAdminUi = false;
+
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
         application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
@@ -60,11 +67,9 @@ export default class extends BaseApplicationGenerator {
         application.solutionName = application.pascalizedBaseName;
         application.mainProjectDir = `${application.pascalizedBaseName}/`;
 
-        application.temporaryDir = 'tmp/';
         application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
         application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
         application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
-        application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
         application.backendType = '.Net';
 
         application.jhipsterDotnetVersion = this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version;
@@ -75,7 +80,8 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       async preparingTemplateTask({ application }) {
-        application.withAdminUi = false;
+        application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
+        application.temporaryDir = 'tmp/';
         application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
         application.dockerServicesDir = 'docker/';
 

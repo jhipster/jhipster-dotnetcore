@@ -6,10 +6,6 @@ export default class extends BaseApplicationGenerator {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
-  async beforeQueue() {
-    await this.dependsOnJHipster('jhipster-dotnetcore:bootstrap-dotnetcore');
-  }
-
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async writingDotNetFiles({ application }) {
