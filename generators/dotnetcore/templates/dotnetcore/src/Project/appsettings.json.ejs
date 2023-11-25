@@ -1,0 +1,121 @@
+<%#
+ Copyright 2019-2023 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+{
+    "Serilog": {
+        "MinimumLevel": "Information",
+        "Override": {
+            "Default": "Information",
+            "Microsoft": "Information",
+            "System": "Information"
+        },
+        "SyslogUrl": "localhost",
+        "SyslogPort": "6514",
+        "SyslogAppName": "<%= baseName %>",
+        "Enrich": [ "FromLogContext", "WithProcessId", "WithThreadId" ]
+    },
+    "AllowedHosts": "*",
+    <%_ switch(databaseType) {
+            case 'sqllite': _%>
+    "EntityFramework": {
+        "DataSource": ":memory:"
+    },
+            <%_ break;
+            case 'mssql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=mssql;Database=<%= baseName %>;User=<%- databaseData.defaultUsername %>;Password=<%- databaseData.defaultPassword %>;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;"
+    },
+            <%_ break;
+            case 'postgresql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=postgresql;Database=<%= baseName %>;Port=5432;User Id=<%= baseName %>;Password=;Integrated Security=true;Pooling=true;"
+    },
+            <%_ break;
+            case 'mysql': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "Server=mysql;Port=3306;Database=<%= baseName.toLowerCase() %>;User=<%- databaseData.defaultUsername %>;Password=;"
+    },
+            <%_ break;
+            case 'mongodb': _%>
+    "EntityFramework": {
+        "DataSource": ":memory:"
+    },
+    "MongoDatabaseConfig": {
+        "ConnectionString": "mongodb://mongodb:27017",
+        "DatabaseName": "<%= baseName %>"
+    },
+    "MongoDatabaseConfigUnitTests": {
+        "ConnectionString": "mongodb://localhost:27017",
+        "DatabaseName": "tests"
+    },
+            <%_ break;
+            case 'oracle': _%>
+    "ConnectionStrings": {
+        "AppDbContext": "User Id=<%- databaseData.defaultUsername %>;Password=<%- databaseData.defaultPassword %>;Data Source=oracle:1521/<%- databaseData.defaultDatabaseName %>"
+    },
+            <%_ break;
+    }_%>
+    <%_ if (serviceDiscoveryType === 'consul') { _%>
+    "Consul": {
+        "Host": "http://localhost:8500",
+        <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
+        "Enabled": true,
+        "service": "<%= lowercaseBaseName %>",
+        "address": "localhost",
+        "Port": <%= serverPortSecured %>,
+        "PingEnabled": false
+        <%_ } _%>
+    },
+    <%_ } _%>
+    "Security": {
+        "Authentication": {
+            <%_ if (authenticationType === 'jwt') { _%>
+            "Jwt": {
+                "Base64Secret": "<%- jwtSecretKey %>",
+                "TokenValidityInSeconds": 86400,
+                "TokenValidityInSecondsForRememberMe": 2592000
+            }
+            <%_ } else { _%>
+            "OAuth2": {
+                "Provider": {
+                    "IssuerUri": "http://localhost:9080/auth/realms/jhipster",
+                    "LogOutUri": "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/logout",
+                    "ClientId": "web_app",
+                    "ClientSecret": "web_app"
+                    }
+                    //"Provider": {
+                    //  "IssuerUri": "https://{yourOktaDomain}/oauth2/default",
+                    //  "LogOutUri": "https://{yourOktaDomain}/oauth2/default/v1/logout",
+                    //  "ClientId": "client_id",
+                    //  "ClientSecret": "client_secret"
+                    //}
+            }
+            <%_ } _%>
+        },
+        "Cors": {
+            "AllowedOrigins": "*",
+            "AllowedMethods": "*",
+            "AllowedHeaders": "*",
+            "ExposedHeaders": "Authorization,Link,X-Total-Count,X-Pagination",
+            "AllowCredentials": true,
+            "MaxAge": 1800
+        }
+    },
+    <%_ if (clientFramework === "Blazor") { _%>
+    "INCLUDE_BLAZOR": false,
+    <%_ } _%>
+    "RibbonInfo": {
+      "display-ribbon-on-profiles": "dev"
+    }
+}

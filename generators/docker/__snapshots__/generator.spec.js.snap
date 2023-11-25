@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SubGenerator docker of dotnetcore JHipster blueprint > run > should succeed 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "SonarAnalysis.ps1": {
+    "stateCleared": "modified",
+  },
+  "SonarQube.Analysis.xml": {
+    "stateCleared": "modified",
+  },
+  "docker/app.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/grafana/data/dashboard/Docker Monitoring.json": {
+    "stateCleared": "modified",
+  },
+  "docker/grafana/data/dashboard/default-dashboard.yaml": {
+    "stateCleared": "modified",
+  },
+  "docker/grafana/data/provisioning/influxdb.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/influxdb/config/influxdb.conf": {
+    "stateCleared": "modified",
+  },
+  "docker/kapacitor/config/kapacitor.conf": {
+    "stateCleared": "modified",
+  },
+  "docker/monitoring.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/prometheus/prometheus.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/sonar.yml": {
+    "stateCleared": "modified",
+  },
+  "docker/telegraf/telegraf.conf": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

@@ -4,7 +4,7 @@ JHipster.Net implement basic Auditing on all the entities you save in the databa
 
 ## Audit properties
 
-This blueprint introduce a new base class named ```AuditedEntityBase``` that every generated entity will inherit from when we need to add the audit functionality. The properties use to audit entities are :
+This blueprint introduce a new base class named `AuditedEntityBase` that every generated entity will inherit from when we need to add the audit functionality. The properties use to audit entities are :
 
 1. CreateBy : The user who created the initial entry.
 2. CreatedDate : The datetime of creation of initial entry.
@@ -20,9 +20,11 @@ public abstract class AuditedEntityBase
     public DateTime LastModifiedDate { get; set; }
 }
 ```
+
 ## Audit of generated Entities
 
-For example, if we have a ```Task``` entity and we want to add audit functionality we would inherit from our ```AuditedEntityBase``` like that:
+For example, if we have a `Task` entity and we want to add audit functionality we would inherit from our `AuditedEntityBase` like that:
+
 ```csharp
 public class Task : AuditedEntityBase
 {
@@ -31,11 +33,11 @@ public class Task : AuditedEntityBase
 }
 ```
 
-Our ```Task``` class will have all the audit properties.
+Our `Task` class will have all the audit properties.
 
 ## Automatically set properties audit
 
-To automatically set the audit properties, we override the ```SaveChangesAsync``` method in our ```ApplicationDatabaseContext``` class:
+To automatically set the audit properties, we override the `SaveChangesAsync` method in our `ApplicationDatabaseContext` class:
 
 ```csharp
 public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -67,7 +69,8 @@ public override async Task<int> SaveChangesAsync(CancellationToken cancellationT
 }
 ```
 
-In our implementation, we use the ```HttpContextAccessor``` to get the ```user name``` of current user. To have ```HttpContextAccessor``` available we just inject it into our ```ApplicationDatabaseContext class```.
+In our implementation, we use the `HttpContextAccessor` to get the `user name` of current user. To have `HttpContextAccessor` available we just inject it into our `ApplicationDatabaseContext class`.
+
 ```csharp
 private readonly IHttpContextAccessor _httpContextAccessor;
 public ApplicationDatabaseContext(DbContextOptions<ApplicationDatabaseContext> options, IHttpContextAccessor httpContextAccessor) : base(options)

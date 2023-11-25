@@ -1,6 +1,6 @@
 # Fronts
 
-When generating an application, you are able to choose between multiple fronts. 
+When generating an application, you are able to choose between multiple fronts.
 
 ## Angular
 
@@ -80,7 +80,7 @@ With a C#-shared codebase, developers can use Xamarin tools to write native Andr
 
 Xamarin allows to take advantage of this blueprint. Indeed, it enables to generate a modern cross platform application with both front-end and back-end in C#.
 
-### Generate your application 
+### Generate your application
 
 Call the generator
 
@@ -95,6 +95,7 @@ and choose Xamarin
 ### Structure
 
 Any generated Xamarin application is structured as follows
+
 ```
 client
 ├── Namespace.Client.Xamarin.Core     - Your core application
@@ -107,33 +108,33 @@ client
 │   ├── Views
 │   │   ├── Entities                  - Generated views
 ├── Namespace.Client.Xamarin.Android  - Your Android application
-│   ├── Resources          
+│   ├── Resources
 │   │   ├── drawable                  - Contains your images
 │   │   ├── Layout                    - Contains your layouts
 │   ├── Properties
-├── Namespace.Client.Xamarin.iOS      - Your iOS application   
+├── Namespace.Client.Xamarin.iOS      - Your iOS application
 │   ├── Resources                     - Contains your images
 │   ├── Properties
 ├── Namespace.Client.Xamarin.Shared   - Shared code
 │   ├── Constants                     - Contains shared constants
 ```
 
-### Limitations 
+### Limitations
 
-For the moment, the Xamarin generation has certain limitations : 
+For the moment, the Xamarin generation has certain limitations :
 
 - No Offline mode
 - No User managment
 - No validation on entity fields
-- No translation 
+- No translation
 - No Tests
-- Only JWT security is implemented 
+- Only JWT security is implemented
 
 ## Alpha - Blazor
 
 Blazor is a free and open-source web framework that enables developers to create web apps using C# and HTML.
 
-### Why Blazor ? 
+### Why Blazor ?
 
 Blazor can run your client-side C# code directly in the browser, using WebAssembly. Because it's real .NET running on WebAssembly, you can re-use code and libraries from server-side parts of your application. (https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor)
 
@@ -141,7 +142,7 @@ Blazor can run your client-side C# code directly in the browser, using WebAssemb
 
 - [dotnet 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 
-### Generate your application 
+### Generate your application
 
 Call the generator
 
@@ -172,54 +173,59 @@ dotnet run --verbosity normal --project ./src/client/YourAppName.Client/YourAppN
 #### Start your application with Hot Reload
 
 ##### Run the Backend
+
 ```bash
  dotnet watch --project ./src/YourAppName/YourAppName.csproj run --verbosity normal
- ```
+```
+
 ##### Run the Frontend
+
 ```bash
  dotnet watch --project ./src/client/YourAppName.Client/YourAppName.Client.csproj run --verbosity normal
- ```
+```
 
-### Generate entities 
+### Generate entities
 
 Like the others front technologies you can generate entities for Blazor.
 
 #### With CLI
+
 ```bash
 jhipster entity <entity-name>
 ```
 
 #### With [JDL](https://start.jhipster.tech/jdl-studio/)
+
 ```bash
 jhipster import-jdl my_file.jdl
 ```
 
-### Tools 
+### Tools
 
-As the project used SASS, to install and consume SCSS third parties libraries like Bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager)) 
+As the project used SASS, to install and consume SCSS third parties libraries like Bootstrap we use Microsoft Library Manager (aka [libman](https://github.com/aspnet/LibraryManager))
 You can find libman configuration in the same directory than the client solution (./src/client/YourAppName.Client)
 
 To minify CSS we use Excubo.WebCompiler (aka [webcompiler](https://github.com/excubo-ag/WebCompiler))
 
 These two tools are installed during JHipster client generation, and you can find the execution in Client.csproj (./src/client/YourAppName.Client/YourAppName.Client.csproj)
 
-### UI components 
+### UI components
 
-To speed up our development we use [Blazored](https://github.com/Blazored) components like Blazored.Modal or Blazored.SessionStorage. 
+To speed up our development we use [Blazored](https://github.com/Blazored) components like Blazored.Modal or Blazored.SessionStorage.
 
 We also use [Blazorise](https://github.com/stsrki/Blazorise) which has really interesting components.
 
-### UT 
+### UT
 
 For unit test we use the awesome library [bUnit](https://github.com/egil/bUnit).
 
 You can find client unit test in ./test/YourAppName.Client.Test
 
-### Limitations 
+### Limitations
 
-For the moment, the Blazor generation has certain limitations : 
+For the moment, the Blazor generation has certain limitations :
 
-- Only support DTO you can't use application without DTO 
+- Only support DTO you can't use application without DTO
 - No validation on entity fields (The validation is only on user management part)
-- No translation 
-- Only JWT security is implemented 
+- No translation
+- Only JWT security is implemented

@@ -1,6 +1,6 @@
 # Running local Blueprint version for development
 
-1. Link your blueprint globally 
+1. Link your blueprint globally
 
 ```bash
 cd jhipster-dotnetcore

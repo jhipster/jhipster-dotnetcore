@@ -1,0 +1,126 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AspNetCorePackageVersion>7.0.4</AspNetCorePackageVersion>
+    <EntityFrameworkPackageVersion>7.0.4</EntityFrameworkPackageVersion>
+    <JHipsterNetPackageVersion>1.0.10</JHipsterNetPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<%_ if(!skipClient && clientFramework === "Blazor") { _%>
+	<PackageVersion Include="AutoMapper" Version="12.0.1" />
+	<PackageVersion Include="Blazored.Modal" Version="7.1.0" />
+	<PackageVersion Include="Blazored.SessionStorage" Version="2.3.0" />
+	<PackageVersion Include="Blazorise.Bootstrap" Version="1.2.2" />
+	<PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.2.2" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+	<PackageVersion Include="System.Net.Http.Json" Version="7.0.1" />
+	<PackageVersion Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
+
+	<PackageVersion Include="AutoFixture" Version="4.18.0" />
+	<PackageVersion Include="bunit" Version="1.18.4" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCorePackageVersion)" />
+
+	<%_ } _%>
+	<PackageVersion Include="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
+	<PackageVersion Include="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
+	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+	<%_ if (cqrsEnabled) { _%>
+	<PackageVersion Include="MediatR" Version="11.0.0" />
+	<PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+	<%_ } _%>
+	<PackageVersion Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
+	<PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="Scrutor" Version="4.2.2" />
+	<PackageVersion Include="Serilog.AspNetCore" Version="6.1.0" />
+	<PackageVersion Include="Serilog.Settings.Configuration" Version="3.4.0" />
+	<PackageVersion Include="Serilog.Sinks.Console" Version="4.1.0" />
+	<PackageVersion Include="Serilog.Enrichers.Process" Version="2.0.2" />
+	<PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+	<PackageVersion Include="Serilog.Sinks.SyslogMessages" Version="2.0.7" />
+	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	<PackageVersion Include="LanguageExt.Core" Version="4.4.2" />
+	<%_ if (authenticationType === 'jwt') { _%>
+	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
+	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
+	<%_ } else { _%>
+	<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(AspNetCorePackageVersion)" />
+	<%_ } _%>
+	<%_ if (serviceDiscoveryType === 'consul') { _%>
+	<PackageVersion Include="Winton.Extensions.Configuration.Consul" Version="3.2.0" />
+	<%_ } _%>
+	<%_ if (serviceDiscoveryType === 'consul'  && applicationType !== 'gateway') { _%>
+	<PackageVersion Include="Consul" Version="1.6.10.7" />
+	<%_ } _%>
+	<%_ if (applicationType === 'gateway') { _%>
+	<PackageVersion Include="Ocelot" Version="18.0.0" />
+	<PackageVersion Include="Ocelot.Provider.Consul" Version="18.0.0" />
+	<%_ } _%>
+
+	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+	<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+	<PackageVersion Include="System.Text.Json" Version="7.0.2" />
+	<PackageVersion Include="Serilog" Version="2.12.0" />
+
+	<%_ switch(databaseType) {
+		case 'sqllite': _%>
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
+		<%_ break;
+		case 'mssql': _%>
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
+		<%_ break;
+		case 'postgresql': _%>
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
+		<%_ break;
+		case 'mongodb': _%>
+	<PackageVersion Include="MongoDB.Driver" Version="2.18.0" />
+	<PackageVersion Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
+		<%_ break;
+		case 'mysql': _%>
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
+		<%_ break;
+		case 'oracle': _%>
+	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Oracle.EntityFrameworkCore" Version="6.21.61" />
+	<PackageVersion Include="Oracle.ManagedDataAccess.Core" Version="3.21.80" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
+		<%_ break;
+	} _%>
+	<%_ if (databaseType !== 'mongodb') { _%>
+    <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
+	<PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
+	<%_ } _%>
+	<PackageVersion Include="coverlet.msbuild" Version="3.2.0" />
+	<PackageVersion Include="FakeItEasy" Version="7.3.1" />
+	<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+	<PackageVersion Include="Moq" Version="4.18.4" />
+	<PackageVersion Include="xunit" Version="2.4.2" />
+	<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
+	<PackageVersion Include="xunit.runner.console" Version="2.4.2" />
+	<PackageVersion Include="FluentAssertions" Version="6.10.0" />
+	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
+	<PackageVersion Include="FluentAssertions.Json" Version="6.1.0" />
+  </ItemGroup>
+</Project>

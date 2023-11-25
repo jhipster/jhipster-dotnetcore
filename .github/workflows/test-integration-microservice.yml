@@ -7,58 +7,74 @@ on:
   pull_request:
 
 jobs:
-    applications:
-        name: ${{ matrix.app-type }}
-        runs-on: ${{ matrix.os }}
-        if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
-        timeout-minutes: 40
-        strategy:
-            fail-fast: false
-            matrix:
-                node_version: [16.14.0]
-                os: [ubuntu-20.04]
-                app-type:
-                    - microservice-app
-                    - gateway-app
-                include:
-                    - app-type: microservice-app
-                      arg: 'no'
-                    - app-type: gateway-app
-                      arg: 'no'
+  applications:
+    name: ${{ matrix.app-type }}
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version: [18.17.1]
+        os: [ubuntu-22.04]
+        app-type:
+          - microservice-app
+          - gateway-app
+        include:
+          - app-type: microservice-app
+            arg: 'no'
+          - app-type: gateway-app
+            arg: 'no'
+    env:
+      JHI_APP: ${{ matrix.app-type }}
+      JHI_ARG: ${{ matrix.arg }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: jhipster-dotnetcore
+          fetch-depth: 2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
+      - name: Create app dir
+        working-directory: ${{ github.workspace }}
+        run: mkdir app
+      - name: 'install required npm version'
+        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: git history
+        run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
+      - name: PREPARE jhipster env
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
+        run: npm ci && npm link
+      - name: 'GENERATE JHipster.NET app'
+        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
+      - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
+        run: dotnet build
         env:
-            JHI_APP: ${{ matrix.app-type }}
-            JHI_ARG: ${{ matrix.arg }}
-
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                node-version: ${{ matrix.node_version }}
-            - name: 'install required npm version'
-              run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
-            - uses: actions/setup-dotnet@v3
-              with:
-                dotnet-version: '7.0.x'
-            - name: git history
-              run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
-            - name: PREPARE jhipster env
-              run: sudo ./test-integration/scripts/00-install-all-jhipster.sh
-            - name: 'GENERATE JHipster.NET app'
-              run: ./test-integration/scripts/02-generate-app-sample.sh $JHI_APP
-            - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
-              run: ./test-integration/scripts/03-install-dependencies-app-sample.sh $JHI_APP
-            - name: 'GENERATE JHipster.NET entities'
-              run: ./test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            - name: 'RUN SERVER UNIT TESTS of generated app'
-              run: ./test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
-            - name: 'RUN SONAR ANALYZE on generated app'
-              run: ./test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            - name: 'VERIFY FORMAT'
-              run: ./test-integration/scripts/09-verify-format.sh $JHI_APP
-
+          NODE_ENV: development
+          APP_VERSION: 1.0
+      - name: 'GENERATE JHipster.NET entities'
+        run: ../jhipster-dotnetcore/test-integration/scripts/04-generate-entities-sample.sh $JHI_APP $JHI_ARG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: 'RUN SERVER UNIT TESTS of generated app'
+        run: ../jhipster-dotnetcore/test-integration/scripts/06-run-generated-server-tests-of-sample.sh $JHI_APP
+      - name: 'RUN SONAR ANALYZE on generated app'
+        run: ../jhipster-dotnetcore/test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: 'VERIFY FORMAT'
+        run: ../jhipster-dotnetcore/test-integration/scripts/09-verify-format.sh $JHI_APP
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2

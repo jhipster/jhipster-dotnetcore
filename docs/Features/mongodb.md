@@ -17,6 +17,7 @@ When generating your application, make sure to choose "MongoDB" as your database
 The main difference with the other SQL databases is that your IDs are handled as string and are stored in ObjectID instead of long.
 
 Also, some classes are replaced in order to support MongoDB :
+
 ```
 BaseEntity => MongoBaseEntity
 GenericRepository => MongoGenericRepository

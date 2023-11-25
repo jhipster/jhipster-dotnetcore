@@ -2,7 +2,7 @@
 
 This sub-generator allows the deployment of your JHipster .Net application to Heroku cloud.
 
-The Heroku sub-generator would have no resources and dynos available hence a paid plan of Heroku is required. 
+The Heroku sub-generator would have no resources and dynos available hence a paid plan of Heroku is required.
 
 Therefore to avoid any unexpected build failures, we would recommend verifying your Heroku account before starting this sub-generator.
 
@@ -11,6 +11,7 @@ Therefore to avoid any unexpected build failures, we would recommend verifying y
 Before running the sub-generator, you must install the [Heroku CLI](https://cli.heroku.com/).
 
 Make sure that you are logged into Heroku.
+
 ```bash
 heroku login
 ```
@@ -30,14 +31,15 @@ jhipster heroku
 ## Databases
 
 - Mysql ✔
-- Postgres ✔ 
+- Postgres ✔
 - MSSQL ✔ (requires a manual step described below)
 
-The MySql and PostgreSQL database addons are not free of cost and won't be automatically added by the sub-generator when deploying to Heroku. A paid plan is required to use the resources and addons. 
+The MySql and PostgreSQL database addons are not free of cost and won't be automatically added by the sub-generator when deploying to Heroku. A paid plan is required to use the resources and addons.
 
 Likewise, Heroku's [MSSQL addon](https://elements.heroku.com/addons/mssql) is not free of cost and to avoid unexpected costs It will not be provisioned automatically when deploying to Heroku.
 
 Please visit [the MSSQL addon page](https://elements.heroku.com/addons/mssql), review the pricing and add the MSSQL addon to your account with the following command:
+
 ```bash
 heroku addons:create mssql:REPLACE_PLAN_NAME --as DATABASE --app REPLACE_YOUR_APP_NAME
 ```
@@ -51,7 +53,6 @@ For applications that use Oauth2 the following manual steps are required:
     3. Under `Installed add-ons` okta should be already installed.
     4. Click on `okta` to open the addon's Dashboard.
     5. To configure it follow the documentation (here)[https://jhipsternet.readthedocs.io/en/latest/Features/security.html#okta]
-
 
 ## Limitations
 

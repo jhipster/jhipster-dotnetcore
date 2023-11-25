@@ -1,10 +1,11 @@
 # generator-jhipster-dotnetcore
-[![NPM version][npm-image]][npm-url] 
+
+[![NPM version][npm-image]][npm-url]
 [![Documentation Status](https://readthedocs.org/projects/jhipsternet/badge/?version=latest)](https://jhipsternet.readthedocs.io/en/latest/?badge=latest)
 [![Generator Build Status][github-actions-generator-image]][github-actions-url]
 [![Integration JWT Build Status][github-actions-integ-jwt-image]][github-actions-url]
 [![Integration OAUTH Build Status][github-actions-integ-oauth-image]][github-actions-url]
-[![Dependency Status][daviddm-image]][daviddm-url] 
+[![Dependency Status][daviddm-image]][daviddm-url]
 [![Sonar Cloud Quality Gate][sonar-gate-image]][sonar-url]
 [![Sonar Cloud Reliability Rate][sonar-reliability-image]][sonar-url]
 [![Sonar Cloud Security Rate][sonar-security-image]][sonar-url]
@@ -13,12 +14,12 @@
 
 > JHipster blueprint
 
-# Big Picture 
+# Big Picture
 
 JHipster is a well-known platform for generating modern application in java world.
-JHipster provides a blueprints system that allows to override the default behavior of the generator 
+JHipster provides a blueprints system that allows to override the default behavior of the generator
 
-JHipster.NET is a blueprint that overrides the back-end part, originally generated in spring boot, by back-end in asp.net core. For the front-end all the common language can be used (angular, react, vue.js). 
+JHipster.NET is a blueprint that overrides the back-end part, originally generated in spring boot, by back-end in asp.net core. For the front-end all the common language can be used (angular, react, vue.js).
 
 In alpha version we also have the possibility to choose either [Blazor](https://github.com/jhipster/jhipster-dotnetcore/issues/165) or [Xamarin](https://github.com/jhipster/jhipster-dotnetcore/issues/488) for the front.
 
@@ -26,11 +27,12 @@ This blueprint is an official blueprint of JHipster [official-blueprints](https:
 
 # Docs
 
-Documentation and information about  `JHipster.NET` are available [here](https://jhipsternet.readthedocs.io/en/latest/)
+Documentation and information about `JHipster.NET` are available [here](https://jhipsternet.readthedocs.io/en/latest/)
 
 Full documentation and information about JHipster are available [here](https://www.jhipster.tech/)
 
-# Analysis of the sample project 
+# Analysis of the sample project
+
 https://github.com/jhipster/jhipster-sample-app-dotnetcore
 
 [![Sonar Cloud Quality Gate][sonar-sample-gate-image]][sonar-sample-url]
@@ -47,10 +49,6 @@ This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be 
 # Gitter
 
 https://gitter.im/JHipster-NET/jhipster-dotnetcore
-
-# Prerequisites
-
-npm install -g generator-jhipster
 
 # Installation
 
@@ -87,18 +85,10 @@ yarn global upgrade generator-jhipster-dotnetcore
 To use this blueprint, run the below command
 
 ```bash
-jhipster --blueprints dotnetcore
+jhipster-dotnetcore
 ```
 
 ## Using Docker
-
-Download the Dockerfile:
-
-```bash
-mkdir docker
-cd docker
-wget https://github.com/jhipster/jhipster-dotnetcore/raw/main/docker/Dockerfile
-```
 
 Build the Docker images:
 
@@ -123,17 +113,17 @@ docker run -it --rm -v $PWD:/home/jhipster/app jhipster-generator-dotnetcore
 
 ✅ General App generation
 
--   `jhipster --blueprints dotnetcore`
-    -   JWT : ✅ 
-    -   Oauth2 : ✅ 
-  
+- `jhipster-dotnetcore`
+  - JWT : ✅
+  - Oauth2 : ✅
+
 ✅ Entity generation
 
--   `jhipster entity <entity-name>`
+- `jhipster-dotnetcore <entity-name>`
 
 ✅ JDL Entity model support generation
 
--   `jhipster import-jdl my_file.jdl`
+- `jhipster-dotnetcore import-jdl my_file.jdl`
 
 ## Running the generated app in a Docker container
 
@@ -149,18 +139,18 @@ docker build -f "[Dockerfile path]" -t [An image name]:[A tag] "[Application roo
 docker run -d -p [A host port]:80 [Image name]:[Image tag]
 ```
 
-3. Open your favorite browser at ```localhost:[Chosen host port]``` and enjoy ! :whale:
+3. Open your favorite browser at `localhost:[Chosen host port]` and enjoy ! :whale:
 
 Docker compose file can be used to start the application with database as a service. To build images, run
 
 ```bash
-docker-compose -f docker/app.yml build
+docker compose -f docker/app.yml build
 ```
 
 To start services, use
 
 ```bash
-docker-compose -f docker/app.yml up
+docker compose -f docker/app.yml up
 ```
 
 In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/main/OracleDatabase/SingleInstance/README.md)
@@ -168,7 +158,6 @@ In case of Oracle database, see [official documentation](https://github.com/orac
 # License
 
 Apache-2.0 © [JHipster.NET]()
-
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-dotnetcore.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-dotnetcore
@@ -186,7 +175,6 @@ Apache-2.0 © [JHipster.NET]()
 [sonar-security-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=security_rating
 [sonar-maintainability-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=sqale_rating
 [sonar-duplication-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=duplicated_lines_density
-
 [sonar-sample-url]: https://sonarcloud.io/dashboard?branch=main&id=jhipster_jhipster-sample-app-dotnetcore
 [sonar-sample-coverage-url]: https://sonarcloud.io/component_measures?branch=main&id=jhipster_jhipster-sample-app-dotnetcore&metric=coverage&view=list
 [sonar-sample-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-sample-app-dotnetcore&metric=alert_status
