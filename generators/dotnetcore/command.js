@@ -56,6 +56,7 @@ const command = {
       prompt: {
         type: 'confirm',
         message: 'Do you want to use the CQRS design pattern?',
+        default: false,
       },
     },
     withTerraformAzureScripts: {

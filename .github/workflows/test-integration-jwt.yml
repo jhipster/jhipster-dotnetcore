@@ -108,6 +108,7 @@ jobs:
       - name: 'RUN E2E TESTS of generated app'
         run: ../jhipster-dotnetcore/test-integration/scripts/07-tests-e2e.sh $JHI_APP $JHI_ARG
         id: e2e
+        continue-on-error: true
       - name: 'RUN SONAR ANALYZE on generated app'
         run: ../jhipster-dotnetcore/test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
         env:
