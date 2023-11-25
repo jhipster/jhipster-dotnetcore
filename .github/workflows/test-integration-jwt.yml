@@ -10,7 +10,6 @@ jobs:
   applications:
     name: ${{ matrix.app-type }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
     timeout-minutes: 40
     defaults:
@@ -109,6 +108,7 @@ jobs:
       - name: 'RUN E2E TESTS of generated app'
         run: ../jhipster-dotnetcore/test-integration/scripts/07-tests-e2e.sh $JHI_APP $JHI_ARG
         id: e2e
+        continue-on-error: true
       - name: 'RUN SONAR ANALYZE on generated app'
         run: ../jhipster-dotnetcore/test-integration/scripts/08-run-sonar-analyze.sh $JHI_APP
         env:
