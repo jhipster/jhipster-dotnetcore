@@ -39,7 +39,7 @@ exports[`SubGenerator common of dotnetcore JHipster blueprint > run > should suc
     "stateCleared": "modified",
   },
   "sonar-project.properties": {
-    "stateCleared": "modified",
+    "state": "deleted",
   },
 }
 `;
