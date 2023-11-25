@@ -39,7 +39,7 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
     "stateCleared": "modified",
   },
   "sonar-project.properties": {
-    "stateCleared": "modified",
+    "state": "deleted",
   },
   "src/Jhipster/ClientApp/.eslintignore": {
     "stateCleared": "modified",
