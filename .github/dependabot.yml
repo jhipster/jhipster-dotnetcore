@@ -34,7 +34,7 @@ updates:
         versions:
           - 8.0.0
   - package-ecosystem: nuget
-    directory: '/generators/server/dotnetcore/templates/src'
+    directory: '/generators/dotnetcore/templates/dotnetcore/src'
     schedule:
       interval: daily
       time: '11:00'
