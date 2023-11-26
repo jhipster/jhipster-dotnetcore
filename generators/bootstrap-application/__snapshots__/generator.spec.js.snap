@@ -22,7 +22,7 @@ exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > r
   "blueprints": [
     {
       "name": "generator-jhipster-dotnetcore",
-      "version": "3.9.1",
+      "version": "4.0.0",
     },
   ],
   "buildTool": "maven",
