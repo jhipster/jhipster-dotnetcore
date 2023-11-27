@@ -55,7 +55,7 @@ namespace <%= namespace %>.Configuration;
 public static class SecurityStartup
 {
     <%_ if (authenticationType === 'jwt') { _%>
-    public const string UserNameClaimType = JwtRegisteredClaimNames.Sub;
+    public const string UserNameClaimType = ClaimTypes.NameIdentifier;
     <%_ } _%>
 
     public static IServiceCollection AddSecurityModule(this IServiceCollection services)

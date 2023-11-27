@@ -4,8 +4,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AspNetCorePackageVersion>7.0.4</AspNetCorePackageVersion>
-    <EntityFrameworkPackageVersion>7.0.4</EntityFrameworkPackageVersion>
+    <AspNetCorePackageVersion>8.0.0</AspNetCorePackageVersion>
+    <EntityFrameworkPackageVersion>8.0.0</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.10</JHipsterNetPackageVersion>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@
 	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-	<PackageVersion Include="System.Net.Http.Json" Version="7.0.1" />
+	<PackageVersion Include="System.Net.Http.Json" Version="8.0.0" />
 	<PackageVersion Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
 
 	<PackageVersion Include="AutoFixture" Version="4.18.0" />
@@ -49,7 +49,7 @@
 	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	<PackageVersion Include="LanguageExt.Core" Version="4.4.2" />
 	<%_ if (authenticationType === 'jwt') { _%>
-	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
+	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
 	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
 	<%_ } else { _%>
@@ -69,7 +69,7 @@
 	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
 	<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-	<PackageVersion Include="System.Text.Json" Version="7.0.2" />
+	<PackageVersion Include="System.Text.Json" Version="8.0.0" />
 	<PackageVersion Include="Serilog" Version="2.12.0" />
 
 	<%_ switch(databaseType) {
@@ -86,7 +86,7 @@
 		<%_ break;
 		case 'postgresql': _%>
 	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
-	<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+	<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
 		<%_ break;
 		case 'mongodb': _%>
