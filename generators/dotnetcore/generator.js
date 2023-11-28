@@ -127,6 +127,7 @@ export default class extends BaseApplicationGenerator {
         await this.writeFiles({
           blocks: [
             {
+              transform: false,
               templates: [
                 {
                   sourceFile: `dotnetcore/${SERVER_SRC_DIR}/Directory.Packages.props`,
