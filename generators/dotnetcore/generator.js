@@ -123,11 +123,11 @@ export default class extends BaseApplicationGenerator {
           rootTemplatesPath: 'dotnetcore',
         });
       },
-      async writeDirectoryTargetsFile() {
+      async writeDirectoryTargetsFile({ application }) {
         this.fs.copyTpl(
           this.templatePath(`dotnetcore/${SERVER_SRC_DIR}/Directory.Packages.props`),
           this.destinationPath('Directory.Packages.props'),
-          this,
+          application,
         );
       },
     });
