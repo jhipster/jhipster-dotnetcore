@@ -40,12 +40,12 @@
 	<PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspNetCorePackageVersion)" />
 	<PackageVersion Include="Scrutor" Version="4.2.2" />
-	<PackageVersion Include="Serilog.AspNetCore" Version="6.1.0" />
-	<PackageVersion Include="Serilog.Settings.Configuration" Version="3.4.0" />
-	<PackageVersion Include="Serilog.Sinks.Console" Version="4.1.0" />
+	<PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
+	<PackageVersion Include="Serilog.Settings.Configuration" Version="8.0.0" />
+	<PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
 	<PackageVersion Include="Serilog.Enrichers.Process" Version="2.0.2" />
 	<PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-	<PackageVersion Include="Serilog.Sinks.SyslogMessages" Version="2.0.7" />
+	<PackageVersion Include="Serilog.Sinks.SyslogMessages" Version="3.0.1" />
 	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	<PackageVersion Include="LanguageExt.Core" Version="4.4.2" />
 	<%_ if (authenticationType === 'jwt') { _%>
@@ -70,7 +70,7 @@
 	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
 	<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
 	<PackageVersion Include="System.Text.Json" Version="8.0.0" />
-	<PackageVersion Include="Serilog" Version="2.12.0" />
+	<PackageVersion Include="Serilog" Version="3.1.1" />
 
 	<%_ switch(databaseType) {
 		case 'sqllite': _%>
@@ -111,14 +111,14 @@
     <PackageVersion Include="Microsoft.Data.Sqlite.Core" Version="$(EntityFrameworkPackageVersion)" />
 	<PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="$(EntityFrameworkPackageVersion)" />
 	<%_ } _%>
-	<PackageVersion Include="coverlet.msbuild" Version="3.2.0" />
+	<PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
 	<PackageVersion Include="FakeItEasy" Version="7.3.1" />
 	<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
 	<PackageVersion Include="Moq" Version="4.18.4" />
-	<PackageVersion Include="xunit" Version="2.4.2" />
-	<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
-	<PackageVersion Include="xunit.runner.console" Version="2.4.2" />
+	<PackageVersion Include="xunit" Version="2.6.2" />
+	<PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4" />
+	<PackageVersion Include="xunit.runner.console" Version="2.6.2" />
 	<PackageVersion Include="FluentAssertions" Version="6.10.0" />
 	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
 	<PackageVersion Include="FluentAssertions.Json" Version="6.1.0" />
