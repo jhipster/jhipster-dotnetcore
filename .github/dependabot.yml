@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: '/'
+    directory: "/"
     schedule:
       interval: daily
       time: '11:00'
@@ -34,7 +34,7 @@ updates:
         versions:
           - 8.0.0
   - package-ecosystem: nuget
-    directory: '/generators/dotnetcore/templates/dotnetcore/src'
+    directory: "/generators/dotnetcore/templates/dotnetcore/src"
     schedule:
       interval: daily
       time: '11:00'
