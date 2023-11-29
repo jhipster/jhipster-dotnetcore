@@ -43,7 +43,6 @@ using <%= namespace %>.Crosscutting.Exceptions;
 using <%= namespace %>.Dto;
 <%_ } _%>
 using <%= namespace %>.Web.Extensions;
-using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Web.Rest.Utilities;
 <%_ if (cqrsEnabled) { _%>
 using <%= namespace %>.Application.Queries;
@@ -114,7 +113,6 @@ namespace <%= namespace %>.Controllers
         <%_ } _%>
 
         [HttpPost]
-        [ValidateModel]
         public async Task<ActionResult<<%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %>>> Create<%= pascalizedEntityClass %>([FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to save <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");
@@ -142,7 +140,6 @@ namespace <%= namespace %>.Controllers
         }
 
         [HttpPut("{id}")]
-        [ValidateModel]
         public async Task<IActionResult> Update<%= pascalizedEntityClass %>(<%= primaryKeyType %> id, [FromBody] <%= hasDto ? asDto(pascalizedEntityClass) : pascalizedEntityClass %> <%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>)
         {
             _log.LogDebug($"REST request to update <%= pascalizedEntityClass %> : {<%= hasDto ? asDto(camelCasedEntityClass) : camelCasedEntityClass %>}");

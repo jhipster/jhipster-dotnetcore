@@ -21,8 +21,6 @@ using System.Security.Claims;
 using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Dto;
 using <%= namespace %>.Web.Extensions;
-using <%= namespace %>.Web.Filters;
-using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
@@ -77,7 +75,6 @@ public class AccountController : ControllerBase
     <%_ } _%>
 
     [HttpPost("register")]
-    [ValidateModel]
     public async Task<IActionResult> RegisterAccount([FromBody] ManagedUserDto managedUserDto)
     {
         if (!CheckPasswordLength(managedUserDto.Password)) throw new InvalidPasswordException();
@@ -91,7 +88,6 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet("activate")]
-    [ValidateModel]
     public async Task ActivateAccount([FromQuery(Name = "key")] string key)
     {
         <%_ if (cqrsEnabled) { _%>
@@ -147,7 +143,6 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpPost("account")]
-    [ValidateModel]
     public async Task<ActionResult> SaveAccount([FromBody] UserDto userDto)
     {
         <%_ if (cqrsEnabled) { _%>
@@ -172,7 +167,6 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpPost("account/change-password")]
-    [ValidateModel]
     public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeDto passwordChangeDto)
     {
         if (!CheckPasswordLength(passwordChangeDto.NewPassword)) throw new InvalidPasswordException();
@@ -199,7 +193,6 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost("account/reset-password/finish")]
-    [ValidateModel]
     public async Task RequestPasswordReset([FromBody] KeyAndPasswordDto keyAndPasswordDto)
     {
         if (!CheckPasswordLength(keyAndPasswordDto.NewPassword)) throw new InvalidPasswordException();

@@ -12,63 +12,53 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-using Hellang.Middleware.ProblemDetails;
-using <%= namespace %>.Web.Rest.Problems;
+using System.Security.Authentication;
 using <%= namespace %>.Crosscutting.Exceptions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 
 namespace <%= namespace %>.Configuration;
 
 public static class ProblemDetailsStartup
 {
-    //TODO Understand difference between UI and non-ui Exceptions
-    //https://github.com/christianacca/ProblemDetailsDemo/blob/master/src/ProblemDetailsDemo.Api/Startup.cs
-
-    public static IServiceCollection AddProblemDetailsModule(this IServiceCollection services, IHostEnvironment environment)
+    public static IServiceCollection AddProblemDetailsModule(this IServiceCollection services)
     {
-        services.AddProblemDetails(setup =>
+        services.AddProblemDetails(config =>
         {
-            setup.IncludeExceptionDetails = (_context, _exception) => environment.IsDevelopment();
-
-            // Map BadRequestAlertException and inheriting exceptions to ProblemDetails
-            setup.Map<BadRequestAlertException>(exception => new ProblemDetails
+            config.CustomizeProblemDetails = context =>
             {
-                Type = exception.Type,
-                Detail = exception.Detail,
-                Status = StatusCodes.Status400BadRequest,
-                Extensions = { ["params"] = exception.EntityName, ["message"] = $"error.{exception.ErrorKey}" }
-            });
+                var exception = context.HttpContext.Features.Get<IExceptionHandlerPathFeature>()?.Error;
+                if (exception is BaseException)
+                {
+                    context.ProblemDetails.Status = 400;
+                    context.ProblemDetails.Detail = exception.Message;
+                    context.HttpContext.Response.StatusCode = 400;
+                }
 
-            // Map InternalServerErrorException with status 500
-            setup.Map<InternalServerErrorException>(exception => new ProblemDetails
-            {
-                Type = exception.Type,
-                Detail = exception.Detail,
-                Status = StatusCodes.Status500InternalServerError
-            });
-
-            // This mapping will catch exceptions inheriting from BaseException that has not been mapped previously
-            setup.Map<BaseException>(exception => new ProblemDetails
-            {
-                Type = exception.Type,
-                Detail = exception.Detail,
-                Status = StatusCodes.Status400BadRequest
-            });
-
-        });
-
-        services.ConfigureOptions<ProblemDetailsConfiguration>();
+                if (exception is AuthenticationException)
+                {
+                    context.ProblemDetails.Status = 401;
+                    context.ProblemDetails.Detail = exception.Message;
+                    context.HttpContext.Response.StatusCode = 401;
+                }
+            };
+        }); 
 
         return services;
-    }
+    }   
 
-    public static IApplicationBuilder UseApplicationProblemDetails(this IApplicationBuilder app)
+    public static IApplicationBuilder UseApplicationProblemDetails(this IApplicationBuilder app, IHostEnvironment environment)
     {
-        app.UseProblemDetails();
+        app.UseExceptionHandler();
+        app.UseStatusCodePages();
+
+        if (environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
         return app;
     }
 }

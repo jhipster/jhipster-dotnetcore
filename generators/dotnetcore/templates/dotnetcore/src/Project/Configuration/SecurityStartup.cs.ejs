@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Security.Claims;
 using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Infrastructure.Data.Repositories;
