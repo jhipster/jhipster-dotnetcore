@@ -44,10 +44,10 @@ public static class ProblemDetailsStartup
                     context.HttpContext.Response.StatusCode = 401;
                 }
             };
-        }); 
+        });
 
         return services;
-    }   
+    }
 
     public static IApplicationBuilder UseApplicationProblemDetails(this IApplicationBuilder app, IHostEnvironment environment)
     {
