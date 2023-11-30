@@ -6,7 +6,7 @@
   <PropertyGroup>
     <AspNetCorePackageVersion>8.0.0</AspNetCorePackageVersion>
     <EntityFrameworkPackageVersion>8.0.0</EntityFrameworkPackageVersion>
-    <JHipsterNetPackageVersion>1.0.10</JHipsterNetPackageVersion>
+    <JHipsterNetPackageVersion>1.0.11</JHipsterNetPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,7 +31,7 @@
 	<%_ } _%>
 	<PackageVersion Include="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
 	<PackageVersion Include="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
-	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	<%_ if (cqrsEnabled) { _%>
 	<PackageVersion Include="MediatR" Version="11.0.0" />
 	<PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -46,7 +46,7 @@
 	<PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
 	<PackageVersion Include="Serilog.Sinks.SyslogMessages" Version="3.0.1" />
 	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-	<PackageVersion Include="LanguageExt.Core" Version="4.4.2" />
+	<PackageVersion Include="LanguageExt.Core" Version="4.4.7" />
 	<%_ if (authenticationType === 'jwt') { _%>
 	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
 	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
