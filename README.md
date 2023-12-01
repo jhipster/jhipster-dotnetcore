@@ -136,7 +136,7 @@ docker build -f "[Dockerfile path]" -t [An image name]:[A tag] "[Application roo
 2. Run your image in a Docker container
 
 ```bash
-docker run -d -p [A host port]:80 [Image name]:[Image tag]
+docker run -d -p [A host port]:8080 [Image name]:[Image tag]
 ```
 
 3. Open your favorite browser at `localhost:[Chosen host port]` and enjoy ! :whale:
