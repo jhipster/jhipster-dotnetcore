@@ -83,7 +83,7 @@ public class AccountResourceIntTest
     {
         var client = _factory.CreateClient();
         var response = await client.GetAsync("/api/activate?key=wrongActivationKey");
-        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -353,7 +353,7 @@ public class AccountResourceIntTest
 
         var response = await client.PostAsync("/api/account/reset-password/finish",
             TestUtil.ToJsonContent(keyAndPassword));
-        response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]

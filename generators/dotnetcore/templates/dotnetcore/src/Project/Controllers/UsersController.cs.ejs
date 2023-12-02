@@ -26,8 +26,6 @@ using <%= namespace %>.Security;
 using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Dto;
 using <%= namespace %>.Web.Extensions;
-using <%= namespace %>.Web.Filters;
-using <%= namespace %>.Web.Rest.Problems;
 using <%= namespace %>.Web.Rest.Utilities;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Crosscutting.Exceptions;
@@ -78,7 +76,6 @@ public class UsersController : ControllerBase
     <%_ } _%>
 
     [HttpPost]
-    [ValidateModel]
     public async Task<ActionResult<User>> CreateUser([FromBody] UserDto userDto)
     {
         _log.LogDebug($"REST request to save User : {userDto}");
@@ -101,7 +98,6 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut]
-    [ValidateModel]
     public async Task<IActionResult> UpdateUser([FromBody] UserDto userDto)
     {
         _log.LogDebug($"REST request to update User : {userDto}");
@@ -120,7 +116,6 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [ValidateModel]
     public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto userDto)
     {
         return await UpdateUser(userDto);

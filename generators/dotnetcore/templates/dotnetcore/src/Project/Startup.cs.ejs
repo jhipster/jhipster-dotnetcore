@@ -66,7 +66,7 @@ public class Startup : IStartup
         <%_ if (authenticationType === 'jwt' || applicationType !== 'microservice') { _%>
             .AddSecurityModule()
         <%_ } _%>
-            .AddProblemDetailsModule(environment)
+            .AddProblemDetailsModule()
             .AddAutoMapperModule()
             .AddSwaggerModule()
             .AddWebModule()
@@ -87,7 +87,7 @@ public class Startup : IStartup
         var securitySettings = securitySettingsOptions.Value;
         app
             .UseApplicationSecurity(securitySettings)
-            .UseApplicationProblemDetails()
+            .UseApplicationProblemDetails(environment)
             <%_ if (serviceDiscoveryType === 'consul' && applicationType !== 'gateway') { _%>
             .UseConsul()
             <%_ } _%>

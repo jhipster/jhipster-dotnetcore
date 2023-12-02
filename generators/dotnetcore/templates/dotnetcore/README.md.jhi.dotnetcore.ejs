@@ -210,7 +210,7 @@ docker build -f ./Dockerfile-Front -t <%= baseName.toLowerCase() %>-front .
 Then run:
 
 ```bash
-docker run -p 8080:80 <%= baseName.toLowerCase() %>
+docker run -p 8080:8080 <%= baseName.toLowerCase() %>
 ```
 
 <%_ if (!skipClient && clientFramework === "Blazor") { _%>

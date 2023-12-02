@@ -1173,15 +1173,6 @@ export const serverFiles = {
       path: SERVER_SRC_DIR,
       templates: [
         {
-          file: 'Project/Web/Filters/ValidateModelAttribute.cs',
-          renameTo: generator => `${generator.mainProjectDir}/Web/Filters/ValidateModelAttribute.cs`,
-        },
-      ],
-    },
-    {
-      path: SERVER_SRC_DIR,
-      templates: [
-        {
           file: 'Project/Web/Rest/Utilities/ActionResultUtil.cs',
           renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Utilities/ActionResultUtil.cs`,
         },
@@ -1247,15 +1238,6 @@ export const serverFiles = {
       path: SERVER_SRC_DIR,
       templates: [
         {
-          file: 'Project/Web/Rest/Problems/ExceptionTranslator.cs',
-          renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ExceptionTranslator.cs`,
-        },
-      ],
-    },
-    {
-      path: SERVER_SRC_DIR,
-      templates: [
-        {
           file: 'Project.Crosscutting/Exceptions/InternalServerErrorException.cs',
           renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/InternalServerErrorException.cs`,
         },
@@ -1278,24 +1260,6 @@ export const serverFiles = {
         {
           file: 'Project.Crosscutting/Exceptions/LoginAlreadyUsedException.cs',
           renameTo: generator => `${generator.pascalizedBaseName}${PROJECT_CROSSCUTTING_SUFFIX}/Exceptions/LoginAlreadyUsedException.cs`,
-        },
-      ],
-    },
-    {
-      path: SERVER_SRC_DIR,
-      templates: [
-        {
-          file: 'Project/Web/Rest/Problems/ProblemDetailsConfiguration.cs',
-          renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ProblemDetailsConfiguration.cs`,
-        },
-      ],
-    },
-    {
-      path: SERVER_SRC_DIR,
-      templates: [
-        {
-          file: 'Project/Web/Rest/Problems/ValidationFailedException.cs',
-          renameTo: generator => `${generator.mainProjectDir}/Web/Rest/Problems/ValidationFailedException.cs`,
         },
       ],
     },

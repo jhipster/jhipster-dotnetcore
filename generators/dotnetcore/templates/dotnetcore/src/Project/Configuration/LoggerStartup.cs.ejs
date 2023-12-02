@@ -61,7 +61,7 @@ public static class SerilogConfiguration
             : "<%= pascalizedBaseName %>App";
         var loggerConfiguration = new LoggerConfiguration()
             .Enrich.With<LoggerNameEnricher>()
-            .WriteTo.TcpSyslog(url, port, appName, FramingType.OCTET_COUNTING, SyslogFormat.RFC5424, Facility.Local0, SslProtocols.None)
+            .WriteTo.TcpSyslog(url, port, appName)
             .ReadFrom.Configuration(appConfiguration);
 
         Log.Logger = loggerConfiguration.CreateLogger();
