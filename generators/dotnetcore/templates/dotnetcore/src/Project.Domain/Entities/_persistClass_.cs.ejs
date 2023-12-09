@@ -72,7 +72,7 @@ namespace <%= namespace %>.Domain.Entities
             const relationshipFieldNamePascalizedPlural = relationships[idx].relationshipFieldNamePascalizedPlural;
             const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
             if (relationshipType === 'one-to-one') { _%>
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string' && !primaryKeyType.includes("?")) { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
 <%_ }
             if(relationshipType === 'one-to-many') { _%>
@@ -81,7 +81,7 @@ namespace <%= namespace %>.Domain.Entities
                 if (relationshipRequired) { _%>
         [Required]
                 <%_ } _%>
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string' && !primaryKeyType.includes("?")) { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
         public <%= otherEntityNamePascalized %> <%= relationshipFieldNamePascalized %> { get; set; }
 <% } else if (relationshipType === 'many-to-many') {
                 const ownerSide = relationships[idx].ownerSide; _%>
