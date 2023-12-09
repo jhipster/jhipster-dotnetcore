@@ -131,7 +131,7 @@ export default class extends BaseApplicationGenerator {
       async preparingTemplateTask({ application, entity }) {
         // This assumes we aren't using value objects and every entity has a primary key
         const idField = entity.fields.filter(f => f.id)[0];
-        
+
         entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : equivalentCSharpType(idField.fieldType);
 
         entity.dotnetEntityModel = `${entity.entityClass}${application.modelSuffix}`;

@@ -193,7 +193,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
               fields: [
                 {
                   fieldName: 'id',
-                  fieldType: 'UUID'
+                  fieldType: 'UUID',
                 },
               ],
             },
@@ -201,7 +201,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
         )
         .withOptions({
           ignoreNeedlesError: true,
-          blueprints: 'dotnetcore'
+          blueprints: 'dotnetcore',
         })
         .withJHipsterLookup()
         .withSpawnMock()
