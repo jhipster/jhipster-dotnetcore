@@ -54,6 +54,9 @@ export function equivalentCSharpType(javaType) {
     case 'Boolean':
       cSharpType = 'bool?';
       break;
+    case 'UUID':
+      cSharpType = 'Guid';
+      break;
     case 'enum':
       cSharpType = 'LOOK_FOR_AN_EQUIVALENT';
       break;

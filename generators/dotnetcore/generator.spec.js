@@ -177,6 +177,42 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
     });
   });
 
+  describe('generating with custom id fieldType', () => {
+    const orderClass = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain/Entities/Order.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Order',
+              fields: [
+                {
+                  fieldName: 'id',
+                  fieldType: 'UUID'
+                },
+              ],
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprints: 'dotnetcore'
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('creates entity class', () => {
+      result.assertFileContent(orderClass, /<Guid>/);
+    });
+  });
+
   describe('generating service interface and implementation', () => {
     const personService = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain.Services/PersonService.cs`;
     const personServiceInterface = `${SERVER_SRC_DIR}JhipsterBlueprint.Domain/Services/Interfaces/IPersonService.cs`;
