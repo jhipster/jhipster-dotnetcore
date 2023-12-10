@@ -156,9 +156,12 @@ export default class extends BaseApplicationGenerator {
           await this.spawnCommand('libman');
         } catch (error) {
           try {
-            await this.spawnCommand('dotnet tool install -g Microsoft.Web.LibraryManager.Cli');
+            // If a tool is already installed the install sub-command will return 1
+            // We'll use the update sub-command which behaves the way we'd expected.
+            // See: https://github.com/dotnet/sdk/issues/9500
+            await this.spawnCommand('dotnet tool update -g Microsoft.Web.LibraryManager.Cli');
           } catch (error) {
-            throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
+            throw new Error('Could not install/update Microsoft.Web.LibraryManager.Cli');
           }
           this.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
         }
@@ -167,9 +170,9 @@ export default class extends BaseApplicationGenerator {
           await this.spawnCommand('webcompiler');
         } catch (error) {
           try {
-            await this.spawnCommand('dotnet tool install Excubo.WebCompiler --global');
+            await this.spawnCommand('dotnet tool update Excubo.WebCompiler --global');
           } catch (error) {
-            throw new Error('Could not install Excubo.WebCompiler');
+            throw new Error('Could not install/update Excubo.WebCompiler');
           }
           this.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
         }
