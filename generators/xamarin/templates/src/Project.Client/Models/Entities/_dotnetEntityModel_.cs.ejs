@@ -35,7 +35,7 @@ namespace <%= namespace %>.Client.Xamarin.Core.Models;
 
 public class <%= asModel(entityClassName) %>
 {
-    public long? Id { get; set; }
+    public <%= primaryKeyType %> Id { get; set; }
     <%_ for (idx in fields){
         let required = false;
         const fieldValidate = fields[idx].fieldValidate;

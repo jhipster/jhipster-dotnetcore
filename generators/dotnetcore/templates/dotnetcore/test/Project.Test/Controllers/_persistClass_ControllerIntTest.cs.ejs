@@ -265,7 +265,7 @@ namespace <%= namespace %>.Test.Controllers
         {
             var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
             // Create the <%= pascalizedEntityClass %> with an existing ID
-            _<%= camelCasedEntityClass %>.Id = <%= defaultValue(primaryKeyType) _%>;
+            _<%= camelCasedEntityClass %>.Id = <%- defaultValue(primaryKeyType) %>;
 
             // An entity with an existing ID cannot be created, so this API call must fail
             <%_ if (hasDto) { _%>
@@ -439,7 +439,7 @@ namespace <%= namespace %>.Test.Controllers
             TestUtil.EqualsVerifier(typeof(<%= pascalizedEntityClass %>));
             var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %>
             {
-                Id = <%= defaultValue(primaryKeyType) _%>
+                Id = <%- defaultValue(primaryKeyType) %>
             };
             var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %>
             {

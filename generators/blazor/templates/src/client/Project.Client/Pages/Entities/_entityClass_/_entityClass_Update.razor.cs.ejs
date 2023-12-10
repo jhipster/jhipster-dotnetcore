@@ -73,7 +73,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     <%_ } else { _%>
         public IEnumerable<<%= primaryKeyType %>> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<<%= primaryKeyType %>>();
 
-        public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relation.otherEntityNamePascalized %>Id { get; set; }
+        public <%= primaryKeyType _%> <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
@@ -93,7 +93,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             <%= relation.relationshipFieldNamePascalizedPlural %> = await <%= relation.otherEntityNamePascalized %>Service.GetAll();
             <%= relation.otherEntityNamePascalized %>Ids = <%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id).ToList();
             <%_ }}); _%>
-            <%_ if(primaryKeyType !== 'string') { %>
+            <%_ if(primaryKeyType.includes('long')) { %>
             if (Id != 0)
             <%_ } else { _%>
             if (Id != null)
@@ -130,7 +130,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                 <%= asModel(entityClassName) %>.<%= relation.relationshipFieldNamePascalizedPlural %> = null;
             }
             <%_ }}); _%>
-            <%_ if(primaryKeyType !== 'string') { %>
+            <%_ if(primaryKeyType.includes('long')) { %>
             if (Id != 0)
             <%_ } else { _%>
             if (Id != null)
