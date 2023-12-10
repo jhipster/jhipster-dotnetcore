@@ -99,12 +99,12 @@ namespace <%= namespace %>.Domain.Entities
             if (this == obj) return true;
             if (obj == null || GetType() != obj.GetType()) return false;
             var <%= entityVariableName %> = obj as <%= entityClassName %>;
-            <%_ if (primaryKeyType != 'string') { _%>
+            <%_ if (primaryKeyType.includes('long')) { _%>
             if (<%= entityVariableName %>?.Id == null || <%= entityVariableName %>?.Id == 0 || Id == 0) return false;
-            return EqualityComparer<long>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            return EqualityComparer<long>.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } else { _%>
             if (<%= entityVariableName %>?.Id == null || Id == null) return false;
-            return EqualityComparer<string>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            return EqualityComparer<<%= primaryKeyType.replace('?') %>>.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } _%>
         }
 

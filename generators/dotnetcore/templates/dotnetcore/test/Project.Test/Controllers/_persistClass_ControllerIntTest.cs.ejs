@@ -48,6 +48,10 @@
         case 'bool?' :
             defaultValue = "false";
             break;
+        case 'Guid':
+        case 'Guid?':
+            defaultValue = 'Guid.NewGuid()';
+            break;
     }
 
     return defaultValue;
@@ -84,6 +88,10 @@ function updatedValue(cSharpType) {
         case 'bool?' :
             updatedValue = "true";
             break;
+        case 'Guid':
+        case 'Guid?':
+            updatedValue = 'Guid.NewGuid()';
+            break;
     }
 
     return updatedValue;
@@ -114,16 +122,14 @@ function hasDateTimeTypeField() {
         idx ++;
     }
     return dateTimeTypeField;
-}
-if (hasDateTimeTypeField()) { _%>
-using System;
-<%_ } _%>
+} _%>
 <%
 let hasDto = dto === 'mapstruct';
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
 <%_ } _%>
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -259,7 +265,7 @@ namespace <%= namespace %>.Test.Controllers
         {
             var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
             // Create the <%= pascalizedEntityClass %> with an existing ID
-            _<%= camelCasedEntityClass %>.Id = 1L<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } _%>;
+            _<%= camelCasedEntityClass %>.Id = <%= defaultValue(primaryKeyType) _%>;
 
             // An entity with an existing ID cannot be created, so this API call must fail
             <%_ if (hasDto) { _%>
@@ -433,7 +439,7 @@ namespace <%= namespace %>.Test.Controllers
             TestUtil.EqualsVerifier(typeof(<%= pascalizedEntityClass %>));
             var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %>
             {
-                Id = 1L<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } %>
+                Id = <%= defaultValue(primaryKeyType) _%>
             };
             var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %>
             {
