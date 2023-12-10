@@ -67,7 +67,7 @@ public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
             if(otherEntityNamePascalized === 'User') { _%>
     public string UserId { get; set; }
             <%_ } else { _%>
-    public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
+    public <%= primaryKeyType _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
             <%_ }
         }
         if(relationshipType === 'one-to-many') { _%>
@@ -79,7 +79,7 @@ public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
             if(otherEntityNamePascalized === 'User') { _%>
     public string UserId { get; set; }
             <%_ } else { _%>
-    public <%= primaryKeyType _%> <%_ if(primaryKeyType !== 'string') { _%>?<%_ } %> <%= relationshipFieldNamePascalized %>Id { get; set; }
+    public <%= primaryKeyType _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
             <%_ }
             } else if (relationshipType === 'many-to-many') { _%>
     public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
