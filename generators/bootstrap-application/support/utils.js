@@ -22,7 +22,7 @@ export function equivalentCSharpType(javaType) {
 
   switch (javaType) {
     case 'String':
-      cSharpType = 'string';
+      cSharpType = 'string?';
       break;
     case 'Integer':
       cSharpType = 'int?';
@@ -55,7 +55,7 @@ export function equivalentCSharpType(javaType) {
       cSharpType = 'bool?';
       break;
     case 'UUID':
-      cSharpType = 'Guid';
+      cSharpType = 'Guid?';
       break;
     case 'enum':
       cSharpType = 'LOOK_FOR_AN_EQUIVALENT';

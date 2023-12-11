@@ -21,30 +21,35 @@
     const defaultNumValue = 1;
 
     switch (cSharpType) {
+        case 'string?' :
         case 'string' :
             defaultValue = "\"AAAAAAAAAA\"";
             break;
+        case 'int' :
         case 'int?' :
             defaultValue = `${defaultNumValue}`;
             break;
+        case 'long' :
         case 'long?' :
             defaultValue = `${defaultNumValue}L`;
             break;
+        case 'float' :
         case 'float?' :
             defaultValue = `${defaultNumValue}F`;
             break;
+        case 'double' :
         case 'double?' :
             defaultValue = `${defaultNumValue}D`;
             break;
+        case 'decimal' :
         case 'decimal?' :
             defaultValue = `${defaultNumValue}M`;
             break;
+        case 'DateTime' :
         case 'DateTime?' :
             defaultValue = "DateTime.UnixEpoch";
             break;
-        case 'DateTime' :
-            defaultValue = "DateTime.UnixEpoch";
-            break;
+        case 'bool' :
         case 'bool?' :
             defaultValue = "false";
             break;
@@ -62,29 +67,34 @@ function updatedValue(cSharpType) {
 
     switch (cSharpType) {
         case 'string' :
+        case 'string?' :
             updatedValue = "\"BBBBBBBBBB\"";
             break;
+        case 'int' :
         case 'int?' :
             updatedValue = `${updatedNumValue}`;
             break;
+        case 'long' :
         case 'long?' :
             updatedValue = `${updatedNumValue}L`;
             break;
+        case 'float' :
         case 'float?' :
             updatedValue = `${updatedNumValue}F`;
             break;
+        case 'double' :
         case 'double?' :
             updatedValue = `${updatedNumValue}D`;
             break;
+        case 'decimal' :
         case 'decimal?' :
             updatedValue = `${updatedNumValue}M`;
             break;
+        case 'DateTime' :
         case 'DateTime?' :
             updatedValue = "DateTime.UtcNow";
             break;
-        case 'DateTime' :
-            updatedValue = "DateTime.UtcNow";
-            break;
+        case 'bool' :
         case 'bool?' :
             updatedValue = "true";
             break;
@@ -446,9 +456,9 @@ namespace <%= namespace %>.Test.Controllers
                 Id = <%= camelCasedEntityClass %>1.Id
             };
             <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>2.Id = 2L<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } _%>;
+            <%= camelCasedEntityClass %>2.Id = <% if (primaryKeyType.includes('long')) { _%>2L<%_ } else { _%><%- defaultValue(primaryKeyType) %><%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>1.Id = 0<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } _%>;
+            <%= camelCasedEntityClass %>1.Id = <% if (primaryKeyType.includes('long')) { _%>0L<%_ } else { _%>null<%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
         }
     }

@@ -13,6 +13,14 @@
  limitations under the License.
 -%>
 <%_
+function getNullableResolvedType(cSharpType, required) {
+    return required ? cSharpType.replace('?', '') : cSharpType;
+}
+function getPrimaryKeyType(entity) {
+    return entity.primaryKeyType;
+}
+_%>
+<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
@@ -52,9 +60,9 @@ public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
     [Required]
         <%_ } _%>
         <%_ if (fields[idx].fieldIsEnum) { _%>
-    public <%= fields[idx].fieldType %> <%= fieldNamePascalized %> { get; set; }
+    public <%= getNullableResolvedType(fields[idx].fieldType, required) %> <%= fieldNamePascalized %> { get; set; }
             <%_ } else { _%>
-    public <%= fieldType %> <%= fieldNamePascalized %> { get; set; }
+    public <%= getNullableResolvedType(fieldType, required) %> <%= fieldNamePascalized %> { get; set; }
         <%_ } _%>
     <%_ }
     for (idx in relationships) {
@@ -67,7 +75,7 @@ public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
             if(otherEntityNamePascalized === 'User') { _%>
     public string UserId { get; set; }
             <%_ } else { _%>
-    public <%= primaryKeyType _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
+    public <%= getPrimaryKeyType(relationships[idx].otherEntity) _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
             <%_ }
         }
         if(relationshipType === 'one-to-many') { _%>
@@ -79,7 +87,7 @@ public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
             if(otherEntityNamePascalized === 'User') { _%>
     public string UserId { get; set; }
             <%_ } else { _%>
-    public <%= primaryKeyType _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
+    public <%= getPrimaryKeyType(relationships[idx].otherEntity) _%> <%= relationshipFieldNamePascalized %>Id { get; set; }
             <%_ }
             } else if (relationshipType === 'many-to-many') { _%>
     public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();

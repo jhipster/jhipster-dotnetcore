@@ -16,6 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ 
+function getNullableResolvedType(cSharpType, required) {
+    return required ? cSharpType.replace('?', '') : cSharpType;
+}
+function getPrimaryKeyType(entity) {
+    return entity.primaryKeyType;
+}
+_%>
 <%_ let importJsonIgnore = false;
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
@@ -51,18 +59,18 @@ namespace <%= namespace %>.Dto
         [Required]
             <%_ } _%>
             <%_ if (field && field.id) { _%>
-        public <%= primaryKeyType %> <%= reference.nameCapitalized %> { get; set; }
+        public <%= getNullableResolvedType(getPrimaryKeyType(reference.relationship.otherEntity), required) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (field && field.blobContentTypeText) { _%>
         public String <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (reference.collection && reference.relationship) { _%>
-        public IList<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>> <%= reference.nameCapitalized %> { get; set; } = new List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>>();
+        public IList<<%= getNullableResolvedType(asDto(reference.relationship.otherEntity.entityNameCapitalized), required) %>> <%= reference.nameCapitalized %> { get; set; } = new List<<%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %>>();
             <%_ } else if (reference.relationship) { _%>
-        public long? <%= reference.nameCapitalized %>Id { get; set; }
-        public <%= asDto(reference.relationship.otherEntity.entityNameCapitalized) %> <%= reference.nameCapitalized %> { get; set; }
+        public <%= getNullableResolvedType(getPrimaryKeyType(reference.relationship.otherEntity)) %> <%= reference.nameCapitalized %>Id { get; set; }
+        public <%= getNullableResolvedType(asDto(reference.relationship.otherEntity.entityNameCapitalized)) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (field && field.fieldIsEnum) { _%>
-        public <%= field.fieldType %> <%= reference.nameCapitalized %> { get; set; }
+        public <%= getNullableResolvedType(field.fieldType, required) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } else { _%>
-        public <%= field.cSharpType %> <%= reference.nameCapitalized %> { get; set; }
+        public <%= getNullableResolvedType(field.cSharpType, required) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } _%>
         <%_ } _%>
 
