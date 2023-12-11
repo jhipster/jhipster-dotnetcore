@@ -91,6 +91,171 @@ export default class extends BaseApplicationGenerator {
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
               asModel: str => `${str}${application.modelSuffix}`,
+              getNullableResolvedType: (cSharpType, required) => required ? cSharpType.replace('?', '') : cSharpType,
+              getPrimaryKeyType: entity => entity.primaryKeyType,
+              isNumericPrimaryKey: primaryKeyType => ['long', 'long?', 'int', 'int?'].includes(primaryKeyType),
+              defaultValue: (cSharpType) => {
+                let defaultValue;
+                const defaultNumValue = 1;
+
+                switch (cSharpType) {
+                  case 'string?':
+                  case 'string':
+                    defaultValue = "\"AAAAAAAAAA\"";
+                    break;
+                  case 'int':
+                  case 'int?':
+                    defaultValue = `${defaultNumValue}`;
+                    break;
+                  case 'long':
+                  case 'long?':
+                    defaultValue = `${defaultNumValue}L`;
+                    break;
+                  case 'float':
+                  case 'float?':
+                    defaultValue = `${defaultNumValue}F`;
+                    break;
+                  case 'double':
+                  case 'double?':
+                    defaultValue = `${defaultNumValue}D`;
+                    break;
+                  case 'decimal':
+                  case 'decimal?':
+                    defaultValue = `${defaultNumValue}M`;
+                    break;
+                  case 'DateTime':
+                  case 'DateTime?':
+                    defaultValue = "DateTime.UnixEpoch";
+                    break;
+                  case 'bool':
+                  case 'bool?':
+                    defaultValue = "false";
+                    break;
+                  case 'Guid':
+                  case 'Guid?':
+                    defaultValue = 'Guid.NewGuid()';
+                    break;
+                }
+
+                return defaultValue;
+              },
+              defaultNilValue: (cSharpType) => {
+                let defaultValue;
+                const defaultNumValue = 0;
+
+                switch (cSharpType) {
+                  case 'string?':
+                  case 'string':
+                    defaultValue = "\"\"";
+                    break;
+                  case 'int':
+                  case 'int?':
+                    defaultValue = `${defaultNumValue}`;
+                    break;
+                  case 'long':
+                  case 'long?':
+                    defaultValue = `${defaultNumValue}L`;
+                    break;
+                  case 'float':
+                  case 'float?':
+                    defaultValue = `${defaultNumValue}F`;
+                    break;
+                  case 'double':
+                  case 'double?':
+                    defaultValue = `${defaultNumValue}D`;
+                    break;
+                  case 'decimal':
+                  case 'decimal?':
+                    defaultValue = `${defaultNumValue}M`;
+                    break;
+                  case 'DateTime':
+                  case 'DateTime?':
+                    defaultValue = "DateTime.UnixEpoch";
+                    break;
+                  case 'bool':
+                  case 'bool?':
+                    defaultValue = "false";
+                    break;
+                  case 'Guid':
+                  case 'Guid?':
+                    defaultValue = 'Guid.NewGuid()';
+                    break;
+                }
+
+                return defaultValue;
+              },
+              updatedValue: (cSharpType) => {
+                let updatedValue;
+                const updatedNumValue = 2;
+
+                switch (cSharpType) {
+                  case 'string':
+                  case 'string?':
+                    updatedValue = "\"BBBBBBBBBB\"";
+                    break;
+                  case 'int':
+                  case 'int?':
+                    updatedValue = `${updatedNumValue}`;
+                    break;
+                  case 'long':
+                  case 'long?':
+                    updatedValue = `${updatedNumValue}L`;
+                    break;
+                  case 'float':
+                  case 'float?':
+                    updatedValue = `${updatedNumValue}F`;
+                    break;
+                  case 'double':
+                  case 'double?':
+                    updatedValue = `${updatedNumValue}D`;
+                    break;
+                  case 'decimal':
+                  case 'decimal?':
+                    updatedValue = `${updatedNumValue}M`;
+                    break;
+                  case 'DateTime':
+                  case 'DateTime?':
+                    updatedValue = "DateTime.UtcNow";
+                    break;
+                  case 'bool':
+                  case 'bool?':
+                    updatedValue = "true";
+                    break;
+                  case 'Guid':
+                  case 'Guid?':
+                    updatedValue = 'Guid.NewGuid()';
+                    break;
+                }
+
+                return updatedValue;
+              },
+              enumDefaultValue: (field) => {
+                const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+                if (enums.length > 0) {
+                  return field.fieldType + '.' + enums[0];
+                } else {
+                  return 'null';
+                }
+              },
+              enumUpdatedValue: (field) => {
+                const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+                if (enums.length > 1) {
+                  return field.fieldType + '.' + enums[1];
+                } else {
+                  return 'null';
+                }
+              },
+              hasDateTimeTypeField: () => {
+                let dateTimeTypeField = false;
+                let idx = 0;
+                while (idx < fields.length && !dateTimeTypeField) {
+                  if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'Instant' || fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Duration') {
+                    dateTimeTypeField = true;
+                  }
+                  idx++;
+                }
+                return dateTimeTypeField;
+              }
             },
           });
         }
