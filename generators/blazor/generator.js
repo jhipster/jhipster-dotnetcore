@@ -91,17 +91,17 @@ export default class extends BaseApplicationGenerator {
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
               asModel: str => `${str}${application.modelSuffix}`,
-              getNullableResolvedType: (cSharpType, required) => required ? cSharpType.replace('?', '') : cSharpType,
+              getNullableResolvedType: (cSharpType, required) => (required ? cSharpType.replace('?', '') : cSharpType),
               getPrimaryKeyType: entity => entity.primaryKeyType,
               isNumericPrimaryKey: primaryKeyType => ['long', 'long?', 'int', 'int?'].includes(primaryKeyType),
-              defaultValue: (cSharpType) => {
+              defaultValue: cSharpType => {
                 let defaultValue;
                 const defaultNumValue = 1;
 
                 switch (cSharpType) {
                   case 'string?':
                   case 'string':
-                    defaultValue = "\"AAAAAAAAAA\"";
+                    defaultValue = '"AAAAAAAAAA"';
                     break;
                   case 'int':
                   case 'int?':
@@ -125,11 +125,11 @@ export default class extends BaseApplicationGenerator {
                     break;
                   case 'DateTime':
                   case 'DateTime?':
-                    defaultValue = "DateTime.UnixEpoch";
+                    defaultValue = 'DateTime.UnixEpoch';
                     break;
                   case 'bool':
                   case 'bool?':
-                    defaultValue = "false";
+                    defaultValue = 'false';
                     break;
                   case 'Guid':
                   case 'Guid?':
@@ -139,14 +139,14 @@ export default class extends BaseApplicationGenerator {
 
                 return defaultValue;
               },
-              defaultNilValue: (cSharpType) => {
+              defaultNilValue: cSharpType => {
                 let defaultValue;
                 const defaultNumValue = 0;
 
                 switch (cSharpType) {
                   case 'string?':
                   case 'string':
-                    defaultValue = "\"\"";
+                    defaultValue = '""';
                     break;
                   case 'int':
                   case 'int?':
@@ -170,11 +170,11 @@ export default class extends BaseApplicationGenerator {
                     break;
                   case 'DateTime':
                   case 'DateTime?':
-                    defaultValue = "DateTime.UnixEpoch";
+                    defaultValue = 'DateTime.UnixEpoch';
                     break;
                   case 'bool':
                   case 'bool?':
-                    defaultValue = "false";
+                    defaultValue = 'false';
                     break;
                   case 'Guid':
                   case 'Guid?':
@@ -184,14 +184,14 @@ export default class extends BaseApplicationGenerator {
 
                 return defaultValue;
               },
-              updatedValue: (cSharpType) => {
+              updatedValue: cSharpType => {
                 let updatedValue;
                 const updatedNumValue = 2;
 
                 switch (cSharpType) {
                   case 'string':
                   case 'string?':
-                    updatedValue = "\"BBBBBBBBBB\"";
+                    updatedValue = '"BBBBBBBBBB"';
                     break;
                   case 'int':
                   case 'int?':
@@ -215,11 +215,11 @@ export default class extends BaseApplicationGenerator {
                     break;
                   case 'DateTime':
                   case 'DateTime?':
-                    updatedValue = "DateTime.UtcNow";
+                    updatedValue = 'DateTime.UtcNow';
                     break;
                   case 'bool':
                   case 'bool?':
-                    updatedValue = "true";
+                    updatedValue = 'true';
                     break;
                   case 'Guid':
                   case 'Guid?':
@@ -229,7 +229,7 @@ export default class extends BaseApplicationGenerator {
 
                 return updatedValue;
               },
-              enumDefaultValue: (field) => {
+              enumDefaultValue: field => {
                 const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                 if (enums.length > 0) {
                   return field.fieldType + '.' + enums[0];
@@ -237,7 +237,7 @@ export default class extends BaseApplicationGenerator {
                   return 'null';
                 }
               },
-              enumUpdatedValue: (field) => {
+              enumUpdatedValue: field => {
                 const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                 if (enums.length > 1) {
                   return field.fieldType + '.' + enums[1];
@@ -249,13 +249,18 @@ export default class extends BaseApplicationGenerator {
                 let dateTimeTypeField = false;
                 let idx = 0;
                 while (idx < fields.length && !dateTimeTypeField) {
-                  if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'Instant' || fields[idx].fieldType === 'ZonedDateTime' || fields[idx].fieldType === 'Duration') {
+                  if (
+                    fields[idx].fieldType === 'LocalDate' ||
+                    fields[idx].fieldType === 'Instant' ||
+                    fields[idx].fieldType === 'ZonedDateTime' ||
+                    fields[idx].fieldType === 'Duration'
+                  ) {
                     dateTimeTypeField = true;
                   }
                   idx++;
                 }
                 return dateTimeTypeField;
-              }
+              },
             },
           });
         }
