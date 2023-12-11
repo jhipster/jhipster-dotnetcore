@@ -104,12 +104,12 @@ namespace <%= namespace %>.Domain.Entities
             if (this == obj) return true;
             if (obj == null || GetType() != obj.GetType()) return false;
             var <%= entityVariableName %> = obj as <%= entityClassName %>;
-            <%_ if (primaryKeyType.includes('long')) { _%>
+            <%_ if (isNumericPrimaryKey(primaryKeyType)) { _%>
             if (<%= entityVariableName %>?.Id == null || <%= entityVariableName %>?.Id == 0 || Id == 0) return false;
             return EqualityComparer<long>.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } else { _%>
             if (<%= entityVariableName %>?.Id == null || Id == null) return false;
-            return EqualityComparer<<%= primaryKeyType.replace('?', '') %>>.Default.Equals(Id, <%= entityVariableName %>.Id);
+            return EqualityComparer<<%= primaryKeyType.replace('?', '') %>>.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } _%>
         }
 

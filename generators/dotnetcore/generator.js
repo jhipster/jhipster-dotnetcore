@@ -158,6 +158,8 @@ export default class extends BaseApplicationGenerator {
               ...application,
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
+              getNullableResolvedType: (cSharpType, required) => required ? cSharpType.replace('?', '') : cSharpType,
+              isNumericPrimaryKey: primaryKeyType => ['long', 'long?', 'int', 'int?'].includes(primaryKeyType),
             },
             rootTemplatesPath: ['dotnetcore'],
           });

@@ -106,6 +106,31 @@ function updatedValue(cSharpType) {
 
     return updatedValue;
 }
+function nonexistentPrimaryKey(cSharpType) {
+    let defaultValue;
+    const defaultNumValue = 9999999;
+
+    switch (cSharpType) {
+        case 'string?' :
+        case 'string' :
+            defaultValue = "\"ABCDEFGHIJK\"";
+            break;
+        case 'int' :
+        case 'int?' :
+            defaultValue = `${defaultNumValue}`;
+            break;
+        case 'long' :
+        case 'long?' :
+            defaultValue = `${defaultNumValue}L`;
+            break;
+        case 'Guid':
+        case 'Guid?':
+            defaultValue = 'Guid.NewGuid()';
+            break;
+    }
+
+    return defaultValue;
+}
 function enumDefaultValue(field) {
     const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
     if (enums.length > 0) {
@@ -200,7 +225,7 @@ namespace <%= namespace %>.Test.Controllers
 
         <%_ fields.forEach(field => {
             if (field.id) return;
-            const fieldType = field.cSharpType;
+            const fieldType = getNullableResolvedType(field.cSharpType, true);
             if (field.fieldIsEnum) { _%>
         private const <%= field.fieldType %> Default<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
         private const <%= field.fieldType %> Updated<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
@@ -364,7 +389,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetNonExisting<%= pascalizedEntityClass %>()
         {
-            var maxValue = <% if (databaseType != 'mongodb') { _%> long.MaxValue <%_ } else { _%> ObjectId.GenerateNewId().ToString() <%_ } _%>;
+            var maxValue = <%= nonexistentPrimaryKey(primaryKeyType) %>;
             var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + maxValue);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
