@@ -360,7 +360,7 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
-            json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id<%_ if (primaryKeyType.includes('Guid')) { _%>.ToString()<%_ } _%>);
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
             json.SelectTokens("$.[*].<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
@@ -379,7 +379,7 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
-            json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id<%_ if (primaryKeyType.includes('Guid')) { _%>.ToString()<%_ } _%>);
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
             json.SelectTokens("$.<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);

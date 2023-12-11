@@ -23,7 +23,7 @@ _%>
                 *@
 
                 <%_ if(isNumericPrimaryKey(primaryKeyType)) { %>
-                @if (Id != 0)
+                @if (Id != 0 && Id.ToString().Length > 0)
                 <%_ } else { _%>
                 @if (Id != null)
                 <%_ } _%>

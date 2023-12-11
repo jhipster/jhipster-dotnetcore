@@ -118,9 +118,11 @@ public class <%= entityClassName %>Test : TestContext
 
         // Assert
         <%= entityVariableName %>Page.Find("td>div>button").Click();
-        _<%= entityVariableName %>Service.Verify(service => service.Delete(<%= entityVariableName %>ToDelete.Id.ToString()), Times.Once);
-        var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
-        <%= camelCasedEntityClassPlural %>TableBody.ChildElementCount.Should().Be(9);
+        _modalService.Verify(service => service.Show<DeleteModal>(It.IsAny<string>()), Times.Once);
+        // TODO: FIXME. Clicking the delete button will not call the service delete operation. Instead, it will display a dialog to confirm deletion.
+        // _<%= entityVariableName %>Service.Verify(service => service.Delete(<%= entityVariableName %>ToDelete.Id.ToString()), Times.Once);
+        // var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
+        // <%= camelCasedEntityClassPlural %>TableBody.ChildElementCount.Should().Be(9);
     }
 
 }

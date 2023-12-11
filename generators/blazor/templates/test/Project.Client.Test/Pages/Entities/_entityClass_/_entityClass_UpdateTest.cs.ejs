@@ -140,7 +140,7 @@ public class <%= entityClassName %>UpdateTest : TestContext
             <%_ }
         }); _%>
 
-        var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>(ComponentParameter.CreateParameter("Id", <%= defaultNilValue(primaryKeyType) %>));
+        var update<%= entityClassName %>Page = RenderComponent<<%= namespace %>.Client.Pages.Entities.<%= entityClassName %>.<%= entityClassName %>Update>();
 
         // Act
         var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");

@@ -97,7 +97,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
             <%= relation.otherEntityNamePascalized %>Ids = <%= relation.relationshipFieldNamePascalizedPlural %>.Select(<%= relation.otherEntityNameLowerCased %> => <%= relation.otherEntityNameLowerCased %>.Id).ToList();
             <%_ }}); _%>
             <%_ if(isNumericPrimaryKey(primaryKeyType)) { %>
-            if (Id != 0)
+            if (Id != 0 && Id != null)
             <%_ } else { _%>
             if (Id != null)
             <%_ } _%>

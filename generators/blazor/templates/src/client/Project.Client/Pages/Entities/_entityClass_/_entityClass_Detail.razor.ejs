@@ -14,7 +14,7 @@ _%>
 <div class="row justify-content-center">
     <div class="col-8">
         <%_ if (isNumericPrimaryKey(primaryKeyType)) { _%>
-        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0)
+        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0 && <%= entityClassName %>.Id.ToString().Length > 0)
         <%_ } else { _%>
         @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != null)
         <%_ } _%>
