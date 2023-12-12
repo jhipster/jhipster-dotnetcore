@@ -109,7 +109,7 @@ namespace <%= namespace %>.Domain.Entities
             return EqualityComparer<long><%_ if (databaseType == 'mongodb') { _%>.Default<%_ } _%>.Equals(Id, <%= entityVariableName %>.Id);
             <%_ } else { _%>
             if (<%= entityVariableName %>?.Id == null || Id == null) return false;
-            return EqualityComparer<<%= primaryKeyType %>><%_ if (databaseType == 'mongodb') { _%>.Default<%_ } _%>.Equals(Id, <%= entityVariableName %>.Id);
+            return EqualityComparer<<%= primaryKeyType.replace('?', '') %>><%_ if (databaseType == 'mongodb') { _%>.Default<%_ } _%>.Equals(Id!, <%= entityVariableName %>.Id!);
             <%_ } _%>
         }
 

@@ -23,7 +23,7 @@
     switch (cSharpType) {
         case 'string?' :
         case 'string' :
-            defaultValue = '"AAAAAAAAAA"';
+            defaultValue = '"546c776b3e23f5f2ebdd3b03"';
             break;
         case 'int' :
         case 'int?' :
@@ -68,7 +68,7 @@ function updatedValue(cSharpType) {
     switch (cSharpType) {
         case 'string' :
         case 'string?' :
-            updatedValue = "\"BBBBBBBBBB\"";
+            updatedValue = '"546c776b3e23f5f2ebdd3b0a"';
             break;
         case 'int' :
         case 'int?' :
@@ -113,7 +113,7 @@ function nonexistentPrimaryKey(cSharpType) {
     switch (cSharpType) {
         case 'string?' :
         case 'string' :
-            defaultValue = '"ABCDEFGHIJK"';
+            defaultValue = '"546c776b3e23f5f2ebdd3b03"';
             break;
         case 'int' :
         case 'int?' :
@@ -389,7 +389,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetNonExisting<%= pascalizedEntityClass %>()
         {
-            var maxValue = <%= nonexistentPrimaryKey(primaryKeyType) %>;
+            var maxValue = <%- nonexistentPrimaryKey(primaryKeyType) %>;
             var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + maxValue);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
@@ -481,7 +481,7 @@ namespace <%= namespace %>.Test.Controllers
                 Id = <%= camelCasedEntityClass %>1.Id
             };
             <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>2.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>2L<%_ } else { _%><%- defaultValue(primaryKeyType) %><%_ } _%>;
+            <%= camelCasedEntityClass %>2.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>2L<%_ } else { _%><%- updatedValue(primaryKeyType) %><%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
             <%= camelCasedEntityClass %>1.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>0L<%_ } else { _%>null<%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);

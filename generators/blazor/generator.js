@@ -91,7 +91,7 @@ export default class extends BaseApplicationGenerator {
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
               asModel: str => `${str}${application.modelSuffix}`,
-              getNullableResolvedType: (cSharpType, required) => entity.databaseType === 'mongodb' ? 'string' : (required ? cSharpType.replace('?', '') : cSharpType),
+              getNullableResolvedType: (cSharpType, required) => (required ? cSharpType.replace('?', '') : cSharpType),
               getPrimaryKeyType: entity => entity.primaryKeyType,
               isNumericPrimaryKey: primaryKeyType => ['long', 'long?', 'int', 'int?'].includes(primaryKeyType),
               defaultValue: cSharpType => {
