@@ -22,7 +22,7 @@ export function defaultValue(cSharpType) {
   switch (cSharpType) {
     case 'string?':
     case 'string':
-      defaultValue = '"AAAAAAAAAA"';
+      defaultValue = '"546c776b3e23f5f2ebdd3b03"';
       break;
     case 'int':
     case 'int?':
@@ -118,7 +118,7 @@ export function updatedValue(cSharpType) {
   switch (cSharpType) {
     case 'string':
     case 'string?':
-      updatedValue = '"BBBBBBBBBB"';
+      updatedValue = '"546c776b3e23f5f2ebdd3b0a"';
       break;
     case 'int':
     case 'int?':
