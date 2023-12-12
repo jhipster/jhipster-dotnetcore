@@ -13,14 +13,6 @@
  limitations under the License.
 -%>
 <%_
-function getNullableResolvedType(cSharpType, required) {
-    return required ? cSharpType.replace('?', '') : cSharpType;
-}
-function getPrimaryKeyType(entity) {
-    return entity.primaryKeyType;
-}
-_%>
-<%_
 const hasManyToMany = entityClassHasManyToMany;
 const entityTableName = snakeCasedEntityClass;
 const entityClassName = pascalizedEntityClass;
