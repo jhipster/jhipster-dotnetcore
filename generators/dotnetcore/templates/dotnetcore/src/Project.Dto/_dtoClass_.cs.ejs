@@ -51,13 +51,13 @@ namespace <%= namespace %>.Dto
         [Required]
             <%_ } _%>
             <%_ if (field && field.id) { _%>
-        public <%= getNullableResolvedPrimaryKeyType(field.cSharpType, required) %> <%= reference.nameCapitalized %> { get; set; }
+        public <%= getNullableResolvedPrimaryKeyType(field.cSharpType, required, databaseType) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (field && field.blobContentTypeText) { _%>
         public String <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (reference.collection && reference.relationship) { _%>
         public IList<<%= getNullableResolvedType(asDto(reference.relationship.otherEntity.entityNameCapitalized), true) %>> <%= reference.nameCapitalized %> { get; set; } = new List<<%= getNullableResolvedType(asDto(reference.relationship.otherEntity.entityNameCapitalized), required) %>>();
             <%_ } else if (reference.relationship) { _%>
-        public <%= getNullableResolvedPrimaryKeyType(getPrimaryKeyType(reference.relationship.otherEntity), required) %> <%= reference.nameCapitalized %>Id { get; set; }
+        public <%= getNullableResolvedPrimaryKeyType(getPrimaryKeyType(reference.relationship.otherEntity), required, databaseType) %> <%= reference.nameCapitalized %>Id { get; set; }
         public <%= getNullableResolvedType(asDto(reference.relationship.otherEntity.entityNameCapitalized), required) %> <%= reference.nameCapitalized %> { get; set; }
             <%_ } else if (field && field.fieldIsEnum) { _%>
         public <%= getNullableResolvedType(field.fieldType, required) %> <%= reference.nameCapitalized %> { get; set; }

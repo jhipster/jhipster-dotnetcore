@@ -4,6 +4,7 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 import { createBase64Secret } from 'generator-jhipster/generators/base/support';
 import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
+import { getNullableResolvedType, getNullableResolvedPrimaryKeyType, isNumericPrimaryKey, getPrimaryKeyType } from '../utils.js';
 import command from './command.js';
 import { serverFiles } from './files.js';
 import {
@@ -158,16 +159,10 @@ export default class extends BaseApplicationGenerator {
               ...application,
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
-              getNullableResolvedType: (cSharpType, required) => (required ? cSharpType.replace('?', '') : cSharpType),
-              getNullableResolvedPrimaryKeyType: (cSharpType, required) => {
-                if (entity.databaseType === 'mongodb') return 'string';
-                if (required) {
-                  return cSharpType.replace('?', '');
-                }
-                return cSharpType;
-              },
-              isNumericPrimaryKey: primaryKeyType => ['long', 'long?', 'int', 'int?'].includes(primaryKeyType),
-              getPrimaryKeyType: entity => entity.primaryKeyType,
+              getNullableResolvedType,
+              getNullableResolvedPrimaryKeyType,
+              isNumericPrimaryKey,
+              getPrimaryKeyType,
             },
             rootTemplatesPath: ['dotnetcore'],
           });

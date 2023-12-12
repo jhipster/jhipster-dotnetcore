@@ -5,6 +5,7 @@ import { createNeedleCallback } from 'generator-jhipster/generators/base/support
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
 import { files } from './files-blazor.js';
 import { entityFiles } from './entities-blazor.js';
+import { getNullableResolvedType, isNumericPrimaryKey, getPrimaryKeyType, defaultNilValue, defaultValue, updatedValue } from '../utils.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -91,150 +92,12 @@ export default class extends BaseApplicationGenerator {
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
               asModel: str => `${str}${application.modelSuffix}`,
-              getNullableResolvedType: (cSharpType, required) => (required ? cSharpType.replace('?', '') : cSharpType),
-              getPrimaryKeyType: entity => entity.primaryKeyType,
-              isNumericPrimaryKey: primaryKeyType => ['long', 'long?', 'int', 'int?'].includes(primaryKeyType),
-              defaultValue: cSharpType => {
-                let defaultValue;
-                const defaultNumValue = 1;
-
-                switch (cSharpType) {
-                  case 'string?':
-                  case 'string':
-                    defaultValue = '"AAAAAAAAAA"';
-                    break;
-                  case 'int':
-                  case 'int?':
-                    defaultValue = `${defaultNumValue}`;
-                    break;
-                  case 'long':
-                  case 'long?':
-                    defaultValue = `${defaultNumValue}L`;
-                    break;
-                  case 'float':
-                  case 'float?':
-                    defaultValue = `${defaultNumValue}F`;
-                    break;
-                  case 'double':
-                  case 'double?':
-                    defaultValue = `${defaultNumValue}D`;
-                    break;
-                  case 'decimal':
-                  case 'decimal?':
-                    defaultValue = `${defaultNumValue}M`;
-                    break;
-                  case 'DateTime':
-                  case 'DateTime?':
-                    defaultValue = 'DateTime.UnixEpoch';
-                    break;
-                  case 'bool':
-                  case 'bool?':
-                    defaultValue = 'false';
-                    break;
-                  case 'Guid':
-                  case 'Guid?':
-                    defaultValue = 'Guid.NewGuid()';
-                    break;
-                  default:
-                    defaultValue = null;
-                }
-
-                return defaultValue;
-              },
-              defaultNilValue: cSharpType => {
-                let defaultValue;
-                const defaultNumValue = 0;
-
-                switch (cSharpType) {
-                  case 'string?':
-                  case 'string':
-                    defaultValue = '""';
-                    break;
-                  case 'int':
-                  case 'int?':
-                    defaultValue = `${defaultNumValue}`;
-                    break;
-                  case 'long':
-                  case 'long?':
-                    defaultValue = `${defaultNumValue}L`;
-                    break;
-                  case 'float':
-                  case 'float?':
-                    defaultValue = `${defaultNumValue}F`;
-                    break;
-                  case 'double':
-                  case 'double?':
-                    defaultValue = `${defaultNumValue}D`;
-                    break;
-                  case 'decimal':
-                  case 'decimal?':
-                    defaultValue = `${defaultNumValue}M`;
-                    break;
-                  case 'DateTime':
-                  case 'DateTime?':
-                    defaultValue = 'DateTime.UnixEpoch';
-                    break;
-                  case 'bool':
-                  case 'bool?':
-                    defaultValue = 'false';
-                    break;
-                  case 'Guid':
-                  case 'Guid?':
-                    defaultValue = 'Guid.NewGuid()';
-                    break;
-                  default:
-                    defaultValue = null;
-                }
-
-                return defaultValue;
-              },
-              updatedValue: cSharpType => {
-                let updatedValue;
-                const updatedNumValue = 2;
-
-                switch (cSharpType) {
-                  case 'string':
-                  case 'string?':
-                    updatedValue = '"BBBBBBBBBB"';
-                    break;
-                  case 'int':
-                  case 'int?':
-                    updatedValue = `${updatedNumValue}`;
-                    break;
-                  case 'long':
-                  case 'long?':
-                    updatedValue = `${updatedNumValue}L`;
-                    break;
-                  case 'float':
-                  case 'float?':
-                    updatedValue = `${updatedNumValue}F`;
-                    break;
-                  case 'double':
-                  case 'double?':
-                    updatedValue = `${updatedNumValue}D`;
-                    break;
-                  case 'decimal':
-                  case 'decimal?':
-                    updatedValue = `${updatedNumValue}M`;
-                    break;
-                  case 'DateTime':
-                  case 'DateTime?':
-                    updatedValue = 'DateTime.UtcNow';
-                    break;
-                  case 'bool':
-                  case 'bool?':
-                    updatedValue = 'true';
-                    break;
-                  case 'Guid':
-                  case 'Guid?':
-                    updatedValue = 'Guid.NewGuid()';
-                    break;
-                  default:
-                    updatedValue = null;
-                }
-
-                return updatedValue;
-              },
+              getNullableResolvedType,
+              getPrimaryKeyType,
+              isNumericPrimaryKey,
+              defaultValue,
+              defaultNilValue,
+              updatedValue,
               enumDefaultValue: field => {
                 const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                 if (enums.length > 0) {
