@@ -147,7 +147,7 @@ function enumUpdatedValue(field) {
         return 'null';
     }
 }
-function hasDateTimeTypeField() {
+function hasDateTimeTypeField(fields) {
     let dateTimeTypeField = false;
     let idx = 0;
     while (idx < fields.length && !dateTimeTypeField) {
@@ -170,7 +170,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-<%_ if (hasDateTimeTypeField()) { _%>
+<%_ if (hasDateTimeTypeField(fields)) { _%>
 using FluentAssertions.Extensions;
 <%_ } _%>
 using <%= namespace %>.Infrastructure.Data;

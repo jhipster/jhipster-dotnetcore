@@ -112,7 +112,7 @@ export default class extends BaseApplicationGenerator {
                 }
                 return 'null';
               },
-              hasDateTimeTypeField: () => {
+              hasDateTimeTypeField: fields => {
                 let dateTimeTypeField = false;
                 let idx = 0;
                 while (idx < fields.length && !dateTimeTypeField) {
@@ -124,7 +124,7 @@ export default class extends BaseApplicationGenerator {
                   ) {
                     dateTimeTypeField = true;
                   }
-                  idx++;
+                  idx += 1;
                 }
                 return dateTimeTypeField;
               },

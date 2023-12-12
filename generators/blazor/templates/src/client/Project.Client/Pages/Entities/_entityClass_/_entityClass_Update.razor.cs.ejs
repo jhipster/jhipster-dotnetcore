@@ -75,7 +75,7 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
                     <%_ } else { _%>
         public IEnumerable<<%= relationPrimaryKeyType %>> <%= relation.otherEntityNamePascalized %>Ids { get; set; } = new List<<%= relationPrimaryKeyType %>>();
 
-        public <%= relationPrimaryKeyType _%> <%= relation.otherEntityNamePascalized %>Id { get; set; }
+        public <%= relationPrimaryKeyType %> <%= relation.otherEntityNamePascalized %>Id { get; set; }
 
                     <%_ } _%>
             <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
