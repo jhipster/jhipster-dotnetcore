@@ -427,6 +427,8 @@ namespace <%= namespace %>.Test.Controllers
                 if (field.id) return; 
                 if (field.fieldType === 'Instant') { _%>
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().BeCloseTo(Updated<%= field.fieldNamePascalized %>, 1.Milliseconds());
+                <%_ } else if (field.fieldType === 'DateTime' || field.fieldType === 'LocalDate') { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().BeCloseTo(Updated<%= field.fieldNamePascalized %>, 2.Seconds());
                 <%_ } else { _%>     
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
                 <%_ }
