@@ -135,6 +135,8 @@ export default class extends BaseApplicationGenerator {
                   case 'Guid?':
                     defaultValue = 'Guid.NewGuid()';
                     break;
+                  default:
+                    defaultValue = null;
                 }
 
                 return defaultValue;
@@ -180,6 +182,8 @@ export default class extends BaseApplicationGenerator {
                   case 'Guid?':
                     defaultValue = 'Guid.NewGuid()';
                     break;
+                  default:
+                    defaultValue = null;
                 }
 
                 return defaultValue;
@@ -225,6 +229,8 @@ export default class extends BaseApplicationGenerator {
                   case 'Guid?':
                     updatedValue = 'Guid.NewGuid()';
                     break;
+                  default:
+                    updatedValue = null;
                 }
 
                 return updatedValue;
@@ -232,18 +238,16 @@ export default class extends BaseApplicationGenerator {
               enumDefaultValue: field => {
                 const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                 if (enums.length > 0) {
-                  return field.fieldType + '.' + enums[0];
-                } else {
-                  return 'null';
+                  return `${field.fieldType}.${enums[0]}`;
                 }
+                return 'null';
               },
               enumUpdatedValue: field => {
                 const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                 if (enums.length > 1) {
-                  return field.fieldType + '.' + enums[1];
-                } else {
-                  return 'null';
+                  return `${field.fieldType}.${enums[1]}`;
                 }
+                return 'null';
               },
               hasDateTimeTypeField: () => {
                 let dateTimeTypeField = false;
