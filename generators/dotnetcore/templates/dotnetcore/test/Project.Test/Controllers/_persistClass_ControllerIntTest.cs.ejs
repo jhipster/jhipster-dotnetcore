@@ -23,7 +23,7 @@
     switch (cSharpType) {
         case 'string?' :
         case 'string' :
-            defaultValue = "\"AAAAAAAAAA\"";
+            defaultValue = '"AAAAAAAAAA"';
             break;
         case 'int' :
         case 'int?' :
@@ -113,7 +113,7 @@ function nonexistentPrimaryKey(cSharpType) {
     switch (cSharpType) {
         case 'string?' :
         case 'string' :
-            defaultValue = "\"ABCDEFGHIJK\"";
+            defaultValue = '"ABCDEFGHIJK"';
             break;
         case 'int' :
         case 'int?' :
@@ -481,9 +481,9 @@ namespace <%= namespace %>.Test.Controllers
                 Id = <%= camelCasedEntityClass %>1.Id
             };
             <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>2.Id = <% if (primaryKeyType.includes('long')) { _%>2L<%_ } else { _%><%- defaultValue(primaryKeyType) %><%_ } _%>;
+            <%= camelCasedEntityClass %>2.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>2L<%_ } else { _%><%- defaultValue(primaryKeyType) %><%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>1.Id = <% if (primaryKeyType.includes('long')) { _%>0L<%_ } else { _%>null<%_ } _%>;
+            <%= camelCasedEntityClass %>1.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>0L<%_ } else { _%>null<%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
         }
     }
