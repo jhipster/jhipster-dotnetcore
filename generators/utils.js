@@ -1,3 +1,6 @@
+export function getNonNullableType(cSharpType) {
+  return cSharpType.replace('?', '');
+}
 export function getNullableResolvedType(cSharpType, required) {
   return required ? cSharpType.replace('?', '') : cSharpType;
 }

@@ -5,7 +5,15 @@ import { createNeedleCallback } from 'generator-jhipster/generators/base/support
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
 import { files } from './files-blazor.js';
 import { entityFiles } from './entities-blazor.js';
-import { getNullableResolvedType, isNumericPrimaryKey, getPrimaryKeyType, defaultNilValue, defaultValue, updatedValue } from '../utils.js';
+import {
+  getNonNullableType,
+  getNullableResolvedType,
+  isNumericPrimaryKey,
+  getPrimaryKeyType,
+  defaultNilValue,
+  defaultValue,
+  updatedValue,
+} from '../utils.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -98,6 +106,7 @@ export default class extends BaseApplicationGenerator {
               defaultValue,
               defaultNilValue,
               updatedValue,
+              getNonNullableType,
               enumDefaultValue: field => {
                 const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
                 if (enums.length > 0) {

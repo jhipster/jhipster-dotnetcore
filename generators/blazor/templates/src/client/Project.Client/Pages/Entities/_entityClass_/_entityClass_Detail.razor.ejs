@@ -5,7 +5,7 @@ const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass;
 const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
-@page "/<%= lowerCasedEntityClass %>/{Id<%_ if(isNumericPrimaryKey(primaryKeyType)) { %>:<%= primaryKeyType %> <%_ } _%> }/view"
+@page "/<%= lowerCasedEntityClass %>/{Id<%_ if(primaryKeyType !== 'string') { %>:<%= getNonNullableType(primaryKeyType) %> <%_ } _%> }/view"
 @using Microsoft.AspNetCore.Authorization
 @namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
