@@ -5,6 +5,15 @@ import { createNeedleCallback } from 'generator-jhipster/generators/base/support
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
 import { files } from './files-blazor.js';
 import { entityFiles } from './entities-blazor.js';
+import {
+  getNonNullableType,
+  getNullableResolvedType,
+  isNumericPrimaryKey,
+  getPrimaryKeyType,
+  defaultNilValue,
+  defaultValue,
+  updatedValue,
+} from '../utils.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -91,6 +100,43 @@ export default class extends BaseApplicationGenerator {
               ...entity,
               asDto: str => `${str}${application.dtoSuffix}`,
               asModel: str => `${str}${application.modelSuffix}`,
+              getNullableResolvedType,
+              getPrimaryKeyType,
+              isNumericPrimaryKey,
+              defaultValue,
+              defaultNilValue,
+              updatedValue,
+              getNonNullableType,
+              enumDefaultValue: field => {
+                const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+                if (enums.length > 0) {
+                  return `${field.fieldType}.${enums[0]}`;
+                }
+                return 'null';
+              },
+              enumUpdatedValue: field => {
+                const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
+                if (enums.length > 1) {
+                  return `${field.fieldType}.${enums[1]}`;
+                }
+                return 'null';
+              },
+              hasDateTimeTypeField: fields => {
+                let dateTimeTypeField = false;
+                let idx = 0;
+                while (idx < fields.length && !dateTimeTypeField) {
+                  if (
+                    fields[idx].fieldType === 'LocalDate' ||
+                    fields[idx].fieldType === 'Instant' ||
+                    fields[idx].fieldType === 'ZonedDateTime' ||
+                    fields[idx].fieldType === 'Duration'
+                  ) {
+                    dateTimeTypeField = true;
+                  }
+                  idx += 1;
+                }
+                return dateTimeTypeField;
+              },
             },
           });
         }
@@ -156,9 +202,12 @@ export default class extends BaseApplicationGenerator {
           await this.spawnCommand('libman');
         } catch (error) {
           try {
-            await this.spawnCommand('dotnet tool install -g Microsoft.Web.LibraryManager.Cli');
+            // If a tool is already installed the install sub-command will return 1
+            // We'll use the update sub-command which behaves the way we'd expected.
+            // See: https://github.com/dotnet/sdk/issues/9500
+            await this.spawnCommand('dotnet tool update -g Microsoft.Web.LibraryManager.Cli');
           } catch (error) {
-            throw new Error('Could not install Microsoft.Web.LibraryManager.Cli');
+            throw new Error('Could not install/update Microsoft.Web.LibraryManager.Cli');
           }
           this.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
         }
@@ -167,9 +216,9 @@ export default class extends BaseApplicationGenerator {
           await this.spawnCommand('webcompiler');
         } catch (error) {
           try {
-            await this.spawnCommand('dotnet tool install Excubo.WebCompiler --global');
+            await this.spawnCommand('dotnet tool update Excubo.WebCompiler --global');
           } catch (error) {
-            throw new Error('Could not install Excubo.WebCompiler');
+            throw new Error('Could not install/update Excubo.WebCompiler');
           }
           this.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));
         }

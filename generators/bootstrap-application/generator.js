@@ -107,6 +107,7 @@ export default class extends BaseApplicationGenerator {
         application.modelSuffix = 'Model';
         application.backendName = '.Net';
 
+        // What is this used for?
         application.primaryKeyType = application.databaseType === 'mongodb' ? 'string' : 'long';
 
         if (application.clientFramework === BLAZOR) {
@@ -128,7 +129,10 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.asPreparingEachEntityTaskGroup({
       async preparingTemplateTask({ application, entity }) {
-        entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : 'long';
+        // This assumes we aren't using value objects and every entity has a primary key
+        const idField = entity.fields.filter(f => f.id)[0];
+
+        entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : equivalentCSharpType(idField.fieldType);
 
         entity.dotnetEntityModel = `${entity.entityClass}${application.modelSuffix}`;
         entity.pascalizedEntityClass = toPascalCase(entity.entityClass);
