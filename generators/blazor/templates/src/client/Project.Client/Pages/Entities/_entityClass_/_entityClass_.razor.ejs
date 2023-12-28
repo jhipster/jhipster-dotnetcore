@@ -88,9 +88,9 @@ _%>
                                 <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
                                 @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != string.Empty)
                                 <%_ } else { _%>
-                                    <%_ if(primaryKeyType !== 'string') { %>
+                                    <%_ if (isNumericPrimaryKey(getPrimaryKeyType(relation.otherEntity))) { _%>
                                 @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != 0)
-                                        <%_ } else { _%>
+                                    <%_ } else { _%>
                                 @if (<%= lowerCasedEntityClass %>.<%= relation.relationshipFieldNamePascalized %>Id != null)
                                     <%_ } _%>
                                 <%_ } _%>

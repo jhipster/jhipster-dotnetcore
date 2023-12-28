@@ -5,7 +5,7 @@ const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass;
 const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
-@page "/<%= lowerCasedEntityClass %>/{Id<%_ if(primaryKeyType !== 'string') { %>:<%= primaryKeyType %> <%_ } _%> }/view"
+@page "/<%= lowerCasedEntityClass %>/{Id<%_ if(primaryKeyType !== 'string') { %>:<%= getNonNullableType(primaryKeyType) %> <%_ } _%> }/view"
 @using Microsoft.AspNetCore.Authorization
 @namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
@@ -13,8 +13,8 @@ _%>
 
 <div class="row justify-content-center">
     <div class="col-8">
-        <%_ if(primaryKeyType !== 'string') { %>
-        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0)
+        <%_ if (isNumericPrimaryKey(primaryKeyType)) { _%>
+        @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != 0 && <%= entityClassName %>.Id.ToString().Length > 0)
         <%_ } else { _%>
         @if (<%= entityClassName %> != null && <%= entityClassName %>.Id != null)
         <%_ } _%>
@@ -41,9 +41,9 @@ _%>
                         <%_ if(relation.otherEntityNamePascalized === 'User') { _%>
                         @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>Id != string.Empty)
                         <%_ } else { _%>
-                            <%_ if(primaryKeyType !== 'string') { %>
+                            <%_ if (isNumericPrimaryKey(getPrimaryKeyType(relation.otherEntity))) { _%>
                         @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>Id != 0)
-                                <%_ } else { _%>
+                            <%_ } else { _%>
                                     @if (<%= entityClassName %>.<%= relation.relationshipFieldNamePascalized %>Id != null)
                             <%_ } _%>
                         <%_ } _%>

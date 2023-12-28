@@ -56,6 +56,18 @@ entity JobHistory {
     language Language
 }
 
+entity TimeSheet {
+	id UUID
+	timeSheetDate LocalDate
+}
+
+entity TimeSheetEntry {
+	activityName String
+	startTimeMilitary Integer
+	endTimeMilitary Integer
+	totalTime BigDecimal
+}
+
 enum Language {
     FRENCH, ENGLISH, SPANISH
 }
@@ -85,6 +97,10 @@ relationship OneToMany {
 	* Another side of the same relationship
 	*/
 	Employee{department}
+	
+	Employee to TimeSheet{employee}
+
+	TimeSheet to TimeSheetEntry{timeSheet}
 }
 
 relationship ManyToOne {

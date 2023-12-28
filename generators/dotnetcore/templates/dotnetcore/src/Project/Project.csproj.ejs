@@ -16,7 +16,7 @@
 
     <PropertyGroup>
         <Version>0.0.1</Version>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
         <RootNamespace><%= namespace %></RootNamespace>
@@ -36,7 +36,6 @@
         <PackageReference Include="JHipsterNet.Core" />
         <PackageReference Include="JHipsterNet.Web" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
-        <PackageReference Include="Hellang.Middleware.ProblemDetails" />
         <%_ if (cqrsEnabled) { _%>
         <PackageReference Include="MediatR" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />

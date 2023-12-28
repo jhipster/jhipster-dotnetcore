@@ -318,18 +318,6 @@ exports[`SubGenerator dotnetcore of dotnetcore JHipster blueprint > run > should
   "src/Jhipster/Web/Extensions/HttpRequestExtensions.cs": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/Web/Filters/ValidateModelAttribute.cs": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/Web/Rest/Problems/ExceptionTranslator.cs": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/Web/Rest/Problems/ProblemDetailsConfiguration.cs": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/Web/Rest/Problems/ValidationFailedException.cs": {
-    "stateCleared": "modified",
-  },
   "src/Jhipster/Web/Rest/Utilities/ActionResultUtil.cs": {
     "stateCleared": "modified",
   },

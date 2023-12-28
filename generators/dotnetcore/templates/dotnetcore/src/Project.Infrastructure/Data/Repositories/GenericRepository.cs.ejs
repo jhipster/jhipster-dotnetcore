@@ -123,7 +123,7 @@ public abstract class GenericRepository<TEntity, TKey> : ReadOnlyGenericReposito
         return await _context.SaveChangesAsync(cancellationToken);
     }
 
-    protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)
+    protected async Task RemoveManyToManyRelationship<TOtherEntityKey>(string joinEntityName, string ownerIdKey, string ownedIdKey, TOtherEntityKey ownerEntityId, List<TOtherEntityKey> idsToIgnore)
     {
         DbSet<Dictionary<string, object>> dbset = _context.Set<Dictionary<string, object>>(joinEntityName);
 

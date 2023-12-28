@@ -21,32 +21,41 @@
     const defaultNumValue = 1;
 
     switch (cSharpType) {
+        case 'string?' :
         case 'string' :
-            defaultValue = "\"AAAAAAAAAA\"";
+            defaultValue = '"546c776b3e23f5f2ebdd3b03"';
             break;
+        case 'int' :
         case 'int?' :
             defaultValue = `${defaultNumValue}`;
             break;
+        case 'long' :
         case 'long?' :
             defaultValue = `${defaultNumValue}L`;
             break;
+        case 'float' :
         case 'float?' :
             defaultValue = `${defaultNumValue}F`;
             break;
+        case 'double' :
         case 'double?' :
             defaultValue = `${defaultNumValue}D`;
             break;
+        case 'decimal' :
         case 'decimal?' :
             defaultValue = `${defaultNumValue}M`;
             break;
+        case 'DateTime' :
         case 'DateTime?' :
             defaultValue = "DateTime.UnixEpoch";
             break;
-        case 'DateTime' :
-            defaultValue = "DateTime.UnixEpoch";
-            break;
+        case 'bool' :
         case 'bool?' :
             defaultValue = "false";
+            break;
+        case 'Guid':
+        case 'Guid?':
+            defaultValue = 'Guid.NewGuid()';
             break;
     }
 
@@ -58,35 +67,69 @@ function updatedValue(cSharpType) {
 
     switch (cSharpType) {
         case 'string' :
-            updatedValue = "\"BBBBBBBBBB\"";
+        case 'string?' :
+            updatedValue = '"546c776b3e23f5f2ebdd3b0a"';
             break;
+        case 'int' :
         case 'int?' :
             updatedValue = `${updatedNumValue}`;
             break;
+        case 'long' :
         case 'long?' :
             updatedValue = `${updatedNumValue}L`;
             break;
+        case 'float' :
         case 'float?' :
             updatedValue = `${updatedNumValue}F`;
             break;
+        case 'double' :
         case 'double?' :
             updatedValue = `${updatedNumValue}D`;
             break;
+        case 'decimal' :
         case 'decimal?' :
             updatedValue = `${updatedNumValue}M`;
             break;
+        case 'DateTime' :
         case 'DateTime?' :
             updatedValue = "DateTime.UtcNow";
             break;
-        case 'DateTime' :
-            updatedValue = "DateTime.UtcNow";
-            break;
+        case 'bool' :
         case 'bool?' :
             updatedValue = "true";
+            break;
+        case 'Guid':
+        case 'Guid?':
+            updatedValue = 'Guid.NewGuid()';
             break;
     }
 
     return updatedValue;
+}
+function nonexistentPrimaryKey(cSharpType) {
+    let defaultValue;
+    const defaultNumValue = 9999999;
+
+    switch (cSharpType) {
+        case 'string?' :
+        case 'string' :
+            defaultValue = '"546c776b3e23f5f2ebdd3b03"';
+            break;
+        case 'int' :
+        case 'int?' :
+            defaultValue = `${defaultNumValue}`;
+            break;
+        case 'long' :
+        case 'long?' :
+            defaultValue = `${defaultNumValue}L`;
+            break;
+        case 'Guid':
+        case 'Guid?':
+            defaultValue = 'Guid.NewGuid()';
+            break;
+    }
+
+    return defaultValue;
 }
 function enumDefaultValue(field) {
     const enums = field.fieldValues.split(',').map(fieldValue => fieldValue.trim());
@@ -104,7 +147,7 @@ function enumUpdatedValue(field) {
         return 'null';
     }
 }
-function hasDateTimeTypeField() {
+function hasDateTimeTypeField(fields) {
     let dateTimeTypeField = false;
     let idx = 0;
     while (idx < fields.length && !dateTimeTypeField) {
@@ -114,22 +157,20 @@ function hasDateTimeTypeField() {
         idx ++;
     }
     return dateTimeTypeField;
-}
-if (hasDateTimeTypeField()) { _%>
-using System;
-<%_ } _%>
+} _%>
 <%
 let hasDto = dto === 'mapstruct';
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
 <%_ } _%>
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-<%_ if (hasDateTimeTypeField()) { _%>
+<%_ if (hasDateTimeTypeField(fields)) { _%>
 using FluentAssertions.Extensions;
 <%_ } _%>
 using <%= namespace %>.Infrastructure.Data;
@@ -184,7 +225,7 @@ namespace <%= namespace %>.Test.Controllers
 
         <%_ fields.forEach(field => {
             if (field.id) return;
-            const fieldType = field.cSharpType;
+            const fieldType = getNullableResolvedType(field.cSharpType, true);
             if (field.fieldIsEnum) { _%>
         private const <%= field.fieldType %> Default<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
         private const <%= field.fieldType %> Updated<%= field.fieldNamePascalized %> = <%- enumUpdatedValue(field) %>;
@@ -259,7 +300,7 @@ namespace <%= namespace %>.Test.Controllers
         {
             var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
             // Create the <%= pascalizedEntityClass %> with an existing ID
-            _<%= camelCasedEntityClass %>.Id = 1L<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } _%>;
+            _<%= camelCasedEntityClass %>.Id = <%- defaultValue(primaryKeyType) %>;
 
             // An entity with an existing ID cannot be created, so this API call must fail
             <%_ if (hasDto) { _%>
@@ -319,7 +360,7 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
-            json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            json.SelectTokens("$.[*].id").Should().Contain(_<%= camelCasedEntityClass %>.Id<%_ if (primaryKeyType.includes('Guid')) { _%>.ToString()<%_ } _%>);
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
             json.SelectTokens("$.[*].<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
@@ -338,7 +379,7 @@ namespace <%= namespace %>.Test.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var json = JToken.Parse(await response.Content.ReadAsStringAsync());
-            json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id);
+            json.SelectTokens("$.id").Should().Contain(_<%= camelCasedEntityClass %>.Id<%_ if (primaryKeyType.includes('Guid')) { _%>.ToString()<%_ } _%>);
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
             json.SelectTokens("$.<%= field.fieldNameCamelCased %>").Should().Contain(Default<%= field.fieldNamePascalized %><%_ if (field.fieldIsEnum) { _%>.ToString()<%_ } _%>);
@@ -348,7 +389,7 @@ namespace <%= namespace %>.Test.Controllers
         [Fact]
         public async Task GetNonExisting<%= pascalizedEntityClass %>()
         {
-            var maxValue = <% if (databaseType != 'mongodb') { _%> long.MaxValue <%_ } else { _%> ObjectId.GenerateNewId().ToString() <%_ } _%>;
+            var maxValue = <%- nonexistentPrimaryKey(primaryKeyType) %>;
             var response = await _client.GetAsync("/api/<%= kebabCasedEntityClassPlural %>/" + maxValue);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
@@ -386,6 +427,8 @@ namespace <%= namespace %>.Test.Controllers
                 if (field.id) return; 
                 if (field.fieldType === 'Instant') { _%>
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().BeCloseTo(Updated<%= field.fieldNamePascalized %>, 1.Milliseconds());
+                <%_ } else if (field.fieldType === 'DateTime' || field.fieldType === 'LocalDate') { _%>
+            test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().BeCloseTo(Updated<%= field.fieldNamePascalized %>, 2.Seconds());
                 <%_ } else { _%>     
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
                 <%_ }
@@ -433,16 +476,16 @@ namespace <%= namespace %>.Test.Controllers
             TestUtil.EqualsVerifier(typeof(<%= pascalizedEntityClass %>));
             var <%= camelCasedEntityClass %>1 = new <%= pascalizedEntityClass %>
             {
-                Id = 1L<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } %>
+                Id = <%- defaultValue(primaryKeyType) %>
             };
             var <%= camelCasedEntityClass %>2 = new <%= pascalizedEntityClass %>
             {
                 Id = <%= camelCasedEntityClass %>1.Id
             };
             <%= camelCasedEntityClass %>1.Should().Be(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>2.Id = 2L<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } _%>;
+            <%= camelCasedEntityClass %>2.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>2L<%_ } else { _%><%- updatedValue(primaryKeyType) %><%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
-            <%= camelCasedEntityClass %>1.Id = 0<% if (primaryKeyType == 'string') { _%>.ToString()<%_ } _%>;
+            <%= camelCasedEntityClass %>1.Id = <% if (isNumericPrimaryKey(primaryKeyType)) { _%>0L<%_ } else { _%>null<%_ } _%>;
             <%= camelCasedEntityClass %>1.Should().NotBe(<%= camelCasedEntityClass %>2);
         }
     }

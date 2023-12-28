@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 <%_ if (authenticationType === 'jwt') { _%>
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Security.Claims;
 using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Infrastructure.Data.Repositories;
@@ -55,7 +56,7 @@ namespace <%= namespace %>.Configuration;
 public static class SecurityStartup
 {
     <%_ if (authenticationType === 'jwt') { _%>
-    public const string UserNameClaimType = JwtRegisteredClaimNames.Sub;
+    public const string UserNameClaimType = ClaimTypes.NameIdentifier;
     <%_ } _%>
 
     public static IServiceCollection AddSecurityModule(this IServiceCollection services)

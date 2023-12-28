@@ -20,7 +20,6 @@ using <%= namespace %>.Security.Jwt;
 using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Dto.Authentication;
 using <%= namespace %>.Web.Extensions;
-using <%= namespace %>.Web.Filters;
 using <%= namespace %>.Crosscutting.Constants;
 <%_ if (cqrsEnabled) { _%>
 using <%= namespace %>.Application.Queries;
@@ -61,7 +60,6 @@ public class UserJwtController : ControllerBase
     <%_ } _%>
 
     [HttpPost("authenticate")]
-    [ValidateModel]
     public async Task<ActionResult<JwtToken>> Authorize([FromBody] LoginDto loginDto)
     {
         <%_ if (cqrsEnabled) { _%>

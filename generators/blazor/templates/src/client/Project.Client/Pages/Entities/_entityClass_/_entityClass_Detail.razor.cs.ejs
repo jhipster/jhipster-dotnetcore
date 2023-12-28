@@ -19,6 +19,7 @@ const entityClassName = pascalizedEntityClass;
 const entityVariableName = camelCasedEntityClass;
 const entityClassNamePluralized = pascalizedEntityClassPlural;
 _%>
+using System;
 using System.Threading.Tasks;
 using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Pages.Utils;
@@ -42,8 +43,8 @@ namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
         protected override async Task OnInitializedAsync()
         {
-            <%_ if(primaryKeyType !== 'string') { %>
-            if (Id != 0)
+            <%_ if (isNumericPrimaryKey(primaryKeyType)) { _%>
+            if (Id != 0 && Id != null)
             <%_ } else { _%>
             if (Id != null)
             <%_ } _%>
