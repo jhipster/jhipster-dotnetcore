@@ -330,8 +330,8 @@ namespace <%= namespace %>.Test.Controllers
         {
             var databaseSizeBeforeTest = await _<%= camelCasedEntityClass %>Repository.CountAsync();
 
-            // Set the field to null
-            _<%= camelCasedEntityClass %>.<%= field.fieldNamePascalized %> = null;
+            // Set the field to default
+            _<%= camelCasedEntityClass %>.<%= field.fieldNamePascalized %> = default;
 
             // Create the <%= pascalizedEntityClass %>, which fails.
             <%_ if (hasDto) { _%>
