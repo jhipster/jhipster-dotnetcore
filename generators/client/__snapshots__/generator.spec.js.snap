@@ -377,13 +377,16 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "src/Jhipster/ClientApp/src/app/entities/entity.routes.ts": {
     "stateCleared": "modified",
   },
+  "src/Jhipster/ClientApp/src/app/entities/user/service/user.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/src/app/entities/user/service/user.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/Jhipster/ClientApp/src/app/entities/user/user.model.ts": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/ClientApp/src/app/entities/user/user.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/src/app/entities/user/user.service.ts": {
+  "src/Jhipster/ClientApp/src/app/entities/user/user.test-samples.ts": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/src/app/home/home.component.html": {
@@ -566,10 +569,16 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "src/Jhipster/ClientApp/src/app/shared/sort/sort-by.directive.ts": {
     "stateCleared": "modified",
   },
+  "src/Jhipster/ClientApp/src/app/shared/sort/sort-state.ts": {
+    "stateCleared": "modified",
+  },
   "src/Jhipster/ClientApp/src/app/shared/sort/sort.directive.spec.ts": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/src/app/shared/sort/sort.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/src/app/shared/sort/sort.service.spec.ts": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/src/app/shared/sort/sort.service.ts": {

@@ -14,10 +14,10 @@
 *.css           text
 *.cql           text
 *.df            text
-*.ejs           text eol=lf
+*.ejs           text
 *.html          text
 *.java          text
-*.js            text eol=lf
+*.js            text
 *.json          text
 *.less          text
 *.properties    text
