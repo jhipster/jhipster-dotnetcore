@@ -3,3 +3,4 @@ generators/** skip
 .blueprint/** skip
 .eslintrc.json skip
 README.md skip
+vitest.config.ts
