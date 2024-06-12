@@ -19,7 +19,7 @@ docutils==0.18.1
     #   recommonmark
     #   sphinx
     #   sphinx-rtd-theme
-idna==3.6
+idna==3.7
     # via requests
 imagesize==1.4.1
     # via sphinx
