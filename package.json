@@ -49,7 +49,7 @@
     "to-pascal-case": "^1.0.0"
   },
   "devDependencies": {
-    "@j-ulrich/release-it-regex-bumper": "^4.0.0",
+    "@j-ulrich/release-it-regex-bumper": "^5.1.0",
     "@release-it/bumper": "^4.0.0",
     "ejs-lint": "2.0.0",
     "eslint": "8.57.0",
