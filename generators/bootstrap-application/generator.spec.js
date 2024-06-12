@@ -21,8 +21,8 @@ describe('SubGenerator bootstrap-application of dotnetcore JHipster blueprint', 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
-    it.skip('application should match snapshot', () => {
-      expect({ ...result.generator.sharedData.getApplication(), user: undefined }).toMatchSnapshot();
+    it('application should match snapshot', () => {
+      expect(result.generator.sharedData.getApplication()).toMatchSnapshot({ user: expect.any(Object) });
     });
   });
 });
