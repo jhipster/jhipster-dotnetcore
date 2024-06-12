@@ -1,5 +1,8 @@
 name: Test Integration JWT
-
+concurrency:
+  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
 on:
   push:
     branches:
@@ -18,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [18.17.1]
+        node_version: [20]
         os: [ubuntu-22.04]
         app-type:
           - jwt-with-angular-app
@@ -72,18 +75,11 @@ jobs:
         with:
           path: jhipster-dotnetcore
           fetch-depth: 2
-      - uses: actions/setup-java@v4
+      - uses: jhipster/actions/setup-runner@v0
         with:
-          distribution: 'temurin'
           java-version: 17
-      - uses: actions/setup-node@v3
-        with:
           node-version: ${{ matrix.node_version }}
-      - name: Create app dir
-        working-directory: ${{ github.workspace }}
-        run: mkdir app
-      - name: 'install required npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
+          binary-dir: ${{ github.workspace }}/jhipster-dotnetcore/cli/
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
@@ -94,7 +90,15 @@ jobs:
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
         run: npm ci && npm link
       - name: 'GENERATE JHipster.NET app'
-        run: jhipster-dotnetcore generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
+        run: cli.cjs generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
+      - uses: jhipster/actions/compare-sample@v0
+        id: compare
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
+        with:
+          generator-path: jhipster-dotnetcore
+          cmd: cli.cjs generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
       - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
         run: dotnet build
         env:
