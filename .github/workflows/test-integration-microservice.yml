@@ -45,8 +45,6 @@ jobs:
           java-version: 17
           node-version: ${{ matrix.node_version }}
           binary-dir: ${{ github.workspace }}/jhipster-dotnetcore/cli/
-      - name: 'install required npm version'
-        run: npm install -g npm@$(node -e "console.log(require('./generators/generator-dotnetcore-constants.cjs').NPM_VERSION);")
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
