@@ -3,7 +3,7 @@
     "node": true,
     "es2022": true
   },
-  "extends": ["eslint:recommended", "airbnb-base", "plugin:prettier/recommended"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "parserOptions": {
     "ecmaVersion": 13,
     "sourceType": "module"
@@ -20,9 +20,6 @@
       "error",
       { "props": true, "ignorePropertyModificationsFor": ["application", "source", "entity", "field", "relationship"] }
     ],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "import/no-unresolved": "off",
-    "import/extensions": "off",
     "no-restricted-exports": ["error", { "restrictDefaultExports": { "defaultFrom": false } }],
     "no-await-in-loop": "off",
     "no-restricted-syntax": [
