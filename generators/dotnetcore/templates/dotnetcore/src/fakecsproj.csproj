@@ -1,5 +1,6 @@
 <Project ToolsVersion="Current">
   <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
   </ItemGroup>
