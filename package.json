@@ -52,7 +52,7 @@
     "@j-ulrich/release-it-regex-bumper": "^4.0.0",
     "@release-it/bumper": "^4.0.0",
     "ejs-lint": "2.0.0",
-    "eslint": "8.57.0",
+    "eslint": "9.9.1",
     "eslint-plugin-prettier": "5.2.1",
     "prettier": "3.3.3",
     "vitest": "2.0.5",
