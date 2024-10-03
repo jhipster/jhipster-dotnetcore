@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@j-ulrich/release-it-regex-bumper": "^4.0.0",
-    "@release-it/bumper": "^4.0.0",
+    "@release-it/bumper": "^6.0.1",
     "ejs-lint": "2.0.0",
     "eslint": "8.57.0",
     "eslint-plugin-prettier": "5.2.1",
