@@ -1,3 +1,4 @@
 .blueprint/** skip
+.gitattributes
 .github/** skip
 README.md skip
