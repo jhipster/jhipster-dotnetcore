@@ -35,44 +35,43 @@ export default class extends BaseApplicationGenerator {
         if (!this.jhipsterConfig.namespace) {
           this.jhipsterConfig.namespace = toPascalCase(this.jhipsterConfig.baseName);
         }
+        this.jhipsterConfig.withAdminUi = false;
+        // Paths needs adjusts for husky and lint-staged:
+        // - prettier should be installed at root package.json.
+        // - lint-staged paths needs adjusts.
+        this.jhipsterConfig.skipCommitHook = true;
+        this.jhipsterConfig.databaseType ??= 'sqllite';
+
+        if (this.jhipsterConfig.dtoSuffix === undefined || application.dtoSuffix === 'DTO') {
+          this.jhipsterConfig.dtoSuffix = 'Dto';
+        }
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
-      async loadingTemplateTask({ application }) {
-        // Paths needs adjusts for husky and lint-staged:
-        // - prettier should be installed at root package.json.
-        // - lint-staged paths needs adjusts.
-        application.skipCommitHook = true;
-
-        application.withAdminUi = false;
-
+      async loadingTemplateTask({ application, applicationDefaults }) {
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
-        application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
         if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
         }
 
-        application.SERVER_SRC_DIR = SERVER_SRC_DIR;
-        application.SERVER_TEST_DIR = SERVER_TEST_DIR;
-
-        if (this.jhipsterConfig.dtoSuffix === undefined || application.dtoSuffix === 'DTO') {
-          application.dtoSuffix = 'Dto';
-        }
-        application.pascalizedBaseName = toPascalCase(application.baseName);
-        application.solutionName = application.pascalizedBaseName;
-        application.mainProjectDir = `${application.pascalizedBaseName}/`;
-
-        application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
-        application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
-        application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
-        application.backendType = '.Net';
-
-        application.jhipsterDotnetVersion = this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version;
+        applicationDefaults({
+          __override__: true,
+          SERVER_SRC_DIR,
+          SERVER_TEST_DIR,
+          pascalizedBaseName: ({ baseName }) => toPascalCase(baseName),
+          solutionName: ({ pascalizedBaseName }) => pascalizedBaseName,
+          mainProjectDir: ({ pascalizedBaseName }) => `${pascalizedBaseName}/`,
+          clientRootDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/`,
+          clientSrcDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/src/`,
+          clientTestDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/test/`,
+          backendType: () => '.Net',
+          jhipsterDotnetVersion: this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version,
+        })
       },
     });
   }
@@ -122,6 +121,7 @@ export default class extends BaseApplicationGenerator {
           application.iOSClientDir = `client/${application.pascalizedBaseName}.Client.Xamarin.iOS/`;
           application.clientTestProject = `${application.pascalizedBaseName}.Client.Xamarin${PROJECT_TEST_SUFFIX}/`;
         }
+        console.log(application.withAdminUi);
       },
     });
   }
@@ -129,6 +129,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.asPreparingEachEntityTaskGroup({
       async preparingTemplateTask({ application, entity }) {
+        console.log(application.withAdminUi);
         // This assumes we aren't using value objects and every entity has a primary key
         const idField = entity.fields.filter(f => f.id)[0];
 

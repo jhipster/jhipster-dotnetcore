@@ -12,9 +12,8 @@ describe('SubGenerator bootstrap-application of dotnetcore JHipster blueprint', 
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-          blueprints: 'dotnetcore',
+          blueprint: ['dotnetcore'],
         })
-        .withJHipsterLookup()
         .withParentBlueprintLookup();
     });
 
