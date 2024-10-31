@@ -13,7 +13,7 @@ describe('SubGenerator docker of dotnetcore JHipster blueprint', () => {
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-          blueprint: 'dotnetcore',
+          blueprint: ['dotnetcore'],
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();
