@@ -1,6 +1,6 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import command from './command.js';
 import { BLAZOR, XAMARIN } from '../generator-dotnetcore-constants.js';
+import command from './command.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {

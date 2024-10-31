@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const chalk = require('chalk');
 const ChildProcess = require('child_process');
 const util = require('util');
+const chalk = require('chalk');
 const Which = require('which');
 const { OAUTH2 } = require('generator-jhipster/jdl/jhipster/authentication-types');
 const { BLAZOR } = require('../generator-dotnetcore-constants.js');

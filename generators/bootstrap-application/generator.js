@@ -1,13 +1,13 @@
 import { readFile } from 'fs/promises';
 import { fileURLToPath } from 'url';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { addOtherRelationship } from 'generator-jhipster/generators/base-application/support';
 import { getDatabaseData } from 'generator-jhipster/generators/spring-data-relational/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
-import { equivalentCSharpType } from './support/utils.js';
 import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
+import { equivalentCSharpType } from './support/utils.js';
 
 const packagejs = JSON.parse((await readFile(join(dirname(fileURLToPath(import.meta.url)), '../../package.json'))).toString()).version;
 export default class extends BaseApplicationGenerator {
@@ -42,7 +42,7 @@ export default class extends BaseApplicationGenerator {
         this.jhipsterConfig.skipCommitHook = true;
         this.jhipsterConfig.databaseType ??= 'sqllite';
 
-        if (this.jhipsterConfig.dtoSuffix === undefined || application.dtoSuffix === 'DTO') {
+        if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
           this.jhipsterConfig.dtoSuffix = 'Dto';
         }
       },
@@ -71,18 +71,33 @@ export default class extends BaseApplicationGenerator {
           clientTestDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/test/`,
           backendType: () => '.Net',
           jhipsterDotnetVersion: this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version,
-        })
+        });
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
-      async preparingTemplateTask({ application }) {
-        application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
-        application.temporaryDir = 'tmp/';
-        application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
-        application.dockerServicesDir = 'docker/';
+      async preparingTemplateTask({ application, applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          clientDistDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/dist/`,
+          temporaryDir: 'tmp/',
+          serverPortSecured: ({ serverPort }) => parseInt(serverPort, 10) + 1,
+          dockerServicesDir: 'docker/',
+          mainClientDir: ({ mainProjectDir }) => `${mainProjectDir}ClientApp/`,
+          mainClientAppDir: ({ mainProjectDir }) => `${mainProjectDir}ClientApp/src/`,
+          relativeMainClientDir: 'ClientApp/',
+          relativeMainAppDir: ({ relativeMainClientDir }) => `${relativeMainClientDir}src/`,
+          relativeMainTestDir: ({ relativeMainClientDir }) => `${relativeMainClientDir}test/`,
+          testProjectDir: ({ pascalizedBaseName }) => `${pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`,
+          clientTestProject: ({ mainClientDir }) => `${mainClientDir}test/`,
+          kebabCasedBaseName: ({ baseName }) => this._.kebabCase(baseName),
+          modelSuffix: 'Model',
+          backendName: '.Net',
+          // What is this used for?
+          primaryKeyType: ({ databaseType }) => (databaseType === 'mongodb' ? 'string' : 'long'),
+        });
 
         application[`databaseType${this._.upperFirst(application.databaseType)}`] = true;
         if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
@@ -90,24 +105,6 @@ export default class extends BaseApplicationGenerator {
           application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
           application.databaseData = getDatabaseData(application.databaseType);
         }
-
-        application.camelizedBaseName = this._.camelCase(application.baseName);
-        application.dasherizedBaseName = this._.kebabCase(application.baseName);
-        application.lowercaseBaseName = application.baseName.toLowerCase();
-        application.humanizedBaseName = this._.startCase(application.baseName);
-        application.mainClientDir = `${application.mainProjectDir}ClientApp/`;
-        application.mainClientAppDir = `${application.mainProjectDir}ClientApp/src/`;
-        application.relativeMainClientDir = 'ClientApp/';
-        application.relativeMainAppDir = `${application.relativeMainClientDir}src/`;
-        application.relativeMainTestDir = `${application.relativeMainClientDir}test/`;
-        application.testProjectDir = `${application.pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`;
-        application.clientTestProject = `${application.mainClientDir}test/`;
-        application.kebabCasedBaseName = this._.kebabCase(application.baseName);
-        application.modelSuffix = 'Model';
-        application.backendName = '.Net';
-
-        // What is this used for?
-        application.primaryKeyType = application.databaseType === 'mongodb' ? 'string' : 'long';
 
         if (application.clientFramework === BLAZOR) {
           application.mainClientDir = `client/${application.pascalizedBaseName}.Client/`;
@@ -121,7 +118,6 @@ export default class extends BaseApplicationGenerator {
           application.iOSClientDir = `client/${application.pascalizedBaseName}.Client.Xamarin.iOS/`;
           application.clientTestProject = `${application.pascalizedBaseName}.Client.Xamarin${PROJECT_TEST_SUFFIX}/`;
         }
-        console.log(application.withAdminUi);
       },
     });
   }
@@ -129,7 +125,6 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.asPreparingEachEntityTaskGroup({
       async preparingTemplateTask({ application, entity }) {
-        console.log(application.withAdminUi);
         // This assumes we aren't using value objects and every entity has a primary key
         const idField = entity.fields.filter(f => f.id)[0];
 

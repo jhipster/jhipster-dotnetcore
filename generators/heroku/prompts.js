@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+const ChildProcess = require('child_process');
 const _ = require('lodash');
 const chalk = require('chalk');
-const ChildProcess = require('child_process');
 const Which = require('which');
 
 function askForDotnetApp() {

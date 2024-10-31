@@ -268,7 +268,7 @@ exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > r
   "hipsterStackoverflowLink": "https://stackoverflow.com/tags/jhipster/info",
   "hipsterTwitterLink": "https://twitter.com/jhipster",
   "hipsterTwitterUsername": "@jhipster",
-  "humanizedBaseName": "Jhipster",
+  "humanizedBaseName": "JHipster",
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaDependencies": {
