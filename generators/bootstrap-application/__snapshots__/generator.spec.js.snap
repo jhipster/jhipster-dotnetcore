@@ -88,7 +88,7 @@ exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > r
   "databaseTypeMongodb": false,
   "databaseTypeNeo4j": false,
   "databaseTypeNo": false,
-  "databaseTypeSql": true,
+  "databaseTypeSql": false,
   "databaseTypeSqllite": true,
   "defaultEnvironment": undefined,
   "defaultEnvironmentAny": undefined,
