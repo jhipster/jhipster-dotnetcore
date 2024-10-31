@@ -188,6 +188,7 @@ export default class extends BaseApplicationGenerator {
           devDependencies: {
             concurrently: application.nodeDependencies.concurrently,
           },
+          workspaces: [application.clientRootDir],
           scripts: {
             'ci:e2e:server:start': 'docker compose -f docker/app.yml up --wait',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',
