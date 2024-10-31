@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'node:path';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { addOtherRelationship } from 'generator-jhipster/generators/base-application/support';
-import { getDatabaseData } from 'generator-jhipster/generators/spring-data-relational/support';
+import { getDatabaseData, prepareSqlApplicationProperties } from 'generator-jhipster/generators/spring-data-relational/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
 import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
@@ -40,7 +40,7 @@ export default class extends BaseApplicationGenerator {
         // - prettier should be installed at root package.json.
         // - lint-staged paths needs adjusts.
         this.jhipsterConfig.skipCommitHook = true;
-        this.jhipsterConfig.databaseType ??= 'sqllite';
+        this.jhipsterConfig.databaseType ??= this.jhipsterConfig.prodDatabaseType ?? 'sqllite';
 
         if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
           this.jhipsterConfig.dtoSuffix = 'Dto';
@@ -55,7 +55,7 @@ export default class extends BaseApplicationGenerator {
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle', 'sqllite'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
         }
 
@@ -104,6 +104,7 @@ export default class extends BaseApplicationGenerator {
           application.databaseTypeSql = true;
           application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
           application.databaseData = getDatabaseData(application.databaseType);
+          prepareSqlApplicationProperties({ application });
         }
 
         if (application.clientFramework === BLAZOR) {
