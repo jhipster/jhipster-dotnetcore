@@ -31,9 +31,9 @@ export default class extends BaseApplicationGenerator {
             content.replace('prettier,\n', '').replace('extends: [prettier],\n', ''),
           );
 
-          const packageJson = this.readDestinationJSON(`${application.clientRootDir}/package.json`);
+          const clientPackageJson = this.readDestinationJSON(`${application.clientRootDir}/package.json`);
           this.packageJson.merge({
-            overrides: packageJson.overrides,
+            overrides: clientPackageJson.overrides,
           });
         }
 
