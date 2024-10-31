@@ -25,6 +25,11 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       async postWritingTemplateTask({ application }) {
+        if (application.clientFrameworkBuiltIn) {
+          // Remove prettier from eslint config, prettier is not installed in the client folder
+          this.editFile(application.eslintConfigFile, content => content.replace('prettier,\n', '').replace('extends: [prettier],\n', ''));
+        }
+
         if (application.clientFramework !== BLAZOR && application.clientRootDir) {
           this.packageJson.merge({
             scripts: {
