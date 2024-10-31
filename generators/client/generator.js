@@ -30,6 +30,11 @@ export default class extends BaseApplicationGenerator {
           this.editFile(`${application.clientRootDir}${application.eslintConfigFile}`, content =>
             content.replace('prettier,\n', '').replace('extends: [prettier],\n', ''),
           );
+
+          const packageJson = this.readDestinationJSON(`${application.clientRootDir}/package.json`);
+          this.packageJson.merge({
+            overrides: packageJson.overrides,
+          });
         }
 
         if (application.clientFramework !== BLAZOR && application.clientRootDir) {
