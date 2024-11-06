@@ -38,34 +38,26 @@ jobs:
         include:
           - app-type: jwt-with-angular-app
             arg: 'import-jdl'
-            extra-args: '--with-entities'
           - app-type: jwt-with-angular-cqrs-app
             arg: 'import-jdl'
-            extra-args: '--with-entities'
           - app-type: jwt-with-blazor-app
             arg: 'import-jdl blazor'
-            extra-args: '--with-entities'
           - app-type: jwt-with-blazor-cqrs-app
             arg: 'import-jdl blazor'
-            extra-args: '--with-entities'
           - app-type: jwt-with-mssql-app
             arg: 'no'
           - app-type: jwt-with-mysql-app
             arg: 'no'
           - app-type: jwt-with-mongo-app
             arg: 'import-jdl'
-            extra-args: '--with-entities'
           - app-type: jwt-with-mongo-cqrs-app
             arg: 'import-jdl'
-            extra-args: '--with-entities'
           - app-type: jwt-with-postgres-app
             arg: 'no'
           - app-type: jwt-with-react-app
             arg: 'import-jdl'
-            extra-args: '--with-entities'
           - app-type: jwt-with-vue-app
             arg: 'import-jdl'
-            extra-args: '--with-entities'
     env:
       JHI_APP: ${{ matrix.app-type }}
       JHI_ARG: ${{ matrix.arg }}
