@@ -16,7 +16,6 @@ import {
   SERVER_SRC_DIR,
   SERVER_TEST_DIR,
 } from '../generator-dotnetcore-constants.js';
-import command from './command.js';
 import { serverFiles } from './files.js';
 import { entityCommonFiles, entityFiles } from './entity-files.js';
 
