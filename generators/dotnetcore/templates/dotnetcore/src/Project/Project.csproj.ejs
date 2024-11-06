@@ -118,14 +118,14 @@
         <Exec WorkingDirectory="$(RepoRoot)" Command="npm install" />
     </Target>
 
-    <Target Name="RunWebPack" BeforeTargets="Build" DependsOnTargets="NpmInstall">
+    <Target Name="RunClientBundler" BeforeTargets="Build" DependsOnTargets="NpmInstall">
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Debug'" />
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Release'" />
     </Target>
 
     <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
-    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <Target Name="PublishRunClientBundler" AfterTargets="ComputeFilesToPublish">
         <!-- Include the newly-built files in the publish output -->
         <ItemGroup>
             <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
