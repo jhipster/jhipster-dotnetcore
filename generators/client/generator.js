@@ -4,7 +4,7 @@ import command from './command.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, sbsBlueprint: true });
+    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true });
 
     this.jhipsterContext.command = command;
   }
@@ -25,22 +25,10 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       async postWritingTemplateTask({ application }) {
-        if (application.clientFrameworkBuiltIn) {
-          // Remove prettier from eslint config, prettier is not installed in the client folder
-          this.editFile(`${application.clientRootDir}${application.eslintConfigFile}`, content =>
-            content.replace('prettier,\n', '').replace('extends: [prettier],\n', ''),
-          );
-
-          const clientPackageJson = this.readDestinationJSON(`${application.clientRootDir}/package.json`);
-          this.packageJson.merge({
-            overrides: clientPackageJson.overrides,
-          });
-        }
-
         if (application.clientFramework !== BLAZOR && application.clientRootDir) {
           this.packageJson.merge({
             scripts: {
-              test: `npm test --prefix ${application.clientRootDir}`,
+              test: `npm test -w ${application.clientRootDir}`,
             },
           });
         }

@@ -17,7 +17,7 @@ import { entityFiles } from './entities-blazor.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, sbsBlueprint: true, jhipster7Migration: true });
+    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true, jhipster7Migration: true });
   }
 
   async beforeQueue() {

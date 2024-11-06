@@ -81,20 +81,17 @@ export default class extends BaseApplicationGenerator {
       async preparingTemplateTask({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          clientDistDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/dist/`,
           temporaryDir: 'tmp/',
-          serverPortSecured: ({ serverPort }) => parseInt(serverPort, 10) + 1,
           dockerServicesDir: 'docker/',
+          modelSuffix: 'Model',
+          backendName: '.Net',
+          serverPortSecured: ({ serverPort }) => parseInt(serverPort, 10) + 1,
+          clientDistDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/dist/`,
           mainClientDir: ({ mainProjectDir }) => `${mainProjectDir}ClientApp/`,
           mainClientAppDir: ({ mainProjectDir }) => `${mainProjectDir}ClientApp/src/`,
-          relativeMainClientDir: 'ClientApp/',
-          relativeMainAppDir: ({ relativeMainClientDir }) => `${relativeMainClientDir}src/`,
-          relativeMainTestDir: ({ relativeMainClientDir }) => `${relativeMainClientDir}test/`,
           testProjectDir: ({ pascalizedBaseName }) => `${pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`,
           clientTestProject: ({ mainClientDir }) => `${mainClientDir}test/`,
           kebabCasedBaseName: ({ baseName }) => this._.kebabCase(baseName),
-          modelSuffix: 'Model',
-          backendName: '.Net',
           // What is this used for?
           primaryKeyType: ({ databaseType }) => (databaseType === 'mongodb' ? 'string' : 'long'),
         });

@@ -22,28 +22,11 @@ import { entityCommonFiles, entityFiles } from './entity-files.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, jhipster7Migration: true });
+    super(args, opts, { ...features, queueCommandTasks: true, jhipster7Migration: true });
   }
 
   async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
-      async initializingTemplateTask() {
-        this.parseJHipsterCommand(command);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup({
-      async promptingTemplateTask({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(command.configs));
-      },
-    });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
@@ -188,7 +171,6 @@ export default class extends BaseApplicationGenerator {
           devDependencies: {
             concurrently: application.nodeDependencies.concurrently,
           },
-          workspaces: [application.clientRootDir],
           scripts: {
             'ci:e2e:server:start': 'docker compose -f docker/app.yml up --wait',
             'ci:e2e:run': 'concurrently -k -s first "npm run ci:e2e:server:start" "npm run e2e:headless"',

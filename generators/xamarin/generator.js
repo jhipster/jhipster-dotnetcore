@@ -9,7 +9,7 @@ import { entityFiles } from './entities-xamarin.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, jhipster7Migration: true });
+    super(args, opts, { ...features, queueCommandTasks: true, jhipster7Migration: true });
   }
 
   async beforeQueue() {
