@@ -1,10 +1,7 @@
-/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */
-const command = {
+import { asCommand } from 'generator-jhipster';
+
+export default asCommand({
   options: {},
   import: ['jhipster-dotnetcore:dotnetcore'],
   override: true,
-};
-
-export default command;
+});

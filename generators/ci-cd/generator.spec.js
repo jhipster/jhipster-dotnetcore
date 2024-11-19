@@ -13,7 +13,7 @@ describe.skip('SubGenerator ci-cd of dotnetcore JHipster blueprint', () => {
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-          blueprint: 'dotnetcore',
+          blueprint: ['dotnetcore'],
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();

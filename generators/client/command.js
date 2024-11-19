@@ -1,10 +1,8 @@
 import { command as clientCommand } from 'generator-jhipster/generators/client';
+import { asCommand } from 'generator-jhipster';
 import { BLAZOR, XAMARIN } from '../generator-dotnetcore-constants.js';
 
-/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */
-const command = {
+export default asCommand({
   ...clientCommand,
   configs: {
     ...clientCommand.configs,
@@ -19,6 +17,4 @@ const command = {
     },
   },
   override: true,
-};
-
-export default command;
+});

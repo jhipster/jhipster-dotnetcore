@@ -41,13 +41,10 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "sonar-project.properties": {
     "state": "deleted",
   },
-  "src/Jhipster/ClientApp/.eslintignore": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/.eslintrc.json": {
-    "stateCleared": "modified",
-  },
   "src/Jhipster/ClientApp/angular.json": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/eslint.config.mjs": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/jest.conf.js": {

@@ -1,10 +1,10 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import command from './command.js';
 import { BLAZOR, XAMARIN } from '../generator-dotnetcore-constants.js';
+import command from './command.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, sbsBlueprint: true });
+    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true });
 
     this.jhipsterContext.command = command;
   }
@@ -28,7 +28,7 @@ export default class extends BaseApplicationGenerator {
         if (application.clientFramework !== BLAZOR && application.clientRootDir) {
           this.packageJson.merge({
             scripts: {
-              test: `npm test --prefix ${application.clientRootDir}`,
+              test: `npm test -w ${application.clientRootDir}`,
             },
           });
         }

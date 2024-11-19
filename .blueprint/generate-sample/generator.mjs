@@ -1,7 +1,6 @@
 import { readdir, stat } from 'node:fs/promises';
 import BaseGenerator from 'generator-jhipster/generators/base';
 import command from './command.mjs';
-import { statSync } from 'node:fs';
 
 export default class extends BaseGenerator {
   sampleName;
