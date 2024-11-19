@@ -25,6 +25,7 @@ describe('SubGenerator bootstrap-application of dotnetcore JHipster blueprint', 
         authority: expect.any(Object),
         userManagement: expect.any(Object),
         user: expect.any(Object),
+        jhipsterPackageJson: expect.any(Object),
       });
     });
   });

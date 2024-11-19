@@ -341,6 +341,7 @@ exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > r
   "jhiPrefixDashed": "jhi",
   "jhiTablePrefix": "jhi",
   "jhipsterDotnetVersion": "JHIPSTER_DOTNET_VERSION",
+  "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
   "jwtSecretKey": undefined,
   "kebabCasedBaseName": "jhipster",
