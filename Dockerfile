@@ -1,4 +1,4 @@
-FROM ubuntu:23.10
+FROM ubuntu:24.04
 
 # copy sources
 COPY . /home/jhipster/jhipster-dotnetcore
@@ -23,8 +23,6 @@ RUN \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
-  # install yeoman
-  npm install -g yo && \
   #install dotnet
   apt-get install -y dotnet-sdk-8.0 && \
   # cleanup
