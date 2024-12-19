@@ -52,7 +52,7 @@
     "to-pascal-case": "^1.0.0"
   },
   "devDependencies": {
-    "ejs-lint": "2.0.0",
+    "ejs-lint": "2.0.1",
     "eslint": "9.13.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
