@@ -251,9 +251,6 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "src/Jhipster/ClientApp/src/app/app.config.ts": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/ClientApp/src/app/app.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/Jhipster/ClientApp/src/app/app.routes.ts": {
     "stateCleared": "modified",
   },
@@ -662,6 +659,12 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
   "src/Jhipster/ClientApp/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/Jhipster/ClientApp/src/environments/environment.development.ts": {
+    "stateCleared": "modified",
+  },
+  "src/Jhipster/ClientApp/src/environments/environment.ts": {
+    "stateCleared": "modified",
+  },
   "src/Jhipster/ClientApp/src/favicon.ico": {
     "stateCleared": "modified",
   },
@@ -708,9 +711,6 @@ exports[`SubGenerator client of dotnetcore JHipster blueprint > run > should suc
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/src/robots.txt": {
-    "stateCleared": "modified",
-  },
-  "src/Jhipster/ClientApp/src/swagger-ui/dist/images/throbber.gif": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/src/swagger-ui/index.html": {
