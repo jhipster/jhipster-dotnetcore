@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const _ = require('lodash');
-const chalk = require('chalk');
 const ChildProcess = require('child_process');
 const fs = require('fs');
+const _ = require('lodash');
+const chalk = require('chalk');
 const Which = require('which');
 
 const { OAUTH2 } = require('generator-jhipster/jdl/jhipster/authentication-types');
@@ -31,7 +31,7 @@ function gitInit() {
     fs.lstatSync('.git');
     this.log(chalk.bold('\nUsing existing Git repository'));
     done();
-  } catch (e) {
+  } catch {
     // An exception is thrown if the folder doesn't exist
     this.log(chalk.bold('\nInitializing Git repository'));
     const child = ChildProcess.execFile(Which.sync('git'), ['init'], () => {

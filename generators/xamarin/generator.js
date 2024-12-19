@@ -1,16 +1,15 @@
-/* eslint-disable prefer-regex-literals */
 import { writeFileSync } from 'fs';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 import chalk from 'chalk';
 import { Guid } from 'js-guid';
-import { files } from './files-xamarin.js';
 import { CLIENT_SRC_DIR } from '../generator-dotnetcore-constants.js';
+import { files } from './files-xamarin.js';
 import { entityFiles } from './entities-xamarin.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, jhipster7Migration: true });
+    super(args, opts, { ...features, queueCommandTasks: true, jhipster7Migration: true });
   }
 
   async beforeQueue() {
@@ -152,7 +151,7 @@ export default class extends BaseApplicationGenerator {
             },
           ]);
           this.log(chalk.green.bold('Client application generated successfully.\n'));
-        } catch (error) {
+        } catch {
           this.log.error('Failed to add project.');
         }
       },
@@ -161,12 +160,12 @@ export default class extends BaseApplicationGenerator {
 
   async newSlnAddProj(solutionName, projects) {
     const solutionFile = this.readDestination(`${solutionName}.sln`);
-    const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const regex = new RegExp(`Project\\("{([^}"]*)}"\\) = .*Core.csproj", "{([^}"]*)}"`, 'g');
     const exc = regex.exec(solutionFile);
     const firstGuid = exc[1];
-    const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g'); // eslint-disable-line quotes
+    const regexp = RegExp(`Project\\("{[^}"]*}"\\) = "client", "client", "{([^}"]*)}"`, 'g');
     const clientDir = regexp.exec(solutionFile)[1];
-    const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g'); // eslint-disable-line quotes
+    const reg = new RegExp(`Project\\("{[^"]*"\\) = "([^"]*)", "[^"]*`, 'g');
     let projectText = '';
     let dirText = '';
 

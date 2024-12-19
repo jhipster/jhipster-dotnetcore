@@ -1,23 +1,23 @@
+import { access } from 'fs/promises';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import chalk from 'chalk';
-import { access } from 'fs/promises';
 import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 import { CLIENT_SRC_DIR, CLIENT_TEST_DIR } from '../generator-dotnetcore-constants.js';
-import { files } from './files-blazor.js';
-import { entityFiles } from './entities-blazor.js';
 import {
-  getNonNullableType,
-  getNullableResolvedType,
-  isNumericPrimaryKey,
-  getPrimaryKeyType,
   defaultNilValue,
   defaultValue,
+  getNonNullableType,
+  getNullableResolvedType,
+  getPrimaryKeyType,
+  isNumericPrimaryKey,
   updatedValue,
 } from '../utils.js';
+import { files } from './files-blazor.js';
+import { entityFiles } from './entities-blazor.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, sbsBlueprint: true, jhipster7Migration: true });
+    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true, jhipster7Migration: true });
   }
 
   async beforeQueue() {
@@ -176,7 +176,7 @@ export default class extends BaseApplicationGenerator {
         try {
           try {
             await access(`${application.solutionName}.sln`);
-          } catch (error) {
+          } catch {
             await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
           }
         } catch (err) {
@@ -200,13 +200,13 @@ export default class extends BaseApplicationGenerator {
 
         try {
           await this.spawnCommand('libman');
-        } catch (error) {
+        } catch {
           try {
             // If a tool is already installed the install sub-command will return 1
             // We'll use the update sub-command which behaves the way we'd expected.
             // See: https://github.com/dotnet/sdk/issues/9500
             await this.spawnCommand('dotnet tool update -g Microsoft.Web.LibraryManager.Cli');
-          } catch (error) {
+          } catch {
             throw new Error('Could not install/update Microsoft.Web.LibraryManager.Cli');
           }
           this.log(chalk.green.bold('Microsoft.Web.LibraryManager.Cli successfully installed.\n'));
@@ -214,10 +214,10 @@ export default class extends BaseApplicationGenerator {
 
         try {
           await this.spawnCommand('webcompiler');
-        } catch (error) {
+        } catch {
           try {
             await this.spawnCommand('dotnet tool update Excubo.WebCompiler --global');
-          } catch (error) {
+          } catch {
             throw new Error('Could not install/update Excubo.WebCompiler');
           }
           this.log(chalk.green.bold('Excubo.WebCompiler successfully installed.\n'));

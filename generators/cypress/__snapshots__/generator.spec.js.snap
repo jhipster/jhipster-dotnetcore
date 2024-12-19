@@ -14,10 +14,10 @@ exports[`SubGenerator cypress of dotnetcore JHipster blueprint > run > should su
   "src/Jhipster/ClientApp/package.json": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/ClientApp/test/cypress/.eslintrc.json": {
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/login-page.cy.ts": {
     "stateCleared": "modified",
   },
-  "src/Jhipster/ClientApp/test/cypress/e2e/account/login-page.cy.ts": {
+  "src/Jhipster/ClientApp/test/cypress/e2e/account/logout.cy.ts": {
     "stateCleared": "modified",
   },
   "src/Jhipster/ClientApp/test/cypress/e2e/account/password-page.cy.ts": {

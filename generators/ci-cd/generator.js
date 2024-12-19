@@ -1,6 +1,9 @@
 import CiCdGenerator from 'generator-jhipster/generators/ci-cd';
 import command from './command.mjs';
 
+const GITHUB = 'github';
+const GITLAB = 'gitlab';
+
 export default class extends CiCdGenerator {
   constructor(args, opts, features) {
     super(args, opts, {

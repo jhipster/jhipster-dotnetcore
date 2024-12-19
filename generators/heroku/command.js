@@ -1,8 +1,5 @@
-/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */
-const command = {
-  options: {},
-};
+import { asCommand } from 'generator-jhipster';
 
-export default command;
+export default asCommand({
+  options: {},
+});

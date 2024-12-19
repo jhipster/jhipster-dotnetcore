@@ -3,7 +3,7 @@ import { files } from './files.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, sbsBlueprint: true });
+    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true });
   }
 
   get [BaseApplicationGenerator.WRITING]() {

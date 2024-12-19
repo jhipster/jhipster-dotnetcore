@@ -4,10 +4,9 @@ import toPascalCase from 'to-pascal-case';
 
 const { applicationType } = serverCommand.configs;
 
-/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */
-const command = {
+import { asCommand } from 'generator-jhipster';
+
+export default asCommand({
   options: {},
   configs: {
     applicationType,
@@ -67,6 +66,4 @@ const command = {
       }),
     },
   },
-};
-
-export default command;
+});

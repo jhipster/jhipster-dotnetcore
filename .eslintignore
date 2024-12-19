@@ -1,5 +1,0 @@
-*.back.js
-**/heroku/**
-**/entity/**
-**/ci-cd/**
-**/client/*.cjs
