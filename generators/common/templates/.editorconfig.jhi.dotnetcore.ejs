@@ -1,24 +1,13 @@
-# editorconfig.org
-
-# top-most EditorConfig file
-root = true
-
-# Default settings:
-# A newline ending every file
-# Use 4 spaces as indentation
-[*]
-insert_final_newline = true
-indent_style = space
-indent_size = 4
-trim_trailing_whitespace = true
-end_of_line = lf
-
 [project.json]
 indent_size = 2
 
 # Generated code
 [*{_AssemblyInfo.cs,.notsupported.cs}]
 generated_code = true
+
+# Code files
+[*.{cs,csx,vb,vbx}]
+indent_size = 4
 
 # C# files
 [*.cs]

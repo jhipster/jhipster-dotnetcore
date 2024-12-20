@@ -25,6 +25,7 @@
         <IsPackable>false</IsPackable>
 <%_ if(!skipClient && clientFramework !== "Blazor" && clientFramework !== "Xamarin") { %>
         <SpaRoot>ClientApp\</SpaRoot>
+        <RepoRoot>..\..\</RepoRoot>
 <%_ } _%>
         <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 
@@ -107,24 +108,24 @@
         </SonarQubeSetting>
     </ItemGroup>
 
-    <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('$(SpaRoot)node_modules')">
+    <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('$(RepoRoot)node_modules')">
         <!-- Ensure Node.js is installed -->
-        <Exec WorkingDirectory="$(SpaRoot)" Command="node --version" ContinueOnError="true">
+        <Exec WorkingDirectory="$(RepoRoot)" Command="node --version" ContinueOnError="true">
             <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
         </Exec>
         <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
         <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+        <Exec WorkingDirectory="$(RepoRoot)" Command="npm install" />
     </Target>
 
-    <Target Name="RunWebPack" BeforeTargets="Build" DependsOnTargets="NpmInstall">
+    <Target Name="RunClientBundler" BeforeTargets="Build" DependsOnTargets="NpmInstall">
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Debug'" />
         <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Release'" />
     </Target>
 
     <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
-    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <Target Name="PublishRunClientBundler" AfterTargets="ComputeFilesToPublish">
         <!-- Include the newly-built files in the publish output -->
         <ItemGroup>
             <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />

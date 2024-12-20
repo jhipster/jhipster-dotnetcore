@@ -1,5 +1,4 @@
-cli/cli.cjs skip
-generators/** skip
 .blueprint/** skip
-.eslintrc.json skip
+.gitattributes
+.github/** skip
 README.md skip

@@ -1,4 +1,4 @@
-FROM ubuntu:23.10
+FROM ubuntu:24.04
 
 # copy sources
 COPY . /home/jhipster/jhipster-dotnetcore
@@ -19,12 +19,10 @@ RUN \
     sudo \
     git && \
   # install node.js
-  wget https://nodejs.org/dist/v18.17.1/node-v18.17.1-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v20.18.1/node-v20.18.1-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
-  # install yeoman
-  npm install -g yo && \
   #install dotnet
   apt-get install -y dotnet-sdk-8.0 && \
   # cleanup

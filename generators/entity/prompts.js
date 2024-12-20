@@ -539,7 +539,7 @@ async function askForField() {
 
         return true;
       },
-      message: answers => {
+      message: _answers => {
         if (!context.existingEnum) {
           return 'What are the values of your enumeration (separated by comma, no spaces)?';
         }
@@ -653,7 +653,7 @@ async function askForField() {
       type: 'checkbox',
       name: 'fieldValidateRules',
       message: 'Which validation rules do you want to add?',
-      choices: response => {
+      choices: _response => {
         // Default rules applicable for fieldType 'LocalDate', 'Instant',
         // 'ZonedDateTime', 'Duration', 'UUID', 'Boolean', 'ByteBuffer' and 'Enum'
         const opts = [
@@ -926,7 +926,7 @@ async function askForRelationship() {
       type: 'input',
       name: 'otherEntityRelationshipName',
       message: 'What is the name of this relationship in the other entity?',
-      default: response => _.lowerFirst(name),
+      default: _response => _.lowerFirst(name),
     },
     {
       when: response =>

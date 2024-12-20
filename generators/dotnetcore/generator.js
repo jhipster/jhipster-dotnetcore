@@ -4,9 +4,7 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 import { createBase64Secret } from 'generator-jhipster/generators/base/support';
 import { getEnumInfo } from 'generator-jhipster/generators/base-application/support';
 
-import { getNullableResolvedType, getNullableResolvedPrimaryKeyType, isNumericPrimaryKey, getPrimaryKeyType } from '../utils.js';
-import command from './command.js';
-import { serverFiles } from './files.js';
+import { getNullableResolvedPrimaryKeyType, getNullableResolvedType, getPrimaryKeyType, isNumericPrimaryKey } from '../utils.js';
 import {
   PROJECT_APPLICATION_SUFFIX,
   PROJECT_CROSSCUTTING_SUFFIX,
@@ -18,32 +16,16 @@ import {
   SERVER_SRC_DIR,
   SERVER_TEST_DIR,
 } from '../generator-dotnetcore-constants.js';
+import { serverFiles } from './files.js';
 import { entityCommonFiles, entityFiles } from './entity-files.js';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, jhipster7Migration: true });
+    super(args, opts, { ...features, queueCommandTasks: true, jhipster7Migration: true });
   }
 
   async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({
-      async initializingTemplateTask() {
-        this.parseJHipsterCommand(command);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup({
-      async promptingTemplateTask({ control }) {
-        if (control.existingProject && this.options.askAnswered !== true) return;
-        await this.prompt(this.prepareQuestions(command.configs));
-      },
-    });
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
@@ -260,7 +242,7 @@ export default class extends BaseApplicationGenerator {
     try {
       await access(`${solutionName}.sln`);
       return true;
-    } catch (error) {
+    } catch {
       return this.spawnCommand(`dotnet new sln --name ${solutionName}`);
     }
   }

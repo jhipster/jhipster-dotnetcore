@@ -21,7 +21,7 @@ import { BLAZOR } from '../generator-dotnetcore-constants.js';
 export const files = {
   general: [
     {
-      templates: ['.gitignore.jhi.dotnetcore-common', '.devcontainer/devcontainer.json'],
+      templates: ['.gitignore.jhi.dotnetcore-common', '.editorconfig.jhi.dotnetcore', '.devcontainer/devcontainer.json'],
     },
   ],
   docker: [

@@ -1,13 +1,13 @@
 import { readFile } from 'fs/promises';
 import { fileURLToPath } from 'url';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { addOtherRelationship } from 'generator-jhipster/generators/base-application/support';
-import { getDatabaseData } from 'generator-jhipster/generators/spring-data-relational/support';
+import { getDatabaseData, prepareSqlApplicationProperties } from 'generator-jhipster/generators/spring-data-relational/support';
 import toPascalCase from 'to-pascal-case';
 import pluralize from 'pluralize';
-import { equivalentCSharpType } from './support/utils.js';
 import { BLAZOR, PROJECT_TEST_SUFFIX, SERVER_SRC_DIR, SERVER_TEST_DIR, XAMARIN } from '../generator-dotnetcore-constants.js';
+import { equivalentCSharpType } from './support/utils.js';
 
 const packagejs = JSON.parse((await readFile(join(dirname(fileURLToPath(import.meta.url)), '../../package.json'))).toString()).version;
 export default class extends BaseApplicationGenerator {
@@ -35,80 +35,74 @@ export default class extends BaseApplicationGenerator {
         if (!this.jhipsterConfig.namespace) {
           this.jhipsterConfig.namespace = toPascalCase(this.jhipsterConfig.baseName);
         }
+        this.jhipsterConfig.withAdminUi = false;
+        // Paths needs adjusts for husky and lint-staged:
+        // - prettier should be installed at root package.json.
+        // - lint-staged paths needs adjusts.
+        this.jhipsterConfig.skipCommitHook = true;
+        this.jhipsterConfig.databaseType ??= this.jhipsterConfig.prodDatabaseType ?? 'sqllite';
+
+        if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
+          this.jhipsterConfig.dtoSuffix = 'Dto';
+        }
       },
     });
   }
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
-      async loadingTemplateTask({ application }) {
-        // Paths needs adjusts for husky and lint-staged:
-        // - prettier should be installed at root package.json.
-        // - lint-staged paths needs adjusts.
-        application.skipCommitHook = true;
-
-        application.withAdminUi = false;
-
+      async loadingTemplateTask({ application, applicationDefaults }) {
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
-        application.databaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle', 'sqllite'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
         }
 
-        application.SERVER_SRC_DIR = SERVER_SRC_DIR;
-        application.SERVER_TEST_DIR = SERVER_TEST_DIR;
-
-        if (this.jhipsterConfig.dtoSuffix === undefined || application.dtoSuffix === 'DTO') {
-          application.dtoSuffix = 'Dto';
-        }
-        application.pascalizedBaseName = toPascalCase(application.baseName);
-        application.solutionName = application.pascalizedBaseName;
-        application.mainProjectDir = `${application.pascalizedBaseName}/`;
-
-        application.clientRootDir = `src/${application.mainProjectDir}ClientApp/`;
-        application.clientSrcDir = `src/${application.mainProjectDir}ClientApp/src/`;
-        application.clientTestDir = `src/${application.mainProjectDir}ClientApp/test/`;
-        application.backendType = '.Net';
-
-        application.jhipsterDotnetVersion = this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version;
+        applicationDefaults({
+          __override__: true,
+          SERVER_SRC_DIR,
+          SERVER_TEST_DIR,
+          pascalizedBaseName: ({ baseName }) => toPascalCase(baseName),
+          solutionName: ({ pascalizedBaseName }) => pascalizedBaseName,
+          mainProjectDir: ({ pascalizedBaseName }) => `${pascalizedBaseName}/`,
+          clientRootDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/`,
+          clientSrcDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/src/`,
+          clientTestDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/test/`,
+          backendType: () => '.Net',
+          jhipsterDotnetVersion: this.useVersionPlaceholders ? 'JHIPSTER_DOTNET_VERSION' : packagejs.version,
+        });
       },
     });
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
-      async preparingTemplateTask({ application }) {
-        application.clientDistDir = `src/${application.mainProjectDir}ClientApp/dist/`;
-        application.temporaryDir = 'tmp/';
-        application.serverPortSecured = parseInt(application.serverPort, 10) + 1;
-        application.dockerServicesDir = 'docker/';
+      async preparingTemplateTask({ application, applicationDefaults }) {
+        applicationDefaults({
+          __override__: true,
+          temporaryDir: 'tmp/',
+          dockerServicesDir: 'docker/',
+          modelSuffix: 'Model',
+          backendName: '.Net',
+          serverPortSecured: ({ serverPort }) => parseInt(serverPort, 10) + 1,
+          clientDistDir: ({ mainProjectDir }) => `src/${mainProjectDir}ClientApp/dist/`,
+          mainClientDir: ({ mainProjectDir }) => `${mainProjectDir}ClientApp/`,
+          mainClientAppDir: ({ mainProjectDir }) => `${mainProjectDir}ClientApp/src/`,
+          testProjectDir: ({ pascalizedBaseName }) => `${pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`,
+          clientTestProject: ({ mainClientDir }) => `${mainClientDir}test/`,
+          kebabCasedBaseName: ({ baseName }) => this._.kebabCase(baseName),
+          // What is this used for?
+          primaryKeyType: ({ databaseType }) => (databaseType === 'mongodb' ? 'string' : 'long'),
+        });
 
         application[`databaseType${this._.upperFirst(application.databaseType)}`] = true;
         if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.databaseTypeSql = true;
           application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
           application.databaseData = getDatabaseData(application.databaseType);
+          prepareSqlApplicationProperties({ application });
         }
-
-        application.camelizedBaseName = this._.camelCase(application.baseName);
-        application.dasherizedBaseName = this._.kebabCase(application.baseName);
-        application.lowercaseBaseName = application.baseName.toLowerCase();
-        application.humanizedBaseName = this._.startCase(application.baseName);
-        application.mainClientDir = `${application.mainProjectDir}ClientApp/`;
-        application.mainClientAppDir = `${application.mainProjectDir}ClientApp/src/`;
-        application.relativeMainClientDir = 'ClientApp/';
-        application.relativeMainAppDir = `${application.relativeMainClientDir}src/`;
-        application.relativeMainTestDir = `${application.relativeMainClientDir}test/`;
-        application.testProjectDir = `${application.pascalizedBaseName}${PROJECT_TEST_SUFFIX}/`;
-        application.clientTestProject = `${application.mainClientDir}test/`;
-        application.kebabCasedBaseName = this._.kebabCase(application.baseName);
-        application.modelSuffix = 'Model';
-        application.backendName = '.Net';
-
-        // What is this used for?
-        application.primaryKeyType = application.databaseType === 'mongodb' ? 'string' : 'long';
 
         if (application.clientFramework === BLAZOR) {
           application.mainClientDir = `client/${application.pascalizedBaseName}.Client/`;
