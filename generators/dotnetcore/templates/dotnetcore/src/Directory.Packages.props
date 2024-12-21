@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AspNetCorePackageVersion>8.0.0</AspNetCorePackageVersion>
+    <AspNetCorePackageVersion>8.0.11</AspNetCorePackageVersion>
     <EntityFrameworkPackageVersion>8.0.0</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.11</JHipsterNetPackageVersion>
   </PropertyGroup>
@@ -57,11 +57,11 @@
   	
   	<PackageVersion Include="Winton.Extensions.Configuration.Consul" Version="3.2.0" />
   	
-  	<PackageVersion Include="Consul" Version="1.6.10.7" />
+  	<PackageVersion Include="Consul" Version="1.7.14.5" />
   	
   	
-  	<PackageVersion Include="Ocelot" Version="18.0.0" />
-  	<PackageVersion Include="Ocelot.Provider.Consul" Version="18.0.0" />
+  	<PackageVersion Include="Ocelot" Version="23.4.2" />
+  	<PackageVersion Include="Ocelot.Provider.Consul" Version="23.4.2" />
   	
   	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
