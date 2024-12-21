@@ -1,7 +1,97 @@
-<Project ToolsVersion="Current">
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- This is an auto-generated file by a GH action! -->
+  <!-- It's a workaround for dependabot to support Central Package Management (CPM) -->
+  <!-- https://github.com/dependabot/dependabot-core/issues/8590 -->
   <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="AutoMapper" />
+  	<PackageReference Include="Blazored.Modal" />
+  	<PackageReference Include="Blazored.SessionStorage" />
+  	<PackageReference Include="Blazorise.Bootstrap" />
+  	<PackageReference Include="Blazorise.Icons.FontAwesome" />
+  	<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
+  	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+  	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" />
+  	<PackageReference Include="Microsoft.Web.LibraryManager.Build" />
+  	<PackageReference Include="System.Net.Http.Json" />
+  	<PackageReference Include="Toolbelt.Blazor.HttpClientInterceptor" />
+  
+  	<PackageReference Include="AutoFixture" />
+  	<PackageReference Include="bunit" />
+  	<PackageReference Include="Microsoft.AspNetCore.Components" />
+  	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
+  
+  	<PackageReference Include="JHipsterNet.Core" />
+  	<PackageReference Include="JHipsterNet.Web" />
+  	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+  	<PackageReference Include="MediatR" />
+  	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
+  	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />
+  	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+  	<PackageReference Include="Scrutor" />
+  	<PackageReference Include="Serilog.AspNetCore" />
+  	<PackageReference Include="Serilog.Settings.Configuration" />
+  	<PackageReference Include="Serilog.Sinks.Console" />
+  	<PackageReference Include="Serilog.Enrichers.Process" />
+  	<PackageReference Include="Serilog.Enrichers.Thread" />
+  	<PackageReference Include="Serilog.Sinks.SyslogMessages" />
+  	<PackageReference Include="Swashbuckle.AspNetCore" />
+  	<PackageReference Include="LanguageExt.Core" />
+  	<PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+  	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+  	<PackageReference Include="BCrypt.Net-Next" />
+  	<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+  	<PackageReference Include="Winton.Extensions.Configuration.Consul" />
+  	<PackageReference Include="Consul" />
+  	<PackageReference Include="Ocelot" />
+  	<PackageReference Include="Ocelot.Provider.Consul" />
+  
+  
+  	<PackageReference Include="Microsoft.AspNetCore.Identity" />
+  	<PackageReference Include="Newtonsoft.Json" />
+  	<PackageReference Include="System.ComponentModel.Annotations" />
+  	<PackageReference Include="System.Text.Json" />
+  	<PackageReference Include="Serilog" />
+  
+  
+  	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+  	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+  	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+  	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+  	<PackageReference Include="MongoDB.Driver" />
+  	<PackageReference Include="AspNetCore.Identity.MongoDbCore" />
+  	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+  	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+  	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" />
+  	<PackageReference Include="Oracle.EntityFrameworkCore" />
+  	<PackageReference Include="Oracle.ManagedDataAccess.Core" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" />
+  	<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+  	<PackageReference Include="coverlet.msbuild" />
+  	<PackageReference Include="FakeItEasy" />
+  	<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  	<PackageReference Include="Moq" />
+  	<PackageReference Include="xunit" />
+  	<PackageReference Include="xunit.runner.visualstudio" />
+  	<PackageReference Include="xunit.runner.console" />
+  	<PackageReference Include="FluentAssertions" />
+  	<PackageReference Include="FluentAssertions.AspNetCore.Mvc" />
+  	<PackageReference Include="FluentAssertions.Json" />
   </ItemGroup>
+
 </Project>
