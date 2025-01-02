@@ -48,7 +48,7 @@
   	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   	<PackageVersion Include="LanguageExt.Core" Version="4.4.7" />
   	
-  	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+  	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
   	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
   	
