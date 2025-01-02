@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AspNetCorePackageVersion>8.0.0</AspNetCorePackageVersion>
+    <AspNetCorePackageVersion>8.0.2</AspNetCorePackageVersion>
     <EntityFrameworkPackageVersion>8.0.0</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.11</JHipsterNetPackageVersion>
   </PropertyGroup>
@@ -12,7 +12,7 @@
   <ItemGroup>
 
   	<PackageVersion Include="AutoMapper" Version="12.0.1" />
-  	<PackageVersion Include="Blazored.Modal" Version="7.1.0" />
+  	<PackageVersion Include="Blazored.Modal" Version="7.3.1" />
   	<PackageVersion Include="Blazored.SessionStorage" Version="2.3.0" />
   	<PackageVersion Include="Blazorise.Bootstrap" Version="1.2.2" />
   	<PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.2.2" />
@@ -48,7 +48,7 @@
   	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   	<PackageVersion Include="LanguageExt.Core" Version="4.4.7" />
   	
-  	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.0.3" />
+  	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
   	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
   	
