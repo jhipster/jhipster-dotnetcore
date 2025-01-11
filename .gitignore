@@ -155,4 +155,4 @@ coverage/
 # added by generate-blueprint:
 generators/**/package-lock.json
 
-*.obj
+[Oo]bj/
