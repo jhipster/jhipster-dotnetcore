@@ -8,13 +8,14 @@ _%>
 @page "/<%= lowerCasedEntityClass %>/new"
 @page "/<%= lowerCasedEntityClass %>/{Id<%_ if(primaryKeyType !== 'string') { %>:<%= getNonNullableType(primaryKeyType)  %> <%_ } _%> }/edit"
 @using Microsoft.AspNetCore.Authorization
-@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 <%_ fields.forEach(field => {
     if (field.id) return; _%>
     <%_ if (field.fieldIsEnum) { _%>
 @using <%= namespace %>.Crosscutting.Enums
     <%_ }
 }); _%>
+
+@namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
