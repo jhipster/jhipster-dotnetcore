@@ -4,8 +4,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AspNetCorePackageVersion>8.0.2</AspNetCorePackageVersion>
-    <EntityFrameworkPackageVersion>8.0.0</EntityFrameworkPackageVersion>
+    <AspNetCorePackageVersion>9.0.0</AspNetCorePackageVersion>
+    <EntityFrameworkPackageVersion>9.0.0</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.11</JHipsterNetPackageVersion>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@
   	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-  	<PackageVersion Include="System.Net.Http.Json" Version="8.0.0" />
+  	<PackageVersion Include="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
   
   	<PackageVersion Include="AutoFixture" Version="4.18.0" />
@@ -48,7 +48,7 @@
   	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   	<PackageVersion Include="LanguageExt.Core" Version="4.4.7" />
   	
-  	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+  	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
   	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
   	
