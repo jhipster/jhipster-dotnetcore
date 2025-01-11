@@ -8,10 +8,12 @@
     <h2>
         <span id="user-management-page-heading">Users</span>
 
-        <a class="btn btn-primary float-right jh-create-entity" href="/admin/user-management/new">
-            <Icon Name='"fa-plus"' />
-            <span>Create a new User</span>
-        </a>
+        <Div Class="d-flex justify-content-end">
+            <a class="btn btn-primary float-right jh-create-entity" href="/admin/user-management/new">
+                <Icon Name='"fa-plus"' />
+                <span>Create a new User</span>
+            </a>
+        </Div>
     </h2>
 
     @*<jhi-alert-error></jhi-alert-error>*@
@@ -69,14 +71,14 @@
                                 @foreach (var authority in user.Authorities)
                                 {
                                     <div>
-                                        <span class="badge badge-info">@authority</span>
+                                        <span class="badge bg-info">@authority</span>
                                     </div>
                                 }
                             </td>
                             <td>@($"{user.CreatedDate:dd/MM/yy HH:mm}")</td>
                             <td>@user.LastModifiedBy</td>
                             <td>@($"{user.LastModifiedDate:dd/MM/yy HH:mm}")</td>
-                            <td class="text-right">
+                            <td class="text-end">
                                 <div class="btn-group">
                                     <a type="submit"
                                        href="/admin/user-management/@user.Login/view"
@@ -118,11 +120,11 @@
         </div>
 
         @*<div *ngIf="users">
-                <div class="row justify-content-center">
+                <div class="d-flex justify-content-center">
                     <jhi-item-count [page]="page" [total]="totalItems" [itemsPerPage]="itemsPerPage"></jhi-item-count>
                 </div>
 
-                <div class="row justify-content-center">
+                <div class="d-flex justify-content-center">
                     <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
                 </div>
             </div>*@

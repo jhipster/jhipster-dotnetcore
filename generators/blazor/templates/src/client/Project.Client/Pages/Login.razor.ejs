@@ -1,6 +1,6 @@
 @namespace <%= namespace %>.Client.Pages
 
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
     @if (IsAuthenticateError)
     {
         <div class="col-md-8">
@@ -12,13 +12,13 @@
 
     <div class="col-md-8">
         <EditForm Model="@LoginModel" OnValidSubmit="@HandleSubmit">
-            <div class="form-group">
+            <div row mb-3>
                 <label class="username-label" for="username">Login</label>
                 <input type="text" class="form-control" name="username" id="username" placeholder="Your username"
                        @bind-value="@LoginModel.Username" >
             </div>
 
-            <div class="form-group">
+            <div row mb-3>
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" id="password" placeholder="Your password"
                        @bind-value="@LoginModel.Password">

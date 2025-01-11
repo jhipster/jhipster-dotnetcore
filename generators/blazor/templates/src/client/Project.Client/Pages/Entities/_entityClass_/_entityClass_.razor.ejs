@@ -16,12 +16,14 @@ _%>
     <h2 id="page-heading">
         <span><%= entityClassNamePluralized %></span>
 
-        <a id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= lowerCasedEntityClass %>" href="/<%= lowerCasedEntityClass %>/new">
-            <Icon Name='"fa-plus"' />
-            <span class="hidden-sm-down">
-                Create a new <%= entityClassName %>
-            </span>
-        </a>
+        <Div Class="d-flex justify-content-end">
+            <a id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-<%= lowerCasedEntityClass %>" href="/<%= lowerCasedEntityClass %>/new">
+                <Icon Name='"fa-plus"' />
+                <span class="hidden-sm-down">
+                    Create a new <%= entityClassName %>
+                </span>
+            </a>
+        </Div>
     </h2>
 
     @*<jhi-alert-error></jhi-alert-error>
@@ -56,7 +58,7 @@ _%>
     }
     else
     {
-        <div class="table-responsive" id="entities">
+        <div class="table-responsive table-entities" id="entities">
             <table class="table table-striped" aria-describedby="page-heading">
                 <thead>
                     <tr>
@@ -115,7 +117,7 @@ _%>
                             </td>
                                 <%_ }
                             }); _%>
-                            <td class="text-right">
+                            <td class="text-end">
                                 <div class="btn-group">
                                     <a href="/<%= lowerCasedEntityClass %>/@<%= lowerCasedEntityClass %>.Id/view" class="btn btn-info btn-sm">
                                         <Icon Name='"fa-eye"'/>
