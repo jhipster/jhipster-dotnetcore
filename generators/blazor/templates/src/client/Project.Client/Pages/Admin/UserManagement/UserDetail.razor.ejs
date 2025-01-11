@@ -4,7 +4,7 @@
 
 @attribute [Authorize(Roles = "ROLE_ADMIN")]
 
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
     <div class="col-8">
 
         @if (CurrentUser != null)
@@ -53,7 +53,7 @@
                             @foreach (var authority in CurrentUser.Authorities)
                             {
                                 <li>
-                                    <span class="badge badge-info">@authority</span>
+                                    <span class="badge bg-info">@authority</span>
                                 </li>
                             }
                         </ul>

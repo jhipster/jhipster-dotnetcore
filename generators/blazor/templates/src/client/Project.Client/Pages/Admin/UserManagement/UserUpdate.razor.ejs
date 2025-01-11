@@ -5,7 +5,7 @@
 
 @attribute [Authorize(Roles = "ROLE_ADMIN")]
 
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
     <div class="col-8">
         @if (CurrentUser != null)
         {
@@ -18,14 +18,14 @@
 
     @if (!string.IsNullOrWhiteSpace(CurrentUser.Id))
     {
-<div class="form-group">
+<div row mb-3>
     <label>ID</label>
     <input type="text" class="form-control" name="id" @bind-value="@CurrentUser.Id" readonly>
 </div>
     }
 
-    <div class="form-group">
-        <label class="form-control-label">Login</label>
+    <div row mb-3>
+        <label class="form-label">Login</label>
         <input type="text" class="form-control" name="login"
                @bind-value="@CurrentUser.Login">
 
@@ -47,8 +47,8 @@
             </div>*@
     </div>
 
-    <div class="form-group">
-        <label class="form-control-label">First Name</label>
+    <div row mb-3>
+        <label class="form-label">First Name</label>
         <input type="text" class="form-control" name="firstName" @bind-value="@CurrentUser.FirstName">
 
         @*TODO <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
@@ -59,7 +59,7 @@
             </div>*@
     </div>
 
-    <div class="form-group">
+    <div row mb-3>
         <label>Last Name</label>
         <input type="text" class="form-control" name="lastName"
                @bind-value="@CurrentUser.LastName">
@@ -72,8 +72,8 @@
             </div>*@
     </div>
 
-    <div class="form-group">
-        <label class="form-control-label">Email</label>
+    <div row mb-3>
+        <label class="form-label">Email</label>
         <input type="email" class="form-control" name="email" @bind-value="@CurrentUser.Email">
 
         @*TODO <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
@@ -113,7 +113,7 @@
         </label>
     </div>
 
-    <div class="form-group">
+    <div row mb-3>
         <label>Profiles</label>
         <Select TValue="string" Multiple="true" SelectedValues="@CurrentAuthorities" SelectedValuesChanged="@OnSelectAuthoritiesChanged">
             @foreach (var authority in Authorities)

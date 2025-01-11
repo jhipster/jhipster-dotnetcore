@@ -7,7 +7,7 @@ using AutoMapper;
 using Blazored.Modal;
 using Blazored.SessionStorage;
 using Blazorise;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using <%= namespace %>.Client.Pages.Utils;
 using <%= namespace %>.Client.Services;
@@ -34,7 +34,7 @@ public class Program
             {
                 options.Immediate = true;
             })
-            .AddBootstrapProviders()
+            .AddBootstrap5Providers()
             .AddFontAwesomeIcons();
 
 

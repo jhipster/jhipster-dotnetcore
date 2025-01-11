@@ -18,7 +18,7 @@ _%>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
     <div class="col-8">
         <EditForm Model="@<%= asModel(entityClassName) %>" OnValidSubmit="@Save">
             <h2 id="jhi-<%= lowerCasedEntityClass %>-heading">Create or edit a <%= entityClassName %></h2>
@@ -34,7 +34,7 @@ _%>
                 @if (Id != null)
                 <%_ } _%>
                 {
-                    <div class="form-group">
+                    <div row mb-3>
                         <label for="id">ID</label>
                         <input type="text" class="form-control" id="id" name="id" readonly @bind-value="@<%= asModel(entityClassName) %>.Id" />
                     </div>
@@ -50,8 +50,8 @@ _%>
                     }
                 </Select>
                     <%_ } else { _%>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_<%= field.fieldName %>"><%= field.fieldNameHumanized %></label>
+                <div row mb-3>
+                    <label class="form-label" for="field_<%= field.fieldName %>"><%= field.fieldNameHumanized %></label>
                     <input type="text" class="form-control" name="<%= field.fieldName %>" id="field_<%= field.fieldName %>"
                             @bind-value="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>" />
                 </div>
@@ -60,8 +60,8 @@ _%>
 
             <%_ relationships.forEach(relation => { 
                 if (relation.relationshipType === 'one-to-one' || relation.relationshipType === 'many-to-one') { _%>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
+                <div row mb-3>
+                    <label class="form-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
                     <select class="form-control" id="field_<%= relation.otherEntityNameLowerCased %>" name="<%= relation.otherEntityNameLowerCased %>" @bind="@<%= relation.otherEntityNamePascalized %>Id">
                         <option value="0"></option>
                         @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.otherEntityNamePascalized %>Ids)
@@ -78,8 +78,8 @@ _%>
                     </select>
                 </div>
                 <%_ } else if ((relation.relationshipType === 'many-to-many' || relation.relationshipType === 'one-to-many') && relation.ownerSide === true ) { _%>
-                <div class="form-group">
-                    <label class="form-control-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
+                <div row mb-3>
+                    <label class="form-label" for="field_<%= relation.otherEntityNameLowerCased %>"><%= relation.relationshipFieldNamePascalizedPlural %></label>
                     <Select  class="form-control" name="<%= relation.otherEntityNameLowerCased %>"  TValue="<%= primaryKeyType %>" @bind-SelectedValues="Selected<%= relation.relationshipFieldNamePascalizedPlural %>" Multiple="true">
                         @foreach (var <%= relation.otherEntityNameLowerCased %> in <%= relation.otherEntityNamePascalized %>Ids)
                         {

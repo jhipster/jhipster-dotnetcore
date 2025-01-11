@@ -26,7 +26,7 @@ using AutoFixture;
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using Blazorise;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Bunit;
 using Bunit.Rendering;
@@ -61,7 +61,7 @@ public class <%= entityClassName %>Test : TestContext
                 options.Immediate = true;
             })
             .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
-            .AddBootstrapProviders()
+            .AddBootstrap5Providers()
             .AddFontAwesomeIcons();
         Services.AddHttpClientInterceptor();
         //This code is needed to support recursion
@@ -119,11 +119,9 @@ public class <%= entityClassName %>Test : TestContext
 
         // Assert
         await <%= entityVariableName %>Page.Find("td>div>button").ClickAsync(new MouseEventArgs());
-        _modalService.Verify(service => service.Show<DeleteModal>(It.IsAny<string>()), Times.Once);
-        // TODO: FIXME. Clicking the delete button will not call the service delete operation. Instead, it will display a dialog to confirm deletion.
-        // _<%= entityVariableName %>Service.Verify(service => service.Delete(<%= entityVariableName %>ToDelete.Id.ToString()), Times.Once);
-        // var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
-        // <%= camelCasedEntityClassPlural %>TableBody.ChildElementCount.Should().Be(9);
+        _<%= entityVariableName %>Service.Verify(service => service.Delete(<%= entityVariableName %>ToDelete.Id.ToString()), Times.Once);
+        var <%= camelCasedEntityClassPlural %>TableBody = <%= entityVariableName %>Page.Find("tbody");
+        <%= camelCasedEntityClassPlural %>TableBody.ChildElementCount.Should().Be(9);
     }
 
 }
