@@ -23,7 +23,7 @@
   	<PackageVersion Include="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
   
-  	<PackageVersion Include="AutoFixture" Version="4.18.0" />
+  	<PackageVersion Include="AutoFixture" Version="4.18.1" />
   	<PackageVersion Include="bunit" Version="1.18.4" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCorePackageVersion)" />
@@ -103,11 +103,11 @@
   	<PackageVersion Include="FakeItEasy" Version="7.3.1" />
   	<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspNetCorePackageVersion)" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-  	<PackageVersion Include="Moq" Version="4.18.4" />
-  	<PackageVersion Include="xunit" Version="2.6.2" />
-  	<PackageVersion Include="xunit.runner.visualstudio" Version="2.5.4" />
-  	<PackageVersion Include="xunit.runner.console" Version="2.6.2" />
-  	<PackageVersion Include="FluentAssertions" Version="6.10.0" />
+  	<PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.1" />
+    <PackageVersion Include="xunit.runner.console" Version="2.9.3" />
+    <PackageVersion Include="FluentAssertions" Version="7.0.0" />
   	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
   	<PackageVersion Include="FluentAssertions.Json" Version="6.1.0" />
   </ItemGroup>

@@ -826,7 +826,7 @@ public class AccountResourceIntTest
         updatedUser.ImageUrl.Should().Be(userDto.ImageUrl);
         updatedUser.PasswordHash.Should().Be(user.PasswordHash);
         updatedUser.Activated.Should().BeTrue();
-        updatedUser.UserRoles.IsNullOrEmpty().Should().BeTrue();
+        updatedUser.UserRoles.Should().BeNullOrEmpty();
     }
 
     [Fact]
