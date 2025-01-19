@@ -4,7 +4,7 @@
 @namespace <%= namespace %>.Client.Pages.Account
     <div>
         <div>
-            <div class="row justify-content-center">
+            <div class="d-flex justify-content-center">
                 <div class="col-md-8">
                     <h1>Registration</h1>
                     @if (Success)
@@ -34,37 +34,37 @@
                 </div>
             </div>
 
-            <div class="row justify-content-center">
+            <div class="d-flex justify-content-center">
                 <div class="col-md-8">
                     
                     <EditForm EditContext="@EditContext" OnValidSubmit="@HandleSubmit" @ref="editForm">
                         <DataAnnotationsValidator />
-                        <div class="form-group">
-                            <label class="form-control-label" for="login">Username</label>
+                        <div row mb-3>
+                            <label class="form-label" for="login">Username</label>
                             <DynInputText id="login" @bind-Value="RegisterModel.Username" class="form-control" placeholder="Username" />
                             <div class="form-text text-danger">
                                 <ValidationMessage For="@(() => RegisterModel.Username)" />
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-control-label" for="email">Email</label>
+                        <div row mb-3>
+                            <label class="form-label" for="email">Email</label>
                             <DynInputText id="email" @bind-Value="RegisterModel.Email" type="email" class="form-control" placeholder="Email" />
                             <div class="form-text text-danger">
                                 <ValidationMessage For="@(() => RegisterModel.Email)" />
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-control-label" for="password">New password</label>
+                        <div row mb-3>
+                            <label class="form-label" for="password">New password</label>
                             <DynInputText id="password" @bind-Value="RegisterModel.Password" type="password" class="form-control" placeholder="New password" />
                             <div class="form-text text-danger">
                                 <ValidationMessage For="@(() => RegisterModel.Password)" />
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-control-label" for="confirmPassword">New password confirmation</label>
+                        <div row mb-3>
+                            <label class="form-label" for="confirmPassword">New password confirmation</label>
                             <DynInputText id="confirmPassword" @bind-Value="RegisterModel.ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
                             <div class="form-text text-danger">
                                 <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
