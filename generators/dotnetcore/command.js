@@ -37,7 +37,7 @@ export default asCommand({
         { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
       ],
     },
-    databaseType: {
+    databaseChoice: {
       prompt: {
         type: 'list',
         message: 'Which database do you want to use',
