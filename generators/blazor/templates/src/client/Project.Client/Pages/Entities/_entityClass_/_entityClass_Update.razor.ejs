@@ -9,6 +9,12 @@ _%>
 @page "/<%= lowerCasedEntityClass %>/{Id<%_ if(primaryKeyType !== 'string') { %>:<%= getNonNullableType(primaryKeyType)  %> <%_ } _%> }/edit"
 @using Microsoft.AspNetCore.Authorization
 @namespace <%= namespace %>.Client.Pages.Entities.<%= entityClassName %>
+<%_ fields.forEach(field => {
+    if (field.id) return; _%>
+    <%_ if (field.fieldIsEnum) { _%>
+@using <%= namespace %>.Crosscutting.Enums
+    <%_ }
+}); _%>
 
 @attribute [Authorize(Roles = "ROLE_USER")]
 
@@ -38,9 +44,10 @@ _%>
                     if (field.id) return; _%>
                     <%_ if (field.fieldIsEnum) { _%>
                 <Select class="form-control" name="<%= field.fieldName %>" formControlName="<%= field.fieldName %>" @bind-SelectedValue="@<%= asModel(entityClassName) %>.<%= field.fieldNamePascalized %>">
-                    <%_ field.enumValues.forEach(enumValue => { _%>
-                        <SelectItem TValue="string" value="<%= enumValue.value %>"><%= enumValue.value %></SelectItem>
-                    <%_ }); _%>
+                    @foreach (var <%= field.fieldName %> in Enum.GetValues(typeof(<%= field.fieldNamePascalized %>)))
+                    {
+                          <SelectItem value="@<%= field.fieldName %>">@<%= field.fieldName %></SelectItem>
+                    }
                 </Select>
                     <%_ } else { _%>
                 <div class="form-group">
