@@ -24,7 +24,7 @@ RUN \
   # upgrade npm
   npm install -g npm && \
   #install dotnet
-  apt-get install -y dotnet-sdk-8.0 && \
+  apt-get install -y dotnet-sdk-9.0 && \
   # cleanup
   apt-get clean && \
   rm -rf \

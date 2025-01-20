@@ -15,13 +15,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <RootNamespace><%= namespace %>.Infrastructure</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="AutoMapper" />
         <PackageReference Include="Serilog" />
         <%_ switch(databaseType) {
             case 'sqllite': _%>

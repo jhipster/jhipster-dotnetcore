@@ -59,7 +59,7 @@ public class Startup : IStartup
     public virtual void ConfigureServices(IServiceCollection services, IHostEnvironment environment)
     {
         <%_ if (cqrsEnabled) { _%>
-        services.AddMediatR(typeof(ApplicationClassesAssemblyHelper));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationClassesAssemblyHelper).Assembly));
 
         <%_ } _%>
         services

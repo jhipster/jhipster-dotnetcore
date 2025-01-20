@@ -15,16 +15,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <RootNamespace><%= namespace %>.Application</RootNamespace>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="JHipsterNet.Core" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="AutoMapper" />
         <PackageReference Include="MediatR" />
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
     </ItemGroup>
 
     <ItemGroup>
