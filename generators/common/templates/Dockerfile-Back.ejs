@@ -46,7 +46,7 @@ WORKDIR src/<%= mainProjectDir %>
 RUN dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 
 # Final stage/image
-FROM mcr.microsoft.com/dotnet/sdk:9.0-noble AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble AS runtime
 EXPOSE 8080
 WORKDIR /app
 COPY docker-entrypoint-back.sh .
