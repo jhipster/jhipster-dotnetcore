@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.10
 
 # copy sources
 COPY . /home/jhipster/jhipster-dotnetcore
@@ -24,7 +24,7 @@ RUN \
   # upgrade npm
   npm install -g npm && \
   #install dotnet
-  sudo apt-get update && apt-get install -y dotnet-sdk-9.0 && \
+  apt-get install -y dotnet-sdk-9.0 && \
   # cleanup
   apt-get clean && \
   rm -rf \
