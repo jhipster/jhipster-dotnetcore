@@ -14,7 +14,7 @@
 -%>
 # Based on Microsoft's docker samples for dotnet core
 # available at https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
-FROM mcr.microsoft.com/dotnet/sdk:9.0-jammy AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-noble AS build
 # First install nodejs - required to build generated client app
 WORKDIR /app
 RUN apt-get update -yq && apt-get install -yq curl
@@ -46,7 +46,7 @@ WORKDIR src/<%= mainProjectDir %>
 RUN dotnet publish "<%= pascalizedBaseName %>.csproj" -c Release -o /app/out
 
 # Final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-jammy AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble AS runtime
 EXPOSE 8080
 WORKDIR /app
 COPY docker-entrypoint-back.sh .

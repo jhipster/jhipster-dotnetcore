@@ -98,7 +98,7 @@ public class <%= entityClassName %>UpdateTest : TestContext
     }
 
     [Fact]
-    public void Should_UpdateSelected<%= entityClassName %>_When_FormIsSubmitWithId()
+    public async Task Should_UpdateSelected<%= entityClassName %>_When_FormIsSubmitWithId()
     {
         //Arrange
         <%_ relationships.forEach(relation => {
@@ -120,14 +120,14 @@ public class <%= entityClassName %>UpdateTest : TestContext
 
         // Act
         var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
-        <%= entityVariableName %>Form.Submit();
+        await <%= entityVariableName %>Form.SubmitAsync();
 
         // Assert
         _<%= entityVariableName %>Service.Verify(service => service.Update(<%= entityVariableName %>ToUpdate), Times.Once);
     }
 
     [Fact]
-    public void Should_Add<%= entityClassName %>_When_FormIsSubmitWithoutId()
+    public async Task Should_Add<%= entityClassName %>_When_FormIsSubmitWithoutId()
     {
         //Arrange
         <%_ relationships.forEach(relation => {
@@ -144,7 +144,7 @@ public class <%= entityClassName %>UpdateTest : TestContext
 
         // Act
         var <%= entityVariableName %>Form = update<%= entityClassName %>Page.Find("form");
-        <%= entityVariableName %>Form.Submit();
+        await <%= entityVariableName %>Form.SubmitAsync();
 
         // Assert
         _<%= entityVariableName %>Service.Verify(service => service.Add(It.IsAny<<%= asModel(entityClassName) %>>()), Times.Once);
