@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>App.Domain.Services</RootNamespace>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JHipsterNet.Core" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="LanguageExt.Core" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\App.Infrastructure\App.Infrastructure.csproj" />
+        <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
+        <ProjectReference Include="..\App.Crosscutting\App.Crosscutting.csproj" />
+    </ItemGroup>
+
+</Project>

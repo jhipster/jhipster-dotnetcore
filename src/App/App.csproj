@@ -1,0 +1,98 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <Version>0.0.1</Version>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+        <RootNamespace>App</RootNamespace>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+        <IsPackable>false</IsPackable>
+
+        <SpaRoot>ClientApp\</SpaRoot>
+        <RepoRoot>..\..\</RepoRoot>
+        <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+        <!-- Set this to true if you enable server-side prerendering -->
+        <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="JHipsterNet.Core" />
+        <PackageReference Include="JHipsterNet.Web" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+        <PackageReference Include="Scrutor" />
+        <PackageReference Include="Serilog.AspNetCore" />
+        <PackageReference Include="Serilog.Settings.Configuration" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="Serilog.Enrichers.Process" />
+        <PackageReference Include="Serilog.Enrichers.Thread" />
+        <PackageReference Include="Serilog.Sinks.SyslogMessages" />
+        <PackageReference Include="Swashbuckle.AspNetCore" />
+        <PackageReference Include="LanguageExt.Core" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+        <PackageReference Include="BCrypt.Net-Next" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\App.Infrastructure\App.Infrastructure.csproj" />
+        <ProjectReference Include="..\App.Domain.Services\App.Domain.Services.csproj" />
+        <ProjectReference Include="..\App.Crosscutting\App.Crosscutting.csproj" />
+        <ProjectReference Include="..\App.Dto\App.Dto.csproj" />
+        <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
+    </ItemGroup>
+    <!-- https://stackoverflow.com/questions/46720148/exclude-wwwroot-dist-from-build-asp-net-dotnet-core-2-0 -->
+    <ItemGroup>
+        <!-- Don't publish the SPA source files, but do show them in the project files list -->
+        <Content Remove="$(SpaRoot)**" />
+        <None Remove="$(SpaRoot)**" />
+        <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <SonarQubeSetting Include="sonar.exclusions">
+            <Value>$(SpaRoot)dist/**,$(SpaRoot)target/**,$(SpaRoot)dist,$(SpaRoot)src/content/**,$(SpaRoot)src/i18n/**,$(SpaRoot)webpack/**,$(SpaRoot)test/**</Value>
+        </SonarQubeSetting>
+        <SonarQubeSetting Include="sonar.testExecutionReportPaths">
+            <Value>$(SpaRoot)target/test-results/jest/TESTS-results-sonar.xml</Value>
+        </SonarQubeSetting>
+        <SonarQubeSetting Include="sonar.javascript.lcov.reportPaths">
+            <Value>$(SpaRoot)target/test-results/lcov.info</Value>
+        </SonarQubeSetting>
+    </ItemGroup>
+
+    <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('$(RepoRoot)node_modules')">
+        <!-- Ensure Node.js is installed -->
+        <Exec WorkingDirectory="$(RepoRoot)" Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec WorkingDirectory="$(RepoRoot)" Command="npm install" />
+    </Target>
+
+    <Target Name="RunClientBundler" BeforeTargets="Build" DependsOnTargets="NpmInstall">
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:build" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Debug'" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run webapp:prod" IgnoreStandardErrorWarningFormat="true" Condition="'$(Configuration)'=='Release'" />
+    </Target>
+
+    <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
+    <Target Name="PublishRunClientBundler" AfterTargets="ComputeFilesToPublish">
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+            <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+                <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
+
+</Project>

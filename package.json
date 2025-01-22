@@ -1,0 +1,38 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "description": "Description for App",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "src/App/ClientApp"
+  ],
+  "scripts": {
+    "app:up": "docker compose -f docker/app.yml up --wait",
+    "ci:e2e:prepare": "npm run ci:e2e:prepare:docker",
+    "ci:e2e:prepare:docker": "npm run services:up --if-present && docker ps -a",
+    "ci:e2e:run": "concurrently -k -s first \"npm run ci:e2e:server:start\" \"npm run e2e:headless\"",
+    "ci:e2e:server:start": "docker compose -f docker/app.yml up --wait",
+    "ci:e2e:teardown": "npm run ci:e2e:teardown:docker --if-present",
+    "ci:frontend:test": "npm run -w src/App/ClientApp/ ci:frontend:test",
+    "docker:db:up": "echo \"Docker for db sqllite not configured for application app\"",
+    "e2e:headless": "npm run -w src/App/ClientApp/ e2e:headless",
+    "prettier:check": "prettier --check \"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts,html,css,scss}\"",
+    "prettier:format": "prettier --write \"{,src/**/,webpack/,.blueprint/**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts,html,css,scss}\"",
+    "test": "npm test -w src/App/ClientApp/",
+    "webapp:build": "npm run -w src/App/ClientApp/ webapp:build"
+  },
+  "config": {
+    "default_environment": "prod"
+  },
+  "devDependencies": {
+    "concurrently": "9.1.0",
+    "generator-jhipster": "8.8.0",
+    "generator-jhipster-dotnetcore": "4.2.0",
+    "prettier": "3.4.2",
+    "prettier-plugin-packagejson": "2.5.6"
+  },
+  "overrides": {
+    "browser-sync": "3.0.3",
+    "webpack": "5.97.1"
+  }
+}

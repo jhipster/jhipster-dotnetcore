@@ -1,0 +1,34 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "app",
+    "blueprints": [
+      {
+        "name": "generator-jhipster-dotnetcore",
+        "version": "4.2.0"
+      }
+    ],
+    "clientFramework": "angular",
+    "clientTestFrameworks": [],
+    "clientTheme": "none",
+    "cqrsEnabled": false,
+    "creationTimestamp": 1737504965898,
+    "databaseType": "sqllite",
+    "dtoSuffix": "Dto",
+    "enableTranslation": true,
+    "entities": [],
+    "jhipsterVersion": "8.8.0",
+    "jwtSecretKey": "ODJhZGIwMjMyOGE3OWM3ZGQ3NTBmNzkyNGNkMWNkOTA1OTNkNWUwNDE2YzQ3OTQ5YWMyYzg3ODgzZTAwMjdlZWM0MzcxNWNjYzdkNDgyNzhiMWQwMzEzNzA5MTRiNDg4ZGYxMA==",
+    "languages": ["en"],
+    "microfrontend": null,
+    "microfrontends": [],
+    "namespace": "App",
+    "nativeLanguage": "en",
+    "serverPort": "5000",
+    "skipCommitHook": true,
+    "testFrameworks": [],
+    "withAdminUi": false,
+    "withTerraformAzureScripts": null
+  }
+}

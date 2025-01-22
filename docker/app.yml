@@ -1,0 +1,16 @@
+# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
+name: app
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: Dockerfile-Back
+    # If you want to expose these ports outside your dev PC,
+    # remove the "127.0.0.1:" prefix
+    ports:
+      - 127.0.0.1:5000:8080
+    # healthcheck:
+    #   test: ['CMD', 'curl', '-f', 'http://127.0.0.1:8080/health']
+    #   interval: 5s
+    #   timeout: 5s
+    #   retries: 40

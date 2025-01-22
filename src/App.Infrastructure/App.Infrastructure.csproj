@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>App.Infrastructure</RootNamespace>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
+        <ProjectReference Include="..\App.Dto\App.Dto.csproj" />
+        <ProjectReference Include="..\App.Crosscutting\App.Crosscutting.csproj" />
+    </ItemGroup>
+
+</Project>

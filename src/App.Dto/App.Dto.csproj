@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <RootNamespace>App.Dto</RootNamespace>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection"  />
+        <PackageReference Include="Newtonsoft.Json"  />
+        <PackageReference Include="System.ComponentModel.Annotations"  />
+        <PackageReference Include="System.Text.Json"  />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\App.Crosscutting\App.Crosscutting.csproj" />
+   </ItemGroup>
+
+</Project>
