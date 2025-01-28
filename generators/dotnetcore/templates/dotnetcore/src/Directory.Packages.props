@@ -5,13 +5,13 @@
 
   <PropertyGroup>
     <AspNetCorePackageVersion>9.0.0</AspNetCorePackageVersion>
-    <EntityFrameworkPackageVersion>9.0.0</EntityFrameworkPackageVersion>
+    <EntityFrameworkPackageVersion>9.0.1</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.12</JHipsterNetPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
 
-  	<PackageVersion Include="AutoMapper" Version="12.0.1" />
+  	<PackageVersion Include="AutoMapper" Version="13.0.1" />
   	<PackageVersion Include="Blazored.Modal" Version="7.3.1" />
   	<PackageVersion Include="Blazored.SessionStorage" Version="2.3.0" />
   	<PackageVersion Include="Blazorise.Bootstrap" Version="1.2.2" />
@@ -31,7 +31,6 @@
   	
   	<PackageVersion Include="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
   	<PackageVersion Include="JHipsterNet.Web" Version="$(JHipsterNetPackageVersion)" />
-  	<PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   	
   	<PackageVersion Include="MediatR" Version="11.0.0" />
   	<PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -45,8 +44,8 @@
   	<PackageVersion Include="Serilog.Enrichers.Process" Version="2.0.2" />
   	<PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
   	<PackageVersion Include="Serilog.Sinks.SyslogMessages" Version="3.0.1" />
-  	<PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  	<PackageVersion Include="LanguageExt.Core" Version="4.4.7" />
+  	<PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  	<PackageVersion Include="LanguageExt.Core" Version="4.4.9" />
   	
   	<PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.3.0" />
   	<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetCorePackageVersion)" />
@@ -66,7 +65,7 @@
   	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
   	<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
-  	<PackageVersion Include="System.Text.Json" Version="8.0.0" />
+  	<PackageVersion Include="System.Text.Json" Version="9.0.0" />
   	<PackageVersion Include="Serilog" Version="3.1.1" />
   	
   	<PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(EntityFrameworkPackageVersion)" />
