@@ -4,7 +4,7 @@
   <!-- It's a workaround for dependabot to support Central Package Management (CPM) -->
   <!-- https://github.com/dependabot/dependabot-core/issues/8590 -->
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

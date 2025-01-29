@@ -35,6 +35,7 @@ using <%= namespace %>.Client.Models;
 using <%= namespace %>.Client.Services.EntityServices.<%= entityClassName %>;
 using <%= namespace %>.Client.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
@@ -102,7 +103,7 @@ public class <%= entityClassName %>Test : TestContext
     }
 
     [Fact]
-    public void Should_Delete<%= entityClassName %>_WhenDeleteButtonClicked()
+    public async Task Should_Delete<%= entityClassName %>_WhenDeleteButtonClicked()
     {
         //Arrange
         var <%= camelCasedEntityClassPlural %> = _fixture.CreateMany<<%= asModel(entityClassName) %>>(10);
@@ -117,7 +118,7 @@ public class <%= entityClassName %>Test : TestContext
         var <%= entityVariableName %>ToDelete = <%= camelCasedEntityClassPlural %>.First();
 
         // Assert
-        <%= entityVariableName %>Page.Find("td>div>button").Click();
+        await <%= entityVariableName %>Page.Find("td>div>button").ClickAsync(new MouseEventArgs());
         _modalService.Verify(service => service.Show<DeleteModal>(It.IsAny<string>()), Times.Once);
         // TODO: FIXME. Clicking the delete button will not call the service delete operation. Instead, it will display a dialog to confirm deletion.
         // _<%= entityVariableName %>Service.Verify(service => service.Delete(<%= entityVariableName %>ToDelete.Id.ToString()), Times.Once);

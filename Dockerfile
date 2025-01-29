@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:24.10
 
 # copy sources
 COPY . /home/jhipster/jhipster-dotnetcore
@@ -19,12 +19,12 @@ RUN \
     sudo \
     git && \
   # install node.js
-  wget https://nodejs.org/dist/v20.18.1/node-v20.18.1-linux-x64.tar.gz -O /tmp/node.tar.gz && \
+  wget https://nodejs.org/dist/v22.13.0/node-v22.13.0-linux-x64.tar.gz -O /tmp/node.tar.gz && \
   tar -C /usr/local --strip-components 1 -xzf /tmp/node.tar.gz && \
   # upgrade npm
   npm install -g npm && \
   #install dotnet
-  apt-get install -y dotnet-sdk-8.0 && \
+  apt-get install -y dotnet-sdk-9.0 && \
   # cleanup
   apt-get clean && \
   rm -rf \

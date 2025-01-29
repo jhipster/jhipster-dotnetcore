@@ -42,5 +42,5 @@ services:
     ports:
       - 8081:80
     environment:
-      - ServerUrl=http://localhost:8080
+      - ServerUrl=http://localhost:<%= serverPort %>
 <%_ } _%>

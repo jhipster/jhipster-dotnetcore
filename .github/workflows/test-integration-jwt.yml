@@ -74,7 +74,7 @@ jobs:
           binary-dir: ${{ github.workspace }}/jhipster-dotnetcore/cli/
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: git history
         run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
