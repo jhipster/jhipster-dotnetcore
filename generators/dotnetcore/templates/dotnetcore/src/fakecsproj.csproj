@@ -27,7 +27,7 @@
   
   	<PackageReference Include="JHipsterNet.Core" />
   	<PackageReference Include="JHipsterNet.Web" />
-  	<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+  	<PackageReference Include="AutoMapper" />
   	<PackageReference Include="MediatR" />
   	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
   	<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" />

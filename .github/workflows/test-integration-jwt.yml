@@ -117,7 +117,7 @@ jobs:
       - name: 'VERIFY FORMAT'
         run: ../jhipster-dotnetcore/test-integration/scripts/09-verify-format.sh $JHI_APP
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.app-type }}
