@@ -23,7 +23,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Blazorise;
-using Blazorise.Bootstrap;
+using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Bunit;
 using Bunit.Rendering;
@@ -57,7 +57,7 @@ public class <%= entityClassName %>DetailTest : TestContext
                 options.Immediate = true;
             })
             .Replace(ServiceDescriptor.Transient<IComponentActivator, ComponentActivator>())
-            .AddBootstrapProviders()
+            .AddBootstrap5Providers()
             .AddFontAwesomeIcons();
         //This code is needed to support recursion
         _fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
