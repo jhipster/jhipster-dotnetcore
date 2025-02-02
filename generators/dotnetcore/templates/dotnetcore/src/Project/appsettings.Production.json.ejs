@@ -51,7 +51,7 @@
             <%_ break;
             case 'postgresql': _%>
     "ConnectionStrings": {
-        "AppDbContext": "Server=postgresql;Database=<%= baseName %>;Port=5432;User Id=<%= baseName %>;Password=;Integrated Security=true;Pooling=true;"
+        "AppDbContext": "Server=postgresql;Database=<%= baseName %>;Port=5432;User Id=<%= baseName %>;Password=<%- databaseData.defaultPassword %>;Pooling=true;"
     },
             <%_ break;
             case 'mysql': _%>
