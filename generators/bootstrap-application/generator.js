@@ -41,7 +41,7 @@ export default class extends BaseApplicationGenerator {
         // - lint-staged paths needs adjusts.
         this.jhipsterConfig.skipCommitHook = true;
         this.jhipsterConfig.databaseType ??= this.jhipsterConfig.prodDatabaseType ?? 'sqllite';
-
+        this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType === 'mongodb' ? 'mongodb' : 'sql'; // set only for jdl-importer compatibility
         if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
           this.jhipsterConfig.dtoSuffix = 'Dto';
         }
