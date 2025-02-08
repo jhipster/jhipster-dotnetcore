@@ -60,14 +60,18 @@ export default class extends BaseGenerator {
         }
       },
       async jdlEntities() {
-        if (this.withEntities) {
+        if (this.withEntities) {          
           if (this.sampleName.includes('-mongo-')) {
-            this.jdlSample = 'app_mongo.jdl';
+            this.jdlSample = 'app_mongo';
           } else if (this.sampleName.includes('-react-')) {
-            this.jdlSample = 'app-react.jdl';
+            this.jdlSample = 'app-react';
           } else {
-            this.jdlSample = 'app.jdl';
+            this.jdlSample = 'app';
           }
+          if (this.sampleName.includes('oauth-')) {
+            this.jdlSample = this.jdlSample+'_oauth';
+          }
+          this.jdlSample = this.jdlSample+'.jdl';
           this.copyTemplate(`samples/jdl-default/${this.jdlSample}`, this.jdlSample, { noGlob: true });
         }
       },
