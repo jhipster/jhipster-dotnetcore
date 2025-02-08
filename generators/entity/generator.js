@@ -16,7 +16,7 @@ export default class extends EntityGenerator {
   }
 
   get [EntityGenerator.INITIALIZING]() {
-    return this.asInitializingTaskGroup({      
+    return this.asInitializingTaskGroup({
       async initializingTemplateTask() {
         this.parseJHipsterArguments(command.arguments);
         this.parseJHipsterOptions(command.options);
@@ -72,10 +72,10 @@ export default class extends EntityGenerator {
       askForDTO: prompts.askForDTO,
       // askForFiltering: prompts.askForFiltering,
       askForPagination: prompts.askForPagination,
-      
+
       async composeEntities() {
         // We need to compose with others entities to update relationships.
-        await this.composeWithJHipster("jhipster:entities", {
+        await this.composeWithJHipster('jhipster:entities', {
           generatorArgs: this.options.singleEntity ? [this.entityData.name] : [],
           generatorOptions: {
             skipDbChangelog: this.options.skipDbChangelog,
