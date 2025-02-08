@@ -23,7 +23,7 @@ copyright = '2020, Nicolas Raymond'
 author = 'Nicolas Raymond'
 
 # The full version, including alpha/beta/rc tags
-release = '4.3.0'
+release = '4.4.0'
 
 
 # -- General configuration ---------------------------------------------------
