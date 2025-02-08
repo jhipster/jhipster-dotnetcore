@@ -122,12 +122,20 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
     return this.asPreparingEachEntityTaskGroup({
+      /*async prepareUserEntity({ application, entity }) {
+        if (entity.name === 'User') {
+          application.user.primaryKey.type = equivalentCSharpType(application.user.primaryKey.type); 
+          //TODO : improve and use user entity
+        }
+      },*/
       async preparingTemplateTask({ application, entity }) {
         // This assumes we aren't using value objects and every entity has a primary key
         const idField = entity.fields.filter(f => f.id)[0];
-
-        entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : equivalentCSharpType(idField.fieldType);
-
+        if (entity.name === 'User') {
+          entity.primaryKeyType = 'string';
+        } else {
+          entity.primaryKeyType = entity.databaseType === 'mongodb' ? 'string' : equivalentCSharpType(idField.fieldType);
+        }
         entity.dotnetEntityModel = `${entity.entityClass}${application.modelSuffix}`;
         entity.pascalizedEntityClass = toPascalCase(entity.entityClass);
         entity.pascalizedEntityClassPlural = toPascalCase(entity.entityClassPlural);
