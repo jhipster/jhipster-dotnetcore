@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "generator-jhipster": "8.8.0",
+    "generator-jhipster": "8.9.0",
     "js-guid": "^1.0.2",
     "pluralize": "^8.0.0",
     "to-pascal-case": "^1.0.0"
@@ -63,7 +63,7 @@
     "yeoman-test": ">=8.2.0"
   },
   "engines": {
-    "generator-jhipster": "8.8.0",
+    "generator-jhipster": "8.9.0",
     "node": "^18.19.0 || >= 20.6.1"
   }
 }
