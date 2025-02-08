@@ -69,9 +69,9 @@ export default class extends BaseGenerator {
             this.jdlSample = 'app';
           }
           if (this.sampleName.includes('jwt-')) {
-            this.jdlSample = this.jdlSample + '_withUserRelation';
+            this.jdlSample = `${this.jdlSample}_withUserRelation`;
           }
-          this.jdlSample = this.jdlSample + '.jdl';
+          this.jdlSample = `${this.jdlSample}.jdl`;
           this.copyTemplate(`samples/jdl-default/${this.jdlSample}`, this.jdlSample, { noGlob: true });
         }
       },
