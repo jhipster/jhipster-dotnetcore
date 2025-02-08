@@ -60,7 +60,9 @@ enum Language {
     FRENCH, ENGLISH, SPANISH
 }
 
-
+relationship OneToOne {
+	Employee{internalUser} to User with builtInEntity
+}
 
 relationship OneToOne {
 	Country{region} to Region

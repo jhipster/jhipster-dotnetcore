@@ -87,7 +87,7 @@ relationship OneToOne {
 }
 
 relationship OneToOne {
-	Employee{internalUser(login)} to User with builtInEntity
+	Employee{internalUser} to User with builtInEntity
 }
 
 // defining multiple OneToMany relationships with comments
