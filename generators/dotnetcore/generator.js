@@ -45,6 +45,9 @@ export default class extends BaseApplicationGenerator {
         if (this.jhipsterConfig.jwtSecretKey === undefined) {
           this.jhipsterConfig.jwtSecretKey = createBase64Secret(this.options.reproducibleTests);
         }
+        if(this.jhipsterConfig.authenticationType === 'oauth2') {
+          this.jhipsterConfig.syncUserWithIdp = true;
+        }
       },
     });
   }
