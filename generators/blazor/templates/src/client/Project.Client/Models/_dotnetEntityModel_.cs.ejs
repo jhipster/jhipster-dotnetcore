@@ -65,15 +65,15 @@ public class <%= asModel(entityClassName) %> : BaseModel<<%= primaryKeyType %>>
         const relationshipFieldNamePascalized = relationships[idx].relationshipFieldNamePascalized;
         if (relationshipType === 'one-to-one') { _%>
     public <%= getPrimaryKeyType(relationships[idx].otherEntity) %> <%= relationshipFieldNamePascalized %>Id { get; set; }
-            <%_ }
+        <%_ }
         if(relationshipType === 'one-to-many') { _%>
     public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
         <%_  } else if (relationshipType === 'many-to-one') {
             if (relationshipRequired) { _%>
     [Required]
+        <%_ } _%>
     public <%= getPrimaryKeyType(relationships[idx].otherEntity) %> <%= relationshipFieldNamePascalized %>Id { get; set; }
-            <%_ }
-            } else if (relationshipType === 'many-to-many') { _%>
+        <%_ } else if (relationshipType === 'many-to-many') { _%>
     public IList<<%= asModel(otherEntityNamePascalized) %>> <%= relationshipFieldNamePascalizedPlural %> { get; set; } = new List<<%= asModel(otherEntityNamePascalized) %>>();
         <%_ } _%>
 

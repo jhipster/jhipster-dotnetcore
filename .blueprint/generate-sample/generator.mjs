@@ -60,7 +60,7 @@ export default class extends BaseGenerator {
         }
       },
       async jdlEntities() {
-        if (this.withEntities) {          
+        if (this.withEntities) {
           if (this.sampleName.includes('-mongo-')) {
             this.jdlSample = 'app_mongo';
           } else if (this.sampleName.includes('-react-')) {
@@ -68,10 +68,10 @@ export default class extends BaseGenerator {
           } else {
             this.jdlSample = 'app';
           }
-          if (this.sampleName.includes('oauth-')) {
-            this.jdlSample = this.jdlSample+'_oauth';
+          if (this.sampleName.includes('jwt-')) {
+            this.jdlSample = this.jdlSample + '_withUserRelation';
           }
-          this.jdlSample = this.jdlSample+'.jdl';
+          this.jdlSample = this.jdlSample + '.jdl';
           this.copyTemplate(`samples/jdl-default/${this.jdlSample}`, this.jdlSample, { noGlob: true });
         }
       },

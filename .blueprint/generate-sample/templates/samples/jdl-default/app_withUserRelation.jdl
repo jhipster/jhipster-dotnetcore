@@ -86,6 +86,10 @@ relationship OneToOne {
 	Department{location} to Location
 }
 
+relationship OneToOne {
+	Employee{internalUser} to User with builtInEntity
+}
+
 // defining multiple OneToMany relationships with comments
 relationship OneToMany {
 	Employee to Job{employee},
