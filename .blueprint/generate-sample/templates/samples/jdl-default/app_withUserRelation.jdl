@@ -56,9 +56,23 @@ entity JobHistory {
     language Language
 }
 
+entity TimeSheet {
+	id UUID
+	timeSheetDate LocalDate
+}
+
+entity TimeSheetEntry {
+	activityName String
+	startTimeMilitary Integer
+	endTimeMilitary Integer
+	totalTime BigDecimal
+}
+
 enum Language {
     FRENCH, ENGLISH, SPANISH
 }
+
+
 
 relationship OneToOne {
 	Country{region} to Region
@@ -72,6 +86,10 @@ relationship OneToOne {
 	Department{location} to Location
 }
 
+relationship OneToOne {
+	Employee{internalUser} to User with builtInEntity
+}
+
 // defining multiple OneToMany relationships with comments
 relationship OneToMany {
 	Employee to Job{employee},
@@ -83,6 +101,10 @@ relationship OneToMany {
 	* Another side of the same relationship
 	*/
 	Employee{department}
+	
+	Employee to TimeSheet{employee}
+
+	TimeSheet to TimeSheetEntry{timeSheet}
 }
 
 relationship ManyToOne {
@@ -101,7 +123,8 @@ relationship ManyToMany {
 }
 
 // Set pagination options
-paginate * with pagination
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
 
 // Use Data Transfert Objects (DTO)
 dto * with mapstruct

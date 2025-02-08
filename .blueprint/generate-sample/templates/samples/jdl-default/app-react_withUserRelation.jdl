@@ -61,6 +61,10 @@ enum Language {
 }
 
 relationship OneToOne {
+	Employee{internalUser} to User with builtInEntity
+}
+
+relationship OneToOne {
 	Country{region} to Region
 }
 
@@ -101,7 +105,9 @@ relationship ManyToMany {
 }
 
 // Set pagination options
-paginate * with pagination
+// .Net does not generates link header for pagination.
+// paginate JobHistory, Employee with infinite-scroll
+// paginate Job with pagination
 
 // Use Data Transfert Objects (DTO)
 dto * with mapstruct

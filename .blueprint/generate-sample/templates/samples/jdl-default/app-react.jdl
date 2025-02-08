@@ -60,8 +60,6 @@ enum Language {
     FRENCH, ENGLISH, SPANISH
 }
 
-
-
 relationship OneToOne {
 	Country{region} to Region
 }
