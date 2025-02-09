@@ -53,13 +53,13 @@
   },
   "devDependencies": {
     "ejs-lint": "2.0.1",
-    "eslint": "9.17.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
+    "eslint": "9.20.0",
+    "eslint-config-prettier": "10.0.1",
+    "eslint-plugin-prettier": "5.2.3",
     "globals": "15.14.0",
     "prettier": "3.4.2",
-    "prettier-plugin-packagejson": "2.5.6",
-    "vitest": "2.1.9",
+    "prettier-plugin-packagejson": "2.5.8",
+    "vitest": "3.0.5",
     "yeoman-test": ">=8.2.0"
   },
   "engines": {
