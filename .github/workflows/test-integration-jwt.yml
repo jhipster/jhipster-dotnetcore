@@ -13,7 +13,7 @@ jobs:
   applications:
     name: ${{ matrix.app-type }}
     runs-on: ${{ matrix.os }}
-    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    if: (!contains(github.event.head_commit.message, '[ci skip]')) && !contains(github.event.head_commit.message, '[skip ci]')
     timeout-minutes: 40
     defaults:
       run:
@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node_version: [20]
+        node_version: [22.13.1]
         os: [ubuntu-22.04]
         app-type:
           - jwt-with-angular-app
