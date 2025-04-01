@@ -2,9 +2,10 @@
 
 [![NPM version][npm-image]][npm-url]
 [![Documentation Status](https://readthedocs.org/projects/jhipsternet/badge/?version=latest)](https://jhipsternet.readthedocs.io/en/latest/?badge=latest)
-[![Generator Build Status][github-actions-generator-image]][github-actions-url]
-[![Integration JWT Build Status][github-actions-integ-jwt-image]][github-actions-url]
-[![Integration OAUTH Build Status][github-actions-integ-oauth-image]][github-actions-url]
+[![Generator Build Status][github-actions-generator-image]][github-actions-generator-url]
+[![Integration JWT Build Status][github-actions-integ-jwt-image]][github-actions-integ-jwt-url]
+[![Integration OAUTH Build Status][github-actions-integ-oauth-image]][github-actions-integ-oauth-url]
+[![build docker image][github-actions-docker-build-image]][github-actions-docker-build-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
 [![Sonar Cloud Quality Gate][sonar-gate-image]][sonar-url]
 [![Sonar Cloud Reliability Rate][sonar-reliability-image]][sonar-url]
@@ -163,10 +164,14 @@ Apache-2.0 © [JHipster.NET]()
 [npm-url]: https://npmjs.org/package/generator-jhipster-dotnetcore
 [daviddm-image]: https://david-dm.org/jhipster/jhipster-dotnetcore.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/jhipster/jhipster-dotnetcore
-[github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Generator/badge.svg?branch=main
-[github-actions-integ-oauth-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20OAUTH/badge.svg?branch=main
-[github-actions-integ-jwt-image]: https://github.com/jhipster/jhipster-dotnetcore/workflows/Test%20Integration%20JWT/badge.svg?branch=main
-[github-actions-url]: https://github.com/jhipster/jhipster-dotnetcore/actions
+[github-actions-generator-image]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/generator.yml/badge.svg
+[github-actions-generator-url]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/generator.yml
+[github-actions-integ-oauth-image]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/test-integration-oauth.yml/badge.svg
+[github-actions-integ-oauth-url]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/test-integration-oauth.yml
+[github-actions-integ-jwt-image]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/test-integration-jwt.yml/badge.svg
+[github-actions-integ-jwt-url]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/test-integration-jwt.yml
+[github-actions-docker-build-image]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/build-docker-image.yml/badge.svg
+[github-actions-docker-build-url]: https://github.com/jhipster/jhipster-dotnetcore/actions/workflows/build-docker-image.yml
 [sonar-url]: https://sonarcloud.io/dashboard?branch=main&id=jhipster_jhipster-dotnetcore
 [sonar-coverage-url]: https://sonarcloud.io/component_measures?branch=main&id=jhipster_jhipster-dotnetcore&metric=coverage&view=list
 [sonar-gate-image]: https://sonarcloud.io/api/project_badges/measure?branch=main&project=jhipster_jhipster-dotnetcore&metric=alert_status
