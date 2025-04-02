@@ -53,17 +53,17 @@
   },
   "devDependencies": {
     "ejs-lint": "2.0.1",
-    "eslint": "9.20.0",
-    "eslint-config-prettier": "10.0.1",
-    "eslint-plugin-prettier": "5.2.3",
-    "globals": "15.14.0",
-    "prettier": "3.4.2",
-    "prettier-plugin-packagejson": "2.5.8",
-    "vitest": "3.0.5",
+    "eslint": "9.23.0",
+    "eslint-config-prettier": "10.1.1",
+    "eslint-plugin-prettier": "5.2.5",
+    "globals": "16.0.0",
+    "prettier": "3.5.3",
+    "prettier-plugin-packagejson": "2.5.10",
+    "vitest": "3.1.1",
     "yeoman-test": ">=8.2.0"
   },
   "engines": {
-    "generator-jhipster": "8.9.0",
+    "generator-jhipster": "8.10.0",
     "node": "^18.19.0 || >= 20.6.1"
   }
 }
