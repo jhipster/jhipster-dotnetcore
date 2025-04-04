@@ -19,6 +19,23 @@ public class SecuritySettings
     public Authentication Authentication { get; set; }
     public Cors Cors { get; set; }
     public bool EnforceHttps { get; set; }
+    public Email Email { get; set; }
+}
+
+public class Email
+{
+    public string From { get; set; }
+    public string BaseUrl { get; set; }
+    public SmtpSettings Smtp { get; set; }
+}
+
+public class SmtpSettings
+{
+    public string Host { get; set; }
+    public int Port { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public bool UseSsl { get; set; }
 }
 
 <%_ if (authenticationType === 'jwt') { _%>
