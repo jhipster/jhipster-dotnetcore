@@ -65,6 +65,17 @@
         <%_ break;
     }_%>
     "Security": {
-        "EnforceHttps":  false,
+        "EnforceHttps": true,
+        "Email": {
+            "From": "noreply@<%= baseName.toLowerCase() %>.com",
+            "BaseUrl": "https://<%= baseName.toLowerCase() %>.com",
+            "Smtp": {
+                "Host": "smtp.<%= baseName.toLowerCase() %>.com",
+                "Port": 587,
+                "Username": "",
+                "Password": "",
+                "UseSsl": true
+            }
+        }
     }
 }

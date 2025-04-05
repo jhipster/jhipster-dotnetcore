@@ -59,6 +59,7 @@ public class AppWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntr
             .UseSolutionRelativeContentRoot("<%= SERVER_SRC_DIR %><%= solutionName %>")
             .ConfigureServices(services =>
             {
+                services.AddScoped<IMailService, MockMailService>();
                 services
                     .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
                 services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
