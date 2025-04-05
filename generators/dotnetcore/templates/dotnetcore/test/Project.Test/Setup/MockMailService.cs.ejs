@@ -1,0 +1,72 @@
+<%#
+ Copyright 2019-2025 the original author or authors from the JHipster project.
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using <%= namespace %>.Domain.Entities;
+using <%= namespace %>.Domain.Services.Interfaces;
+using Microsoft.Extensions.Logging;
+
+namespace <%= namespace %>.Test.Setup;
+
+public class MockMailService(ILogger<MockMailService> logger) : IMailService
+{
+    private readonly ILogger<MockMailService> _logger = logger;
+    public List<(User user, string mailType)> SentEmails { get; } = new();
+
+    private void LogEmailSent(string emailType, User user)
+    {
+        _logger?.LogInformation($"Mock email of type '{emailType}' would be sent to {user.Email}");
+    }
+
+    public Task SendActivationEmail(User user)
+    {
+        _logger?.LogInformation($"[MockMailService] Sending activation email to user {user.Login} ({user.Email})");
+        if (string.IsNullOrEmpty(user.Email))
+        {
+            throw new InvalidOperationException($"User {user.Login} has no email address");
+        }
+        LogEmailSent("activation", user);
+        SentEmails.Add((user, "activation"));
+        _logger?.LogInformation($"[MockMailService] Successfully sent activation email to user {user.Login}");
+        return Task.CompletedTask;
+    }
+
+    public Task SendCreationEmail(User user)
+    {
+        _logger?.LogInformation($"[MockMailService] Sending creation email to user {user.Login} ({user.Email})");
+        if (string.IsNullOrEmpty(user.Email))
+        {
+            throw new InvalidOperationException($"User {user.Login} has no email address");
+        }
+        LogEmailSent("creation", user);
+        SentEmails.Add((user, "creation"));
+        _logger?.LogInformation($"[MockMailService] Successfully sent creation email to user {user.Login}");
+        return Task.CompletedTask;
+    }
+
+    public Task SendPasswordResetMail(User user)
+    {
+        _logger?.LogInformation($"[MockMailService] Sending password reset email to user {user.Login} ({user.Email})");
+        if (string.IsNullOrEmpty(user.Email))
+        {
+            throw new InvalidOperationException($"User {user.Login} has no email address");
+        }
+        LogEmailSent("reset", user);
+        SentEmails.Add((user, "reset"));
+        _logger?.LogInformation($"[MockMailService] Successfully sent password reset email to user {user.Login}");
+        return Task.CompletedTask;
+    }
+}
