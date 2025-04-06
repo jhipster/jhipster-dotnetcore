@@ -18,7 +18,6 @@ using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
-using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Infrastructure.Configuration;
 
@@ -52,43 +51,43 @@ public class MailService : IMailService
         await smtp.DisconnectAsync(true);
     }
 
-    public async Task SendPasswordResetMail(User user)
+    public async Task SendPasswordResetMail(string email, string name, string resetKey)
     {
-        _logger.LogDebug($"Sending password reset email to {user.Email}");
-        var subject = "Password Reset";
+        _logger.LogDebug($"Sending password reset email to {email}");
+        var subject = "Password Reset Request";
         var content = $@"
             <h1>Password Reset Request</h1>
-            <p>Dear {user.FirstName},</p>
+            <p>Dear {name},</p>
             <p>You recently requested to reset your password. Click the link below to proceed:</p>
-            <p><a href='{_settings.Email.BaseUrl}/account/reset/finish?key={user.ResetKey}'>Reset Password</a></p>
+            <p><a href='{_settings.Email.BaseUrl}/account/reset/finish?key={resetKey}'>Reset Password</a></p>
             <p>If you did not request this, please ignore this email.</p>";
         
-        await SendEmailAsync(user.Email, subject, content);
+        await SendEmailAsync(email, subject, content);
     }
 
-    public async Task SendActivationEmail(User user)
+    public async Task SendActivationEmail(string email, string name, string activationKey)
     {
-        _logger.LogDebug($"Sending activation email to {user.Email}");
+        _logger.LogDebug($"Sending activation email to {email}");
         var subject = "Activate Your Account";
         var content = $@"
             <h1>Account Activation</h1>
-            <p>Dear {user.FirstName},</p>
+            <p>Dear {name},</p>
             <p>Please click on the link below to activate your account:</p>
-            <p><a href='{_settings.Email.BaseUrl}/account/activate?key={user.ActivationKey}'>Activate Account</a></p>";
+            <p><a href='{_settings.Email.BaseUrl}/account/activate?key={activationKey}'>Activate Account</a></p>";
         
-        await SendEmailAsync(user.Email, subject, content);
+        await SendEmailAsync(email, subject, content);
     }
 
-    public async Task SendCreationEmail(User user)
+    public async Task SendCreationEmail(string email, string name)
     {
-        _logger.LogDebug($"Sending creation email to {user.Email}");
+        _logger.LogDebug($"Sending creation email to {email}");
         var subject = "Welcome to Your Account";
         var content = $@"
             <h1>Welcome!</h1>
-            <p>Dear {user.FirstName},</p>
+            <p>Dear {name},</p>
             <p>Your account has been created successfully. Please click the link below to access your account:</p>
             <p><a href='{_settings.Email.BaseUrl}/login'>Login to Your Account</a></p>";
         
-        await SendEmailAsync(user.Email, subject, content);
+        await SendEmailAsync(email, subject, content);
     }
 }

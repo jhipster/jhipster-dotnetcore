@@ -767,7 +767,7 @@ export const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
+      // condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
       path: SERVER_SRC_DIR,
       templates: [
         {
@@ -777,7 +777,7 @@ export const serverFiles = {
       ],
     },
     {
-      condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
+      // condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
       path: SERVER_SRC_DIR,
       templates: [
         {
