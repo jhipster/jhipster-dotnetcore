@@ -15,7 +15,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -24,49 +23,49 @@ namespace <%= namespace %>.Test.Setup;
 public class MockMailService(ILogger<MockMailService> logger) : IMailService
 {
     private readonly ILogger<MockMailService> _logger = logger;
-    public List<(User user, string mailType)> SentEmails { get; } = new();
+    public List<(string email, string mailType)> SentEmails { get; } = new();
 
-    private void LogEmailSent(string emailType, User user)
+    private void LogEmailSent(string emailType, string email)
     {
-        _logger?.LogInformation($"Mock email of type '{emailType}' would be sent to {user.Email}");
+        _logger?.LogInformation($"Mock email of type '{emailType}' would be sent to {email}");
     }
 
-    public Task SendActivationEmail(User user)
+    public Task SendActivationEmail(string email, string name, string activationKey)
     {
-        _logger?.LogInformation($"[MockMailService] Sending activation email to user {user.Login} ({user.Email})");
-        if (string.IsNullOrEmpty(user.Email))
+        _logger?.LogInformation($"[MockMailService] Sending activation email to user {name}");
+        if (string.IsNullOrEmpty(email))
         {
-            throw new InvalidOperationException($"User {user.Login} has no email address");
+            throw new InvalidOperationException($"{email} cannot be null or empty");
         }
-        LogEmailSent("activation", user);
-        SentEmails.Add((user, "activation"));
-        _logger?.LogInformation($"[MockMailService] Successfully sent activation email to user {user.Login}");
+        LogEmailSent("activation", email);
+        SentEmails.Add((email, "activation"));
+        _logger?.LogInformation($"[MockMailService] Successfully sent activation email to user {email}");
         return Task.CompletedTask;
     }
 
-    public Task SendCreationEmail(User user)
+    public Task SendCreationEmail(string email, string name)
     {
-        _logger?.LogInformation($"[MockMailService] Sending creation email to user {user.Login} ({user.Email})");
-        if (string.IsNullOrEmpty(user.Email))
+        _logger?.LogInformation($"[MockMailService] Sending creation email to user {name}");
+        if (string.IsNullOrEmpty(email))
         {
-            throw new InvalidOperationException($"User {user.Login} has no email address");
+            throw new InvalidOperationException($"{email} cannot be null or empty");
         }
-        LogEmailSent("creation", user);
-        SentEmails.Add((user, "creation"));
-        _logger?.LogInformation($"[MockMailService] Successfully sent creation email to user {user.Login}");
+        LogEmailSent("creation", email);
+        SentEmails.Add((email, "creation"));
+        _logger?.LogInformation($"[MockMailService] Successfully sent creation email to user {email}");
         return Task.CompletedTask;
     }
 
-    public Task SendPasswordResetMail(User user)
+    public Task SendPasswordResetMail(string email, string name, string resetKey)
     {
-        _logger?.LogInformation($"[MockMailService] Sending password reset email to user {user.Login} ({user.Email})");
-        if (string.IsNullOrEmpty(user.Email))
+        _logger?.LogInformation($"[MockMailService] Sending password reset email to user {name}");
+        if (string.IsNullOrEmpty(email))
         {
-            throw new InvalidOperationException($"User {user.Login} has no email address");
+            throw new InvalidOperationException($"{email} camnot be null or empty");
         }
-        LogEmailSent("reset", user);
-        SentEmails.Add((user, "reset"));
-        _logger?.LogInformation($"[MockMailService] Successfully sent password reset email to user {user.Login}");
+        LogEmailSent("reset", email);
+        SentEmails.Add((email, "reset"));
+        _logger?.LogInformation($"[MockMailService] Successfully sent password reset email to user {email}");
         return Task.CompletedTask;
     }
 }
