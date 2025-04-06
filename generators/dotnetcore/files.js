@@ -1310,6 +1310,15 @@ export const serverFiles = {
         },
       ],
     },
+    {
+      path: SERVER_TEST_DIR,
+      templates: [
+        {
+          file: 'Project.Test/Setup/MockMailService.cs',
+          renameTo: generator => `${generator.testProjectDir}/Setup/MockMailService.cs`,
+        },
+      ],
+    },
   ],
   serverMisc: [
     {
