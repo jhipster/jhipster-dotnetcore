@@ -17,6 +17,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Threading.Tasks;
 using <%= namespace %>.Domain.Services.Interfaces;
 using <%= namespace %>.Infrastructure.Configuration;
@@ -44,11 +45,18 @@ public class MailService : IMailService
         var builder = new BodyBuilder { HtmlBody = htmlContent };
         email.Body = builder.ToMessageBody();
 
-        using var smtp = new SmtpClient();
-        await smtp.ConnectAsync(_settings.Email.Smtp.Host, _settings.Email.Smtp.Port, _settings.Email.Smtp.UseSsl);
-        await smtp.AuthenticateAsync(_settings.Email.Smtp.Username, _settings.Email.Smtp.Password);
-        await smtp.SendAsync(email);
-        await smtp.DisconnectAsync(true);
+        try 
+        {
+            using var smtp = new SmtpClient();
+            await smtp.ConnectAsync(_settings.Email.Smtp.Host, _settings.Email.Smtp.Port, _settings.Email.Smtp.UseSsl);
+            await smtp.AuthenticateAsync(_settings.Email.Smtp.Username, _settings.Email.Smtp.Password);
+            await smtp.SendAsync(email);
+            await smtp.DisconnectAsync(true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error sending email. Please check your SMTP settings.");
+        }
     }
 
     public async Task SendPasswordResetMail(string email, string name, string resetKey)

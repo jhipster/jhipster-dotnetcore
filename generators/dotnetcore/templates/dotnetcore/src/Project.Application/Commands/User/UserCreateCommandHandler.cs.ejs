@@ -52,7 +52,7 @@ public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, User>
             throw new EmailAlreadyUsedException();
 
         var newUser = await _userService.CreateUser(_mapper.Map<User>(command.UserDto));
-        await _mailService.SendCreationEmail(newUser);
+        await _mailService.SendCreationEmail(newUser.Email, newUser.FirstName);
         return newUser;
     }
 }

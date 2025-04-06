@@ -360,6 +360,9 @@ exports[`SubGenerator dotnetcore of dotnetcore JHipster blueprint > run > should
   "test/Jhipster.Test/Properties/launchSettings.json": {
     "stateCleared": "modified",
   },
+  "test/Jhipster.Test/Services/MailServiceTest.cs": {
+    "stateCleared": "modified",
+  },
   "test/Jhipster.Test/Setup/AppWebApplicationFactory.cs": {
     "stateCleared": "modified",
   },

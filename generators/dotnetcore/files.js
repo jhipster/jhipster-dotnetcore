@@ -767,7 +767,6 @@ export const serverFiles = {
       ],
     },
     {
-      // condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
       path: SERVER_SRC_DIR,
       templates: [
         {
@@ -777,7 +776,6 @@ export const serverFiles = {
       ],
     },
     {
-      // condition: generator => generator.authenticationType === 'jwt' && generator.applicationType !== 'microservice',
       path: SERVER_SRC_DIR,
       templates: [
         {
@@ -1316,6 +1314,15 @@ export const serverFiles = {
         {
           file: 'Project.Test/Setup/MockMailService.cs',
           renameTo: generator => `${generator.testProjectDir}/Setup/MockMailService.cs`,
+        },
+      ],
+    },
+    {
+      path: SERVER_TEST_DIR,
+      templates: [
+        {
+          file: 'Project.Test/Services/MailServiceTest.cs',
+          renameTo: generator => `${generator.testProjectDir}/Services/MailServiceTest.cs`,
         },
       ],
     },
