@@ -91,7 +91,7 @@ public class UsersController : ControllerBase
         if (await _userManager.FindByEmailAsync(userDto.Email.ToLowerInvariant()) != null)
             throw new EmailAlreadyUsedException();
         var newUser = await _userService.CreateUser(_mapper.Map<User>(userDto));
-        await _mailService.SendCreationEmail(newUser);
+        await _mailService.SendCreationEmail(newUser.Email, newUser.FirstName);
         <%_ } _%>
         return CreatedAtAction(nameof(GetUser), new { login = newUser.Login }, newUser)
             .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", newUser.Login));

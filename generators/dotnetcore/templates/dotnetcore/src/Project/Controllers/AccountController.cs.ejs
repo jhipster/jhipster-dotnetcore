@@ -82,7 +82,7 @@ public class AccountController : ControllerBase
         var user = await _mediator.Send(new AccountCreateCommand { ManagedUserDto = managedUserDto });
         <%_ } else { _%>
         var user = await _userService.RegisterUser(_userMapper.Map<User>(managedUserDto), managedUserDto.Password);
-        await _mailService.SendActivationEmail(user);
+        await _mailService.SendActivationEmail(user.Email, user.FirstName, user.ActivationKey);
         <%_ } _%>
         return CreatedAtAction(nameof(GetAccount), user);
     }
@@ -187,7 +187,7 @@ public class AccountController : ControllerBase
         <%_ } else { _%>
         var user = await _userService.RequestPasswordReset(mail);
         if (user == null) throw new EmailNotFoundException();
-        await _mailService.SendPasswordResetMail(user);
+        await _mailService.SendPasswordResetMail(user.Email, user.FirstName, user.ResetKey);
         <%_ } _%>
         return Ok();
     }
