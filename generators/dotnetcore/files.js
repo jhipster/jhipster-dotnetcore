@@ -1312,15 +1312,6 @@ export const serverFiles = {
       path: SERVER_TEST_DIR,
       templates: [
         {
-          file: 'Project.Test/Setup/MockMailService.cs',
-          renameTo: generator => `${generator.testProjectDir}/Setup/MockMailService.cs`,
-        },
-      ],
-    },
-    {
-      path: SERVER_TEST_DIR,
-      templates: [
-        {
           file: 'Project.Test/Services/MailServiceTest.cs',
           renameTo: generator => `${generator.testProjectDir}/Services/MailServiceTest.cs`,
         },
