@@ -1,6 +1,7 @@
 ## Email Service Configuration
 
 The MailService provides email functionality using SMTP protocol. It supports:
+
 - Account activation emails
 - Password reset emails
 - Welcome emails
@@ -31,12 +32,16 @@ Configure email settings in `appsettings.json`:
 ```
 
 #### Development Configuration
+
 For local development, you can use:
+
 - [MailHog](https://github.com/mailhog/MailHog) - Recommended for Mac/Linux
 - [Papercut SMTP](https://github.com/ChangemakerStudios/Papercut-SMTP) - Windows alternative
 
 #### Production Configuration
+
 Common SMTP providers:
+
 - Gmail SMTP:
   ```json
   "Smtp": {
@@ -57,6 +62,7 @@ Common SMTP providers:
 ### Usage Examples
 
 1. Activation Email:
+
 ```csharp
 await _mailService.SendActivationEmail(
     email: "user@example.com",
@@ -66,6 +72,7 @@ await _mailService.SendActivationEmail(
 ```
 
 2. Password Reset:
+
 ```csharp
 await _mailService.SendPasswordResetMail(
     email: "user@example.com",
@@ -75,6 +82,7 @@ await _mailService.SendPasswordResetMail(
 ```
 
 3. Welcome Email:
+
 ```csharp
 await _mailService.SendCreationEmail(
     email: "user@example.com",
@@ -85,6 +93,7 @@ await _mailService.SendCreationEmail(
 ### Security Best Practices
 
 1. **SMTP Security**
+
    - Enable TLS/SSL encryption (`UseSsl: true`)
    - Use environment variables for credentials:
      ```json
@@ -95,6 +104,7 @@ await _mailService.SendCreationEmail(
    - Use dedicated sending domains
 
 2. **Content Security**
+
    - Sanitize all user input in templates
    - Include SPF/DKIM records for your domain
    - Set up DMARC policy
@@ -108,16 +118,17 @@ await _mailService.SendCreationEmail(
 ### Testing
 
 1. Unit Testing:
+
 ```csharp
 [Fact]
 public async Task Should_Send_Activation_Email()
 {
     // Arrange
     var mockMailService = new Mock<IMailService>();
-    
+
     // Act
     await mailService.SendActivationEmail("test@example.com", "Test User", "key123");
-    
+
     // Assert
     mockMailService.Verify(x => x.SendActivationEmail(
         It.IsAny<string>(),
@@ -128,12 +139,13 @@ public async Task Should_Send_Activation_Email()
 ```
 
 2. Integration Testing:
+
 ```csharp
 [Fact]
 public async Task Should_Connect_To_SMTP_Server()
 {
     // Use MailHog for integration tests
-    var mailConfig = new MailConfiguration 
+    var mailConfig = new MailConfiguration
     {
         Host = "localhost",
         Port = 1025
@@ -147,8 +159,8 @@ public async Task Should_Connect_To_SMTP_Server()
    - Verify network connectivity to SMTP server
    - Check firewall rules for SMTP ports (25, 465, 587)
    - Validate SSL certificate if using TLS
-   
 2. **Authentication Problems**
+
    - Ensure credentials are correctly encoded
    - Check for IP-based restrictions
    - Verify OAuth2 settings if applicable
