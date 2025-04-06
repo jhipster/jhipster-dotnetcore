@@ -28,6 +28,7 @@ public class MailService : IMailService
 {
     private readonly SecuritySettings _settings;
     private readonly ILogger<MailService> _logger;
+    public static Func<MimeMessage, Task> TestAction { get; set; }
 
     public MailService(IOptions<SecuritySettings> settings, ILogger<MailService> logger)
     {
@@ -37,6 +38,11 @@ public class MailService : IMailService
 
     private async Task SendEmailAsync(string to, string subject, string htmlContent)
     {
+        if (string.IsNullOrEmpty(to))
+        {
+            _logger.LogWarning("Email address is null or empty. Email not sent.");
+            throw new InvalidOperationException("Email address cannot be null or empty");
+        }
         var email = new MimeMessage();
         email.From.Add(MailboxAddress.Parse(_settings.Email.From));
         email.To.Add(MailboxAddress.Parse(to));
@@ -44,6 +50,12 @@ public class MailService : IMailService
 
         var builder = new BodyBuilder { HtmlBody = htmlContent };
         email.Body = builder.ToMessageBody();
+
+        if (TestAction != null)
+        {
+            await TestAction(email);
+            return;
+        }
 
         try
         {

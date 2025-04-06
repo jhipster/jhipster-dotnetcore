@@ -15,7 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using <%= namespace %>.Crosscutting.Constants;
 using <%= namespace %>.Configuration;
 using <%= namespace %>.Test.Configuration;
@@ -28,6 +30,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Moq;
 
 namespace <%= namespace %>.Test.Setup;
 
@@ -59,7 +62,7 @@ public class AppWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntr
             .UseSolutionRelativeContentRoot("<%= SERVER_SRC_DIR %><%= solutionName %>")
             .ConfigureServices(services =>
             {
-                services.AddScoped<IMailService, MockMailService>();
+                services.AddSingleton(CreateMockMailService().Object);
                 services
                     .AddMvc(TestMvcStartup.ConfigureMvcAuthorization());
                 services.Replace(new ServiceDescriptor(typeof(IHttpContextFactory), typeof(MockHttpContextFactory),
@@ -98,5 +101,22 @@ public class AppWebApplicationFactory<TEntryPoint> : WebApplicationFactory<TEntr
         <%_ } _%>
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
         return new ClaimsPrincipal(new ClaimsIdentity(claims.ToArray(), authenticationType));
+    }
+
+    private static Mock<IMailService> CreateMockMailService()
+    {
+        // Setup mock mail service with default successful responses
+        var mockMailService = new Mock<IMailService>();
+        var setups = new Expression<Func<IMailService, Task>>[]
+        {
+            x => x.SendActivationEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+            x => x.SendCreationEmail(It.IsAny<string>(), It.IsAny<string>()),
+            x => x.SendPasswordResetMail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())
+        };
+        foreach (Expression<Func<IMailService, Task>> setup in setups)
+        {
+            mockMailService.Setup(setup).Returns(Task.CompletedTask);
+        }
+        return mockMailService;
     }
 }
