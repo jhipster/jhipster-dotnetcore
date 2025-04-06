@@ -366,6 +366,9 @@ exports[`SubGenerator dotnetcore of dotnetcore JHipster blueprint > run > should
   "test/Jhipster.Test/Setup/MockHttpContextFactory.cs": {
     "stateCleared": "modified",
   },
+  "test/Jhipster.Test/Setup/MockMailService.cs": {
+    "stateCleared": "modified",
+  },
   "test/Jhipster.Test/Setup/TestStartup.cs": {
     "stateCleared": "modified",
   },
