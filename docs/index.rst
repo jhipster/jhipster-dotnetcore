@@ -30,6 +30,7 @@ You can also find lot of information in https://www.jhipster.tech
   Features/database-migrations
   Features/dependencies-management
   Features/dto
+  Features/email-config
   Features/entity-auditing
   Features/fronts
   Features/heroku
