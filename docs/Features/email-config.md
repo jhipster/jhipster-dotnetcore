@@ -1,4 +1,4 @@
-## Email Service Configuration
+# Email Service Configuration
 
 The MailService provides email functionality using SMTP protocol. It supports:
 
@@ -6,7 +6,7 @@ The MailService provides email functionality using SMTP protocol. It supports:
 - Password reset emails
 - Welcome emails
 
-### Configuration Options
+## Configuration Options
 
 Configure email settings in `appsettings.json`:
 
@@ -31,14 +31,14 @@ Configure email settings in `appsettings.json`:
 }
 ```
 
-#### Development Configuration
+### Development Configuration
 
 For local development, you can use:
 
 - [MailHog](https://github.com/mailhog/MailHog) - Recommended for Mac/Linux
 - [Papercut SMTP](https://github.com/ChangemakerStudios/Papercut-SMTP) - Windows alternative
 
-#### Production Configuration
+### Production Configuration
 
 Common SMTP providers:
 
@@ -59,7 +59,7 @@ Common SMTP providers:
   }
   ```
 
-### Usage Examples
+## Usage Examples
 
 1. Activation Email:
 
@@ -90,7 +90,7 @@ await _mailService.SendCreationEmail(
 );
 ```
 
-### Security Best Practices
+## Security Best Practices
 
 1. **SMTP Security**
 
@@ -115,7 +115,7 @@ await _mailService.SendCreationEmail(
    - Log delivery failures with correlation IDs
    - Monitor bounce rates and spam reports
 
-### Testing
+## Testing
 
 1. Unit Testing:
 
@@ -153,7 +153,7 @@ public async Task Should_Connect_To_SMTP_Server()
 }
 ```
 
-### Troubleshooting Guide
+## Troubleshooting Guide
 
 1. **Connection Issues**
    - Verify network connectivity to SMTP server
@@ -170,7 +170,7 @@ public async Task Should_Connect_To_SMTP_Server()
    - Monitor email logs for bounce reasons
    - Verify recipient address format
 
-### Dependencies
+## Dependencies
 
 - **MailKit**: SMTP client library
   ```xml
@@ -181,7 +181,7 @@ public async Task Should_Connect_To_SMTP_Server()
   <PackageReference Include="MimeKit" Version="4.1.0" />
   ```
 
-### Additional Resources
+## Additional Resources
 
 - [JHipster Email Configuration Guide](https://www.jhipster.tech/tips/011_tip_configuring_email_in_jhipster.html)
 - [MailKit Documentation](https://github.com/jstedfast/MailKit#documentation)
