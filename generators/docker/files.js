@@ -30,7 +30,6 @@ export const dockerFiles = {
       templates: [
         'app.yml',
         'monitoring.yml',
-        'postgresql.yml',
         'telegraf/telegraf.conf',
         'kapacitor/config/kapacitor.conf',
         'influxdb/config/influxdb.conf',
@@ -38,6 +37,11 @@ export const dockerFiles = {
         'grafana/data/dashboard/Docker Monitoring.json',
         'grafana/data/provisioning/influxdb.yml',
       ],
+    },
+    {
+      path: DOCKER_DIR,
+      condition: generator => generator.databaseChoice === 'postgresql',
+      templates: ['postgresql.yml'],
     },
   ],
 };
