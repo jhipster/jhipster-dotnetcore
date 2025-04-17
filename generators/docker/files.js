@@ -30,6 +30,7 @@ export const dockerFiles = {
       templates: [
         'app.yml',
         'monitoring.yml',
+        'postgresql.yml',
         'telegraf/telegraf.conf',
         'kapacitor/config/kapacitor.conf',
         'influxdb/config/influxdb.conf',

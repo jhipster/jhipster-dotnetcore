@@ -35,6 +35,9 @@ exports[`SubGenerator server of dotnetcore JHipster blueprint > run > should suc
   "docker/monitoring.yml": {
     "stateCleared": "modified",
   },
+  "docker/postgresql.yml": {
+    "stateCleared": "modified",
+  },
   "docker/prometheus/prometheus.yml": {
     "stateCleared": "modified",
   },
