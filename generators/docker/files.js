@@ -38,5 +38,10 @@ export const dockerFiles = {
         'grafana/data/provisioning/influxdb.yml',
       ],
     },
+    {
+      path: DOCKER_DIR,
+      condition: generator => generator.databaseChoice === 'postgresql',
+      templates: ['postgresql.yml'],
+    },
   ],
 };
