@@ -49,20 +49,20 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           # Clone the target repository
           git clone https://x-access-token:${{ secrets.github_sample_repo_token }}@github.com/jhipster/jhipster-sample-app-dotnetcore.git out
-          
+
           # Ensure app directory exists and has content
           if [ ! -d "app" ] || [ -z "$(ls -A app)" ]; then
             echo "Error: Generated app directory is empty or doesn't exist"
             exit 1
           fi
-          
+
           # Clear target repo and copy new content
           rm -rf out/*
           cp -r app/* out/
-          
+
           # Commit and push changes
           cd out
           git add .
