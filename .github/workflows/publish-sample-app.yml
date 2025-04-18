@@ -1,0 +1,75 @@
+name: Publish Sample App
+
+on:
+  release:
+    types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    name: Publish Sample App
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]')"
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: jhipster-dotnetcore
+          fetch-depth: 2
+
+      - uses: jhipster/actions/setup-runner@v0
+        with:
+          binary-dir: ${{ github.workspace }}/jhipster-dotnetcore/cli/
+          java-version: '17'
+          node-version: '22.14.0'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install dependencies
+        working-directory: ${{ github.workspace }}/jhipster-dotnetcore
+        run: npm ci && npm link
+
+      - name: Generate sample app
+        working-directory: ${{ github.workspace }}
+        run: |
+          mkdir -p app
+          cd app
+          ../jhipster-dotnetcore/cli/cli.cjs generate-sample jwt-with-angular-app --skip-install --skip-checks --no-insight --with-entities
+
+      - name: Clone and update sample app repo
+        working-directory: ${{ github.workspace }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Clone the target repository
+          git clone https://x-access-token:${{ secrets.github_sample_repo_token }}@github.com/jhipster/jhipster-sample-app-dotnetcore.git out
+          
+          # Ensure app directory exists and has content
+          if [ ! -d "app" ] || [ -z "$(ls -A app)" ]; then
+            echo "Error: Generated app directory is empty or doesn't exist"
+            exit 1
+          fi
+          
+          # Clear target repo and copy new content
+          rm -rf out/*
+          cp -r app/* out/
+          
+          # Commit and push changes
+          cd out
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update sample app from release ${GITHUB_REF#refs/tags/}"
+          git push
+        shell: bash
