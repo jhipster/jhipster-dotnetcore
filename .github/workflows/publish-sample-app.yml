@@ -5,12 +5,12 @@ on:
     types: [published]
 
   workflow_dispatch:
-  inputs:
-    test_mode:
-      description: 'Running in test mode'
-      type: boolean
-      default: true
-      required: false
+    inputs:
+      test_mode:
+        description: 'Running in test mode'
+        type: boolean
+        default: true
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
