@@ -33,15 +33,8 @@ export default class extends CiCdGenerator {
         if (this.ciType) return;
 
         const ciTypeChoices = [
-          // { value: GITHUB, name: 'Github Action' },
-          // { value: GITLAB, name: 'Gitlab CI' },
-          { value: 'noci', name: 'No CI' },
-          { name: 'GitHub Actions', value: 'github' },
-          { name: 'Jenkins pipeline', value: 'jenkins' },
-          { name: 'GitLab CI', value: 'gitlab' },
-          { name: 'Azure Pipelines', value: 'azure' },
-          { name: 'Travis CI', value: 'travis' },
-          { name: 'CircleCI', value: 'circle' },
+          { value: GITHUB, name: 'Github Action' },
+          { value: GITLAB, name: 'Gitlab CI' },
         ];
 
         const answers = await this.prompt([

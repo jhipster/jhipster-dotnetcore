@@ -159,8 +159,9 @@ In case of Oracle database, see [official documentation](https://github.com/orac
 ## Continuous Integration
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Currently, it is supporting:
- - Github
- - GItlab
+
+- GitHub
+- GItLab
 
 # License
 
