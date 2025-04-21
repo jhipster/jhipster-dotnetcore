@@ -1,21 +1,21 @@
 import CiCdGenerator from 'generator-jhipster/generators/ci-cd';
-import command from './command.mjs';
+import command from './command.js';
 
 const GITHUB = 'github';
 const GITLAB = 'gitlab';
 
 export default class extends CiCdGenerator {
   constructor(args, opts, features) {
-    super(args, opts, {
-      ...features,
-      checkBlueprint: true,
-      // Dropped it once migration is done.
-      jhipster7Migration: true,
-    });
+    super(args, opts, { ...features, queueCommandTasks: true, checkBlueprint: true });
+  }
+
+  async beforeQueue() {
+    await super.beforeQueue();
   }
 
   get [CiCdGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
+      ...super.initializing,
       async initializingTemplateTask() {
         this.parseJHipsterArguments(command.arguments);
         this.parseJHipsterOptions(command.options);
@@ -33,9 +33,15 @@ export default class extends CiCdGenerator {
         if (this.ciType) return;
 
         const ciTypeChoices = [
-          { value: GITHUB, name: 'Github Action' },
-          { value: GITLAB, name: 'Gitlab CI' },
+          // { value: GITHUB, name: 'Github Action' },
+          // { value: GITLAB, name: 'Gitlab CI' },
           { value: 'noci', name: 'No CI' },
+          { name: 'GitHub Actions', value: 'github' },
+          { name: 'Jenkins pipeline', value: 'jenkins' },
+          { name: 'GitLab CI', value: 'gitlab' },
+          { name: 'Azure Pipelines', value: 'azure' },
+          { name: 'Travis CI', value: 'travis' },
+          { name: 'CircleCI', value: 'circle' },
         ];
 
         const answers = await this.prompt([
