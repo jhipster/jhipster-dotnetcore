@@ -59,7 +59,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # Clone the target repository
-          git clone https://x-access-token:${{ secrets.github_sample_repo_token }}@github.com/jhipster/jhipster-sample-app-dotnetcore.git out
+          git clone https://x-access-token:${{ secrets.JHIPSTER_DOTNET_SAMPLES_TOKEN }}@github.com/jhipster/jhipster-sample-app-dotnetcore.git out
 
           # Ensure app directory exists and has content
           if [ ! -d "app" ] || [ -z "$(ls -A app)" ]; then
