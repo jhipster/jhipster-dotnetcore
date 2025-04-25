@@ -156,6 +156,19 @@ docker compose -f docker/app.yml up
 
 In case of Oracle database, see [official documentation](https://github.com/oracle/docker-images/blob/main/OracleDatabase/SingleInstance/README.md)
 
+## Continuous Integration
+
+To set up continuous integration (CI) for your project, run the CI/CD sub-generator:
+
+```bash
+jhipster ci-cd
+```
+
+This command generates configuration files for multiple CI platforms. Currently, it supports templates for:
+
+- GitHub Actions
+- GitLab CI/CD
+
 # License
 
 Apache-2.0 © [JHipster.NET]()
