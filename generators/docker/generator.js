@@ -13,6 +13,7 @@ export default class extends DockerGenerator {
 
   get [DockerGenerator.WRITING]() {
     return this.asWritingTaskGroup({
+      ...super.writing,
       async writingTemplateTask({ application }) {
         await this.writeFiles({
           sections: dockerFiles,
