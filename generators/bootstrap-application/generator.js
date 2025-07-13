@@ -97,7 +97,9 @@ export default class extends BaseApplicationGenerator {
         });
 
         application[`databaseType${this._.upperFirst(application.databaseType)}`] = true;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseChoice)) {
+          application.databaseType = application.databaseChoice;
+          application.prodDatabaseType = application.databaseChoice;
           application.databaseTypeSql = true;
           application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
           application.databaseData = getDatabaseData(application.databaseType);
