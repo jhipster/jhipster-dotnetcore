@@ -24,7 +24,7 @@
   	<PackageVersion Include="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
   	<PackageVersion Include="AutoFixture" Version="4.18.1" />
-  	<PackageVersion Include="bunit" Version="1.38.5" />
+  	<PackageVersion Include="bunit" Version="1.40.0" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="JHipsterNet.Core" Version="$(JHipsterNetPackageVersion)" />
