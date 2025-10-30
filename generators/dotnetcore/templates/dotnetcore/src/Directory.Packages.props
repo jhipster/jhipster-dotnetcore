@@ -76,8 +76,8 @@
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.1" />
     <PackageVersion Include="xunit.runner.console" Version="2.9.3" />
-    <PackageVersion Include="FluentAssertions" Version="7.0.0" />
+    <PackageVersion Include="FluentAssertions" Version="8.0.0" />
   	<PackageVersion Include="FluentAssertions.AspNetCore.Mvc" Version="4.2.0" />
-  	<PackageVersion Include="FluentAssertions.Json" Version="6.1.0" />
+  	<PackageVersion Include="FluentAssertions.Json" Version="8.0.0" />
   </ItemGroup>
 </Project>
