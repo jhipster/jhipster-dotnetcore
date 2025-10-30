@@ -60,8 +60,8 @@
   	<PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkPackageVersion)" />
   	<PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(EntityFrameworkPackageVersion)" />
   	<PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
-  	<PackageVersion Include="MongoDB.Driver" Version="2.18.0" />
-  	<PackageVersion Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
+  	<PackageVersion Include="MongoDB.Driver" Version="3.4.2" />
+  	<PackageVersion Include="AspNetCore.Identity.MongoDbCore" Version="7.0.0" />
   	<PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0-preview.2.efcore.9.0.0" />
   	<PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="$(EntityFrameworkPackageVersion)" />
   	<PackageVersion Include="Oracle.EntityFrameworkCore" Version="9.23.60" />
