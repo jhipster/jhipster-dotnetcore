@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AspNetCorePackageVersion>9.0.0</AspNetCorePackageVersion>
+    <AspNetCorePackageVersion>9.0.4</AspNetCorePackageVersion>
     <EntityFrameworkPackageVersion>9.0.1</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.12</JHipsterNetPackageVersion>
   </PropertyGroup>
@@ -47,9 +47,9 @@
   	<PackageVersion Include="BCrypt.Net-Next" Version="4.0.3" />
   	<PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Winton.Extensions.Configuration.Consul" Version="3.2.0" />
-  	<PackageVersion Include="Consul" Version="1.6.10.7" />
-  	<PackageVersion Include="Ocelot" Version="18.0.0" />
-  	<PackageVersion Include="Ocelot.Provider.Consul" Version="18.0.0" />
+  	<PackageVersion Include="Consul" Version="1.7.14.7" />
+  	<PackageVersion Include="Ocelot" Version="24.0.0" />
+  	<PackageVersion Include="Ocelot.Provider.Consul" Version="24.0.0" />
   	<PackageVersion Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   	<PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
   	<PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
