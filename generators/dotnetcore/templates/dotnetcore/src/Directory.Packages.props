@@ -12,7 +12,7 @@
   <ItemGroup>
   	<PackageVersion Include="AutoMapper" Version="13.0.1" />
   	<PackageVersion Include="Blazored.Modal" Version="7.3.1" />
-  	<PackageVersion Include="Blazored.SessionStorage" Version="2.3.0" />
+  	<PackageVersion Include="Blazored.SessionStorage" Version="2.4.0" />
   	<PackageVersion Include="Blazorise.Bootstrap5" Version="1.7.2" />
     <PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.7.2" />
 	<PackageVersion Include="MailKit" Version="4.11.0" />
