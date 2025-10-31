@@ -1,4 +1,4 @@
-FROM ubuntu:24.10
+FROM ubuntu:25.10
 
 # copy sources
 COPY . /home/jhipster/jhipster-dotnetcore
@@ -49,7 +49,7 @@ RUN \
 
 # expose the working directory
 USER jhipster
-ENV PATH $PATH:/usr/bin
+ENV PATH=$PATH:/usr/bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
 CMD ["jhipster-dotnetcore"]
