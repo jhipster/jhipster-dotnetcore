@@ -11,7 +11,7 @@
     <PackageReference Include="AutoMapper" />
   	<PackageReference Include="Blazored.Modal" />
   	<PackageReference Include="Blazored.SessionStorage" />
-  	<PackageReference Include="Blazorise.Bootstrap" />
+  	<PackageReference Include="Blazorise.Bootstrap5" />
   	<PackageReference Include="Blazorise.Icons.FontAwesome" />
   	<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" />
   	<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />

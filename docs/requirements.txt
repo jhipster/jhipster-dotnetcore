@@ -33,7 +33,7 @@ pygments==2.17.2
     # via sphinx
 recommonmark==0.7.1
     # via -r requirements.in
-requests==2.32.2
+requests==2.32.4
     # via sphinx
 snowballstemmer==2.2.0
     # via sphinx
@@ -64,7 +64,7 @@ sphinxcontrib-qthelp==1.0.6
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.9
     # via sphinx
-urllib3==2.2.2
+urllib3==2.6.0
     # via requests
 
 # The following packages are considered to be unsafe in a requirements file:
