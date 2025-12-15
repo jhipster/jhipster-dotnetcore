@@ -26,6 +26,11 @@ export default class extends BaseApplicationGenerator {
           }
         }
       },
+      async fixDatabaseConfig() {
+        if (this.jhipsterConfig.databaseChoice) {
+          this.jhipsterConfig.databaseType = this.jhipsterConfig.databaseChoice;
+        }
+      },
     });
   }
 
@@ -40,8 +45,14 @@ export default class extends BaseApplicationGenerator {
         // - prettier should be installed at root package.json.
         // - lint-staged paths needs adjusts.
         this.jhipsterConfig.skipCommitHook = true;
-        this.jhipsterConfig.databaseType ??= this.jhipsterConfig.prodDatabaseType ?? 'sqllite';
-        this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType === 'mongodb' ? 'mongodb' : 'sql'; // set only for jdl-importer compatibility
+        if (this.jhipsterConfig.databaseType === 'mongodb') {
+          this.jhipsterConfig.prodDatabaseType = 'mongodb';
+        } else if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle', 'sqllite'].includes(this.jhipsterConfig.databaseType)) {
+          this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType;
+        } else {
+          // fallback if needed, possibly for 'sql' generic
+          this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
+        }
         if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
           this.jhipsterConfig.dtoSuffix = 'Dto';
         }
