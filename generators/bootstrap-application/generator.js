@@ -26,6 +26,11 @@ export default class extends BaseApplicationGenerator {
           }
         }
       },
+      async fixDatabaseConfig() {
+        if (this.jhipsterConfig.databaseChoice) {
+          this.jhipsterConfig.databaseType = this.jhipsterConfig.databaseChoice;
+        }
+      },
     });
   }
 
@@ -40,8 +45,16 @@ export default class extends BaseApplicationGenerator {
         // - prettier should be installed at root package.json.
         // - lint-staged paths needs adjusts.
         this.jhipsterConfig.skipCommitHook = true;
-        this.jhipsterConfig.databaseType ??= this.jhipsterConfig.prodDatabaseType ?? 'sqllite';
-        this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType === 'mongodb' ? 'mongodb' : 'sql'; // set only for jdl-importer compatibility
+        if (this.jhipsterConfig.databaseType === 'mongodb') {
+          this.jhipsterConfig.prodDatabaseType = 'mongodb';
+        } else if (this.jhipsterConfig.databaseType === 'sqlite') {
+          this.jhipsterConfig.prodDatabaseType = 'postgresql';
+        } else if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(this.jhipsterConfig.databaseType)) {
+          this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType;
+        } else {
+          // fallback if needed
+          this.jhipsterConfig.prodDatabaseType = 'postgresql';
+        }
         if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
           this.jhipsterConfig.dtoSuffix = 'Dto';
         }
@@ -55,8 +68,10 @@ export default class extends BaseApplicationGenerator {
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle', 'sqllite'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
+        } else if (application.databaseType === 'sqlite') {
+          application.prodDatabaseType = 'postgresql';
         }
 
         applicationDefaults({
