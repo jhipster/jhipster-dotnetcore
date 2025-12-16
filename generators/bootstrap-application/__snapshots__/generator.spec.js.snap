@@ -496,3 +496,19 @@ exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > r
   },
 }
 `;
+
+exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > with postgresql database > should succeed 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`SubGenerator bootstrap-application of dotnetcore JHipster blueprint > with sqlite database > should succeed 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

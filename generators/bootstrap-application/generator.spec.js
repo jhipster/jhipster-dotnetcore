@@ -29,4 +29,55 @@ describe('SubGenerator bootstrap-application of dotnetcore JHipster blueprint', 
       });
     });
   });
+
+  describe('with sqlite database', () => {
+    beforeAll(async function () {
+      await helpers
+        .runJHipster(SUB_GENERATOR)
+        .withJHipsterConfig({
+          databaseType: 'sqlite',
+        })
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprint: ['dotnetcore'],
+        })
+        .withParentBlueprintLookup();
+    });
+
+    it('should succeed', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should set prodDatabaseType to postgresql internally', () => {
+      expect(result.generator.sharedData.getApplication().prodDatabaseType).toBe('postgresql');
+    });
+  });
+
+  describe('with postgresql database', () => {
+    beforeAll(async function () {
+      await helpers
+        .runJHipster(SUB_GENERATOR)
+        .withJHipsterConfig({
+          databaseType: 'postgresql',
+          prodDatabaseType: 'postgresql',
+        })
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprint: ['dotnetcore'],
+        })
+        .withParentBlueprintLookup();
+    });
+
+    it('should succeed', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should set prodDatabaseType to postgresql', () => {
+      expect(result.generator.sharedData.getApplication().prodDatabaseType).toBe('postgresql');
+    });
+
+    it('should set databaseTypeSql to true', () => {
+      expect(result.generator.sharedData.getApplication().databaseTypeSql).toBe(true);
+    });
+  });
 });
