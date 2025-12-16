@@ -47,11 +47,13 @@ export default class extends BaseApplicationGenerator {
         this.jhipsterConfig.skipCommitHook = true;
         if (this.jhipsterConfig.databaseType === 'mongodb') {
           this.jhipsterConfig.prodDatabaseType = 'mongodb';
-        } else if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle', 'sqllite'].includes(this.jhipsterConfig.databaseType)) {
+        } else if (this.jhipsterConfig.databaseType === 'sqlite') {
+          this.jhipsterConfig.prodDatabaseType = 'postgresql';
+        } else if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(this.jhipsterConfig.databaseType)) {
           this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType;
         } else {
-          // fallback if needed, possibly for 'sql' generic
-          this.jhipsterConfig.prodDatabaseType = this.jhipsterConfig.databaseType ?? 'sqllite';
+          // fallback if needed
+          this.jhipsterConfig.prodDatabaseType = 'postgresql';
         }
         if (this.jhipsterConfig.dtoSuffix === undefined || this.jhipsterConfig.dtoSuffix === 'DTO') {
           this.jhipsterConfig.dtoSuffix = 'Dto';
@@ -66,8 +68,10 @@ export default class extends BaseApplicationGenerator {
         application.cqrsEnabled = this.jhipsterConfig.cqrsEnabled;
         application.namespace = this.jhipsterConfig.namespace;
         application.withTerraformAzureScripts = this.jhipsterConfig.withTerraformAzureScripts;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle', 'sqllite'].includes(application.databaseType)) {
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.prodDatabaseType = application.databaseType;
+        } else if (application.databaseType === 'sqlite') {
+          application.prodDatabaseType = 'postgresql';
         }
 
         applicationDefaults({
@@ -108,9 +112,7 @@ export default class extends BaseApplicationGenerator {
         });
 
         application[`databaseType${this._.upperFirst(application.databaseType)}`] = true;
-        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseChoice)) {
-          application.databaseType = application.databaseChoice;
-          application.prodDatabaseType = application.databaseChoice;
+        if (['postgresql', 'mysql', 'mariadb', 'mssql', 'oracle'].includes(application.databaseType)) {
           application.databaseTypeSql = true;
           application[`prodDatabaseType${this._.upperFirst(application.databaseType)}`] = true;
           application.databaseData = getDatabaseData(application.databaseType);
