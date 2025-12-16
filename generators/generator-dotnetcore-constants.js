@@ -34,9 +34,11 @@ export const TERRAFORM_DIR = 'terraform/';
 export const GITHUB = 'Github';
 export const GITLAB = 'Gitlab';
 
-// Version of Node, NPM
+// Version of Node, NPM, Dotnet, DevContainer Dotnet Image
 export const NODE_VERSION = '16.14.0';
 export const NPM_VERSION = '8.6.0';
+export const DOTNET_VERSION = '9.0';
+export const DEVCONTAINER_DOTNET_IMAGE_TAG = `1-${DOTNET_VERSION}`;
 
 export const renameDotNetCore =
   (prefix = SERVER_SRC_DIR) =>
