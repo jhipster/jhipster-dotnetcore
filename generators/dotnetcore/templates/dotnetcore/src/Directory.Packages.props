@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AspNetCorePackageVersion>9.0.0</AspNetCorePackageVersion>
+    <AspNetCorePackageVersion>9.0.11</AspNetCorePackageVersion>
     <EntityFrameworkPackageVersion>9.0.1</EntityFrameworkPackageVersion>
     <JHipsterNetPackageVersion>1.0.12</JHipsterNetPackageVersion>
   </PropertyGroup>
@@ -13,7 +13,7 @@
   	<PackageVersion Include="AutoMapper" Version="13.0.1" />
   	<PackageVersion Include="Blazored.Modal" Version="7.3.1" />
   	<PackageVersion Include="Blazored.SessionStorage" Version="2.3.0" />
-  	<PackageVersion Include="Blazorise.Bootstrap5" Version="1.7.2" />
+  	<PackageVersion Include="Blazorise.Bootstrap5" Version="1.8.8" />
     <PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.7.2" />
 	<PackageVersion Include="MailKit" Version="4.11.0" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
