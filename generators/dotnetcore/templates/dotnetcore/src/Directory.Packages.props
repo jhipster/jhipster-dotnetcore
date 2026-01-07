@@ -19,7 +19,7 @@
   	<PackageVersion Include="Microsoft.AspNetCore.Components.Authorization" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="$(AspNetCorePackageVersion)" />
-  	<PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+  	<PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
 	<PackageVersion Include="MimeKit" Version="4.11.0" />
   	<PackageVersion Include="System.Net.Http.Json" Version="$(AspNetCorePackageVersion)" />
   	<PackageVersion Include="Toolbelt.Blazor.HttpClientInterceptor" Version="10.2.0" />
