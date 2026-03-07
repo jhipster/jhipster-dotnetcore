@@ -1,0 +1,33 @@
+<% const relationships = entity.relationships || []; %>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using <%= namespace %>.Domain.Entities;
+using Xunit;
+
+namespace <%= namespace %>.Test.Domain.Entities;
+
+public class <%= entity.entityClass %>Test {
+    [Fact]
+    public void <%= entity.entityClass %>ConstructorTest() {
+        var <%= entity.entityInstance %> = new <%= entity.entityClass %>();
+        <%= entity.entityClass %>Assert(<%= entity.entityInstance %>);
+    }
+
+    private void <%= entity.entityClass %>Assert(<%= entity.entityClass %> <%= entity.entityInstance %>) {
+        <%= entity.entityInstance %>.Should().NotBeNull();
+<%_ for (const field of entity.fields) { _%>
+        <%= entity.entityInstance %>.<%= field.fieldName %>.Should().Be(default(<%= field.fieldType %>));
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>
+    <%_ if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) { _%>
+        <%= entity.entityInstance %>.<%= relationship.relationshipName %>.Should().BeNull();
+    <%_ } else if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') { _%>
+        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
+        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().BeEmpty();
+    <%_ } _%>
+<%_ } _%>
+    }
+}
