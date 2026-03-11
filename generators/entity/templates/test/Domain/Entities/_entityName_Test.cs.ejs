@@ -26,7 +26,7 @@ public class <%= entity.entityClass %>Test {
         <%= entity.entityInstance %>.<%= relationship.relationshipName %>.Should().BeNull();
     <%_ } else if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') { _%>
         <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
-        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().BeEmpty();
+        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Count.Should().Be(0);
     <%_ } _%>
 <%_ } _%>
     }
