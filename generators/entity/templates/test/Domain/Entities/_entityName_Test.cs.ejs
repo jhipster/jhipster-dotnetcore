@@ -21,6 +21,8 @@ public class <%= entity.entityClass %>Test {
 <%_ for (const field of entity.fields) { _%>
         <%= entity.entityInstance %>.<%= field.fieldName %>.Should().Be(default(<%= field.fieldType %>));
 <%_ } _%>
+    }
+}%>
 <%_ for (const relationship of relationships) { _%>
     <%_ if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) { _%>
         <%= entity.entityInstance %>.<%= relationship.relationshipName %>.Should().BeNull();
