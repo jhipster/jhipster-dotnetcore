@@ -157,9 +157,31 @@ function hasDateTimeTypeField(fields) {
         idx ++;
     }
     return dateTimeTypeField;
-} _%>
+}
+function getPrimaryKeyType(entity) {
+    return entity.primaryKeyType;
+}
+_%>
 <%
 let hasDto = dto === 'mapstruct';
+let hasRelationships = relationships && relationships.length > 0;
+let hasManyToOneOrOneToOne = false;
+let hasOneToManyOrManyToManyOwner = false;
+if (hasRelationships) {
+    for (let ri = 0; ri < relationships.length; ri++) {
+        if (relationships[ri].relationshipType === 'many-to-one' || relationships[ri].relationshipType === 'one-to-one') {
+            hasManyToOneOrOneToOne = true;
+        } else if (relationships[ri].relationshipType === 'one-to-many' || (relationships[ri].relationshipType === 'many-to-many' && relationships[ri].ownerSide)) {
+            hasOneToManyOrManyToManyOwner = true;
+        }
+    }
+}
+let hasEnumField = false;
+fields.forEach(field => {
+    if (field.fieldIsEnum) {
+        hasEnumField = true;
+    }
+});
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
@@ -176,14 +198,7 @@ using FluentAssertions.Extensions;
 using <%= namespace %>.Infrastructure.Data;
 using <%= namespace %>.Domain.Entities;
 using <%= namespace %>.Domain.Repositories.Interfaces;
-<%_
-let hasEnumField = false;
-fields.forEach(field => {
-        if (field.fieldIsEnum) {
-            hasEnumField = true;
-        }
-    });
-if (hasEnumField) { _%>
+<%_ if (hasEnumField) { _%>
 using <%= namespace %>.Crosscutting.Enums;
 <%_ } _%>
 <%_ if (hasDto) { _%>
@@ -211,6 +226,23 @@ namespace <%= namespace %>.Test.Controllers
             _client = _factory.CreateClient();
 
             _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
+            <%_ if (hasManyToOneOrOneToOne) {
+                relationships.forEach(function(rel) {
+                    if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') { _%>
+            _<%= rel.otherEntityNameCamelCased %>Repository = _factory.GetRequiredService<I<%= rel.otherEntityNamePascalized %>Repository>();
+            _<%= rel.otherEntityNameCamelCased %> = new <%= rel.otherEntityNamePascalized %>();
+            _<%= rel.otherEntityNameCamelCased %>Repository.CreateOrUpdateAsync(_<%= rel.otherEntityNameCamelCased %>).GetAwaiter().GetResult();
+            _<%= rel.otherEntityNameCamelCased %>Repository.SaveChangesAsync().GetAwaiter().GetResult();
+                    <%_ }
+                });
+            } _%>
+            <%_ if (hasOneToManyOrManyToManyOwner) {
+                relationships.forEach(function(rel) {
+                    if (rel.relationshipType === 'one-to-many' || (rel.relationshipType === 'many-to-many' && rel.ownerSide)) { _%>
+            _<%= rel.relationshipFieldNamePascalizedPlural %>Items = new System.Collections.Generic.List<<%= rel.otherEntityNamePascalized %>>();
+                    <%_ }
+                });
+            } _%>
 
             <%_ if (hasDto) { _%>
             var config = new MapperConfiguration(cfg =>
@@ -241,6 +273,21 @@ namespace <%= namespace %>.Test.Controllers
         private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
         private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        <%_ if (hasManyToOneOrOneToOne) {
+            relationships.forEach(function(rel) {
+                if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') { _%>
+        private readonly I<%= rel.otherEntityNamePascalized %>Repository _<%= rel.otherEntityNameCamelCased %>Repository;
+        private readonly <%= rel.otherEntityNamePascalized %> _<%= rel.otherEntityNameCamelCased %>;
+                <%_ }
+            });
+        } _%>
+        <%_ if (hasOneToManyOrManyToManyOwner) {
+            relationships.forEach(function(rel) {
+                if (rel.relationshipType === 'one-to-many' || (rel.relationshipType === 'many-to-many' && rel.ownerSide)) { _%>
+        private readonly System.Collections.Generic.List<<%= rel.otherEntityNamePascalized %>> _<%= rel.relationshipFieldNamePascalizedPlural %>Items;
+                <%_ }
+            });
+        } _%>
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
 
@@ -261,8 +308,20 @@ namespace <%= namespace %>.Test.Controllers
                         } _%>
                 <%= fields[i].fieldNamePascalized %> = Default<%= fields[i].fieldNamePascalized %>,
                         <%_ i ++;
-                    } _%>
-                <%_ } _%>
+                    }
+                }
+                if (hasRelationships) {
+                    relationships.forEach(function(rel) {
+                        if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') { _%>
+                <%= rel.relationshipFieldNamePascalized %>Id = _<%= rel.otherEntityNameCamelCased %>.Id,
+                <%= rel.relationshipFieldNamePascalized %> = _<%= rel.otherEntityNameCamelCased %>,
+                        <%_ } else if (rel.relationshipType === 'one-to-many') { _%>
+                <%= rel.relationshipFieldNamePascalizedPlural %> = _<%= rel.relationshipFieldNamePascalizedPlural %>Items,
+                        <%_ } else if (rel.relationshipType === 'many-to-many' && rel.ownerSide) { _%>
+                <%= rel.relationshipFieldNamePascalizedPlural %> = _<%= rel.relationshipFieldNamePascalizedPlural %>Items,
+                        <%_ }
+                    });
+                } _%>
             };
         }
 
@@ -293,6 +352,13 @@ namespace <%= namespace %>.Test.Controllers
                 if (field.id) return; _%>
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
             <%_ }); _%>
+            <%_ if (hasRelationships) {
+                relationships.forEach(function(rel) {
+                    if (rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one') { _%>
+            test<%= pascalizedEntityClass %>.<%= rel.relationshipFieldNamePascalized %>Id.Should().Be(_<%= rel.otherEntityNameCamelCased %>.Id);
+                    <%_ }
+                });
+            } _%>
         }
 
         [Fact]
