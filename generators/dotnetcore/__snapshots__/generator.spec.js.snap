@@ -4,7 +4,7 @@ exports[`SubGenerator dotnetcore of dotnetcore JHipster blueprint > run > execut
 [
   [
     "spawnCommand",
-    "dotnet new sln --name Jhipster",
+    "dotnet new sln --name Jhipster --format sln",
   ],
   [
     "spawnCommand",

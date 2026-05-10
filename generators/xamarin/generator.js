@@ -120,7 +120,7 @@ export default class extends BaseApplicationGenerator {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
 
         try {
-          await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
+          await this.spawnCommand(`dotnet new sln --name ${application.solutionName} --format sln`);
         } catch (err) {
           this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
         }

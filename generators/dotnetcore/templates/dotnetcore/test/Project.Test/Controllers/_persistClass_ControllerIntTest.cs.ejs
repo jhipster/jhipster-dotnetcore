@@ -160,6 +160,45 @@ function hasDateTimeTypeField(fields) {
 } _%>
 <%
 let hasDto = dto === 'mapstruct';
+const relationshipTestRelationships = databaseType !== 'mongodb'
+    ? relationships.filter(relationship =>
+        relationship.otherEntity &&
+        relationship.otherEntityName.toLowerCase() !== 'user' &&
+        (
+            relationship.relationshipType === 'many-to-one' ||
+            relationship.relationshipType === 'one-to-one' ||
+            (relationship.relationshipType === 'many-to-many' && relationship.ownerSide)
+        ))
+    : [];
+const removableRelationshipTestRelationships = relationshipTestRelationships.filter(relationship =>
+    relationship.relationshipType === 'many-to-many' ||
+    (
+        relationship.relationshipRequired !== true &&
+        (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one')
+    ));
+const relationshipTestCreatedEntityCount = 1 + relationshipTestRelationships.filter(relationship =>
+    relationship.otherEntityNamePascalized === pascalizedEntityClass
+).length;
+function relationshipPropertyName(relationship) {
+    return relationship.relationshipType === 'many-to-many'
+        ? relationship.relationshipFieldNamePascalizedPlural
+        : relationship.relationshipFieldNamePascalized;
+}
+function relationshipVariableName(relationship) {
+    return relationship.relationshipFieldNameLowerCased || relationship.relationshipName;
+}
+function relationshipFactoryName(relationship) {
+    return 'CreateRelated' + relationship.relationshipFieldNamePascalized;
+}
+function relationshipPrimaryKeyDefault(relationship) {
+    return `default(${getPrimaryKeyType(relationship.otherEntity).replace('?', '')})`;
+}
+function relatedEntityDefaultValue(field) {
+    if (field.fieldIsEnum) {
+        return enumDefaultValue(field);
+    }
+    return defaultValue(getNullableResolvedType(field.cSharpType, true));
+}
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
@@ -211,6 +250,9 @@ namespace <%= namespace %>.Test.Controllers
             _client = _factory.CreateClient();
 
             _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
+            <%_ relationshipTestRelationships.forEach(relationship => { _%>
+            _<%= relationshipVariableName(relationship) %>Repository = _factory.GetRequiredService<I<%= relationship.otherEntityNamePascalized %>Repository>();
+            <%_ }); _%>
 
             <%_ if (hasDto) { _%>
             var config = new MapperConfiguration(cfg =>
@@ -241,6 +283,9 @@ namespace <%= namespace %>.Test.Controllers
         private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
         private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        <%_ relationshipTestRelationships.forEach(relationship => { _%>
+        private readonly I<%= relationship.otherEntityNamePascalized %>Repository _<%= relationshipVariableName(relationship) %>Repository;
+        <%_ }); _%>
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
 
@@ -271,6 +316,53 @@ namespace <%= namespace %>.Test.Controllers
             _<%= camelCasedEntityClass %> = CreateEntity();
         }
 
+        <%_ if (relationshipTestRelationships.length > 0) { _%>
+        <%_ relationshipTestRelationships.forEach(relationship => { _%>
+        private <%= relationship.otherEntityNamePascalized %> <%= relationshipFactoryName(relationship) %>()
+        {
+            return new <%= relationship.otherEntityNamePascalized %>
+            {
+                <%_ (relationship.otherEntity.fields || []).forEach(field => {
+                    if (field.id) return; _%>
+                <%= field.fieldNamePascalized %> = <%- relatedEntityDefaultValue(field) %>,
+                <%_ }); _%>
+            };
+        }
+
+        <%_ }); _%>
+        private async Task<<%= pascalizedEntityClass %>> Persist<%= pascalizedEntityClass %>WithRelationships()
+        {
+            var <%= camelCasedEntityClass %> = CreateEntity();
+            <%_ relationshipTestRelationships.forEach(relationship => {
+                const relatedVariableName = relationshipVariableName(relationship);
+                const propertyName = relationshipPropertyName(relationship); _%>
+            var <%= relatedVariableName %> = <%= relationshipFactoryName(relationship) %>();
+            await _<%= relatedVariableName %>Repository.CreateOrUpdateAsync(<%= relatedVariableName %>);
+            await _<%= relatedVariableName %>Repository.SaveChangesAsync();
+                <%_ if (relationship.relationshipType === 'many-to-many') { _%>
+            <%= camelCasedEntityClass %>.<%= propertyName %>.Add(<%= relatedVariableName %>);
+                <%_ } else { _%>
+            <%= camelCasedEntityClass %>.<%= propertyName %> = <%= relatedVariableName %>;
+                <%_ } _%>
+            <%_ }); _%>
+
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(<%= camelCasedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+
+            return <%= camelCasedEntityClass %>;
+        }
+
+        private async Task<<%= pascalizedEntityClass %>> Get<%= pascalizedEntityClass %>WithRelationships(<%= primaryKeyType %> id)
+        {
+            return await _<%= camelCasedEntityClass %>Repository.QueryHelper()
+                <%_ relationshipTestRelationships.forEach(relationship => {
+                    const propertyName = relationshipPropertyName(relationship); _%>
+                .Include(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.<%= propertyName %>)
+                <%_ }); _%>
+                .GetOneAsync(<%= camelCasedEntityClass %> => <%= camelCasedEntityClass %>.Id == id);
+        }
+
+        <%_ } _%>
         [Fact]
         public async Task Create<%= pascalizedEntityClass %>()
         {
@@ -295,6 +387,63 @@ namespace <%= namespace %>.Test.Controllers
             <%_ }); _%>
         }
 
+        <%_ if (relationshipTestRelationships.length > 0) { _%>
+        [Fact]
+        public async Task Create<%= pascalizedEntityClass %>WithRelationships()
+        {
+            var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+
+            var <%= camelCasedEntityClass %> = await Persist<%= pascalizedEntityClass %>WithRelationships();
+
+            var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + <%= relationshipTestCreatedEntityCount %>);
+            var test<%= pascalizedEntityClass %> = await Get<%= pascalizedEntityClass %>WithRelationships(<%= camelCasedEntityClass %>.Id);
+            test<%= pascalizedEntityClass %>.Should().NotBeNull();
+            <%_ relationshipTestRelationships.forEach(relationship => {
+                const propertyName = relationshipPropertyName(relationship); _%>
+                <%_ if (relationship.relationshipType === 'many-to-many') { _%>
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.Should().ContainSingle();
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.First().Id.Should().NotBe(<%- relationshipPrimaryKeyDefault(relationship) %>);
+                <%_ } else { _%>
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.Should().NotBeNull();
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.Id.Should().NotBe(<%- relationshipPrimaryKeyDefault(relationship) %>);
+                <%_ } _%>
+            <%_ }); _%>
+        }
+
+        <%_ if (removableRelationshipTestRelationships.length > 0) { _%>
+        [Fact]
+        public async Task Remove<%= pascalizedEntityClass %>Relationships()
+        {
+            var <%= camelCasedEntityClass %> = await Persist<%= pascalizedEntityClass %>WithRelationships();
+            var persisted<%= pascalizedEntityClass %> = await Get<%= pascalizedEntityClass %>WithRelationships(<%= camelCasedEntityClass %>.Id);
+
+            <%_ removableRelationshipTestRelationships.forEach(relationship => {
+                const propertyName = relationshipPropertyName(relationship); _%>
+                <%_ if (relationship.relationshipType === 'many-to-many') { _%>
+            persisted<%= pascalizedEntityClass %>.<%= propertyName %>.Clear();
+                <%_ } else { _%>
+            persisted<%= pascalizedEntityClass %>.<%= propertyName %> = null;
+            persisted<%= pascalizedEntityClass %>.<%= propertyName %>Id = default;
+                <%_ } _%>
+            <%_ }); _%>
+
+            await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(persisted<%= pascalizedEntityClass %>);
+            await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
+
+            var test<%= pascalizedEntityClass %> = await Get<%= pascalizedEntityClass %>WithRelationships(<%= camelCasedEntityClass %>.Id);
+            <%_ removableRelationshipTestRelationships.forEach(relationship => {
+                const propertyName = relationshipPropertyName(relationship); _%>
+                <%_ if (relationship.relationshipType === 'many-to-many') { _%>
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.Should().BeEmpty();
+                <%_ } else { _%>
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.Should().BeNull();
+                <%_ } _%>
+            <%_ }); _%>
+        }
+
+        <%_ } _%>
+        <%_ } _%>
         [Fact]
         public async Task Create<%= pascalizedEntityClass %>WithExistingId()
         {

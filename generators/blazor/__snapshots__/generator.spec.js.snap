@@ -330,7 +330,7 @@ exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > execute co
 [
   [
     "spawnCommand",
-    "dotnet new sln --name Jhipster",
+    "dotnet new sln --name Jhipster --format sln",
   ],
   [
     "spawnCommand",
