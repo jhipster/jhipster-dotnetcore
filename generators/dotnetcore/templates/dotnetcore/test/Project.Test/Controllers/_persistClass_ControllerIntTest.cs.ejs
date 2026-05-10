@@ -176,6 +176,9 @@ const removableRelationshipTestRelationships = relationshipTestRelationships.fil
         relationship.relationshipRequired !== true &&
         (relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one')
     ));
+const relationshipTestCreatedEntityCount = 1 + relationshipTestRelationships.filter(relationship =>
+    relationship.otherEntityNamePascalized === pascalizedEntityClass
+).length;
 function relationshipPropertyName(relationship) {
     return relationship.relationshipType === 'many-to-many'
         ? relationship.relationshipFieldNamePascalizedPlural
@@ -393,7 +396,7 @@ namespace <%= namespace %>.Test.Controllers
             var <%= camelCasedEntityClass %> = await Persist<%= pascalizedEntityClass %>WithRelationships();
 
             var <%= camelCasedEntityClass %>List = await _<%= camelCasedEntityClass %>Repository.GetAllAsync();
-            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + 1);
+            <%= camelCasedEntityClass %>List.Count().Should().Be(databaseSizeBeforeCreate + <%= relationshipTestCreatedEntityCount %>);
             var test<%= pascalizedEntityClass %> = await Get<%= pascalizedEntityClass %>WithRelationships(<%= camelCasedEntityClass %>.Id);
             test<%= pascalizedEntityClass %>.Should().NotBeNull();
             <%_ relationshipTestRelationships.forEach(relationship => {

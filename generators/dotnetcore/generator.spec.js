@@ -243,6 +243,12 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
               ],
               relationships: [
                 {
+                  relationshipName: 'manager',
+                  relationshipType: 'many-to-one',
+                  otherEntityName: 'employee',
+                  otherEntityField: 'id',
+                },
+                {
                   relationshipName: 'department',
                   relationshipType: 'many-to-one',
                   otherEntityName: 'department',
@@ -264,7 +270,10 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
     it('creates tests for persisting and removing relationships', () => {
       result.assertFileContent(employeeControllerTest, /private Department CreateRelatedDepartment\(\)/);
       result.assertFileContent(employeeControllerTest, /private async Task<Employee> PersistEmployeeWithRelationships\(\)/);
+      result.assertFileContent(employeeControllerTest, /employeeList\.Count\(\)\.Should\(\)\.Be\(databaseSizeBeforeCreate \+ 2\);/);
+      result.assertFileContent(employeeControllerTest, /private readonly IEmployeeRepository _managerRepository;/);
       result.assertFileContent(employeeControllerTest, /private readonly IDepartmentRepository _departmentRepository;/);
+      result.assertFileContent(employeeControllerTest, /await _managerRepository\.CreateOrUpdateAsync\(manager\);/);
       result.assertFileContent(employeeControllerTest, /await _departmentRepository\.CreateOrUpdateAsync\(department\);/);
       result.assertFileContent(employeeControllerTest, /await _departmentRepository\.SaveChangesAsync\(\);/);
       result.assertFileContent(employeeControllerTest, /private async Task<Employee> GetEmployeeWithRelationships\(long\? id\)/);
