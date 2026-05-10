@@ -187,6 +187,9 @@ function relationshipVariableName(relationship) {
 function relationshipFactoryName(relationship) {
     return 'CreateRelated' + relationship.relationshipFieldNamePascalized;
 }
+function relationshipPrimaryKeyDefault(relationship) {
+    return `default(${getPrimaryKeyType(relationship.otherEntity).replace('?', '')})`;
+}
 function relatedEntityDefaultValue(field) {
     if (field.fieldIsEnum) {
         return enumDefaultValue(field);
@@ -389,10 +392,10 @@ namespace <%= namespace %>.Test.Controllers
                 const propertyName = relationshipPropertyName(relationship); _%>
                 <%_ if (relationship.relationshipType === 'many-to-many') { _%>
             test<%= pascalizedEntityClass %>.<%= propertyName %>.Should().ContainSingle();
-            test<%= pascalizedEntityClass %>.<%= propertyName %>.First().Id.Should().NotBe(default);
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.First().Id.Should().NotBe(<%- relationshipPrimaryKeyDefault(relationship) %>);
                 <%_ } else { _%>
             test<%= pascalizedEntityClass %>.<%= propertyName %>.Should().NotBeNull();
-            test<%= pascalizedEntityClass %>.<%= propertyName %>.Id.Should().NotBe(default);
+            test<%= pascalizedEntityClass %>.<%= propertyName %>.Id.Should().NotBe(<%- relationshipPrimaryKeyDefault(relationship) %>);
                 <%_ } _%>
             <%_ }); _%>
         }

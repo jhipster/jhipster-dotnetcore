@@ -267,7 +267,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertFileContent(employeeControllerTest, /private async Task<Employee> GetEmployeeWithRelationships\(long\? id\)/);
       result.assertFileContent(employeeControllerTest, /\.Include\(employee => employee\.Department\)/);
       result.assertFileContent(employeeControllerTest, /public async Task CreateEmployeeWithRelationships\(\)/);
-      result.assertFileContent(employeeControllerTest, /testEmployee\.Department\.Id\.Should\(\)\.NotBe\(default\);/);
+      result.assertFileContent(employeeControllerTest, /testEmployee\.Department\.Id\.Should\(\)\.NotBe\(default\(long\)\);/);
       result.assertFileContent(employeeControllerTest, /public async Task RemoveEmployeeRelationships\(\)/);
       result.assertFileContent(employeeControllerTest, /persistedEmployee\.Department = null;/);
     });
