@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
-import { SERVER_SRC_DIR } from '../generator-dotnetcore-constants.js';
+import { SERVER_SRC_DIR, SERVER_TEST_DIR } from '../generator-dotnetcore-constants.js';
 
 const SUB_GENERATOR = 'dotnetcore';
 const SUB_GENERATOR_NAMESPACE = `jhipster-dotnetcore:${SUB_GENERATOR}`;
@@ -210,6 +210,65 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
 
     it('creates entity class', () => {
       result.assertFileContent(orderClass, /<Guid>/);
+    });
+  });
+
+  describe('generating relationship controller tests', () => {
+    const employeeControllerTest = `${SERVER_TEST_DIR}JhipsterBlueprint.Test/Controllers/EmployeeControllerIntTest.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Department',
+              fields: [
+                {
+                  fieldName: 'name',
+                  fieldType: 'String',
+                },
+              ],
+            },
+            {
+              name: 'Employee',
+              fields: [
+                {
+                  fieldName: 'name',
+                  fieldType: 'String',
+                },
+              ],
+              relationships: [
+                {
+                  relationshipName: 'department',
+                  relationshipType: 'many-to-one',
+                  otherEntityName: 'department',
+                  otherEntityField: 'id',
+                },
+              ],
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('creates tests for persisting and removing relationships', () => {
+      result.assertFileContent(employeeControllerTest, /private Department CreateRelatedDepartment\(\)/);
+      result.assertFileContent(employeeControllerTest, /private async Task<Employee> PersistEmployeeWithRelationships\(\)/);
+      result.assertFileContent(employeeControllerTest, /\.Include\(employee => employee\.Department\)/);
+      result.assertFileContent(employeeControllerTest, /public async Task CreateEmployeeWithRelationships\(\)/);
+      result.assertFileContent(employeeControllerTest, /testEmployee\.Department\.Id\.Should\(\)\.NotBe\(default\);/);
+      result.assertFileContent(employeeControllerTest, /public async Task RemoveEmployeeRelationships\(\)/);
+      result.assertFileContent(employeeControllerTest, /persistedEmployee\.Department = null;/);
     });
   });
 
