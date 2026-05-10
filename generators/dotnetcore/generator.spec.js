@@ -264,6 +264,9 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
     it('creates tests for persisting and removing relationships', () => {
       result.assertFileContent(employeeControllerTest, /private Department CreateRelatedDepartment\(\)/);
       result.assertFileContent(employeeControllerTest, /private async Task<Employee> PersistEmployeeWithRelationships\(\)/);
+      result.assertFileContent(employeeControllerTest, /private readonly IDepartmentRepository _departmentRepository;/);
+      result.assertFileContent(employeeControllerTest, /await _departmentRepository\.CreateOrUpdateAsync\(department\);/);
+      result.assertFileContent(employeeControllerTest, /await _departmentRepository\.SaveChangesAsync\(\);/);
       result.assertFileContent(employeeControllerTest, /private async Task<Employee> GetEmployeeWithRelationships\(long\? id\)/);
       result.assertFileContent(employeeControllerTest, /\.Include\(employee => employee\.Department\)/);
       result.assertFileContent(employeeControllerTest, /public async Task CreateEmployeeWithRelationships\(\)/);

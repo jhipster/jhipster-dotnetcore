@@ -247,6 +247,9 @@ namespace <%= namespace %>.Test.Controllers
             _client = _factory.CreateClient();
 
             _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
+            <%_ relationshipTestRelationships.forEach(relationship => { _%>
+            _<%= relationshipVariableName(relationship) %>Repository = _factory.GetRequiredService<I<%= relationship.otherEntityNamePascalized %>Repository>();
+            <%_ }); _%>
 
             <%_ if (hasDto) { _%>
             var config = new MapperConfiguration(cfg =>
@@ -277,6 +280,9 @@ namespace <%= namespace %>.Test.Controllers
         private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
         private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        <%_ relationshipTestRelationships.forEach(relationship => { _%>
+        private readonly I<%= relationship.otherEntityNamePascalized %>Repository _<%= relationshipVariableName(relationship) %>Repository;
+        <%_ }); _%>
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
 
@@ -328,6 +334,8 @@ namespace <%= namespace %>.Test.Controllers
                 const relatedVariableName = relationshipVariableName(relationship);
                 const propertyName = relationshipPropertyName(relationship); _%>
             var <%= relatedVariableName %> = <%= relationshipFactoryName(relationship) %>();
+            await _<%= relatedVariableName %>Repository.CreateOrUpdateAsync(<%= relatedVariableName %>);
+            await _<%= relatedVariableName %>Repository.SaveChangesAsync();
                 <%_ if (relationship.relationshipType === 'many-to-many') { _%>
             <%= camelCasedEntityClass %>.<%= propertyName %>.Add(<%= relatedVariableName %>);
                 <%_ } else { _%>
