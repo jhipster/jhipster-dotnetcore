@@ -338,7 +338,7 @@ namespace <%= namespace %>.Test.Controllers
             return <%= camelCasedEntityClass %>;
         }
 
-        private async Task<<%= pascalizedEntityClass %>> Get<%= pascalizedEntityClass %>WithRelationships(<%= primaryKeyType.replace('?', '') %> id)
+        private async Task<<%= pascalizedEntityClass %>> Get<%= pascalizedEntityClass %>WithRelationships(<%= primaryKeyType %> id)
         {
             return await _<%= camelCasedEntityClass %>Repository.QueryHelper()
                 <%_ relationshipTestRelationships.forEach(relationship => {
