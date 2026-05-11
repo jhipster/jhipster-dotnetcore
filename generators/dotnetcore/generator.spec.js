@@ -255,4 +255,70 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertFileContent(personServiceInterface, /public interface IPersonService/);
     });
   });
+
+  describe('generating controller tests for related entities', () => {
+    const employeeControllerTest = 'test/JhipsterBlueprint.Test/Controllers/EmployeesControllerIntTest.cs';
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Employee',
+              relationships: [
+                {
+                  relationshipType: 'many-to-one',
+                  relationshipName: 'department',
+                  otherEntityName: 'department',
+                },
+                {
+                  relationshipType: 'many-to-many',
+                  relationshipName: 'skill',
+                  otherEntityName: 'skill',
+                  otherEntityRelationshipName: 'employee',
+                  ownerSide: true,
+                  relationshipSide: 'left',
+                },
+              ],
+            },
+            {
+              name: 'Department',
+            },
+            {
+              name: 'Skill',
+              relationships: [
+                {
+                  relationshipType: 'many-to-many',
+                  relationshipName: 'employee',
+                  otherEntityName: 'employee',
+                  otherEntityRelationshipName: 'skill',
+                  ownerSide: false,
+                  relationshipSide: 'right',
+                },
+              ],
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('generates add and remove tests for the owning relationship side', () => {
+      result.assertFileContent(employeeControllerTest, /CreateEmployeeWithDepartment/);
+      result.assertFileContent(employeeControllerTest, /UpdateEmployeeShouldChangeDepartment/);
+      result.assertFileContent(employeeControllerTest, /CreateEmployeeWithSkills/);
+      result.assertFileContent(employeeControllerTest, /UpdateEmployeeShouldRemoveSkills/);
+      result.assertFileContent(employeeControllerTest, /private readonly IDepartmentRepository _departmentRepository;/);
+      result.assertFileContent(employeeControllerTest, /private readonly ISkillRepository _skillRepository;/);
+    });
+  });
 });
