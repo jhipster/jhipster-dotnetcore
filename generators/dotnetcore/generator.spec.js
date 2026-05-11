@@ -257,7 +257,7 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
   });
 
   describe('generating controller tests for related entities', () => {
-    const employeeControllerTest = 'test/JhipsterBlueprint.Test/Controllers/EmployeesControllerIntTest.cs';
+    const employeeControllerTest = 'test/JhipsterBlueprint.Test/Controllers/EmployeeControllerIntTest.cs';
 
     beforeAll(async function () {
       await helpers
