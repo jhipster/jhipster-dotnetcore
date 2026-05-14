@@ -255,4 +255,69 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertFileContent(personServiceInterface, /public interface IPersonService/);
     });
   });
+
+  describe('generating relationship tests', () => {
+    const employeeTest = `${SERVER_SRC_DIR.replace('src/', 'test/')}JhipsterBlueprint.Test/Controllers/EmployeeControllerIntTest.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig(
+          {
+            baseName: 'jhipsterBlueprint',
+          },
+          [
+            {
+              name: 'Department',
+              fields: [
+                {
+                  fieldName: 'name',
+                  fieldType: 'String',
+                },
+              ],
+            },
+            {
+              name: 'Employee',
+              fields: [
+                {
+                  fieldName: 'name',
+                  fieldType: 'String',
+                },
+              ],
+              relationships: [
+                {
+                  relationshipType: 'many-to-one',
+                  relationshipName: 'department',
+                  otherEntityName: 'department',
+                  otherEntityField: 'name',
+                },
+                {
+                  relationshipType: 'many-to-one',
+                  relationshipName: 'manager',
+                  otherEntityName: 'employee',
+                  otherEntityField: 'name',
+                },
+              ],
+            },
+          ],
+        )
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('generates create and remove tests for optional many-to-one relationships', () => {
+      result.assertFile(employeeTest);
+      result.assertFileContent(employeeTest, /private readonly IDepartmentRepository _departmentRepository;/);
+      result.assertFileContent(employeeTest, /CreateEmployeeWithDepartmentRelationship/);
+      result.assertFileContent(employeeTest, /RemoveDepartmentRelationshipFromEmployee/);
+      result.assertFileContent(employeeTest, /testEmployee\.DepartmentId\.Should\(\)\.Be\(department\.Id\);/);
+      result.assertFileContent(employeeTest, /testEmployee\.Department\.Should\(\)\.BeNull\(\);/);
+      result.assertNoFileContent(employeeTest, /CreateEmployeeWithManagerRelationship/);
+    });
+  });
 });
