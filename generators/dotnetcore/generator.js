@@ -243,7 +243,7 @@ export default class extends BaseApplicationGenerator {
       await access(`${solutionName}.sln`);
       return true;
     } catch {
-      return this.spawnCommand(`dotnet new sln --name ${solutionName}`);
+      return this.spawnCommand(`dotnet new sln --name ${solutionName} --format sln`);
     }
   }
 

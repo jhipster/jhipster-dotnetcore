@@ -177,7 +177,7 @@ export default class extends BaseApplicationGenerator {
           try {
             await access(`${application.solutionName}.sln`);
           } catch {
-            await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
+            await this.spawnCommand(`dotnet new sln --name ${application.solutionName} --format sln`);
           }
         } catch (err) {
           this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
