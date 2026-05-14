@@ -174,10 +174,10 @@ namespace <%= namespace %>.Infrastructure.Data
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var entries = ChangeTracker
-              .Entries()
-              .Where(e => e.Entity is IAuditedEntityBase && (
-                  e.State == EntityState.Added
-                  || e.State == EntityState.Modified));
+                .Entries()
+                .Where(e => e.Entity is IAuditedEntityBase && (
+                    e.State == EntityState.Added
+                    || e.State == EntityState.Modified));
 
             string modifiedOrCreatedBy = _httpContextAccessor?.HttpContext?.User?.Identity?.Name ?? "System";
 
@@ -193,7 +193,7 @@ namespace <%= namespace %>.Infrastructure.Data
                     Entry((IAuditedEntityBase)entityEntry.Entity).Property(p => p.CreatedDate).IsModified = false;
                     Entry((IAuditedEntityBase)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
                 }
-              ((IAuditedEntityBase)entityEntry.Entity).LastModifiedDate = DateTime.Now;
+                ((IAuditedEntityBase)entityEntry.Entity).LastModifiedDate = DateTime.Now;
                 ((IAuditedEntityBase)entityEntry.Entity).LastModifiedBy = modifiedOrCreatedBy;
             }
             return await base.SaveChangesAsync(cancellationToken);
