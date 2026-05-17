@@ -33,9 +33,7 @@ public class <%= entity.entityClass %>Test {
     <%_ } _%>
 <%_ } _%>
     }
-}relationship.relationshipType === 'many-to-many') { _%>
-        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
-        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Count.Should().Be(0);
+}<%= relationship.relationshipNamePlural %>.Count.Should().Be(0);
         <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
         <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Count.Should().Be(0);
     <%_ } _%>
