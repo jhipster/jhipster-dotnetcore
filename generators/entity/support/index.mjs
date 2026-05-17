@@ -2,11 +2,15 @@ export function getRelationships(entity) {
   const relationships = entity.relationships || [];
   return relationships.map((rel) => ({
     ...rel,
-    otherEntityNameCapitalized: rel.otherEntityName.charAt(0).toUpperCase() + rel.otherEntityName.slice(1),
+    otherEntityNameCapitalized:
+      rel.otherEntityName.charAt(0).toUpperCase() +
+      rel.otherEntityName.slice(1),
     otherEntityFieldCapitalized: rel.otherEntityField
-      ? rel.otherEntityField.charAt(0).toUpperCase() + rel.otherEntityField.slice(1)
-      : 'Id',
-    relationshipNamePlural: rel.relationshipNamePlural || `${rel.relationshipName}s`,
+      ? rel.otherEntityField.charAt(0).toUpperCase() +
+        rel.otherEntityField.slice(1)
+      : "Id",
+    relationshipNamePlural:
+      rel.relationshipNamePlural || `${rel.relationshipName}s`,
   }));
 }
 
