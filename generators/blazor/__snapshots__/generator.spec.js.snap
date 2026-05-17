@@ -334,7 +334,7 @@ exports[`SubGenerator blazor of dotnetcore JHipster blueprint > run > execute co
   ],
   [
     "spawnCommand",
-    "dotnet sln Jhipster.sln add src/client/Jhipster.Client/Jhipster.Client.csproj src/client/Jhipster.Client.Shared/Jhipster.Client.Shared.csproj test/Jhipster.Client.Test/Jhipster.Client.Test.csproj",
+    "dotnet sln Jhipster.slnx add src/client/Jhipster.Client/Jhipster.Client.csproj src/client/Jhipster.Client.Shared/Jhipster.Client.Shared.csproj test/Jhipster.Client.Test/Jhipster.Client.Test.csproj",
   ],
   [
     "spawnCommand",

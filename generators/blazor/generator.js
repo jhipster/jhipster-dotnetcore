@@ -173,12 +173,9 @@ export default class extends BaseApplicationGenerator {
     return this.asEndTaskGroup({
       async end({ application }) {
         this.log(chalk.green.bold(`\nCreating ${application.solutionName} .Net Core solution if it does not already exist.\n`));
+        let solutionFile;
         try {
-          try {
-            await access(`${application.solutionName}.sln`);
-          } catch {
-            await this.spawnCommand(`dotnet new sln --name ${application.solutionName}`);
-          }
+          solutionFile = await this.resolveSolutionFile(application.solutionName);
         } catch (err) {
           this.log.warn(`Failed to create ${application.solutionName} .Net Core solution: ${err}`);
         }
@@ -188,7 +185,7 @@ export default class extends BaseApplicationGenerator {
           `${CLIENT_TEST_DIR}${application.clientTestProject}${application.pascalizedBaseName}.Client.Test.csproj`,
         ];
 
-        await this.spawnCommand(`dotnet sln ${application.solutionName}.sln add ${projects.join(' ')}`);
+        await this.spawnCommand(`dotnet sln ${solutionFile} add ${projects.join(' ')}`);
         this.log(chalk.green.bold('Client application generated successfully.\n'));
         this.log(
           chalk.green(
@@ -224,5 +221,25 @@ export default class extends BaseApplicationGenerator {
         }
       },
     });
+  }
+
+  async resolveSolutionFile(solutionName) {
+    try {
+      await access(`${solutionName}.sln`);
+      return `${solutionName}.sln`;
+    } catch {
+      try {
+        await access(`${solutionName}.slnx`);
+        return `${solutionName}.slnx`;
+      } catch {
+        await this.spawnCommand(`dotnet new sln --name ${solutionName}`);
+        try {
+          await access(`${solutionName}.sln`);
+          return `${solutionName}.sln`;
+        } catch {
+          return `${solutionName}.slnx`;
+        }
+      }
+    }
   }
 }
