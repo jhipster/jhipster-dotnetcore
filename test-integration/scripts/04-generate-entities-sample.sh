@@ -33,3 +33,7 @@ if [[ "$2" = "import-jdl" ]]; then
   fi
 fi
 
+if [[ "$3" != "blazor" && -f package.json && -d src/JhipsterSampleApplication/ClientApp && ! -x node_modules/.bin/eslint ]]; then
+  echo "*** installing generated client dependencies"
+  npm install
+fi

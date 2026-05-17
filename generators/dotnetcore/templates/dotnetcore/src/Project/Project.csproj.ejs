@@ -108,7 +108,7 @@
         </SonarQubeSetting>
     </ItemGroup>
 
-    <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('$(RepoRoot)node_modules')">
+    <Target Name="NpmInstall" BeforeTargets="Build" Condition="!Exists('$(RepoRoot)node_modules/.package-lock.json') Or !Exists('$(RepoRoot)node_modules/.bin/eslint')">
         <!-- Ensure Node.js is installed -->
         <Exec WorkingDirectory="$(RepoRoot)" Command="node --version" ContinueOnError="true">
             <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />

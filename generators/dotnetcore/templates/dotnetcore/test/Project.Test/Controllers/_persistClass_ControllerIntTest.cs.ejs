@@ -160,6 +160,9 @@ function hasDateTimeTypeField(fields) {
 } _%>
 <%
 let hasDto = dto === 'mapstruct';
+const testedRelationships = databaseType !== 'mongodb'
+    ? relationships.filter(relationship => relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one')
+    : [];
 %>
 <%_ if (hasDto) { _%>
 using AutoMapper;
@@ -211,6 +214,9 @@ namespace <%= namespace %>.Test.Controllers
             _client = _factory.CreateClient();
 
             _<%= camelCasedEntityClass %>Repository = _factory.GetRequiredService<I<%= pascalizedEntityClass %>Repository>();
+            <%_ testedRelationships.forEach(relationship => { _%>
+            _<%= relationship.relationshipFieldName %>Repository = _factory.GetRequiredService<I<%= relationship.otherEntityNamePascalized %>Repository>();
+            <%_ }); _%>
 
             <%_ if (hasDto) { _%>
             var config = new MapperConfiguration(cfg =>
@@ -241,6 +247,9 @@ namespace <%= namespace %>.Test.Controllers
         private readonly AppWebApplicationFactory<TestStartup> _factory;
         private readonly HttpClient _client;
         private readonly I<%= pascalizedEntityClass %>Repository _<%= camelCasedEntityClass %>Repository;
+        <%_ testedRelationships.forEach(relationship => { _%>
+        private readonly I<%= relationship.otherEntityNamePascalized %>Repository _<%= relationship.relationshipFieldName %>Repository;
+        <%_ }); _%>
 
         private <%= pascalizedEntityClass %> _<%= camelCasedEntityClass %>;
 
@@ -248,7 +257,7 @@ namespace <%= namespace %>.Test.Controllers
         private readonly IMapper _mapper;
         <%_ } _%>
 
-        private <%= pascalizedEntityClass %> CreateEntity()
+        public static <%= pascalizedEntityClass %> CreateEntity()
         {
             return new <%= pascalizedEntityClass %>
             {
@@ -271,10 +280,26 @@ namespace <%= namespace %>.Test.Controllers
             _<%= camelCasedEntityClass %> = CreateEntity();
         }
 
+        <%_ testedRelationships.forEach(relationship => { _%>
+        private async Task<<%= relationship.otherEntityNamePascalized %>> Create<%= relationship.relationshipFieldNamePascalized %>RelationshipEntity()
+        {
+            var <%= relationship.otherEntityNameLowerCased %> = <%= relationship.otherEntityNamePascalizedPlural %>ControllerIntTest.CreateEntity();
+            await _<%= relationship.relationshipFieldName %>Repository.CreateOrUpdateAsync(<%= relationship.otherEntityNameLowerCased %>);
+            await _<%= relationship.relationshipFieldName %>Repository.SaveChangesAsync();
+            return <%= relationship.otherEntityNameLowerCased %>;
+        }
+
+        <%_ }); _%>
+
         [Fact]
         public async Task Create<%= pascalizedEntityClass %>()
         {
             var databaseSizeBeforeCreate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
+            <%_ testedRelationships.forEach(relationship => { _%>
+            var <%= relationship.relationshipFieldName %> = await Create<%= relationship.relationshipFieldNamePascalized %>RelationshipEntity();
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = <%= relationship.relationshipFieldName %>;
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>Id = <%= relationship.relationshipFieldName %>.Id;
+            <%_ }); _%>
 
             // Create the <%= pascalizedEntityClass %>
             <%_ if (hasDto) { _%>
@@ -292,6 +317,9 @@ namespace <%= namespace %>.Test.Controllers
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Default<%= field.fieldNamePascalized %>);
+            <%_ }); _%>
+            <%_ testedRelationships.forEach(relationship => { _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>Id.Should().Be(<%= relationship.relationshipFieldName %>.Id);
             <%_ }); _%>
         }
 
@@ -398,6 +426,11 @@ namespace <%= namespace %>.Test.Controllers
         public async Task Update<%= pascalizedEntityClass %>()
         {
             // Initialize the database
+            <%_ testedRelationships.forEach(relationship => { _%>
+            var <%= relationship.relationshipFieldName %> = await Create<%= relationship.relationshipFieldNamePascalized %>RelationshipEntity();
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = <%= relationship.relationshipFieldName %>;
+            _<%= camelCasedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>Id = <%= relationship.relationshipFieldName %>.Id;
+            <%_ }); _%>
             await _<%= camelCasedEntityClass %>Repository.CreateOrUpdateAsync(_<%= camelCasedEntityClass %>);
             await _<%= camelCasedEntityClass %>Repository.SaveChangesAsync();
             var databaseSizeBeforeUpdate = await _<%= camelCasedEntityClass %>Repository.CountAsync();
@@ -409,6 +442,11 @@ namespace <%= namespace %>.Test.Controllers
             <%_ fields.forEach(field => {
                 if (field.id) return; _%>
             updated<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %> = Updated<%= field.fieldNamePascalized %>;
+            <%_ }); _%>
+            <%_ testedRelationships.forEach(relationship => { _%>
+            var updated<%= relationship.relationshipFieldNamePascalized %> = await Create<%= relationship.relationshipFieldNamePascalized %>RelationshipEntity();
+            updated<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %> = updated<%= relationship.relationshipFieldNamePascalized %>;
+            updated<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>Id = updated<%= relationship.relationshipFieldNamePascalized %>.Id;
             <%_ }); _%>
 
             <%_ if (hasDto) { _%>
@@ -433,6 +471,9 @@ namespace <%= namespace %>.Test.Controllers
             test<%= pascalizedEntityClass %>.<%= field.fieldNamePascalized %>.Should().Be(Updated<%= field.fieldNamePascalized %>);
                 <%_ }
             }); _%>
+            <%_ testedRelationships.forEach(relationship => { _%>
+            test<%= pascalizedEntityClass %>.<%= relationship.relationshipFieldNamePascalized %>Id.Should().Be(updated<%= relationship.relationshipFieldNamePascalized %>.Id);
+            <%_ }); _%>
         }
 
         [Fact]
