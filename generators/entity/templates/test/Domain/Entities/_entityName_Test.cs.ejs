@@ -33,9 +33,7 @@ public class <%= entity.entityClass %>Test {
     <%_ } _%>
 <%_ } _%>
     }
-}p.otherEntityFieldCapitalized %>.Should().Be(default(<%= getFieldType(relationship.otherEntityField) %>));
-        <%_ } _%>
-    <%_ } else if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') { _%>
+}relationship.relationshipType === 'many-to-many') { _%>
         <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
         <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Count.Should().Be(0);
         <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
