@@ -33,9 +33,7 @@ public class <%= entity.entityClass %>Test {
     <%_ } _%>
 <%_ } _%>
     }
-}
-    <%_ if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) { _%>
-        <%= entity.entityInstance %>.<%= relationship.relationshipName %>.Should().BeNull();
+}ship.relationshipName %>.Should().BeNull();
         <%_ if (relationship.otherEntityField !== 'id') { _%>
         <%= entity.entityInstance %>.<%= relationship.relationshipName %> <%= relationship.otherEntityFieldCapitalized %>.Should().Be(default(<%= getFieldType(relationship.otherEntityField) %>));
         <%_ } _%>
