@@ -21,9 +21,19 @@ public class <%= entity.entityClass %>Test {
 <%_ for (const field of entity.fields) { _%>
         <%= entity.entityInstance %>.<%= field.fieldName %>.Should().Be(default(<%= field.fieldType %>));
 <%_ } _%>
-    }
-}%>
 <%_ for (const relationship of relationships) { _%>
+    <%_ if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) { _%>
+        <%= entity.entityInstance %>.<%= relationship.relationshipName %>.Should().BeNull();
+        <%_ if (relationship.otherEntityField !== 'id') { _%>
+        <%= entity.entityInstance %>.<%= relationship.relationshipName %><%= relationship.otherEntityFieldCapitalized %>.Should().Be(default(<%= getFieldType(relationship.otherEntityField) %>));
+        <%_ } _%>
+    <%_ } else if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') { _%>
+        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Should().NotBeNull();
+        <%= entity.entityInstance %>.<%= relationship.relationshipNamePlural %>.Count.Should().Be(0);
+    <%_ } _%>
+<%_ } _%>
+    }
+}
     <%_ if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) { _%>
         <%= entity.entityInstance %>.<%= relationship.relationshipName %>.Should().BeNull();
         <%_ if (relationship.otherEntityField !== 'id') { _%>
