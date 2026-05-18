@@ -82,7 +82,7 @@ jobs:
         working-directory: ${{ github.workspace }}/jhipster-dotnetcore
         run: npm ci && npm link
       - name: 'GENERATE JHipster.NET app'
-        run: cli.cjs generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
+        run: cli.cjs generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities --skip-forks
       - uses: jhipster/actions/compare-sample@v0
         id: compare
         if: >-
@@ -90,7 +90,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: jhipster-dotnetcore
-          cmd: cli.cjs generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities
+          cmd: cli.cjs generate-sample ${{ matrix.app-type }} --skip-install --skip-checks --no-insight --with-entities --skip-forks
       - name: 'INSTALL AND BUILD DEPENDENCIES of generated app'
         run: dotnet build
         env:
