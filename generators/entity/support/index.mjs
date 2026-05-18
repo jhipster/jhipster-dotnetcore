@@ -3,9 +3,11 @@ export function getRelationships(entity) {
   return relationships.map((rel) => ({
     ...rel,
     otherEntityNameCapitalized:
-      rel.otherEntityName.charAt(0).toUpperCase() + rel.otherEntityName.slice(1),
+      rel.otherEntityName.charAt(0).toUpperCase() +
+      rel.otherEntityName.slice(1),
     otherEntityFieldCapitalized: rel.otherEntityField
-      ? rel.otherEntityField.charAt(0).toUpperCase() + rel.otherEntityField.slice(1)
+      ? rel.otherEntityField.charAt(0).toUpperCase() +
+        rel.otherEntityField.slice(1)
       : "Id",
     relationshipNamePlural:
       rel.relationshipNamePlural || `${rel.relationshipName}s`,
