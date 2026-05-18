@@ -9,8 +9,7 @@ export function getRelationships(entity) {
       ? rel.otherEntityField.charAt(0).toUpperCase() +
         rel.otherEntityField.slice(1)
       : "Id",
-    relationshipNamePlural:
-      rel.relationshipNamePlural || `${rel.relationshipName}s`,
+    relationshipNamePlural: rel.relationshipNamePlural || `${rel.relationshipName}s`,
   }));
 }
 
