@@ -1,0 +1,25 @@
+<% const relationships = entity.relationships || []; %>
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using JHipsterNet.Core.Domain;
+
+namespace <%= namespace %>.Domain.Entities;
+
+[Table("<%= entity.tableName %>")]
+public class <%= entity.entityClass %> : BaseEntity {
+<%_ for (const field of entity.fields) { _%>
+    <%= field.fieldValidate ? getValidationAnnotations(field) : '' %><%= getFieldAsProperty(field) %>
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>
+    <%_ if (relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) { _%>
+    public virtual <%= relationship.otherEntityNameCapitalized %> <%= relationship.relationshipName %> { get; set; }
+    <%_ if (relationship.otherEntityField !== 'id') { _%>
+    public <%= getFieldType(relationship.otherEntityField) %> <%= relationship.relationshipName %> <%= relationship.otherEntityFieldCapitalized %> { get; set; }
+    <%_ } _%>
+    <%_ } else if (relationship.relationshipType === 'one-to-many' || relationship.relationshipType === 'many-to-many') { _%>
+    public virtual ICollection<<%= relationship.otherEntityNameCapitalized %>> <%= relationship.relationshipNamePlural %> { get; set; } = new List<<%= relationship.otherEntityNameCapitalized %>>();
+    <%_ } _%>
+<%_ } _%>
+}

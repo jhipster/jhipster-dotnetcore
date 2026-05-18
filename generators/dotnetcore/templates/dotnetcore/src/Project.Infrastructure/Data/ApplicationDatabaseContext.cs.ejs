@@ -111,7 +111,7 @@ public class ApplicationDatabaseContext : DbContext
                 Entry((IAuditedEntityBase)entityEntry.Entity).Property(p => p.CreatedDate).IsModified = false;
                 Entry((IAuditedEntityBase)entityEntry.Entity).Property(p => p.CreatedBy).IsModified = false;
             }
-          ((IAuditedEntityBase)entityEntry.Entity).LastModifiedDate = DateTime.Now;
+            ((IAuditedEntityBase)entityEntry.Entity).LastModifiedDate = DateTime.Now;
             ((IAuditedEntityBase)entityEntry.Entity).LastModifiedBy = modifiedOrCreatedBy;
         }
         return await base.SaveChangesAsync(cancellationToken);
