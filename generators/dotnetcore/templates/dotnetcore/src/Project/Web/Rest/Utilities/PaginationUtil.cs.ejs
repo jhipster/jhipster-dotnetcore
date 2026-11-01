@@ -12,6 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+using System.Collections.Generic;
 using JHipsterNet.Core.Pagination;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -20,6 +21,7 @@ namespace <%= namespace %>.Infrastructure.Web.Rest.Utilities;
 
 public static class PaginationUtil
 {
+    private const string _LinkHeaderName = "Link";
     private const string _XTotalCountHeaderName = "X-Total-Count";
     private const string _XPaginationHeaderName = "X-Pagination";
     public static IHeaderDictionary GeneratePaginationHttpHeaders<T>(this IPage<T> page)
@@ -37,8 +39,26 @@ public static class PaginationUtil
             IsFirst = page.IsFirst,
             IsLast = page.IsLast
         };
+        var links = new List<string>();
+        if (page.HasNext)
+        {
+            links.Add(PrepareLink(page.Number + 1, page.Size, "next"));
+        }
+        if (page.HasPrevious)
+        {
+            links.Add(PrepareLink(page.Number - 1, page.Size, "prev"));
+        }
+        var lastPage = page.TotalPages > 0 ? page.TotalPages - 1 : 0;
+        links.Add(PrepareLink(lastPage, page.Size, "last"));
+        links.Add(PrepareLink(0, page.Size, "first"));
         headers.Add(_XTotalCountHeaderName, page.TotalElements.ToString());
         headers.Add(_XPaginationHeaderName, JsonConvert.SerializeObject(pageDto));
+        headers.Add(_LinkHeaderName, string.Join(",", links));
         return headers;
+    }
+
+    private static string PrepareLink(int pageNumber, int pageSize, string relType)
+    {
+        return $"<?page={pageNumber}&size={pageSize}>; rel=\"{relType}\"";
     }
 }

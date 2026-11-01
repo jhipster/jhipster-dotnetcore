@@ -28,6 +28,16 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
     it('execute commands', () => {
       expect(result.getSpawnArgsUsingDefaultImplementation()).toMatchSnapshot();
     });
+
+    it('generates Link header in PaginationUtil', () => {
+      const paginationUtilFile = `${SERVER_SRC_DIR}Jhipster.Infrastructure/Web/Rest/Utilities/PaginationUtil.cs`;
+      result.assertFileContent(paginationUtilFile, /private const string _LinkHeaderName = "Link";/);
+      result.assertFileContent(paginationUtilFile, /headers\.Add\(_LinkHeaderName, string\.Join\(",", links\)\);/);
+      result.assertFileContent(paginationUtilFile, /PrepareLink\(page\.Number \+ 1, page\.Size, "next"\)/);
+      result.assertFileContent(paginationUtilFile, /PrepareLink\(page\.Number - 1, page\.Size, "prev"\)/);
+      result.assertFileContent(paginationUtilFile, /PrepareLink\(lastPage, page\.Size, "last"\)/);
+      result.assertFileContent(paginationUtilFile, /PrepareLink\(0, page\.Size, "first"\)/);
+    });
   });
 
   describe('Positive - Terraform files (monolithic app with mssql)', () => {
