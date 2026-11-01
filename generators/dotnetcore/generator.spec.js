@@ -255,4 +255,30 @@ describe('SubGenerator dotnetcore of dotnetcore JHipster blueprint', () => {
       result.assertFileContent(personServiceInterface, /public interface IPersonService/);
     });
   });
+
+  describe('microservice with oauth2 authentication', () => {
+    const startupFile = `${SERVER_SRC_DIR}JhipsterBlueprint/Startup.cs`;
+
+    beforeAll(async function () {
+      await helpers
+        .run(SUB_GENERATOR_NAMESPACE)
+        .withJHipsterConfig({
+          baseName: 'jhipsterBlueprint',
+          applicationType: 'microservice',
+          authenticationType: 'oauth2',
+        })
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprints: 'dotnetcore',
+        })
+        .withJHipsterLookup()
+        .withSpawnMock()
+        .withParentBlueprintLookup();
+    });
+
+    it('registers the security module in Startup.cs', () => {
+      result.assertFile(startupFile);
+      result.assertFileContent(startupFile, /\.AddSecurityModule\(\)/);
+    });
+  });
 });

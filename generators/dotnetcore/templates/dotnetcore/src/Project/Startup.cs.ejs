@@ -63,9 +63,7 @@ public class Startup : IStartup
 
         <%_ } _%>
         services
-        <%_ if (authenticationType === 'jwt' || applicationType !== 'microservice') { _%>
             .AddSecurityModule()
-        <%_ } _%>
             .AddProblemDetailsModule()
             .AddAutoMapperModule()
             .AddSwaggerModule()
